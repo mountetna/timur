@@ -26,6 +26,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'haml-rails', '>= 0.3.4', group: :development
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
@@ -43,3 +45,4 @@ group :development, :test do
   gem 'spring'
 end
 
+gem 'devise'
