@@ -22,5 +22,7 @@ module Timur
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.web_console.whitelisted_ips = '169.230.130.104'
   end
 end
