@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  match 'auth/shibboleth/callback' => 'welcome#login', via: [ :get, :post ]
+  get 'login' => 'welcome#login', as: :login
+  match 'auth/shibboleth/callback' => 'welcome#auth', via: [ :get, :post ], as: :auth
+  get 'auth/shibboleth' => 'welcome#auth', as: :auth_shib
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

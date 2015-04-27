@@ -47,4 +47,6 @@ end
 
 #gem 'devise'
 
-gem 'omniauth-shibboleth'
+group :test, :production do
+  gem 'omniauth-shibboleth'
+end

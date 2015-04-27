@@ -42,17 +42,26 @@
 }
 
 .header {
+	position: relative;
 	border-bottom: 1px solid green;
 	height: 80px;
 }
 
 .main {
 	padding: 40px;
-	font-family: 'EB Garamond', serif;
 	font-size: 30px;
 }
 
-.main a {
+body {
+	font-family: 'EB Garamond', serif;
+}
+a {
 	text-decoration: none;
 	color: olive;
+}
+
+.login {
+	position: absolute;
+	right: 10px;
+	bottom: 2px;
 }

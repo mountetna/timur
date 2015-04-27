@@ -1,0 +1,10 @@
+.header
+  .logo
+    &nbsp;
+  .heading
+    Timur <b>:</b> Data Browser
+  .login
+    - if @current_user
+      = @current_user.display_name
+    - else
+      %a{ href: login_path } Login
