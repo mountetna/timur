@@ -34,7 +34,7 @@
 	font-family: 'Cinzel', serif;
 	font-size: 40px;
 	display: inline-block;
-	color: green;
+	color: forestgreen;
 	padding-left: 10px;
 	height: 70px;
 	vertical-align: top;
@@ -43,7 +43,7 @@
 
 .header {
 	position: relative;
-	border-bottom: 1px solid green;
+	border-bottom: 1px solid forestgreen;
 	height: 80px;
 }
 
@@ -63,5 +63,25 @@ a {
 .login {
 	position: absolute;
 	right: 10px;
-	bottom: 2px;
+	bottom: 0px;
+	color: brown;
+}
+
+.nav {
+	position: absolute;
+	width: calc(100% - 90px);
+	left: 90px;
+	bottom: 0px;
+	border-top: 1px solid forestgreen;
+}
+
+.nav_tab {
+	display: inline-block;
+	font-size: 16px;
+	padding: 0px 25px;
+	border-right: 1px solid forestgreen;
+}
+
+.nav_tab a {
+	color: limegreen;
 }

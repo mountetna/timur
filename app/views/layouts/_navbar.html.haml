@@ -1,10 +1,18 @@
 .header
-  .logo
-    &nbsp;
+  %a{ href: "/" }
+    .logo
+      &nbsp;
   .heading
     Timur <b>:</b> Data Browser
-  .login
-    - if @current_user
-      = @current_user.display_name
-    - else
-      %a{ href: login_path } Login
+  .nav
+    .nav_tab
+      %a{ href: browse_path } Browse
+    .nav_tab
+      Search
+    .nav_tab
+      Plot
+    .login
+      - if current_user
+        = current_user.name
+      - else
+        %a{ href: login_path } Login

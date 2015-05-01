@@ -11,10 +11,23 @@ class WelcomeController <  ApplicationController
   end
 
   def auth
+    auth = nil
     if defined? OmniAuth
-      auth = request.env['omniauth.auth']
+      auth = request.env['omniauth.auth']['info']
     else
+      auth = {
+        'email' => 'Saurabh.Asthana@ucsf.edu',
+        'name' => 'Saurabh Asthana',
+        'ucsf_id' => '020141602'
+      }
     end
-    redirect_to_root_url
+
+    user = User.where(email: auth['email'].downcase).first_or_create do |u|
+      u.ucsf_id = auth['ucsf_id']
+      u.name = auth['name']
+    end
+
+    session[:user_id] = user.id
+    redirect_to root_path
   end
 end
