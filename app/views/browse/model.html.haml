@@ -1,0 +1,12 @@
+= content_for :title, "Timur - Browse - #{@name}"
+
+.names
+  .attribute Type
+  - @model.attributes.each do |name,att|
+    .attribute
+      = attribute_name att
+.values
+  .value= @model.name
+  - @model.attributes.each do |name,att|
+    .value
+    = @record.send(att.name) || '&nbsp;'.html_safe

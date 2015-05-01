@@ -1,2 +1,20 @@
 = content_for :title, "Timur - Browse"
-
+.browse
+  %p
+    %a{ href: browse_model_path(:patient) } Patient
+  %p
+    %a{ href: browse_model_path(:sample) } Sample
+  %p
+    %a{ href: browse_model_path(:rna_seq_batch) } Rnaseq Batch
+  %p
+    %a{ href: browse_model_path(:rna_seq) } Rnaseq
+  %p
+    %a{ href: browse_model_path(:rna_seq_qc) } Rnaseq QC
+  %p
+    %a{ href: browse_model_path(:nktb_stain) } NK/T/B stain
+  %p
+    %a{ href: browse_model_path(:dc_stain) } DC stain
+  %p
+    %a{ href: browse_model_path(:sort_stain) } Sort stain
+  %p
+    %a{ href: browse_model_path(:treg_stain) } Treg stain

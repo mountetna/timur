@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   #
   get 'browse' => 'browse#index', as: :browse
 
+  get 'browse/:model' => 'browse#model', as: :browse_model
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

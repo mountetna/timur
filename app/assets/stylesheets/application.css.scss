@@ -85,3 +85,25 @@ a {
 .nav_tab a {
 	color: limegreen;
 }
+
+.names {
+	width: 25%;
+	display: inline-block;
+	border-right: 1px solid forestgreen;
+	padding-right: 8px;
+}
+
+.attribute {
+	text-align: right;
+	color: darkgoldenrod;
+}
+
+.values {
+	color: mediumorchid;
+	width: 70%;
+	display: inline-block;
+}
+
+.browse {
+	padding-left: 150px;
+}
