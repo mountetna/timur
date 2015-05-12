@@ -14,10 +14,13 @@
  *= require_self
  */
 
-@import url(https://fonts.googleapis.com/css?family=Cinzel);
-@import url(https://fonts.googleapis.com/css?family=EB+Garamond);
 
-.logo {
+$row_height: 25px;
+$body_font: 'Oxygen', sans-serif;
+$value_font: 'Cousine', monospaced;
+@import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Oxygen);
+
+#logo {
 	background-image: image-url('Timur.png');
 	width: 70px;
 	height: 70px;
@@ -30,7 +33,7 @@
 	vertical-align:top
 }
 
-.heading {
+#heading {
 	font-family: 'Cinzel', serif;
 	font-size: 40px;
 	display: inline-block;
@@ -41,33 +44,34 @@
 	line-height: 70px;
 }
 
-.header {
+#header {
 	position: relative;
 	border-bottom: 1px solid forestgreen;
 	height: 80px;
 }
 
-.main {
+#main {
 	padding: 40px;
 	font-size: 30px;
 }
 
 body {
-	font-family: 'EB Garamond', serif;
+	font-family: $body_font;
 }
 a {
 	text-decoration: none;
 	color: olive;
 }
 
-.login {
+#login {
 	position: absolute;
 	right: 10px;
 	bottom: 0px;
 	color: brown;
 }
 
-.nav {
+#nav {
+	font-family: $body_font;
 	position: absolute;
 	width: calc(100% - 90px);
 	left: 90px;
@@ -86,24 +90,85 @@ a {
 	color: limegreen;
 }
 
-.names {
+#names {
 	width: 25%;
 	display: inline-block;
 	border-right: 1px solid forestgreen;
+	border-top: 1px solid forestgreen;
 	padding-right: 8px;
 }
 
 .attribute {
+	height: $row_height;
 	text-align: right;
 	color: darkgoldenrod;
 }
 
-.values {
+#values {
 	color: mediumorchid;
 	width: 70%;
 	display: inline-block;
+	border-left: 1px solid forestgreen;
+	border-top: 1px solid forestgreen;
+	padding-left: 9px;
+	vertical-align:top
 }
 
-.browse {
+#browse {
 	padding-left: 150px;
+}
+
+#model {
+	position: relative;
+	padding-top: 30px;
+}
+
+#model_header {
+	font-family: $body_font;
+	position: relative;
+	margin-left: 10%;
+	padding-left: 10%;
+	margin-right: 20%;
+	//border-bottom: 1px solid forestgreen;
+}
+
+#edit {
+	cursor: pointer;
+	display: inline-block;
+	font-size: 20px;
+	color: forestgreen;
+}
+
+#approve {
+	display: none;
+	cursor: pointer;
+	font-size: 20px;
+	color: forestgreen;
+}
+
+#cancel {
+	display: none;
+	cursor: pointer;
+	font-size: 20px;
+	color: forestgreen;
+}
+
+.value {
+	height: $row_height;
+	font-family: $value_font;
+}
+.edit_value {
+	display: none;
+	height: $row_height;
+}
+.edit_value input {
+	font-family: $value_font;
+	font-size: 16px;
+	border: 0px none black;
+	color: darkorchid;
+	border-bottom: 1px solid forestgreen;
+	margin: 0;
+	padding: 0;
+	vertical-align:top;
+	height: calc(#{$row_height} - 1px);
 }

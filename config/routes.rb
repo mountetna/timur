@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
   get 'browse/:model' => 'browse#model', as: :browse_model
 
+  post 'browse/update' => 'browse#update', as: :update_model
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
