@@ -19,3 +19,4 @@
 !/log/.keep
 /tmp
 /config/magma.yml
+/public/uploads

@@ -12,9 +12,10 @@ Rails.application.routes.draw do
   #
   get 'browse' => 'browse#index', as: :browse
 
-  get 'browse/:model' => 'browse#model', as: :browse_model
-
+  get 'browse/:model/:name' => 'browse#model', as: :browse_model, constraints: { name: /[^\/]+/ }
   post 'browse/update' => 'browse#update', as: :update_model
+  get 'browse/new' => 'browse#new', as: :new_model
+  post 'browse/create' => 'browse#create', as: :create_model
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

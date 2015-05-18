@@ -28,6 +28,6 @@ class WelcomeController <  ApplicationController
     end
 
     session[:user_id] = user.id
-    redirect_to root_path
+    redirect_to browse_path
   end
 end
