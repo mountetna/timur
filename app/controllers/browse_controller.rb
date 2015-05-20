@@ -9,6 +9,7 @@ class BrowseController <  ApplicationController
   def model
     # Get the model name
     @model = Magma.instance.get_model params[:model]
+    @name = params[:name]
     @record = @model[@model.identity => params[:name]]
   end
 

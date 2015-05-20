@@ -28,6 +28,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'haml-rails', '>= 0.3.4'
 
+gem 'react-rails', '~> 1.0'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
