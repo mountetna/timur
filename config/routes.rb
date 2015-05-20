@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'browse/new' => 'browse#new', as: :new_model
   post 'browse/create' => 'browse#create', as: :create_model
 
+  get 'search' => 'search#index', as: :search
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

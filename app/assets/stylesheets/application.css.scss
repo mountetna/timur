@@ -189,3 +189,28 @@ a {
 	height: calc(#{$row_height} - 1px);
 	width: 70%;
 }
+
+#search {
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 50px;
+}
+
+#searchlabel {
+	text-align: right;
+	width: 150px;
+	display: inline-block;
+}
+
+#searchbox {
+	border: 1px solid forestgreen;
+	width: 70%;
+	background: lightgrey;
+}
+.searchbutton {
+	border: 1px solid forestgreen;
+}
+
+#filter {
+	padding-left: 153px;
+}

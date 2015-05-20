@@ -1,0 +1,18 @@
+
+#search
+  %span#searchlabel
+    Search by identifier
+  %input#searchbox{ type: :text }
+  %input.searchbutton{ type: :button, value: :Search }
+  #filter
+    %input.searchbutton{ type: :button, value: "Add filter" }
+    %select
+      %option{ value: :and } AND
+      %option{ value: :not } NOT
+      %option{ value: :or } OR
+    %br
+    Output as: 
+    %select
+      %option{ value: :csv } Comma-separated file
+      %option{ value: :tsv } Tab-separated file
+      %option{ value: :xls } Excel file
