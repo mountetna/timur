@@ -1,6 +1,6 @@
 
 #search
-  %span#searchlabel
+  %span.searchlabel
     Search by identifier
   %input#searchbox{ type: :text }
   %input.searchbutton{ type: :button, value: :Search }
@@ -11,8 +11,9 @@
       %option{ value: :not } NOT
       %option{ value: :or } OR
     %br
+  %span.searchlabel
     Output as: 
-    %select
-      %option{ value: :csv } Comma-separated file
-      %option{ value: :tsv } Tab-separated file
-      %option{ value: :xls } Excel file
+  %select
+    %option{ value: :csv } Comma-separated file
+    %option{ value: :tsv } Tab-separated file
+    %option{ value: :xls } Excel file
