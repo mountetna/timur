@@ -22,8 +22,22 @@ class BrowseController <  ApplicationController
       @model.attributes[att] && !@model.attributes[att].read_only?
     end
 
-    @record.update (params[:values] || {}).select do |att,val|
-      @model.attributes[att] && !@model.attributes[att].read_only?
+    # mark any file uploads as changed.
+    @model.attributes.select do |name,att|
+      att.is_a? Magma::DocumentAttribute
+    end.each do |name, att|
+      if params[:values][name]
+        @record.modified! name
+      end
+    end
+
+
+    begin
+      @record.update (params[:values] || {}).select do |att,val|
+        @model.attributes[att] && !@model.attributes[att].read_only?
+      end
+    rescue Magma::LoadFailed => m
+      logger.info m.complaints
     end
 
     redirect_to browse_model_path(@model.name.snake_case, @record.identifier)
