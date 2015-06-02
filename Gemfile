@@ -30,6 +30,8 @@ gem 'haml-rails', '>= 0.3.4'
 
 gem 'react-rails', '~> 1.0'
 
+gem 'js-routes'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

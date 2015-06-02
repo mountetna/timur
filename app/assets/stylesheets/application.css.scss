@@ -10,15 +10,13 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
  *= require_self
+ *= require_tree .
  */
 
 
-$row_height: 25px;
-$body_font: 'Oxygen', sans-serif;
-$value_font: 'Cousine', monospaced;
 @import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Oxygen);
+$body_font: 'Oxygen', sans-serif;
 
 #logo {
 	background-image: image-url('Timur.png');
@@ -71,6 +69,7 @@ $value_font: 'Cousine', monospaced;
 body {
 	font-family: $body_font;
 }
+
 a {
 	text-decoration: none;
 	color: olive;
@@ -103,29 +102,6 @@ a {
 	color: limegreen;
 }
 
-#names {
-	width: 25%;
-	display: inline-block;
-	border-right: 1px solid forestgreen;
-	border-top: 1px solid forestgreen;
-	padding-right: 8px;
-}
-
-.attribute {
-	height: $row_height;
-	text-align: right;
-	color: midnightblue;
-}
-
-#values {
-	color: mediumorchid;
-	width: 70%;
-	display: inline-block;
-	border-left: 1px solid forestgreen;
-	border-top: 1px solid forestgreen;
-	padding-left: 9px;
-	vertical-align:top
-}
 
 #browse {
 	padding-left: 150px;
@@ -166,31 +142,11 @@ a {
 	color: forestgreen;
 }
 
-.value {
-	height: $row_height;
-	font-family: $value_font;
-}
-.edit_value {
-	height: $row_height;
-}
-.hidden {
-	display: none;
-}
 .inline {
 	display: inline-block;
 }
-.edit_value input {
-	font-family: $value_font;
-	font-size: 16px;
-	border: 0px none black;
-	color: darkorchid;
-	border-bottom: 1px solid forestgreen;
-	margin: 0;
-	padding: 0;
-	vertical-align:top;
-	height: calc(#{$row_height} - 1px);
-	width: 70%;
-}
+
+
 
 #search {
 	padding-left: 10%;

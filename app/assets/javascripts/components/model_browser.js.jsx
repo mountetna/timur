@@ -1,35 +1,8 @@
-ModelAttributes = React.createClass({
-  render: function() {
-    return <div id="attributes">
-          {
-            model.attributes.map(
-              function(att) {
-                if (att.shown) {
-                  return <ModelAttribute key={att.name} attribute={att}/>;
-                }
-              })
-           }
-        </div>
-  }
-});
-
-ModelAttribute = React.createClass({
-  render: function() {
-    return <div className="attribute">
-            <div className="attribute_name">
-             { this.props.attribute.display_name }
-            </div>
-            <div className="attribute_value">
-             { this.props.attribute.display_name }
-            </div>
-           </div>
-  }
-});
 
 ModelHeader = React.createClass({
   render: function() {
     var button;
-    if (this.props.edit_mode)
+    if (this.props.mode == 'edit')
       button = 
         <div className="inline">
           <div id='cancel' onClick={ this.props.mode_handler.bind(null,'browse') }>&#x2717;</div>
@@ -48,20 +21,26 @@ ModelHeader = React.createClass({
 
 ModelBrowser = React.createClass({
   getInitialState: function() {
-    return { mode: false }
+    return { mode: 'browse' }
   },
   submit_edit: function() {
-    alert('ok');
+    $('#model').submit()
   },
   handle_mode: function(mode) {
-  },
-  set_edit_mode: function(enable) {
-    this.setState({ edit_mode: enable })
+    if (mode == 'submit') {
+      // attempt to submit the edit
+      this.submit_edit();
+    } else
+      this.setState({ mode: mode })
   },
   render: function() {
-    return <div id="model_header">
-      <ModelHeader edit_mode={ this.state.edit_mode } mode_handler={ this.handle_mode }/>
-      <ModelAttributes edit_mode={ this.state.edit_mode }/>
-    </div>
+    var token = $( 'meta[name="csrf-token"]' ).attr('content');
+    return <form id="model" method="post" action={ Routes.update_model_path() } encType="multipart/form-data">
+      <input type="hidden" name="authenticity_token" value={ token }/>
+      <input type="hidden" name="model" value={ model.name }/>
+      <input type="hidden" name="record_id" value={ record.id }/>
+      <ModelHeader mode={ this.state.mode } mode_handler={ this.handle_mode }/>
+      <ModelAttributes mode={ this.state.mode }/>
+    </form>
   }
 });

@@ -2,17 +2,5 @@ require 'yaml'
 
 Magma.instance.configure YAML.load(File.read("config/magma.yml"))
 
-class Magma::Document
-  before :store, :report
-
-  def report(file)
-    Rails.logger.info "Called before store thingy with #{file}."
-  end
-end
-
-class DcStain
-  def before_save
-    return false if super == false
-    Rails.logger.info "Going to save."
-  end
-end
+Magma.instance.db.extension :connection_validator
+Magma.instance.db.pool.connection_validation_timeout = -1

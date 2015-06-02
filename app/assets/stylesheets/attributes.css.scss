@@ -1,0 +1,78 @@
+$value_font: 'Cousine', monospaced;
+$body_font: 'Oxygen', sans-serif;
+
+@function forestgreen($opacity) {
+	@return rgba(34,139,34,$opacity)
+}
+
+#attributes {
+	.attribute {
+		display: flex;
+
+		.row_cell {
+			border-bottom: 1px solid forestgreen(0.1);
+		}
+		&:first-of-type {
+			.row_cell { 
+				border-top: 2px solid forestgreen;
+				background-color: forestgreen(0.1);
+			}
+		}
+		.name {
+			@extend .row_cell;
+			display: inline-block;
+			width: 25%;
+			padding-right: 8px;
+			text-align: right;
+			border-right: 1px solid forestgreen;
+			color: midnightblue;
+		}
+		.value {
+			@extend .row_cell;
+			color: mediumorchid;
+			width: 70%;
+			display: inline-block;
+			border-left: 1px solid forestgreen;
+			padding-left: 9px;
+			margin-left: 2px;
+			font-family: $value_font;
+			padding-top: 3px;
+
+			.collection_item {
+				border-bottom: 1px solid forestgreen(0.1);
+				padding-top: 3px;
+			}
+
+			.button {
+				cursor: pointer;
+				font-family: $body_font;
+				color: forestgreen;
+				padding: 2px;
+				font-size: 14px;
+				border: 1px solid forestgreen(0.5);
+				background-color: forestgreen(0.2);
+				&:hover {
+					background-color: forestgreen(0.3);
+				}
+			}
+			
+			.text_defaults {
+				color: darkorchid;
+				border: 0px none black;
+				border-bottom: 1px solid forestgreen;
+				font-family: $value_font;
+				font-size: 16px;
+				margin: 0;
+				padding: 0;
+			}
+			input[type="text"].full_text {
+				@extend .text_defaults;
+				width: 70%;
+			}
+			input[type="text"].link_text {
+				@extend .text_defaults;
+				border-left: 1px solid forestgreen(0.2);
+			}
+		}
+	}
+}
