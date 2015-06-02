@@ -24,7 +24,7 @@ class BrowseController <  ApplicationController
 
     # mark any file uploads as changed.
     @model.attributes.select do |name,att|
-      att.is_a? Magma::DocumentAttribute
+      att.is_a?(Magma::DocumentAttribute) || att.is_a?(Magma::ImageAttribute)
     end.each do |name, att|
       if params[:values][name]
         @record.modified! name
