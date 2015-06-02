@@ -56,3 +56,7 @@ end
 group :test, :production do
   gem 'omniauth-shibboleth'
 end
+
+group :production do
+  gem 'magma-production-ucsf-immunoprofiler'
+end
