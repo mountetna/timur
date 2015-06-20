@@ -61,7 +61,7 @@ ModelBrowser = React.createClass({
     this.setState( { errors: result.errors } );
   },
   data_update:  function(result) {
-    this.setState( { mode: 'browse', record: result.record, model: result.model } );
+    this.setState( { mode: 'browse', record: result.record, model: result.model, errors: [] } );
   },
   handle_mode: function(mode) {
     if (mode == 'submit') {
