@@ -9,3 +9,10 @@
   - @record.experiment.each do |exp|
     %p
       %a{ href: browse_model_path( model: :experiment, name: exp.identifier ) } #{ exp.identifier }
+
+  %h2 Documents
+  - @record.document.sort_by(&:updated_at).each do |doc|
+    %p
+      %a{ href: doc.file.url } #{ doc.identifier } 
+      \- #{ doc.description }
+

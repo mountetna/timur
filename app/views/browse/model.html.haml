@@ -1,10 +1,5 @@
-= content_for :title, "Timur - Browse - #{@name}"
-
-%script{ type: "text/javascript" }
-  ! var model = #{@model.json_template};
-  ! var record = #{@record.to_json};
+= content_for :title, "Timur - Browse - #{@record_name}"
 
 #root
 %script{ type: "text/javascript" }
-  $(function() { React.render( React.createElement(ModelBrowser, null), $('#root')[0]); })
-
+  ! $(function() { React.render( React.createElement(ModelBrowser, { source: '#{ browse_json_path(@model_name, @record_name) }' }), $('#root')[0]); })

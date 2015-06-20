@@ -3,11 +3,11 @@ ModelAttributes = React.createClass({
     var self = this;
     return <div id="attributes">
           {
-            Object.keys(model.attributes).map(
+            Object.keys(self.props.model.attributes).map(
               function(name) {
-                var att = model.attributes[name]
+                var att = self.props.model.attributes[name]
                 if (att.shown) {
-                  return <AttributeRow key={att.name} mode={self.props.mode} attribute={att}/>;
+                  return <AttributeRow key={att.name} mode={self.props.mode} model={ self.props.model } record={ self.props.record } attribute={att}/>;
                 }
               })
            }
@@ -26,7 +26,7 @@ AttributeRow = React.createClass({
             <div className="name" title={ this.props.attribute.desc }>
              { this.props.attribute.display_name }
             </div>
-            <AttClass mode={ this.props.mode } attribute={ this.props.attribute }/>
+            <AttClass record={ this.props.record } model={ this.props.model } mode={ this.props.mode } attribute={ this.props.attribute }/>
            </div>
   }
 });
@@ -41,7 +41,7 @@ BaseAttribute = {
 }
 AttributeHelpers = {
   attribute_exists: function() {
-    return(record[this.props.attribute.name] != null)
+    return(this.props.record[this.props.attribute.name] != null)
   },
   value_name: function() {
     return "values[" + this.props.attribute.name + "]";
@@ -55,40 +55,94 @@ MagmaAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     return <div className="value">
-            { record[this.props.attribute.name] }
+            { this.props.record[this.props.attribute.name] }
            </div>
   },
   render_edit: function() {
     return <div className="value">
-            <input type='text' className="full_text" name={ this.value_name() } defaultValue={ record[this.props.attribute.name] } />
+            <input type='text' className="full_text" name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
            </div>
   }
 });
 
+TextAttribute = React.createClass({
+  mixins: [ BaseAttribute, AttributeHelpers ],
+  render_browse: function() {
+    return <div className="value">
+            { this.props.record[this.props.attribute.name] }
+           </div>
+  },
+  render_edit: function() {
+    return <div className="value">
+            <textarea className="text_box" name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+           </div>
+  }
+})
+
+CheckboxAttribute = React.createClass({
+  mixins: [ BaseAttribute, AttributeHelpers ],
+  render_browse: function() {
+    if (this.props.record[this.props.attribute.name])
+      check = "yes";
+    else
+      check = "no";
+    return <div className="value">
+            { check }
+           </div>
+  },
+  render_edit: function() {
+    return <div className="value">
+            <input type="hidden" name={ this.value_name() } value="0" />
+            <input type="checkbox" className="text_box" name={ this.value_name() } defaultChecked={ this.props.record[this.props.attribute.name] } />
+           </div>
+  }
+})
+
+SelectAttribute = React.createClass({
+  mixins: [ BaseAttribute, AttributeHelpers ],
+  render_browse: function() {
+    return <div className="value">
+            { this.props.record[this.props.attribute.name] }
+           </div>
+  },
+  render_edit: function() {
+    return <div className="value">
+            <select className="selection" defaultValue={ this.props.record[this.props.attribute.name] }>
+            {
+              this.props.attribute.options.map(
+                function(name) {
+                    return <option key={name} value={name}>{ name }</option>;
+                  }
+                )
+            }
+            </select>
+           </div>
+  }
+})
 
 MagmaForeignKeyAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
-    var link = record[this.props.attribute.name];
+    var link = this.props.record[this.props.attribute.name];
     return <div className="value">
             <a href={ Routes.browse_model_path(this.props.attribute.name,encodeURIComponent(link))}>{ link }</a>
            </div>
   },
   render_edit: function() {
-    return <MagmaLinkAttributeEditor attribute={ this.props.attribute }/>
+    return <MagmaLinkAttributeEditor model={ this.props.model } record={ this.props.record } attribute={ this.props.attribute }/>
   }
 })
 
 MagmaChildAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
-    var link = record[this.props.attribute.name];
+    var link = this.props.record[this.props.attribute.name];
     return <div className="value">
             <a href={ Routes.browse_model_path(this.props.attribute.name,encodeURIComponent(link))}>{ link }</a>
            </div>
   },
   render_edit: function() {
-    return <MagmaLinkAttributeEditor attribute={ this.props.attribute }/>
+    return <MagmaLinkAttributeEditor model={ this.props.model } record={this.props.record} attribute={ this.props.attribute }/>
   }
 });
 
@@ -104,7 +158,7 @@ MagmaLinkAttributeEditor = React.createClass({
     this.setState({mode: mode});
   },
   render: function() {
-    var link = record[this.props.attribute.name];
+    var link = this.props.record[this.props.attribute.name];
     var contents;
     if (this.state.mode == 'linked')
       contents = <MagmaLinkUnlinker mode_handler={ this.mode_handler }>{ link }</MagmaLinkUnlinker>;
@@ -141,7 +195,7 @@ MagmaDocumentAttribute = React.createClass({
   },
   render_attribute: function() {
     return <div className="value">
-            <a href={ record[this.props.attribute.name].url } > { record[this.props.attribute.name].path }</a>
+            <a href={ this.props.record[this.props.attribute.name].url } > { this.props.record[this.props.attribute.name].path }</a>
            </div>
   },
   render_empty: function() {
@@ -166,7 +220,7 @@ MagmaImageAttribute = React.createClass({
   },
   render_attribute: function() {
     return <div className="value">
-            <a href={ record[this.props.attribute.name].url } ><img src={ record[this.props.attribute.name].thumb }/></a>
+            <a href={ this.props.record[this.props.attribute.name].url } ><img src={ this.props.record[this.props.attribute.name].thumb }/></a>
            </div>
   },
   render_empty: function() {

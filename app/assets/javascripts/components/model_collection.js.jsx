@@ -5,7 +5,7 @@ MagmaCollectionAttribute = React.createClass({
     return <div className="value">
              <div className="collection">
               {
-                record[this.props.attribute.name].map(
+                this.props.record[this.props.attribute.name].map(
                   function(link) {
                     return <div key={ link } className="collection_item">
                       <a href={ Routes.browse_model_path(self.props.attribute.name,encodeURIComponent(link)) }>{ link }</a>
@@ -30,7 +30,7 @@ MagmaCollectionAttribute = React.createClass({
     return <div className="value">
              <div className="collection">
               {
-                record[this.props.attribute.name].map(
+                this.props.record[this.props.attribute.name].map(
                   function(link) {
                     // this thing has state, reflecting whether or not you want to delete this component
                     return <MagmaCollectionUnlink key={ link } current={ link }/>

@@ -8,15 +8,29 @@ class BrowseController <  ApplicationController
 
   def model
     # Get the model name
+    @model_name = params[:model]
+    @record_name = params[:name]
+  end
+
+  def json
+    # Get the model name
     @model = Magma.instance.get_model params[:model]
-    @name = params[:name]
     @record = @model[@model.identity => params[:name]]
+
+    render json: basic_payload
   end
 
   def update
     # Update a model, redirect to the model view
     @model = Magma.instance.get_model params[:model]
     @record = @model[params[:record_id]]
+
+    validate_update(params)
+
+    if @errors.count > 0
+      render json: { errors: @errors }, status: 422
+      return
+    end
 
     create_or_update_links (params[:link] || {}).select do |att,val|
       @model.attributes[att] && !@model.attributes[att].read_only?
@@ -31,7 +45,6 @@ class BrowseController <  ApplicationController
       end
     end
 
-
     begin
       @record.update (params[:values] || {}).select do |att,val|
         @model.attributes[att] && !@model.attributes[att].read_only?
@@ -40,7 +53,7 @@ class BrowseController <  ApplicationController
       logger.info m.complaints
     end
 
-    redirect_to browse_model_path(@model.name.snake_case, @record.identifier)
+    render json: basic_payload
   end
 
   def new
@@ -68,6 +81,49 @@ class BrowseController <  ApplicationController
   end
 
   private
+  def basic_payload
+    { record: @record.json_template, model: json_update(@model) }
+  end
+
+  def json_update model
+    if update_class(model)
+      updater = update_class(model).new(model)
+      updater.json_template
+    else
+      model.json_template
+    end
+  end
+
+  def update_class model
+    return nil unless [Sample].include? model
+    name = "#{model.name.snake_case}_json_update".camel_case.to_sym
+    Kernel.const_get name
+  end
+
+  def validate_update params
+    @errors = []
+    validate_links params[:link]
+    validate_values params[:values]
+  end
+
+  def validate_links links
+    # pull up the appropriate model
+    links.each do |fname, link|
+      foreign_model = Magma.instance.get_model fname
+      foreign_model.attributes[foreign_model.identity].validate link do |error|
+        @errors.push error
+      end
+    end
+  end
+
+  def validate_values values
+    values.each do |name, value|
+      @model.attributes[name.to_sym].validate value do |error|
+        @errors.push error
+      end
+    end
+  end
+
   def create_or_update_links links
     links.each do |fname,link|
       next if link.blank?
