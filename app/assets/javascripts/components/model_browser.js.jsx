@@ -41,7 +41,7 @@ ModelBrowser = React.createClass({
     $('#model').submit();
   },
   post_form:    function() {
-    var submission = $('#model').serialize();
+    var submission = new FormData($('#model')[0])
     console.log("Posting via AJAX");
     console.log(submission);
     $.ajax({
@@ -50,7 +50,10 @@ ModelBrowser = React.createClass({
       data: submission,
       dataType: "JSON",
       success: this.data_update,
-      error: this.report_errors
+      error: this.report_errors,
+      cache: false,
+      contentType: false,
+      processData: false
     });
     return false;
   },
