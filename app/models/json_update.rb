@@ -20,6 +20,11 @@ class JsonUpdate
           att.attribute_class = "SelectAttribute"
         end
       end
+      if att[:type] == "DateTime"
+        patch_attribute name do |att|
+          att.attribute_class = "DateTimeAttribute"
+        end
+      end
     end
     template
   end

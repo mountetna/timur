@@ -79,6 +79,20 @@ TextAttribute = React.createClass({
   }
 })
 
+DateTimeAttribute = React.createClass({
+  mixins: [ BaseAttribute, AttributeHelpers ],
+  render_browse: function() {
+    return <div className="value">
+            { this.props.record[this.props.attribute.name] }
+           </div>
+  },
+  render_edit: function() {
+    return <div className="value">
+            <input type='text' className="full_text" name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+           </div>
+  }
+})
+
 CheckboxAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {

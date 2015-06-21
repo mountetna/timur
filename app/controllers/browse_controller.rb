@@ -102,15 +102,17 @@ class BrowseController <  ApplicationController
 
   def validate_update params
     @errors = []
-    validate_links params[:link]
-    validate_values params[:values]
+    validate_links params[:link] if params[:link]
+    validate_values params[:values] if params[:values]
   end
 
   def validate_links links
     # pull up the appropriate model
     links.each do |fname, link|
+      next unless link && link.size > 0
       foreign_model = Magma.instance.get_model fname
-      foreign_model.attributes[foreign_model.identity].validate link do |error|
+      att = foreign_model.attributes[foreign_model.identity]
+      att.validate link do |error|
         @errors.push error
       end
     end
