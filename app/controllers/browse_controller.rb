@@ -102,14 +102,23 @@ class BrowseController <  ApplicationController
     validate_values params[:values] if params[:values]
   end
 
-  def validate_links links
+  def validate_links linkset
     # pull up the appropriate model
-    links.each do |fname, link|
-      next unless link && link.size > 0
+    linkset.each do |fname, links|
       foreign_model = Magma.instance.get_model fname
       att = foreign_model.attributes[foreign_model.identity]
-      att.validate link do |error|
-        @errors.push error
+      if links.is_a? Array
+        links.each do |link|
+          next unless link && link.size > 0
+          att.validate link do |error|
+            @errors.push error
+          end
+        end
+      else
+        next unless links && links.size > 0
+        att.validate links do |error|
+          @errors.push error
+        end
       end
     end
   end
