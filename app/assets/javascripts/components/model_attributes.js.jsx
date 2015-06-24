@@ -79,6 +79,55 @@ TextAttribute = React.createClass({
   }
 })
 
+IntegerAttribute = React.createClass({
+  mixins: [ BaseAttribute, AttributeHelpers ],
+  render_browse: function() {
+    return <div className="value">
+            { this.props.record[this.props.attribute.name] }
+           </div>
+  },
+  filter_keys: function(e) {
+    console.log(e.key);
+    if (Keycode.is_modified(e)) return true;
+    if (Keycode.is_number(e)) return true;
+    if (Keycode.is_printable(e)) {
+      e.preventDefault();
+      return true;
+    }
+    return true;
+  },
+  render_edit: function() {
+    return <div className="value">
+            <input type='text' className="full_text" onKeyDown={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+           </div>
+  }
+})
+
+FloatAttribute = React.createClass({
+  mixins: [ BaseAttribute, AttributeHelpers ],
+  render_browse: function() {
+    return <div className="value">
+            { this.props.record[this.props.attribute.name] }
+           </div>
+  },
+  filter_keys: function(e) {
+    console.log(e.key);
+    if (Keycode.is_modified(e)) return true;
+    if (Keycode.is_number(e)) return true;
+    if (e.key.match(/^[\.e\-]/)) return true
+    if (Keycode.is_printable(e)) {
+      e.preventDefault();
+      return true;
+    }
+    return true;
+  },
+  render_edit: function() {
+    return <div className="value">
+            <input type='text' className="full_text" onKeyDown={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+           </div>
+  }
+})
+
 DateTimeAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {

@@ -20,6 +20,16 @@ class JsonUpdate
           att.attribute_class = "SelectAttribute"
         end
       end
+      if att[:type] == "Integer"
+        patch_attribute name do |att|
+          att.attribute_class = "IntegerAttribute"
+        end
+      end
+      if att[:type] == "Float"
+        patch_attribute name do |att|
+          att.attribute_class = "FloatAttribute"
+        end
+      end
       if att[:type] == "DateTime"
         patch_attribute name do |att|
           att.attribute_class = "DateTimeAttribute"

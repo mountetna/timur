@@ -18,3 +18,4 @@
 #= require react_ujs
 #= require components
 #= require model
+#= require keycode

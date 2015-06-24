@@ -32,7 +32,6 @@ ModelHeader = React.createClass({
   }
 });
 
-
 ModelBrowser = React.createClass({
   getInitialState: function() {
     return { mode: 'loading', errors: [] }
@@ -61,7 +60,10 @@ ModelBrowser = React.createClass({
     result = result.responseJSON;
     console.log("Got an error");
     console.log(result);
-    this.setState( { errors: result.errors } );
+    if (result && result.errors)
+      this.setState( { errors: result.errors } );
+    else
+      this.setState( { errors: [ "An unknown error occurred." ] } );
   },
   data_update:  function(result) {
     this.setState( { mode: 'browse', record: result.record, model: result.model, errors: [] } );

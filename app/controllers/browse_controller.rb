@@ -86,16 +86,12 @@ class BrowseController <  ApplicationController
   end
 
   def json_update model
-    if update_class(model)
-      updater = update_class(model).new(model)
-      updater.json_template
-    else
-      model.json_template
-    end
+    updater = update_class(model).new(model)
+    updater.json_template
   end
 
   def update_class model
-    return nil unless [Sample].include? model
+    return JsonUpdate unless [Sample].include? model
     name = "#{model.name.snake_case}_json_update".camel_case.to_sym
     Kernel.const_get name
   end
