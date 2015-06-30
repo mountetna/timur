@@ -74,6 +74,26 @@ $body_font: 'Oxygen', sans-serif;
 				margin: 0;
 				padding: 0;
 			}
+			.selection {
+				border: 1px solid forestgreen;
+				color: mediumorchid;
+				font-family: $value_font;
+				font-size: 16px;
+				background: transparent;
+			}
+			.at_spacer {
+				padding-left: 5px;
+				padding-right: 5px;
+				color: forestgreen;
+			}
+			input[type="text"].date_text {
+				@extend .text_defaults;
+				width: 100px;
+			}
+			input[type="text"].time_text {
+				@extend .text_defaults;
+				width: 50px;
+			}
 			input[type="text"].full_text {
 				@extend .text_defaults;
 				width: 70%;

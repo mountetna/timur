@@ -12,6 +12,7 @@
 #
 #= require js-routes
 #= require jquery
+#= require jquery-ui/datepicker
 #= require jquery_ujs
 #= require turbolinks
 #= require react
@@ -19,3 +20,4 @@
 #= require components
 #= require model
 #= require keycode
+#= require jquery-mask

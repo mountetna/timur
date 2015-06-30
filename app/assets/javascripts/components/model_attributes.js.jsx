@@ -7,7 +7,7 @@ ModelAttributes = React.createClass({
               function(name) {
                 var att = self.props.model.attributes[name]
                 if (att.shown) {
-                  return <AttributeRow key={att.name} mode={self.props.mode} model={ self.props.model } record={ self.props.record } attribute={att}/>;
+                  return <AttributeRow process={ self.props.process } key={att.name} mode={self.props.mode} model={ self.props.model } record={ self.props.record } attribute={att}/>;
                 }
               })
            }
@@ -26,7 +26,7 @@ AttributeRow = React.createClass({
             <div className="name" title={ this.props.attribute.desc }>
              { this.props.attribute.display_name }
             </div>
-            <AttClass record={ this.props.record } model={ this.props.model } mode={ this.props.mode } attribute={ this.props.attribute }/>
+            <AttClass process={ this.props.process } record={ this.props.record } model={ this.props.model } mode={ this.props.mode } attribute={ this.props.attribute }/>
            </div>
   }
 });
@@ -87,7 +87,8 @@ IntegerAttribute = React.createClass({
            </div>
   },
   filter_keys: function(e) {
-    console.log(e.key);
+    console.log("blah");
+    console.log(e);
     if (Keycode.is_modified(e)) return true;
     if (Keycode.is_number(e)) return true;
     if (Keycode.is_printable(e)) {
@@ -111,10 +112,14 @@ FloatAttribute = React.createClass({
            </div>
   },
   filter_keys: function(e) {
+    console.log("blah");
     console.log(e.key);
-    if (Keycode.is_modified(e)) return true;
+    console.log(e.keyCode);
+    console.log(e.charCode);
+    console.log(e.which);
+    if (Keycode.is_ctrl(e)) return true;
     if (Keycode.is_number(e)) return true;
-    if (e.key.match(/^[\.e\-]/)) return true
+    if (Keycode.match(e,/^[\.e\-]$/)) return true
     if (Keycode.is_printable(e)) {
       e.preventDefault();
       return true;
@@ -123,21 +128,7 @@ FloatAttribute = React.createClass({
   },
   render_edit: function() {
     return <div className="value">
-            <input type='text' className="full_text" onKeyDown={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
-           </div>
-  }
-})
-
-DateTimeAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
-    return <div className="value">
-            { this.props.record[this.props.attribute.name] }
-           </div>
-  },
-  render_edit: function() {
-    return <div className="value">
-            <input type='text' className="full_text" name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+            <input type='text' className="full_text" onKeyPress={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
            </div>
   }
 })

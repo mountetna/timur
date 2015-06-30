@@ -41,6 +41,8 @@ ModelBrowser = React.createClass({
   },
   post_form:    function() {
     var submission = new FormData($('#model')[0])
+    // we need to fix some entries in our submission.
+    this.update_form_tokens(submission);
     console.log("Posting via AJAX");
     console.log(submission);
     $.ajax({
@@ -68,6 +70,11 @@ ModelBrowser = React.createClass({
   data_update:  function(result) {
     this.setState( { mode: 'browse', record: result.record, model: result.model, errors: [] } );
   },
+  update_form_tokens: function(submission) {
+    for (var key in self.form_tokens) {
+      submission.append(key, self.form_tokens[key]);
+    }
+  },
   handle_mode: function(mode) {
     if (mode == 'submit') {
       // attempt to submit the edit
@@ -84,6 +91,16 @@ ModelBrowser = React.createClass({
       }
     })
   },
+  process: function( job, item ) {
+    // general workhorse function that handles stuff from the components
+    console.log(item);
+    switch(job) {
+      case 'form-token-update':
+        if (!self.form_tokens) self.form_tokens = {};
+        self.form_tokens[ item.name ] = item.value;
+        break;
+    };
+  },
   render: function() {
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
     if (this.state.mode == 'loading')
@@ -95,7 +112,7 @@ ModelBrowser = React.createClass({
         <input type="hidden" name="record_id" value={ this.state.record.id }/>
         <ModelErrors errors={ this.state.errors }/>
         <ModelHeader mode={ this.state.mode } model={ this.state.model } mode_handler={ this.handle_mode }/>
-        <ModelAttributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record }/>
+        <ModelAttributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record } process={ this.process }/>
       </form>
   }
 });

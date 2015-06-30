@@ -1,0 +1,40 @@
+$value_font: 'Cousine', monospaced;
+
+@function forestgreen($opacity) {
+	@return rgba(34,139,34,$opacity)
+}
+
+.ui-datepicker {
+	font-family: $value_font;
+	font-size: 16px;
+	border: 1px solid forestgreen;
+	border-radius: 0;
+
+	.ui-datepicker-header {
+		border: 1px solid forestgreen;
+		background: forestgreen(0.2);
+		border-radius: 0;
+	}
+
+	select {
+		color: mediumorchid;
+		font-family: $value_font;
+		font-size: 16px;
+	}
+	button {
+		font-family: $value_font;
+		font-size: 16px;
+		border-radius: 0;
+	}
+	.ui-datepicker-calendar {
+		td a {
+			background: forestgreen(0.2);
+		}
+		td.ui-datepicker-current-day a {
+			background: forestgreen(0.4);
+		}
+		td.ui-datepicker-today a {
+			background: forestgreen(0.1);
+		}
+	}
+}
