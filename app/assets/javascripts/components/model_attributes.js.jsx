@@ -60,7 +60,7 @@ MagmaAttribute = React.createClass({
   },
   render_edit: function() {
     return <div className="value">
-            <input type='text' className="full_text" name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+            <input type='text' className="full_text" placeholder={ this.props.attribute.placeholder } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
            </div>
   }
 });
@@ -99,7 +99,7 @@ IntegerAttribute = React.createClass({
   },
   render_edit: function() {
     return <div className="value">
-            <input type='text' className="full_text" onKeyDown={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+            <input type='text' className="full_text" placeholder={this.props.attribute.placeholder} onKeyDown={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
            </div>
   }
 })
@@ -128,7 +128,7 @@ FloatAttribute = React.createClass({
   },
   render_edit: function() {
     return <div className="value">
-            <input type='text' className="full_text" onKeyPress={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+            <input type='text' placeholder={this.props.attribute.placeholder} className="full_text" onKeyPress={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
            </div>
   }
 })

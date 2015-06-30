@@ -91,7 +91,7 @@ class BrowseController <  ApplicationController
   end
 
   def update_class model
-    return JsonUpdate unless [Sample].include? model
+    return JsonUpdate unless [Sample,Patient].include? model
     name = "#{model.name.snake_case}_json_update".camel_case.to_sym
     Kernel.const_get name
   end
