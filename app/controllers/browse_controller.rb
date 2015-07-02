@@ -17,7 +17,8 @@ class BrowseController <  ApplicationController
     @model = Magma.instance.get_model params[:model]
     @record = @model[@model.identity => params[:name]]
 
-    render json: basic_payload
+    updater.extend_template params[:extensions]
+    render json: json_payload
   end
 
   def update
@@ -53,7 +54,7 @@ class BrowseController <  ApplicationController
       logger.info m.complaints
     end
 
-    render json: basic_payload
+    render json: json_payload
   end
 
   def new
@@ -81,18 +82,17 @@ class BrowseController <  ApplicationController
   end
 
   private
-  def basic_payload
-    { record: @record.json_template, model: json_update(@model) }
+  def json_payload
+    @payload ||= { record: updater.json_document, model: updater.json_template }
   end
 
-  def json_update model
-    updater = update_class(model).new(model)
-    updater.json_template
+  def updater
+    @updater ||= update_class.new(@model, @record)
   end
 
-  def update_class model
-    return JsonUpdate unless [Sample,Patient].include? model
-    name = "#{model.name.snake_case}_json_update".camel_case.to_sym
+  def update_class
+    return JsonUpdate unless [Sample,Patient].include? @model
+    name = "#{@model.name.snake_case}_json_update".camel_case.to_sym
     Kernel.const_get name
   end
 

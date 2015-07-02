@@ -37,6 +37,7 @@ ModelBrowser = React.createClass({
     return { mode: 'loading', errors: [] }
   },
   submit_edit: function() {
+    $('#model').submit(this.post_form)
     $('#model').submit();
   },
   post_form:    function() {
@@ -83,22 +84,21 @@ ModelBrowser = React.createClass({
       this.setState({ mode: mode })
   },
   componentDidMount: function() {
-    self = this;
-    $.get(self.props.source,function(result) {
-      if (self.isMounted()) {
-        self.data_update(result);
-        $('#model').submit(self.post_form)
-      }
-    })
+    this.get_data({})
+  },
+  get_data: function(data) {
+    $.get(this.props.source, data, this.data_update);
   },
   process: function( job, item ) {
     // general workhorse function that handles stuff from the components
     console.log(item);
     switch(job) {
       case 'form-token-update':
-        if (!self.form_tokens) self.form_tokens = {};
-        self.form_tokens[ item.name ] = item.value;
+        if (!this.form_tokens) this.form_tokens = {};
+        this.form_tokens[ item.name ] = item.value;
         break;
+      case 'request-extension':
+        this.get_data( { extensions: [ item ] } );
     };
   },
   render: function() {
