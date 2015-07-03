@@ -37,7 +37,6 @@ ModelBrowser = React.createClass({
     return { mode: 'loading', errors: [] }
   },
   submit_edit: function() {
-    $('#model').submit(this.post_form)
     $('#model').submit();
   },
   post_form:    function() {
@@ -84,7 +83,11 @@ ModelBrowser = React.createClass({
       this.setState({ mode: mode })
   },
   componentDidMount: function() {
-    this.get_data({})
+    var self = this;
+    $.get(this.props.source, function(result) {
+      self.data_update(result);
+      $('#model').submit(self.post_form);
+    });
   },
   get_data: function(data) {
     $.get(this.props.source, data, this.data_update);
