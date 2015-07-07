@@ -39,7 +39,7 @@ ModelBrowser = React.createClass({
   submit_edit: function() {
     $('#model').submit();
   },
-  post_form:    function() {
+  post_form: function() {
     var submission = new FormData($('#model')[0])
     // we need to fix some entries in our submission.
     this.update_form_tokens(submission);
@@ -71,8 +71,8 @@ ModelBrowser = React.createClass({
     this.setState( { mode: 'browse', record: result.record, model: result.model, errors: [] } );
   },
   update_form_tokens: function(submission) {
-    for (var key in self.form_tokens) {
-      submission.append(key, self.form_tokens[key]);
+    for (var key in this.form_tokens) {
+      submission.append(key, this.form_tokens[key]);
     }
   },
   handle_mode: function(mode) {
@@ -104,12 +104,20 @@ ModelBrowser = React.createClass({
         this.get_data( { extensions: [ item ] } );
     };
   },
+  class_set: function() {
+    var set = this.state.model.class_set || [];
+    if (this.state.mode == "browse")
+      return set.join(' ');
+    else
+      return '';
+  },
   render: function() {
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
     if (this.state.mode == 'loading')
       return <div id="model"/>;
-    else
-      return <form id="model" method="post" model={ this.state.model } record={ this.state.record } action={ Routes.update_model_path() } encType="multipart/form-data">
+    else {
+      var classes = this.class_set();
+      return <form id="model" className={classes} method="post" model={ this.state.model } record={ this.state.record } action={ Routes.update_model_path() } encType="multipart/form-data">
         <input type="hidden" name="authenticity_token" value={ token }/>
         <input type="hidden" name="model" value={ this.state.model.name }/>
         <input type="hidden" name="record_id" value={ this.state.record.id }/>
@@ -117,5 +125,6 @@ ModelBrowser = React.createClass({
         <ModelHeader mode={ this.state.mode } model={ this.state.model } mode_handler={ this.handle_mode }/>
         <ModelAttributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record } process={ this.process }/>
       </form>
+    }
   }
 });

@@ -11,13 +11,14 @@
  * file per style scope.
  *
  *= require jquery-ui/datepicker
- *= require_self
- *= require_tree .
  */
 
+@import "globals";
+@import "attributes";
+@import "datepicker";
+@import "project";
 
 @import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Oxygen);
-$body_font: 'Oxygen', sans-serif;
 
 #logo {
 	background-image: image-url('Timur.png');

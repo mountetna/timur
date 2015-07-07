@@ -14,11 +14,33 @@ class JsonUpdate
     @document ||= @record.json_document
   end
 
-  def json_document
-    document
+  def self.extension name
+    @extensions ||= []
+    @extensions.push name
   end
 
-  def json_template
+  def self.extensions
+    @extensions
+  end
+
+  def self.sort_order *order
+    @sort_order ||= order
+  end
+
+  def extend_template request_exts
+    return unless request_exts
+    request_exts.each do |name|
+      next unless self.class.extensions.include? name.to_sym
+      @enabled_extensions.push name.to_sym
+    end
+  end
+  def apply!
+    apply_template!
+    apply_sorts!
+  end
+
+  private
+  def apply_template!
     template[:attributes].each do |name,att|
       if att[:type] == "TrueClass"
         patch_attribute name do |att|
@@ -48,8 +70,12 @@ class JsonUpdate
     end
 
     include_extensions
+  end
 
-    template
+  def apply_sorts!
+    template[:attributes] = Hash[template[:attributes].sort_by do |name, att|
+      self.class.sort_order.index(name) || 1000
+    end]
   end
 
   def patch_attribute att
@@ -58,32 +84,19 @@ class JsonUpdate
     template[:attributes][att] = att_def.marshal_dump
   end
 
+  def patch_member mem
+    template[mem] = yield template[mem]
+  end
+
   def patch_key key
     value = document[key]
     document[key] = yield value
-  end
-
-  def self.extension name
-    @extensions ||= []
-    @extensions.push name
-  end
-
-  def self.extensions
-    @extensions
   end
 
   def include_extensions
     # extension methods should patch the template
     @enabled_extensions.each do |ext|
       send ext
-    end
-  end
-
-  def extend_template request_exts
-    return unless request_exts
-    request_exts.each do |name|
-      next unless self.class.extensions.include? name.to_sym
-      @enabled_extensions.push name.to_sym
     end
   end
 end

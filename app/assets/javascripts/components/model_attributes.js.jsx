@@ -41,7 +41,10 @@ BaseAttribute = {
 }
 AttributeHelpers = {
   attribute_exists: function() {
-    return(this.props.record[this.props.attribute.name] != null)
+    return(this.attribute_value() != null)
+  },
+  attribute_value: function() {
+    return(this.props.record[this.props.attribute.name]);
   },
   value_name: function() {
     return "values[" + this.props.attribute.name + "]";
@@ -55,12 +58,12 @@ MagmaAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     return <div className="value">
-            { this.props.record[this.props.attribute.name] }
+            { this.attribute_value() }
            </div>
   },
   render_edit: function() {
     return <div className="value">
-            <input type='text' className="full_text" placeholder={ this.props.attribute.placeholder } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+            <input type='text' className="full_text" placeholder={ this.props.attribute.placeholder } name={ this.value_name() } defaultValue={ this.attribute_value() } />
            </div>
   }
 });
@@ -69,12 +72,12 @@ TextAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     return <div className="value">
-            { this.props.record[this.props.attribute.name] }
+            { this.attribute_value() }
            </div>
   },
   render_edit: function() {
     return <div className="value">
-            <textarea className="text_box" name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+            <textarea className="text_box" name={ this.value_name() } defaultValue={ this.attribute_value() } />
            </div>
   }
 })
@@ -83,7 +86,7 @@ IntegerAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     return <div className="value">
-            { this.props.record[this.props.attribute.name] }
+            { this.attribute_value() }
            </div>
   },
   filter_keys: function(e) {
@@ -99,7 +102,7 @@ IntegerAttribute = React.createClass({
   },
   render_edit: function() {
     return <div className="value">
-            <input type='text' className="full_text" placeholder={this.props.attribute.placeholder} onKeyDown={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+            <input type='text' className="full_text" placeholder={this.props.attribute.placeholder} onKeyDown={ this.filter_keys } name={ this.value_name() } defaultValue={ this.attribute_value() } />
            </div>
   }
 })
@@ -108,7 +111,7 @@ FloatAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     return <div className="value">
-            { this.props.record[this.props.attribute.name] }
+            { this.attribute_value() }
            </div>
   },
   filter_keys: function(e) {
@@ -128,7 +131,7 @@ FloatAttribute = React.createClass({
   },
   render_edit: function() {
     return <div className="value">
-            <input type='text' placeholder={this.props.attribute.placeholder} className="full_text" onKeyPress={ this.filter_keys } name={ this.value_name() } defaultValue={ this.props.record[this.props.attribute.name] } />
+            <input type='text' placeholder={this.props.attribute.placeholder} className="full_text" onKeyPress={ this.filter_keys } name={ this.value_name() } defaultValue={ this.attribute_value() } />
            </div>
   }
 })
@@ -136,7 +139,7 @@ FloatAttribute = React.createClass({
 CheckboxAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
-    if (this.props.record[this.props.attribute.name])
+    if (this.attribute_value())
       check = "yes";
     else
       check = "no";
@@ -147,7 +150,7 @@ CheckboxAttribute = React.createClass({
   render_edit: function() {
     return <div className="value">
             <input type="hidden" name={ this.value_name() } value="0" />
-            <input type="checkbox" className="text_box" name={ this.value_name() } defaultChecked={ this.props.record[this.props.attribute.name] } />
+            <input type="checkbox" className="text_box" name={ this.value_name() } defaultChecked={ this.attribute_value() } />
            </div>
   }
 })
@@ -156,12 +159,12 @@ SelectAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     return <div className="value">
-            { this.props.record[this.props.attribute.name] }
+            { this.attribute_value() }
            </div>
   },
   render_edit: function() {
     return <div className="value">
-            <select className="selection" defaultValue={ this.props.record[this.props.attribute.name] }>
+            <select className="selection" defaultValue={ this.attribute_value() }>
             {
               this.props.attribute.options.map(
                 function(name) {
@@ -177,7 +180,7 @@ SelectAttribute = React.createClass({
 MagmaForeignKeyAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
-    var link = this.props.record[this.props.attribute.name];
+    var link = this.attribute_value();
     return <div className="value">
             <a href={ Routes.browse_model_path(this.props.attribute.name,encodeURIComponent(link))}>{ link }</a>
            </div>
@@ -190,7 +193,7 @@ MagmaForeignKeyAttribute = React.createClass({
 MagmaChildAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
-    var link = this.props.record[this.props.attribute.name];
+    var link = this.attribute_value();
     return <div className="value">
             <a href={ Routes.browse_model_path(this.props.attribute.name,encodeURIComponent(link))}>{ link }</a>
            </div>
@@ -212,7 +215,7 @@ MagmaLinkAttributeEditor = React.createClass({
     this.setState({mode: mode});
   },
   render: function() {
-    var link = this.props.record[this.props.attribute.name];
+    var link = this.attribute_value();
     var contents;
     if (this.state.mode == 'linked')
       contents = <MagmaLinkUnlinker mode_handler={ this.mode_handler }>{ link }</MagmaLinkUnlinker>;
@@ -249,7 +252,7 @@ MagmaDocumentAttribute = React.createClass({
   },
   render_attribute: function() {
     return <div className="value">
-            <a href={ this.props.record[this.props.attribute.name].url } > { this.props.record[this.props.attribute.name].path }</a>
+            <a href={ this.attribute_value().url } > { this.attribute_value().path }</a>
            </div>
   },
   render_empty: function() {
@@ -274,7 +277,7 @@ MagmaImageAttribute = React.createClass({
   },
   render_attribute: function() {
     return <div className="value">
-            <a href={ this.props.record[this.props.attribute.name].url } ><img src={ this.props.record[this.props.attribute.name].thumb }/></a>
+            <a href={ this.attribute_value().url } ><img src={ this.attribute_value().thumb }/></a>
            </div>
   },
   render_empty: function() {

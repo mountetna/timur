@@ -1,0 +1,59 @@
+@import "globals";
+
+.project {
+	#model_header {
+		span {
+			display: none;
+		}
+		padding: 0;
+		margin-left: 50px;
+	}
+
+	#attributes {
+		font-family: $body_font;
+		.attribute {
+			padding-left: 50px;
+			&:first-of-type {
+				.name { 
+					display: none; 
+				}
+				.value {
+					background-color: transparent;
+					padding: 0px;
+					margin: 0px;
+					color: darkorchid;
+					font-size: 25px;
+				}
+			}
+			&:nth-child(2) {
+				.name {
+					display: none;
+				}
+			}
+			display: block;
+			.name {
+				font-family: $body_font;
+				display: block;
+				border: none;
+				width: 100%;
+				margin-top: 10px;
+				text-align: unset;
+			}
+			.value {
+				font-family: $body_font;
+				display: block;
+				width: auto;
+				border: none;
+			}
+		}
+	}
+
+	#plot {
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: black;
+			shape-rendering: crispEdges;
+		}
+	}
+}

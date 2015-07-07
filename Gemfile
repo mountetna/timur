@@ -36,6 +36,8 @@ gem 'react-rails', '~> 1.0'
 
 gem 'js-routes'
 
+gem 'd3-rails'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

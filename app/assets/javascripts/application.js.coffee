@@ -21,3 +21,4 @@
 #= require model
 #= require keycode
 #= require jquery-mask
+#= require d3

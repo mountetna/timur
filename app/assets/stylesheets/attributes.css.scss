@@ -1,9 +1,4 @@
-$value_font: 'Cousine', monospaced;
-$body_font: 'Oxygen', sans-serif;
-
-@function forestgreen($opacity) {
-	@return rgba(34,139,34,$opacity)
-}
+@import "globals";
 
 #error_box {
 	padding-right: 10px;

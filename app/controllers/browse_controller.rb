@@ -2,8 +2,7 @@ class BrowseController <  ApplicationController
   before_filter :authenticate
 
   def index
-    @model = Project
-    @record = @model[@model.identity => "UCSF Immunoprofiler"]
+    redirect_to browse_model_path(:project, "UCSF Immunoprofiler")
   end
 
   def model
@@ -83,7 +82,8 @@ class BrowseController <  ApplicationController
 
   private
   def json_payload
-    @payload ||= { record: updater.json_document, model: updater.json_template }
+    updater.apply!
+    { record: updater.document, model: updater.template }
   end
 
   def updater
@@ -91,7 +91,7 @@ class BrowseController <  ApplicationController
   end
 
   def update_class
-    return JsonUpdate unless [Sample,Patient].include? @model
+    return JsonUpdate unless [Sample,Patient,Project].include? @model
     name = "#{@model.name.snake_case}_json_update".camel_case.to_sym
     Kernel.const_get name
   end
