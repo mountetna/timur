@@ -96,7 +96,7 @@ ProjectSummaryPlotAttribute = React.createClass({
       .enter()
       .append("rect")
       .attr("x", WIDTH - MARGINS.right + 10)
-      .attr("y", function(d, i){ return i *  20;})
+      .attr("y", function(d, i){ return 10 + i *  20;})
       .attr("width", 10)
       .attr("height", 10)
       .style("fill", function(d) { 
@@ -108,7 +108,7 @@ ProjectSummaryPlotAttribute = React.createClass({
       .append("text")
       .attr("text-anchor", "start")
       .attr("x", WIDTH - MARGINS.right + 25)
-      .attr("y", function(d, i) { return 10 + i *  20;})
+      .attr("y", function(d, i) { return 20 + i *  20;})
       .text(function(d) { return d.series; });;
   },
   render_browse: function() {
