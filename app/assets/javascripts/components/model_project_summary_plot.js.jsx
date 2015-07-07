@@ -42,6 +42,7 @@ ProjectSummaryPlotAttribute = React.createClass({
         xAxis = d3.svg.axis()
           .scale(xRange)
           .tickSize(5)
+          .ticks(5)
           .tickSubdivide(true),
         yAxis = d3.svg.axis()
           .scale(yRange)

@@ -164,7 +164,7 @@ SelectAttribute = React.createClass({
   },
   render_edit: function() {
     return <div className="value">
-            <select className="selection" defaultValue={ this.attribute_value() }>
+            <select name={ this.value_name() } className="selection" defaultValue={ this.attribute_value() }>
             {
               this.props.attribute.options.map(
                 function(name) {

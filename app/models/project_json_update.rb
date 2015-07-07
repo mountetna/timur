@@ -12,21 +12,28 @@ class ProjectJsonUpdate < JsonUpdate
 
     patch_key :progress_plot do |sum|
       # get the relevant samples
-      samples = Sample.where('created_at IS NOT NULL').order(:created_at)
+      samples = Sample.where('date_of_digest IS NOT NULL').order(:date_of_digest)
       [
         {
           values: samples.map.with_index do |s,i|
-            { x: s.created_at, y: i }
+            { x: s.date_of_digest, y: i }
           end,
           series: :total,
           color: :mediumseagreen
         },
         {
-          values: samples.where(processed: true).map.with_index do |s,i|
-            { x: s.created_at, y: i }
+          values: samples.where(sample_name: /.T1$/).map.with_index do |s,i|
+            { x: s.date_of_digest, y: i }
           end,
-          series: :processed,
-          color: :red
+          series: :tumor,
+          color: :indigo
+        },
+        {
+          values: samples.where(sample_name: /.N1$/).map.with_index do |s,i|
+            { x: s.date_of_digest, y: i }
+          end,
+          series: :normal,
+          color: :cornflowerblue
         }
       ]
     end
