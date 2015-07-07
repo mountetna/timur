@@ -51,6 +51,8 @@ class BrowseController <  ApplicationController
       end
     rescue Magma::LoadFailed => m
       logger.info m.complaints
+      render json: { errors: m.complaints }, status: 422
+      return
     end
 
     render json: json_payload
