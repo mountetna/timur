@@ -12,7 +12,7 @@ class ProjectJsonUpdate < JsonUpdate
 
     patch_key :progress_plot do |sum|
       # get the relevant samples
-      samples = Sample.where('created_at IS NOT NULL')
+      samples = Sample.where('created_at IS NOT NULL').order(:created_at)
       [
         {
           values: samples.map.with_index do |s,i|
