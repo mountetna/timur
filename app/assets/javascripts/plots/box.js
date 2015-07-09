@@ -21,6 +21,8 @@ d3.box = function() {
 
       // Compute quartiles. Must return exactly 3 elements.
       var quartileData = d.quartiles = quartiles(d);
+      console.log(data.series);
+      console.log(quartileData);
 
       // Compute whiskers. Must return exactly 2 elements, or null.
       var whiskerIndices = whiskers && whiskers.call(this, d, i),
@@ -117,7 +119,7 @@ d3.box = function() {
           .style("opacity", 1);
 
       // Compute the tick format.
-      var format = tickFormat || x1.tickFormat(8);
+      var format = tickFormat || x1.tickFormat(1000);
 
       // Update box ticks.
       var boxTick = g.selectAll("text.box")

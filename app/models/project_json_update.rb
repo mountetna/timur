@@ -46,16 +46,17 @@ class ProjectJsonUpdate < JsonUpdate
     end
 
     patch_key :cd45_plot do |sum|
-      [ :Colorectal, :"Head and Neck", :Melanoma ].map do |e|
-        counts  = SortStain.join(:samples, :id => :sample_id).join(:patients, :id => :patient_id ).join(:experiments, :id => :experiment_id).where('experiments.name = ?', e.to_s)
+      Experiment.where(:project_id => @record.id).map do |e|
+        counts  = SortStain.join(:samples, :id => :sample_id).join(:patients, :id => :patient_id ).join(:experiments, :id => :experiment_id).where('experiments.name = ?', e.name)
           .where('cd45_count IS NOT NULL').where('live_count IS NOT NULL').where('live_count > 0').select_map [ :cd45_count, :live_count ]
+        next if !counts || counts.empty?
         {
-          series: e,
+          series: e.name,
           values: counts.map do |k|
             (k[0] / k[1].to_f).round(3)
           end
         }
-      end
+      end.compact
     end
 
     patch_member :skin do |set|
