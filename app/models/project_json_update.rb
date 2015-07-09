@@ -1,5 +1,5 @@
 class ProjectJsonUpdate < JsonUpdate
-  sort_order :name, :description, :progress_plot, :experiment
+  sort_order :name, :description, :progress_plot, :cd45_plot, :experiment
   def apply_template!
     super
 
@@ -38,7 +38,27 @@ class ProjectJsonUpdate < JsonUpdate
       ]
     end
 
-    patch_member :class_set do |set|
+    patch_attribute :cd45_plot do |att|
+      att.name = :cd45_plot
+      att.attribute_class = "ProjectCD45PlotAttribute"
+      att.shown = true
+      att.display_name = "Immune fractions (%C45+ of live)"
+    end
+
+    patch_key :cd45_plot do |sum|
+      [ :Colorectal, :"Head and Neck", :Melanoma ].map do |e|
+        counts  = SortStain.join(:samples, :id => :sample_id).join(:patients, :id => :patient_id ).join(:experiments, :id => :experiment_id).where('experiments.name = ?', e.to_s)
+          .where('cd45_count IS NOT NULL').where('live_count IS NOT NULL').where('live_count > 0').select_map [ :cd45_count, :live_count ]
+        {
+          series: e,
+          values: counts.map do |k|
+            (k[0] / k[1].to_f).round(3)
+          end
+        }
+      end
+    end
+
+    patch_member :skin do |set|
       [ :project ]
     end
 

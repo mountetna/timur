@@ -104,8 +104,8 @@ ModelBrowser = React.createClass({
         this.get_data( { extensions: [ item ] } );
     };
   },
-  class_set: function() {
-    var set = this.state.model.class_set || [];
+  skin: function() {
+    var set = this.state.model.skin || [];
     if (this.state.mode == "browse")
       return set.join(' ');
     else
@@ -116,8 +116,7 @@ ModelBrowser = React.createClass({
     if (this.state.mode == 'loading')
       return <div id="model"/>;
     else {
-      var classes = this.class_set();
-      return <form id="model" className={classes} method="post" model={ this.state.model } record={ this.state.record } action={ Routes.update_model_path() } encType="multipart/form-data">
+      return <form id="model" className={ this.skin() } method="post" model={ this.state.model } record={ this.state.record } action={ Routes.update_model_path() } encType="multipart/form-data">
         <input type="hidden" name="authenticity_token" value={ token }/>
         <input type="hidden" name="model" value={ this.state.model.name }/>
         <input type="hidden" name="record_id" value={ this.state.record.id }/>
