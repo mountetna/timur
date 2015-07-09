@@ -119,7 +119,7 @@ d3.box = function() {
           .style("opacity", 1);
 
       // Compute the tick format.
-      var format = tickFormat || x1.tickFormat(1000);
+      var format = tickFormat || x1.tickFormat(100);
 
       // Update box ticks.
       var boxTick = g.selectAll("text.box")
