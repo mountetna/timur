@@ -3,7 +3,7 @@ class SampleJsonUpdate < JsonUpdate
   def get_count stain, column, default=0
     if stain
       val = stain.send(column) || default
-      val == 0 ? val : default
+      val == 0 ? default : val
     else
      default 
     end
