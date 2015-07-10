@@ -2,7 +2,7 @@ class SampleJsonUpdate < JsonUpdate
   sort_order :sample_name, :patient, :headshot, :fingerprint 
   def get_count stain, column, default=0
     if stain
-      stain.send column
+      stain.send(column) || default
     else
      default 
     end
