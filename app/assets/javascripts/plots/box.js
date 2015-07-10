@@ -21,8 +21,6 @@ d3.box = function() {
 
       // Compute quartiles. Must return exactly 3 elements.
       var quartileData = d.quartiles = quartiles(d);
-      console.log(data.series);
-      console.log(quartileData);
 
       // Compute whiskers. Must return exactly 2 elements, or null.
       var whiskerIndices = whiskers && whiskers.call(this, d, i),
@@ -141,7 +139,7 @@ d3.box = function() {
         .data([data.series])
         .enter()
         .append("text")
-        .attr("x",0)
+        .attr("x",width/2)
         .attr("y",height + 20)
         .attr("text-anchor", "middle")
         .text(function(d) { return d; } );

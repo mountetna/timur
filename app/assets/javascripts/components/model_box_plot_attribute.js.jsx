@@ -1,4 +1,4 @@
-ProjectCD45PlotAttribute = React.createClass({
+BoxPlotAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   componentDidMount: function() {
     this.d3_render();
@@ -32,7 +32,7 @@ ProjectCD45PlotAttribute = React.createClass({
           return d3.max(s.values, function(d) { return d; })
         })]);
 
-    var vis = d3.select("#cd45plot").selectAll("g")
+    var vis = d3.select("svg.box_plot").selectAll("g")
         .data(data)
         .enter().append("g")
         .attr("class", "box")
@@ -58,7 +58,7 @@ ProjectCD45PlotAttribute = React.createClass({
   },
   render_browse: function() {
     return <div className="value">
-              <svg id="cd45plot" width="600" height="200"></svg>
+              <svg className="box_plot" width="600" height="200"></svg>
            </div>
   },
   render_edit: function() {

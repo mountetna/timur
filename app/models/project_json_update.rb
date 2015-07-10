@@ -1,11 +1,12 @@
 class ProjectJsonUpdate < JsonUpdate
   sort_order :name, :description, :progress_plot, :cd45_plot, :experiment
+
   def apply_template!
     super
 
     patch_attribute :progress_plot do |att|
       att.name = :progress_plot
-      att.attribute_class = "ProjectSummaryPlotAttribute"
+      att.attribute_class = "LinePlotAttribute"
       att.shown = true
       att.display_name = "Progress"
     end
@@ -40,7 +41,7 @@ class ProjectJsonUpdate < JsonUpdate
 
     patch_attribute :cd45_plot do |att|
       att.name = :cd45_plot
-      att.attribute_class = "ProjectCD45PlotAttribute"
+      att.attribute_class = "BoxPlotAttribute"
       att.shown = true
       att.display_name = "Immune fractions (%C45+ of live)"
     end

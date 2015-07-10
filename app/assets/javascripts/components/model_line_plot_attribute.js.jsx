@@ -1,4 +1,4 @@
-ProjectSummaryPlotAttribute = React.createClass({
+LinePlotAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   componentDidMount: function() {
     this.d3_render();
@@ -16,7 +16,7 @@ ProjectSummaryPlotAttribute = React.createClass({
       });
       return line;
     });
-    var vis = d3.select('#plot'),
+    var vis = d3.select('svg.line_plot'),
         WIDTH = 600,
         HEIGHT = 200,
         MARGINS = {
@@ -113,7 +113,7 @@ ProjectSummaryPlotAttribute = React.createClass({
   },
   render_browse: function() {
     return <div className="value">
-              <svg id="plot" width="600" height="200"></svg>
+              <svg className="line_plot" width="600" height="200"></svg>
            </div>
   },
   render_edit: function() {
