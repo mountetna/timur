@@ -10,6 +10,10 @@ class WelcomeController <  ApplicationController
     end
   end
 
+  def static
+    render :action => params[:path]
+  end
+
   def auth
     auth = nil
     if defined? OmniAuth

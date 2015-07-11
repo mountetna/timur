@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
 
+  get 'static/:path' => 'welcome#static', as: :static
+
   get 'login' => 'welcome#login', as: :login
   match 'auth/shibboleth/callback' => 'welcome#auth', via: [ :get, :post ], as: :auth
   get 'auth/shibboleth' => 'welcome#auth', as: :auth_shib

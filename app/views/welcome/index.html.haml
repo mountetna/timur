@@ -10,9 +10,15 @@
 
 
   #links
-    %p Mission
-    %p For Patients
-    %p Help Us
-    %p Scientific Members and Contact
-    %a{ href: browse_path} Data Browser
-    %p News
+    %p
+      %a{ href: static_path(path: :mission) } Mission
+    %p
+      %a{ href: static_path(path: :patients) } For Patients
+    %p
+      %a{ href: static_path(path: :help_us) } Help Us
+    %p
+      %a{ href: static_path(path: :scientific_members) } Scientific Members and Contact
+    %p
+      %a{ href: browse_path} Data Browser
+    %p
+      %a{ href: static_path(path: :news) } News
