@@ -43,7 +43,7 @@ class ProjectJsonUpdate < JsonUpdate
       att.name = :cd45_plot
       att.attribute_class = "BoxPlotAttribute"
       att.shown = true
-      att.display_name = "Immune fractions (%C45+ of live)"
+      att.display_name = "Immune fractions (CD45+ / live)"
     end
 
     patch_key :cd45_plot do |sum|
