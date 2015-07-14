@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   post 'browse/update' => 'browse#update', as: :update_model
 
   get 'search' => 'search#index', as: :search
+  post 'table' => 'search#table', as: :table
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
