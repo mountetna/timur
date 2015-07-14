@@ -40,6 +40,10 @@ a {
 		margin-left: 20px;
 		.picture {
 			padding-right: 20px;
+			flex: 1;
+		}
+		.text {
+			flex: 10;
 		}
 	}
 }
