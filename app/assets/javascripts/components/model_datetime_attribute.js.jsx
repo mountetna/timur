@@ -49,6 +49,11 @@ DateTimeAttribute = React.createClass({
           'form-token-update', 
           { name: this.value_name(), value: date }
       );
+    } else {
+      this.props.process(
+          'form-token-update', 
+          { name: this.value_name(), value: null }
+      );
     }
   },
   change_date: function() {

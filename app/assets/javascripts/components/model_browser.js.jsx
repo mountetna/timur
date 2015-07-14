@@ -98,7 +98,10 @@ ModelBrowser = React.createClass({
     switch(job) {
       case 'form-token-update':
         if (!this.form_tokens) this.form_tokens = {};
-        this.form_tokens[ item.name ] = item.value;
+        if (item.value == null)
+          delete this.form_tokens[ item.name ];
+        else
+          this.form_tokens[ item.name ] = item.value;
         break;
       case 'request-extension':
         this.get_data( { extensions: [ item ] } );

@@ -4,7 +4,7 @@ BarPlotAttribute = React.createClass({
     this.d3_render();
   },
   componentDidUpdate: function() {
-    this.d3_render();
+    if (this.props.mode == 'browse') this.d3_render();
   },
   d3_render: function() {
     var margin = {top: 10, right: 20, bottom: 120, left: 50},
