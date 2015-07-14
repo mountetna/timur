@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate
-    redirect_to :login
+    redirect_to :login unless current_user
 
     # you passed external auth, now internal
   end
@@ -22,6 +22,14 @@ class ApplicationController < ActionController::Base
 
   def can_edit?
     current_user && current_user.can_edit?
+  end
+
+  def readable_check
+    unauth unless can_read?
+  end
+
+  def editable_check
+    unauth unless can_edit?
   end
 
   def current_user

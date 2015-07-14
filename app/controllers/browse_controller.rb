@@ -1,7 +1,7 @@
 class BrowseController <  ApplicationController
-  before_filter :authenticate, unless: :current_user
-  before_filter :unauth, unless: :can_read?
-  before_filter :unauth, only: :update, unless: :can_edit?
+  before_filter :authenticate
+  before_filter :readable_check
+  before_filter :editable_check, only: :update
 
   def index
     redirect_to browse_model_path(:project, "UCSF Immunoprofiler")
