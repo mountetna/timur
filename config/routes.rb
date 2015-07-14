@@ -5,8 +5,9 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   get 'static/:path' => 'welcome#static', as: :static
-
   get 'login' => 'welcome#login', as: :login
+  get 'noauth' => 'welcome#noauth', as: :noauth
+
   match 'auth/shibboleth/callback' => 'welcome#auth', via: [ :get, :post ], as: :auth
   get 'auth/shibboleth' => 'welcome#auth', as: :auth_shib
 
@@ -17,8 +18,6 @@ Rails.application.routes.draw do
   get 'browse/:model/:name' => 'browse#model', as: :browse_model, constraints: { name: /[^\/]+/ }
   get 'json/:model/:name' => 'browse#json', as: :browse_json, constraints: { name: /[^\/]+/ }
   post 'browse/update' => 'browse#update', as: :update_model
-  get 'browse/new' => 'browse#new', as: :new_model
-  post 'browse/create' => 'browse#create', as: :create_model
 
   get 'search' => 'search#index', as: :search
   # Example of regular route:

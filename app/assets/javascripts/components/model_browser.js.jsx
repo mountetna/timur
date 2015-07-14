@@ -22,7 +22,7 @@ ModelHeader = React.createClass({
           <div id='cancel' onClick={ this.props.mode_handler.bind(null,'browse') }>&#x2717;</div>
           <div id='approve' onClick={ this.props.mode_handler.bind(null,'submit') }>&#x2713;</div>
         </div>
-    else
+    else if (this.props.editable)
       button = <div id='edit' onClick={ this.props.mode_handler.bind(null,'edit') }>&#x270e;</div>
 
     return <div id="model_header">
@@ -34,7 +34,7 @@ ModelHeader = React.createClass({
 
 ModelBrowser = React.createClass({
   getInitialState: function() {
-    return { mode: 'loading', errors: [] }
+    return { mode: 'loading', errors: [], editable: null }
   },
   submit_edit: function() {
     $('#model').submit();
@@ -68,7 +68,7 @@ ModelBrowser = React.createClass({
       this.setState( { errors: [ "An unknown error occurred." ] } );
   },
   data_update:  function(result) {
-    this.setState( { mode: 'browse', record: result.record, model: result.model, errors: [] } );
+    this.setState( { mode: 'browse', record: result.record, model: result.model, errors: [], editable: result.editable } );
   },
   update_form_tokens: function(submission) {
     for (var key in this.form_tokens) {
@@ -121,7 +121,7 @@ ModelBrowser = React.createClass({
         <input type="hidden" name="model" value={ this.state.model.name }/>
         <input type="hidden" name="record_id" value={ this.state.record.id }/>
         <ModelErrors errors={ this.state.errors }/>
-        <ModelHeader mode={ this.state.mode } model={ this.state.model } mode_handler={ this.handle_mode }/>
+        <ModelHeader mode={ this.state.mode } model={ this.state.model } mode_handler={ this.handle_mode } editable={ this.state.editable } />
         <ModelAttributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record } process={ this.process }/>
       </form>
     }

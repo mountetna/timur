@@ -1,0 +1,53 @@
+@import "globals";
+
+#header {
+	position: relative;
+	border-bottom: 1px solid forestgreen;
+	height: 80px;
+	#logo {
+		background-image: image-url('Timur.png');
+		width: 70px;
+		height: 70px;
+		border: 2px solid #066306;
+		background-size: cover;
+		background-position: 0px -6px;
+		border-radius: 50%;
+		box-shadow: 0 0 0 2px #FFF, 0 0 0 3px #066306;
+		display: inline-block;
+		vertical-align:top
+	}
+	#heading {
+		font-family: 'Cinzel', serif;
+		font-size: 40px;
+		display: inline-block;
+		color: forestgreen;
+		padding-left: 10px;
+		height: 70px;
+		vertical-align: top;
+		line-height: 70px;
+	}
+	#nav {
+		font-family: $body_font;
+		position: absolute;
+		width: calc(100% - 90px);
+		left: 90px;
+		bottom: 0px;
+		border-top: 1px solid forestgreen;
+		#login {
+			position: absolute;
+			right: 10px;
+			bottom: 0px;
+			color: brown;
+		}
+
+		.nav_tab {
+			display: inline-block;
+			font-size: 16px;
+			padding: 0px 25px;
+			border-right: 1px solid forestgreen;
+			a {
+				color: limegreen;
+			}
+		}
+	}
+}

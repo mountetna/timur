@@ -1,5 +1,7 @@
 class BrowseController <  ApplicationController
-  before_filter :authenticate
+  before_filter :authenticate, unless: :current_user
+  before_filter :unauth, unless: :can_read?
+  before_filter :unauth, only: :update, unless: :can_edit?
 
   def index
     redirect_to browse_model_path(:project, "UCSF Immunoprofiler")
@@ -57,35 +59,10 @@ class BrowseController <  ApplicationController
 
     render json: json_payload
   end
-
-  def new
-    @params = params
-    @model = Magma.instance.get_model params[:model]
-  end
-
-  def create
-    @model = Magma.instance.get_model params[:model]
-
-    hash = params[:values]
-    # add any keys to the hash
-    if params[:key]
-      params[:key].each do |parent, identifier|
-        foreign = Magma.instance.get_model parent
-        frecord = foreign[foreign.identity => identifier]
-        hash.update :"#{foreign.name.snake_case}_id" => frecord.id
-      end
-    end
-    logger.info hash
-
-    @record = @model.create hash
-
-    redirect_to browse_model_path(@model.name.snake_case, @record.identifier)
-  end
-
   private
   def json_payload
     updater.apply!
-    { record: updater.document, model: updater.template }
+    { record: updater.document, model: updater.template, editable: can_edit? }
   end
 
   def updater

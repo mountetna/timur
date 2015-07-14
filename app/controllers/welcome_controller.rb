@@ -10,6 +10,10 @@ class WelcomeController <  ApplicationController
     end
   end
 
+  def noauth
+    render layout: "noauth"
+  end
+
   def static
     render :action => params[:path]
   end

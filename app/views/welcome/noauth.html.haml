@@ -1,0 +1,8 @@
+= content_for :title, "Unauthorized"
+#noauth
+  #quote
+    %svg{ width:"31", height:"21" }
+      %path{ d:"M 8,20 0,0 20,20" }
+  Alas, #{current_user.name}. Though you seek to enter, you are
+  %span.red Unauthorized.
+
