@@ -21,3 +21,4 @@
 /config/magma.yml
 /public/uploads
 *.swp
+*.tsv
