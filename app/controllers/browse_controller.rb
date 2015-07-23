@@ -140,13 +140,14 @@ class BrowseController <  ApplicationController
         logger.info "Found #{foreign_model}"
         # now see if the link exists
         if foreign_model
-          obj = foreign_model.find_or_create(foreign_model.identity => link)
-          @record[ :"#{fname}_id" ] = obj.id if obj
+          foreign_model.update_or_create(foreign_model.identity => link) do |obj|
+            @record[ :"#{fname}_id" ] = obj.id
+          end
         end
       when Magma::ChildAttribute
         child_model = Magma.instance.get_model fname
         if child_model
-          child_model.find_or_create(child_model.identity => link) do |obj|
+          child_model.update_or_create(child_model.identity => link) do |obj|
             obj[ :"#{@model.name.snake_case}_id" ] = @record.id
           end
         end
@@ -156,7 +157,7 @@ class BrowseController <  ApplicationController
           next if ilink.blank?
           if child_model
             logger.info "Trying to create #{child_model} for #{ilink} with #{child_model.identity}"
-            child_model.find_or_create(child_model.identity => ilink) do |obj|
+            child_model.update_or_create(child_model.identity => ilink) do |obj|
               logger.info "Setting #{@model.name.snake_case}_id on #{obj}"
               obj[ :"#{@model.name.snake_case}_id" ] = @record.id
             end
