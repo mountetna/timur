@@ -51,6 +51,9 @@ AttributeHelpers = {
   },
   link_name: function() {
     return "link[" + this.props.attribute.name + "]";
+  },
+  unlink_name: function() {
+    return "unlink[" + this.props.attribute.name + "]";
   }
 };
 
@@ -186,7 +189,7 @@ MagmaForeignKeyAttribute = React.createClass({
            </div>
   },
   render_edit: function() {
-    return <MagmaLinkAttributeEditor model={ this.props.model } record={ this.props.record } attribute={ this.props.attribute }/>
+    return <MagmaLinkAttributeEditor process={ this.props.process } model={ this.props.model } record={ this.props.record } attribute={ this.props.attribute }/>
   }
 })
 
@@ -199,7 +202,7 @@ MagmaChildAttribute = React.createClass({
            </div>
   },
   render_edit: function() {
-    return <MagmaLinkAttributeEditor model={ this.props.model } record={this.props.record} attribute={ this.props.attribute }/>
+    return <MagmaLinkAttributeEditor process={ this.props.process } hide_unlink={ true } model={ this.props.model } record={this.props.record} attribute={ this.props.attribute }/>
   }
 });
 
@@ -212,13 +215,21 @@ MagmaLinkAttributeEditor = React.createClass({
       return { mode: 'create' };
   },
   mode_handler: function(mode) {
-    this.setState({mode: mode});
+    if (mode == 'unlink') {
+      this.setState({mode: 'create'});
+      this.props.process('form-token-update', { name: this.unlink_name(), value: true });
+    }
+    else
+      this.setState({mode: mode});
   },
   render: function() {
     var link = this.attribute_value();
     var contents;
     if (this.state.mode == 'linked')
-      contents = <MagmaLinkUnlinker mode_handler={ this.mode_handler }>{ link }</MagmaLinkUnlinker>;
+      if (this.props.hide_unlink)
+        contents = <div>{ link } </div>;
+      else
+        contents = <MagmaLinkUnlinker mode_handler={ this.mode_handler }>{ link }</MagmaLinkUnlinker>;
     else {
       contents = <MagmaNewLink name={ this.link_name() }/>
     }
@@ -238,7 +249,7 @@ MagmaNewLink = React.createClass({
 });
 MagmaLinkUnlinker = React.createClass({
   render: function() {
-    return <div>{ this.props.children } <span className="button" onClick={ this.props.mode_handler.bind(null,'create') }>Unlink</span></div>
+    return <div>{ this.props.children } <span className="button" onClick={ this.props.mode_handler.bind(null,'unlink') }>Unlink</span></div>
   }
 });
 

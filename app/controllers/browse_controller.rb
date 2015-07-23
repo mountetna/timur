@@ -34,9 +34,9 @@ class BrowseController <  ApplicationController
       return
     end
 
-    create_or_update_links (params[:link] || {}).select do |att,val|
-      @model.attributes[att] && !@model.attributes[att].read_only?
-    end
+    destroy_links editable_attributes(params[:unlink])
+    
+    create_or_update_links editable_attributes(params[:link])
 
     # mark any file uploads as changed.
     @model.attributes.select do |name,att|
@@ -48,9 +48,7 @@ class BrowseController <  ApplicationController
     end
 
     begin
-      @record.update (params[:values] || {}).select do |att,val|
-        @model.attributes[att] && !@model.attributes[att].read_only?
-      end
+      @record.update editable_attributes(params[:values])
     rescue Magma::LoadFailed => m
       logger.info m.complaints
       render json: { errors: m.complaints }, status: 422
@@ -59,6 +57,7 @@ class BrowseController <  ApplicationController
 
     render json: json_payload
   end
+
   private
   def json_payload
     updater.apply!
@@ -106,6 +105,26 @@ class BrowseController <  ApplicationController
     values.each do |name, value|
       @model.attributes[name.to_sym].validate value do |error|
         @errors.push error
+      end
+    end
+  end
+
+  def editable_attributes atts
+    logger.info "Screening #{atts}"
+    atts ||= {}
+    d = atts.select do |att,val|
+      @model.attributes[att.to_sym] && !@model.attributes[att.to_sym].read_only?
+    end
+    logger.info "Screened to #{d}"
+    d
+  end
+
+  def destroy_links links
+    links.each do |fname,link|
+      logger.info "Attempting to undo link for #{fname} which is a #{ @model.attributes[fname.to_sym].class }"
+      case @model.attributes[fname.to_sym]
+      when Magma::ForeignKeyAttribute
+        @record[ :"#{fname}_id" ] = nil
       end
     end
   end

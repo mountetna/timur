@@ -25,6 +25,9 @@ MagmaCollectionAttribute = React.createClass({
   new_items_name: function() {
     return "link[" + this.props.attribute.name + "][]";
   },
+  remove_name: function() {
+    return "unlink[" + this.props.attribute.name + "][]";
+  },
   new_collection_item: function() {
     this.state.new_items.push({})
     this.setState({ new_items: this.state.new_items });
@@ -36,14 +39,12 @@ MagmaCollectionAttribute = React.createClass({
               {
                 this.attribute_value().map(
                   function(link) {
-                    // this thing has state, reflecting whether or not you want to delete this component
-                    return <MagmaCollectionUnlink key={ link.identifier } current={ link.identifier }/>
+                    return <MagmaCollectionUnlink key={ link.identifier } process={ self.props.process } name={ self.remove_name() } current={ link.identifier }/>
                   })
               }
               {
                 this.state.new_items.map(
                   function(link) {
-                    // this thing has state, reflecting whether or not you want to delete this component
                     return <div className="collection_item"><MagmaNewLink name={ self.new_items_name() }/></div>
                   })
               }
@@ -58,11 +59,17 @@ MagmaCollectionUnlink = React.createClass({
     return { mode: 'linked' };
   },
   mode_handler: function(mode) {
+    var val = {};
+    if (mode == 'unlinked')
+      val[ this.props.current ] = true;
+    else
+      val[ this.props.current ] = null;
+    this.props.process('form-token-update', { name: this.props.name, value: val });
     this.setState({ mode: mode });
   },
   render: function() {
     if (this.state.mode == 'linked')
-      return <div className="collection_item">{ this.props.current } <span className="button" onClick={ this.mode_handler.bind(null,'unlinked') }>Unlink</span></div>
+      return <div className="collection_item">{ this.props.current } </div>
     else
       return <div className="collection_item"><strike>{ this.props.current }</strike> <span className="button" onClick={ this.mode_handler.bind(null,'linked') }>Re-link</span></div>
   }

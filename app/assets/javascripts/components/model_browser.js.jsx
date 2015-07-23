@@ -72,15 +72,25 @@ ModelBrowser = React.createClass({
   },
   update_form_tokens: function(submission) {
     for (var key in this.form_tokens) {
-      submission.append(key, this.form_tokens[key]);
+      var token = this.form_tokens[key];
+      if (token.constructor == Object)
+        token = Object.keys(token).filter(function(k) {
+          return token[k];
+        });
+      submission.append(key, token);
     }
   },
   handle_mode: function(mode) {
     if (mode == 'submit') {
       // attempt to submit the edit
       this.submit_edit();
-    } else
+    } else {
+      if (mode == 'browse') {
+        // clear any existing edits
+        this.form_tokens = {};
+      }
       this.setState({ mode: mode })
+    }
   },
   componentDidMount: function() {
     var self = this;
@@ -100,6 +110,8 @@ ModelBrowser = React.createClass({
         if (!this.form_tokens) this.form_tokens = {};
         if (item.value == null)
           delete this.form_tokens[ item.name ];
+        else if (item.value.constructor == Object)
+          this.form_tokens[ item.name ] = $.extend(this.form_tokens[ item.name ], item.value);
         else
           this.form_tokens[ item.name ] = item.value;
         break;
