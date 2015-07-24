@@ -135,7 +135,7 @@ class SampleJsonUpdate < JsonUpdate
           {
             series: "CD45+/live",
             color: "khaki",
-            height: get_ratio(@record.sort_stain, :cd45_count, :live_count),,
+            height: get_ratio(@record.sort_stain, :cd45_count, :live_count),
             dots: get_dots(SortStain, :cd45_count, :live_count)
           },
           {
