@@ -135,26 +135,22 @@ class SampleJsonUpdate < JsonUpdate
           {
             series: "CD45+/live",
             color: "khaki",
-            height: get_ratio(@record.sort_stain, :cd45_count, :live_count),
-            dots: get_dots(SortStain, :cd45_count, :live_count)
+            height: get_ratio(@record.sort_stain, :cd45_count, :live_count)
           },
           {
             series: "CD45+/live",
             color: "seagreen",
-            height: get_ratio(@record.nktb_stain, :cd45_count, :live_count),
-            dots: get_dots(NktbStain, :cd45_count, :live_count)
+            height: get_ratio(@record.nktb_stain, :cd45_count, :live_count)
           },
           {
             series: "CD45+/live",
             color: "coral",
-            height: get_ratio(@record.dc_stain, :cd45_count, :live_count),
-            dots: get_dots(DcStain, :cd45_count, :live_count)
+            height: get_ratio(@record.dc_stain, :cd45_count, :live_count)
           },
           {
             series: "CD45+/live",
             color: "greenyellow",
-            height: get_ratio(@record.treg_stain, :cd45_count, :live_count),
-            dots: get_dots(TregStain, :cd45_count, :live_count)
+            height: get_ratio(@record.treg_stain, :cd45_count, :live_count)
           },
         ],
         legend: {
