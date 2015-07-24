@@ -1,12 +1,20 @@
 class SampleJsonUpdate < JsonUpdate
-  sort_order :sample_name, :patient, :headshot, :fingerprint 
-  def get_count stain, column, default=0
+  sort_order :sample_name, :patient, :headshot, :fingerprint, :qc
+  def get_ratio stain, num, *dens
     if stain
-      val = stain.send(column) || default
-      val == 0 ? default : val
+      num = stain.send(num) || 0
+      den_sum = dens.inject(0) do |sum,den|
+        den = [ 1, stain.send(den) || 1 ].max unless den.is_a? Numeric
+        sum + den
+      end
+      num / den_sum.to_f
     else
-     default 
+     0
     end
+  end
+
+  def get_dots(model, num, den)
+    query = model.where('? IS NOT NULL',num).where('? IS NOT NULL', den).where('? > 0',den).select_map([num,den]).map { |a| a[0]/a[1].to_f }
   end
 
   def apply_template!
@@ -25,74 +33,132 @@ class SampleJsonUpdate < JsonUpdate
     end
 
     patch_key :fingerprint do |sum|
-      nk_live_count = get_count(@record.nktb_stain, :live_count, 1)
-      sort_live_count = get_count(@record.sort_stain, :live_count, 1)
-      treg_live_count = get_count(@record.treg_stain, :live_count, 1)
-      dc_live_count = get_count(@record.dc_stain, :live_count, 1)
-      nk_cd45_count = get_count(@record.nktb_stain, :cd45_count, 1)
-      treg_cd45_count = get_count(@record.treg_stain, :cd45_count, 1)
-      [
-        { series: "EPCAM+ tumor",
-          height: get_count(@record.sort_stain, :tumor_count) / sort_live_count.to_f
+      myeloid = [ :dc1_count, :dc2_count, :peripheral_dc_count, :monocyte_count, :cd14_pos_tam_count, :cd14_neg_tam_count ]
+      {
+        plot: {
+          name: 'fingerprint',
+          width: 600,
+          height: 350,
+          margin: { top: 10, right: 20, bottom: 150, left: 50},
         },
-        { series: "Stroma (CD90+, CD44+)",
-          height: get_count(@record.sort_stain, :stroma_count) / sort_live_count.to_f
-        },
-        { series: "CD45+",
-          height: get_count(@record.sort_stain, :cd45_count) / sort_live_count.to_f
-        },
-        { series: "CD4+",
-          height: get_count(@record.nktb_stain, :cd4_count) / nk_cd45_count.to_f
-        },
-        { series: "CD8+",
-          height: get_count(@record.nktb_stain, :cd8_count) / nk_cd45_count.to_f
-        },
-        { series: "T-regs",
-          height: get_count(@record.treg_stain, :treg_count) / treg_cd45_count.to_f
-        },
-        { series: "NK cells",
-          height: get_count(@record.nktb_stain, :nk_count) / nk_live_count.to_f
-        },
-        { series: "B-cells",
-          height: get_count(@record.nktb_stain, :b_count) / nk_live_count.to_f
-        },
-        { series: "BDCA1+ DCs",
-          height: get_count(@record.dc_stain, :dc1_count) / dc_live_count.to_f
-        },
-        { series: "BDCA3+ DCs",
-          height: get_count(@record.dc_stain, :dc2_count) / dc_live_count.to_f
-        },
-        { series: "pDCs (CD85g+)",
-          height: get_count(@record.dc_stain, :peripheral_dc_count) / dc_live_count.to_f
-        },
-        { series: "CD16+ monocytes",
-          height: get_count(@record.dc_stain, :monocyte_count) / dc_live_count.to_f
-        },
-        { series: "CD14+ TAMs",
-          height: get_count(@record.dc_stain, :cd14_pos_tam_count) / dc_live_count.to_f
-        },
-        { series: "CD14- TAMs",
-          height: get_count(@record.dc_stain, :cd14_neg_tam_count) / dc_live_count.to_f
-        },
-# % live cells (as a housekeeping marker?)
-# % CD45 of live
-# CD3e
-# CD4
-# CD8
-# T-regs (FoxP3+, CD25+, CD4+)
-# BDCA3+ DCs
-# NK cells (NKG2b)
-# B-cells (CD19)
-# EPCAM+ tumor cells
-# Stroma (CD90+, CD44+)
-# pDCs (CD85g+)
-# CD16+ monocytes
-# CD14+ TAMs
-# BDCA1+ DCs
-# CD14- TAMs
-      ]
+        data: [
+          { series: "EPCAM+ tumor/live",
+            color: "khaki",
+            height: get_ratio(@record.sort_stain, :tumor_count, :live_count),
+            dots: get_dots(SortStain, :tumor_count, :live_count)
+          },
+          { series: "Stroma (CD90+, CD44+)/live",
+            color: "khaki",
+            height: get_ratio(@record.sort_stain, :stroma_count, :live_count),
+            dots: get_dots(SortStain, :stroma_count, :live_count)
+          },
+          { series: "CD45+/live",
+            color: "khaki",
+            height: get_ratio(@record.sort_stain, :cd45_count, :live_count),
+            dots: get_dots(SortStain, :cd45_count, :live_count)
+          },
+          { series: "T-regs/CD45+",
+            color: "greenyellow",
+            height: get_ratio(@record.treg_stain, :treg_count, :cd45_count),
+            dots: get_dots(TregStain, :treg_count, :cd45_count)
+          },
+          { series: "CD4+/CD45+",
+            color: "coral",
+            height: get_ratio(@record.nktb_stain, :cd4_count, :cd45_count),
+            dots: get_dots(NktbStain, :cd4_count, :cd45_count)
+          },
+          { series: "CD8+/CD45+",
+            color: "coral",
+            height: get_ratio(@record.nktb_stain, :cd8_count, :cd45_count),
+            dots: get_dots(NktbStain, :cd8_count, :cd45_count)
+          },
+          { series: "NK cells/CD45+",
+            color: "coral",
+            height: get_ratio(@record.nktb_stain, :nk_count, :cd45_count),
+            dots: get_dots(NktbStain, :nk_count, :cd45_count)
+          },
+          { series: "B-cells/CD45+",
+            color: "coral",
+            height: get_ratio(@record.nktb_stain, :b_count, :cd45_count),
+            dots: get_dots(NktbStain, :b_count, :cd45_count)
+          },
+          { series: "BDCA1+ DCs/myeloid",
+            color: "seagreen",
+            height: get_ratio(@record.dc_stain, :dc1_count, *myeloid)
+            #dots: get_dots(SortStain, :stroma_count, :live_count)
+          },
+          { series: "BDCA3+ DCs/myeloid",
+            color: "seagreen",
+            height: get_ratio(@record.dc_stain, :dc2_count, *myeloid)
+            #dots: get_dots(SortStain, :stroma_count, :live_count)
+          },
+          { series: "pDCs (CD85g+)/myeloid",
+            color: "seagreen",
+            height: get_ratio(@record.dc_stain, :peripheral_dc_count, *myeloid)
+          },
+          { series: "CD16+ monocytes/myeloid",
+            color: "seagreen",
+            height: get_ratio(@record.dc_stain, :monocyte_count, *myeloid)
+          },
+          { series: "CD14+ TAMs/myeloid",
+            color: "seagreen",
+            height: get_ratio(@record.dc_stain, :cd14_pos_tam_count, *myeloid)
+          },
+          { series: "CD14- TAMs/myeloid",
+            color: "seagreen",
+            height: get_ratio(@record.dc_stain, :cd14_neg_tam_count, *myeloid)
+          },
+        ],
+        legend: {
+          series: [ "treg", "nk/t/b", "sort", "dc" ],
+          colors: [ "greenyellow", "seagreen", "khaki", "coral" ]
+        }
+      }
     end
 
+    patch_attribute(:qc) do |att|
+      att.name = :qc
+      att.attribute_class = "BarPlotAttribute"
+      att.display_name = "QC"
+      att.shown = true
+    end
+
+    patch_key :qc do |sum|
+      {
+        plot: {
+          name: 'qc',
+          width: 300,
+          height: 200,
+          margin: { top: 10, right: 20, bottom: 60, left: 50},
+        },
+        data: [
+          {
+            series: "CD45+/live",
+            color: "khaki",
+            height: get_ratio(@record.sort_stain, :cd45_count, :live_count),
+          },
+          {
+            series: "CD45+/live",
+            color: "seagreen",
+            height: get_ratio(@record.nktb_stain, :cd45_count, :live_count),
+          },
+          {
+            series: "CD45+/live",
+            color: "coral",
+            height: get_ratio(@record.dc_stain, :cd45_count, :live_count),
+          },
+          {
+            series: "CD45+/live",
+            color: "greenyellow",
+            height: get_ratio(@record.treg_stain, :cd45_count, :live_count),
+          },
+        ],
+        legend: {
+          series: [ "treg", "nk/t/b", "sort", "dc" ],
+          colors: [ "greenyellow", "seagreen", "khaki", "coral" ]
+        }
+      }
+    end
     patch_attribute(:weight) {|a| a.placeholder = "Mass in grams"}
     patch_attribute(:ice_time) {|a| a.placeholder = "Time in hours"}
     patch_attribute(:fixation_time) {|a| a.placeholder = "Time in minutes"}

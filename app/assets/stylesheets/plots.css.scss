@@ -41,10 +41,19 @@ svg {
 			stroke: black;
 			shape-rendering: crispEdges;
 		}
-		.bar rect {
-			fill: #fff;
-			stroke: #000;
-			stroke-width: 1.5px;
+		.bar { 
+			rect {
+				fill: #fff;
+				stroke: #000;
+				stroke-width: 1.5px;
+			}
+			text {
+				font-size: 10px;
+			}
+			circle.dot {
+				fill: #ccc;
+				stroke-width: 0px;
+			}
 		}
 	}
 }

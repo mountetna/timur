@@ -35,7 +35,6 @@ d3.bar = function() {
       .each(function(data, i) {
       var g = d3.select(this);
 
-
       // Note: the bar, median, and bar tick elements are fixed in number,
       // so we only have to handle enter and update. In contrast, the outliers
       // and other elements are variable, so we need to exit them! Variable
@@ -48,10 +47,22 @@ d3.bar = function() {
           .attr("x", 10 + i * 30)
           .attr("y", function(d) { return yRange(d.height) - yRange(domain()[1]) })
           .attr("width", width)
+          .attr("style", function(d) { return "stroke:"+(d.color || "white") })
           .attr("height", function(d) { return yRange(0) - yRange(d.height); })
 
       bar.attr("y", function(d) { return yRange(d.height) - yRange(domain()[1]) })
          .attr("height", function(d) { return yRange(0) - yRange(d.height); });
+
+      if (data.dots) {
+        var dots = g.selectAll("circle.dot")
+          .data(data.dots)
+
+        dots.enter().append("circle")
+          .attr("class","dot")
+          .attr("r", 1.5)
+          .attr("cx", function(d) { return 10 + i * 30 + ((1000*d)%8)-4 + width/2; })
+          .attr("cy", function(d) { return yRange(d); })
+      }
 
       var text = g.selectAll("text.bar")
         .data([data])
