@@ -33,7 +33,7 @@ class SampleJsonUpdate < JsonUpdate
     end
 
     patch_key :fingerprint do |sum|
-      myeloid = [ :dc1_count, :dc2_count, :peripheral_dc_count, :monocyte_count, :cd14_pos_tam_count, :cd14_neg_tam_count ]
+      myeloid = [ :dc1_count, :dc2_count, :peripheral_dc_count, :monocyte_count, :cd14_pos_tam_count, :cd14_neg_tam_count, :neutrophil_count ]
       {
         plot: {
           name: 'fingerprint',
@@ -100,6 +100,10 @@ class SampleJsonUpdate < JsonUpdate
             color: "seagreen",
             height: get_ratio(@record.dc_stain, :monocyte_count, *myeloid)
           },
+          { series: "Neutrophils/myeloid",
+            color: "seagreen",
+            height: get_ratio(@record.dc_stain, :neutrophil_count, *myeloid)
+          },
           { series: "CD14+ TAMs/myeloid",
             color: "seagreen",
             height: get_ratio(@record.dc_stain, :cd14_pos_tam_count, *myeloid)
@@ -111,7 +115,7 @@ class SampleJsonUpdate < JsonUpdate
         ],
         legend: {
           series: [ "treg", "nk/t/b", "sort", "dc" ],
-          colors: [ "greenyellow", "seagreen", "khaki", "coral" ]
+          colors: [ "greenyellow", "coral", "khaki", "seagreen" ]
         }
       }
     end
@@ -139,12 +143,12 @@ class SampleJsonUpdate < JsonUpdate
           },
           {
             series: "CD45+/live",
-            color: "seagreen",
+            color: "coral",
             height: get_ratio(@record.nktb_stain, :cd45_count, :live_count)
           },
           {
             series: "CD45+/live",
-            color: "coral",
+            color: "seagreen",
             height: get_ratio(@record.dc_stain, :cd45_count, :live_count)
           },
           {
@@ -155,7 +159,7 @@ class SampleJsonUpdate < JsonUpdate
         ],
         legend: {
           series: [ "treg", "nk/t/b", "sort", "dc" ],
-          colors: [ "greenyellow", "seagreen", "khaki", "coral" ]
+          colors: [ "greenyellow", "coral", "khaki", "seagreen" ]
         }
       }
     end
