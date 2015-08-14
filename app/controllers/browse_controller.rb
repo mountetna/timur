@@ -82,50 +82,33 @@ class BrowseController <  ApplicationController
 
   def validate_links linkset
     # pull up the appropriate model
-    linkset.each do |fname, links|
-      foreign_model = Magma.instance.get_model fname
-      att = foreign_model.attributes[foreign_model.identity]
-      if links.is_a? Array
-        links.each do |link|
-          next unless link && link.size > 0
-          att.validate link do |error|
-            @errors.push error
-          end
-        end
-      else
-        next unless links && links.size > 0
-        att.validate links do |error|
-          @errors.push error
-        end
+    linkset.each do |name, links|
+      next unless @model.has_attribute? name
+      @model.attributes[name].validate links, @record do |error|
+        @errors.push error
       end
     end
   end
 
   def validate_values values
     values.each do |name, value|
-      @model.attributes[name.to_sym].validate value do |error|
+      next unless @model.has_attribute? name
+      @model.attributes[name.to_sym].validate value, @record do |error|
         @errors.push error
       end
     end
   end
 
   def editable_attributes atts
-    logger.info "Screening #{atts}"
-    atts ||= {}
-    d = atts.select do |att,val|
+    (atts || {}).select do |att,val|
       @model.attributes[att.to_sym] && !@model.attributes[att.to_sym].read_only?
     end
-    logger.info "Screened to #{d}"
-    d
   end
 
   def destroy_links links
     links.each do |fname,link|
       logger.info "Attempting to undo link for #{fname} which is a #{ @model.attributes[fname.to_sym].class }"
-      case @model.attributes[fname.to_sym]
-      when Magma::ForeignKeyAttribute
-        @record[ :"#{fname}_id" ] = nil
-      end
+      @record.delete_link fname
     end
   end
 
@@ -133,37 +116,7 @@ class BrowseController <  ApplicationController
     links.each do |fname,link|
       next if link.blank?
       logger.info "Attempting to make #{link} for #{fname} which is a #{ @model.attributes[fname.to_sym].class }"
-      case @model.attributes[fname.to_sym]
-      when Magma::ForeignKeyAttribute
-        # See if you can find the appropriate model
-        foreign_model = Magma.instance.get_model fname
-        logger.info "Found #{foreign_model}"
-        # now see if the link exists
-        if foreign_model
-          foreign_model.update_or_create(foreign_model.identity => link) do |obj|
-            @record[ :"#{fname}_id" ] = obj.id
-          end
-        end
-      when Magma::ChildAttribute
-        child_model = Magma.instance.get_model fname
-        if child_model
-          child_model.update_or_create(child_model.identity => link) do |obj|
-            obj[ :"#{@model.name.snake_case}_id" ] = @record.id
-          end
-        end
-      when Magma::CollectionAttribute
-        child_model = Magma.instance.get_model fname
-        link.each do |ilink|
-          next if ilink.blank?
-          if child_model
-            logger.info "Trying to create #{child_model} for #{ilink} with #{child_model.identity}"
-            child_model.update_or_create(child_model.identity => ilink) do |obj|
-              logger.info "Setting #{@model.name.snake_case}_id on #{obj}"
-              obj[ :"#{@model.name.snake_case}_id" ] = @record.id
-            end
-          end
-        end
-      end
+      @record.create_link(fname.to_sym, link)
     end
   end
 end

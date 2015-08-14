@@ -184,8 +184,10 @@ MagmaForeignKeyAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     var link = this.attribute_value();
+    var uri;
+    if (link) uri = <a href={ Routes.browse_model_path(link.model,encodeURIComponent(link.identifier))}>{ link.identifier }</a>;
     return <div className="value">
-            <a href={ Routes.browse_model_path(this.props.attribute.name,encodeURIComponent(link))}>{ link }</a>
+            { uri }
            </div>
   },
   render_edit: function() {
@@ -197,8 +199,10 @@ MagmaChildAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     var link = this.attribute_value();
+    var uri;
+    if (link) uri = <a href={ Routes.browse_model_path(link.model,encodeURIComponent(link.identifier))}>{ link.identifier }</a>;
     return <div className="value">
-            <a href={ Routes.browse_model_path(this.props.attribute.name,encodeURIComponent(link))}>{ link }</a>
+            { uri }
            </div>
   },
   render_edit: function() {
@@ -227,9 +231,9 @@ MagmaLinkAttributeEditor = React.createClass({
     var contents;
     if (this.state.mode == 'linked')
       if (this.props.hide_unlink)
-        contents = <div>{ link } </div>;
+        contents = <div>{ link.identifier } </div>;
       else
-        contents = <MagmaLinkUnlinker mode_handler={ this.mode_handler }>{ link }</MagmaLinkUnlinker>;
+        contents = <MagmaLinkUnlinker mode_handler={ this.mode_handler }>{ link.identifier }</MagmaLinkUnlinker>;
     else {
       contents = <MagmaNewLink name={ this.link_name() }/>
     }

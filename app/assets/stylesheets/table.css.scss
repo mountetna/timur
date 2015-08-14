@@ -1,0 +1,28 @@
+@import "globals";
+
+.table {
+	.pager {
+		background-color: forestgreen(0.1);
+		color: midnightblue;
+		.turner {
+			display: inline;
+			cursor: pointer;
+		}
+	}
+	.table_item { 
+		display: table-row;
+		.table_cell {
+			display: table-cell;
+			padding: 2px;
+			border-right: 1px solid forestgreen(0.5);
+		}
+		.table_header {
+			@extend .table_cell;
+			background-color: forestgreen(0.1);
+		}
+		.item_value {
+			@extend .table_cell;
+		}
+	}
+}
+
