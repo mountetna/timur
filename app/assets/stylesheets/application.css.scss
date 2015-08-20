@@ -38,19 +38,7 @@ a {
 	padding-left: 150px;
 }
 
-#model {
-	position: relative;
-	padding-top: 30px;
-}
 
-#model_header {
-	font-family: $body_font;
-	position: relative;
-	margin-left: 10%;
-	padding-left: 10%;
-	margin-right: 20%;
-	//border-bottom: 1px solid forestgreen;
-}
 
 #noauth {
 	#quote {
@@ -91,30 +79,6 @@ a {
 
 }
 
-#edit {
-	cursor: pointer;
-	display: inline-block;
-	font-size: 20px;
-	color: forestgreen;
-}
-
-#approve {
-	cursor: pointer;
-	display: inline-block;
-	font-size: 20px;
-	color: forestgreen;
-}
-
-#cancel {
-	cursor: pointer;
-	display: inline-block;
-	font-size: 20px;
-	color: forestgreen;
-}
-
-.inline {
-	display: inline-block;
-}
 
 
 
