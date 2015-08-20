@@ -7,26 +7,29 @@ MagmaTableAttribute = React.createClass({
     this.setState({ current_page: page });
   },
   render_browse: function() {
+    // [ record, record ]
+    // { model: {}, records: [ record, record ] }
     var self = this;
     var table = this.attribute_value();
-    if (!table || table.length == 0) return <div className="value"></div>;
-    var pages = Math.ceil(table.length / this.state.page_size);
+    if (!table || table.records.length == 0) return <div className="value"></div>;
+    var pages = Math.ceil(table.records.length / this.state.page_size);
     return <div className="value">
              <div className="table">
               <TablePager pages={ pages } current_page={ this.state.current_page } set_page={ this.set_page }/>
               <div className="table_item">
               {
-                Object.keys(table[0]).map(function(att) {
-                  return <div className="table_header">{ att }</div>
+                Object.keys(table.model.attributes).map(function(att) {
+                //Object.keys(table.records[0]).map(function(att) {
+                  if (table.model.attributes[att].shown) return <div className="table_header">{ att }</div>
                 })
               }
               </div>
               {
-                table.slice(this.row_for(this.state.current_page), this.row_for(this.state.current_page+1)).map(
+                table.records.slice(this.row_for(this.state.current_page), this.row_for(this.state.current_page+1)).map(
                   function(item) {
-                    values = Object.keys(item).map(function(att) {
-                      return item[att];
-                    });
+                    values = Object.keys(table.model.attributes).map(function(att) {
+                      if (table.model.attributes[att].shown) return self.format_attribute(att,item[att]);
+                    }).filter(function(v) { return v != null });
                     return <div key={ item.id } className="table_item">
                       {
                         values.map(function(value) {
@@ -38,6 +41,13 @@ MagmaTableAttribute = React.createClass({
                }
              </div>
            </div>
+  },
+  format_attribute: function(att,value) {
+    var table = this.attribute_value();
+
+    if (table.model.attributes[att].attribute_class == "Magma::TableAttribute")
+      return value ? value.records : '';
+    return value || '';
   },
   getInitialState: function() {
     return { new_items: [], page_size: 10, current_page: 0 }
