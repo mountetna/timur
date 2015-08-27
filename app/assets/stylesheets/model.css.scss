@@ -1,9 +1,9 @@
 @import "globals";
 
-#model {
+.model_viewer {
 	position: relative;
 	padding-top: 30px;
-	#model_header {
+	.model_header {
 		font-family: $body_font;
 		position: relative;
 		margin-left: 10%;

@@ -1,4 +1,4 @@
-MagmaTableAttribute = React.createClass({
+TableAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   row_for: function(page) {
     return this.state.page_size * page;
@@ -27,9 +27,8 @@ MagmaTableAttribute = React.createClass({
               {
                 table.records.slice(this.row_for(this.state.current_page), this.row_for(this.state.current_page+1)).map(
                   function(item) {
-                    values = Object.keys(table.model.attributes).map(function(att) {
-                      if (table.model.attributes[att].shown) return self.format_attribute(att,item[att]);
-                    }).filter(function(v) { return v != null });
+                    values = self.format_attributes(item);
+
                     return <div key={ item.id } className="table_item">
                       {
                         values.map(function(value) {
@@ -42,12 +41,23 @@ MagmaTableAttribute = React.createClass({
              </div>
            </div>
   },
-  format_attribute: function(att,value) {
+  format_attributes: function(item) {
     var table = this.attribute_value();
 
-    if (table.model.attributes[att].attribute_class == "Magma::TableAttribute")
-      return value ? value.records : '';
-    return value || '';
+   values = Object.keys(table.model.attributes).map(function(att) {
+
+     if (!table.model.attributes[att].shown) return null;
+
+     value = item[att];
+
+     if (!value) return '';
+
+     if (table.model.attributes[att].attribute_class == "Magma::TableAttribute") return value.records;
+
+     return value;
+   }).filter(function(v) { return v != null });
+
+    return values;
   },
   getInitialState: function() {
     return { new_items: [], page_size: 10, current_page: 0 }

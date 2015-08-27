@@ -1,4 +1,4 @@
-MagmaCollectionAttribute = React.createClass({
+CollectionAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     var self = this;
@@ -39,13 +39,13 @@ MagmaCollectionAttribute = React.createClass({
               {
                 this.attribute_value().map(
                   function(link) {
-                    return <MagmaCollectionUnlink key={ link.identifier } process={ self.props.process } name={ self.remove_name() } current={ link.identifier }/>
+                    return <CollectionUnlink key={ link.identifier } process={ self.props.process } name={ self.remove_name() } current={ link.identifier }/>
                   })
               }
               {
                 this.state.new_items.map(
                   function(link) {
-                    return <div className="collection_item"><MagmaNewLink name={ self.new_items_name() }/></div>
+                    return <div className="collection_item"><NewLink name={ self.new_items_name() }/></div>
                   })
               }
               <div className="collection_item"><span className="button" onClick={ this.new_collection_item.bind(null) }>Add</span></div>
@@ -54,7 +54,7 @@ MagmaCollectionAttribute = React.createClass({
   }
 });
 
-MagmaCollectionUnlink = React.createClass({
+CollectionUnlink = React.createClass({
   getInitialState: function() {
     return { mode: 'linked' };
   },

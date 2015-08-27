@@ -40,22 +40,22 @@ a {
 
 
 
-#noauth {
+#error {
 	#quote {
 		&:after {
 			content: "\201c"
 		}
 		color: forestgreen(0.3);
 		display: inline;
-		font-size: 200px;
+		font-size: 100px;
 		margin: 0;
 		position: absolute;
 		left: 0px;
-		top: -50px;
+		top: -10px;
 		svg {
 			opacity: 1;
 			position: absolute;
-			top: 30px;
+			top: -10px;
 			left: 53px;
 			path {
 				fill:#FFFFFF;
@@ -70,7 +70,7 @@ a {
 	font-family: $talk_font;
 	font-size: 25px;
 	color: darkgreen;
-	padding-left: 80px;
+	padding-left: 50px;
 	padding-top: 20px;
 	position: relative;
 	.red {
@@ -78,9 +78,6 @@ a {
 	}
 
 }
-
-
-
 
 #search {
 	font-family: $body_font;
