@@ -56,6 +56,7 @@ class SampleJsonUpdate < JsonUpdate
 
     patch_key :fingerprint do |sum|
       myeloid = [ "BDCA1+ DCs", "BDCA2+ DCs", "pDCs", "CD16+ Monocytes", "Eosinophils", "Neutrophils", "CD14+ TAMs", "CD14- TAMs" ]
+      lineage = [ "CD3+ all", "HLADR-, CD3-, CD56+ (NK)", "B-cells" ]
       {
         plot: {
           name: 'fingerprint',
@@ -77,12 +78,12 @@ class SampleJsonUpdate < JsonUpdate
           },
 
           # immune
-          { series: "CD3+/CD45+",
+          { series: "Lineage+/CD45+",
             color: "coral",
-            height: get_ratio(:treg, "CD3+ all", "CD45+"),
-            dots: get_dots(:treg, "CD3+ all", "CD45+")
+            height: get_ratio(:dc, "Lineage+", "CD45+"),
+            dots: get_dots(:dc, "Lineage+", "CD45+")
           },
-          { series: "HLADR+/CD45+",
+          { series: "HLADR+,Lineage-/CD45+",
             color: "coral",
             height: get_ratio(:dc, "HLADR+", "CD45+"),
             dots: get_dots(:dc, "HLADR+", "CD45+")
@@ -97,15 +98,22 @@ class SampleJsonUpdate < JsonUpdate
             height: get_ratio(:dc, "Eosinophils", "CD45+"),
             dots: get_dots(:dc, "Eosinophils", "CD45+")
           },
-          { series: "NK cells/CD45+",
-            color: "coral",
-            height: get_ratio(:nktb, "HLADR-, CD3-, CD56+ (NK)", "CD45+"),
-            dots: get_dots(:nktb, "HLADR-, CD3-, CD56+ (NK)", "CD45+")
+
+          #lineage
+          { series: "T cells/lineage+",
+            color: "chocolate",
+            height: get_ratio(:nktb, "CD3+ all", lineage),
+            dots: get_dots(:nktb, "CD3+ all", lineage)
           },
-          { series: "B-cells/CD45+",
-            color: "coral",
-            height: get_ratio(:nktb, "B-cells", "CD45+"),
-            dots: get_dots(:nktb, "B-cells", "CD45+")
+          { series: "NK cells/lineage+",
+            color: "chocolate",
+            height: get_ratio(:nktb, "HLADR-, CD3-, CD56+ (NK)", lineage),
+            dots: get_dots(:nktb, "HLADR-, CD3-, CD56+ (NK)", lineage)
+          },
+          { series: "B-cells/lineage+",
+            color: "chocolate",
+            height: get_ratio(:nktb, "B-cells", lineage),
+            dots: get_dots(:nktb, "B-cells", lineage)
           },
 
 
@@ -120,6 +128,11 @@ class SampleJsonUpdate < JsonUpdate
             height: get_ratio(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all"),
             dots: get_dots(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all")
           },
+          { series: "CD8+,CD4-/CD3+",
+            color: "dodgerblue",
+            height: get_ratio(:treg, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all"),
+            dots: get_dots(:treg, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all")
+          },
           { series: "CD4+,CD8+/CD3+",
             color: "dodgerblue",
             height: get_ratio(:treg, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all"),
@@ -127,11 +140,9 @@ class SampleJsonUpdate < JsonUpdate
           },
           { series: "CD4-,CD8-/CD3+",
             color: "dodgerblue",
-            height: get_ratio(:treg, "Q2: CD8a- , CD4-##CD3+ all", "CD3+ all"),
-            dots: get_dots(:treg, "Q2: CD8a- , CD4-##CD3+ all", "CD3+ all")
+            height: get_ratio(:treg, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all"),
+            dots: get_dots(:treg, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all")
           },
-
-
 
           # apc
           { series: "CD16+ monocytes/HLADR+",
@@ -171,20 +182,20 @@ class SampleJsonUpdate < JsonUpdate
           },
 
           # sub-apc
-          { series: "BDCA3+ DCs/myeloid",
+          { series: "BDCA3+ DCs/HLADR+",
             color: "khaki",
             height: get_ratio(:dc, "BDCA3+ DCs", "HLADR+"),
             dots: get_dots(:dc, "BDCA3+ DCs", "HLADR+")
           },
-          { series: "pDCs (CD85g+)/myeloid",
+          { series: "pDCs (CD85g+)/HLADR+",
             color: "khaki",
             height: get_ratio(:dc, "pDCs", "HLADR+"),
             dots: get_dots(:dc, "pDCs", "HLADR+")
           }
         ],
         legend: {
-          series: [ "overall", "immune", "t-cell", "apcs", "rare apcs" ],
-          colors: [ "seagreen", "coral", "dodgerblue", "greenyellow", "khaki" ]
+          series: [ "overall", "immune", "lineage", "t-cell", "apcs", "rare apcs" ],
+          colors: [ "seagreen", "coral", "chocolate", "dodgerblue", "greenyellow", "khaki" ]
         }
       }
     end
