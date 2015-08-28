@@ -17,19 +17,24 @@ class SampleJsonUpdate < JsonUpdate
 
   def get_ratio stain, num, den
     compute_ratio num, den do |name|
-      sample_count(@record, stain, name)
+      sample_count(@record.population, @record.id, stain, name)
     end
   end
 
-  def sample_count(sample, stain, name)
-    sample.population.select{ |s| s.stain == "#{sample.sample_name}.#{stain}" && s.name == name }.map(&:count).first
+  def sample_count(populations, sid, stain, name)
+    name, parent_name = name.split(/##/)
+    populations.select do |p|
+      p.sample_id == sid && p.stain =~ /#{stain}$/ && p.name == name && (!parent_name || (p.population && p.population.name == parent_name))
+    end.map(&:count).first
   end
 
   def get_dots(stain, num, den)
-    Sample.join(:patients, :id => :patient_id).where(:experiment_id => @record.patient.experiment_id).map do |sample|
-      # compute a value for this sample if it kills ya
+    samples = Sample.join(:patients, :id => :patient_id).where(:experiment_id => @record.patient.experiment_id).select_map :samples__id
+    populations = Population.where(sample_id: samples).all
+    
+    samples.each do |sample_id|
       compute_ratio num, den do |name|
-        sample_count sample, stain, name
+        sample_count populations, sample_id, stain, name
       end
     end
   end
@@ -50,46 +55,48 @@ class SampleJsonUpdate < JsonUpdate
     end
 
     patch_key :fingerprint do |sum|
-      myeloid = [ "BDCA1+ DCs", "BDCA2+ DCs", "pDCs", "CD16+ Monocytes", "Neutrophils", "CD14+ TAMs", "CD14- TAMs" ]
+      myeloid = [ "BDCA1+ DCs", "BDCA2+ DCs", "pDCs", "CD16+ Monocytes", "Eosinophils", "Neutrophils", "CD14+ TAMs", "CD14- TAMs" ]
       {
         plot: {
           name: 'fingerprint',
-          width: 600,
+          width: 800,
           height: 350,
           margin: { top: 10, right: 20, bottom: 150, left: 50},
         },
         data: [
-          { series: "EPCAM+ tumor/live",
-            color: "khaki",
-            height: get_ratio(:sort, "EPCAM+", "Live"),
-            dots: get_dots(:sort, "EPCAM+", "Live")
-          },
-          { series: "Stroma (CD90+, CD44+)/live",
-            color: "khaki",
-            height: get_ratio(:sort, "Q2: CD90+ , CD44+", "Live"),
-            dots: get_dots(:sort, "Q2: CD90+ , CD44+", "Live")
-          },
+          # overall
           { series: "CD45+/live",
-            color: "khaki",
+            color: "seagreen",
             height: get_ratio(:sort, "CD45+", "Live"),
             dots: get_dots(:sort, "CD45+", "Live")
           },
-
-          { series: "T-regs/CD45+",
-            color: "greenyellow",
-            height: get_ratio(:treg, "CD3+, HLADR+, CD4+, CD25+, FoxP3+ (Tr)", "CD45+"),
-            dots: get_dots(:treg, "CD3+, HLADR+, CD4+, CD25+, FoxP3+ (Tr)", "CD45+")
+          { series: "EPCAM+ tumor/live",
+            color: "seagreen",
+            height: get_ratio(:sort, "EPCAM+", "Live"),
+            dots: get_dots(:sort, "EPCAM+", "Live")
           },
-          #{ series: "CD4+/CD45+",
-            #color: "coral",
-            #height: get_ratio(:nktb, :cd4_count, "CD45+"),
-            #dots: get_dots(:nktb, :cd4_count, "CD45+")
-          #},
-          #{ series: "CD8+/CD45+",
-            #color: "coral",
-            #height: get_ratio(:nktb, :cd8_count, "CD45+"),
-            #dots: get_dots(:nktb, :cd8_count, "CD45+")
-          #},
+
+          # immune
+          { series: "CD3+/CD45+",
+            color: "coral",
+            height: get_ratio(:dc, "CD3+ all", "CD45+"),
+            dots: get_dots(:dc, "CD3+ all", "CD45+")
+          },
+          { series: "HLADR+/CD45+",
+            color: "coral",
+            height: get_ratio(:dc, "HLADR+", "CD45+"),
+            dots: get_dots(:dc, "HLADR+", "CD45+")
+          },
+          { series: "Neutrophils/CD45+",
+            color: "coral",
+            height: get_ratio(:dc, "Neutrophils", "CD45+"),
+            dots: get_dots(:dc, "Neutrophils", "CD45+")
+          },
+          { series: "Eosinophils/CD45+",
+            color: "coral",
+            height: get_ratio(:dc, "Eosinophils", "CD45+"),
+            dots: get_dots(:dc, "Eosinophils", "CD45+")
+          },
           { series: "NK cells/CD45+",
             color: "coral",
             height: get_ratio(:nktb, "HLADR-, CD3-, CD56+ (NK)", "CD45+"),
@@ -100,40 +107,84 @@ class SampleJsonUpdate < JsonUpdate
             height: get_ratio(:nktb, "B-cells", "CD45+"),
             dots: get_dots(:nktb, "B-cells", "CD45+")
           },
-          { series: "BDCA1+ DCs/myeloid",
-            color: "seagreen",
-            height: get_ratio(:dc, "BDCA1+ DCs", myeloid)
-            #dots: get_dots(:sort, :stroma_count, "Live")
+
+
+          # t-cell
+          { series: "T-regs/CD3+",
+            color: "dodgerblue",
+            height: get_ratio(:treg, "CD3 all, CD4+, CD25+, FoxP3+ (Tr)", "CD3+ all"),
+            dots: get_dots(:treg, "CD3 all, CD4+, CD25+, FoxP3+ (Tr)", "CD3+ all")
           },
+          { series: "T-helpers(CD4+,CD25-)/CD3+",
+            color: "dodgerblue",
+            height: get_ratio(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all"),
+            dots: get_dots(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all")
+          },
+          { series: "CD4+,CD8+/CD3+",
+            color: "dodgerblue",
+            height: get_ratio(:treg, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all"),
+            dots: get_dots(:treg, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all")
+          },
+          { series: "CD4-,CD8-/CD3+",
+            color: "dodgerblue",
+            height: get_ratio(:treg, "Q2: CD8a- , CD4-##CD3+ all", "CD3+ all"),
+            dots: get_dots(:treg, "Q2: CD8a- , CD4-##CD3+ all", "CD3+ all")
+          },
+
+
+
+          # apc
+          { series: "CD16+ monocytes/HLADR+",
+            color: "greenyellow",
+            height: get_ratio(:dc, "CD16+ Monocytes", "HLADR+"),
+            dots: get_dots(:dc, "CD16+ Monocytes", "HLADR+"),
+          },
+          { series: "CD14+ TAMs/HLADR+",
+            color: "greenyellow",
+            height: get_ratio(:dc, "CD14+ TAMs", "HLADR+"),
+            dots: get_dots(:dc, "CD14+ TAMs", "HLADR+")
+          },
+          { series: "CD14- TAMs/HLADR+",
+            color: "greenyellow",
+            height: get_ratio(:dc, "CD14- TAMs", "HLADR+"),
+            dots: get_dots(:dc, "CD14- TAMs", "HLADR+")
+          },
+          { series: "CD11c-/HLADR+",
+            color: "greenyellow",
+            height: get_ratio(:dc, "CD11c-", "HLADR+"),
+            dots: get_dots(:dc, "CD11c-", "HLADR+")
+          },
+          { series: "CD11c+/HLADR+",
+            color: "greenyellow",
+            height: get_ratio(:dc, "CD11c+", "HLADR+"),
+            dots: get_dots(:dc, "CD11c+", "HLADR+")
+          },
+          { series: "CD14- TAMs/HLADR+",
+            color: "greenyellow",
+            height: get_ratio(:dc, "CD14- TAMs", "HLADR+"),
+            dots: get_dots(:dc, "CD14- TAMs", "HLADR+")
+          },
+          { series: "BDCA1+ DCs/HLADR+",
+            color: "greenyellow",
+            height: get_ratio(:dc, "BDCA1+ DCs", "HLADR+"),
+            dots: get_dots(:dc, "BDCA1+ DCs", "HLADR+")
+          },
+
+          # sub-apc
           { series: "BDCA3+ DCs/myeloid",
-            color: "seagreen",
-            height: get_ratio(:dc, "BDCA2+ DCs", myeloid)
-            #dots: get_dots(:sort, :stroma_count, "Live")
+            color: "khaki",
+            height: get_ratio(:dc, "BDCA3+ DCs", "HLADR+"),
+            dots: get_dots(:dc, "BDCA3+ DCs", "HLADR+")
           },
           { series: "pDCs (CD85g+)/myeloid",
-            color: "seagreen",
-            height: get_ratio(:dc, "pDCs", myeloid)
-          },
-          { series: "CD16+ monocytes/myeloid",
-            color: "seagreen",
-            height: get_ratio(:dc, "CD16+ Monocytes", myeloid)
-          },
-          { series: "Neutrophils/myeloid",
-            color: "seagreen",
-            height: get_ratio(:dc, "Neutrophils", myeloid)
-          },
-          { series: "CD14+ TAMs/myeloid",
-            color: "seagreen",
-            height: get_ratio(:dc, "CD14+ TAMs", myeloid)
-          },
-          { series: "CD14- TAMs/myeloid",
-            color: "seagreen",
-            height: get_ratio(:dc, "CD14- TAMs", myeloid)
-          },
+            color: "khaki",
+            height: get_ratio(:dc, "pDCs", "HLADR+"),
+            dots: get_dots(:dc, "pDCs", "HLADR+")
+          }
         ],
         legend: {
-          series: [ "treg", "nk/t/b", "sort", "dc" ],
-          colors: [ "greenyellow", "coral", "khaki", "seagreen" ]
+          series: [ "overall", "immune", "t-cell", "apcs", "rare apcs" ],
+          colors: [ "seagreen", "coral", "dodgerblue", "greenyellow", "khaki" ]
         }
       }
     end
