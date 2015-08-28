@@ -79,8 +79,8 @@ class SampleJsonUpdate < JsonUpdate
           # immune
           { series: "CD3+/CD45+",
             color: "coral",
-            height: get_ratio(:dc, "CD3+ all", "CD45+"),
-            dots: get_dots(:dc, "CD3+ all", "CD45+")
+            height: get_ratio(:treg, "CD3+ all", "CD45+"),
+            dots: get_dots(:treg, "CD3+ all", "CD45+")
           },
           { series: "HLADR+/CD45+",
             color: "coral",
