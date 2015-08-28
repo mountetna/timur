@@ -1,6 +1,6 @@
 $body_font: 'Oxygen', sans-serif;
 $value_font: 'Cousine', monospace;
-$talk_font: 'EB Garamond', serif;
+$talk_font: 'Lora', serif;
 
 @function forestgreen($opacity) {
 	@return rgba(34,139,34,$opacity)
