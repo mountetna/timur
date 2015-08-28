@@ -51,7 +51,7 @@ class BrowseController <  ApplicationController
       @record.update editable_attributes(params[:values])
     rescue Magma::LoadFailed => m
       logger.info m.complaints
-      render json: { errors: m.complaints }, status: 422
+      render json: { errors: m.complaints }, status: 421
       return
     end
 
@@ -83,7 +83,9 @@ class BrowseController <  ApplicationController
   def validate_links linkset
     # pull up the appropriate model
     linkset.each do |name, links|
-      next unless @model.has_attribute? name
+      name = name.to_sym
+      next if !@model.has_attribute?(name) || links.blank?
+      logger.info "Validating #{name} for #{links}"
       @model.attributes[name].validate links, @record do |error|
         @errors.push error
       end
@@ -92,8 +94,9 @@ class BrowseController <  ApplicationController
 
   def validate_values values
     values.each do |name, value|
-      next unless @model.has_attribute? name
-      @model.attributes[name.to_sym].validate value, @record do |error|
+      name = name.to_sym
+      next if !@model.has_attribute?(name) || value.blank?
+      @model.attributes[name].validate value, @record do |error|
         @errors.push error
       end
     end
