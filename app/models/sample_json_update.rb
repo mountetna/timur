@@ -1,20 +1,37 @@
 class SampleJsonUpdate < JsonUpdate
   sort_order :sample_name, :patient, :headshot, :fingerprint, :qc
-  def get_ratio stain, num, *dens
-    if stain
-      num = stain.send(num) || 0
-      den_sum = dens.inject(0) do |sum,den|
-        den = [ 1, stain.send(den) || 1 ].max unless den.is_a? Numeric
-        sum + den
-      end
-      num / den_sum.to_f
-    else
-     0
+  def compute_ratio nums, dens
+    nums = [ nums ].flatten
+    dens = [ dens ].flatten
+
+    num_sum = nums.inject(0) do |sum, name|
+      sum + (yield(name) || 0)
+    end
+
+    den_sum = dens.inject(0) do |sum,name|
+      sum + [ 1, yield(name) || 1 ].max
+    end
+
+    num_sum / den_sum.to_f
+  end
+
+  def get_ratio stain, num, den
+    compute_ratio num, den do |name|
+      sample_count(@record, stain, name)
     end
   end
 
-  def get_dots(model, num, den)
-    query = model.where('? IS NOT NULL',num).where('? IS NOT NULL', den).where('? > 0',den).select_map([num,den]).map { |a| a[0]/a[1].to_f }
+  def sample_count(sample, stain, name)
+    sample.population.select{ |s| s.stain == "#{sample.sample_name}.#{stain}" && s.name == name }.map(&:count).first
+  end
+
+  def get_dots(stain, num, den)
+    Sample.join(:patients, :id => :patient_id).where(:experiment_id => @record.patient.experiment_id).map do |sample|
+      # compute a value for this sample if it kills ya
+      compute_ratio num, den do |name|
+        sample_count sample, stain, name
+      end
+    end
   end
 
   def apply_template!
@@ -33,7 +50,7 @@ class SampleJsonUpdate < JsonUpdate
     end
 
     patch_key :fingerprint do |sum|
-      myeloid = [ :dc1_count, :dc2_count, :peripheral_dc_count, :monocyte_count, :cd14_pos_tam_count, :cd14_neg_tam_count, :neutrophil_count ]
+      myeloid = [ "BDCA1+ DCs", "BDCA2+ DCs", "pDCs", "CD16+ Monocytes", "Neutrophils", "CD14+ TAMs", "CD14- TAMs" ]
       {
         plot: {
           name: 'fingerprint',
@@ -44,73 +61,74 @@ class SampleJsonUpdate < JsonUpdate
         data: [
           { series: "EPCAM+ tumor/live",
             color: "khaki",
-            height: get_ratio(@record.sort_stain, :tumor_count, :live_count),
-            dots: get_dots(SortStain, :tumor_count, :live_count)
+            height: get_ratio(:sort, "EPCAM+", "Live"),
+            dots: get_dots(:sort, "EPCAM+", "Live")
           },
           { series: "Stroma (CD90+, CD44+)/live",
             color: "khaki",
-            height: get_ratio(@record.sort_stain, :stroma_count, :live_count),
-            dots: get_dots(SortStain, :stroma_count, :live_count)
+            height: get_ratio(:sort, "Q2: CD90+ , CD44+", "Live"),
+            dots: get_dots(:sort, "Q2: CD90+ , CD44+", "Live")
           },
           { series: "CD45+/live",
             color: "khaki",
-            height: get_ratio(@record.sort_stain, :cd45_count, :live_count),
-            dots: get_dots(SortStain, :cd45_count, :live_count)
+            height: get_ratio(:sort, "CD45+", "Live"),
+            dots: get_dots(:sort, "CD45+", "Live")
           },
+
           { series: "T-regs/CD45+",
             color: "greenyellow",
-            height: get_ratio(@record.treg_stain, :treg_count, :cd45_count),
-            dots: get_dots(TregStain, :treg_count, :cd45_count)
+            height: get_ratio(:treg, "CD3+, HLADR+, CD4+, CD25+, FoxP3+ (Tr)", "CD45+"),
+            dots: get_dots(:treg, "CD3+, HLADR+, CD4+, CD25+, FoxP3+ (Tr)", "CD45+")
           },
-          { series: "CD4+/CD45+",
-            color: "coral",
-            height: get_ratio(@record.nktb_stain, :cd4_count, :cd45_count),
-            dots: get_dots(NktbStain, :cd4_count, :cd45_count)
-          },
-          { series: "CD8+/CD45+",
-            color: "coral",
-            height: get_ratio(@record.nktb_stain, :cd8_count, :cd45_count),
-            dots: get_dots(NktbStain, :cd8_count, :cd45_count)
-          },
+          #{ series: "CD4+/CD45+",
+            #color: "coral",
+            #height: get_ratio(:nktb, :cd4_count, "CD45+"),
+            #dots: get_dots(:nktb, :cd4_count, "CD45+")
+          #},
+          #{ series: "CD8+/CD45+",
+            #color: "coral",
+            #height: get_ratio(:nktb, :cd8_count, "CD45+"),
+            #dots: get_dots(:nktb, :cd8_count, "CD45+")
+          #},
           { series: "NK cells/CD45+",
             color: "coral",
-            height: get_ratio(@record.nktb_stain, :nk_count, :cd45_count),
-            dots: get_dots(NktbStain, :nk_count, :cd45_count)
+            height: get_ratio(:nktb, "HLADR-, CD3-, CD56+ (NK)", "CD45+"),
+            dots: get_dots(:nktb, "HLADR-, CD3-, CD56+ (NK)", "CD45+")
           },
           { series: "B-cells/CD45+",
             color: "coral",
-            height: get_ratio(@record.nktb_stain, :b_count, :cd45_count),
-            dots: get_dots(NktbStain, :b_count, :cd45_count)
+            height: get_ratio(:nktb, "B-cells", "CD45+"),
+            dots: get_dots(:nktb, "B-cells", "CD45+")
           },
           { series: "BDCA1+ DCs/myeloid",
             color: "seagreen",
-            height: get_ratio(@record.dc_stain, :dc1_count, *myeloid)
-            #dots: get_dots(SortStain, :stroma_count, :live_count)
+            height: get_ratio(:dc, "BDCA1+ DCs", myeloid)
+            #dots: get_dots(:sort, :stroma_count, "Live")
           },
           { series: "BDCA3+ DCs/myeloid",
             color: "seagreen",
-            height: get_ratio(@record.dc_stain, :dc2_count, *myeloid)
-            #dots: get_dots(SortStain, :stroma_count, :live_count)
+            height: get_ratio(:dc, "BDCA2+ DCs", myeloid)
+            #dots: get_dots(:sort, :stroma_count, "Live")
           },
           { series: "pDCs (CD85g+)/myeloid",
             color: "seagreen",
-            height: get_ratio(@record.dc_stain, :peripheral_dc_count, *myeloid)
+            height: get_ratio(:dc, "pDCs", myeloid)
           },
           { series: "CD16+ monocytes/myeloid",
             color: "seagreen",
-            height: get_ratio(@record.dc_stain, :monocyte_count, *myeloid)
+            height: get_ratio(:dc, "CD16+ Monocytes", myeloid)
           },
           { series: "Neutrophils/myeloid",
             color: "seagreen",
-            height: get_ratio(@record.dc_stain, :neutrophil_count, *myeloid)
+            height: get_ratio(:dc, "Neutrophils", myeloid)
           },
           { series: "CD14+ TAMs/myeloid",
             color: "seagreen",
-            height: get_ratio(@record.dc_stain, :cd14_pos_tam_count, *myeloid)
+            height: get_ratio(:dc, "CD14+ TAMs", myeloid)
           },
           { series: "CD14- TAMs/myeloid",
             color: "seagreen",
-            height: get_ratio(@record.dc_stain, :cd14_neg_tam_count, *myeloid)
+            height: get_ratio(:dc, "CD14- TAMs", myeloid)
           },
         ],
         legend: {
@@ -139,22 +157,22 @@ class SampleJsonUpdate < JsonUpdate
           {
             series: "CD45+/live",
             color: "khaki",
-            height: get_ratio(@record.sort_stain, :cd45_count, :live_count)
+            height: get_ratio(:sort, "CD45+", "Live")
           },
           {
             series: "CD45+/live",
             color: "coral",
-            height: get_ratio(@record.nktb_stain, :cd45_count, :live_count)
+            height: get_ratio(:nktb, "CD45+", "Live")
           },
           {
             series: "CD45+/live",
             color: "seagreen",
-            height: get_ratio(@record.dc_stain, :cd45_count, :live_count)
+            height: get_ratio(:dc, "CD45+", "Live")
           },
           {
             series: "CD45+/live",
             color: "greenyellow",
-            height: get_ratio(@record.treg_stain, :cd45_count, :live_count)
+            height: get_ratio(:treg, "CD45+", "Live")
           },
         ],
         legend: {
