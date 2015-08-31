@@ -13,66 +13,91 @@ d3.bar = function() {
   // For each small multiple…
   function bar(g) {
     // Compute the new x-scale.
-    var yRange = d3.scale.linear()
+    var yScale = d3.scale.linear()
           .domain(domain())
           .range([height, 0]),
         yAxis = d3.svg.axis()
-          .scale(yRange)
+          .scale(yScale)
           .tickSize(5)
           .ticks(5)
           .orient('left')
           .tickSubdivide(true);
 
-    g.append('g')
+    var zoom = d3.behavior.zoom()
+      .scaleExtent([0,1])
+      .on("zoom",function() {
+        console.log("Zooming");
+        yScale.domain([ 0, domain()[1] * Math.pow(d3.event.scale,0.5)]);
+        yElement.call(yAxis);
+        //draw();
+      })
+      .on("zoomend",function() {
+        draw();
+      });
+
+    var yElement = g.append('g')
       .attr('class', 'y axis')
-      .call(yAxis);
+      .call(yAxis)
 
-    g.selectAll("g.bar")
-      .data(g.data()[0])
-      .enter()
-      .append("g")
-      .attr("class", "bar")
-      .each(function(data, i) {
-      var g = d3.select(this);
+    g.call(zoom);
 
-      // Note: the bar, median, and bar tick elements are fixed in number,
-      // so we only have to handle enter and update. In contrast, the outliers
-      // and other elements are variable, so we need to exit them! Variable
-      // elements also fade in and out.
-      var bar = g.selectAll("rect.bar")
-          .data([data])
+    var rect = g.append("rect")
+          .attr("width", 50*width)
+          .attr("height", height)
+          .style("fill", "none")
+          .style("pointer-events", "all");
 
-      bar.enter().append("rect")
+    draw();
+
+    function draw() {
+        g.selectAll("g.bar").remove()
+
+        g.selectAll("g.bar")
+          .data(g.data()[0])
+          .enter()
+          .append("g")
           .attr("class", "bar")
-          .attr("x", 10 + i * 30)
-          .attr("y", function(d) { return yRange(d.height) - yRange(domain()[1]) })
-          .attr("width", width)
-          .attr("style", function(d) { return "stroke:"+(d.color || "white") })
-          .attr("height", function(d) { return yRange(0) - yRange(d.height); })
+          .each(function(data, i) {
+          var g = d3.select(this);
 
-      bar.attr("y", function(d) { return yRange(d.height) - yRange(domain()[1]) })
-         .attr("height", function(d) { return yRange(0) - yRange(d.height); });
+          // Note: the bar, median, and bar tick elements are fixed in number,
+          // so we only have to handle enter and update. In contrast, the outliers
+          // and other elements are variable, so we need to exit them! Variable
+          // elements also fade in and out.
+          var bar = g.selectAll("rect.bar").data([data]);
 
-      if (data.dots) {
-        var dots = g.selectAll("circle.dot")
-          .data(data.dots)
+          bar.enter().append("rect")
+              .attr("class", "bar")
+              .attr("x", 10 + i * 30)
+              .attr("y", function(d) { return yScale(d.height) - yScale(yScale.domain()[1]) })
+              .attr("width", width)
+              .attr("style", function(d) { return "stroke:"+(d.color || "white") })
+              .attr("height", function(d) { return yScale(0) - yScale(d.height); })
 
-        dots.enter().append("circle")
-          .attr("class","dot")
-          .attr("r", 1.5)
-          .attr("cx", function(d) { return 10 + i * 30 + ((1000*d)%8)-4 + width/2; })
-          .attr("cy", function(d) { return yRange(d); })
-      }
+          bar.attr("y", function(d) { return yScale(d.height) - yScale(yScale.domain()[1]) })
+             .attr("height", function(d) { return yScale(0) - yScale(d.height); });
 
-      var text = g.selectAll("text.bar")
-        .data([data])
+          if (data.dots) {
+            var dots = g.selectAll("circle.dot")
+              .data(data.dots)
 
-      text.enter().append("text")
-        .attr("class", "bar")
-        .attr("text-anchor", "start")
-        .text(function(d) { return d.series })
-        .attr("transform", 'translate('+(10 + i * 30)+','+(yRange(domain()[0]) + 15)+') rotate(45)');
-    });
+            dots.enter().append("circle")
+              .attr("class","dot")
+              .attr("r", 1.5)
+              .attr("cx", function(d) { return 10 + i * 30 + ((1000*d)%8)-4 + width/2; })
+              .attr("cy", function(d) { return yScale(d); })
+          }
+
+          var text = g.selectAll("text.bar")
+            .data([data])
+
+          text.enter().append("text")
+            .attr("class", "bar")
+            .attr("text-anchor", "start")
+            .text(function(d) { return d.series })
+            .attr("transform", 'translate('+(10 + i * 30)+','+(yScale(yScale.domain()[0]) + 15)+') rotate(45)');
+      });
+    }
   }
 
   bar.width = function(x) {

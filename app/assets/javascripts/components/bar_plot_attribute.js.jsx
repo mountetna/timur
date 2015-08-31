@@ -15,19 +15,15 @@ BarPlotAttribute = React.createClass({
 
     var barwidth = width / data.data.length;
 
-    var min = Infinity,
-        max = -Infinity;
+    var min = d3.min(data.data, function(s) { return s.height; }),
+        max = d3.max(data.data, function(s) { return s.height; });
+    min = (min > 0) ? 0 : min;
+    max = (max < 0) ? 0 : max;
 
     var chart = d3.bar()
         .width(20)
-        .height(height);
-
-    min = d3.min(data.data, function(s) { return s.height; });
-    max = d3.max(data.data, function(s) { return s.height; });
-
-    min = (min > 0) ? 0 : min;
-    max = (max < 0) ? 0 : max;
-    chart.domain([min,max]);
+        .height(height)
+        .domain([min,max]);
 
     var vis = d3.select("svg#" + data.plot.name + ".bar_plot").selectAll("g")
         .data([data.data])

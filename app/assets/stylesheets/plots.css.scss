@@ -35,11 +35,15 @@ svg {
 	&.bar_plot {
 		font-family: $value_font;
 		font-size: 12px;
-		.axis path,
-		.axis line {
-			fill: none;
-			stroke: black;
-			shape-rendering: crispEdges;
+		.axis {
+			path, line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+		}
+		.y {
+			cursor: pointer;
 		}
 		.bar { 
 			rect {

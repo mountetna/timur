@@ -32,7 +32,7 @@ class SampleJsonUpdate < JsonUpdate
     samples = Sample.join(:patients, :id => :patient_id).where(:experiment_id => @record.patient.experiment_id).select_map :samples__id
     populations = Population.where(sample_id: samples).all
     
-    samples.each do |sample_id|
+    samples.map do |sample_id|
       compute_ratio num, den do |name|
         sample_count populations, sample_id, stain, name
       end
@@ -101,17 +101,17 @@ class SampleJsonUpdate < JsonUpdate
 
           #lineage
           { series: "T cells/lineage+",
-            color: "chocolate",
+            color: "dodgerblue",
             height: get_ratio(:nktb, "CD3+ all", lineage),
             dots: get_dots(:nktb, "CD3+ all", lineage)
           },
           { series: "NK cells/lineage+",
-            color: "chocolate",
+            color: "dodgerblue",
             height: get_ratio(:nktb, "HLADR-, CD3-, CD56+ (NK)", lineage),
             dots: get_dots(:nktb, "HLADR-, CD3-, CD56+ (NK)", lineage)
           },
           { series: "B-cells/lineage+",
-            color: "chocolate",
+            color: "dodgerblue",
             height: get_ratio(:nktb, "B-cells", lineage),
             dots: get_dots(:nktb, "B-cells", lineage)
           },
@@ -119,27 +119,27 @@ class SampleJsonUpdate < JsonUpdate
 
           # t-cell
           { series: "T-regs/CD3+",
-            color: "dodgerblue",
+            color: "chocolate",
             height: get_ratio(:treg, "CD3 all, CD4+, CD25+, FoxP3+ (Tr)", "CD3+ all"),
             dots: get_dots(:treg, "CD3 all, CD4+, CD25+, FoxP3+ (Tr)", "CD3+ all")
           },
           { series: "T-helpers(CD4+,CD25-)/CD3+",
-            color: "dodgerblue",
+            color: "chocolate",
             height: get_ratio(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all"),
             dots: get_dots(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all")
           },
           { series: "CD8+,CD4-/CD3+",
-            color: "dodgerblue",
+            color: "chocolate",
             height: get_ratio(:treg, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all"),
             dots: get_dots(:treg, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all")
           },
           { series: "CD4+,CD8+/CD3+",
-            color: "dodgerblue",
+            color: "chocolate",
             height: get_ratio(:treg, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all"),
             dots: get_dots(:treg, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all")
           },
           { series: "CD4-,CD8-/CD3+",
-            color: "dodgerblue",
+            color: "chocolate",
             height: get_ratio(:treg, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all"),
             dots: get_dots(:treg, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all")
           },
@@ -195,7 +195,7 @@ class SampleJsonUpdate < JsonUpdate
         ],
         legend: {
           series: [ "overall", "immune", "lineage", "t-cell", "apcs", "rare apcs" ],
-          colors: [ "seagreen", "coral", "chocolate", "dodgerblue", "greenyellow", "khaki" ]
+          colors: [ "seagreen", "coral", "dodgerblue", "chocolate", "greenyellow", "khaki" ]
         }
       }
     end
