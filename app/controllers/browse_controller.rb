@@ -2,6 +2,7 @@ class BrowseController <  ApplicationController
   before_filter :authenticate
   before_filter :readable_check
   before_filter :editable_check, only: :update
+  layout "timur"
 
   def index
     redirect_to browse_model_path(:project, "UCSF Immunoprofiler")
