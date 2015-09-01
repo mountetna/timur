@@ -57,6 +57,7 @@ class SampleJsonUpdate < JsonUpdate
   def get_dots(stain, num, den)
     
     samples.map do |sample_id, sample_name|
+      next if sample_id == @record.id
       ratio = compute_ratio(num, den, discard_null: true) do |name|
         sample_count populations, sample_id, stain, name
       end

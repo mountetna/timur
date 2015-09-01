@@ -20,7 +20,7 @@ d3.bar = function() {
           .tickSubdivide(true);
 
     var zoom = d3.behavior.zoom()
-      .scaleExtent([0,1])
+      .scaleExtent([1e-6,1])
       .on("zoom",function() {
         console.log("Zooming");
         yScale.domain([ 0, domain()[1] * Math.pow(d3.event.scale,0.5)]);
@@ -38,13 +38,22 @@ d3.bar = function() {
       .attr('class', 'y axis')
       .call(yAxis)
 
-    g.call(zoom);
+    g.call(zoom)
+        .on("mousedown.zoom", null)
+            .on("touchstart.zoom", null)
+                .on("touchmove.zoom", null)
+                    .on("touchend.zoom", null);
 
     var rect = g.append("rect")
           .attr("width", 50*width)
           .attr("height", height)
           .style("fill", "none")
           .style("pointer-events", "all");
+
+    var tooltip = g.append("text")
+      .attr("class", "tooltip")
+      .attr("text-anchor", "start")
+      .attr("visibility", "hidden")
 
     draw();
 
@@ -79,17 +88,25 @@ d3.bar = function() {
           if (newstep - step > 100) console.log("Drawing bar took "+((newstep-step)/1000)+" seconds.");
           step = newstep;
 
+
           if (data.dots) {
             data.dots.forEach(function(dot) {
               g.append("circle")
                 .attr("class","dot")
-                .attr("r", 2)
+                .attr("r", 2.5)
                 .attr("cx", 10 + i * 30 + ((1000*dot.height)%8)-4 + width/2)
                 .attr("cy", yScale(dot.height))
                 .on("click", function(d) {
                   console.log("clicking!" + dot.name);
-                  d3.event.sourceEvent.stopPropagation();
                   window.location = Routes.browse_model_path('sample', dot.name);
+                })
+                .on("mouseover", function(d) {
+                  tooltip.attr("visibility", "visible")
+                    .text(dot.name)
+                    .attr("transform", 'translate( ' + (13 + i * 30 + ((1000*dot.height)%8)-4 + width/2) + ',' + yScale(dot.height) + ')')
+                })
+                .on("mouseout", function(d) {
+                  tooltip.attr("visibility", "hidden")
                 })
             });
           }
