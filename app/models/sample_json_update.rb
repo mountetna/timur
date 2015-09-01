@@ -14,7 +14,11 @@ class SampleJsonUpdate < JsonUpdate
       end
     end
 
-    return nil if !num_sum && opts[:discard_null]
+    if !num_sum && opts[:discard_null]
+      return nil
+    else
+      num_sum = 0
+    end
 
     den_sum = dens.inject(0) do |sum,name|
       sum + [ 1, yield(name) || 1 ].max
