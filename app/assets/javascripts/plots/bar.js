@@ -83,9 +83,14 @@ d3.bar = function() {
 
             dots.enter().append("circle")
               .attr("class","dot")
-              .attr("r", 1.5)
-              .attr("cx", function(d) { return 10 + i * 30 + ((1000*d)%8)-4 + width/2; })
-              .attr("cy", function(d) { return yScale(d); })
+              .attr("r", 2)
+              .attr("cx", function(d) { return 10 + i * 30 + ((1000*d.height)%8)-4 + width/2; })
+              .attr("cy", function(d) { return yScale(d.height); })
+              .on("click", function(d) {
+                console.log("clicking!" + d.name);
+                d3.event.sourceEvent.stopPropagation();
+                window.location = Routes.browse_model_path('sample', d.name);
+              })
           }
 
           var text = g.selectAll("text.bar")
