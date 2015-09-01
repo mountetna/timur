@@ -1,12 +1,20 @@
 class SampleJsonUpdate < JsonUpdate
   sort_order :sample_name, :patient, :headshot, :fingerprint, :qc
-  def compute_ratio nums, dens
+  def compute_ratio nums, dens, opts={}
     nums = [ nums ].flatten
     dens = [ dens ].flatten
 
-    num_sum = nums.inject(0) do |sum, name|
-      sum + (yield(name) || 0)
+    num_sum = nums.inject(nil) do |sum, name|
+      value = yield(name)
+      if value
+        sum ||= 0
+        sum + value
+      else
+        sum
+      end
     end
+
+    return nil if !num_sum && opts[:discard_null]
 
     den_sum = dens.inject(0) do |sum,name|
       sum + [ 1, yield(name) || 1 ].max
@@ -49,13 +57,16 @@ class SampleJsonUpdate < JsonUpdate
   def get_dots(stain, num, den)
     
     samples.map do |sample_id, sample_name|
-      {
-        name: sample_name,
-        height: compute_ratio(num, den) do |name|
-          sample_count populations, sample_id, stain, name
-        end
-      }
-    end
+      ratio = compute_ratio(num, den, discard_null: true) do |name|
+        sample_count populations, sample_id, stain, name
+      end
+      if ratio
+        {
+          name: sample_name,
+          height: ratio
+        }
+      end
+    end.compact
   end
 
   def apply_template!

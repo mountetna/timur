@@ -3,11 +3,7 @@
 d3.bar = function() {
   var width = 1,
       height = 1,
-      duration = 0,
       domain = null,
-      value = Number,
-      whiskers = barWhiskers,
-      quartiles = barQuartiles,
       tickFormat = null;
 
   // For each small multiple…
@@ -32,7 +28,10 @@ d3.bar = function() {
         //draw();
       })
       .on("zoomend",function() {
+        var time = new Date().getTime();
         draw();
+        time = (new Date().getTime()) - time;
+        console.log("Drawing took "+(time/1000)+" seconds.");
       });
 
     var yElement = g.append('g')
@@ -50,7 +49,11 @@ d3.bar = function() {
     draw();
 
     function draw() {
+        var time = new Date().getTime();
+        var step;
         g.selectAll("g.bar").remove()
+        step = new Date().getTime();
+        console.log("Removal took "+((step-time)/1000)+" seconds.");
 
         g.selectAll("g.bar")
           .data(g.data()[0])
@@ -64,43 +67,45 @@ d3.bar = function() {
           // so we only have to handle enter and update. In contrast, the outliers
           // and other elements are variable, so we need to exit them! Variable
           // elements also fade in and out.
-          var bar = g.selectAll("rect.bar").data([data]);
-
-          bar.enter().append("rect")
+          var bar = g.append("rect")
               .attr("class", "bar")
               .attr("x", 10 + i * 30)
-              .attr("y", function(d) { return yScale(d.height) - yScale(yScale.domain()[1]) })
+              .attr("y", yScale(data.height) - yScale(yScale.domain()[1]))
               .attr("width", width)
-              .attr("style", function(d) { return "stroke:"+(d.color || "white") })
-              .attr("height", function(d) { return yScale(0) - yScale(d.height); })
+              .attr("style", "stroke:"+(data.color || "white"))
+              .attr("height", yScale(0) - yScale(data.height))
 
-          bar.attr("y", function(d) { return yScale(d.height) - yScale(yScale.domain()[1]) })
-             .attr("height", function(d) { return yScale(0) - yScale(d.height); });
+          var newstep = new Date().getTime();
+          if (newstep - step > 100) console.log("Drawing bar took "+((newstep-step)/1000)+" seconds.");
+          step = newstep;
 
           if (data.dots) {
-            var dots = g.selectAll("circle.dot")
-              .data(data.dots)
-
-            dots.enter().append("circle")
-              .attr("class","dot")
-              .attr("r", 2)
-              .attr("cx", function(d) { return 10 + i * 30 + ((1000*d.height)%8)-4 + width/2; })
-              .attr("cy", function(d) { return yScale(d.height); })
-              .on("click", function(d) {
-                console.log("clicking!" + d.name);
-                d3.event.sourceEvent.stopPropagation();
-                window.location = Routes.browse_model_path('sample', d.name);
-              })
+            data.dots.forEach(function(dot) {
+              g.append("circle")
+                .attr("class","dot")
+                .attr("r", 2)
+                .attr("cx", 10 + i * 30 + ((1000*dot.height)%8)-4 + width/2)
+                .attr("cy", yScale(dot.height))
+                .on("click", function(d) {
+                  console.log("clicking!" + dot.name);
+                  d3.event.sourceEvent.stopPropagation();
+                  window.location = Routes.browse_model_path('sample', dot.name);
+                })
+            });
           }
+          newstep = new Date().getTime();
+          if (newstep - step > 100) console.log("Drawing dots took "+((newstep-step)/1000)+" seconds.");
+          step = newstep;
 
-          var text = g.selectAll("text.bar")
-            .data([data])
-
-          text.enter().append("text")
+          g.append("text")
             .attr("class", "bar")
             .attr("text-anchor", "start")
-            .text(function(d) { return d.series })
+            .text(data.series)
             .attr("transform", 'translate('+(10 + i * 30)+','+(yScale(yScale.domain()[0]) + 15)+') rotate(45)');
+          newstep = new Date().getTime();
+          if (newstep - step > 100) console.log("Drawing text took "+((newstep-step)/1000)+" seconds.");
+          step = newstep;
+
       });
     }
   }
@@ -123,21 +128,9 @@ d3.bar = function() {
     return bar;
   };
 
-  bar.duration = function(x) {
-    if (!arguments.length) return duration;
-    duration = x;
-    return bar;
-  };
-
   bar.domain = function(x) {
     if (!arguments.length) return domain;
     domain = x == null ? x : d3.functor(x);
-    return bar;
-  };
-
-  bar.value = function(x) {
-    if (!arguments.length) return value;
-    value = x;
     return bar;
   };
 
