@@ -14,10 +14,12 @@ class SampleJsonUpdate < JsonUpdate
       end
     end
 
-    if !num_sum && opts[:discard_null]
-      return nil
-    else
-      num_sum = 0
+    if !num_sum 
+      if opts[:discard_null]
+        return nil
+      else
+        num_sum = 0
+      end
     end
 
     den_sum = dens.inject(0) do |sum,name|
