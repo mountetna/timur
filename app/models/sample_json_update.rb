@@ -24,18 +24,37 @@ class SampleJsonUpdate < JsonUpdate
   def sample_count(populations, sid, stain, name)
     name, parent_name = name.split(/##/)
     populations.select do |p|
-      p.sample_id == sid && p.stain =~ /#{stain}$/ && p.name == name && (!parent_name || (p.population && p.population.name == parent_name))
+      p.sample_id == sid && 
+        p.stain =~ /#{stain}$/ && 
+        p.name == name && 
+        (!parent_name || 
+         (p.population && has_parent?(p,parent_name)))
     end.map(&:count).first
   end
 
+  def has_parent? p, name
+    populations.find do |pop|
+      pop.id == p.population_id && pop.population.name == name
+    end
+  end
+
+  def samples
+    @samples ||= Sample.join(:patients, :id => :patient_id).where(:experiment_id => @record.patient.experiment_id).select_hash(:samples__id, :samples__sample_name)
+  end
+
+  def populations
+    @populations ||= Population.where(sample_id: samples.keys).all
+  end
+
   def get_dots(stain, num, den)
-    samples = Sample.join(:patients, :id => :patient_id).where(:experiment_id => @record.patient.experiment_id).select_map :samples__id
-    populations = Population.where(sample_id: samples).all
     
-    samples.map do |sample_id|
-      compute_ratio num, den do |name|
-        sample_count populations, sample_id, stain, name
-      end
+    samples.map do |sample_id, sample_name|
+      {
+        name: sample_name,
+        height: compute_ratio(num, den) do |name|
+          sample_count populations, sample_id, stain, name
+        end
+      }
     end
   end
 
