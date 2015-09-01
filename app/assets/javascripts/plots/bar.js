@@ -101,7 +101,7 @@ d3.bar = function() {
                   window.location = Routes.browse_model_path('sample', dot.name);
                 })
                 .on("mouseover", function(d) {
-                  tooltip.parentNode.appendChild(tooltip);
+                  tooltip.node().parentNode.appendChild(tooltip);
                   tooltip.attr("visibility", "visible")
                     .text(dot.name)
                     .attr("transform", 'translate( ' + (13 + i * 30 + ((1000*dot.height)%8)-4 + width/2) + ',' + yScale(dot.height) + ')')
