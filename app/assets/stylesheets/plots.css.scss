@@ -65,4 +65,24 @@ svg {
 			}
 		}
 	}
+	&.scatter_plot {
+		font-family: $value_font;
+		font-size: 12px;
+		.axis {
+			path, line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+		}
+		circle.dot {
+			cursor: pointer;
+			fill: dodgerblue;
+			stroke-width: 1px;
+			&:hover {
+				stroke-width: 4px;
+				stroke: black;
+			}
+		}
+	}
 }

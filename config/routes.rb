@@ -19,6 +19,10 @@ Rails.application.routes.draw do
   get 'json/:model/:name' => 'browse#json', as: :browse_json, constraints: { name: /[^\/]+/ }
   post 'browse/update' => 'browse#update', as: :update_model
 
+  get 'plot' => 'plot#index', as: :plot
+  get 'fixed_plots_json' => 'plot#fixed_plots_json', as: :fixed_plots_json
+  get 'scatter_plot_json' => 'plot#scatter_plot_json', as: :scatter_plot_json
+
   get 'search' => 'search#index', as: :search
   post 'table' => 'search#table', as: :table
   # Example of regular route:

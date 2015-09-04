@@ -1,0 +1,5 @@
+= content_for :title, "Timur - Browse - #{@record_name}"
+
+#root
+%script{ type: "text/javascript" }
+  ! $(function() { React.render( React.createElement(Timur, { #{current_user ? "user: '#{current_user.name}', " : '' } mode: 'plotter', }), $('#root')[0]); })

@@ -54,7 +54,7 @@ BarPlotAttribute = React.createClass({
       .attr("text-anchor", "start")
       .attr("x", width - margin.right - 15)
       .attr("y", function(d, i) { return 20 + i *  20;})
-      .text(function(d) { return d; });;
+      .text(function(d) { return d; });
   },
   render_browse: function() {
     var plot = this.attribute_value().plot;

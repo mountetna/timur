@@ -6,6 +6,9 @@ TableAttribute = React.createClass({
   set_page: function(page) {
     this.setState({ current_page: page });
   },
+  filter: function(evt) {
+    this.setState({ filter: evt.target.value });
+  },
   render_browse: function() {
     // [ record, record ]
     // { model: {}, records: [ record, record ] }
@@ -15,7 +18,7 @@ TableAttribute = React.createClass({
     var pages = Math.ceil(table.records.length / this.state.page_size);
     return <div className="value">
              <div className="table">
-              <TablePager pages={ pages } current_page={ this.state.current_page } set_page={ this.set_page }/>
+              <TablePager pages={ pages } filter={ this.filter } current_page={ this.state.current_page } set_page={ this.set_page }/>
               <div className="table_item">
               {
                 Object.keys(table.model.attributes).map(function(att) {
@@ -83,6 +86,7 @@ TablePager = React.createClass({
             { leftturn }
             { this.props.current_page + 1 } of { this.props.pages }
             { rightturn }
+            <input type="text" onChange={ this.props.filter }/>
            </div>;
   }
 });
