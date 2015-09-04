@@ -21,7 +21,7 @@ class PlotController <  ApplicationController
       {
         name: "XY Scatter",
         type: "Scatter",
-        indications: Experiment.select_map(:name),
+        indications: [ "Any" ] + Experiment.select_map(:name),
         variables: ScatterPlot::VARIABLES
       }
     ]

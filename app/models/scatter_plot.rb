@@ -60,9 +60,13 @@ class ScatterPlot
   end
 
   def samples
-    @samples ||= Sample.join(:patients, :id => :patient_id)
-      .where(:experiment_id => @indication.id)
-      .select_hash(:samples__id, :samples__sample_name)
+    @samples ||= get_samples
+  end
+
+  def get_samples
+    samples = Sample.join(:patients, :id => :patient_id)
+    samples = samples.where(:experiment_id => @indication.id) if @indication
+    samples.select_hash(:samples__id, :samples__sample_name)
   end
 
   def populations

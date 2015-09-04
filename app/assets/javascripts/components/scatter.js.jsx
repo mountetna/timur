@@ -1,12 +1,12 @@
 Scatter = React.createClass({
   render: function() {
-    return <form>
-      Indication:  { this.var_select('indication', this.props.plot.indications) }
-      X var: { this.var_select('x', this.props.plot.variables) } 
-      Y var: { this.var_select('y', this.props.plot.variables) } 
-      <input type="button" onClick={ this.do_plot } value="Plot"/>
+    return <div>
+        Indication:  { this.var_select('indication', this.props.plot.indications) }
+        X var: { this.var_select('x', this.props.plot.variables) } 
+        Y var: { this.var_select('y', this.props.plot.variables) } 
+        <input type="button" onClick={ this.do_plot } value="Plot"/>
       <svg className="scatter_plot" width="800" height="350"/>
-    </form>;
+    </div>;
   },
   componentDidUpdate: function() {
     if (this.state.data) this.d3_render();
