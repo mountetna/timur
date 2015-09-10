@@ -7,7 +7,7 @@ class PlotController <  ApplicationController
   end
 
   def scatter_plot_json
-    plot = ScatterPlot.new(params)
+    plot = ScatterPlotJson.new(params)
     render json: plot.to_json
   end
 
@@ -22,7 +22,7 @@ class PlotController <  ApplicationController
         name: "XY Scatter",
         type: "Scatter",
         indications: [ "Any" ] + Experiment.select_map(:name),
-        variables: ScatterPlot::VARIABLES
+        variables: ScatterPlotJson::VARIABLES
       }
     ]
     render json: plots
