@@ -101,6 +101,12 @@ Browser = React.createClass({
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
     if (this.state.mode == 'loading')
       return <div className={ this.skin() }/>;
+    else if (this.state.mode == 'browse') {
+      return <div className={ this.skin() }>
+        <BrowserHeader mode={ this.state.mode } model={ this.state.model } mode_handler={ this.handle_mode } editable={ this.state.editable } />
+        <Attributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record } process={ this.process }/>
+      </div>;
+    }
     else {
       return <form className={ this.skin() } method="post" model={ this.state.model } record={ this.state.record } action={ Routes.update_model_path() } encType="multipart/form-data">
         <input type="hidden" name="authenticity_token" value={ token }/>

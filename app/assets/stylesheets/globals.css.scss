@@ -5,3 +5,13 @@ $talk_font: 'Lora', serif;
 @function forestgreen($opacity) {
 	@return rgba(34,139,34,$opacity)
 }
+
+.text_defaults {
+	color: darkorchid;
+	border: 0px none black;
+	border-bottom: 1px solid forestgreen;
+	font-family: $value_font;
+	font-size: 16px;
+	margin: 0;
+	padding: 0;
+}

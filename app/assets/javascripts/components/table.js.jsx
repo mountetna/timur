@@ -6,29 +6,50 @@ TableAttribute = React.createClass({
   set_page: function(page) {
     this.setState({ current_page: page });
   },
-  filter: function(evt) {
-    this.setState({ filter: evt.target.value });
+  set_filter: function(evt) {
+    this.setState({ current_page: 0, filter: evt.target.value });
+  },
+  filter_records: function(table) {
+    var self = this;
+    if (!table || table.records.length == 0) return null;
+
+    if (!this.state.filter) return table.records;
+
+    terms = this.state.filter.split(/\s+/);
+
+    return table.records.filter(function(record) {
+      // see if it matches
+      return terms.every(function(term) { 
+        if (!term) return true;
+        return Object.keys(table.model.attributes).some(function(att) {
+          if (!table.model.attributes[att].shown) { return false; }
+          if ($.type(record[att]) != "string") { return false; }
+          if (record[att].match(new RegExp(term, "i"))) return true;
+        });
+      });
+    });
   },
   render_browse: function() {
     // [ record, record ]
     // { model: {}, records: [ record, record ] }
     var self = this;
     var table = this.attribute_value();
-    if (!table || table.records.length == 0) return <div className="value"></div>;
-    var pages = Math.ceil(table.records.length / this.state.page_size);
+    var records = this.filter_records(table);
+    if (!records) return <div className="value"></div>;
+    var pages = Math.ceil(records.length / this.state.page_size);
     return <div className="value">
              <div className="table">
-              <TablePager pages={ pages } filter={ this.filter } current_page={ this.state.current_page } set_page={ this.set_page }/>
+              <TablePager pages={ pages } set_filter={ this.set_filter } current_page={ this.state.current_page } set_page={ this.set_page }/>
               <div className="table_item">
               {
                 Object.keys(table.model.attributes).map(function(att) {
-                //Object.keys(table.records[0]).map(function(att) {
+                //Object.keys(records[0]).map(function(att) {
                   if (table.model.attributes[att].shown) return <div className="table_header">{ att }</div>
                 })
               }
               </div>
               {
-                table.records.slice(this.row_for(this.state.current_page), this.row_for(this.state.current_page+1)).map(
+                records.slice(this.row_for(this.state.current_page), this.row_for(this.state.current_page+1)).map(
                   function(item) {
                     values = self.format_attributes(item);
 
@@ -86,7 +107,8 @@ TablePager = React.createClass({
             { leftturn }
             { this.props.current_page + 1 } of { this.props.pages }
             { rightturn }
-            <input type="text" onChange={ this.props.filter }/>
+            <div className='search'>&#x2315;</div>
+            <input className="filter" type="text" onChange={ this.props.set_filter }/>
            </div>;
   }
 });
