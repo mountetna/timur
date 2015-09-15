@@ -19,6 +19,8 @@
 //= require ./components/text_attribute
 
 //= require ./components/plotter
+//= require ./components/filter
+//= require ./components/var_select
 //= require ./components/scatter
 
 //= require ./components/timur

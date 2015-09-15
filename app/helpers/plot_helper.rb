@@ -1,30 +1,30 @@
 module PlotHelper
-  def compute_ratio nums, dens, opts={}
-    nums = [ nums ].flatten
-    dens = [ dens ].flatten
+  def compute_ratio v1, v2, opts={}
+    compute_operation(:/, v1, v2, opts) do |name|
+      yield name
+    end
+  end
 
-    num_sum = nums.inject(nil) do |sum, name|
-      value = yield(name)
-      if value
-        sum ||= 0
-        sum + value
-      else
-        sum
-      end
+  def compute_operation op, v1, v2, opts={}
+    v1_names = [ v1 ].flatten
+    v2_names = [ v2 ].flatten
+
+    v1_values = v1_names.map do |name|
+      yield name
     end
 
-    if !num_sum 
-      if opts[:discard_null]
-        return nil
-      else
-        num_sum = 0
-      end
+    v2_values = v2_names.map do |name|
+      yield name
     end
 
-    den_sum = dens.inject(0) do |sum,name|
-      sum + [ 1, yield(name) || 1 ].max
+    case op
+    when :/
+      v1_sum = v1_values.compact.reduce &:+
+      v2_sum = v2_values.compact.reduce &:+
+      return nil if opts[:discard_null] && !v1_sum
+      v1_sum ||= 0
+      v2_sum = [ 1, v2_sum || 1 ].max
+      return v1_sum / v2_sum.to_f
     end
-
-    num_sum / den_sum.to_f
   end
 end

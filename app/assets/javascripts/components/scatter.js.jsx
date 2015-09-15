@@ -1,10 +1,12 @@
 Scatter = React.createClass({
   render: function() {
-    return <div>
-        Indication:  { this.var_select('indication', this.props.plot.indications) }
-        X var: { this.var_select('x', this.props.plot.variables) } 
-        Y var: { this.var_select('y', this.props.plot.variables) } 
+    return <div className="scatter_plot">
+      <div className="configure">
+        <Filter indications={ this.props.plot.indications }/>
+        <VarSelect variables={ this.props.plot.variables } name='x'/>
+        <VarSelect variables={ this.props.plot.variables } name='y'/>
         <input type="button" onClick={ this.do_plot } value="Plot"/>
+      </div>
       <svg className="scatter_plot" width="800" height="350"/>
     </div>;
   },
@@ -47,19 +49,29 @@ Scatter = React.createClass({
     var self = this;
     var node = $(React.findDOMNode(this));
     var request = {
-      indication: node.children('select[name=indication]').val(),
-      x_var: node.children('select[name=x]').val(),
-      y_var: node.children('select[name=y]').val(),
+      indication: node.find('select[name=indication]').val(),
+      xstain: node.find('select[name=xstain]').val(),
+      x_var1: node.find('select[name=x1]').val(),
+      x_var2: node.find('select[name=x2]').val(),
+      ystain: node.find('select[name=ystain]').val(),
+      y_var1: node.find('select[name=y1]').val(),
+      y_var2: node.find('select[name=y2]').val(),
     };
-    $.get( Routes.scatter_plot_json_path(request), function(result) {
+    console.log(request);
+    $.get( Routes.scatter_plot_json_path(), request, function(result) {
       self.data_update(result);
     });
+  },
+  update_stain: function() {
+    var node = $(React.findDOMNode(this));
+    var stain = node.find('select[name=stain]').val();
+    this.setState({ stain_variables: this.props.plot.variables[stain] });
   },
   data_update: function(result) {
     this.setState({ data: result });
   },
   var_select: function(name, values) {
-    return <select name={ name }>
+    return <select name={ name } onChange={ this.update_stain }>
       {
         values.map(function(v) {
           return <option key={v} value={v} >{ v }</option>;

@@ -5,15 +5,13 @@ module PopulationHelper
       p.sample_id == sid && 
         p.stain =~ /#{stain}$/ && 
         p.name == name && 
-        (!parent_name || 
-         (p.population && has_parent?(p,parent_name, populations)))
+        (!parent_name || has_parent?(p,parent_name))
     end.map(&:count).first
   end
   
-  def has_parent? p, name, populations
-    populations.find do |pop|
-      pop.id == p.population_id && pop.population.name == name
-    end
+  def has_parent? p, parent_name
+    Rails.logger.info "#{p.ancestry} =? #{parent_name}"
+    p.ancestry =~ /^#{Regexp.escape(parent_name)}/
   end
 
   def populations

@@ -18,12 +18,7 @@ class PlotController <  ApplicationController
         name: "None",
         type: "none"
       },
-      {
-        name: "XY Scatter",
-        type: "Scatter",
-        indications: [ "Any" ] + Experiment.select_map(:name),
-        variables: ScatterPlotJson::VARIABLES
-      }
+      ScatterPlotJson.template
     ]
     render json: plots
   end

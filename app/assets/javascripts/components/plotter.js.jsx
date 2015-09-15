@@ -26,7 +26,7 @@ Plotter = React.createClass({
         var PlotClass = eval(this.state.plot.type);
         plot_html = <PlotClass plot={ this.state.plot }/>;
       }
-      return <div >
+      return <div className="plotter">
                 Plot type: 
                 <select name="plot_type" onChange={ this.select_plot } defaultValue="none">
                 {
