@@ -87,20 +87,27 @@ class FingerprintPlotJson
           height: get_ratio(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all"),
           dots: get_dots(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all")
         },
-        { series: "CD8+,CD4-/CD3+",
-          color: "chocolate",
-          height: get_ratio(:treg, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all"),
-          dots: get_dots(:treg, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all")
+
+        # cd4/8
+        { series: "CD8-,CD4-/CD3+",
+          color: "magenta",
+          height: get_ratio(:nktb, "Q1: CD8a- , CD4+##CD3+ all", "CD3+ all"),
+          dots: get_dots(:nktb, "Q1: CD8a- , CD4+##CD3+ all", "CD3+ all")
         },
         { series: "CD4+,CD8+/CD3+",
-          color: "chocolate",
-          height: get_ratio(:treg, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all"),
-          dots: get_dots(:treg, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all")
+          color: "magenta",
+          height: get_ratio(:nktb, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all"),
+          dots: get_dots(:nktb, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all")
+        },
+        { series: "CD8+,CD4-/CD3+",
+          color: "magenta",
+          height: get_ratio(:nktb, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all"),
+          dots: get_dots(:nktb, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all")
         },
         { series: "CD4-,CD8-/CD3+",
-          color: "chocolate",
-          height: get_ratio(:treg, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all"),
-          dots: get_dots(:treg, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all")
+          color: "magenta",
+          height: get_ratio(:nktb, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all"),
+          dots: get_dots(:nktb, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all")
         },
 
         # apc
@@ -153,8 +160,8 @@ class FingerprintPlotJson
         }
       ],
       legend: {
-        series: [ "overall", "immune", "lineage", "t-cell", "apcs", "rare apcs" ],
-        colors: [ "seagreen", "coral", "dodgerblue", "chocolate", "greenyellow", "khaki" ]
+        series: [ "overall", "immune", "lineage", "t-cell", "cd4/8", "apcs", "rare apcs" ],
+        colors: [ "seagreen", "coral", "dodgerblue", "chocolate", "magenta", "greenyellow", "khaki" ]
       }
     }
   end
