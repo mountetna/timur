@@ -69,7 +69,7 @@ class ScatterPlotJson
   end
 
   def label_for var
-    "#{var[:v1].sub(/##.*/,'')} #{var[:op]} #{var[:v2].sub(/##.*/,'')}"
+    "#{var[:stain]} #{var[:v1].sub(/##.*/,'')} #{var[:op]} #{var[:v2].sub(/##.*/,'')}"
   end
 
   def x_y_data
