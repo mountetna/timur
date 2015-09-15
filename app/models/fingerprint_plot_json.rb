@@ -19,7 +19,7 @@ class FingerprintPlotJson
     {
       plot: {
         name: 'fingerprint',
-        width: 800,
+        width: 850,
         height: 350,
         margin: { top: 10, right: 20, bottom: 150, left: 50},
       },
@@ -89,7 +89,7 @@ class FingerprintPlotJson
         },
 
         # cd4/8
-        { series: "CD8-,CD4-/CD3+",
+        { series: "CD8-,CD4+/CD3+",
           color: "magenta",
           height: get_ratio(:nktb, "Q1: CD8a- , CD4+##CD3+ all", "CD3+ all"),
           dots: get_dots(:nktb, "Q1: CD8a- , CD4+##CD3+ all", "CD3+ all")
@@ -147,21 +147,20 @@ class FingerprintPlotJson
           dots: get_dots(:dc, "BDCA1+ DCs", "HLADR+")
         },
 
-        # sub-apc
         { series: "BDCA3+ DCs/HLADR+",
-          color: "khaki",
+          color: "greenyellow",
           height: get_ratio(:dc, "BDCA3+ DCs", "HLADR+"),
           dots: get_dots(:dc, "BDCA3+ DCs", "HLADR+")
         },
         { series: "pDCs (CD85g+)/HLADR+",
-          color: "khaki",
+          color: "greenyellow",
           height: get_ratio(:dc, "pDCs", "HLADR+"),
           dots: get_dots(:dc, "pDCs", "HLADR+")
         }
       ],
       legend: {
-        series: [ "overall", "immune", "lineage", "t-cell", "cd4/8", "apcs", "rare apcs" ],
-        colors: [ "seagreen", "coral", "dodgerblue", "chocolate", "magenta", "greenyellow", "khaki" ]
+        series: [ "overall", "immune", "lineage", "t-cell", "cd4/8", "apcs" ],
+        colors: [ "seagreen", "coral", "dodgerblue", "chocolate", "magenta", "greenyellow" ]
       }
     }
   end
