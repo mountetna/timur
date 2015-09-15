@@ -12,6 +12,11 @@
 		font-size: 16px;
 		background: transparent;
 	}
+	.var_select {
+		select {
+			width: 200px;
+		}
+	}
 	input[type=button] {
 		cursor: pointer;
 		font-family: $body_font;

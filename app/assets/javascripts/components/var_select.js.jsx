@@ -28,7 +28,7 @@ VarSelect = React.createClass({
     return <select name={ name }>
       {
         values.map(function(v) {
-          return <option key={v.name + v.ancestry} value={ v.name +'##'+ v.ancestry} title={ v.ancestry}>{ v.name }</option>;
+          return <option key={v.name + v.ancestry} value={ v.name +'##'+ v.ancestry}>{ v.name } > {v.ancestry.replace(/\t/g, " / ") }</option>;
         })
       }
     </select>
