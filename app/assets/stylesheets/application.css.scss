@@ -87,17 +87,7 @@ a {
 	padding-top: 50px;
 	
 	.button {
-		cursor: pointer;
-		font-family: $body_font;
-		color: forestgreen;
-		margin-left: 4px;
-		padding: 2px;
-		font-size: 14px;
-		border: 1px solid forestgreen(0.5);
-		background-color: forestgreen(0.2);
-		&:hover {
-			background-color: forestgreen(0.3);
-		}
+		@include green_button;
 	}
 }
 

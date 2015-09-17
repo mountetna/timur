@@ -1,6 +1,6 @@
 //= require ./components/errors
 //= require ./components/browser
-//= require ./components/browser/header
+//= require ./components/header
 //= require ./components/attributes
 //= require ./components/collection
 //= require ./components/table
@@ -19,8 +19,8 @@
 //= require ./components/text_attribute
 
 //= require ./components/plotter
-//= require ./components/filter
-//= require ./components/var_select
+//= require ./components/plot_series
+//= require ./components/plot_var_mapping
 //= require ./components/scatter
 
 //= require ./components/timur

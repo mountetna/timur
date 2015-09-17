@@ -7,39 +7,58 @@ Plotter = React.createClass({
     });
   },
   data_update: function(result) {
-    this.setState( { mode: 'choose', plots: result } );
+    this.setState( { mode: 'plot', plot_types: result } );
   },
   getInitialState: function() {
-    return { mode: 'loading' }
+    return { mode: 'loading', plots: [] }
   },
-  select_plot: function(e) {
-    var plot = this.state.plots.find(function(p) { return p.type == e.target.value });
-    this.setState( { mode: 'plot', plot: plot } );
+  create_plot: function() {
+    var node = $(React.findDOMNode(this));
+    var name = node.find('select[name=plot_type]').val();
+    var plot_type = this.state.plot_types.find(function(p) { return p.type == name });
+    var plots = this.state.plots;
+    plots.push({
+      template: plot_type,
+      name: plot_type.name,
+      type: plot_type.type
+    });
+    this.setState( { plots: plots } );
+  },
+  remove_plot: function(plot) {
+    var plots = this.state.plots;
+    var index = plots.indexOf(plot);
+    if (index != -1) plots.splice(index,1)
+      this.setState( { plots: plots } );
+  },
+  plot_handler: function(command, plot) {
+    if (command == 'close') {
+      this.remove_plot(plot);
+    }
   },
   render: function() {
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
+    var self = this;
     if (this.state.mode == 'loading')
       return <div></div>;
     else {
-      var plot_html;
-      if (this.state.mode == 'plot' && this.state.plot.type != 'none') {
-        var PlotClass = eval(this.state.plot.type);
-        plot_html = <PlotClass plot={ this.state.plot }/>;
-      }
       return <div className="plotter">
                 Plot type: 
-                <select name="plot_type" onChange={ this.select_plot } defaultValue="none">
+                <select name="plot_type" defaultValue="none">
                 {
-                  this.state.plots.map(
-                    function(plot) {
-                      return <option key={plot.name} value={plot.type} >{ plot.name }</option>;
+                  this.state.plot_types.map(
+                    function(plot_type) {
+                      return <option key={plot_type.name} value={plot_type.type} >{ plot_type.name }</option>;
                     }
                   )
                 }
                 </select>
-
+                <input type="button" onClick={ this.create_plot } value="Add"/>
+ 
                 {
-                  plot_html
+                  this.state.plots.map(function(plot) {
+                    var PlotClass = eval(plot.type);
+                    return <PlotClass plot={ plot } handler={ self.plot_handler } />;
+                  })
                 }
              </div>
     }

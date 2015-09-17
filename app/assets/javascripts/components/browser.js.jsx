@@ -4,14 +4,13 @@ Browser = React.createClass({
 
     $.get( Routes.browse_json_path(this.props.model, encodeURIComponent(this.props.record)), function(result) {
       self.data_update(result);
-      $(React.findDOMNode(self)).submit(self.update_form);
     });
   },
   getInitialState: function() {
-    return { mode: 'loading', editable: null }
+    return { mode: 'loading', can_edit: null }
   },
   submit_edit: function() {
-    $(React.findDOMNode(this)).submit();
+    this.update_form();
   },
   update_form: function() {
     var node = $(React.findDOMNode(this));
@@ -44,7 +43,7 @@ Browser = React.createClass({
       this.props.show_errors([ "An unknown error occurred." ]);
   },
   data_update:  function(result) {
-    this.handle_mode( 'browse', { record: result.record, model: result.model, editable: result.editable } );
+    this.handle_mode( 'browse', { record: result.record, model: result.model, can_edit: result.editable } );
   },
   update_form_tokens: function(submission) {
     for (var key in this.form_tokens) {
@@ -55,6 +54,11 @@ Browser = React.createClass({
         });
       submission.append(key, token);
     }
+  },
+  header_handler: function(action) {
+    if (action == 'cancel') this.handle_mode('browse');
+    else if (action == 'approve') this.handle_mode('submit');
+    else if (action == 'edit') this.handle_mode('edit');
   },
   handle_mode: function(mode,opts) {
     var self = this;
@@ -93,9 +97,9 @@ Browser = React.createClass({
   skin: function() {
     if (this.state.mode == "browse") {
       var set = this.state.model.skin || [];
-      return set.concat(['model_viewer']).join(' ');
+      return set.concat(['browser']).join(' ');
     } else
-      return 'model_viewer';
+      return 'browser';
   },
   render: function() {
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
@@ -103,16 +107,20 @@ Browser = React.createClass({
       return <div className={ this.skin() }/>;
     else if (this.state.mode == 'browse') {
       return <div className={ this.skin() }>
-        <BrowserHeader mode={ this.state.mode } model={ this.state.model } mode_handler={ this.handle_mode } editable={ this.state.editable } />
+        <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.state.can_edit }>
+          { this.state.model.name }
+        </Header>
         <Attributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record } process={ this.process }/>
       </div>;
     }
     else {
-      return <form className={ this.skin() } method="post" model={ this.state.model } record={ this.state.record } action={ Routes.update_model_path() } encType="multipart/form-data">
+      return <form onSubmit={ this.update_form } className={ this.skin() } method="post" model={ this.state.model } record={ this.state.record } action={ Routes.update_model_path() } encType="multipart/form-data">
         <input type="hidden" name="authenticity_token" value={ token }/>
         <input type="hidden" name="model" value={ this.state.model.name }/>
         <input type="hidden" name="record_id" value={ this.state.record.id }/>
-        <BrowserHeader mode={ this.state.mode } model={ this.state.model } mode_handler={ this.handle_mode } editable={ this.state.editable } />
+        <Header mode={ this.state.mode } handler={ this.header_handler } editable={ this.state.editable }>
+          { this.state.model.name }
+        </Header>
         <Attributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record } process={ this.process }/>
       </form>
     }

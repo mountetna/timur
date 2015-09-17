@@ -1,0 +1,37 @@
+$body_font: 'Oxygen', sans-serif;
+$value_font: 'Cousine', monospace;
+$talk_font: 'Lora', serif;
+
+@function forestgreen($opacity) {
+	@return rgba(34,139,34,$opacity)
+}
+
+@mixin text_defaults {
+	color: darkorchid;
+	border: 0px none black;
+	border-bottom: 1px solid forestgreen;
+	font-family: $value_font;
+	font-size: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+@mixin green_button {
+	cursor: pointer;
+	font-family: $body_font;
+	color: forestgreen;
+	margin-left: 4px;
+	padding: 2px;
+	font-size: 14px;
+	border: 1px solid forestgreen(0.5);
+	background-color: forestgreen(0.2);
+	&:hover {
+		background-color: forestgreen(0.3);
+	}
+}
+
+@mixin header_button {
+	cursor: pointer;
+	font-size: 20px;
+	color: forestgreen;
+}

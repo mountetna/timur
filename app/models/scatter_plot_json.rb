@@ -38,11 +38,9 @@ class ScatterPlotJson
   ]
 
   def initialize params
-    @x_var = { v1: params[:x_var1], v2: params[:x_var2], op: :/, stain: params[:xstain]  }
-    @y_var = { v1: params[:y_var1], v2: params[:y_var2], op: :/, stain: params[:ystain]  }
-    @xstain = params[:xstain]
-    @ystain = params[:ystain]
-    @indication = Experiment[name: params[:indication] ]
+    @x_var = params[:x_mapping].merge( op: :/ )
+    @y_var = params[:y_mapping].merge( op: :/ )
+    @indication = Experiment[name: params[:series][:indication] ]
   end
 
   def to_json
@@ -51,8 +49,8 @@ class ScatterPlotJson
       plot: {
           name: 'scatter',
           width: 800,
-          height: 350,
-          margin: { top: 10, right: 150, bottom: 150, left: 150},
+          height: 300,
+          margin: { top: 30, right: 150, bottom: 30, left: 150},
       },
       xlabel: label_for(@x_var),
       ylabel: label_for(@y_var),

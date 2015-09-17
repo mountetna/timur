@@ -14,10 +14,6 @@ class PlotController <  ApplicationController
   def fixed_plots_json
     # JSON description of available fixed plots
     plots = [
-      {
-        name: "None",
-        type: "none"
-      },
       ScatterPlotJson.template
     ]
     render json: plots
