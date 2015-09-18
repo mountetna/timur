@@ -70,6 +70,7 @@ Scatter = React.createClass({
   update_mapping: function(v, vmap) {
     mapping = this.state.mapping;
     mapping[v] = vmap;
+    console.log(vmap);
     this.setState({ mapping: mapping });
   },
   request_plot_data: function() {

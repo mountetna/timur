@@ -1,6 +1,6 @@
 Selector = React.createClass({
   render: function() {
-    return <select name={ this.props.name } defaultValue={ this.props.defaultValue } onChange={ this.props.onChange } >
+    return <select name={ this.props.name } defaultValue={ this.props.defaultValue || this.props.values.first } onChange={ this.props.onChange } >
       { this.props.children }
       {
         this.props.values.map(function(v) {

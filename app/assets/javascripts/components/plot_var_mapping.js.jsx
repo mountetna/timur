@@ -17,7 +17,7 @@ PlotVarMapping = React.createClass({
       return <div className="var_mapping edit">
              <span className="title">{ this.props.name } mapping</span>
              Type: 
-             <Selector name='type' values={ [ 'Population Count', 'MFI', 'Clinical variable' ] }
+             <Selector name='type' values={ [ 'Population Count' ] } //, 'MFI', 'Clinical variable' ] }
                 onChange={ this.update_type } 
                 defaultValue={ this.props.mapping ? this.props.mapping.type : "Population Count" }/>
              Stain: 
@@ -46,7 +46,12 @@ PlotVarMapping = React.createClass({
   update_stain: function(e) {
     var stain = e.target.value;
     this.setState({ stain_variables: this.props.template.variables[stain] });
-    this.update_mapping();
+    this.props.update_mapping(this.props.name + '_proposed', {
+      type: 'population',
+      stain: stain,
+      v1: this.population_map(this.props.template.variables[stain][0]).value,
+      v2: this.population_map(this.props.template.variables[stain][0]).value
+    });
   },
   update_mapping: function() {
     var node = $(React.findDOMNode(this));
