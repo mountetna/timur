@@ -1,7 +1,6 @@
 DateTimeAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
-    
     return <div className="value">
             { this.default_date() || '?' }
             <span className="at_spacer">@</span>
@@ -67,11 +66,12 @@ DateTimeAttribute = React.createClass({
       this.current_time = e.target.value;
       this.form_update();
   },
-  componentDidUpdate: function () {
+  componentDidMount: function () {
     var minDate = new Date('2014-06-01');
     var dateInput = "input[type=text][id='" + this.component_name('date') + "']"
     var timeInput = "input[type=text][id='" + this.component_name('time') + "']"
 
+    console.log("Adding datepicker");
     $(dateInput).datepicker({
       defaultDate: this.default_date(),
       dateFormat: this.date_format,

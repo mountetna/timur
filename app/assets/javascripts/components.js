@@ -1,6 +1,7 @@
 //= require ./components/errors
 //= require ./components/browser
 //= require ./components/header
+//= require ./components/selector
 //= require ./components/attributes
 //= require ./components/collection
 //= require ./components/table

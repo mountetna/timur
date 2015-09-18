@@ -1,7 +1,7 @@
 BarPlotAttribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   componentDidMount: function() {
-    this.d3_render();
+    if (this.props.mode == 'browse') this.d3_render();
   },
   componentDidUpdate: function() {
     if (this.props.mode == 'browse') this.d3_render();
