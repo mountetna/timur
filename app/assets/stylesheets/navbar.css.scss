@@ -4,17 +4,24 @@
 	position: relative;
 	border-bottom: 1px solid forestgreen;
 	height: 80px;
-	#logo {
-		background-image: image-url('Timur.png');
+	@mixin basic_logo($color) {
 		width: 70px;
 		height: 70px;
-		border: 2px solid #066306;
+		border: 2px solid $color;
 		background-size: cover;
 		background-position: 0px -6px;
 		border-radius: 50%;
-		box-shadow: 0 0 0 2px #FFF, 0 0 0 3px #066306;
+		box-shadow: 0 0 0 2px #FFF, 0 0 0 3px $color;
 		display: inline-block;
 		vertical-align:top
+	}
+	#logo {
+		background-image: image-url('Timur.png');
+		@include basic_logo(#066306);
+	}
+	#devlogo {
+		background-image: image-url('Timur-dev.png');
+		@include basic_logo(#630606);
 	}
 	#heading {
 		font-family: 'Cinzel', serif;

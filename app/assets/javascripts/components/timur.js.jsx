@@ -11,7 +11,7 @@ Timur = React.createClass({
     else if (this.props.mode == 'plotter') component = <Plotter show_errors={ this.show_errors }/>;
 
     return <div>
-              <TimurNav user={ this.props.user }/>
+              <TimurNav user={ this.props.user } environment={ this.props.environment}/>
               <Errors errors={ this.state.errors }/>
               { component }
            </div>;
@@ -24,15 +24,23 @@ TimurNav = React.createClass({
     var search_path = Routes.search_path();
     var plot_path = Routes.plot_path();
     var login_path = Routes.login_path();
+
     var login;
-    if (this.props.user)
-      login = this.props.user;
-    else
-      login = <a href={ login_path}>Login</a>;
+    var heading;
+    var logo;
+    login = this.props.user || <a href={ login_path}>Login</a>;
+    if (this.props.environment == 'development') {
+      heading = <span>Timur Development</span>;
+      logo = <a href="/"> <div id="devlogo"> &nbsp; </div> </a>;
+    }
+    else {
+      heading = <span>Timur <b>:</b> Data Browser</span>;
+      logo = <a href="/"> <div id="logo"> &nbsp; </div> </a>;
+    }
     return <div id="header">
-             <a href="/"> <div id="logo"> &nbsp; </div> </a>
+             { logo }
              <div id="heading">
-               Timur <b>:</b> Data Browser
+             { heading }
              </div>
              <div id="nav">
                <div className="nav_tab">

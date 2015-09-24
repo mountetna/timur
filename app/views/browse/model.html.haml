@@ -2,4 +2,16 @@
 
 #root
 %script{ type: "text/javascript" }
-  ! $(function() { React.render( React.createElement(Timur, { #{current_user ? "user: '#{current_user.name}', " : '' } mode: 'browser', model: '#{@model_name}', record: '#{@record_name}' }), $('#root')[0]); })
+  :plain
+    $(function() {
+      React.render(
+        React.createElement(Timur, {
+          #{current_user ? "user: '#{current_user.name}', " : '' }
+          mode: 'browser',
+          environment: '#{Rails.env.development? ? 'development' : 'production'}',
+          model: '#{@model_name}',
+          record: '#{@record_name}'
+        }),
+        $('#root')[0]
+      );
+    })
