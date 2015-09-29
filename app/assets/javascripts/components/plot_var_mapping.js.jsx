@@ -21,7 +21,7 @@ PlotVarMapping = React.createClass({
                 onChange={ this.update_type } 
                 defaultValue={ this.props.mapping ? this.props.mapping.type : "Population Count" }/>
              Stain: 
-             <Selector name='stain' values={ Object.keys(this.props.template.variables) }
+             <Selector name='stain' values={ Object.keys(this.props.template.populations) }
                 onChange={ this.update_stain }
                 defaultValue={ this.props.mapping ? this.props.mapping.stain : "none" }>
                <option disabled key="none" value="none"> --- </option>
@@ -45,12 +45,12 @@ PlotVarMapping = React.createClass({
   },
   update_stain: function(e) {
     var stain = e.target.value;
-    this.setState({ stain_variables: this.props.template.variables[stain] });
+    this.setState({ stain_variables: this.props.template.populations[stain] });
     this.props.update_mapping(this.props.name + '_proposed', {
       type: 'population',
       stain: stain,
-      v1: this.population_map(this.props.template.variables[stain][0]).value,
-      v2: this.population_map(this.props.template.variables[stain][0]).value
+      v1: this.population_map(this.props.template.populations[stain][0]).value,
+      v2: this.population_map(this.props.template.populations[stain][0]).value
     });
   },
   update_mapping: function() {

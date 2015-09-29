@@ -7,8 +7,16 @@ class ScatterPlotJson
       {
         name: "XY Scatter",
         type: "Scatter",
+        mapping: {
+          values: map_clinical_by_indication
+        },
+        series: {
+          chain: [ :indication, :clinical ],
+          values: map_clinical_by_indication
+        },
         indications: [ "Any" ] + Experiment.select_map(:name),
-        variables: get_population_names_by_stain
+        populations: get_population_names_by_stain,
+        clinicals: get_clinical_names_by_indication
       }
     end
 
@@ -26,6 +34,9 @@ class ScatterPlotJson
           end
         }
       end.reduce :merge
+    end
+
+    def get_clinical_names_by_indication
     end
   end
 
