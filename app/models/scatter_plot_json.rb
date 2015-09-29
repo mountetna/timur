@@ -61,7 +61,7 @@ class ScatterPlotJson
   private 
 
   def get_relation var, sample_id
-    compute_operation(var[:op], var[:v1], var[:v2]) do |name|
+    compute_operation(var[:op], var[:v1], var[:v2], discard_null: true) do |name|
       sample_count(populations, sample_id, var[:stain].to_sym, name)
     end
   end
