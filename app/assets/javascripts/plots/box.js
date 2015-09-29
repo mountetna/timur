@@ -108,13 +108,10 @@ d3.box = function() {
 
       outlier.enter().insert("circle", "text")
           .attr("class", "outlier")
-          .attr("r", 5)
+          .attr("r", 2)
           .attr("cx", width / 2)
           .attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1)
-
-      outlier.attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1);
+          .style("opacity", 0.5)
 
       // Compute the tick format.
       var format = tickFormat || x1.tickFormat(100);
