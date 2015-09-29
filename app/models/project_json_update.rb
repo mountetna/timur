@@ -42,14 +42,26 @@ class ProjectJsonUpdate < JsonUpdate
     patch_attribute :cd45_plot do |att|
       att.name = :cd45_plot
       att.attribute_class = "BoxPlotAttribute"
-      att.shown = true
       att.display_name = "Immune fractions (CD45+ / live)"
+      att.shown = true
     end
 
     patch_key :cd45_plot do |sum|
       Experiment.where(:project_id => @record.id).map do |e|
-        counts  = SortStain.join(:samples, :id => :sample_id).join(:patients, :id => :patient_id ).join(:experiments, :id => :experiment_id).where('experiments.name = ?', e.name)
-          .where('cd45_count IS NOT NULL').where('live_count IS NOT NULL').where('live_count > 0').select_map [ :cd45_count, :live_count ]
+        cd45_counts  = Population.join(:samples, :id => :sample_id)
+          .join(:patients, :id => :patient_id )
+          .where('experiment_id = ?', e.id)
+          .where(stain: 'sort')
+          .where(name: "CD45+").select_map :count
+        live_counts  = Population.join(:samples, :id => :sample_id)
+          .join(:patients, :id => :patient_id )
+          .where('experiment_id = ?', e.id)
+          .where(stain: 'sort')
+          .where(name: "CD45+").select_map :count
+        # pull cd45 counts and live counts
+        counts = cd45_counts.zip(live_counts).reject do |c,l|
+          !c || !l
+        end
         next if !counts || counts.empty?
         {
           series: e.name,
