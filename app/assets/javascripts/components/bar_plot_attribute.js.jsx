@@ -23,7 +23,7 @@ BarPlotAttribute = React.createClass({
     var chart = d3.bar()
         .width(20)
         .height(height)
-        .domain([min,max]);
+        .domain([0,1]);
 
     var vis = d3.select("svg#" + data.plot.name + ".bar_plot").selectAll("g")
         .data([data.data])
