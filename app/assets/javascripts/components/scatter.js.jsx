@@ -81,15 +81,17 @@ Scatter = React.createClass({
       y_mapping: $.extend({}, this.state.mapping.y, this.state.mapping.y_proposed),
     };
     console.log(request);
-    $.get( Routes.scatter_plot_json_path(), request, self.data_update);
-  },
-  data_update: function(result) {
-    // clean up proposed stuff
-    mapping = {
-      x: $.extend({}, this.state.mapping.x, this.state.mapping.x_proposed),
-      y: $.extend({}, this.state.mapping.y, this.state.mapping.y_proposed),
-    }
-    this.setState({ data: result, mode: 'plot', mapping: mapping, 
-      series: $.extend({}, this.state.series, this.state.series_proposed) });
-  },
+    $.get( Routes.scatter_plot_json_path(), request, function(result) {
+      mapping = {
+        x: request.x_mapping,
+        y: request.y_mapping,
+      };
+      this.setState({
+        data: result, 
+        mode: 'plot', 
+        mapping: mapping, 
+        series: request.series 
+      });
+    });
+  }
 });
