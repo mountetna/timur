@@ -1,18 +1,13 @@
 PlotSeries = React.createClass({
+  getInitialState: function() {
+    return { full_state: {} }
+  },
   render_indication: function() {
     if (!this.props.series) return <span>undefined</span>;
     return <span> Indication: { this.props.series.indication }</span>;
   },
   render: function() {
-    var vars = [
-      {
-        name: 'indication'
-      },
-      {
-        name: 'clinical',
-        prerequisite: 'indication'
-      },
-    ]
+    var self = this;
     if (this.props.mode == 'plot')
       return <div className="series">
           <span className="title">Series</span>
@@ -21,12 +16,27 @@ PlotSeries = React.createClass({
     else {
       return <div className="series edit">
             <span className="title">Series</span>
-            <ChainSelector item="indication"
-                variables={ vars }
-                selection={ this.state.selection } 
-                chain={ [ 'stain', 'population' ] }
-                choices={ this.props.template.series } onUpdate={ this.update_chain }/>
-            <ChainSelector item="clinical" chain={ this.state.chain } selections={ this.props.template.series } onUpdate={ this.update_chain }/>
+            <ChainSelector name="indication"
+                onChange={ this.update_chain }
+                values={ this.props.template.indications }
+                chain_state={ this.state.full_state }/>
+            <ChainSelector
+                name="clinical"
+                depends="indication"
+                values={ this.props.template.clinical }
+                onChange={ this.update_chain }
+                chain_state={ this.state.full_state } />
+            <ChainSelector
+                name="colors"
+                values={ Object.keys(self.props.template.colors).map(function(color) {
+                  return  {
+                    key: color,
+                    name: color,
+                    text: <span style={ { 'background-color': self.props.template.colors[color] } }>###</span>
+                  };
+                }) }
+                onChange={ this.update_chain }
+                chain_state={ this.state.full_state } />
           </div>;
     }
   },

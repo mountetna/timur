@@ -17,6 +17,28 @@ ChainSelector = React.createClass({
     //     'indication2' : [ 'clinical1', 'clinical3', etc. ]
     //   }
     // }
+  current_values: function() {
+    if (this.props.depends)
+      return this.props.values[ this.props.chain_state[ this.props.depends ] ]
+    else
+      return this.props.values;
+  },
+  current_default: function() {
+    return 'none';
+  },
   render: function() {
+    // only show if you don't have any dependencies
+    if (!this.props.depends || this.props.chain_state[ this.props.depends ]) {
+      return <div className="chain_selector">
+        <span className="label">{ this.props.name }</span>
+        <Selector name={ this.props.name } values={ this.current_values() } //, 'MFI', 'Clinical variable' ] }
+                onChange={ this.props.onChange } 
+                showNone={true}
+                defaultValue={ this.current_default() }>
+        </Selector>
+      </div>;
+    }
+    else
+      return <div className="chain_selector empty"></div>;
   },
 })

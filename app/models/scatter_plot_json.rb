@@ -7,14 +7,12 @@ class ScatterPlotJson
       {
         name: "XY Scatter",
         type: "Scatter",
-        mapping: {
-          values: map_clinical_by_indication
-        },
-        series: {
-          chain: [ :indication, :clinical ],
-          values: map_clinical_by_indication
-        },
         indications: [ "Any" ] + Experiment.select_map(:name),
+        colors: {
+          red: '#ff0000',
+          blue: '#0000ff',
+          green: '#00ff00'
+        },
         populations: get_population_names_by_stain,
         clinicals: get_clinical_names_by_indication
       }
@@ -37,6 +35,7 @@ class ScatterPlotJson
     end
 
     def get_clinical_names_by_indication
+
     end
   end
 

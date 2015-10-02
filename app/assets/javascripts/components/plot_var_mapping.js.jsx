@@ -23,8 +23,8 @@ PlotVarMapping = React.createClass({
              Stain: 
              <Selector name='stain' values={ Object.keys(this.props.template.populations) }
                 onChange={ this.update_stain }
+                showNone={true}
                 defaultValue={ this.props.mapping ? this.props.mapping.stain : "none" }>
-               <option disabled key="none" value="none"> --- </option>
              </Selector>
              Ratio: 
              <Selector name='v1' values={ this.state.stain_variables.map(this.population_map) }
