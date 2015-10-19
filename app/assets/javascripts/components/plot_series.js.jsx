@@ -1,6 +1,6 @@
 PlotSeries = React.createClass({
   getInitialState: function() {
-    return { full_state: {} }
+    return { chain_state: {} }
   },
   render_indication: function() {
     if (!this.props.series) return <span>undefined</span>;
@@ -16,31 +16,41 @@ PlotSeries = React.createClass({
     else {
       return <div className="series edit">
             <span className="title">Series</span>
+            <ColorPicker label="Color" onChange={ this.update_color }/>
             <ChainSelector name="indication"
-                onChange={ this.update_chain }
+                label="Indication"
+                change={ this.update_chain }
                 values={ this.props.template.indications }
-                chain_state={ this.state.full_state }/>
+                showNone="disabled"
+                chain_state={ this.state.chain_state }/>
             <ChainSelector
-                name="clinical"
-                depends="indication"
-                values={ this.props.template.clinical }
-                onChange={ this.update_chain }
-                chain_state={ this.state.full_state } />
+                name="clinical_name"
+                label="Clinical Variable"
+                depends={ [ "indication" ] }
+                values={ this.props.template.clinicals }
+                change={ this.update_chain }
+                showNone="enabled"
+                chain_state={ this.state.chain_state } />
             <ChainSelector
-                name="colors"
-                values={ Object.keys(self.props.template.colors).map(function(color) {
-                  return  {
-                    key: color,
-                    name: color,
-                    text: <span style={ { 'background-color': self.props.template.colors[color] } }>###</span>
-                  };
-                }) }
-                onChange={ this.update_chain }
-                chain_state={ this.state.full_state } />
+                name="clinical_value"
+                label="Value"
+                showNone="disabled"
+                depends={ [ "indication", "clinical_name" ] }
+                values={ this.props.template.clinicals }
+                change={ this.update_chain }
+                chain_state={ this.state.chain_state } />
           </div>;
     }
   },
-  update_chain: function(payload) {
+  update_color: function(color) {
+    console.log(color.toRgbString());
+    this.update_chain('color', color.toRgb());
+  },
+  update_chain: function(name, value) {
+    console.log(value);
+    current_chain = this.state.chain_state;
+    current_chain[ name ] = value;
+    this.setState({ chain_state: current_chain });
   },
   update_series: function() {
     var node = $(React.findDOMNode(this));

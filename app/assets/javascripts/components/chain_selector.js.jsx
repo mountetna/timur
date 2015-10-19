@@ -18,22 +18,38 @@ ChainSelector = React.createClass({
     //   }
     // }
   current_values: function() {
-    if (this.props.depends)
-      return this.props.values[ this.props.chain_state[ this.props.depends ] ]
-    else
-      return this.props.values;
+    if (!this.props.depends) return this.props.values;
+    var self = this;
+    values = this.props.depends.reduce(function(values,depend) {
+      if (values)
+        return values[self.props.chain_state[ depend ]];
+      else
+        return null
+    }, this.props.values);
+    if (!values) return [];
+    values = Array.isArray(values) ? values : Object.keys(values);
+    if (this.props.formatter)
+      values = values.map(this.props.formatter);
+    console.log(values);
+    return values;
   },
   current_default: function() {
     return 'none';
   },
+  should_show: function() {
+    return this.current_values().length > 0
+  },
+  change: function(evt) {
+    this.props.change( this.props.name, evt.target.value );
+  },
   render: function() {
     // only show if you don't have any dependencies
-    if (!this.props.depends || this.props.chain_state[ this.props.depends ]) {
+    if (this.should_show()) {
       return <div className="chain_selector">
-        <span className="label">{ this.props.name }</span>
+        <span className="label">{ this.props.label }</span>
         <Selector name={ this.props.name } values={ this.current_values() } //, 'MFI', 'Clinical variable' ] }
-                onChange={ this.props.onChange } 
-                showNone={true}
+                onChange={ this.change } 
+                showNone={ this.props.showNone }
                 defaultValue={ this.current_default() }>
         </Selector>
       </div>;

@@ -13,7 +13,9 @@ class ScatterPlotJson
           blue: '#0000ff',
           green: '#00ff00'
         },
+        stains: [ :treg, :nktb, :sort, :dc ],
         populations: get_population_names_by_stain,
+        mfis: get_mfi_by_populations,
         clinicals: get_clinical_names_by_indication
       }
     end
@@ -35,7 +37,19 @@ class ScatterPlotJson
     end
 
     def get_clinical_names_by_indication
-
+      Clinical.order
+        .join(:patients, clinical_id: :id)
+        .join(:experiments, experiments__id: :patients__experiment_id)
+        .join(:parameters, clinical_id: :clinicals__id)
+        .distinct(:experiments__name, :parameters__name, :parameters__value)
+        .select_hash_groups(:experiments__name___experiments_name,
+          [:parameters__name___parameters_name, :parameters__value]).map do |exp, params|
+          {
+            exp => params.group_by(&:first).map do |name, array|
+              { name => array.map(&:last) }
+            end.reduce(:merge)
+          }
+      end.reduce :merge
     end
   end
 

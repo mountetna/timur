@@ -24,5 +24,6 @@
 //= require ./components/plot_var_mapping
 //= require ./components/scatter
 //= require ./components/chain_selector
+//= require ./components/color_picker
 
 //= require ./components/timur

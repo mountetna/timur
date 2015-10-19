@@ -62,18 +62,33 @@
 			font-size: 14px;
 			.title {
 				padding: 1px;
+				margin-bottom: 5px;
 				font-weight: bold;
 				background-color: forestgreen(0.2);
 			}
 		}
 		.var_mapping {
 			@extend .plot_variable;
-			select {
-				width: 200px;
-			}
 		}
 		.series {
 			@extend .plot_variable;
+		}
+		.option_box {
+			display: inline;
+			.label {
+				display: inline;
+				padding-right: 2px;
+			}
+			padding: 3px;
+			margin-left: 1px;
+			margin-top: 2px;
+			border: 1px solid forestgreen(0.2);
+		}
+		.color_picker, .chain_selector {
+			@extend .option_box;
+			select {
+				width: 200px;
+			}
 		}
 	}
 	.scatter {

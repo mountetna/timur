@@ -1,6 +1,6 @@
 PlotVarMapping = React.createClass({
   getInitialState: function() {
-    return { stain_variables: [] }
+    return { stain_variables: [], chain_state: {} }
   },
   render_mapping: function() {
     if (!this.props.mapping) return <span>undefined</span>;
@@ -16,25 +16,69 @@ PlotVarMapping = React.createClass({
     else
       return <div className="var_mapping edit">
              <span className="title">{ this.props.name } mapping</span>
-             Type: 
-             <Selector name='type' values={ [ 'Population Count' ] } //, 'MFI', 'Clinical variable' ] }
-                onChange={ this.update_type } 
-                defaultValue={ this.props.mapping ? this.props.mapping.type : "Population Count" }/>
-             Stain: 
-             <Selector name='stain' values={ Object.keys(this.props.template.populations) }
-                onChange={ this.update_stain }
-                showNone={true}
-                defaultValue={ this.props.mapping ? this.props.mapping.stain : "none" }>
-             </Selector>
-             Ratio: 
-             <Selector name='v1' values={ this.state.stain_variables.map(this.population_map) }
-                defaultValue={ this.props.mapping ? this.props.mapping.v1 : null }
-                onChange={ this.update_mapping }/>
-             /
-             <Selector name='v2' values={ this.state.stain_variables.map(this.population_map) }
-                defaultValue={ this.props.mapping ? this.props.mapping.v2 : null }
-                onChange={ this.update_mapping }/>
+             <ChainSelector 
+               label="Type"
+               name='type' values={ [ 'Population Count', 'MFI' ] }
+               showNone="disabled"
+               change={ this.update_chain } 
+               chain_state={ this.state.chain_state }/>
+             <ChainSelector name="stain"
+               label="Stain"
+               change={ this.update_chain }
+               values={ this.props.template.stains }
+               showNone="disabled"
+               chain_state={ this.state.chain_state }/>
+             {
+               this.render_mapping_edit()
+             }
           </div>;
+  },
+  update_chain: function (name,value) {
+    console.log(value);
+    current_chain = this.state.chain_state;
+    current_chain[ name ] = value;
+    this.setState({ chain_state: current_chain });
+  },
+  render_mapping_edit: function() {
+    if (this.state.chain_state.type == 'Population Count')
+      return <div style={ { display: 'inline' } }>
+               <ChainSelector
+                 name='v1'
+                 label="Ratio"
+                 depends={ ['stain'] }
+                 values={ this.props.template.populations }
+                 formatter={ this.population_map }
+                 change={ this.update_chain }
+                 chain_state={ this.state.chain_state }/>
+               <ChainSelector
+                 name='v2'
+                 label="/"
+                 depends={ ['stain'] }
+                 values={ this.props.template.populations }
+                 formatter={ this.population_map }
+                 change={ this.update_chain }
+                 chain_state={ this.state.chain_state }/>
+           </div>;
+    else if (this.state.chain_state.type == 'MFI')
+      return <div style={ { display: 'inline' } }>
+               <ChainSelector
+                 name='population'
+                 label="Population"
+                 depends={ ['stain'] }
+                 values={ this.props.template.populations }
+                 formatter={ this.population_map }
+                 change={ this.update_chain }
+                 chain_state={ this.state.chain_state }/>
+               <ChainSelector
+                 name='mfi'
+                 label="Intensity"
+                 depends={ ['stain'] }
+                 values={ this.props.template.populations }
+                 formatter={ this.population_map }
+                 change={ this.update_chain }
+                 chain_state={ this.state.chain_state }/>
+           </div>;
+    return <div></div>;
   },
   population_map: function(pop) {
     return { 

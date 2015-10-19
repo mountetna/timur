@@ -18,9 +18,10 @@
 #= require react
 #= require react_ujs
 #= require d3
-#
+
 #= require plots
 #= require components
 #= require model
 #= require keycode
 #= require jquery-mask
+#= require spectrum
