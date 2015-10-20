@@ -116,7 +116,7 @@ class ScatterPlotJson
     when "Population Fraction"
       "#{var[:stain]} #{var[:v1].sub(/##.*/,'')} / #{var[:v2].sub(/##.*/,'')}"
     when "MFI"
-      "#{var[:stain]} #{var[:population]} #{var[:mfi]}"
+      "#{var[:stain]} #{var[:population].sub(/##.*/,'')} #{var[:mfi]}"
     end
   end
 

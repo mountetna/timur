@@ -84,6 +84,11 @@
 			margin-top: 2px;
 			border: 1px solid forestgreen(0.2);
 		}
+		.name {
+			input[type=text] {
+				@include text_defaults;
+			}
+		}
 		.color_picker, .chain_selector {
 			@extend .option_box;
 			select {

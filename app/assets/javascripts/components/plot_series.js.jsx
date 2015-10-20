@@ -25,6 +25,10 @@ PlotSeries = React.createClass({
     else {
       return <div className="series edit">
             <span className="title">Series</span>
+            <div className="name option_box">
+              <span className="label">Name</span>
+              <input type="text" onChange={ this.update_name } defaultValue={ this.props.current ? this.props.current.name : 'series' }/>
+            </div>
             <ColorPicker label="Color" onChange={ this.update_color }/>
             <ChainSelector name="indication"
                 label="Indication"
@@ -54,8 +58,11 @@ PlotSeries = React.createClass({
           </div>;
     }
   },
+  update_name: function(name) {
+    this.update_chain('name', name);
+  },
   update_color: function(color) {
-    this.update_chain('color', color.toRgb());
+    this.update_chain('color', color.toRgbString());
   },
   update_chain: function(name, value) {
     current_chain = this.state.chain_state;

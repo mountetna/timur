@@ -61,7 +61,8 @@ Scatter = React.createClass({
         .xlabel(data.xlabel)
         .ylabel(data.ylabel)
         .xdomain([xmin,xmax])
-        .ydomain([ymin,ymax]);
+        .ydomain([ymin,ymax])
+        .color(this.state.current_query.series.color);
 
     console.log("Drawing chart");
     var base = d3.select(React.findDOMNode(this));

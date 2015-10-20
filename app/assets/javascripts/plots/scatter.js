@@ -7,6 +7,7 @@ d3.scatter = function() {
       ylabel = null,
       xdomain = null,
       ydomain = null,
+      color = null,
       tickFormat = null;
 
   function scatter(g) {
@@ -64,6 +65,7 @@ d3.scatter = function() {
       .data(g.data()[0])
       .enter()
       .append("circle")
+        .style("fill", function(d) { return color; } )
         .attr("class","dot")
         .attr("r", 2.5)
         .attr("cx", function(d) { return xScale(d.x) })
@@ -91,6 +93,12 @@ d3.scatter = function() {
   scatter.height = function(x) {
     if (!arguments.length) return height;
     height = x;
+    return scatter;
+  };
+
+  scatter.color = function(x) {
+    if (!arguments.length) return color;
+    color = x;
     return scatter;
   };
 
