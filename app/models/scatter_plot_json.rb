@@ -21,6 +21,22 @@ class ScatterPlotJson
     end
 
     private
+    def get_mfi_by_populations
+      Mfi.join(:populations, id: :population_id)
+        .distinct(:stain, :ancestry, :populations__name, :mfis__fluor)
+        .select_hash_groups(:stain, [:populations__name___pop_name, :ancestry, :mfis__fluor___mfi_fluor]).map do |stain,pops|
+        {
+          stain => pops.group_by do |pop|
+            pop[0] + '##' + pop[1]
+          end.map do |key, value|
+            {
+              key => value.map(&:last)
+            }
+          end.reduce(:merge)
+        }
+      end.reduce(:merge)
+    end
+
     def get_population_names_by_stain
       Population.distinct(:stain, :ancestry, :name).select_hash_groups(:stain, [ :name, :ancestry ]).map do |stain,pops|
         { 
@@ -62,9 +78,9 @@ class ScatterPlotJson
   ]
 
   def initialize params
-    @x_var = params[:x_mapping].merge( op: :/ )
-    @y_var = params[:y_mapping].merge( op: :/ )
-    @indication = Experiment[name: params[:series][:indication] ]
+    @x_var = params[:x]
+    @y_var = params[:y]
+    @series = params[:series]
   end
 
   def to_json
@@ -85,16 +101,45 @@ class ScatterPlotJson
   private 
 
   def get_relation var, sample_id
-    compute_operation(var[:op], var[:v1], var[:v2], discard_null: true) do |name|
-      sample_count(populations, sample_id, var[:stain].to_sym, name)
+    case var[:type]
+    when "Population Fraction"
+      compute_operation(:/, var[:v1], var[:v2], discard_null: true) do |name|
+        sample_count(populations, sample_id, var[:stain].to_sym, name)
+      end
+    when "MFI"
+      mfi_value(sample_id, var[:stain], var[:population], var[:mfi])
     end
   end
 
   def label_for var
-    "#{var[:stain]} #{var[:v1].sub(/##.*/,'')} #{var[:op]} #{var[:v2].sub(/##.*/,'')}"
+    case var[:type]
+    when "Population Fraction"
+      "#{var[:stain]} #{var[:v1].sub(/##.*/,'')} / #{var[:v2].sub(/##.*/,'')}"
+    when "MFI"
+      "#{var[:stain]} #{var[:population]} #{var[:mfi]}"
+    end
+  end
+
+  def sample_id_hash 
+    # if there is no indication, just return all samples
+    @sample_id_hash ||= begin
+      samples = Sample.join(:patients, id: :patient_id)
+      if @series[:indication] && @series[:indication] != "Any"
+        indication = Experiment[name: @series[:indication] ]
+        samples = samples.where(experiment_id: indication.id)
+      end
+      if @series[:clinical_value]
+        samples = samples.join(:clinicals, id: :patients__clinical_id)
+          .join(:parameters, clinicals__id: :parameters__clinical_id)
+          .where(parameters__name: @series[:clinical_name])
+          .where(parameters__value: @series[:clinical_value])
+      end
+      samples.select_hash(:samples__id, :samples__sample_name)
+    end
   end
 
   def x_y_data
+    Rails.logger.info sample_id_hash
     sample_id_hash.map do |sample_id, sample_name|
       value = {
         name: sample_name,

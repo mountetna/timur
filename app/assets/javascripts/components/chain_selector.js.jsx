@@ -30,11 +30,7 @@ ChainSelector = React.createClass({
     values = Array.isArray(values) ? values : Object.keys(values);
     if (this.props.formatter)
       values = values.map(this.props.formatter);
-    console.log(values);
     return values;
-  },
-  current_default: function() {
-    return 'none';
   },
   should_show: function() {
     return this.current_values().length > 0
@@ -50,7 +46,7 @@ ChainSelector = React.createClass({
         <Selector name={ this.props.name } values={ this.current_values() } //, 'MFI', 'Clinical variable' ] }
                 onChange={ this.change } 
                 showNone={ this.props.showNone }
-                defaultValue={ this.current_default() }>
+                defaultValue={ this.props.defaultValue }>
         </Selector>
       </div>;
     }

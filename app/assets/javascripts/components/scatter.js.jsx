@@ -1,6 +1,6 @@
 Scatter = React.createClass({
   getInitialState: function() {
-    return { mode: 'plot', mapping: {} }
+    return { mode: 'plot', mapping: {}, query: {}, current_query: {} }
   },
   render_var: function(cvar) {
     if (!cvar) return <span>undefined</span>;
@@ -12,9 +12,21 @@ Scatter = React.createClass({
         { this.props.plot.name }
       </Header>
       <div className="configure">
-        <PlotSeries update_series={ this.update_series } mode={ this.state.mode } template={ this.props.plot.template } series={ this.state.series }/>
-        <PlotVarMapping update_mapping={ this.update_mapping } mode={ this.state.mode } template={ this.props.plot.template } name='x' mapping={ this.state.mapping.x } />
-        <PlotVarMapping update_mapping={ this.update_mapping } mode={ this.state.mode } template={ this.props.plot.template } name='y' mapping={ this.state.mapping.y } />
+        <PlotSeries update_query={ this.update_query }
+          mode={ this.state.mode }
+          name='series'
+          current={ this.state.current_query.series }
+          template={ this.props.plot.template } />
+        <PlotVarMapping update_query={ this.update_query }
+          mode={ this.state.mode }
+          template={ this.props.plot.template }
+          current={ this.state.current_query.x }
+          name='x'/>
+        <PlotVarMapping update_query={ this.update_query }
+          mode={ this.state.mode }
+          template={ this.props.plot.template }
+          name='y'
+          current={ this.state.current_query.y } />
       </div>
       <svg className="scatter_plot" width="800" height="350"/>
     </div>;
@@ -64,33 +76,25 @@ Scatter = React.createClass({
         })
         .call(chart);
   },
-  update_series: function(series) {
-    this.setState({ series_proposed: series });
-  },
-  update_mapping: function(v, vmap) {
-    mapping = this.state.mapping;
-    mapping[v] = vmap;
-    console.log(vmap);
-    this.setState({ mapping: mapping });
+  update_query: function(name, value) {
+    query = this.state.query;
+    query[ name ] = value;
+    this.setState({ query: query });
   },
   request_plot_data: function() {
     var self = this;
-    var request = {
-      series: $.extend({}, this.state.series, this.state.series_proposed),
-      x_mapping: $.extend({}, this.state.mapping.x, this.state.mapping.x_proposed),
-      y_mapping: $.extend({}, this.state.mapping.y, this.state.mapping.y_proposed),
-    };
+    var request = this.state.query;
     console.log(request);
     $.get( Routes.scatter_plot_json_path(), request, function(result) {
       mapping = {
         x: request.x_mapping,
         y: request.y_mapping,
       };
-      this.setState({
+      self.setState({
         data: result, 
         mode: 'plot', 
-        mapping: mapping, 
-        series: request.series 
+        current_query: self.state.query,
+        query: {},
       });
     });
   }
