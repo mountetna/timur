@@ -1,10 +1,10 @@
-== README
+# README
 
 Timur is a data browser. It is primarily intended to consume data from Magma, a data warehouse.
 
 There are three ways to interact with Timur:
 
-=== Browse
+## Browse
 
 The 'browse' view is intended to allow simple record viewing and editing. Magma
 publishes a JSON template describing each model and a JSON document describing
@@ -27,7 +27,7 @@ plots to a view; we might add a new attribute of class 'BarPlot' to our model,
 and include the appropriate bar plot data in the record, which may be rendered
 by a component using d3.js.
 
-=== Search
+## Search
 
 (This section is mostly theoretical.)
 
@@ -50,7 +50,7 @@ mapped variables to yield new variables (for example, the ratio of two counts).
 
 These variables may be fed into plots.
 
-=== Plot
+## Plot
 
 Given a set of variables, we might want to produce fixed plots (again using d3.js). Possible plot types:
 
