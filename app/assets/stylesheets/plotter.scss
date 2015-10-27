@@ -43,9 +43,9 @@
 		margin-top: 5px;
 		padding: 10px;
 		background-color: forestgreen(0.1);
-		.plot_variable {
-			border: 1px solid forestgreen;
-			background-color: forestgreen(0.1);
+		@mixin plot_input($color) {
+			border: 1px solid $color;
+			background-color: rgba($color,0.1);
 			margin-left: 2px;
 			padding: 2px;
 			display: inline-block;
@@ -64,14 +64,14 @@
 				padding: 1px;
 				margin-bottom: 5px;
 				font-weight: bold;
-				background-color: forestgreen(0.2);
+				background-color: rgba($color,0.2);
 			}
 		}
 		.var_mapping {
-			@extend .plot_variable;
+			@include plot_input(forestgreen);
 		}
 		.series {
-			@extend .plot_variable;
+			@include plot_input(indianred);
 		}
 		.option_box {
 			display: inline;

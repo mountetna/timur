@@ -2,26 +2,10 @@ PlotSeries = React.createClass({
   getInitialState: function() {
     return { chain_state: {} }
   },
-  render_plot: function() {
-    var indication, clinical;
-    if (!this.props.current)
-      indication = <span>undefined</span>;
-    else {
-      if (this.props.current.indication)
-        indication = <span> Indication: { this.props.current.indication }</span>;
-      if (this.props.current.clinical_value)
-        clinical = <span> Clinical: { this.props.current.clinical_name } = { this.props.current.clinical_value }</span>;
-    }
-    return <div className="series">
-          <span className="title">Series</span>
-          { indication }
-          { clinical }
-        </div>;
-  },
   render: function() {
     var self = this;
     if (this.props.mode == 'plot')
-      return this.render_plot();
+      return <div></div>;
     else {
       return <div className="series edit">
             <span className="title">Series</span>

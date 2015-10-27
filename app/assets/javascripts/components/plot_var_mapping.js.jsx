@@ -2,22 +2,9 @@ PlotVarMapping = React.createClass({
   getInitialState: function() {
     return { stain_variables: [], chain_state: {} }
   },
-  render_plot: function() {
-    var pop;
-    if (!this.props.current) 
-      pop = <span>undefined</span>;
-    else if (this.props.current.type == "Population Fraction")
-      pop = <span>{ this.props.current.stain + " " + this.props.current.v1.replace(/##.*/,'') + "/" + this.props.current.v2.replace(/##.*/,'') }</span>;
-    else if (this.props.current.type == "MFI")
-      pop = <span>{ this.props.current.stain + " " + this.props.current.population.replace(/##.*/,'') + " " + this.props.current.mfi }</span>;
-    return <div className="var_mapping">
-         <span className="title">{ this.props.name } mapping</span>
-         { pop }
-      </div>;
-  },
   render: function() {
     if (this.props.mode == 'plot')
-      return this.render_plot();
+      return <div></div>;
     else
       return <div className="var_mapping edit">
              <span className="title">{ this.props.name } mapping</span>

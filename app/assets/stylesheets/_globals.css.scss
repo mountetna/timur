@@ -6,6 +6,10 @@ $talk_font: 'Lora', serif;
 	@return rgba(34,139,34,$opacity)
 }
 
+@function indianred($opacity) {
+	@return rgba(205, 92, 92, $opacity)
+}
+
 @mixin text_defaults {
 	color: darkorchid;
 	border: 0px none black;
