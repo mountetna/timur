@@ -7,12 +7,13 @@ ColorPicker = React.createClass({
   },
 
   componentDidMount: function () {
-    var picker = ".color_picker input[type=text]"
+    var picker = "input[type=text]"
 
     console.log("Adding color_picker");
     var self = this;
-    $(picker).spectrum({
-      color: "dodgerblue",
+    var node = $(React.findDOMNode(this));
+    node.find(picker).spectrum({
+      color: this.props.defaultValue,
       showAlpha: true,
       change: function(color) {
         self.props.onChange(color);

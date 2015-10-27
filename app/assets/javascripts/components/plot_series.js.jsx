@@ -29,7 +29,7 @@ PlotSeries = React.createClass({
               <span className="label">Name</span>
               <input type="text" onChange={ this.update_name } defaultValue={ this.props.current ? this.props.current.name : 'series' }/>
             </div>
-            <ColorPicker label="Color" onChange={ this.update_color }/>
+            <ColorPicker label="Color" defaultValue={ this.props.current ? this.props.current.color : 'dodgerblue' } onChange={ this.update_color }/>
             <ChainSelector name="indication"
                 label="Indication"
                 change={ this.update_chain }
@@ -58,8 +58,8 @@ PlotSeries = React.createClass({
           </div>;
     }
   },
-  update_name: function(name) {
-    this.update_chain('name', name);
+  update_name: function(evt) {
+    this.update_chain('name', evt.target.value);
   },
   update_color: function(color) {
     this.update_chain('color', color.toRgbString());

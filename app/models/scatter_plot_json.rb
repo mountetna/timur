@@ -80,7 +80,11 @@ class ScatterPlotJson
   def initialize params
     @x_var = params[:x]
     @y_var = params[:y]
-    @series = params[:series]
+    @series = params[:series_names].map do |name|
+      { name.to_sym => params[name.to_sym] }
+    end.reduce :merge
+    @samples = {}
+    @populations = {}
   end
 
   def to_json
@@ -88,65 +92,81 @@ class ScatterPlotJson
     {
       plot: {
           name: 'scatter',
-          width: 800,
+          width: 900,
           height: 300,
-          margin: { top: 30, right: 150, bottom: 30, left: 150},
+          margin: { top: 30, right: 250, bottom: 30, left: 150},
       },
       xlabel: label_for(@x_var),
       ylabel: label_for(@y_var),
-      data: x_y_data
+      series: x_y_data_by_series
     }
   end
 
   private 
 
-  def get_relation var, sample_id
+  def get_relation var, sample_id, populations
     case var[:type]
     when "Population Fraction"
       compute_operation(:/, var[:v1], var[:v2], discard_null: true) do |name|
         sample_count(populations, sample_id, var[:stain].to_sym, name)
       end
     when "MFI"
-      mfi_value(sample_id, var[:stain], var[:population], var[:mfi])
+      mfi_value(populations, sample_id, var[:stain], var[:population], var[:mfi])
     end
   end
 
   def label_for var
     case var[:type]
     when "Population Fraction"
-      "#{var[:stain]} #{var[:v1].sub(/##.*/,'')} / #{var[:v2].sub(/##.*/,'')}"
+      "#{var[:v1].sub(/##.*/,'')} / #{var[:v2].sub(/##.*/,'')} (#{var[:stain]})"
     when "MFI"
-      "#{var[:stain]} #{var[:population].sub(/##.*/,'')} #{var[:mfi]}"
+      "#{var[:population].sub(/##.*/,'')} #{var[:mfi]} (#{var[:stain]})"
     end
   end
 
-  def sample_id_hash 
+  def populations series
+    @populations[series] ||= Population.where(sample_id: sample_id_hash(series).keys).all
+  end
+
+  def sample_id_hash series
     # if there is no indication, just return all samples
-    @sample_id_hash ||= begin
-      samples = Sample.join(:patients, id: :patient_id)
-      if @series[:indication] && @series[:indication] != "Any"
-        indication = Experiment[name: @series[:indication] ]
-        samples = samples.where(experiment_id: indication.id)
+    @samples[series] ||=
+      begin
+        samples = Sample.join(:patients, id: :patient_id)
+        if series[:indication] && series[:indication] != "Any"
+          indication = Experiment[name: series[:indication] ]
+          samples = samples.where(experiment_id: indication.id)
+        end
+        if series[:clinical_value]
+          samples = samples.join(:clinicals, id: :patients__clinical_id)
+            .join(:parameters, clinicals__id: :parameters__clinical_id)
+            .where(parameters__name: series[:clinical_name])
+            .where(parameters__value: series[:clinical_value])
+        end
+        samples.select_hash(:samples__id, :samples__sample_name)
       end
-      if @series[:clinical_value]
-        samples = samples.join(:clinicals, id: :patients__clinical_id)
-          .join(:parameters, clinicals__id: :parameters__clinical_id)
-          .where(parameters__name: @series[:clinical_name])
-          .where(parameters__value: @series[:clinical_value])
-      end
-      samples.select_hash(:samples__id, :samples__sample_name)
+  end
+  
+  def x_y_data_by_series
+    @series.map do |name,series|
+      x_y_data(series, name)
     end
   end
 
-  def x_y_data
-    Rails.logger.info sample_id_hash
-    sample_id_hash.map do |sample_id, sample_name|
-      value = {
-        name: sample_name,
-        x: get_relation( @x_var, sample_id ),
-        y: get_relation( @y_var, sample_id )
-      }
-      value if value[:x] && value[:y]
-    end.compact
+  def x_y_data series, name
+    samples = sample_id_hash(series)
+    Rails.logger.info samples
+    {
+      values: samples.map do |sample_id, sample_name|
+        value = {
+          name: sample_name,
+          x: get_relation( @x_var, sample_id, populations(series) ),
+          y: get_relation( @y_var, sample_id, populations(series) )
+        }
+        value if value[:x] && value[:y]
+      end.compact,
+      name: series[:name],
+      color: series[:color]
+    }
   end
 end

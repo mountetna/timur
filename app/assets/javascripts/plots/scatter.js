@@ -8,6 +8,7 @@ d3.scatter = function() {
       xdomain = null,
       ydomain = null,
       color = null,
+      series = null,
       tickFormat = null;
 
   function scatter(g) {
@@ -61,28 +62,60 @@ d3.scatter = function() {
       .attr("text-anchor", "start")
       .attr("visibility", "hidden")
 
-    g.selectAll("circle.dot")
-      .data(g.data()[0])
+    g.selectAll("g.series")
+      .data(series)
       .enter()
-      .append("circle")
-        .style("fill", function(d) { return color; } )
-        .attr("class","dot")
-        .attr("r", 2.5)
-        .attr("cx", function(d) { return xScale(d.x) })
-        .attr("cy", function(d) { return yScale(d.y) })
-      .on("click", function(d) {
-        window.location = Routes.browse_model_path('sample', d.name);
-      })
-      .on("mouseover", function(d) {
-        tooltip.node().parentNode.appendChild(tooltip.node());
-        tooltip.attr("visibility", "visible")
-          .text(d.name)
-          .attr("transform", 'translate( ' + (xScale(d.x) + 10) + ',' + yScale(d.y) + ')')
-      })
-      .on("mouseout", function(d) {
-        tooltip.attr("visibility", "hidden")
-      })
-    }
+      .append("g")
+        .attr("class", "series")
+        .selectAll("circle.dot")
+        .data(function(d) { return d.values; })
+         .enter()
+         .append("circle")
+           .style("fill", function(d) { 
+             var datum = d3.select(this.parentNode).datum();
+             return datum.color;
+           } )
+           .attr("class","dot")
+           .attr("r", 2.5)
+           .attr("cx", function(d) { return xScale(d.x) })
+           .attr("cy", function(d) { return yScale(d.y) })
+         .on("click", function(d) {
+           window.location = Routes.browse_model_path('sample', d.name);
+         })
+         .on("mouseover", function(d) {
+           tooltip.node().parentNode.appendChild(tooltip.node());
+           tooltip.attr("visibility", "visible")
+             .text(d.name)
+             .attr("transform", 'translate( ' + (xScale(d.x) + 10) + ',' + yScale(d.y) + ')')
+         })
+         .on("mouseout", function(d) {
+           tooltip.attr("visibility", "hidden")
+         });
+
+    var legend = g.append("g")
+      .attr("class", "legend")
+      .attr("height", 100)
+      .attr("width", 100);
+
+    legend.selectAll('rect')
+      .data(series)
+      .enter()
+      .append("rect")
+      .attr("x", width + 10)
+      .attr("y", function(d, i){ return 10 + i * 20;})
+      .attr("width", 10)
+      .attr("height", 10)
+      .style("fill", function(d) { return d.color; });
+
+    legend.selectAll('text')
+      .data(series)
+      .enter()
+      .append("text")
+      .attr("text-anchor", "start")
+      .attr("x", width + 25)
+      .attr("y", function(d, i) { return 20 + i *  20;})
+      .text(function(d) { return d.name; });
+  }
 
   scatter.width = function(x) {
     if (!arguments.length) return width;
@@ -129,6 +162,14 @@ d3.scatter = function() {
   scatter.ydomain = function(x) {
     if (!arguments.length) return ydomain;
     ydomain = x == null ? x : d3.functor(x);
+    return scatter;
+  };
+
+  scatter.series = function(x) {
+    if (!arguments.length) return series;
+    series = x;
+    console.log("Setting series");
+    console.log(series);
     return scatter;
   };
 

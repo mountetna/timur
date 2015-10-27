@@ -10,7 +10,6 @@ module PopulationHelper
   end
   
   def has_parent? p, parent_name
-    Rails.logger.info "#{p.ancestry} =? #{parent_name}"
     p.ancestry =~ /^#{Regexp.escape(parent_name)}/
   end
 
@@ -18,11 +17,7 @@ module PopulationHelper
     @populations ||= Population.where(sample_id: sample_id_hash.keys).all
   end
 
-  def mfis
-    @mfis ||= Mfi.where(population_id: populations.map(&:id))
-  end
-
-  def mfi_value sid, stain, name, mfi
+  def mfi_value populations, sid, stain, name, mfi
     name, parent_name = name.split(/##/)
     pop = populations.find do |p|
       p.sample_id == sid && 
@@ -31,9 +26,9 @@ module PopulationHelper
         (!parent_name || has_parent?(p,parent_name))
     end
     if pop
-      mfis.select do |m|
-        m.fluor == "mfi" && m.population_id == pop.id
-      end.map(&:value).first
+      Mfi.where(population_id: pop.id)
+        .where(fluor: mfi)
+        .select_map(:value).first
     end
   end
 
