@@ -91,15 +91,13 @@ d3.bar = function() {
 
           if (data.dots) {
             data.dots.forEach(function(dot) {
-              g.append("circle")
+              g.append("a")
+                .attr("xlink:href", Routes.browse_model_path('sample', dot.name))
+               .append("circle")
                 .attr("class","dot")
                 .attr("r", 2.5)
                 .attr("cx", 10 + i * 30 + ((1000*dot.height)%8)-4 + width/2)
                 .attr("cy", yScale(dot.height))
-                .on("click", function(d) {
-                  console.log("clicking!" + dot.name);
-                  window.location = Routes.browse_model_path('sample', dot.name);
-                })
                 .on("mouseover", function(d) {
                   tooltip.node().parentNode.appendChild(tooltip.node());
                   tooltip.attr("visibility", "visible")

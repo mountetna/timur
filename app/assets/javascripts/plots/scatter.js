@@ -70,18 +70,17 @@ d3.scatter = function() {
         .selectAll("circle.dot")
         .data(function(d) { return d.values; })
          .enter()
+         .append('a')
+           .attr('xlink:href', function(d) { return Routes.browse_model_path('sample', d.name); } )
          .append("circle")
            .style("fill", function(d) { 
-             var datum = d3.select(this.parentNode).datum();
+             var datum = d3.select(this.parentNode.parentNode).datum();
              return datum.color;
            } )
            .attr("class","dot")
            .attr("r", 2.5)
            .attr("cx", function(d) { return xScale(d.x) })
            .attr("cy", function(d) { return yScale(d.y) })
-         .on("click", function(d) {
-           window.location = Routes.browse_model_path('sample', d.name);
-         })
          .on("mouseover", function(d) {
            tooltip.node().parentNode.appendChild(tooltip.node());
            tooltip.attr("visibility", "visible")
