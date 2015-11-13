@@ -1,20 +1,39 @@
 Scatter = React.createClass({
   getInitialState: function() {
-    return { mode: 'plot', mapping: {}, query: {}, current_query: {}, series_names: [ 'series1' ] }
+    return {
+      mode: 'plot', 
+      series: []
+   }
   },
-  render_var: function(cvar) {
-    if (!cvar) return <span>undefined</span>;
-    return <span>cvar.stain + " " + cvar.v1 + "/" + cvar.v2</span>;
-  },
-  add_series_button: function() {
-    if (this.state.mode == 'edit')
-      return <input type="button" value="Add Series" onClick={ this.add_series }/>;
+  render_edit: function() {
+    var self = this;
+    if (this.state.mode == 'plot') return null;
+    return <div className="configure">
+        Series: 
+        {
+          this.state.series.map(function(series_name) {
+            return <div key={ series_name }>{ self.props.saves.series[series_name].name }</div>;
+          })
+        }
+        <Selector showNone="disabled" name="series" values={ $.map(this.props.saves.series,this.mapping_map) }/>
+        <input type="button" value="Add Series" onClick={ this.add_series }/>
+        <div>
+        x: <Selector showNone="disabled" name="x" onChange={ this.set_mapping } values={ $.map(this.props.saves.mappings,this.mapping_map) }/>
+        y: <Selector showNone="disabled" name="y" onChange={ this.set_mapping } values={ $.map(this.props.saves.mappings,this.mapping_map) }/>
+        </div>
+      </div>
   },
   add_series: function() {
-    var series_names = this.state.series_names;
-    var series_num = series_names.length + 1;
-    series_names.push('series' + series_num);
-    this.setState({ series_names: series_names });
+    var series = this.state.series;
+    var select = $(React.findDOMNode(this)).find('select[name="series"]');
+    series.push(select.val())
+    console.log(series);
+    this.setState({ series: series });
+  },
+  set_mapping: function(e) {
+    var update = {}
+    update[e.target.name] = e.target.value;
+    this.setState(update);
   },
   render: function() {
     var self = this;
@@ -22,33 +41,18 @@ Scatter = React.createClass({
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
         { this.props.plot.name }
       </Header>
-      <div className="configure">
         {
-          this.add_series_button()
+          this.render_edit()
         }
-        { 
-          this.state.series_names.map(function(series_name) {
-            return <PlotSeries update_query={ self.update_query }
-              mode={ self.state.mode }
-              name={ series_name }
-              key={ series_name }
-              current={ self.state.current_query[ series_name ] }
-              template={ self.props.plot.template } />
-          })
-        }
-        <PlotVarMapping update_query={ this.update_query }
-          mode={ this.state.mode }
-          template={ this.props.plot.template }
-          current={ this.state.current_query.x }
-          name='x'/>
-        <PlotVarMapping update_query={ this.update_query }
-          mode={ this.state.mode }
-          template={ this.props.plot.template }
-          name='y'
-          current={ this.state.current_query.y } />
-      </div>
       <svg className="scatter_plot" width="800" height="350"/>
     </div>;
+  },
+  mapping_map: function(mapping) {
+    return {
+      key: mapping.key,
+      value: mapping.key,
+      text: mapping.name
+    }
   },
   header_handler: function(action) {
     if (action == 'cancel') this.setState({mode: 'plot'});
@@ -84,8 +88,7 @@ Scatter = React.createClass({
         .ylabel(data.ylabel)
         .xdomain([xmin,xmax])
         .ydomain([ymin,ymax])
-        .series(data.series)
-        .color(this.state.current_query.series1.color);
+        .series(data.series);
 
     console.log("Drawing chart");
     var base = d3.select(React.findDOMNode(this));
@@ -108,17 +111,18 @@ Scatter = React.createClass({
   },
   request_plot_data: function() {
     var self = this;
-    var request = $.extend({ series_names: this.state.series_names },this.state.query);
+    var request = { 
+        series: this.state.series.map(function(key) {
+          return self.props.saves.series[key];
+        }),
+        x: this.props.saves.mappings[this.state.x],
+        y: this.props.saves.mappings[this.state.y],
+      };
     console.log(request);
     $.get( Routes.scatter_plot_json_path(), request, function(result) {
-      mapping = {
-        x: request.x_mapping,
-        y: request.y_mapping,
-      };
       self.setState({
         data: result, 
-        mode: 'plot', 
-        current_query: $.extend(true, {}, self.state.query)
+        mode: 'plot'
       });
     });
   }

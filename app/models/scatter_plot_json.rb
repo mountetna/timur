@@ -80,9 +80,7 @@ class ScatterPlotJson
   def initialize params
     @x_var = params[:x]
     @y_var = params[:y]
-    @series = params[:series_names].map do |name|
-      { name.to_sym => params[name.to_sym] }
-    end.reduce :merge
+    @series = params[:series]
     @samples = {}
     @populations = {}
   end
@@ -149,13 +147,13 @@ class ScatterPlotJson
   
   def x_y_data_by_series
     @series.map do |name,series|
-      x_y_data(series, name)
+      x_y_data(series)
     end
   end
 
-  def x_y_data series, name
+  def x_y_data series
     samples = sample_id_hash(series)
-    Rails.logger.info samples
+    Rails.logger.info series
     {
       values: samples.map do |sample_id, sample_name|
         value = {

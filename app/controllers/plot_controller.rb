@@ -6,6 +6,12 @@ class PlotController <  ApplicationController
   def index
   end
 
+  def update_saves
+    current_user.saves = params[:saves]
+    current_user.save
+    render json: :ok
+  end
+
   def scatter_plot_json
     plot = ScatterPlotJson.new(params)
     render json: plot.to_json
@@ -13,11 +19,11 @@ class PlotController <  ApplicationController
 
   def fixed_plots_json
     # JSON description of available fixed plots
-    plots = [
-      ScatterPlotJson.template
-    ]
-    render json: plots
+    render json: {
+      plots: [
+        ScatterPlotJson.template
+      ],
+      saves: current_user.saves
+    }
   end
-
-  private
 end

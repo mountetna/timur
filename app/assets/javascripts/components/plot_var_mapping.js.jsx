@@ -7,35 +7,38 @@ PlotVarMapping = React.createClass({
       return <div></div>;
     else
       return <div className="var_mapping edit">
-             <span className="title">{ this.props.name } mapping</span>
+              <div className="name option_box">
+                <span className="label">Name</span>
+                <input type="text" onChange={ this.update_name } defaultValue={ this.props.current ? this.props.current.name : 'mapping' }/>
+              </div>
              <ChainSelector 
                label="Type"
                name='type' values={ [ 'Population Fraction', 'MFI' ] }
                showNone="disabled"
                change={ this.update_chain } 
                defaultValue={ this.props.current ? this.props.current.type : null }
-               chain_state={ this.state.chain_state }/>
+               chain_state={ this.props.current }/>
              <ChainSelector name="stain"
                label="Stain"
                change={ this.update_chain }
                values={ this.props.template.stains }
                defaultValue={ this.props.current ? this.props.current.stain : null }
                showNone="disabled"
-               chain_state={ this.state.chain_state }/>
+               chain_state={ this.props.current }/>
              {
                this.render_mapping_edit()
              }
+            <div className='close' onClick={ this.props.update.bind(null,'series', this.props.current.key, 'remove') } className="close">&#x274c;</div>
           </div>;
   },
+  update_name: function(evt) {
+    this.props.update('mappings', this.props.current.key, 'name', evt.target.value);
+  },
   update_chain: function (name,value) {
-    current_chain = this.state.chain_state;
-    current_chain[ name ] = value;
-    console.log(current_chain);
-    this.setState({ chain_state: current_chain });
-    this.props.update_query(this.props.name, current_chain);
+    this.props.update('mappings', this.props.current.key, name, value)
   },
   render_mapping_edit: function() {
-    if (this.state.chain_state.type == 'Population Fraction')
+    if (this.props.current.type == 'Population Fraction')
       return <div style={ { display: 'inline' } }>
                <ChainSelector
                  name='v1'
@@ -46,7 +49,7 @@ PlotVarMapping = React.createClass({
                  showNone="disabled"
                  change={ this.update_chain }
                  defaultValue={ this.props.current ? this.props.current.v1 : null }
-                 chain_state={ this.state.chain_state }/>
+                 chain_state={ this.props.current }/>
                <ChainSelector
                  name='v2'
                  label="/"
@@ -56,9 +59,9 @@ PlotVarMapping = React.createClass({
                  defaultValue={ this.props.current ? this.props.current.v2 : null }
                  formatter={ this.population_map }
                  change={ this.update_chain }
-                 chain_state={ this.state.chain_state }/>
+                 chain_state={ this.props.current }/>
            </div>;
-    else if (this.state.chain_state.type == 'MFI')
+    else if (this.props.current.type == 'MFI')
       return <div style={ { display: 'inline' } }>
                <ChainSelector
                  name='population'
@@ -69,7 +72,7 @@ PlotVarMapping = React.createClass({
                  defaultValue={ this.props.current ? this.props.current.population : null }
                  showNone="disabled"
                  formatter={ this.mfi_map }
-                 chain_state={ this.state.chain_state }/>
+                 chain_state={ this.props.current }/>
                <ChainSelector
                  name='mfi'
                  label="Intensity"
@@ -78,7 +81,7 @@ PlotVarMapping = React.createClass({
                  showNone="disabled"
                  defaultValue={ this.props.current ? this.props.current.mfi : null }
                  change={ this.update_chain }
-                 chain_state={ this.state.chain_state }/>
+                 chain_state={ this.props.current }/>
            </div>;
     return <div></div>;
   },
@@ -96,24 +99,5 @@ PlotVarMapping = React.createClass({
       value: name + '##' + ancestry,
       text: name + ' > ' + ancestry.replace(/\t/g, " / ")
     }
-  },
-  update_stain: function(e) {
-    var stain = e.target.value;
-    this.setState({ stain_variables: this.props.template.populations[stain] });
-    this.props.update_mapping(this.props.name + '_proposed', {
-      type: 'population',
-      stain: stain,
-      v1: this.population_map(this.props.template.populations[stain][0]).value,
-      v2: this.population_map(this.props.template.populations[stain][0]).value
-    });
-  },
-  update_mapping: function() {
-    var node = $(React.findDOMNode(this));
-    this.props.update_mapping(this.props.name + '_proposed', {
-      type: 'population',
-      stain: node.find('select[name=stain]').val(),
-      v1: node.find('select[name=v1]').val(),
-      v2: node.find('select[name=v2]').val()
-    });
   },
 })

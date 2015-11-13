@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get 'plot' => 'plot#index', as: :plot
   get 'fixed_plots_json' => 'plot#fixed_plots_json', as: :fixed_plots_json
   get 'scatter_plot_json' => 'plot#scatter_plot_json', as: :scatter_plot_json
+  post 'update_saves' => 'plot#update_saves', as: :update_saves
 
   get 'search' => 'search#index', as: :search
   post 'table' => 'search#table', as: :table

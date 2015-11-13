@@ -7,10 +7,17 @@ Plotter = React.createClass({
     });
   },
   data_update: function(result) {
-    this.setState( { mode: 'plot', plot_types: result } );
+    this.setState( { mode: 'plot', plot_types: result.plots, saves: $.extend(this.default_saves, result.saves ) } );
+  },
+  default_saves: {
+    series: {},
+    mappings: {},
+    plots: {}
   },
   getInitialState: function() {
-    return { mode: 'loading', plots: [] }
+    return { mode: 'loading', plots: [],
+        saves: this.default_saves, 
+    };
   },
   create_plot: function() {
     var node = $(React.findDOMNode(this));
@@ -35,6 +42,27 @@ Plotter = React.createClass({
       this.remove_plot(plot);
     }
   },
+  create_variable: function(var_type) {
+    // get the existing saves
+    saves = this.state.saves;
+    v = this.new_var();
+    saves[var_type][v.key] = v;
+    console.log(saves);
+    this.setState({ saves: saves });
+  },
+  update_variable: function(var_type, key, prop, value) {
+    saves = this.state.saves;
+    console.log(saves);
+    console.log(key);
+    if (prop == 'remove')
+      delete saves[var_type][key];
+    else
+      saves[var_type][key][prop] = value;
+    this.setState({ saves: saves });
+  },
+  new_var: function() {
+    return { key: Math.random().toString(36).substring(7) };
+  },
   render: function() {
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
     var self = this;
@@ -42,22 +70,30 @@ Plotter = React.createClass({
       return <div></div>;
     else {
       return <div className="plotter">
-                Plot type: 
-                <select name="plot_type" defaultValue="none">
-                {
-                  this.state.plot_types.map(
-                    function(plot_type) {
-                      return <option key={plot_type.name} value={plot_type.type} >{ plot_type.name }</option>;
-                    }
-                  )
-                }
-                </select>
-                <input type="button" onClick={ this.create_plot } value="Add"/>
+                <PlotVariables create={ this.create_variable } 
+                  update={ this.update_variable }
+                   saves={ this.state.saves }
+                   template={ self.state.plot_types[0] } />
+                <div className="create">
+                  Plot type: 
+                  <select name="plot_type" defaultValue="none">
+                  {
+                    this.state.plot_types.map(
+                      function(plot_type) {
+                        return <option key={plot_type.name} value={plot_type.type} >{ plot_type.name }</option>;
+                      }
+                    )
+                  }
+                  </select>
+                  <input type="button" onClick={ this.create_plot } value="Add"/>
+                </div>
  
                 {
                   this.state.plots.map(function(plot) {
                     var PlotClass = eval(plot.type);
-                    return <PlotClass plot={ plot } handler={ self.plot_handler } />;
+                    return <PlotClass plot={ plot } 
+                      saves={ self.state.saves }
+                      handler={ self.plot_handler } />;
                   })
                 }
              </div>

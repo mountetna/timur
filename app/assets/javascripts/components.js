@@ -22,6 +22,7 @@
 //= require ./components/plotter
 //= require ./components/plot_series
 //= require ./components/plot_var_mapping
+//= require ./components/plot_variables
 //= require ./components/scatter
 //= require ./components/chain_selector
 //= require ./components/color_picker

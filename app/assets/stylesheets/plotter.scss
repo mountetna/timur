@@ -2,7 +2,6 @@
 
 .plotter {
 	position: relative;
-	padding-top: 30px;
 	color: midnightblue;
 	font-family: $body_font;
 	.header {
@@ -30,6 +29,20 @@
 			display: inline-block;
 		}
 	}
+	.variables {
+		.header { 
+			padding: 3px;
+			border-bottom: 1px solid forestgreen;
+			background-color: rgba(midnightblue,0.2);
+			font-size: 18px;
+		}
+		font-size: 16px;
+	}
+	.create {
+		padding: 3px;
+		border-bottom: 1px solid forestgreen;
+		background-color: rgba(forestgreen,0.2);
+	}
 	select {
 		border: 1px solid forestgreen;
 		color: mediumorchid;
@@ -37,64 +50,63 @@
 		font-size: 16px;
 		background: white;
 	}
+	@mixin plot_input($color) {
+		border-top: 1px solid rgba(midnightblue,0.2);
+		background-color: rgba(midnightblue,0.1);
+		padding: 2px;
+		display: inline-block;
+		&.edit {
+			display: block;
+			.title {
+				display: block;
+				border-right: none;
+			}
+		}
+		font-size: 14px;
+	}
+	.var_list {
+		border-bottom: 1px solid rgba(midnightblue,0.2);
+		.title {
+			padding-bottom: 2px;
+		}
+		.close {
+			@include header_button;
+			float: right;
+		}
+		padding-top: 2px;
+	}
+	.var_mapping {
+		@include plot_input(forestgreen);
+	}
+	.series {
+		@include plot_input(midnightblue);
+	}
+	.option_box {
+		display: inline;
+		.label {
+			display: inline;
+			padding-right: 2px;
+		}
+		padding: 3px;
+		margin-left: 1px;
+		margin-top: 2px;
+	}
+	.name {
+		input[type=text] {
+			@include text_defaults;
+		}
+	}
+	.color_picker, .chain_selector {
+		@extend .option_box;
+		select {
+			width: 200px;
+		}
+	}
 	.plot {
-		border-top: 1px solid forestgreen;
 		border-bottom: 1px solid forestgreen;
-		margin-top: 5px;
+		margin-bottom: 5px;
 		padding: 10px;
 		background-color: forestgreen(0.1);
-		@mixin plot_input($color) {
-			border: 1px solid $color;
-			background-color: rgba($color,0.1);
-			margin-left: 2px;
-			padding: 2px;
-			display: inline-block;
-			&.edit {
-				&:nth-child(n+2) {
-					margin-top: 2px;
-				}
-				display: block;
-				.title {
-					display: block;
-					border-right: none;
-				}
-			}
-			font-size: 14px;
-			.title {
-				padding: 1px;
-				margin-bottom: 5px;
-				font-weight: bold;
-				background-color: rgba($color,0.2);
-			}
-		}
-		.var_mapping {
-			@include plot_input(forestgreen);
-		}
-		.series {
-			@include plot_input(indianred);
-		}
-		.option_box {
-			display: inline;
-			.label {
-				display: inline;
-				padding-right: 2px;
-			}
-			padding: 3px;
-			margin-left: 1px;
-			margin-top: 2px;
-			border: 1px solid forestgreen(0.2);
-		}
-		.name {
-			input[type=text] {
-				@include text_defaults;
-			}
-		}
-		.color_picker, .chain_selector {
-			@extend .option_box;
-			select {
-				width: 200px;
-			}
-		}
 	}
 	.scatter {
 		.settings {
