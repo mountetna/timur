@@ -8,7 +8,7 @@
 
 	.ui-datepicker-header {
 		border: 1px solid forestgreen;
-		background: forestgreen(0.2);
+		background: rgba(forestgreen,0.2);
 		border-radius: 0;
 	}
 
@@ -24,13 +24,13 @@
 	}
 	.ui-datepicker-calendar {
 		td a {
-			background: forestgreen(0.2);
+			background: rgba(forestgreen,0.2);
 		}
 		td.ui-datepicker-current-day a {
-			background: forestgreen(0.4);
+			background: rgba(forestgreen,0.4);
 		}
 		td.ui-datepicker-today a {
-			background: forestgreen(0.1);
+			background: rgba(forestgreen,0.1);
 		}
 	}
 }

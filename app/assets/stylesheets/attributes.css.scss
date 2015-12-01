@@ -12,18 +12,8 @@
 #attributes {
 	.attribute {
 		display: flex;
-
-		.row_cell {
-			border-bottom: 1px solid forestgreen(0.1);
-		}
-		&:first-of-type {
-			.row_cell { 
-				border-top: 2px solid forestgreen;
-				background-color: forestgreen(0.1);
-			}
-		}
 		.name {
-			@extend .row_cell;
+			border-bottom: 1px solid rgba(forestgreen,0.1);
 			display: inline-block;
 			width: 25%;
 			padding-right: 8px;
@@ -32,8 +22,8 @@
 			font-family: $body_font;
 			color: midnightblue;
 		}
-		.value {
-			@extend .row_cell;
+		> .value {
+			border-bottom: 1px solid rgba(forestgreen,0.1);
 			color: mediumorchid;
 			width: 70%;
 			display: inline-block;
@@ -44,7 +34,7 @@
 			padding-top: 3px;
 
 			.collection_item {
-				border-bottom: 1px solid forestgreen(0.1);
+				border-bottom: 1px solid rgba(forestgreen,0.1);
 				padding-top: 3px;
 			}
 
@@ -79,7 +69,7 @@
 			}
 			input[type="text"].link_text {
 				@include text_defaults;
-				border-left: 1px solid forestgreen(0.2);
+				border-left: 1px solid rgba(forestgreen,0.2);
 			}
 			textarea.text_box {
 				border: 0px none black;
@@ -88,6 +78,12 @@
 				box-shadow: 2px 2px 3px 1px #ddd inset;
 				height: 70px;
 				width: 70%;
+			}
+		}
+		&:first-of-type {
+			.name, > .value {
+				border-top: 2px solid forestgreen;
+				background-color: rgba(forestgreen,0.1);
 			}
 		}
 	}

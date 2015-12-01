@@ -2,14 +2,6 @@ $body_font: 'Oxygen', sans-serif;
 $value_font: 'Cousine', monospace;
 $talk_font: 'Lora', serif;
 
-@function forestgreen($opacity) {
-	@return rgba(34,139,34,$opacity)
-}
-
-@function indianred($opacity) {
-	@return rgba(205, 92, 92, $opacity)
-}
-
 @mixin text_defaults {
 	color: darkorchid;
 	border: 0px none black;
@@ -27,10 +19,10 @@ $talk_font: 'Lora', serif;
 	margin-left: 4px;
 	padding: 2px;
 	font-size: 14px;
-	border: 1px solid forestgreen(0.5);
-	background-color: forestgreen(0.2);
+	border: 1px solid rgba(forestgreen,0.5);
+	background-color: rgba(forestgreen,0.2);
 	&:hover {
-		background-color: forestgreen(0.3);
+		background-color: rgba(forestgreen,0.3);
 	}
 }
 

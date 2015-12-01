@@ -1,11 +1,16 @@
 @import "globals";
 
 .table {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	border-collapse: collapse;
 	.pager {
-		padding-top: 2px;
-		background-color: forestgreen(0.1);
+		padding: 2px 4px;
+		background-color: rgba(forestgreen,0.1);
 		color: midnightblue;
 		display: table-caption;
+		border-right: 1px solid rgba(forestgreen,0.5);
 		.turner {
 			color: forestgreen;
 			display: inline;
@@ -27,17 +32,34 @@
 	}
 	.table_item { 
 		display: table-row;
+		&:not(:first-child) {
+			border-bottom: 1px solid rgba(midnightblue,0.1);
+		}
 		.table_cell {
 			display: table-cell;
 			padding: 2px;
-			border-right: 1px solid forestgreen(0.5);
+			border-right: 1px solid rgba(forestgreen,0.5);
 		}
 		.table_header {
 			@extend .table_cell;
-			background-color: forestgreen(0.1);
+			background-color: rgba(forestgreen,0.1);
 		}
 		.item_value {
 			@extend .table_cell;
+			.value {
+				border-left: none;
+				padding: 0px;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+		}
+		&:hover {
+			.item_value {
+				.value {
+					overflow: auto;
+					white-space: normal;
+				}
+			}
 		}
 	}
 }

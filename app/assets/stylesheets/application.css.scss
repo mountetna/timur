@@ -47,7 +47,7 @@ a {
 		&:after {
 			content: "\201c"
 		}
-		color: forestgreen(0.3);
+		color: rgba(forestgreen,0.3);
 		display: inline;
 		font-size: 100px;
 		margin: 0;

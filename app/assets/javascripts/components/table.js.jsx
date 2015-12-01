@@ -43,7 +43,6 @@ TableAttribute = React.createClass({
               <div className="table_item">
               {
                 Object.keys(table.model.attributes).map(function(att) {
-                //Object.keys(records[0]).map(function(att) {
                   if (table.model.attributes[att].shown) return <div className="table_header">{ att }</div>
                 })
               }
@@ -67,19 +66,26 @@ TableAttribute = React.createClass({
   },
   format_attributes: function(item) {
     var table = this.attribute_value();
+    var self = this;
 
-   values = Object.keys(table.model.attributes).map(function(att) {
+    values = Object.keys(table.model.attributes).map(function(att_name) {
+      var att = table.model.attributes[att_name];
 
-     if (!table.model.attributes[att].shown) return null;
+      if (!att.shown) return null;
 
-     value = item[att];
+      value = item[att_name];
 
-     if (!value) return '';
+      if (!value) return '';
 
-     if (table.model.attributes[att].attribute_class == "Magma::TableAttribute") return value.records;
+      if (att.attribute_class == "Magma::TableAttribute") return <div className="value">{ value.records }</div>;
 
-     return value;
-   }).filter(function(v) { return v != null });
+      var AttClass = eval(att.attribute_class.replace('Magma::',''));
+
+      return <AttClass record={ item } 
+        model={ table.model }
+        mode={ self.props.mode } 
+        attribute={ att }/>
+    }).filter(function(v) { return v != null });
 
     return values;
   },
