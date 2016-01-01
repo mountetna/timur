@@ -20,8 +20,8 @@ Rails.application.routes.draw do
   post 'browse/update' => 'browse#update', as: :update_model
 
   get 'plot' => 'plot#index', as: :plot
-  get 'fixed_plots_json' => 'plot#fixed_plots_json', as: :fixed_plots_json
-  get 'scatter_plot_json' => 'plot#scatter_plot_json', as: :scatter_plot_json
+  get 'json/plot_types' => 'plot#plot_types_json', as: :plot_types_json
+  post 'json/plot' => 'plot#plot_json', as: :plot_json
   post 'update_saves' => 'plot#update_saves', as: :update_saves
 
   get 'search' => 'search#index', as: :search

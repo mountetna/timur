@@ -1,4 +1,4 @@
-Scatter = React.createClass({
+ScatterPlot = React.createClass({
   getInitialState: function() {
     return {
       mode: 'plot', 
@@ -68,6 +68,7 @@ Scatter = React.createClass({
   },
   d3_render: function() {
     var data = this.state.data;
+    var self = this;
 
     var margin = data.plot.margin,
         width = data.plot.width - margin.left - margin.right,
@@ -88,7 +89,12 @@ Scatter = React.createClass({
         .ylabel(data.ylabel)
         .xdomain([xmin,xmax])
         .ydomain([ymin,ymax])
-        .series(data.series);
+        .series(data.series.map( function(s) {
+          var save = self.props.saves.series[s.key];
+          s.name = save.name;
+          s.color = save.color;
+          return s;
+        }));
 
     console.log("Drawing chart");
     var base = d3.select(React.findDOMNode(this));
@@ -112,6 +118,7 @@ Scatter = React.createClass({
   request_plot_data: function() {
     var self = this;
     var request = { 
+        type: "ScatterPlot",
         series: this.state.series.map(function(key) {
           return self.props.saves.series[key];
         }),
@@ -119,11 +126,15 @@ Scatter = React.createClass({
         y: this.props.saves.mappings[this.state.y],
       };
     console.log(request);
-    $.get( Routes.scatter_plot_json_path(), request, function(result) {
-      self.setState({
-        data: result, 
-        mode: 'plot'
-      });
+    $.ajax({
+      url: Routes.plot_json_path(), 
+      type: 'POST',
+      data: JSON.stringify(request), 
+      dataType: 'json',
+      contentType: 'application/json',
+      success: function(result) {
+        self.setState({ data: result, mode: 'plot' });
+      }
     });
   }
 });
