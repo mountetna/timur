@@ -29,7 +29,6 @@ BoxPlotConfigure = React.createClass({
         
         <Selector showNone="disabled" name="x" onChange={ this.set_mapping } 
           values={ $.map(this.props.saves.mappings,this.mapping_map) }/>
-        </div>
       </div>
   }
 });
