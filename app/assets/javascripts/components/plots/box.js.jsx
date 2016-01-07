@@ -5,7 +5,7 @@ BoxPlot = React.createClass({
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
         { this.props.plot.name }
       </Header>
-      <BoxPlotConfigure mode={ this.state.mode }/>
+      <BoxPlotConfigure mode={ this.state.mode } plot_id={ this.props.plot_id }/>
       <svg className="scatter_plot" width="800" height="350">
         {
           this.plot_data.mappings.map(function(mapping) {
@@ -22,13 +22,12 @@ BoxPlotConfigure = React.createClass({
     if (this.props.mode == 'plot') return null;
 
     return <div className="configure">
-      <SeriesSelector/>
         <Selector showNone="disabled" name="series" 
-          values={ $.map(this.props.saves.series,this.mapping_map) }/>
+          values={ this.props.saved_series }/>
         Mappings:
         
-        <Selector showNone="disabled" name="x" onChange={ this.set_mapping } 
-          values={ $.map(this.props.saves.mappings,this.mapping_map) }/>
+        <Selector showNone="disabled" name="x" 
+          values={ this.props.saved_mappings }/>
       </div>
   }
 });
