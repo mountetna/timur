@@ -1,9 +1,15 @@
-#search
-  %form{ method: :post, action: table_path }
-    = hidden_field_tag :authenticity_token, form_authenticity_token
-    Export
-    %select{ name: :model }
-      - Magma.instance.magma_models.each do |m|
-        %option{ value: m.name.snake_case } #{m.name.snake_case}
+= content_for :title, "#{Rails.env.development? ? :"Dev Timur" : :Timur } - Search"
 
-    %input.button{ type: :submit, value: "Download TSV" }
+#root
+%script{ type: "text/javascript" }
+  :plain
+    $(function() {
+      React.render(
+        React.createElement(Timur, {
+          #{current_user ? "user: '#{current_user.name}', " : '' }
+          mode: 'search',
+          environment: '#{Rails.env.development? ? 'development' : 'production'}',
+        }),
+        $('#root')[0]
+      );
+    })

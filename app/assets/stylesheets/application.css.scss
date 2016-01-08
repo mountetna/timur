@@ -23,6 +23,7 @@
 @import "project";
 @import "plots";
 @import "spectrum";
+@import "search";
 
 @import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen);
 
@@ -79,34 +80,4 @@ a {
 		color: red;
 	}
 
-}
-
-#search {
-	font-family: $body_font;
-	padding-left: 10%;
-	padding-right: 10%;
-	padding-top: 50px;
-	
-	.button {
-		@include green_button;
-	}
-}
-
-.searchlabel {
-	text-align: right;
-	width: 150px;
-	display: inline-block;
-}
-
-#searchbox {
-	border: 1px solid forestgreen;
-	width: 70%;
-	background: lightgrey;
-}
-.searchbutton {
-	border: 1px solid forestgreen;
-}
-
-#filter {
-	padding-left: 153px;
 }

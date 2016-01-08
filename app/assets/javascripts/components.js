@@ -28,4 +28,6 @@
 //= require ./components/chain_selector
 //= require ./components/color_picker
 
+//= require ./components/search
+//
 //= require ./components/timur

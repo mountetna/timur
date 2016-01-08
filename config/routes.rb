@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   post 'update_saves' => 'plot#update_saves', as: :update_saves
 
   get 'search' => 'search#index', as: :search
+  get 'json/search' => 'search#json', as: :search_json
   post 'table' => 'search#table', as: :table
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

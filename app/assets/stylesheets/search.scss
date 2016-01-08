@@ -1,0 +1,22 @@
+@import "globals";
+.search {
+	font-family: $body_font;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 50px;
+	
+	.button {
+		@include green_button;
+	}
+	select {
+		border: 1px solid forestgreen;
+		color: mediumorchid;
+		font-family: $value_font;
+		font-size: 16px;
+		background: white;
+	}
+	.label {
+		padding: 4px;
+		color: midnightblue;
+	}
+}

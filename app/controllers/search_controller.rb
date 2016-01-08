@@ -3,8 +3,17 @@ require "csv"
 class SearchController <  ApplicationController
   before_filter :authenticate
   before_filter :readable_check
+  layout "timur"
 
   def index
+  end
+
+  def json
+    render json: {
+      magma_models: Magma.instance.magma_models.map do |model|
+        model.json_template
+      end
+    }
   end
  
   def table
