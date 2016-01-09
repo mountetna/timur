@@ -43,6 +43,7 @@
 		.table_header {
 			@extend .table_cell;
 			background-color: rgba(forestgreen,0.1);
+			overflow: hidden;
 		}
 		.item_value {
 			@extend .table_cell;

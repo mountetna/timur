@@ -90,8 +90,6 @@ Browser = React.createClass({
         else
           this.form_tokens[ item.name ] = item.value;
         break;
-      case 'request-extension':
-        this.get_data( { extensions: [ item ] } );
     };
   },
   skin: function() {

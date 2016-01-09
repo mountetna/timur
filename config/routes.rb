@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get 'browse' => 'browse#index', as: :browse
 
   get 'browse/:model/:name' => 'browse#model', as: :browse_model, constraints: { name: /[^\/]+/ }
-  get 'json/:model/:name' => 'browse#json', as: :browse_json, constraints: { name: /[^\/]+/ }
+  get 'json/model/:model/:name' => 'browse#json', as: :browse_json, constraints: { name: /[^\/]+/ }
   post 'browse/update' => 'browse#update', as: :update_model
 
   get 'plot' => 'plot#index', as: :plot
@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 
   get 'search' => 'search#index', as: :search
   get 'json/search' => 'search#json', as: :search_json
+  get 'json/table' => 'search#table_json', as: :table_json
   post 'table' => 'search#table', as: :table
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

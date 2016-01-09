@@ -15,6 +15,17 @@ class SearchController <  ApplicationController
       end
     }
   end
+
+  def table_json
+    # This should mimic the format of the 'table' attribute:
+    model = Magma.instance.get_model params[:model]
+    render json: {
+      model: JsonUpdate::Template.new(model).patched_template,
+      records: model.all.map do |item|
+        item.json_document
+      end
+    }
+  end
  
   def table
     @name = params[:model]

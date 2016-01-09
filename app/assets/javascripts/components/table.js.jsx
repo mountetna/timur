@@ -1,7 +1,9 @@
-TableAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
+TableViewer = React.createClass({
+  getInitialState: function() {
+    return { new_items: [], current_page: 0 }
+  },
   row_for: function(page) {
-    return this.state.page_size * page;
+    return this.props.page_size * page;
   },
   set_page: function(page) {
     this.setState({ current_page: page });
@@ -30,15 +32,15 @@ TableAttribute = React.createClass({
     });
   },
   render_browse: function() {
-    // [ record, record ]
-    // { model: {}, records: [ record, record ] }
     var self = this;
-    var table = this.attribute_value();
+    var table = this.props.table;
     var records = this.filter_records(table);
-    if (!records) return <div className="value"></div>;
-    var pages = Math.ceil(records.length / this.state.page_size);
-    return <div className="value">
-             <div className="table">
+
+    if (!records) return <div className="table"></div>;
+
+    var pages = Math.ceil(records.length / this.props.page_size);
+
+    return <div className="table">
               <TablePager pages={ pages } set_filter={ this.set_filter } current_page={ this.state.current_page } set_page={ this.set_page }/>
               <div className="table_item">
               {
@@ -62,10 +64,15 @@ TableAttribute = React.createClass({
                   })
                }
              </div>
-           </div>
+  },
+  render: function() {
+    if (this.props.mode == 'browse')
+      return this.render_browse();
+    else
+      return this.render_edit();
   },
   format_attributes: function(item) {
-    var table = this.attribute_value();
+    var table = this.props.table;
     var self = this;
 
     values = Object.keys(table.model.attributes).map(function(att_name) {
@@ -77,7 +84,7 @@ TableAttribute = React.createClass({
 
       if (!value) return '';
 
-      if (att.attribute_class == "Magma::TableAttribute") return <div className="value">(table)</div>;
+      if (att.attribute_class == "Magma::TableAttribute") return <div className="value"> (table) </div>;
 
       var AttClass = eval(att.attribute_class.replace('Magma::',''));
 
@@ -88,9 +95,6 @@ TableAttribute = React.createClass({
     }).filter(function(v) { return v != null });
 
     return values;
-  },
-  getInitialState: function() {
-    return { new_items: [], page_size: 10, current_page: 0 }
   },
   render_edit: function() {
     return <div className="value">

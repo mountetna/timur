@@ -21,6 +21,11 @@ $talk_font: 'Lora', serif;
 	font-size: 14px;
 	border: 1px solid rgba(forestgreen,0.5);
 	background-color: rgba(forestgreen,0.2);
+	&:disabled {
+		color: grey;
+		border: darkgrey;
+		background-color: rgba(grey,0.2);
+	}
 	&:hover {
 		background-color: rgba(forestgreen,0.3);
 	}

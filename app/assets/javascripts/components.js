@@ -5,6 +5,7 @@
 //= require ./components/attributes
 //= require ./components/collection
 //= require ./components/table
+//= require ./components/table_attribute
 //= require ./components/date_time_attribute
 //= require ./components/bar_plot_attribute
 //= require ./components/box_plot_attribute
