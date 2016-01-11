@@ -54,6 +54,10 @@ svg {
 			text {
 				font-size: 10px;
 			}
+			circle.highlighted {
+				stroke-width: 2px;
+				stroke: black;
+			}
 			circle.dot {
 				cursor: pointer;
 				fill: #ccc;
