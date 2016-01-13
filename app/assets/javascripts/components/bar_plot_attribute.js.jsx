@@ -5,6 +5,7 @@ BarPlotAttribute = React.createClass({
               <BarPlot
                 ymin={ 0 }
                 ymax={ 1 }
+                legend={ this.attribute_value().legend }
                 plot={ this.attribute_value().plot }
                 data={ this.attribute_value().data } />
            </div>

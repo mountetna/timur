@@ -132,10 +132,32 @@ class FingerprintPlotJson
           dots: get_dots(:dc, "pDCs", "HLADR+")
         }
       ],
-      legend: {
-        series: [ "overall", "immune", "lineage", "t-cell", "cd4/8", "apcs" ],
-        colors: [ "seagreen", "coral", "dodgerblue", "chocolate", "magenta", "greenyellow" ]
-      }
+      legend: [
+        {
+          name: "overall", 
+          color: "seagreen",
+        },
+        {
+          name: "immune", 
+          color: "coral",
+        },
+        {
+          name: "lineage", 
+          color: "dodgerblue",
+        },
+        {
+          name: "t-cell", 
+          color: "chocolate",
+        },
+        {
+          name: "cd4/8", 
+          color: "magenta",
+        },
+        {
+          name: "apcs",
+          color: "greenyellow",
+        }
+      ]
     }
   end
 

@@ -47,7 +47,7 @@ svg {
 		}
 		.bar { 
 			rect {
-				fill: #fff;
+				fill: none;
 				stroke: #000;
 				stroke-width: 1.5px;
 			}
@@ -56,16 +56,21 @@ svg {
 			}
 			circle.highlighted {
 				stroke-width: 2px;
-				stroke: black;
+				stroke: red;
 			}
 			circle.dot {
 				cursor: pointer;
-				fill: #ccc;
 				stroke-width: 1px;
 				&:hover {
 					stroke-width: 5px;
-					stroke: grey;
+					stroke: red;
 				}
+			}
+			circle.tumor {
+				fill: #888;
+			}
+			circle.normal {
+				fill: #ccc;
 			}
 		}
 	}

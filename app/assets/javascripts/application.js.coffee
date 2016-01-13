@@ -18,6 +18,7 @@
 #= require react
 #= require react_ujs
 #= require d3
+#= require react-classnames
 
 #= require plots
 #= require components
