@@ -38,10 +38,24 @@ class QcPlotJson
           height: get_ratio(:dc, "CD45+", "Live")
         }
       ],
-      legend: {
-        series: [ "treg", "nk/t/b", "sort", "dc" ],
-        colors: [ "greenyellow", "coral", "khaki", "seagreen" ]
-      }
+      legend: [
+        {
+          name: "treg",
+          color: "greenyellow"
+        },
+        {
+          name: "nk/t/b",
+          color: "coral"
+        },
+        {
+          name: "sort",
+          color: "khaki"
+        },
+        {
+          name: "dc",
+          color: "seagreen"
+        }
+      ]
     }
   end
 end
