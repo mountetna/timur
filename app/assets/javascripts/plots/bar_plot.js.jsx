@@ -35,7 +35,7 @@ BarPlot = React.createClass({
       className="bar_plot" 
       width={ this.props.plot.width }
       height={ this.props.plot.height }>
-      <Plot 
+      <PlotCanvas
         onWheel={ this.onWheel }
         x={ margin.left } y={ margin.top }
         width={ width }
@@ -45,12 +45,12 @@ BarPlot = React.createClass({
         ymin={ this.props.ymin }
         ymax={ zoom_ymax }
         num_ticks={5}
-        tick_size={ 5 }/>
+        tick_width={ 5 }/>
       <XAxis />
       <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend }/>
       {
         this.props.data.map(function(datum,i) {
-          return <Bar series={ datum.series }
+          return <BarPlotBar series={ datum.series }
                   color={ datum.color }
                   ymax={ zoom_ymax }
                   ymin={ self.props.ymin }
@@ -63,7 +63,7 @@ BarPlot = React.createClass({
                   dots={ datum.dots } />
         })
       }
-      </Plot>
+      </PlotCanvas>
     </svg>
   },
   highlight_dot_mouseover: function(dot_name) {
@@ -71,22 +71,7 @@ BarPlot = React.createClass({
   }
 });
 
-Plot = React.createClass({
-  render: function() {
-    return <g className="plot" 
-            onWheel={ this.props.onWheel }
-            transform={ 'translate(' + this.props.x + ',' + this.props.y + ')' }>
-              <rect x="0" y="0" width={ this.props.width }
-                height={ this.props.height }
-                style={ { fill: 'white' } }/>
-      {
-        this.props.children
-      }
-    </g>
-  }
-});
-
-Bar = React.createClass({
+BarPlotBar = React.createClass({
   render_dots: function() {
     var self = this;
     if (!this.props.dots) return null;
@@ -122,81 +107,6 @@ Bar = React.createClass({
   }
 });
 
-YAxis = React.createClass({
-  calculate_tick_label: function(tick) {
-      var interval_size = (this.props.ymin - this.props.ymax)/this.props.num_ticks;
-      var value = this.props.ymax + tick * interval_size;
-      var places = Math.ceil(-Math.log10(Math.abs(interval_size))) + 1;
-      console.log(interval_size);
-
-      return value.toFixed(places);
-  },
-  render: function() {
-    var self = this;
-    var ticks = []
-    var tick;
-    var y1 = this.props.scale(this.props.ymin);
-    var y2 = this.props.scale(this.props.ymax);
-    for (tick = 0; tick <= self.props.num_ticks; tick++) {
-      var y = y2 + tick*(y1-y2) / self.props.num_ticks;
-      var ylabel = this.calculate_tick_label(tick);
-
-      ticks.push(
-        <g>
-          <text textAnchor="end" 
-            transform={ 
-              'translate(' + (this.props.x - self.props.tick_size - 2) + ',' + (y + 2) + ')' }>
-                { ylabel }
-          </text>
-          <line x1={ self.props.x }
-              y1={ y }
-              x2={ self.props.x - self.props.tick_size }
-              y2={ y }/>
-        </g>
-      );
-    }
-    return <g className="axis">
-      <line 
-            x1={ this.props.x }
-            y1={ y1 }
-            x2={ this.props.x }
-            y2={ y2 }/>
-      {
-        ticks
-      }
-    </g>;
-  }
-});
-
-
-XAxis = React.createClass({
-  render: function() {
-    return <div></div>;
-  }
-});
-
-Legend = React.createClass({
-  render: function() {
-    return <g className="legend" height="100" width="100" 
-       transform={ 'translate(' + this.props.x + ',' + this.props.y + ')' }>
-      {
-        this.props.series.map(function(series,i) {
-          return <g>
-            <rect x="0" y={ 10 + i * 20 }
-              width="10" height="10"
-              style={{fill: series.color }}/>
-            <text textAnchor="start"
-              x="15"
-              y={ 20 + i * 20 }>
-              { series.name }
-            </text>
-          </g>
-        })
-      }
-    </g>
-  }
-});
-
 Dot = React.createClass({
   getInitialState: function() {
     return { highlighted: false }
@@ -218,15 +128,19 @@ Dot = React.createClass({
       { this.props.name }
       </text>
   },
-  is_tumor: function() {
-    return this.props.name.match(/\.T[0-9]$/)
+  is_tumor: function(name) {
+    return name.match(/\.T[0-9]$/)
+  },
+  is_same_sample: function(my_name, other_name) {
+    return other_name && other_name.replace(/\..*$/,'') == my_name.replace(/\..*$/,'')
   },
   render: function() {
     var classes = classNames({
       dot: true,
-      tumor: this.is_tumor(),
-      normal: !this.is_tumor(),
-      highlighted: this.props.name == this.props.highlighted_dot_name
+      tumor: this.is_tumor(this.props.name),
+      normal: !this.is_tumor(this.props.name),
+      highlighted_tumor: this.is_tumor(this.props.name) && this.is_same_sample(this.props.name, this.props.highlighted_dot_name),
+      highlighted_normal: !this.is_tumor(this.props.name) && this.is_same_sample(this.props.name, this.props.highlighted_dot_name),
     });
 
 

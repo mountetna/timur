@@ -54,16 +54,12 @@ svg {
 			text {
 				font-size: 10px;
 			}
-			circle.highlighted {
-				stroke-width: 2px;
-				stroke: red;
-			}
 			circle.dot {
 				cursor: pointer;
 				stroke-width: 1px;
 				&:hover {
 					stroke-width: 5px;
-					stroke: red;
+					stroke: gold;
 				}
 			}
 			circle.tumor {
@@ -71,6 +67,16 @@ svg {
 			}
 			circle.normal {
 				fill: #ccc;
+			}
+			circle.highlighted_tumor {
+				stroke-width: 2px;
+				stroke: red;
+				fill: #fcc;
+			}
+			circle.highlighted_normal {
+				stroke-width: 2px;
+				stroke: #00f;
+				fill: #ccf;
 			}
 		}
 	}

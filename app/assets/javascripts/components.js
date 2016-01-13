@@ -7,7 +7,6 @@
 //= require ./components/table
 //= require ./components/date_time_attribute
 //= require ./components/bar_plot_attribute
-//= require ./components/bar_plot
 //= require ./components/box_plot_attribute
 //= require ./components/line_plot_attribute
 //= require ./components/checkbox_attribute
