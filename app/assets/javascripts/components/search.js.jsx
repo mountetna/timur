@@ -13,8 +13,9 @@ Search = React.createClass({
     var self = this;
     $.get(Routes.table_json_path({ model: this.state.selected_model }),
           function(result) {
-            self.setState({ model_data: result });
+            self.setState({ model_data: result, loading_table: false });
           });
+    self.setState({ loading_table: true });
   },
   download_table_tsv: function() {
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
@@ -55,7 +56,7 @@ Search = React.createClass({
           onChange={ this.set_table_name }
           showNone="enabled"/>
         <input type="button" className="button" value="Show Table" 
-          disabled={ !this.state.selected_model }
+          disabled={ !this.state.selected_model || this.state.loading_table }
           onClick={ this.get_table_json } />
         <input type="button" className="button" value="Download TSV"
           disabled={ this.state.selected_model ? false : "disabled" }
