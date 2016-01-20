@@ -11,14 +11,15 @@
 #   "mappings": [ 'zyxxy' ]
 # }
 
-class BoxPlot
-  def initialize params
+class DataMatrix
+  def initialize params, user
     @mappings = params[:mappings].map do |key|
-      current_user.get_save(key: key)
+      user.get_save(key)
     end
     @series = params[:series].map do |key|
-      current_user.get_save(key: key)
+      user.get_save(key)
     end
+    Rails.logger.info @mappings
   end
 
   def to_json
@@ -35,7 +36,7 @@ class BoxPlot
   end
 
   private 
-  def data_matrix series
+  def data_matrix
     @series.map do |series|
       matrix = @mappings.map do |mapping|
         series.map_by mapping

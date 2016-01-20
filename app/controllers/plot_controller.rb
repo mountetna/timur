@@ -13,16 +13,8 @@ class PlotController <  ApplicationController
   end
 
   def plot_json
-    plot_types = PlotTypesJson.template[:plots].map do |plot|
-      plot[:type]
-    end
-
-    if plot_types.include? params[:type]
-      plot = Object.const_get(params[:type].to_sym).new(params)
-      render json: plot.to_json
-    else
-      render json: {}, status: 422
-    end
+    matrix = DataMatrix.new(params,current_user)
+    render json: matrix.to_json
   end
 
   def plot_types_json

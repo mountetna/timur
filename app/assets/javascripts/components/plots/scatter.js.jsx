@@ -117,13 +117,9 @@ ScatterPlot = React.createClass({
   },
   request_plot_data: function() {
     var self = this;
-    var request = { 
-        type: "ScatterPlot",
-        series: this.state.series.map(function(key) {
-          return self.props.saves.series[key];
-        }),
-        x: this.props.saves.mappings[this.state.x],
-        y: this.props.saves.mappings[this.state.y],
+    var request = {
+        series: this.state.series,
+        mappings: [ this.state.x, this.state.y ]
       };
     console.log(request);
     $.ajax({
