@@ -37,6 +37,15 @@ ScatterPlot = React.createClass({
   },
   render: function() {
     var self = this;
+    var data = this.state.data.map(function(series) {
+      return new DataMatrixSeries(series);
+    });
+
+    var xmin = d3.min(data, function(s) { return s.row_min(0); });
+    var xmax = d3.max(data, function(s) { return s.row_max(0); });
+    var ymin = d3.min(data, function(s) { return s.row_min(1); });
+    var ymax = d3.max(data, function(s) { return s.row_max(1); });
+
     return <div className="scatter plot">
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
         { this.props.plot.name }
@@ -44,7 +53,28 @@ ScatterPlot = React.createClass({
         {
           this.render_edit()
         }
-      <svg className="scatter_plot" width="800" height="350"/>
+      <svg 
+        className="scatter_plot" 
+        width={ 900 }
+        height={ 300 } >
+        <PlotCanvas
+          x={ 10 } y={ 10 }
+          width={ width }
+          height={ height }>
+        <YAxis x={ -3 }
+          scale={ yScale }
+          ymin={ this.props.ymin }
+          ymax={ zoom_ymax }
+          num_ticks={5}
+          tick_width={ 5 }/>
+        <XAxis />
+        <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend }/>
+        {
+          this.props.data.map(function(datum,i) {
+          })
+        }
+        </PlotCanvas>
+      </svg>
     </div>;
   },
   mapping_map: function(mapping) {
@@ -62,9 +92,6 @@ ScatterPlot = React.createClass({
     }
     else if (action == 'edit') this.setState({mode: 'edit'});
     else if (action == 'close') this.props.handler('close', this.props.plot);
-  },
-  componentDidUpdate: function(prevProps, prevState) {
-    if (this.state.data != prevState.data) this.d3_render();
   },
   d3_render: function() {
     var data = this.state.data;
@@ -129,8 +156,27 @@ ScatterPlot = React.createClass({
       dataType: 'json',
       contentType: 'application/json',
       success: function(result) {
-        self.setState({ data: result, mode: 'plot' });
+        self.setState({ data: result.data, series: result.series, mappings: result.mappings, mode: 'plot' });
       }
     });
   }
 });
+
+
+
+DataMatrixSeries = function(series) {
+  var filtered_values = this.filter_null_columns();
+
+  this.filter_null_columns = function() {
+    // values is an n x m array of arrays. we want a reduced version
+    // that is n x p
+    var size = series.samples.size;
+  }
+
+  this.row_min = function(row) {
+    // returns the minimum value for a row in this series
+    Math.min.apply(null, series.values[row].filter(function(n) { 
+      return n != undefined 
+    }))
+  }
+}
