@@ -1,6 +1,119 @@
+// this table viewer expects some basic inputs for the table.
+// 
+// records = an array of hashes with keys defined by column_name
+// columns = an array describing each column, with { name, type }
+
+TableColumn = function(attribute,model) {
+  var self = this;
+
+  this.name = attribute.name;
+
+  this.shown = attribute.shown;
+  
+  this.format = function(value) {
+    // this returns a plain text or number version of this attribute,
+    // suitable for searching
+  };
+
+  this.render = function(record, mode) {
+    // this returns a react class displaying the given value for 
+    // this attribute
+    
+    if (attribute.attribute_class == "Magma::TableAttribute")
+      return <div className="value"> (table) </div>;
+
+    var AttClass = eval(attribute.attribute_class.replace('Magma::',''));
+
+    return <AttClass record={ item } 
+      model={ model }
+      mode={ mode } 
+      attribute={ attribute }/>
+  }
+};
+
+RecordFilter = function(table,filter) {
+  var terms = filter.split(/\s+/);
+
+  this.matches_any = function(term,record) {
+    return table.columns.some(function(column) {
+      var value = record[ column.name ];
+      var txt = column.format( value );
+
+      return txt.match(new RegExp(term, "i"));
+    });
+  }
+
+  this.matches_column = function(term, record) {
+    var column_format = RegExp(
+      "^" +
+      "([\\w]+)" + // the column name
+      "([=<>~])" + // the operator
+      "(.*)" +     // the rest
+      "$"
+    );
+
+    var match = column_format.exec(term);
+
+    // format ok, find column
+    if (match) {
+      var column_name = match[1],
+        operator = match[2],
+        match_txt = match[3];
+
+      var column = table.columns.find(function(column) {
+        return column.name == match[1];
+      });
+
+      // column exists, check match
+      if (column) {
+        // get the value
+        var value = record[ column.name ];
+
+        var txt = column.format( value );
+        switch(operator) {
+          case '=':
+            return txt == match_txt;
+          case '~':
+            return txt.match(new RegExp(match_txt, "i"));
+          case '<':
+            return txt < match_txt;
+          case '>':
+            return txt > match_txt;
+        }
+      }
+    }
+    return false;
+  },
+
+  this.records = function() {
+    var self = this;
+
+    if (!table || !table.records.length) return null;
+
+    if (!filter || !filter.length) return table.records;
+
+    return table.records.filter(function(record) {
+
+      // show records which match all terms
+      
+      return terms.every(function(term) { 
+        // ignore empty terms
+        if (!term.length) return true; 
+
+        // check column restrict
+        if (self.matches_column(term, record)) return true;
+
+        if (self.matches_any(term,record)) return true;
+
+        return false;
+      });
+    });
+  }
+};
+
 TableViewer = React.createClass({
   getInitialState: function() {
-    return { new_items: [], current_page: 0 }
+    return { new_items: [], current_page: 0, filter: "" }
   },
   row_for: function(page) {
     return this.props.page_size * page;
@@ -11,53 +124,36 @@ TableViewer = React.createClass({
   set_filter: function(evt) {
     this.setState({ current_page: 0, filter: evt.target.value });
   },
-  filter_records: function(table) {
-    var self = this;
-    if (!table || table.records.length == 0) return null;
-
-    if (!this.state.filter) return table.records;
-
-    terms = this.state.filter.split(/\s+/);
-
-    return table.records.filter(function(record) {
-      // see if it matches
-      return terms.every(function(term) { 
-        if (!term) return true;
-        return Object.keys(table.model.attributes).some(function(att) {
-          if (!table.model.attributes[att].shown) { return false; }
-          if ($.type(record[att]) != "string") { return false; }
-          if (record[att].match(new RegExp(term, "i"))) return true;
-        });
-      });
-    });
-  },
   render_browse: function() {
     var self = this;
-    var table = this.props.table;
-    var records = this.filter_records(table);
+    var table = self.props.table;
+    var filter = new RecordFilter(table, self.state.filter)
+    var records = filter.records();
 
     if (!records) return <div className="table"></div>;
 
-    var pages = Math.ceil(records.length / this.props.page_size);
+    var pages = Math.ceil(records.length / self.props.page_size);
 
     return <div className="table">
-              <TablePager pages={ pages } set_filter={ this.set_filter } current_page={ this.state.current_page } set_page={ this.set_page }/>
+              <TablePager pages={ pages } set_filter={ self.set_filter } current_page={ self.state.current_page } set_page={ self.set_page }/>
               <div className="table_item">
               {
-                Object.keys(table.model.attributes).map(function(att) {
-                  if (table.model.attributes[att].shown) return <div className="table_header">{ att }</div>
+                table.columns.map(function(column) {
+                  return <div className="table_header">{ column.name }</div>
                 })
               }
               </div>
               {
-                records.slice(this.row_for(this.state.current_page), this.row_for(this.state.current_page+1)).map(
-                  function(item) {
-                    values = self.format_attributes(item);
-
-                    return <div key={ item.id } className="table_item">
+                records.slice(self.row_for(self.state.current_page),
+                              self.row_for(self.state.current_page+1)).map(
+                  function(record) {
+                    return <div key={ record.id }
+                      className="table_item">
                       {
-                        values.map(function(value) {
-                          return <div className="item_value"> { value } </div>;
+                        table.columns.map(function(column) {
+                          var value = record[ column.name ];
+                          var txt = column.render(record, self.props.mode);
+                          return <div className="item_value"> { txt } </div>;
                         })
                       }
                     </div>;
@@ -70,31 +166,6 @@ TableViewer = React.createClass({
       return this.render_browse();
     else
       return this.render_edit();
-  },
-  format_attributes: function(item) {
-    var table = this.props.table;
-    var self = this;
-
-    values = Object.keys(table.model.attributes).map(function(att_name) {
-      var att = table.model.attributes[att_name];
-
-      if (!att.shown) return null;
-
-      value = item[att_name];
-
-      if (!value) return '';
-
-      if (att.attribute_class == "Magma::TableAttribute") return <div className="value"> (table) </div>;
-
-      var AttClass = eval(att.attribute_class.replace('Magma::',''));
-
-      return <AttClass record={ item } 
-        model={ table.model }
-        mode={ self.props.mode } 
-        attribute={ att }/>
-    }).filter(function(v) { return v != null });
-
-    return values;
   },
   render_edit: function() {
     return <div className="value">
