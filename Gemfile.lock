@@ -38,7 +38,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.3)
-    babel-source (5.8.26)
+    babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
@@ -268,7 +268,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdoc (4.2.0)
-    react-rails (1.3.1)
+    react-rails (1.5.0)
       babel-transpiler (>= 0.7.0)
       coffee-script-source (~> 1.8)
       connection_pool
@@ -333,10 +333,13 @@ DEPENDENCIES
   omniauth-shibboleth
   pg
   rails (= 4.2.0)
-  react-rails (~> 1.0)
+  react-rails (~> 1.5.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
   therubyracer
   turbolinks
   uglifier (>= 1.3.0)
+
+BUNDLED WITH
+   1.11.2

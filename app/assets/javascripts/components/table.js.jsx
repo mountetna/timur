@@ -77,7 +77,7 @@ TableAttribute = React.createClass({
 
       if (!value) return '';
 
-      if (att.attribute_class == "Magma::TableAttribute") return <div className="value">{ value.records }</div>;
+      if (att.attribute_class == "Magma::TableAttribute") return <div className="value">(table)</div>;
 
       var AttClass = eval(att.attribute_class.replace('Magma::',''));
 
