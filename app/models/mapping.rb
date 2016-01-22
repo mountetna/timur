@@ -33,9 +33,8 @@ end
 class MfiMapper < Mapper
   def initialize params
     @stain = params[:stain]
-    @name = params[:name]
-    @ancestor = params[:ancestor]
-    @channel = params[:channel]
+    @name, @ancestor = params[:population].split(/##/)
+    @channel = params[:mfi]
   end
 
   def get_value sample, pops
@@ -60,11 +59,8 @@ class PopulationFractionMapper < Mapper
   # gated populations
   def initialize params
     @stain = params[:stain]
-    @population1 = params[:population1]
-    @ancestor1 = params[:ancestor1]
-
-    @population2 = params[:population2]
-    @ancestor2 = params[:ancestor2]
+    @population1, @ancestor1 = params[:v1].split(/##/)
+    @population2, @ancestor2 = params[:v2].split(/##/)
   end
 
   def get_value sample, pops

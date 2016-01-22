@@ -10,6 +10,11 @@ class User < ActiveRecord::Base
   end
 
   def get_save key
-    saved_items.where(key: key).first.to_item
+    if saves["series"].has_key? key
+      return Series.new key,  saves["series"][key].symbolize_keys
+    end
+    if saves["mappings"].has_key? key
+      return Mapping.new key,  saves["mappings"][key].symbolize_keys
+    end
   end
 end

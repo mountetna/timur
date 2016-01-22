@@ -35,6 +35,11 @@ svg {
 	&.bar_plot {
 		font-family: $value_font;
 		font-size: 12px;
+		.plot_canvas {
+			rect {
+				fill: white;
+			}
+		}
 		.axis {
 			path, line {
 				fill: none;
@@ -83,6 +88,13 @@ svg {
 	&.scatter_plot {
 		font-family: $value_font;
 		font-size: 12px;
+		.plot_canvas {
+			rect {
+				fill: white;
+				stroke: gray;
+				stroke-width: 0.2px;
+			}
+		}
 		.axis {
 			path, line {
 				fill: none;
@@ -95,7 +107,7 @@ svg {
 			stroke-width: 1px;
 			&:hover {
 				stroke-width: 4px;
-				stroke: black;
+				stroke: gold;
 			}
 		}
 	}

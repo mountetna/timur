@@ -6,7 +6,7 @@
 
 PlotCanvas = React.createClass({
   render: function() {
-    return <g className="plot" 
+    return <g className="plot_canvas" 
             onWheel={ this.props.onWheel }
             transform={ 'translate(' + this.props.x + ',' + this.props.y + ')' }>
               <rect x="0" y="0" width={ this.props.width }

@@ -9,15 +9,19 @@
 YAxis = React.createClass({
   render: function() {
     var self = this;
-    var ticks = this.props.scale.ticks(this.props.num_ticks);
+    var scale = this.props.scale;
+    var ticks = scale.ticks(this.props.num_ticks);
     var interval_size = ticks[1] - ticks[0];
     var places = Math.ceil(-Math.log10(Math.abs(interval_size)));
     return <g className="axis">
+      <text textAnchor="middle" transform={ 'translate(-45,' + (scale(this.props.ymin)+scale(this.props.ymax))/2 + ') rotate(-90)' }>
+        { this.props.label }
+      </text>
       <line 
             x1={ this.props.x }
-            y1={ this.props.scale(this.props.ymin) }
+            y1={ scale(this.props.ymin) }
             x2={ this.props.x }
-            y2={ this.props.scale(this.props.ymax) }/>
+            y2={ scale(this.props.ymax) }/>
       {
         ticks.map(function(tick) {
           var y = self.props.scale(tick);

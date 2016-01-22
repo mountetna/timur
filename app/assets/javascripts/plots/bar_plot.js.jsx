@@ -46,7 +46,6 @@ BarPlot = React.createClass({
         ymax={ zoom_ymax }
         num_ticks={5}
         tick_width={ 5 }/>
-      <XAxis />
       <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend }/>
       {
         this.props.data.map(function(datum,i) {
