@@ -90,7 +90,7 @@ Plotter = React.createClass({
  
                 {
                   this.state.plots.map(function(plot) {
-                    var PlotClass = eval(plot.type);
+                    var PlotClass = eval(plot.type+"Container");
                     return <PlotClass plot={ plot } 
                       saves={ self.state.saves }
                       handler={ self.plot_handler } />;

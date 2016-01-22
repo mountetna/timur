@@ -21,6 +21,7 @@
 #= require react-classnames
 
 #= require plots
+#= require matrix
 #= require components
 #= require model
 #= require keycode

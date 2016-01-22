@@ -1,8 +1,9 @@
-ScatterPlot = React.createClass({
+ScatterPlotContainer = React.createClass({
   getInitialState: function() {
     return {
       mode: 'plot', 
-      series: []
+      series: [],
+      data: []
    }
   },
   render_edit: function() {
@@ -35,16 +36,27 @@ ScatterPlot = React.createClass({
     update[e.target.name] = e.target.value;
     this.setState(update);
   },
+  render_temp: function() {
+    return <div className="scatter plot">
+      <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
+        { this.props.plot.name }
+      </Header>
+        {
+          this.render_edit()
+        }
+      <svg className="scatter_plot" width={ 900 } height= { 300 }></svg>
+      </div>
+  },
   render: function() {
     var self = this;
-    var data = this.state.data.map(function(series) {
-      return new DataMatrixSeries(series);
+    var all_series = this.state.data.map(function(series) {
+      // TODO: need to add row names
+      var matrix = new Matrix( series.values, null, series.samples );
+      return matrix.col_filter(function(col) {
+        return col.every(function(v) { return v != undefined });
+      });
     });
-
-    var xmin = d3.min(data, function(s) { return s.row_min(0); });
-    var xmax = d3.max(data, function(s) { return s.row_max(0); });
-    var ymin = d3.min(data, function(s) { return s.row_min(1); });
-    var ymax = d3.max(data, function(s) { return s.row_max(1); });
+    console.log(all_series);
 
     return <div className="scatter plot">
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
@@ -53,28 +65,16 @@ ScatterPlot = React.createClass({
         {
           this.render_edit()
         }
-      <svg 
-        className="scatter_plot" 
-        width={ 900 }
-        height={ 300 } >
-        <PlotCanvas
-          x={ 10 } y={ 10 }
-          width={ width }
-          height={ height }>
-        <YAxis x={ -3 }
-          scale={ yScale }
-          ymin={ this.props.ymin }
-          ymax={ zoom_ymax }
-          num_ticks={5}
-          tick_width={ 5 }/>
-        <XAxis />
-        <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend }/>
-        {
-          this.props.data.map(function(datum,i) {
-          })
-        }
-        </PlotCanvas>
-      </svg>
+      <ScatterPlot data={ all_series } plot={{
+          width: 900,
+          height: 300,
+          margin: {
+            left: 30,
+              top: 30,
+              bottom: 30,
+              right: 30
+          }
+        }}/>
     </div>;
   },
   mapping_map: function(mapping) {
@@ -162,21 +162,60 @@ ScatterPlot = React.createClass({
   }
 });
 
+ScatterPlot = React.createClass({
+  render: function() {
+    var self = this;
 
+    if (!this.props.data || !this.props.data.length) return <div></div>;
 
-DataMatrixSeries = function(series) {
-  var filtered_values = this.filter_null_columns();
+    var plot = this.props.plot;
+    var margin = plot.margin,
+        width = plot.width - margin.left - margin.right,
+        height = plot.height - margin.top - margin.bottom;
 
-  this.filter_null_columns = function() {
-    // values is an n x m array of arrays. we want a reduced version
-    // that is n x p
-    var size = series.samples.size;
+    var all_series = this.props.data;
+
+    var xmin = d3.min(all_series, function(series) { return d3.min(series.row(0)); });
+    var xmax = d3.max(all_series, function(series) { return d3.max(series.row(0)); });
+    var ymin = d3.min(all_series, function(series) { return d3.min(series.row(1)); });
+    var ymax = d3.max(all_series, function(series) { return d3.max(series.row(1)); });
+
+    var xScale = d3.scale.linear().domain([ xmin, xmax ]).range([0,width]);
+    var yScale = d3.scale.linear().domain([ ymin, ymax ]).range([height,0]);
+
+    return <svg 
+        className="scatter_plot" 
+        width={ 900 }
+        height={ 300 } >
+        <PlotCanvas
+          x={ 10 } y={ 10 }
+          width={ width }
+          height={ height }>
+        <YAxis x={ -3 }
+          scale={ yScale }
+          ymin={ ymin }
+          ymax={ ymax }
+          num_ticks={5}
+          tick_width={ 5 }/>
+        <XAxis />
+        <Legend x={ width - 30 } y="0" series={ [
+          { name: 'a', color: 'red' },
+          { name: 'b', color: 'blue' },
+        ]}/>
+        {
+          all_series.map(function(matrix,i) {
+            return matrix.map_col(function(point,j,name) {
+              return <a xlinkHref={ Routes.browse_model_path('sample', name) }>
+                  <circle className="dot"
+                    r="2.5"
+                    cx={ xScale(point[0]) }
+                    cy={ yScale(point[1]) }
+                    />
+                </a>;
+            });
+          })
+        }
+        </PlotCanvas>
+      </svg>;
   }
-
-  this.row_min = function(row) {
-    // returns the minimum value for a row in this series
-    Math.min.apply(null, series.values[row].filter(function(n) { 
-      return n != undefined 
-    }))
-  }
-}
+});
