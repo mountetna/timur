@@ -50,12 +50,6 @@ PlotVariables = React.createClass({
                  })
                }
              </div>
-             <div className="var_list">
-               <span className="title">Plots</span>
-                <input type="button" value="Add"/>
-               {
-               }
-             </div>
            </div>;
   },
   header_handler: function(action) {

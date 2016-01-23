@@ -119,4 +119,20 @@
 	input[type=button] {
 		@include green_button;
 	}
+	.configure {
+		.all_series {
+			.warning {
+				color: red;
+				margin: 0px 4px;
+			}
+			font-size: 16px;
+			.selected_series {
+				padding: 2px;
+				font-size: 14px;
+				display: inline-block;
+				margin-right: 2px;
+				background-color: rgba(forestgreen,0.2);
+			}
+		}
+	}
 }

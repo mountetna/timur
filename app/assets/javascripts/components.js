@@ -23,7 +23,8 @@
 //= require ./components/plot_series
 //= require ./components/plot_var_mapping
 //= require ./components/plot_variables
-//= require ./components/scatter
+//= require ./components/plots/scatter
+//= require ./components/plots/box
 //= require ./components/chain_selector
 //= require ./components/color_picker
 

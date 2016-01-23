@@ -2,12 +2,12 @@ Plotter = React.createClass({
   componentDidMount: function() {
     var self = this;
 
-    $.get( Routes.fixed_plots_json_path(), function(result) {
+    $.get( Routes.plot_types_json_path(), function(result) {
       self.data_update(result);
     });
   },
   data_update: function(result) {
-    this.setState( { mode: 'plot', plot_types: result.plots, saves: $.extend(this.default_saves, result.saves ) } );
+    this.setState( { mode: 'plot', template: result.template, plot_types: result.plots, saves: $.extend(this.default_saves, result.saves ) } );
   },
   default_saves: {
     series: {},
@@ -73,7 +73,7 @@ Plotter = React.createClass({
                 <PlotVariables create={ this.create_variable } 
                   update={ this.update_variable }
                    saves={ this.state.saves }
-                   template={ self.state.plot_types[0] } />
+                   template={ self.state.template } />
                 <div className="create">
                   Plot type: 
                   <select name="plot_type" defaultValue="none">
@@ -90,7 +90,7 @@ Plotter = React.createClass({
  
                 {
                   this.state.plots.map(function(plot) {
-                    var PlotClass = eval(plot.type);
+                    var PlotClass = eval(plot.type+"Container");
                     return <PlotClass plot={ plot } 
                       saves={ self.state.saves }
                       handler={ self.plot_handler } />;

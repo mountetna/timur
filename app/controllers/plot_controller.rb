@@ -12,18 +12,15 @@ class PlotController <  ApplicationController
     render json: :ok
   end
 
-  def scatter_plot_json
-    plot = ScatterPlotJson.new(params)
-    render json: plot.to_json
+  def plot_json
+    matrix = DataMatrix.new(params,current_user)
+    render json: matrix.to_json
   end
 
-  def fixed_plots_json
+  def plot_types_json
     # JSON description of available fixed plots
-    render json: {
-      plots: [
-        ScatterPlotJson.template
-      ],
+    render json: PlotTypesJson.template.merge(
       saves: current_user.saves
-    }
+    )
   end
 end
