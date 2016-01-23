@@ -6,18 +6,25 @@ ScatterPlotContainer = React.createClass({
       data: []
    }
   },
+  render_series: function() {
+    var self = this;
+    if (!this.state.series.length) return <span className="warning">none added</span>;
+    return this.state.series.map(function(series_name) {
+      return <div className="selected_series" key={ series_name }>{ self.props.saves.series[series_name].name }</div>;
+    })
+  },
   render_edit: function() {
     var self = this;
     if (this.state.mode == 'plot') return null;
     return <div className="configure">
+        <div className="all_series">
         Series: 
         {
-          this.state.series.map(function(series_name) {
-            return <div key={ series_name }>{ self.props.saves.series[series_name].name }</div>;
-          })
+          this.render_series()
         }
-        <Selector showNone="disabled" name="series" values={ $.map(this.props.saves.series,this.mapping_map) }/>
-        <input type="button" value="Add Series" onClick={ this.add_series }/>
+          <Selector showNone="disabled" name="series" values={ $.map(this.props.saves.series,this.mapping_map) }/>
+          <input type="button" value="Add Series" onClick={ this.add_series }/>
+        </div>
         <div>
         x: <Selector showNone="disabled" name="x" onChange={ this.set_mapping } values={ $.map(this.props.saves.mappings,this.mapping_map) }/>
         y: <Selector showNone="disabled" name="y" onChange={ this.set_mapping } values={ $.map(this.props.saves.mappings,this.mapping_map) }/>

@@ -6,10 +6,6 @@ class PlotTypesJson
           {
             name: "XY Scatter",
             type: "ScatterPlot"
-          },
-          {
-            name: "Box Plot",
-            type: "BoxPlot"
           }
         ],
         template: {
