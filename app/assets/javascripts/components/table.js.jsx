@@ -5,6 +5,7 @@
 
 TableSet = function(table) {
   this.records = table.records;
+  this.model = table.model;
   this.columns = Object.keys(table.model.attributes).map(function(att_name) {
     var column = new TableColumn(table.model.attributes[att_name]);
     if (!column.shown) return null;
@@ -184,7 +185,7 @@ TableViewer = React.createClass({
     var link = document.createElement("a");    
     link.href = uri;
     link.style = "visibility:hidden";
-    link.download = this.props.filename + ".tsv";
+    link.download = table.model.name + ".tsv";
     
     document.body.appendChild(link);
     link.click();
