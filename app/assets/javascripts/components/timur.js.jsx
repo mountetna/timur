@@ -7,8 +7,15 @@ Timur = React.createClass({
   },
   render: function() {
     var component;
-    if (this.props.mode == 'browser') component = <Browser model={ this.props.model } show_errors={ this.show_errors } record={ this.props.record }/>;
-    else if (this.props.mode == 'plotter') component = <Plotter show_errors={ this.show_errors }/>;
+    if (this.props.mode == 'browser') 
+      component = <Browser 
+                    model={ this.props.model } 
+                    show_errors={ this.show_errors }
+                    record={ this.props.record } />;
+    else if (this.props.mode == 'plotter')
+      component = <Plotter show_errors={ this.show_errors }/>;
+    else if (this.props.mode == 'search')
+      component = <Search show_errors={ this.show_errors }/>;
 
     return <div>
               <TimurNav user={ this.props.user } environment={ this.props.environment}/>
