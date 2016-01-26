@@ -175,7 +175,7 @@ TableViewer = React.createClass({
     });
     var rows = records.map(function(record) {
       return table.columns.map(function(column) {
-        return column.format( record[ column.name ] ).toString().replace(/\t/g,"\\t");
+        return column.format( record[ column.name ] ).toString().replace(/\t/g,"\\t").replace(/\n/g,"\\n");
       })
     });
     var string = [ header ].concat(rows).map(function(row) {
