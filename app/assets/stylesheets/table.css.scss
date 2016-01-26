@@ -5,6 +5,7 @@
 	table-layout: fixed;
 	width: 100%;
 	border-collapse: collapse;
+	position: relative;
 	.pager {
 		padding: 2px 4px;
 		background-color: rgba(forestgreen,0.1);
@@ -28,7 +29,11 @@
 			border-top: 1px solid forestgreen;
 			border-left: 1px solid forestgreen;
 			box-shadow: 2px 2px 3px 1px #ddd inset;
+			width: 300px;
 		}
+	}
+	.export {
+		@include green_button;
 	}
 	.table_item { 
 		display: table-row;
