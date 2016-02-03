@@ -25,8 +25,11 @@
 //= require ./components/plot_var_mapping
 //= require ./components/plot_variables
 //= require ./components/plots/scatter
+//= require ./components/plots/plot_config
+//= require ./components/plots/scatter_plot_container
 //= require ./components/plots/box
 //= require ./components/chain_selector
+//= require ./components/list_selector
 //= require ./components/color_picker
 
 //= require ./components/search

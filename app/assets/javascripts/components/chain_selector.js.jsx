@@ -35,8 +35,8 @@ ChainSelector = React.createClass({
   should_show: function() {
     return this.current_values().length > 0
   },
-  change: function(evt) {
-    this.props.change( this.props.name, evt.target.value );
+  change: function(value) {
+    this.props.change( this.props.name, value );
   },
   render: function() {
     // only show if you don't have any dependencies
