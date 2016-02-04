@@ -54,3 +54,5 @@ ChainSelector = React.createClass({
       return <div className="chain_selector empty"></div>;
   },
 })
+
+module.exports = ChainSelector;

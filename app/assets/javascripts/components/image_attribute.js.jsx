@@ -23,3 +23,5 @@ ImageAttribute = React.createClass({
            </div>
   }
 });
+
+module.exports = ImageAttribute;

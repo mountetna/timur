@@ -1,3 +1,19 @@
+requestPlotData = function(plot_id) {
+  return {
+    type: 'REQUEST_PLOT_DATA',
+    plot_id: plot_id
+  }
+}
+
+requestPlotData = function(plot_id) {
+  return function(dispatch) {
+    fetch(route, {
+    }).then(function(response) {
+    }).catch(function(error) {
+    })
+  }
+}
+
 ScatterPlotContainer = React.createClass({
   getInitialState: function() {
     return {
@@ -35,11 +51,11 @@ ScatterPlotContainer = React.createClass({
 
     return <div className="scatter plot">
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
-        { this.props.plot.name }
+        XY Scatter
       </Header>
       {
         this.state.mode == 'edit' ?
-        <PlotConfig saves={ this.props.saves } />
+        <PlotConfig plot_id={this.props.plot.plot_id} saves={ this.props.saves } />
         :
         null
       }
@@ -63,13 +79,22 @@ ScatterPlotContainer = React.createClass({
     }
   },
   header_handler: function(action) {
-    if (action == 'cancel') this.setState({mode: 'plot'});
-    else if (action == 'approve') {
-      this.request_plot_data()
-      this.setState({mode: 'submit'});
+    switch(action) {
+      case 'cancel':
+        this.setState({mode: 'plot'});
+        break;
+      case 'approve':
+        var store = this.context.store;
+        this.setState({mode: 'submit'});
+        store.dispatch(requestPlotData(this.props.plot.plot_id));
+        break;
+      case 'edit':
+        this.setState({mode: 'edit'});
+        break;
+      case 'close':
+        this.props.handler('close', this.props.plot);
+        break;
     }
-    else if (action == 'edit') this.setState({mode: 'edit'});
-    else if (action == 'close') this.props.handler('close', this.props.plot);
   },
   update_query: function(name, value) {
     query = this.state.query;
@@ -95,3 +120,8 @@ ScatterPlotContainer = React.createClass({
     });
   }
 });
+ScatterPlotContainer.contextTypes = {
+  store: React.PropTypes.object
+};
+
+module.exports = ScatterPlotContainer;

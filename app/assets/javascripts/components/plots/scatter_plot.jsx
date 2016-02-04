@@ -66,3 +66,5 @@ ScatterPlot = React.createClass({
       </svg>;
   }
 });
+
+module.exports = ScatterPlot;

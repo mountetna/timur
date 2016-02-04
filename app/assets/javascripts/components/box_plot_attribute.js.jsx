@@ -66,3 +66,5 @@ BoxPlotAttribute = React.createClass({
            </div>
   },
 });
+
+module.exports = BoxPlotAttribute;

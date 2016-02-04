@@ -1,4 +1,20 @@
 Timur = React.createClass({
+  create_store: function() {
+    return Redux.applyMiddleware(thunk)( Redux.createStore)( plotReducer )
+  },
+  render: function () {
+    return <Provider store={ this.create_store() }>
+          <TimurApp
+            user={ this.props.user }
+            mode={ this.props.mode }
+            model={ this.props.model }
+            record={ this.props.record }
+            environment={ this.props.environment } />
+    </Provider>;
+  }
+});
+
+TimurApp = React.createClass({
   getInitialState: function() {
     return { errors: [] }
   },
@@ -66,3 +82,5 @@ TimurNav = React.createClass({
            </div>;
   }
 });
+
+module.exports = Timur;

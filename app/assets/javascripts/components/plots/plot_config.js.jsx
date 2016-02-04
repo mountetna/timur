@@ -27,6 +27,14 @@ updateRequestedSeries = function(plot_id, requested_series) {
   }
 }
 
+updateRequestedMappings = function(plot_id, requested_mappings) {
+  return {
+    type: 'UPDATE_REQUESTED_MAPPINGS',
+    plot_id: plot_id,
+    requested_mappings: requested_mappings
+  }
+}
+
 PlotConfig = React.createClass({
   render_series: function() {
     var self = this;
@@ -37,16 +45,21 @@ PlotConfig = React.createClass({
   },
   render: function() {
     var self = this;
+    var store = this.context.store;
     return <div className="configure">
         <ListSelector label="Series" values={ this.props.saves.series }
           onChange={ function(items) {
-            store.dispatch(updateRequestedSeries(this.props.plot_id, items));
+            store.dispatch(updateRequestedSeries(self.props.plot_id, items));
           } } />
         <ListSelector label="Mappings" values={ this.props.saves.mappings }
           onChange={ function(items) {
-           console.log(items);
-           //updateRequestedMappings( this.props.plot_id, items)
+            store.dispatch(updateRequestedMappings(self.props.plot_id, items));
           } } />
       </div>
   },
 });
+PlotConfig.contextTypes = {
+  store: React.PropTypes.object
+};
+
+module.exports = PlotConfig;

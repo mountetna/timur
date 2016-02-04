@@ -13,3 +13,5 @@ ChildAttribute = React.createClass({
     return <LinkAttributeEditor process={ this.props.process } hide_unlink={ true } model={ this.props.model } record={this.props.record} attribute={ this.props.attribute }/>
   }
 });
+
+module.exports = ChildAttribute;

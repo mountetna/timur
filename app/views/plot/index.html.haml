@@ -4,7 +4,7 @@
 %script{ type: "text/javascript" }
   :plain
     $(function() {
-      React.render(
+      ReactDOM.render(
         React.createElement(Timur, {
           #{current_user ? "user: '#{current_user.name}', " : '' }
           mode: 'plotter',

@@ -1,4 +1,4 @@
-Errors = React.createClass({
+var Errors = React.createClass({
   render: function() {
     if (this.props.errors.length > 0) {
       return <div id="error">
@@ -17,3 +17,5 @@ Errors = React.createClass({
       return <div className="error_box"></div>;
   }
 });
+
+module.exports = Errors;

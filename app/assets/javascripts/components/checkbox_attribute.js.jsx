@@ -16,3 +16,5 @@ CheckboxAttribute = React.createClass({
            </div>
   }
 })
+
+module.exports = CheckboxAttribute;

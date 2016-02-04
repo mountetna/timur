@@ -34,6 +34,8 @@ gem 'haml-rails', '>= 0.3.4'
 
 gem 'react-rails', '~> 1.5.0'
 
+gem 'browserify-rails'
+
 gem 'js-routes'
 
 gem 'd3-rails'

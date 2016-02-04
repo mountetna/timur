@@ -24,3 +24,5 @@ Selector = React.createClass({
     </select>
   }
 });
+
+module.exports = Selector;

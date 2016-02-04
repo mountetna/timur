@@ -1,4 +1,14 @@
-Plotter = React.createClass({
+var newPlotId = 0;
+
+createNewPlot = function(plot_type) {
+  return {
+    type: 'CREATE_NEW_PLOT',
+    plot_id: newPlotId++,
+    plot_type: plot_type
+  }
+}
+
+PlotList = React.createClass({
   componentDidMount: function() {
     var self = this;
 
@@ -7,7 +17,11 @@ Plotter = React.createClass({
     });
   },
   data_update: function(result) {
-    this.setState( { mode: 'plot', template: result.template, plot_types: result.plots, saves: $.extend(this.default_saves, result.saves ) } );
+    this.setState( { mode: 'plot',
+                  template: result.template, 
+                  plot_types: result.plots,
+                  selected_plot_type: result.plots[0].type,
+                  saves: $.extend(this.default_saves, result.saves ) } );
   },
   default_saves: {
     series: {},
@@ -66,6 +80,8 @@ Plotter = React.createClass({
   render: function() {
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
     var self = this;
+    var store = this.context.store;
+
     if (this.state.mode == 'loading')
       return <div></div>;
     else {
@@ -76,22 +92,36 @@ Plotter = React.createClass({
                    template={ self.state.template } />
                 <div className="create">
                   Plot type: 
-                  <select name="plot_type" defaultValue="none">
-                  {
+                  <Selector values={
                     this.state.plot_types.map(
                       function(plot_type) {
-                        return <option key={plot_type.name} value={plot_type.type} >{ plot_type.name }</option>;
+                        return {
+                          key: plot_type.type,
+                          value: plot_type.type,
+                          text: plot_type.name
+                        }
                       }
                     )
-                  }
-                  </select>
-                  <input type="button" onClick={ this.create_plot } value="Add"/>
+                    }
+                    onChange={ function(type) {
+                      this.setState({ selected_plot_type: type })
+                    } }
+                    />
+                  <input
+                    type="button"
+                    onClick={
+                      function() { 
+                       self.props.dispatch( createNewPlot(self.state.selected_plot_type));
+                      }
+                    }
+                    value="Add"/>
                 </div>
  
                 {
-                  this.state.plots.map(function(plot) {
+                  self.props.plots.map(function(plot) {
                     var PlotClass = eval(plot.type+"Container");
-                    return <PlotClass plot={ plot } 
+                    return <PlotClass 
+                      plot={ plot } 
                       saves={ self.state.saves }
                       handler={ self.plot_handler } />;
                   })
@@ -100,3 +130,19 @@ Plotter = React.createClass({
     }
   }
 });
+
+mapStateToProps = function(state) {
+  return {
+    plots: state
+  }
+}
+
+Plotter = connect(
+  mapStateToProps
+)(PlotList);
+
+Plotter.contextTypes = {
+  store: React.PropTypes.object
+};
+
+module.exports = Plotter;

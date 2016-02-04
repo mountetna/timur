@@ -124,3 +124,5 @@ Browser = React.createClass({
     }
   }
 });
+
+module.exports = Browser;

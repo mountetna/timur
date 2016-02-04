@@ -12,3 +12,5 @@ ForeignKeyAttribute = React.createClass({
     return <LinkAttributeEditor process={ this.props.process } model={ this.props.model } record={ this.props.record } attribute={ this.props.attribute }/>
   }
 })
+
+module.exports = ForeignKeyAttribute;

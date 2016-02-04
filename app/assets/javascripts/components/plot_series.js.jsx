@@ -52,3 +52,5 @@ PlotSeries = React.createClass({
     this.props.update('series', this.props.current.key, name, value)
   }
 })
+
+module.exports = PlotSeries;

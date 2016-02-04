@@ -40,3 +40,5 @@ ListSelector = React.createClass({
     </div>
   }
 });
+
+module.exports = ListSelector;

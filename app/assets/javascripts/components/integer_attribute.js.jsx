@@ -22,3 +22,5 @@ IntegerAttribute = React.createClass({
            </div>
   }
 })
+
+module.exports = IntegerAttribute;

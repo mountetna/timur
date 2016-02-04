@@ -42,6 +42,9 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
+    browserify-rails (2.2.1)
+      railties (>= 4.0.0, < 5.0)
+      sprockets (> 3.0.2)
     builder (3.2.2)
     byebug (6.0.2)
     carrierwave (0.10.0)
@@ -320,6 +323,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  browserify-rails
   byebug
   coffee-rails (~> 4.1.0)
   d3-rails
