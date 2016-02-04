@@ -118,9 +118,10 @@ PlotList = React.createClass({
                 </div>
  
                 {
-                  self.props.plots.map(function(plot) {
+                  self.props.plots.map(function(plot, i) {
                     var PlotClass = eval(plot.type+"Container");
                     return <PlotClass 
+                      key={ i }
                       plot={ plot } 
                       saves={ self.state.saves }
                       handler={ self.plot_handler } />;

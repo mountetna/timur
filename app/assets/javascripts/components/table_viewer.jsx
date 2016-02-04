@@ -131,8 +131,8 @@ TableViewer = React.createClass({
               </TablePager>
               <div className="table_item">
               {
-                table.columns.map(function(column) {
-                  return <div className="table_header">{ column.name }</div>
+                table.columns.map(function(column,i) {
+                  return <div key={i} className="table_header">{ column.name }</div>
                 })
               }
               </div>
@@ -143,10 +143,10 @@ TableViewer = React.createClass({
                     return <div key={ record.id }
                       className="table_item">
                       {
-                        table.columns.map(function(column) {
+                        table.columns.map(function(column, i) {
                           var value = record[ column.name ];
                           var txt = column.render(record, self.props.mode);
-                          return <div className="item_value"> { txt } </div>;
+                          return <div key={i} className="item_value"> { txt } </div>;
                         })
                       }
                     </div>;

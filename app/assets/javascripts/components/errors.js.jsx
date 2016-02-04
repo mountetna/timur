@@ -1,4 +1,4 @@
-var Errors = React.createClass({
+Errors = React.createClass({
   render: function() {
     if (this.props.errors.length > 0) {
       return <div id="error">

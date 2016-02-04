@@ -1,34 +1,64 @@
 ListSelector = React.createClass({
   getInitialState: function() {
-    return { selected_items: [] }
+    return { new_item: null }
   },
   delete_item: function(i) {
-    var self = this;
-    var items = this.state.selected_items.slice(0);
+    var items = this.props.currentSelection.slice(0);
     items.splice(i,1);
-    this.setState( { selected_items: items }, function() {
-      if (self.props.onChange) self.props.onChange(self.state.selected_items);
-    });
+    this.props.onChange(items);
   },
   add_item: function() {
-    var self = this;
-    this.setState( { selected_items: this.state.selected_items.concat(this.state.new_item) }, function() {
-      if (self.props.onChange) self.props.onChange(self.state.selected_items);
-    });
+    this.props.onChange(
+      this.props.currentSelection.concat(this.state.new_item)
+    );
   },
   set_new_item: function(item) {
     this.setState({ new_item: item });
   },
-  render: function() {
+  render_current: function() {
     var self = this;
-    return <div className="list">
-      <span className="label">{ this.props.label }</span>
-      {
-        this.state.selected_items.map(function(item,i) {
-          return <span key={ i } onClick={ self.delete_item.bind(self, i) } className="item">{ self.props.values[item].name };</span>
-        })
-      }
-      <Selector showNone="enabled" values={ $.map(this.props.values, function(item) {
+    if (Array.isArray(this.props.limits)) {
+      console.log(this.props.limits);
+      return this.props.limits.map(function(varname,i) {
+        var item = self.props.currentSelection[i];
+        var selection;
+        if (!item)
+          selection = <span className="warning">none</span>;
+        else
+          selection = <span
+            onClick={ self.delete_item.bind(self, i) }
+            className="itemname">{ self.props.values[item].name }</span>
+
+        return <div className="item" key={ i }>
+          <span className="varname">{ varname }</span>
+          {
+            selection
+          }
+        </div>;
+      });
+    }
+    else if (this.props.limits == "any") {
+      if (this.props.currentSelection.length == 0)
+        return <div className="item">
+          <span className="warning">none</span>
+        </div>;
+
+      return this.props.currentSelection.map(function(item,i) {
+        return <div className="item" key={ i }>
+          <span onClick={ self.delete_item.bind(self, i) }
+            className="itemname">{ self.props.values[item].name }</span>
+          </div>;
+      })
+    }
+  },
+  render_selector: function() {
+    var self = this;
+    if (Array.isArray(this.props.limits) 
+        && this.props.limits.length == this.props.currentSelection.length) {
+          return null;
+    }
+    return <div className="selector">
+       <Selector showNone="enabled" values={ $.map(this.props.values, function(item) {
           return {
             key: item.key,
             value: item.key,
@@ -36,9 +66,33 @@ ListSelector = React.createClass({
           }
           }) }
           onChange={ this.set_new_item } />
-      <input type="button" onClick={ this.add_item } value="Add" />
+      <input type="button" 
+        disabled={ this.state.new_item == null }
+        onClick={ this.add_item }
+        value="Add" />
+    </div>;
+  },
+  render_label: function() {
+    if (Array.isArray(this.props.limits)) return null;
+    return <span className="label">{ this.props.label }</span>
+  },
+  render: function() {
+    var self = this;
+    return <div className="list">
+      {
+        this.render_label()
+      }
+      {
+        this.render_current()
+      }
+      {
+        this.render_selector()
+      }
     </div>
   }
 });
+ListSelector.propTypes = {
+  onChange: React.PropTypes.func.isRequired
+};
 
 module.exports = ListSelector;

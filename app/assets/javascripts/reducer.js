@@ -7,7 +7,9 @@ plotReducer = function(state, action) {
     case 'CREATE_NEW_PLOT':
       return state.concat( {
         plot_id: action.plot_id,
-        type: action.plot_type
+        type: action.plot_type,
+        requested_series: [],
+        requested_mappings: []
       }
       );
     case 'UPDATE_REQUESTED_SERIES':
@@ -28,18 +30,27 @@ plotReducer = function(state, action) {
         }
         return plot;
       });
-    case 'REQUEST_PLOT_DATA':
+    case 'ADD_PLOT_DATA':
       return state.map(function(plot) {
         if (plot.plot_id == action.plot_id) {
-          // make a data request based on this plot contents, what
-          // is it?
+          return $.extend(plot, {
+            series: action.series,
+            mappings: action.mappings,
+            data: action.data
+          })
         }
+        return plot;
       });
-      return state;
-    case 'REQUEST_PLOT_DATA_SUCCESS':
-      return state;
-    case 'REQUEST_PLOT_DATA_FAILURE':
-      return state;
+    case 'CANCEL_PLOT_CONFIG':
+      return state.map(function(plot) {
+        if (plot.plot_id == action.plot_id) {
+          return $.extend(plot, {
+            requested_series: plot.series || [],
+            requested_mappings: plot.mappings || [],
+          })
+        }
+        return plot;
+      });
     default:
       return state;
   }

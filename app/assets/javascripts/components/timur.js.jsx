@@ -1,6 +1,6 @@
 Timur = React.createClass({
   create_store: function() {
-    return Redux.applyMiddleware(thunk)( Redux.createStore)( plotReducer )
+    return Redux.applyMiddleware(thunk)(Redux.createStore)(plotReducer)
   },
   render: function () {
     return <Provider store={ this.create_store() }>

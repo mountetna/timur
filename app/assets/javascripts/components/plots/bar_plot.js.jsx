@@ -49,7 +49,8 @@ BarPlot = React.createClass({
       <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend }/>
       {
         this.props.data.map(function(datum,i) {
-          return <BarPlotBar series={ datum.series }
+          return <BarPlotBar key={ i }
+                  series={ datum.series }
                   color={ datum.color }
                   ymax={ zoom_ymax }
                   ymin={ self.props.ymin }
@@ -70,13 +71,15 @@ BarPlot = React.createClass({
   }
 });
 
+module.exports = BarPlot;
+
 BarPlotBar = React.createClass({
   render_dots: function() {
     var self = this;
     if (!this.props.dots) return null;
 
-    return this.props.dots.map( function(dot) {
-      return <Dot name={ dot.name } 
+    return this.props.dots.map( function(dot,i) {
+      return <Dot key={i} name={ dot.name } 
         mouse_handler={ self.props.mouse_handler }
         x={ self.props.x + self.props.width / 2  + ((1000*dot.height) %8) - 4} 
         y={ self.props.scale(dot.height) }

@@ -3,11 +3,12 @@
 React    = require('react');
 ReactDOM = require('react-dom');
 Redux = require('redux');
+Promise = require('es6-promise').Promise;
 
 Provider = require('react-redux').Provider;
 
 connect = require('react-redux').connect;
-fetch = require('isomorphic-fetch').fetch;
+fetch = require('isomorphic-fetch');
 thunk = require('redux-thunk');
 
 Errors = require('./components/errors.js.jsx');

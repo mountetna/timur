@@ -1,53 +1,69 @@
-requestPlotData = function(plot_id) {
+addPlotData = function(plot_id, plot_json) {
   return {
-    type: 'REQUEST_PLOT_DATA',
+    type: 'ADD_PLOT_DATA',
+    plot_id: plot_id,
+    series: plot_json.series,
+    mappings: plot_json.mappings,
+    data: plot_json.data
+  }
+}
+
+cancelPlotConfig = function(plot_id) {
+  return {
+    type: 'CANCEL_PLOT_CONFIG',
     plot_id: plot_id
   }
 }
 
-requestPlotData = function(plot_id) {
+requestPlotData = function(plot, success, failure) {
+  var self = this;
+  var request = {
+    series: plot.requested_series,
+    mappings: plot.requested_mappings
+  };
   return function(dispatch) {
-    fetch(route, {
-    }).then(function(response) {
-    }).catch(function(error) {
+    $.ajax({
+      url: Routes.plot_json_path(),
+      method: 'POST',
+      data: JSON.stringify(request), 
+      dataType: 'json',
+      contentType: 'application/json',
+      success: function(plot_json) {
+        dispatch(addPlotData(plot.plot_id, plot_json))
+        success(plot_json);
+      },
+      error: function(error) {
+      }
     })
   }
 }
 
 ScatterPlotContainer = React.createClass({
   getInitialState: function() {
-    return {
-      mode: 'plot', 
-      series: [],
-      data: []
-   }
-  },
-  add_series: function() {
-    var series = this.state.series;
-    var select = $(React.findDOMNode(this)).find('select[name="series"]');
-    series.push(select.val())
-    this.setState({ series: series });
-  },
-  set_mapping: function(e) {
-    var update = {}
-    update[e.target.name] = e.target.value;
-    this.setState(update);
+    return { mode: 'plot' }
   },
   render: function() {
     var self = this;
 
-    var all_series = this.state.data.map(function(series, i) {
-      var series_def = self.props.saves.series[self.state.series[i]];
-      var row_names = self.state.mappings.map(function(key) { return self.props.saves.mappings[key].name; } );
-      var matrix = new Matrix( series.values, row_names, series.samples );
-      return {
-        matrix: matrix.col_filter(function(col) {
-          return col.every(function(v) { return v != undefined });
-        }),
-        name: series_def.name,
-        color: series_def.color
-      };
-    });
+    var all_series = [];
+    var plot = this.props.plot;
+    
+    if (plot.data) {
+      all_series = plot.data.map(function(series, i) {
+        var series_def = self.props.saves.series[plot.series[i]];
+        var row_names = plot.mappings.map(function(key) { 
+          return self.props.saves.mappings[key].name;
+        });
+        var matrix = new Matrix( series.values, row_names, series.samples );
+        return {
+          matrix: matrix.col_filter(function(col) {
+            return col.every(function(v) { return v != undefined });
+          }),
+          name: series_def.name,
+          color: series_def.color
+        };
+      });
+    }
 
     return <div className="scatter plot">
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
@@ -55,7 +71,11 @@ ScatterPlotContainer = React.createClass({
       </Header>
       {
         this.state.mode == 'edit' ?
-        <PlotConfig plot_id={this.props.plot.plot_id} saves={ this.props.saves } />
+        <PlotConfig
+          plot={plot}
+          series_limits="any"
+          mappings_limits={ [ "X", "Y" ] }
+          saves={ this.props.saves } />
         :
         null
       }
@@ -71,22 +91,31 @@ ScatterPlotContainer = React.createClass({
         }}/>
     </div>;
   },
-  mapping_map: function(mapping) {
-    return {
-      key: mapping.key,
-      value: mapping.key,
-      text: mapping.name
-    }
-  },
   header_handler: function(action) {
+    var self = this;
     switch(action) {
       case 'cancel':
+        var store = this.context.store;
         this.setState({mode: 'plot'});
+        store.dispatch(cancelPlotConfig(this.props.plot.plot_id));
         break;
       case 'approve':
         var store = this.context.store;
+        
+        if (this.props.plot.requested_mappings.length != 2) {
+          alert('You need to have an X and a Y mapping value.');
+          return
+        }
+
+        if (this.props.plot.requested_series.length == 0) {
+          alert('You need to select at least one series to plot.');
+          return
+        }
+
         this.setState({mode: 'submit'});
-        store.dispatch(requestPlotData(this.props.plot.plot_id));
+        store.dispatch(requestPlotData(this.props.plot, function(plot_json) {
+          self.setState({ mode: 'plot' });
+        }));
         break;
       case 'edit':
         this.setState({mode: 'edit'});
@@ -96,29 +125,6 @@ ScatterPlotContainer = React.createClass({
         break;
     }
   },
-  update_query: function(name, value) {
-    query = this.state.query;
-    query[ name ] = value;
-    this.setState({ query: query });
-  },
-  request_plot_data: function() {
-    var self = this;
-    var request = {
-        series: this.state.series,
-        mappings: [ this.state.x, this.state.y ]
-      };
-    console.log(request);
-    $.ajax({
-      url: Routes.plot_json_path(), 
-      type: 'POST',
-      data: JSON.stringify(request), 
-      dataType: 'json',
-      contentType: 'application/json',
-      success: function(result) {
-        self.setState({ data: result.data, series: result.series, mappings: result.mappings, mode: 'plot' });
-      }
-    });
-  }
 });
 ScatterPlotContainer.contextTypes = {
   store: React.PropTypes.object

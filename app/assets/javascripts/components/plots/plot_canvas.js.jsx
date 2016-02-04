@@ -18,3 +18,5 @@ PlotCanvas = React.createClass({
     </g>
   }
 });
+
+module.exports = PlotCanvas;
