@@ -23,3 +23,5 @@ DocumentAttribute = React.createClass({
            </div>
   }
 });
+
+module.exports = DocumentAttribute;

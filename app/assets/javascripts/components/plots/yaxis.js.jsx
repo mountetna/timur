@@ -23,9 +23,9 @@ YAxis = React.createClass({
             x2={ this.props.x }
             y2={ scale(this.props.ymax) }/>
       {
-        ticks.map(function(tick) {
+        ticks.map(function(tick,i) {
           var y = self.props.scale(tick);
-          return <g>
+          return <g key={i}>
               <text textAnchor="end" 
                 transform={ 
                   'translate(' + (self.props.x - self.props.tick_width - 2) + ',' + (y + 2) + ')' }>
@@ -41,3 +41,5 @@ YAxis = React.createClass({
     </g>;
   }
 });
+
+module.exports = YAxis;

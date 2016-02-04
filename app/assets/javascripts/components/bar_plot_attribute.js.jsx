@@ -15,3 +15,5 @@ BarPlotAttribute = React.createClass({
            </div>
   },
 });
+
+module.exports = BarPlotAttribute;

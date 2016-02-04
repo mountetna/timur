@@ -1,4 +1,5 @@
-TextAttribute = React.createClass({
+
+Attribute = React.createClass({
   mixins: [ BaseAttribute, AttributeHelpers ],
   render_browse: function() {
     return <div className="value">
@@ -7,9 +8,9 @@ TextAttribute = React.createClass({
   },
   render_edit: function() {
     return <div className="value">
-            <textarea className="text_box" name={ this.value_name() } defaultValue={ this.attribute_value() } />
+            <input type='text' className="full_text" placeholder={ this.props.attribute.placeholder } name={ this.value_name() } defaultValue={ this.attribute_value() } />
            </div>
   }
 });
 
-module.exports = TextAttribute;
+module.exports = Attribute;

@@ -12,3 +12,5 @@ SelectAttribute = React.createClass({
            </div>
   }
 })
+
+module.exports = SelectAttribute;

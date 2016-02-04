@@ -21,3 +21,5 @@ ColorPicker = React.createClass({
     });
   }
 });
+
+module.exports = ColorPicker;

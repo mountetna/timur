@@ -11,3 +11,5 @@ TableAttribute = React.createClass({
     </div>
   },
 });
+
+module.exports = TableAttribute;

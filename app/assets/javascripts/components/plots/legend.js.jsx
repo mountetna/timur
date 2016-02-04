@@ -6,7 +6,7 @@ Legend = React.createClass({
        transform={ 'translate(' + this.props.x + ',' + this.props.y + ')' }>
       {
         this.props.series.map(function(series,i) {
-          return <g>
+          return <g key={i}>
             <rect x="0" y={ 10 + i * 20 }
               width="10" height="10"
               style={{fill: series.color }}/>
@@ -21,3 +21,5 @@ Legend = React.createClass({
     </g>
   }
 });
+
+module.exports = Legend;

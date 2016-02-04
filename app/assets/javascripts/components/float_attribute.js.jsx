@@ -26,3 +26,5 @@ FloatAttribute = React.createClass({
            </div>
   }
 })
+
+module.exports = FloatAttribute;

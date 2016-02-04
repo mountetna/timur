@@ -120,18 +120,39 @@
 		@include green_button;
 	}
 	.configure {
-		.all_series {
-			.warning {
-				color: red;
-				margin: 0px 4px;
+		.list {
+			.label {
+				font-size: 16px;
+				padding-right: 2px;
+				border-right: 1px solid forestgreen;
 			}
-			font-size: 16px;
-			.selected_series {
-				padding: 2px;
-				font-size: 14px;
+			.item {
+				.varname {
+					font-size: 16px;
+					padding-right: 2px;
+					border-right: 1px solid forestgreen;
+				}
+				&:not(:first-child) {
+					.varname {
+						margin-left: 10px;
+					}
+				}
+				.warning {
+					color: red;
+					margin: 0px 4px;
+					display: inline-block;
+				}
+				.itemname {
+					padding: 2px;
+					font-size: 14px;
+					margin-right: 2px;
+					background-color: rgba(forestgreen,0.2);
+					cursor: pointer;
+				}
 				display: inline-block;
-				margin-right: 2px;
-				background-color: rgba(forestgreen,0.2);
+			}
+			.selector {
+				display: inline-block;
 			}
 		}
 	}

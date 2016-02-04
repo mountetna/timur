@@ -101,3 +101,5 @@ PlotVarMapping = React.createClass({
     }
   },
 })
+
+module.exports = PlotVarMapping;

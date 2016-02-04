@@ -15,13 +15,15 @@
 #= require jquery-ui/datepicker
 #= require jquery_ujs
 #= require turbolinks
-#= require react
+
 #= require react_ujs
+
 #= require d3
 #= require react-classnames
 
 #= require plots
 #= require matrix
+#= require reducer
 #= require components
 #= require model
 #= require keycode

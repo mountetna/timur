@@ -121,3 +121,5 @@ LinePlotAttribute = React.createClass({
            </div>
   },
 });
+
+module.exports = LinePlotAttribute;

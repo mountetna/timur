@@ -16,9 +16,9 @@ XAxis = React.createClass({
             y2={ this.props.y }
             x2={ scale(this.props.xmax) }/>
       {
-        ticks.map(function(tick) {
+        ticks.map(function(tick,i) {
           var x = self.props.scale(tick);
-          return <g>
+          return <g key={i}>
               <text textAnchor="middle" 
                 transform={ 
                   'translate(' + x + ',' + (self.props.y + self.props.tick_width + 10) + ')' }>
@@ -34,3 +34,5 @@ XAxis = React.createClass({
     </g>;
   }
 });
+
+module.exports = XAxis;

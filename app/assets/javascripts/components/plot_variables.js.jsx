@@ -67,3 +67,5 @@ PlotVariables = React.createClass({
     });
   }
 });
+
+module.exports = PlotVariables;

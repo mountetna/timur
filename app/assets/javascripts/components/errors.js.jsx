@@ -17,3 +17,5 @@ Errors = React.createClass({
       return <div className="error_box"></div>;
   }
 });
+
+module.exports = Errors;

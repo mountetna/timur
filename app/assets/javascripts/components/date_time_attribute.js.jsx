@@ -83,3 +83,5 @@ DateTimeAttribute = React.createClass({
     $(timeInput).mask('00:00');
   }
 });
+
+module.exports = DateTimeAttribute;
