@@ -51,6 +51,10 @@ plotReducer = function(state, action) {
         }
         return plot;
       });
+    case 'CLOSE_PLOT':
+      return state.filter(function(plot) {
+        return plot.plot_id != action.plot_id;
+      });
     default:
       return state;
   }

@@ -38,6 +38,13 @@ requestPlotData = function(plot, success, failure) {
   }
 }
 
+closePlot = function(plot_id) {
+  return {
+    type: 'CLOSE_PLOT',
+    plot_id: plot_id
+  }
+}
+
 ScatterPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
@@ -121,7 +128,8 @@ ScatterPlotContainer = React.createClass({
         this.setState({mode: 'edit'});
         break;
       case 'close':
-        this.props.handler('close', this.props.plot);
+        var store = this.context.store;
+        store.dispatch(closePlot(this.props.plot.plot_id));
         break;
     }
   },
