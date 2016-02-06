@@ -1,4 +1,4 @@
-ScatterPlot = React.createClass({
+CorrelationPlot = React.createClass({
   render: function() {
     var self = this;
 
@@ -23,7 +23,7 @@ ScatterPlot = React.createClass({
     var yScale = d3.scale.linear().domain([ ymin, ymax ]).range([canvas_height,0]);
 
     return <svg 
-        className="scatter_plot" 
+        className="correlation_plot" 
         width={ plot.width }
         height={ plot.height } >
         <PlotCanvas
@@ -48,22 +48,18 @@ ScatterPlot = React.createClass({
       <Legend x={ plot.width - margin.left - margin.right + 15 } y="0" series={ all_series }/>
         {
           all_series.map(function(series,i) {
-            return <g key={self.props.data_key + series.name}>
-            {
-              series.matrix.map_col(function(point,j,name) {
-                return <a key={self.props.data_key + name} xlinkHref={ Routes.browse_model_path('sample', name) }>
-                    <circle className="dot"
-                      r="2.5"
-                      style={ {
-                        fill: series.color
-                      } }
-                      cx={ xScale(point[0]) }
-                      cy={ yScale(point[1]) }
-                      />
-                  </a>;
-              })
-            }
-            </g>;
+            return series.matrix.map_col(function(point,j,name) {
+              return <a xlinkHref={ Routes.browse_model_path('sample', name) }>
+                  <circle className="dot"
+                    r="2.5"
+                    style={ {
+                      fill: series.color
+                    } }
+                    cx={ xScale(point[0]) }
+                    cy={ yScale(point[1]) }
+                    />
+                </a>;
+            });
           })
         }
         </PlotCanvas>
@@ -71,4 +67,4 @@ ScatterPlot = React.createClass({
   }
 });
 
-module.exports = ScatterPlot;
+module.exports = CorrelationPlot;

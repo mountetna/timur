@@ -36,7 +36,8 @@ plotReducer = function(state, action) {
           return $.extend(plot, {
             series: action.series,
             mappings: action.mappings,
-            data: action.data
+            data: action.data,
+            data_key: Math.random().toString(36).substring(7)
           })
         }
         return plot;

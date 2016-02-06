@@ -8,6 +8,17 @@ createNewPlot = function(plot_type) {
   }
 }
 
+const PLOT_TYPES = [
+  {
+    name: "XY Scatter",
+    type: "ScatterPlot"
+  },
+  {
+    name: "Correlation",
+    type: "CorrelationPlot"
+  }
+];
+
 PlotList = React.createClass({
   componentDidMount: function() {
     var self = this;
@@ -16,9 +27,8 @@ PlotList = React.createClass({
       self.setState( { 
                   mode: 'plot',
                   template: result.template, 
-                  plot_types: result.plots,
-                  selected_plot_type: result.plots[0].type,
-                  saves: $.extend(this.default_saves, result.saves ) 
+                  saves: $.extend(this.default_saves, result.saves ),
+                  default_mappings: result.default_mappings
       } );
     });
   },
@@ -28,7 +38,9 @@ PlotList = React.createClass({
     plots: {}
   },
   getInitialState: function() {
-    return { mode: 'loading', saves: this.default_saves };
+    return { mode: 'loading', 
+      saves: this.default_saves, 
+      selected_plot_type: PLOT_TYPES[0].type }
   },
   create_variable: function(var_type) {
     // get the existing saves
@@ -67,7 +79,7 @@ PlotList = React.createClass({
                 <div className="create">
                   Plot type: 
                   <Selector values={
-                    this.state.plot_types.map(
+                    PLOT_TYPES.map(
                       function(plot_type) {
                         return {
                           key: plot_type.type,
@@ -78,7 +90,7 @@ PlotList = React.createClass({
                     )
                     }
                     onChange={ function(type) {
-                      this.setState({ selected_plot_type: type })
+                      self.setState({ selected_plot_type: type })
                     } }
                     />
                   <input
@@ -97,7 +109,8 @@ PlotList = React.createClass({
                     return <PlotClass 
                       key={ i }
                       plot={ plot } 
-                      saves={ self.state.saves } />;
+                      saves={ self.state.saves }
+                      default_mappings={ self.state.default_mappings }/>;
                   })
                 }
              </div>
