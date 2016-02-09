@@ -8,20 +8,29 @@ createNewPlot = function(plot_type) {
   }
 }
 
+const PLOT_TYPES = [
+  {
+    name: "XY Scatter",
+    type: "ScatterPlot"
+  },
+  {
+    name: "Correlation",
+    type: "CorrelationPlot"
+  }
+];
+
 PlotList = React.createClass({
   componentDidMount: function() {
     var self = this;
 
     $.get( Routes.plot_types_json_path(), function(result) {
-      self.data_update(result);
-    });
-  },
-  data_update: function(result) {
-    this.setState( { mode: 'plot',
+      self.setState( { 
+                  mode: 'plot',
                   template: result.template, 
-                  plot_types: result.plots,
-                  selected_plot_type: result.plots[0].type,
-                  saves: $.extend(this.default_saves, result.saves ) } );
+                  saves: $.extend(this.default_saves, result.saves ),
+                  default_mappings: result.default_mappings
+      } );
+    });
   },
   default_saves: {
     series: {},
@@ -29,32 +38,9 @@ PlotList = React.createClass({
     plots: {}
   },
   getInitialState: function() {
-    return { mode: 'loading', plots: [],
-        saves: this.default_saves, 
-    };
-  },
-  create_plot: function() {
-    var node = $(React.findDOMNode(this));
-    var name = node.find('select[name=plot_type]').val();
-    var plot_type = this.state.plot_types.find(function(p) { return p.type == name });
-    var plots = this.state.plots;
-    plots.push({
-      template: plot_type,
-      name: plot_type.name,
-      type: plot_type.type
-    });
-    this.setState( { plots: plots } );
-  },
-  remove_plot: function(plot) {
-    var plots = this.state.plots;
-    var index = plots.indexOf(plot);
-    if (index != -1) plots.splice(index,1)
-      this.setState( { plots: plots } );
-  },
-  plot_handler: function(command, plot) {
-    if (command == 'close') {
-      this.remove_plot(plot);
-    }
+    return { mode: 'loading', 
+      saves: this.default_saves, 
+      selected_plot_type: PLOT_TYPES[0].type }
   },
   create_variable: function(var_type) {
     // get the existing saves
@@ -93,7 +79,7 @@ PlotList = React.createClass({
                 <div className="create">
                   Plot type: 
                   <Selector values={
-                    this.state.plot_types.map(
+                    PLOT_TYPES.map(
                       function(plot_type) {
                         return {
                           key: plot_type.type,
@@ -104,7 +90,7 @@ PlotList = React.createClass({
                     )
                     }
                     onChange={ function(type) {
-                      this.setState({ selected_plot_type: type })
+                      self.setState({ selected_plot_type: type })
                     } }
                     />
                   <input
@@ -124,7 +110,7 @@ PlotList = React.createClass({
                       key={ i }
                       plot={ plot } 
                       saves={ self.state.saves }
-                      handler={ self.plot_handler } />;
+                      default_mappings={ self.state.default_mappings }/>;
                   })
                 }
              </div>

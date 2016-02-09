@@ -36,7 +36,8 @@ plotReducer = function(state, action) {
           return $.extend(plot, {
             series: action.series,
             mappings: action.mappings,
-            data: action.data
+            data: action.data,
+            data_key: Math.random().toString(36).substring(7)
           })
         }
         return plot;
@@ -50,6 +51,10 @@ plotReducer = function(state, action) {
           })
         }
         return plot;
+      });
+    case 'CLOSE_PLOT':
+      return state.filter(function(plot) {
+        return plot.plot_id != action.plot_id;
       });
     default:
       return state;

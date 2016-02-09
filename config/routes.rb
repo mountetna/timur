@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get 'plot' => 'plot#index', as: :plot
   get 'json/plot_types' => 'plot#plot_types_json', as: :plot_types_json
   post 'json/plot' => 'plot#plot_json', as: :plot_json
+  post 'json/pythia' => 'plot#pythia_json', as: :pythia_json
   post 'update_saves' => 'plot#update_saves', as: :update_saves
 
   get 'search' => 'search#index', as: :search

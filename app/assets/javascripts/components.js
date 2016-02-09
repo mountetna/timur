@@ -54,9 +54,11 @@ YAxis = require('./components/plots/yaxis.js.jsx');
 Legend = require('./components/plots/legend.js.jsx');
 
 ScatterPlot = require('./components/plots/scatter_plot.jsx');
+CorrelationPlot = require('./components/plots/correlation_plot.jsx');
 PlotConfig = require('./components/plots/plot_config.js.jsx');
 
 ScatterPlotContainer = require('./components/plots/scatter_plot_container.js.jsx');
+CorrelationPlotContainer = require('./components/plots/correlation_plot_container.jsx');
 ChainSelector = require('./components/chain_selector.js.jsx');
 ListSelector = require('./components/list_selector.js.jsx');
 ColorPicker = require('./components/color_picker.js.jsx');

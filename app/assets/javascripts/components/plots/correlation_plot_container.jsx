@@ -15,15 +15,15 @@ var cancelPlotConfig = function(plot_id) {
   }
 }
 
-var requestPlotData = function(plot, success, failure) {
+var requestPlotData = function(plot, mappings, success, failure) {
   var self = this;
   var request = {
     series: plot.requested_series,
-    mappings: plot.requested_mappings
+    mappings: Object.keys(mappings)
   };
   return function(dispatch) {
     $.ajax({
-      url: Routes.plot_json_path(),
+      url: Routes.pythia_json_path(),
       method: 'POST',
       data: JSON.stringify(request), 
       dataType: 'json',
@@ -38,14 +38,14 @@ var requestPlotData = function(plot, success, failure) {
   }
 }
 
-var closePlot = function(plot_id) {
+closePlot = function(plot_id) {
   return {
     type: 'CLOSE_PLOT',
     plot_id: plot_id
   }
 }
 
-ScatterPlotContainer = React.createClass({
+CorrelationPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },
@@ -56,39 +56,25 @@ ScatterPlotContainer = React.createClass({
     var plot = this.props.plot;
     
     if (plot.data) {
-      all_series = plot.data.map(function(series, i) {
-        var series_def = self.props.saves.series[plot.series[i]];
-        var row_names = plot.mappings.map(function(key) { 
-          return self.props.saves.mappings[key].name;
-        });
-        var matrix = new Matrix( series.values, row_names, series.samples );
-        return {
-          matrix: matrix.col_filter(function(col) {
-            return col.every(function(v) { return v != undefined });
-          }),
-          name: series_def.name,
-          color: series_def.color
-        };
-      });
-      console.log(all_series);
     }
 
     return <div className="scatter plot">
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
-        XY Scatter
+        Correlation
       </Header>
       {
         this.state.mode == 'edit' ?
         <PlotConfig
           plot={plot}
           series_limits="any"
-          mappings_limits={ [ "X", "Y" ] }
+          mappings_limits={ [ ] }
           series={ this.props.saves.series }
-          mappings={ $.extend(this.props.saves.mappings, this.props.default_mappings) }/>
+          mappings={ this.props.saves.mappings }
+          />
         :
         null
       }
-      <ScatterPlot data_key={ plot.data_key } data={ all_series } plot={{
+      <CorrelationPlot data={ [] } plot={{
           width: 900,
           height: 300,
           margin: {
@@ -111,18 +97,13 @@ ScatterPlotContainer = React.createClass({
       case 'approve':
         var store = this.context.store;
         
-        if (this.props.plot.requested_mappings.length != 2) {
-          alert('You need to have an X and a Y mapping value.');
-          return
-        }
-
         if (this.props.plot.requested_series.length == 0) {
           alert('You need to select at least one series to plot.');
           return
         }
 
         this.setState({mode: 'submit'});
-        store.dispatch(requestPlotData(this.props.plot, function(plot_json) {
+        store.dispatch(requestPlotData(this.props.plot, this.props.default_mappings, function(plot_json) {
           self.setState({ mode: 'plot' });
         }));
         break;
@@ -136,8 +117,8 @@ ScatterPlotContainer = React.createClass({
     }
   },
 });
-ScatterPlotContainer.contextTypes = {
+CorrelationPlotContainer.contextTypes = {
   store: React.PropTypes.object
 };
 
-module.exports = ScatterPlotContainer;
+module.exports = CorrelationPlotContainer;

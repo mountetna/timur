@@ -53,6 +53,8 @@ Matrix = function(rows, rownames, colnames) {
   }
   this.map_col = function(callback) {
     var self = this;
+    console.log("Map_col for matrix with "+num_rows+","+num_cols);
+    console.log("Rows[0] is size "+rows[0].length);
     return rows[0].map(function (_, c) {
       return callback(self.col(c), c, self.col_name(c));
     });

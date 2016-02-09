@@ -2,12 +2,6 @@ class PlotTypesJson
   class << self
     def template
       {
-        plots: [
-          {
-            name: "XY Scatter",
-            type: "ScatterPlot"
-          }
-        ],
         template: {
           indications: [ "Any" ] + Experiment.select_map(:name),
           stains: [ :treg, :nktb, :sort, :dc ],
