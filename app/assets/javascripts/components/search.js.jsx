@@ -17,10 +17,6 @@ Search = React.createClass({
           });
     self.setState({ loading_table: true });
   },
-  set_table_name: function(e) {
-    console.log(e.target.value);
-    this.setState({ selected_model: e.target.value })
-  },
   render_table: function() {
     if (!this.state.model_data) return null;
     var table = TableSet(this.state.model_data);
@@ -29,6 +25,7 @@ Search = React.createClass({
       page_size={ 25 }/>;
   },
   render: function() {
+    var self = this;
     var token = $( 'meta[name="csrf-token"]' ).attr('content');
     return <div id="search">
         <span className="label">Export</span>
@@ -38,7 +35,7 @@ Search = React.createClass({
               return model.name;
             })
           }
-          onChange={ this.set_table_name }
+          onChange={ function(model_name) { self.setState({ selected_model: model_name }) } }
           showNone="enabled"/>
         <input type="button" className="button" value="Show Table" 
           disabled={ !this.state.selected_model || this.state.loading_table }
