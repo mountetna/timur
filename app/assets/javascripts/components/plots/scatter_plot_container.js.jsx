@@ -24,9 +24,24 @@ ScatterPlotContainer = React.createClass({
     }
 
     return <div className="scatter plot">
-      <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true } can_close={ true }>
-        XY Scatter
-      </Header>
+      <PlotHeader mode={ this.state.mode } 
+        name="XY Scatter"
+        plot={ plot }
+        newMode={ function(mode) { self.setState({mode: mode}); } }
+        onApprove={
+          function(plot) {
+            if (plot.requested_mappings.length != 2) {
+              alert('You need to have an X and a Y mapping value.');
+              return false;
+            }
+            if (plot.requested_series.length == 0) {
+              alert('You need to select at least one series to plot.');
+              return false;
+            }
+            return true;
+          }
+        }
+        />
       {
         this.state.mode == 'edit' ?
         <PlotConfig
@@ -49,41 +64,6 @@ ScatterPlotContainer = React.createClass({
           }
         }}/>
     </div>;
-  },
-  header_handler: function(action) {
-    var self = this;
-    switch(action) {
-      case 'cancel':
-        var store = this.context.store;
-        this.setState({mode: 'plot'});
-        store.dispatch(cancelPlotConfig(this.props.plot.plot_id));
-        break;
-      case 'approve':
-        var store = this.context.store;
-        
-        if (this.props.plot.requested_mappings.length != 2) {
-          alert('You need to have an X and a Y mapping value.');
-          return
-        }
-
-        if (this.props.plot.requested_series.length == 0) {
-          alert('You need to select at least one series to plot.');
-          return
-        }
-
-        this.setState({mode: 'submit'});
-        store.dispatch(requestPlotData(this.props.plot, function(plot_json) {
-          self.setState({ mode: 'plot' });
-        }));
-        break;
-      case 'edit':
-        this.setState({mode: 'edit'});
-        break;
-      case 'close':
-        var store = this.context.store;
-        store.dispatch(closePlot(this.props.plot.plot_id));
-        break;
-    }
   },
 });
 ScatterPlotContainer.contextTypes = {
