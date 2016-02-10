@@ -55,13 +55,10 @@ ScatterPlotContainer = React.createClass({
     var all_series = [];
     var plot = this.props.plot;
     
-    if (plot.data) {
-      all_series = plot.data.map(function(series, i) {
-        var series_def = self.props.saves.series[plot.series[i]];
-        var row_names = plot.mappings.map(function(key) { 
-          return self.props.saves.mappings[key].name;
-        });
-        var matrix = new Matrix( series.values, row_names, series.samples );
+    if (plot.series) {
+      all_series = plot.series.map(function(series, i) {
+        var series_def = self.props.saves.series[series.key];
+        var matrix = new Matrix( series.matrix.rows, series.matrix.row_names, series.matrix.col_names );
         return {
           matrix: matrix.col_filter(function(col) {
             return col.every(function(v) { return v != undefined });
