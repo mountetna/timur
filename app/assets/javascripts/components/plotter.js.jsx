@@ -24,12 +24,12 @@ PlotList = React.createClass({
     var self = this;
 
     $.get( Routes.plot_types_json_path(), function(result) {
-      self.setState( { 
+      self.setState({ 
                   mode: 'plot',
                   template: result.template, 
-                  saves: $.extend(this.default_saves, result.saves ),
+                  saves: $.extend(self.default_saves, result.saves ),
                   default_mappings: result.default_mappings
-      } );
+      });
     });
   },
   default_saves: {
@@ -47,13 +47,10 @@ PlotList = React.createClass({
     saves = this.state.saves;
     v = this.new_var();
     saves[var_type][v.key] = v;
-    console.log(saves);
     this.setState({ saves: saves });
   },
   update_variable: function(var_type, key, prop, value) {
     saves = this.state.saves;
-    console.log(saves);
-    console.log(key);
     if (prop == 'remove')
       delete saves[var_type][key];
     else
