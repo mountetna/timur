@@ -14,8 +14,8 @@ const PLOT_TYPES = [
     type: "ScatterPlot"
   },
   {
-    name: "Correlation",
-    type: "CorrelationPlot"
+    name: "1D Scatter",
+    type: "OneDScatterPlot"
   }
 ];
 
