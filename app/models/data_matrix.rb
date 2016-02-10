@@ -25,26 +25,24 @@ class DataMatrix
   def to_json
     # you should return an array of objects with name, x/y pairs, and colors
     {
-      series: @series.map do |series|
-        series.key
-      end,
-      mappings: @mappings.map do |mapping|
-        mapping.key
-      end,
-      data: data_matrix
+      series: data_matrix
     }
   end
 
   private 
   def data_matrix
     @series.map do |series|
-      matrix = @mappings.map do |mapping|
-        series.map_by mapping
-      end
-      { 
+      {
         # you need to name your samples
-        samples: series.samples.map(&:sample_name),
-        values: matrix
+        name: series.name,
+        key: series.key,
+        matrix: {
+          col_names: series.samples.map(&:sample_name),
+          row_names: @mappings.map(&:name),
+          rows: @mappings.map do |mapping|
+            series.map_by mapping
+          end
+        }
       }
     end
   end

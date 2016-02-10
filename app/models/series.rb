@@ -1,5 +1,5 @@
 class Series
-  attr_reader :key
+  attr_reader :key, :name
   def initialize key, params
     # Right now, a series is a set of samples and
     # can partition based on 
@@ -8,6 +8,8 @@ class Series
     # sample => patient => clinicals => parameters.[name, value]
 
     @key = key
+    @name = params[:name]
+
     @experiment = get_experiment params[:experiment]
     @clinical_value = params[:clinical_value]
     @clinical_name = params[:clinical_name]

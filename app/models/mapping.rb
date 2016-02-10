@@ -1,8 +1,9 @@
 class Mapping
-  attr_reader :key
+  attr_reader :key, :name
   def initialize key, params
     @key = key
     @type = params[:type]
+    @name = params[:name]
 
     @params = params
 

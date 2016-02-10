@@ -1,4 +1,5 @@
-ScatterPlotContainer = React.createClass({
+
+OneDScatterPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },
@@ -25,13 +26,13 @@ ScatterPlotContainer = React.createClass({
 
     return <div className="scatter plot">
       <PlotHeader mode={ this.state.mode } 
-        name="XY Scatter"
+        name="1D Scatter"
         plot={ plot }
         newMode={ function(mode) { self.setState({mode: mode}); } }
         onApprove={
           function(plot) {
-            if (plot.requested_mappings.length != 2) {
-              alert('You need to have an X and a Y mapping value.');
+            if (plot.requested_mappings.length == 0) {
+              alert('You need to select a mapping to plot.');
               return false;
             }
             if (plot.requested_series.length == 0) {
@@ -47,17 +48,17 @@ ScatterPlotContainer = React.createClass({
         <PlotConfig
           plot={plot}
           series_limits="any"
-          mappings_limits={ [ "X", "Y" ] }
+          mappings_limits={ [ "Mapping" ] }
           series={ this.props.saves.series }
           mappings={ $.extend(this.props.saves.mappings, this.props.default_mappings) }/>
         :
         null
       }
-      <ScatterPlot data_key={ plot.data_key } data={ all_series } plot={{
+      <OneDScatterPlot data_key={ plot.data_key } data={ all_series } plot={{
           width: 900,
           height: 300,
           margin: {
-            left: 70,
+            left: 20,
             top: 5,
             bottom: 40,
             right: 200
@@ -65,9 +66,44 @@ ScatterPlotContainer = React.createClass({
         }}/>
     </div>;
   },
+  header_handler: function(action) {
+    var self = this;
+    switch(action) {
+      case 'cancel':
+        var store = this.context.store;
+        this.setState({mode: 'plot'});
+        store.dispatch(cancelPlotConfig(this.props.plot.plot_id));
+        break;
+      case 'approve':
+        var store = this.context.store;
+        
+        if (this.props.plot.requested_mappings.length != 2) {
+          alert('You need to have an X and a Y mapping value.');
+          return
+        }
+
+        if (this.props.plot.requested_series.length == 0) {
+          alert('You need to select at least one series to plot.');
+          return
+        }
+
+        this.setState({mode: 'submit'});
+        store.dispatch(requestPlotData(this.props.plot, function(plot_json) {
+          self.setState({ mode: 'plot' });
+        }));
+        break;
+      case 'edit':
+        this.setState({mode: 'edit'});
+        break;
+      case 'close':
+        var store = this.context.store;
+        store.dispatch(closePlot(this.props.plot.plot_id));
+        break;
+    }
+  },
 });
-ScatterPlotContainer.contextTypes = {
+OneDScatterPlotContainer.contextTypes = {
   store: React.PropTypes.object
 };
 
-module.exports = ScatterPlotContainer;
+module.exports = OneDScatterPlotContainer;
