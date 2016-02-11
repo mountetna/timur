@@ -12,7 +12,7 @@ const PLOT_TYPES = {
     type: "HeatmapPlot",
     analysis: {
       method: "correlation",
-      columns: "true"
+      columns: false
     }
   },
 };

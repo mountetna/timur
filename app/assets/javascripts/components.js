@@ -10,6 +10,7 @@ Provider = require('react-redux').Provider;
 connect = require('react-redux').connect;
 fetch = require('isomorphic-fetch');
 thunk = require('redux-thunk');
+chroma = require('chroma-js');
 
 Errors = require('./components/errors.js.jsx');
 Browser = require('./components/browser.js.jsx');

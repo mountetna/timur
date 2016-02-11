@@ -36,6 +36,7 @@ plotReducer = function(state, action) {
         if (plot.plot_id == action.plot_id) {
           return $.extend(plot, {
             series: action.series,
+            analyses: action.analyses,
             data_key: Math.random().toString(36).substring(7)
           })
         }
