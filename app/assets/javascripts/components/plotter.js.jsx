@@ -1,23 +1,21 @@
-var newPlotId = 0;
-
-createNewPlot = function(plot_type) {
-  return {
-    type: 'CREATE_NEW_PLOT',
-    plot_id: newPlotId++,
-    plot_type: plot_type
-  }
-}
-
-const PLOT_TYPES = [
-  {
+const PLOT_TYPES = {
+  "ScatterPlot": {
     name: "XY Scatter",
     type: "ScatterPlot"
   },
-  {
+  "OneDScatterPlot": {
     name: "1D Scatter",
     type: "OneDScatterPlot"
-  }
-];
+  },
+  "HeatmapPlot": {
+    name: "Heatmap",
+    type: "HeatmapPlot",
+    analysis: {
+      method: "correlation",
+      columns: "true"
+    }
+  },
+};
 
 PlotList = React.createClass({
   componentDidMount: function() {
@@ -40,7 +38,7 @@ PlotList = React.createClass({
   getInitialState: function() {
     return { mode: 'loading', 
       saves: this.default_saves, 
-      selected_plot_type: PLOT_TYPES[0].type }
+      selected_plot_type: Object.keys(PLOT_TYPES)[0] }
   },
   create_variable: function(var_type) {
     // get the existing saves
@@ -76,11 +74,12 @@ PlotList = React.createClass({
                 <div className="create">
                   Plot type: 
                   <Selector values={
-                    PLOT_TYPES.map(
-                      function(plot_type) {
+                    Object.keys(PLOT_TYPES).map(
+                      function(type) {
+                        var plot_type = PLOT_TYPES[type];
                         return {
-                          key: plot_type.type,
-                          value: plot_type.type,
+                          key: type,
+                          value: type,
                           text: plot_type.name
                         }
                       }
@@ -94,7 +93,7 @@ PlotList = React.createClass({
                     type="button"
                     onClick={
                       function() { 
-                       self.props.dispatch( createNewPlot(self.state.selected_plot_type));
+                       self.props.dispatch(plotActions.createNewPlot(PLOT_TYPES[self.state.selected_plot_type]));
                       }
                     }
                     value="Add"/>
@@ -117,7 +116,7 @@ PlotList = React.createClass({
 
 mapStateToProps = function(state) {
   return {
-    plots: state
+    plots: state.plots
   }
 }
 

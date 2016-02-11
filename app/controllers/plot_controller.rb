@@ -14,33 +14,11 @@ class PlotController <  ApplicationController
 
   def plot_json
     matrix = DataMatrix.new(params,current_user)
+    if params[:analysis]
+      pythia_json( matrix, params[:analysis])
+      return
+    end
     render json: matrix.to_json
-  end
-
-  def pythia_json
-    matrix_json = DataMatrix.new(params,current_user).to_json
-
-    data = {
-      "method" => "correlation",
-      "matrix" => matrix_json[:data][0][:values],
-      "columns" => "true"
-    }.to_json
-
-    uri = URI.parse('https://dev.ucsf-immunoprofiler.org/pythia/json/');
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    request = Net::HTTP::Post.new(uri.request_uri)
-    request.basic_auth(
-      Rails.application.secrets.pythia_auth_user,
-      Rails.application.secrets.pythia_auth_passwd
-    )
-    request.body = data
-    request["Content-Type"] = "application/json"
-    response = http.request(request)
-
-    Rails.logger.info response.body
-
-    render json: matrix_json
   end
 
   def plot_types_json
@@ -49,5 +27,30 @@ class PlotController <  ApplicationController
       saves: current_user.saves,
       default_mappings: User::DEFAULT_MAPPINGS
     )
+  end
+
+  private 
+
+  def pythia_json( matrix, analysis )
+    response = pythia_get( {
+      input: matrix.to_json,
+      params: analysis
+    } )
+
+    render json: { pythia_response: JSON.parse(response.body) }
+  end
+
+  def pythia_get data
+    uri = URI.parse(Rails.configuration.pythia_url+"json/")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.basic_auth(
+      Rails.application.secrets.pythia_auth_user,
+      Rails.application.secrets.pythia_auth_passwd
+    )
+    request.body = data.to_json
+    request["Content-Type"] = "application/json"
+    response = http.request(request)
   end
 end

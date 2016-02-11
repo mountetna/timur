@@ -1,4 +1,4 @@
-CorrelationPlot = React.createClass({
+HeatmapPlot = React.createClass({
   render: function() {
     var self = this;
 
@@ -23,7 +23,7 @@ CorrelationPlot = React.createClass({
     var yScale = d3.scale.linear().domain([ ymin, ymax ]).range([canvas_height,0]);
 
     return <svg 
-        className="correlation_plot" 
+        className="heatmap_plot" 
         width={ plot.width }
         height={ plot.height } >
         <PlotCanvas
@@ -67,4 +67,4 @@ CorrelationPlot = React.createClass({
   }
 });
 
-module.exports = CorrelationPlot;
+module.exports = HeatmapPlot;
