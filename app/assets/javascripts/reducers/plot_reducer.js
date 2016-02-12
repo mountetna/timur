@@ -9,7 +9,8 @@ plotReducer = function(state, action) {
         plot_id: action.plot_id,
         type: action.plot_type,
         requested_series: [],
-        requested_mappings: []
+        requested_mappings: [],
+        analysis: action.analysis
       }
       );
     case 'UPDATE_REQUESTED_SERIES':
@@ -35,8 +36,7 @@ plotReducer = function(state, action) {
         if (plot.plot_id == action.plot_id) {
           return $.extend(plot, {
             series: action.series,
-            mappings: action.mappings,
-            data: action.data,
+            analyses: action.analyses,
             data_key: Math.random().toString(36).substring(7)
           })
         }
@@ -60,3 +60,5 @@ plotReducer = function(state, action) {
       return state;
   }
 }
+
+

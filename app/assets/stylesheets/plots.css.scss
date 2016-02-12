@@ -111,4 +111,22 @@ svg {
 			}
 		}
 	}
+	&.heatmap_plot {
+		font-family: $value_font;
+		font-size: 12px;
+		.plot_canvas {
+			rect {
+				fill: white;
+				stroke: gray;
+				stroke-width: 0.2px;
+			}
+		}
+		.axis {
+			path, line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+		}
+	}
 }

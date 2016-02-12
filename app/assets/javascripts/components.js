@@ -10,6 +10,7 @@ Provider = require('react-redux').Provider;
 connect = require('react-redux').connect;
 fetch = require('isomorphic-fetch');
 thunk = require('redux-thunk');
+chroma = require('chroma-js');
 
 Errors = require('./components/errors.js.jsx');
 Browser = require('./components/browser.js.jsx');
@@ -57,13 +58,13 @@ Legend = require('./components/plots/legend.js.jsx');
 
 ScatterPlot = require('./components/plots/scatter_plot.jsx');
 OneDScatterPlot = require('./components/plots/one_d_scatter_plot.jsx');
-CorrelationPlot = require('./components/plots/correlation_plot.jsx');
+HeatmapPlot = require('./components/plots/heatmap_plot.jsx');
 PlotConfig = require('./components/plots/plot_config.js.jsx');
 PlotHeader = require('./components/plots/plot_header.jsx');
 
 OneDScatterPlotContainer = require('./components/plots/one_d_scatter_plot_container.jsx');
 ScatterPlotContainer = require('./components/plots/scatter_plot_container.js.jsx');
-CorrelationPlotContainer = require('./components/plots/correlation_plot_container.jsx');
+HeatmapPlotContainer = require('./components/plots/heatmap_plot_container.jsx');
 ChainSelector = require('./components/chain_selector.js.jsx');
 ListSelector = require('./components/list_selector.js.jsx');
 ColorPicker = require('./components/color_picker.js.jsx');

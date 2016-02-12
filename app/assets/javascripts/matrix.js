@@ -1,6 +1,13 @@
 Matrix = function(rows, rownames, colnames) {
-  var num_rows = rows.length;
-  var num_cols = rows[0].length;
+  this.num_rows = rows.length;
+  this.num_cols = rows[0].length;
+
+  if (colnames && colnames.length != this.num_cols) {
+    throw "colnames size is different from num_cols";
+  }
+  if (rownames && rownames.length != this.num_rows) {
+    throw "rownames size is different from num_rows";
+  }
 
   this._matrix = rows;
   
@@ -53,8 +60,6 @@ Matrix = function(rows, rownames, colnames) {
   }
   this.map_col = function(callback) {
     var self = this;
-    console.log("Map_col for matrix with "+num_rows+","+num_cols);
-    console.log("Rows[0] is size "+rows[0].length);
     return rows[0].map(function (_, c) {
       return callback(self.col(c), c, self.col_name(c));
     });

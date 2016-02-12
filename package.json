@@ -3,6 +3,7 @@
   "devDependencies": {
     "browserify": "^10.2.4",
     "browserify-incremental": "^3.0.1",
+    "chroma-js": "^0.7.8",
     "reactify": "^1.1.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",

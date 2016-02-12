@@ -10,7 +10,7 @@ class Series
     @key = key
     @name = params[:name]
 
-    @experiment = get_experiment params[:experiment]
+    @experiment = get_experiment params[:indication]
     @clinical_value = params[:clinical_value]
     @clinical_name = params[:clinical_name]
   end

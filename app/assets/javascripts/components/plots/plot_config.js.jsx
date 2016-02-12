@@ -19,21 +19,6 @@
  * }
  */
 
-var updateRequestedSeries = function(plot_id, requested_series) {
-  return {
-    type: 'UPDATE_REQUESTED_SERIES',
-    plot_id: plot_id,
-    requested_series: requested_series
-  }
-}
-
-var updateRequestedMappings = function(plot_id, requested_mappings) {
-  return {
-    type: 'UPDATE_REQUESTED_MAPPINGS',
-    plot_id: plot_id,
-    requested_mappings: requested_mappings
-  }
-}
 
 PlotConfig = React.createClass({
   render: function() {
@@ -45,13 +30,13 @@ PlotConfig = React.createClass({
           limits={ this.props.series_limits }
           currentSelection={ self.props.plot.requested_series }
           onChange={ function(items) {
-            store.dispatch(updateRequestedSeries(self.props.plot.plot_id, items));
+            store.dispatch(plotActions.updateRequestedSeries(self.props.plot.plot_id, items));
           } } />
         <ListSelector label="Mappings" values={ this.props.mappings }
           limits={ this.props.mappings_limits }
           currentSelection={ self.props.plot.requested_mappings }
           onChange={ function(items) {
-            store.dispatch(updateRequestedMappings(self.props.plot.plot_id, items));
+            store.dispatch(plotActions.updateRequestedMappings(self.props.plot.plot_id, items));
           } } />
       </div>
   },

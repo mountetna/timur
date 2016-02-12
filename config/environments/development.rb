@@ -38,7 +38,7 @@ Rails.application.configure do
 
   config.serve_static_files = false
 
-
+  config.pythia_url = "https://dev.ucsf-immunoprofiler.org/pythia/"
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
   
