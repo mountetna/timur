@@ -53,6 +53,7 @@ TimurNav = React.createClass({
     var login;
     var heading;
     var logo;
+
     login = this.props.user || <a href={ login_path}>Login</a>;
     if (this.props.environment == 'development') {
       heading = <span>Timur Development</span>;
@@ -62,6 +63,7 @@ TimurNav = React.createClass({
       heading = <span>Timur <b>:</b> Data Browser</span>;
       logo = <a href="/"> <div id="logo"> &nbsp; </div> </a>;
     }
+    var store = this.context.store;
     return <div id="header">
              { logo }
              <div id="heading">
@@ -77,6 +79,11 @@ TimurNav = React.createClass({
                <div className="nav_tab">
                  <a href={ plot_path }> Plot </a>
                </div>
+               <div className="nav_tab">
+                 <a onClick={ timurActions.toggleConfig('help') }> {
+                   store.timur.help ? 'Help' : 'Hide Help'
+                 }</a>
+               </div>
                <div id="login">
                  { login }
                </div>
@@ -84,5 +91,8 @@ TimurNav = React.createClass({
            </div>;
   }
 });
+TimurNav.contextTypes = {
+  store: React.PropTypes.object
+};
 
 module.exports = Timur;

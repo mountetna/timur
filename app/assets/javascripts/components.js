@@ -47,6 +47,7 @@ SelectAttribute = require('./components/select_attribute.js.jsx');
 TextAttribute = require('./components/text_attribute.js.jsx');
 
 plotActions = require('./actions/plot_actions.js');
+timurActions = require('./actions/timur_actions.js');
 
 PlotSeries = require('./components/plot_series.js.jsx');
 PlotVarMapping = require('./components/plot_var_mapping.js.jsx');
