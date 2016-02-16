@@ -62,12 +62,14 @@ Legend = require('./components/plots/legend.js.jsx');
 ScatterPlot = require('./components/plots/scatter_plot.jsx');
 OneDScatterPlot = require('./components/plots/one_d_scatter_plot.jsx');
 HeatmapPlot = require('./components/plots/heatmap_plot.jsx');
+DensityPlot = require('./components/plots/density_plot.jsx');
 PlotConfig = require('./components/plots/plot_config.js.jsx');
 PlotHeader = require('./components/plots/plot_header.jsx');
 
 OneDScatterPlotContainer = require('./components/plots/one_d_scatter_plot_container.jsx');
 ScatterPlotContainer = require('./components/plots/scatter_plot_container.js.jsx');
 HeatmapPlotContainer = require('./components/plots/heatmap_plot_container.jsx');
+DensityPlotContainer = require('./components/plots/density_plot_container.jsx');
 ChainSelector = require('./components/chain_selector.js.jsx');
 ListSelector = require('./components/list_selector.js.jsx');
 ColorPicker = require('./components/color_picker.js.jsx');

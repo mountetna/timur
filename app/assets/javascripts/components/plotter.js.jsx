@@ -15,6 +15,14 @@ const PLOT_TYPES = {
       columns: false
     }
   },
+  "DensityPlot": {
+    name: "Density",
+    type: "DensityPlot",
+    analysis: {
+      method: "density",
+      bandwidth: 0.05
+    }
+  },
 };
 
 PlotList = React.createClass({
