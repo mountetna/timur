@@ -2,7 +2,7 @@
 
 #header {
 	position: relative;
-	border-bottom: 1px solid forestgreen;
+	border-bottom: 2px solid forestgreen;
 	height: 80px;
 	@mixin basic_logo($color) {
 		width: 70px;
@@ -53,7 +53,8 @@
 			padding: 0px 25px;
 			border-right: 1px solid forestgreen;
 			a {
-				color: limegreen;
+				color: goldenrod;
+				cursor: pointer;
 			}
 		}
 	}
