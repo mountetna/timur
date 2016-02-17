@@ -1,6 +1,8 @@
 Timur = React.createClass({
   create_store: function() {
     return Redux.applyMiddleware(thunk)(Redux.createStore)(Redux.combineReducers({
+      timur: timurReducer,
+      messages: messageReducer,
       plots: plotReducer
     }))
   },

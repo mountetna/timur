@@ -1,11 +1,11 @@
 
-plotReducer = function(state, action) {
-  if (!state) state = [];
-  console.log(state);
+plotReducer = function(plots, action) {
+  if (!plots) plots = [];
+  console.log(plots);
   console.log(action);
   switch(action.type) {
     case 'CREATE_NEW_PLOT':
-      return state.concat( {
+      return plots.concat( {
         plot_id: action.plot_id,
         type: action.plot_type,
         requested_series: [],
@@ -14,27 +14,27 @@ plotReducer = function(state, action) {
       }
       );
     case 'UPDATE_REQUESTED_SERIES':
-      return state.map(function(plot) {
+      return plots.map(function(plot) {
         if (plot.plot_id == action.plot_id) {
-          return $.extend(plot, {
+          return $.extend({}, plot, {
             requested_series: action.requested_series 
           })
         }
         return plot;
       });
     case 'UPDATE_REQUESTED_MAPPINGS':
-      return state.map(function(plot) {
+      return plots.map(function(plot) {
         if (plot.plot_id == action.plot_id) {
-          return $.extend(plot, {
+          return $.extend({}, plot, {
             requested_mappings: action.requested_mappings 
           })
         }
         return plot;
       });
     case 'ADD_PLOT_DATA':
-      return state.map(function(plot) {
+      return plots.map(function(plot) {
         if (plot.plot_id == action.plot_id) {
-          return $.extend(plot, {
+          return $.extend({}, plot, {
             series: action.series,
             analyses: action.analyses,
             data_key: Math.random().toString(36).substring(7)
@@ -43,9 +43,9 @@ plotReducer = function(state, action) {
         return plot;
       });
     case 'CANCEL_PLOT_CONFIG':
-      return state.map(function(plot) {
+      return plots.map(function(plot) {
         if (plot.plot_id == action.plot_id) {
-          return $.extend(plot, {
+          return $.extend({}, plot, {
             requested_series: plot.series || [],
             requested_mappings: plot.mappings || [],
           })
@@ -53,11 +53,11 @@ plotReducer = function(state, action) {
         return plot;
       });
     case 'CLOSE_PLOT':
-      return state.filter(function(plot) {
+      return plots.filter(function(plot) {
         return plot.plot_id != action.plot_id;
       });
     default:
-      return state;
+      return plots;
   }
 }
 
