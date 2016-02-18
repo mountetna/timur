@@ -46,20 +46,34 @@ TimurNavBar = React.createClass({
 
     var login;
     var heading;
-    var logo;
+    var logo_id;
 
     login = this.props.user || <a href={ login_path}>Login</a>;
     if (this.props.environment == 'development') {
       heading = <span>Timur Development</span>;
-      logo = <a href="/"> <div id="devlogo"> &nbsp; </div> </a>;
+      logo_id = "devlogo"
     }
     else {
       heading = <span>Timur <b>:</b> Data Browser</span>;
-      logo = <a href="/"> <div id="logo"> &nbsp; </div> </a>;
+      logo_id = "logo"
     }
-    var store = this.context.store;
     return <div id="header">
-             { logo }
+             <a href="/">
+               <div id={ logo_id }> &nbsp; 
+               </div>
+             </a>
+             <div id="help_float">
+                 <Help info={ [ 
+                   ">...Who, from a Scythian Shephearde  \n"+
+                   ">by his rare and woonderfull Conquests, became a most  \n"+
+                   ">puissant and mightye Monarque.  And (for his tyranny,  \n"+
+                   ">and terrour in Warre) was tearmed, The Scourge of God.  \n  \n"+
+                   "&mdash; Tamburlaine the Great, by Christopher Marlowe",
+
+                   "![Alliteration and Variation in Old Germanic Name-Giving](names.png)  \n"+
+                   "&mdash; George T. Flom, _Modern Language Notes_ Vol. 32, No. 1 (Jan., 1917), pp. 7-17 "
+                 ] }/>
+              </div>
              <div id="heading">
              { heading }
              </div>

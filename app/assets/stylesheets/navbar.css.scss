@@ -23,6 +23,11 @@
 		background-image: image-url('Timur-dev.png');
 		@include basic_logo(#630606);
 	}
+	#help_float {
+		position: absolute;
+		top: 6px;
+		left: 25px;
+	}
 	#heading {
 		font-family: 'Cinzel', serif;
 		font-size: 40px;
