@@ -30,7 +30,7 @@ OneDScatterPlotContainer = React.createClass({
         plot={ plot }
         newMode={ function(mode) { self.setState({mode: mode}); } }
         onApprove={
-          function(plot) {
+          function() {
             if (plot.requested_mappings.length == 0) {
               alert('You need to select a mapping to plot.');
               return false;

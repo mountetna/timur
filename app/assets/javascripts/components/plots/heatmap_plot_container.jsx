@@ -2,6 +2,14 @@ HeatmapPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },
+  componentWillMount: function() {
+    var store = this.context.store;
+    store.dispatch(
+      plotActions.updateRequestedMappings(
+        this.props.plot.plot_id, Object.keys(this.props.default_mappings)
+      )
+    );
+  },
   render: function() {
     var self = this;
 
@@ -26,15 +34,12 @@ HeatmapPlotContainer = React.createClass({
         plot={ plot }
         newMode={ function(mode) { self.setState({mode: mode}); } }
         onApprove={
-          function(plot) {
+          function() {
             if (plot.requested_series.length == 0) {
               alert('You need to select at least one series to plot.');
               return false;
             }
 
-            var store = self.context.store;
-
-            store.dispatch(plotActions.updateRequestedMappings(plot.plot_id, Object.keys(self.props.default_mappings)));
             return true;
           }
         }
@@ -44,7 +49,8 @@ HeatmapPlotContainer = React.createClass({
         <PlotConfig
           plot={plot}
           series_limits={ [ "Series" ] }
-          mappings_limits={ [ ] }
+          mappings_limits={ [] }
+          current_mappings={ [] }
           series={ this.props.saves.series }
           mappings={ {} }
           />

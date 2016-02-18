@@ -20,8 +20,7 @@ PlotHeader = React.createClass({
         // allow approval checking by each plot
         var store = this.context.store;
         var self = this;
-        if (this.props.onApprove && !this.props.onApprove(this.props.plot)) break;
-
+        if (this.props.onApprove && !this.props.onApprove()) break;
 
         this.props.newMode('submit');
         store.dispatch(plotActions.requestPlotData(this.props.plot, function(plot_json) {

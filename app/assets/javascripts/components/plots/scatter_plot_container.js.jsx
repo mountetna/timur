@@ -29,7 +29,7 @@ ScatterPlotContainer = React.createClass({
         plot={ plot }
         newMode={ function(mode) { self.setState({mode: mode}); } }
         onApprove={
-          function(plot) {
+          function() {
             if (plot.requested_mappings.length != 2) {
               alert('You need to have an X and a Y mapping value.');
               return false;

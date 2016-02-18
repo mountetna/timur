@@ -28,13 +28,13 @@ PlotConfig = React.createClass({
     return <div className="configure">
         <ListSelector label="Series" values={ this.props.series }
           limits={ this.props.series_limits }
-          currentSelection={ self.props.plot.requested_series }
+          currentSelection={ self.props.current_series || self.props.plot.requested_series }
           onChange={ function(items) {
             store.dispatch(plotActions.updateRequestedSeries(self.props.plot.plot_id, items));
           } } />
         <ListSelector label="Mappings" values={ this.props.mappings }
           limits={ this.props.mappings_limits }
-          currentSelection={ self.props.plot.requested_mappings }
+          currentSelection={ self.props.current_mappings || self.props.plot.requested_mappings }
           onChange={ function(items) {
             store.dispatch(plotActions.updateRequestedMappings(self.props.plot.plot_id, items));
           } } />
