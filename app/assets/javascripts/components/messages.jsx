@@ -42,6 +42,7 @@ var MessageList = React.createClass({
             </div>
             <div id="dismiss"
                onClick={ function() { 
+                 self.setState({ current_message: 0 });
                  self.props.dispatch(messageActions.dismissMessages())
                } }>
               <span className="fa fa-check"> </span>
