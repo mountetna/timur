@@ -15,6 +15,7 @@
 
 @import "globals";
 @import "navbar";
+@import "messages";
 @import "model";
 @import "plotter";
 @import "attributes";
@@ -24,6 +25,7 @@
 @import "plots";
 @import "spectrum";
 @import "search";
+@import "help";
 
 @import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen);
 
@@ -39,45 +41,4 @@ a {
 
 #browse {
 	padding-left: 150px;
-}
-
-
-
-#error {
-	#quote {
-		&:after {
-			content: "\201c"
-		}
-		color: rgba(forestgreen,0.3);
-		display: inline;
-		font-size: 100px;
-		margin: 0;
-		position: absolute;
-		left: 0px;
-		top: -10px;
-		svg {
-			opacity: 1;
-			position: absolute;
-			top: -10px;
-			left: 53px;
-			path {
-				fill:#FFFFFF;
-				stroke: forestgreen;
-				stroke-width:1px;
-				stroke-linecap: butt;
-				stroke-linejoin:miter;
-				stroke-opacity:1
-			}
-		}
-	}
-	font-family: $talk_font;
-	font-size: 25px;
-	color: darkgreen;
-	padding-left: 50px;
-	padding-top: 20px;
-	position: relative;
-	.red {
-		color: red;
-	}
-
 }

@@ -12,7 +12,8 @@ fetch = require('isomorphic-fetch');
 thunk = require('redux-thunk');
 chroma = require('chroma-js');
 
-Errors = require('./components/errors.js.jsx');
+Help = require ('./components/help.jsx');
+Messages = require('./components/messages.jsx');
 Browser = require('./components/browser.js.jsx');
 Header = require('./components/header.js.jsx');
 Selector = require('./components/selector.js.jsx');

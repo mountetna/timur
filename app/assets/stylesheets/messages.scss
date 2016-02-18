@@ -1,0 +1,86 @@
+#messages {
+
+	font-family: $talk_font;
+	font-size: 16px;
+	color: darkgreen;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	border-bottom: 2px solid forestgreen;
+
+	#quote {
+		color: rgba(forestgreen,0.3);
+		display: inline;
+		font-size: 100px;
+		margin: 0;
+		position: absolute;
+		left: 0px;
+		top: -10px;
+		svg {
+			opacity: 1;
+			position: absolute;
+			top: -10px;
+			left: 53px;
+			path {
+				fill:#FFFFFF;
+				stroke: forestgreen;
+				stroke-width:2px;
+				stroke-linecap: butt;
+				stroke-linejoin:miter;
+				stroke-opacity:1
+			}
+		}
+	}
+	#dismiss {
+		font-size: 30px;
+		cursor: pointer;
+		&:hover {
+			color: limegreen;
+			background-color: rgba(limegreen,0.1);
+		}
+		flex-basis: 40px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	#message_viewer {
+		flex-grow: 1;
+		padding-top: 10px;
+		padding-left: 10px;
+		#nav {
+			font-size: 15px;
+			display: inline-block;
+			.pager { 
+				&:first-child {
+					padding-right: 2px;
+				}
+				padding-left: 2px;
+			}
+			.arrow {
+				color: goldenrod;
+				cursor: pointer;
+			}
+		}
+		#message {
+			padding: 0px;
+			padding-right: 10px;
+		}
+	}
+
+	.red {
+		color: red;
+	}
+	blockquote {
+		font-family: $quote_font;
+		font-size: 20px;
+		background-color: rgba(cornsilk,0.5);
+		font-style: italic;
+		margin: 0 10px;
+		padding: 5px;
+		p {
+			margin: 0;
+			padding: 0;
+		}
+	}
+
+}
