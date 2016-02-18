@@ -2,7 +2,7 @@
 
 #header {
 	position: relative;
-	border-bottom: 1px solid forestgreen;
+	border-bottom: 2px solid forestgreen;
 	height: 80px;
 	@mixin basic_logo($color) {
 		width: 70px;
@@ -22,6 +22,11 @@
 	#devlogo {
 		background-image: image-url('Timur-dev.png');
 		@include basic_logo(#630606);
+	}
+	#help_float {
+		position: absolute;
+		top: 6px;
+		left: 25px;
 	}
 	#heading {
 		font-family: 'Cinzel', serif;
@@ -53,7 +58,8 @@
 			padding: 0px 25px;
 			border-right: 1px solid forestgreen;
 			a {
-				color: limegreen;
+				color: goldenrod;
+				cursor: pointer;
 			}
 		}
 	}

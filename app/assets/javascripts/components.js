@@ -12,7 +12,8 @@ fetch = require('isomorphic-fetch');
 thunk = require('redux-thunk');
 chroma = require('chroma-js');
 
-Errors = require('./components/errors.js.jsx');
+Help = require ('./components/help.jsx');
+Messages = require('./components/messages.jsx');
 Browser = require('./components/browser.js.jsx');
 Header = require('./components/header.js.jsx');
 Selector = require('./components/selector.js.jsx');
@@ -47,6 +48,8 @@ SelectAttribute = require('./components/select_attribute.js.jsx');
 TextAttribute = require('./components/text_attribute.js.jsx');
 
 plotActions = require('./actions/plot_actions.js');
+timurActions = require('./actions/timur_actions.js');
+messageActions = require('./actions/message_actions.js');
 
 PlotSeries = require('./components/plot_series.js.jsx');
 PlotVarMapping = require('./components/plot_var_mapping.js.jsx');

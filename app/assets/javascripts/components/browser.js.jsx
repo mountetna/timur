@@ -33,14 +33,13 @@ Browser = React.createClass({
     return false;
   },
   update_errors: function(result) {
+    var store = this.context.store;
     result = result.responseJSON;
     this.handle_mode( 'edit' );
-    console.log("Got an error");
-    console.log(result);
     if (result && result.errors)
-      this.props.show_errors(result.errors);
+      store.dispatch(messageActions.showMessages(result.errors));
     else
-      this.props.show_errors([ "An unknown error occurred." ]);
+      store.dispatch(messageActions.showMessages(["### An unknown error occurred."]));
   },
   data_update:  function(result) {
     this.handle_mode( 'browse', { record: result.record, model: result.model, can_edit: result.editable } );
@@ -68,7 +67,6 @@ Browser = React.createClass({
       },
       browse: function() {
         self.form_tokens = {};
-        self.props.show_errors([]);
       }
     }
     if (handler[mode]) handler[mode]();
@@ -124,5 +122,8 @@ Browser = React.createClass({
     }
   }
 });
+Browser.contextTypes = {
+  store: React.PropTypes.object
+};
 
 module.exports = Browser;

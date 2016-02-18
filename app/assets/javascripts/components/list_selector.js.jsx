@@ -1,4 +1,4 @@
-ListSelector = React.createClass({
+var ListSelector = React.createClass({
   getInitialState: function() {
     return { new_item: null }
   },
@@ -18,7 +18,6 @@ ListSelector = React.createClass({
   render_current: function() {
     var self = this;
     if (Array.isArray(this.props.limits)) {
-      console.log(this.props.limits);
       return this.props.limits.map(function(varname,i) {
         var item = self.props.currentSelection[i];
         var selection;

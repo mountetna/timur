@@ -40,6 +40,8 @@ gem 'js-routes'
 
 gem 'd3-rails'
 
+gem 'font-awesome-sass'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

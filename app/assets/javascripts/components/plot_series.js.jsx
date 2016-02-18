@@ -38,7 +38,9 @@ PlotSeries = React.createClass({
                 defaultValue={ this.props.current ? this.props.current.clinical_value : null }
                 change={ this.update_chain }
                 chain_state={ this.props.current } />
-            <div className='close' onClick={ this.props.update.bind(null,'series', this.props.current.key, 'remove') } className="close">&#x274c;</div>
+            <div className='close' onClick={ this.props.update.bind(null,'series', this.props.current.key, 'remove') } className="close">
+            <span className="fa fa-times-circle"/>
+            </div>
           </div>;
     }
   },

@@ -70,7 +70,7 @@ Matrix = function(rows, rownames, colnames) {
     var selected_cols = [];
     var new_colnames = [];
     
-    for (var j = 0; j < num_cols; j++) {
+    for (var j = 0; j < this.num_cols; j++) {
       var col = this.col(j);
       if (callback(col, j, this.col_name(j))) {
           selected_cols.push(col);
