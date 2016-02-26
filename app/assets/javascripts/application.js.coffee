@@ -20,12 +20,13 @@
 
 #= require d3
 #= require react-classnames
+#= require marked
 
 #= require plots
 #= require matrix
 #= require tree
 #= require_tree ./reducers
-#= require ./marked
+#= require actions
 #= require components
 #= require model
 #= require keycode

@@ -1,10 +1,11 @@
-Browser = React.createClass({
+var BrowserDisplay = React.createClass({
   componentDidMount: function() {
     var self = this;
 
-    $.get( Routes.browse_json_path(this.props.model, encodeURIComponent(this.props.record)), function(result) {
-      self.data_update(result);
-    });
+    this.props.request(function() {
+        console.log("Setting mode to browse");
+        self.setState({mode: 'browse'})
+      })
   },
   getInitialState: function() {
     return { mode: 'loading', can_edit: null }
@@ -35,12 +36,9 @@ Browser = React.createClass({
     result = result.responseJSON;
     this.handle_mode( 'edit' );
     if (result && result.errors)
-      store.dispatch(messageActions.showMessages(result.errors));
+      this.props.showMessage(results.errors);
     else
-      store.dispatch(messageActions.showMessages(["### An unknown error occurred."]));
-  },
-  data_update:  function(result) {
-    this.handle_mode( 'browse', { record: result.record, model: result.model, can_edit: result.editable } );
+      this.props.showMessage( ["### An unknown error occurred."] );
   },
   update_form_tokens: function(submission) {
     for (var key in this.form_tokens) {
@@ -89,36 +87,80 @@ Browser = React.createClass({
   },
   skin: function() {
     if (this.state.mode == "browse") {
-      var set = this.state.model.skin || [];
+      var set = this.props.template.skin || [];
       return set.concat(['browser']).join(' ');
     } else
       return 'browser';
   },
   render: function() {
-    var token = $( 'meta[name="csrf-token"]' ).attr('content');
+    var self = this
+    var token = $( 'meta[name="csrf-token"]' ).attr('content')
     if (this.state.mode == 'loading')
-      return <div className={ this.skin() }/>;
-    else if (this.state.mode == 'browse') {
-      return <div className={ this.skin() }>
-        <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.state.can_edit }>
-          { this.state.model.name }
-        </Header>
-        <Attributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record } process={ this.process }/>
-      </div>;
-    }
+      return <div className={ this.skin() }/>
     else {
-      return <form onSubmit={ this.update_form } className={ this.skin() } method="post" model={ this.state.model } record={ this.state.record } action={ Routes.update_model_path() } encType="multipart/form-data">
-        <input type="hidden" name="authenticity_token" value={ token }/>
-        <input type="hidden" name="model" value={ this.state.model.name }/>
-        <input type="hidden" name="record_id" value={ this.state.record.id }/>
-        <Header mode={ this.state.mode } handler={ this.header_handler } editable={ this.state.editable }>
-          { this.state.model.name }
+      return <div className={ this.skin() }>
+
+        <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true }>
+          { this.props.template.name }
         </Header>
-        <Attributes mode={ this.state.mode } model={ this.state.model } record={ this.state.record } process={ this.process }/>
-      </form>
+
+        <div id="attributes">
+        {
+          self.props.displayed_attributes.map(function(att) {
+            return <AttributeRow 
+              key={att.name}
+              mode={self.props.mode}
+              template={ self.props.template }
+              document={ self.props.document }
+              value={ self.props.document[ att.name ] }
+              attribute={att}/>;
+          })
+        }
+        </div>
+      </div>
     }
   }
 });
+
+var Browser = connect(
+  function (state,props) {
+    var template = state.templates[props.model_name];
+    var document = template ? template.documents[props.record_name] : null
+    var atts = []
+    if (template) {
+      Object.keys( template.attributes ).forEach(
+        function(att_name) {
+          var att = template.attributes[att_name]
+          if (att.shown) atts.push(att)
+        }
+      )
+    }
+    return $.extend(
+      {},
+      props,
+      {
+        template: template,
+        document: document,
+        displayed_attributes: atts
+      }
+    );
+  },
+  function (dispatch,props) {
+    return {
+      request: function(success) {
+        dispatch(magmaActions.requestTemplateAndDocuments(
+          props.model_name,
+          [ props.record_name ], 
+          success))
+      },
+      showMessage: function(messages) {
+        dispatch(messageActions.showMessages(
+          messages))
+      }
+    }
+  }
+)(BrowserDisplay);
+
 Browser.contextTypes = {
   store: React.PropTypes.object
 };

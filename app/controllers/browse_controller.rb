@@ -16,10 +16,10 @@ class BrowseController <  ApplicationController
 
   def json
     # Get the model name
-    @model = Magma.instance.get_model params[:model]
-    @record = @model[@model.identity => params[:name]]
+    model = Magma.instance.get_model params[:model_name]
+    records = model.where(model.identity => params[:record_names]).all
 
-    render json: json_payload
+    render json: json_payload(model, records)
   end
 
   def update
@@ -59,11 +59,12 @@ class BrowseController <  ApplicationController
   end
 
   private
-  def json_payload
+  def json_payload model, records
     {
-      record: JsonUpdate.updated_document(@record,@model),
-      model: JsonUpdate.updated_template(@model),
-      editable: can_edit?
+      documents: records.map do |record|
+        { record.identifier => JsonUpdate.updated_document(record,model) }
+      end.reduce(:merge),
+      template: JsonUpdate.updated_template(model),
     }
   end
 

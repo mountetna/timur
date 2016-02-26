@@ -19,7 +19,6 @@ Header = require('./components/header.js.jsx');
 Selector = require('./components/selector.js.jsx');
 BaseAttribute = require('./components/base_attribute.js');
 AttributeHelpers = require('./components/attribute_helpers.js');
-Attributes = require('./components/attributes.js.jsx');
 Attribute = require('./components/attribute.jsx');
 AttributeRow = require('./components/attribute_row.jsx');
 LinkAttributeEditor = require('./components/link_attribute_editor.jsx');
@@ -49,9 +48,6 @@ IntegerAttribute = require('./components/integer_attribute.js.jsx');
 SelectAttribute = require('./components/select_attribute.js.jsx');
 TextAttribute = require('./components/text_attribute.js.jsx');
 
-plotActions = require('./actions/plot_actions.js');
-timurActions = require('./actions/timur_actions.js');
-messageActions = require('./actions/message_actions.js');
 
 PlotSeries = require('./components/plot_series.js.jsx');
 PlotVarMapping = require('./components/plot_var_mapping.js.jsx');
@@ -84,5 +80,6 @@ Plotter = require('./components/plotter.js.jsx');
 
 BarPlot = require('./components/plots/bar_plot.js.jsx');
 
+TimurNav = require('./components/timur_nav.jsx');
 Search = require('./components/search.js.jsx');
 Timur = require('./components/timur.js.jsx');

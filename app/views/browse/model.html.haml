@@ -4,13 +4,13 @@
 %script{ type: "text/javascript" }
   :plain
     $(function() {
-      React.render(
+      ReactDOM.render(
         React.createElement(Timur, {
           #{current_user ? "user: '#{current_user.name}', " : '' }
           mode: 'browser',
           environment: '#{Rails.env.development? ? 'development' : 'production'}',
-          model: '#{@model_name}',
-          record: '#{@record_name}'
+          model_name: '#{@model_name.camel_case}',
+          record_name: '#{@record_name}'
         }),
         $('#root')[0]
       );

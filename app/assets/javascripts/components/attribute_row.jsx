@@ -1,4 +1,3 @@
-
 AttributeRow = React.createClass({
   attribute_class: function() {
     var class_name = this.props.attribute.attribute_class.replace('Magma::','')
@@ -10,7 +9,11 @@ AttributeRow = React.createClass({
             <div className="name" title={ this.props.attribute.desc }>
              { this.props.attribute.display_name }
             </div>
-            <AttClass process={ this.props.process } record={ this.props.record } model={ this.props.model } mode={ this.props.mode } attribute={ this.props.attribute }/>
+            <AttClass 
+              document={ this.props.document }
+              template={ this.props.template }
+              mode={ this.props.mode }
+              attribute={ this.props.attribute }/>
            </div>
   }
 });
