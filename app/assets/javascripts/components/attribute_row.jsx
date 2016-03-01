@@ -12,6 +12,7 @@ AttributeRow = React.createClass({
             <AttClass 
               document={ this.props.document }
               template={ this.props.template }
+              value={ this.props.value }
               mode={ this.props.mode }
               attribute={ this.props.attribute }/>
            </div>

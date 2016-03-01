@@ -1,17 +1,28 @@
-DateTimeAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
+var DateTimeAttribute = React.createClass({
+  render: function() {
+    if (this.props.mode == "edit") {
+      return <div className="value">
+              <input placeholder="YYYY-MM-DD" 
+                  type='text'
+                  className="date_text" 
+                  id={ this.component_name('date') }
+                  defaultValue={
+                    this.default_date()
+                  }/>
+              <span className="at_spacer">@</span>
+              <input 
+                placeholder="00:00"
+                type='text'
+                className="time_text"
+                id={ this.component_name('time') } 
+                defaultValue={ this.default_time() }
+                onChange={this.change_time}/>
+             </div>
+    }
     return <div className="value">
             { this.default_date() || '?' }
             <span className="at_spacer">@</span>
             { this.default_time() || '?' }
-           </div>
-  },
-  render_edit: function() {
-    return <div className="value">
-            <input placeholder="YYYY-MM-DD" type='text' className="date_text" id={ this.component_name('date') } defaultValue={ this.default_date() }/>
-            <span className="at_spacer">@</span>
-            <input placeholder="00:00" type='text' className="time_text" id={ this.component_name('time') } defaultValue={ this.default_time() } onChange={this.change_time}/>
            </div>
   },
 

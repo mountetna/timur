@@ -1,5 +1,4 @@
-BoxPlotAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
+var BoxPlotAttribute = React.createClass({
   componentDidMount: function() {
     this.d3_render();
   },
@@ -11,7 +10,7 @@ BoxPlotAttribute = React.createClass({
         width = 800 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
-    var data = this.attribute_value();
+    var data = this.props.value;
 
     var boxwidth = width / data.length;
 
@@ -56,15 +55,12 @@ BoxPlotAttribute = React.createClass({
     }
 
   },
-  render_browse: function() {
+  render: function() {
+    if (this.props.mode == "edit") return <div className="value"/>
     return <div className="value">
-              <svg className="box_plot" width="600" height="200"></svg>
+              <svg className="box_plot" width="600" height="200"/>
            </div>
   },
-  render_edit: function() {
-    return <div className="value">
-           </div>
-  },
-});
+})
 
-module.exports = BoxPlotAttribute;
+module.exports = BoxPlotAttribute

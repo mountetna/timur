@@ -3,13 +3,13 @@
 
 Attribute = React.createClass({
   render: function() {
-
-    if (this.props.mode == "edit")
+    if (this.props.mode == "edit") {
       return <div className="value">
               <input type='text' className="full_text" 
                 placeholder={ this.props.attribute.placeholder }
                 defaultValue={ this.props.value } />
              </div>
+    }
 
     return <div className="value">
             { this.props.value }

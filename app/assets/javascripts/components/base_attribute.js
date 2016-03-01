@@ -1,5 +1,4 @@
-
-BaseAttribute = {
+var BaseAttribute = {
   render: function() {
     if (this.props.mode == 'browse')
       return this.render_browse();

@@ -1,17 +1,10 @@
 var BrowserDisplay = React.createClass({
   componentDidMount: function() {
     var self = this;
-
-    this.props.request(function() {
-        console.log("Setting mode to browse");
-        self.setState({mode: 'browse'})
-      })
+    this.props.request(function() { self.setState({mode: 'browse'}) })
   },
   getInitialState: function() {
     return { mode: 'loading', can_edit: null }
-  },
-  submit_edit: function() {
-    this.update_form();
   },
   update_form: function() {
     var node = $(React.findDOMNode(this));
@@ -40,50 +33,21 @@ var BrowserDisplay = React.createClass({
     else
       this.props.showMessage( ["### An unknown error occurred."] );
   },
-  update_form_tokens: function(submission) {
-    for (var key in this.form_tokens) {
-      var token = this.form_tokens[key];
-      if (token.constructor == Object)
-        token = Object.keys(token).filter(function(k) {
-          return token[k];
-        });
-      submission.append(key, token);
-    }
-  },
   header_handler: function(action) {
-    if (action == 'cancel') this.handle_mode('browse');
-    else if (action == 'approve') this.handle_mode('submit');
-    else if (action == 'edit') this.handle_mode('edit');
-  },
-  handle_mode: function(mode,opts) {
-    var self = this;
-    var handler = {
-      submit: function() {
-        self.submit_edit();
-      },
-      browse: function() {
+    switch(action) {
+      case 'cancel':
+        this.setState({mode: 'browse'})
         self.form_tokens = {};
-      }
+        return
+      case 'approve':
+        this.setState({mode: 'submit'})
+        this.submit_edit()
+        return
+      case 'edit':
+        console.log('setting state to edit')
+        this.setState({mode: 'edit'})
+        return
     }
-    if (handler[mode]) handler[mode]();
-    this.setState( $.extend({ mode: mode }, opts) );
-  },
-  get_data: function(data) {
-    $.get(this.props.source, data, this.data_update);
-  },
-  process: function( job, item ) {
-    // general workhorse function that handles stuff from the components
-    switch(job) {
-      case 'form-token-update':
-        if (!this.form_tokens) this.form_tokens = {};
-        if (item.value == null)
-          delete this.form_tokens[ item.name ];
-        else if (item.value.constructor == Object)
-          this.form_tokens[ item.name ] = $.extend(this.form_tokens[ item.name ], item.value);
-        else
-          this.form_tokens[ item.name ] = item.value;
-        break;
-    };
   },
   skin: function() {
     if (this.state.mode == "browse") {
@@ -109,7 +73,7 @@ var BrowserDisplay = React.createClass({
           self.props.displayed_attributes.map(function(att) {
             return <AttributeRow 
               key={att.name}
-              mode={self.props.mode}
+              mode={self.state.mode}
               template={ self.props.template }
               document={ self.props.document }
               value={ self.props.document[ att.name ] }

@@ -1,4 +1,4 @@
-TextAttribute = React.createClass({
+var TextAttribute = React.createClass({
   render: function() {
     if (this.props.mode == "edit")
       return <div className="value">
@@ -11,4 +11,4 @@ TextAttribute = React.createClass({
   }
 })
 
-module.exports = TextAttribute;
+module.exports = TextAttribute

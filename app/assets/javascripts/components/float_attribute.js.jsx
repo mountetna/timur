@@ -1,10 +1,4 @@
 FloatAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
-    return <div className="value">
-            { this.attribute_value() }
-           </div>
-  },
   filter_keys: function(e) {
     if (Keycode.is_ctrl(e)) return true;
     if (Keycode.is_number(e)) return true;
@@ -15,9 +9,19 @@ FloatAttribute = React.createClass({
     }
     return true;
   },
-  render_edit: function() {
+  render: function() {
+    if (this.props.mode == "edit") {
+      return <div className="value">
+        <input
+          type='text' 
+          placeholder={this.props.attribute.placeholder} 
+          className="full_text" 
+          onKeyPress={ this.filter_keys } 
+          defaultValue={ this.props.value } />
+      </div>
+    }
     return <div className="value">
-            <input type='text' placeholder={this.props.attribute.placeholder} className="full_text" onKeyPress={ this.filter_keys } name={ this.value_name() } defaultValue={ this.attribute_value() } />
+            { this.props.value }
            </div>
   }
 })

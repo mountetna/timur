@@ -1,11 +1,30 @@
 CollectionAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
+  render: function() {
     var self = this;
+    var links = this.props.value || []
+    if (this.props.mode == "edit") {
+      return <div className="value">
+               <div className="collection">
+                {
+                  links.map(
+                    function(link) {
+                      return <CollectionUnlink key={ link.identifier } process={ self.props.process } name={ self.remove_name() } current={ link.identifier }/>
+                    })
+                }
+                {
+                  this.state.new_items.map(
+                    function(link) {
+                      return <div className="collection_item"><NewLink name={ self.new_items_name() }/></div>
+                    })
+                }
+                <div className="collection_item"><span className="button" onClick={ this.new_collection_item }>Add</span></div>
+               </div>
+             </div>
+    }
     return <div className="value">
              <div className="collection">
               {
-                this.attribute_value().map(
+                links.map(
                   function(link) {
                     var summary;
                     if (link.summary)
@@ -32,26 +51,6 @@ CollectionAttribute = React.createClass({
     this.state.new_items.push({})
     this.setState({ new_items: this.state.new_items });
   },
-  render_edit: function() {
-    var self = this;
-    return <div className="value">
-             <div className="collection">
-              {
-                this.attribute_value().map(
-                  function(link) {
-                    return <CollectionUnlink key={ link.identifier } process={ self.props.process } name={ self.remove_name() } current={ link.identifier }/>
-                  })
-              }
-              {
-                this.state.new_items.map(
-                  function(link) {
-                    return <div className="collection_item"><NewLink name={ self.new_items_name() }/></div>
-                  })
-              }
-              <div className="collection_item"><span className="button" onClick={ this.new_collection_item.bind(null) }>Add</span></div>
-             </div>
-           </div>
-  }
-});
+})
 
-module.exports = CollectionAttribute;
+module.exports = CollectionAttribute
