@@ -61,10 +61,10 @@ HeatmapPlotContainer = React.createClass({
           width: 1200,
           height: 1200,
           margin: {
-            left: 200,
-            top: 200,
+            left: 250,
+            top: 250,
             bottom: 40,
-            right: 200
+            right: 250
           }
         }}/>
     </div>;
