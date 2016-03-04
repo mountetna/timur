@@ -1,4 +1,6 @@
 CollectionAttribute = React.createClass({
+  even_newer_link: function() {
+  },
   render: function() {
     var self = this;
     var links = this.props.value || []
@@ -7,17 +9,21 @@ CollectionAttribute = React.createClass({
                <div className="collection">
                 {
                   links.map(
-                    function(link) {
-                      return <CollectionUnlink key={ link.identifier } process={ self.props.process } name={ self.remove_name() } current={ link.identifier }/>
+                    function(link,i) {
+                      return <div key={ i } className="collection_item">
+                      <span className="delete_link">{ link.identifier }</span>
+                      </div>
                     })
                 }
-                {
-                  this.state.new_items.map(
-                    function(link) {
-                      return <div className="collection_item"><NewLink name={ self.new_items_name() }/></div>
-                    })
-                }
-                <div className="collection_item"><span className="button" onClick={ this.new_collection_item }>Add</span></div>
+                <div className="collection_item">
+                <input className="link_text" 
+                  placeholder="New or existing ID"
+                  onChange={ function(e) {
+                      self.setState({ new_link_text: e.target.value })
+                    } }
+                  type="text"/>
+                { this.even_newer_link() }
+                </div>
                </div>
              </div>
     }
@@ -26,31 +32,15 @@ CollectionAttribute = React.createClass({
               {
                 links.map(
                   function(link) {
-                    var summary;
-                    if (link.summary)
-                      summary = <span> - { link.summary }</span>;
                     return <div key={ link.identifier } className="collection_item">
-                      <a href={ Routes.browse_model_path(self.props.attribute.name,encodeURIComponent(link.identifier)) }>{ link.identifier }</a>
-                      { summary }
-                    </div>;
+                      <MagmaLink link={ link }/>
+                      { link.summary ? <span> - { link.summary }</span> : null }
+                    </div>
                   })
                }
              </div>
            </div>
-  },
-  getInitialState: function() {
-    return { new_items: [] };
-  },
-  new_items_name: function() {
-    return "link[" + this.props.attribute.name + "][]";
-  },
-  remove_name: function() {
-    return "unlink[" + this.props.attribute.name + "][]";
-  },
-  new_collection_item: function() {
-    this.state.new_items.push({})
-    this.setState({ new_items: this.state.new_items });
-  },
+  }
 })
 
 module.exports = CollectionAttribute

@@ -37,6 +37,14 @@ var magmaActions = {
       template_name: template_name,
       documents: documents
     }
+  },
+  reviseDocument: function(document_name, template_name, revision) {
+    return {
+      type: 'REVISE_DOCUMENT',
+      template_name: template_name,
+      document_name: document_name,
+      revision: revision
+    }
   }
 }
 

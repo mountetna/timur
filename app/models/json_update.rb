@@ -102,6 +102,16 @@ class JsonUpdate
             att.attribute_class = "SelectAttribute"
           end
         end
+        if att[:attribute_class] =~ /ForeignKeyAttribute/
+          patch_attribute name do |att|
+            att.attribute_class = "LinkAttribute"
+          end
+        end
+        if att[:attribute_class] =~ /ChildAttribute/
+          patch_attribute name do |att|
+            att.attribute_class = "LinkAttribute"
+          end
+        end
         if att[:type] == "Integer"
           patch_attribute name do |att|
             att.attribute_class = "IntegerAttribute"

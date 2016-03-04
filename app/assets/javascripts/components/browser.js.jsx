@@ -1,6 +1,6 @@
 var BrowserDisplay = React.createClass({
   componentDidMount: function() {
-    var self = this;
+    var self = this
     this.props.request(function() { self.setState({mode: 'browse'}) })
   },
   getInitialState: function() {
@@ -71,25 +71,30 @@ var BrowserDisplay = React.createClass({
         <div id="attributes">
         {
           self.props.displayed_attributes.map(function(att) {
-            return <AttributeRow 
-              key={att.name}
+            return <div key={att.name} className="attribute">
+              <div className="name" title={ att.desc }>
+               { att.display_name }
+              </div>
+            <AttributeViewer 
               mode={self.state.mode}
               template={ self.props.template }
               document={ self.props.document }
               value={ self.props.document[ att.name ] }
-              attribute={att}/>;
+              attribute={att}/>
+            </div>
           })
         }
         </div>
       </div>
     }
   }
-});
+})
 
 var Browser = connect(
   function (state,props) {
-    var template = state.templates[props.model_name];
-    var document = template ? template.documents[props.record_name] : null
+    var template_record = state.templates[props.model_name]
+    var template = template_record ? template_record.template : null
+    var document = template_record ? template_record.documents[props.record_name] : null
     var atts = []
     if (template) {
       Object.keys( template.attributes ).forEach(

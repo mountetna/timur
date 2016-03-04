@@ -33,6 +33,14 @@
 			font-family: $value_font;
 			padding-top: 3px;
 
+			.delete_link {
+				&:hover {
+					text-decoration: line-through;
+					color: gray;
+					cursor: pointer;
+				}
+			}
+
 			.collection_item {
 				border-bottom: 1px solid rgba(forestgreen,0.1);
 				padding-top: 3px;

@@ -31,12 +31,12 @@ var DateTimeAttribute = React.createClass({
   date_format: 'yy-mm-dd',
 
   default_date: function() {
-    var base = this.props.record[this.props.attribute.name];
+    var base = this.props.value;
     if (!base) return null;
     return $.datepicker.formatDate( this.date_format, new Date(base));
   },
   default_time: function() {
-    var base = this.props.record[this.props.attribute.name];
+    var base = this.props.value;
     if (!base) return null;
     var date = new Date(base);
     var hours = ('00' + date.getHours()).slice(-2);
