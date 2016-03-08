@@ -28,7 +28,7 @@ DensityPlotContainer = React.createClass({
         plot={ plot }
         newMode={ function(mode) { self.setState({mode: mode}); } }
         onApprove={
-          function(plot) {
+          function() {
             if (plot.requested_mappings.length == 0 ) {
               alert('You need to have at last one mapping value.');
               return false;
@@ -37,9 +37,6 @@ DensityPlotContainer = React.createClass({
               alert('You need to select at least one series to plot.');
               return false;
             }
-            var store = self.context.store;
-
-            store.dispatch(plotActions.updateRequestedMappings(plot.plot_id, Object.keys(self.props.default_mappings)));
             return true;
           }
         }
@@ -51,16 +48,16 @@ DensityPlotContainer = React.createClass({
           series_limits={ [ "Series" ] }
           mappings_limits={ [ "Mapping" ] }
           series={ this.props.saves.series }
-          mappings={ this.props.default_mappings }/>
+          mappings={ $.extend({}, this.props.saves.mappings, this.props.default_mappings) }/>
         :
         null
       }
       <DensityPlot data_key={ plot.data_key } data={ all_series } plot={{
-          width: 1200,
-          height: 1200,
+          width: 900,
+          height: 500,
           margin: {
-            left: 200,
-            top: 200,
+            left: 60,
+            top: 20,
             bottom: 40,
             right: 200
           }

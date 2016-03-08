@@ -129,4 +129,31 @@ svg {
 			}
 		}
 	}
+	&.density_plot {
+		font-family: $value_font;
+		font-size: 12px;
+		.plot_canvas {
+			rect {
+				fill: white;
+				stroke: gray;
+				stroke-width: 1px;
+			}
+		}
+		.axis {
+			path, line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+		}
+		.density_line {
+                	stroke: purple;
+                	stroke-width: 2;
+                	fill: none;
+		}
+		.density_shape {
+			stroke: none;
+			fill: rgba(purple,0.2);
+		}
+	}
 }

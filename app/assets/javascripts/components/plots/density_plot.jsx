@@ -22,6 +22,13 @@ DensityPlot = React.createClass({
     var xScale = d3.scale.linear().domain([ xmin, xmax ]).range([0,canvas_width]);
     var yScale = d3.scale.linear().domain([ ymin, ymax ]).range([canvas_height,0]);
 
+    var path_text = all_series[0].rows[0].x_values.map(function(xval,j) {
+      return xScale(xval) + " " + yScale(all_series[0].rows[0].density[j])
+    }).join(" L ")
+
+    var path_start = xScale(xmin) + " " + yScale(ymin)
+    var path_end = xScale(xmax) + " " + yScale(ymin)
+
     return <svg 
         className="density_plot" 
         width={ plot.width }
@@ -45,31 +52,12 @@ DensityPlot = React.createClass({
           xmax={ xmax }
           num_ticks={ 5 }
           tick_width={ 5 } />
-        {
-          all_series.map(function(series,i) {
-            return <g key={self.props.data_key + series.name}>
-            {
-              series.rows[0].x_values.map(function(xval,j) {
-                var lastx;
-                var lasty;
-                if (j > 0){
-                  lastx = xScale(series.rows[0].x_values[j-1])
-                  lasty = yScale(series.rows[0].density[j-1])
-                }
-                else{
-                  lastx = xScale(xval)
-                  lasty = yScale(series.rows[0].density[j])
-                }
-                return <path d={" M " + lastx + " " + lasty + " L " + xScale(xval) + " " + yScale(series.rows[0].density[j])}
-                      stroke="blue"
-                      stroke-width="5"
-                      fill="none"
-                      />;
-              })
-            }
-            </g>;
-          })
-        }
+        <Legend x={ plot.width - margin.left - margin.right + 15 } y="0" 
+          series={ all_series }/>
+          <g>
+            <path className="density_line" d={ " M " + path_text } />
+            <path className="density_shape" d={ " M " + path_start + " L " + path_text + " L " + path_end } />
+          </g>
         </PlotCanvas>
       </svg>;
   }
