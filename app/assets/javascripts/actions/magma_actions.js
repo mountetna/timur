@@ -45,6 +45,13 @@ var magmaActions = {
       document_name: document_name,
       revision: revision
     }
+  },
+  discardRevision: function(document_name, template_name) {
+    return {
+      type: 'DISCARD_REVISION',
+      template_name: template_name,
+      document_name: document_name
+    }
   }
 }
 

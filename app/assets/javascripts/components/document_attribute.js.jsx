@@ -4,7 +4,7 @@ var DocumentAttribute = React.createClass({
     var link = this.props.value
     if (this.props.mode == "edit") {
       return <div className="value">
-               <input type="file" name={ this.value_name() } />
+               <input type="file"/>
              </div>
     }
     if (link) {

@@ -2,7 +2,7 @@ var ImageAttribute = React.createClass({
   render: function() {
     if (this.props.mode == "edit") {
       return <div className="value">
-               <input type="file" name={ this.value_name() } />
+               <input type="file"/>
              </div>
     }
 

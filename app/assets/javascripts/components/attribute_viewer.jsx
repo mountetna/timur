@@ -6,6 +6,7 @@ AttributeViewer = React.createClass({
               document={ this.props.document }
               template={ this.props.template }
               value={ this.props.value }
+              revision={ this.props.revision }
               mode={ this.props.mode }
               attribute={ this.props.attribute }/>
   }

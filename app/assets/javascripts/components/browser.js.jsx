@@ -37,6 +37,7 @@ var BrowserDisplay = React.createClass({
     switch(action) {
       case 'cancel':
         this.setState({mode: 'browse'})
+        this.props.discardRevision()
         self.form_tokens = {};
         return
       case 'approve':
@@ -80,6 +81,7 @@ var BrowserDisplay = React.createClass({
               template={ self.props.template }
               document={ self.props.document }
               value={ self.props.document[ att.name ] }
+              revision={ self.props.revision.hasOwnProperty(att.name) ? self.props.revision[ att.name ] : self.props.document[ att.name ] }
               attribute={att}/>
             </div>
           })
@@ -95,6 +97,7 @@ var Browser = connect(
     var template_record = state.templates[props.model_name]
     var template = template_record ? template_record.template : null
     var document = template_record ? template_record.documents[props.record_name] : null
+    var revision = template_record ? template_record.revisions[props.record_name] : null
     var atts = []
     if (template) {
       Object.keys( template.attributes ).forEach(
@@ -110,6 +113,7 @@ var Browser = connect(
       {
         template: template,
         document: document,
+        revision: revision || {},
         displayed_attributes: atts
       }
     );
@@ -121,6 +125,12 @@ var Browser = connect(
           props.model_name,
           [ props.record_name ], 
           success))
+      },
+      discardRevision: function() {
+        dispatch(magmaActions.discardRevision(
+          props.record_name,
+          props.model_name
+        ))
       },
       showMessage: function(messages) {
         dispatch(messageActions.showMessages(

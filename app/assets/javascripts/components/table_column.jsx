@@ -16,7 +16,7 @@ TableColumn = function(attribute,model) {
       // how to search:
       case "TableAttribute":
         return "";
-      case "ForeignKeyAttribute":
+      case "LinkAttribute":
         return (value || {}).identifier || "";
       case "SelectAttribute":
       case "Attribute":

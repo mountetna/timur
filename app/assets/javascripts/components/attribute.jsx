@@ -3,6 +3,8 @@
 
 Attribute = React.createClass({
   render: function() {
+    var self = this
+    var store = this.context.store
     if (this.props.mode == "edit") {
       return <div className="value">
               <input type='text' className="full_text" 
@@ -10,12 +12,13 @@ Attribute = React.createClass({
                 onChange={ function(e) {
                   var text = e.target.value
                   var revision = { }
-                  revision[ this.props.attribute.name ] = text
-                  magmaActions.reviseDocument(this.props.template.name,
-                                              this.props.document.name,
-                                             revision)
+                  revision[ self.props.attribute.name ] = text
+                  store.dispatch(magmaActions.reviseDocument(
+                    self.props.document.name,
+                    self.props.template.name,
+                    revision))
                 } }
-                defaultValue={ this.props.value } />
+                defaultValue={ this.props.revision } />
              </div>
     }
 
@@ -24,5 +27,8 @@ Attribute = React.createClass({
            </div>
   }
 })
+Attribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
 module.exports = Attribute;
