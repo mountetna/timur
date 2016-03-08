@@ -32,12 +32,15 @@ class PlotController <  ApplicationController
   private 
 
   def pythia_json( matrix, analysis )
+    matrix_json = matrix.to_json
     response = pythia_get( {
-      input: matrix.to_json,
+      input: matrix_json,
       params: analysis
     } )
 
-    render json: { pythia_response: JSON.parse(response.body) }
+    render json: { 
+      pythia_request: {input:matrix_json,params:analysis},
+      pythia_response: JSON.parse(response.body) }
   end
 
   def pythia_get data

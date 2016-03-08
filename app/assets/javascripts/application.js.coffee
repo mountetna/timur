@@ -24,7 +24,7 @@
 #= require plots
 #= require matrix
 #= require_tree ./reducers
-#= require marked
+#= require ./marked
 #= require components
 #= require model
 #= require keycode

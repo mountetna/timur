@@ -22,7 +22,6 @@
 /public/uploads
 *.swp
 *.tsv
-
 /node_modules
 .DS_Store
 ._*
