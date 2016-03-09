@@ -23,6 +23,14 @@ const PLOT_TYPES = {
       bandwidth: 0.05
     }
   },
+  "DendrogramPlot": {
+    name: "Dendrogram",
+    type: "DendrogramPlot",
+    analysis: {
+      method: "dendrogram",
+      columns: false
+    }
+  }
 };
 
 PlotList = React.createClass({

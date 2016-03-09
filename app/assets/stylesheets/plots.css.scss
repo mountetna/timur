@@ -156,4 +156,10 @@ svg {
 			fill: rgba(purple,0.2);
 		}
 	}
+	&.dendrogram_plot {
+		line {
+			stroke: black;
+			stroke-width: 1px;
+		}
+	}
 }

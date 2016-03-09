@@ -32,6 +32,8 @@ TableColumn = require('./components/table_column.jsx');
 TablePager = require('./components/table_pager.jsx');
 TableSet = require('./components/table_set.jsx');
 
+Tooltip = require('./components/tooltip.jsx');
+
 TableAttribute = require('./components/table_attribute.js.jsx');
 DateTimeAttribute = require('./components/date_time_attribute.js.jsx');
 BarPlotAttribute = require('./components/bar_plot_attribute.js.jsx');
@@ -62,12 +64,14 @@ Legend = require('./components/plots/legend.js.jsx');
 ScatterPlot = require('./components/plots/scatter_plot.jsx');
 OneDScatterPlot = require('./components/plots/one_d_scatter_plot.jsx');
 HeatmapPlot = require('./components/plots/heatmap_plot.jsx');
+DendrogramPlot = require('./components/plots/dendrogram_plot.jsx');
 DensityPlot = require('./components/plots/density_plot.jsx');
 PlotConfig = require('./components/plots/plot_config.js.jsx');
 PlotHeader = require('./components/plots/plot_header.jsx');
 
 OneDScatterPlotContainer = require('./components/plots/one_d_scatter_plot_container.jsx');
 ScatterPlotContainer = require('./components/plots/scatter_plot_container.js.jsx');
+DendrogramPlotContainer = require('./components/plots/dendrogram_plot_container.jsx');
 HeatmapPlotContainer = require('./components/plots/heatmap_plot_container.jsx');
 DensityPlotContainer = require('./components/plots/density_plot_container.jsx');
 ChainSelector = require('./components/chain_selector.js.jsx');
