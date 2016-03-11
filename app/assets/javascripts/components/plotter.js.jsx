@@ -28,7 +28,7 @@ const PLOT_TYPES = {
     type: "DendrogramPlot",
     analysis: {
       method: "dendrogram",
-      columns: false
+      columns: true
     }
   }
 };

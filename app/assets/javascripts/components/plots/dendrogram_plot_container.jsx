@@ -51,11 +51,11 @@ DendrogramPlotContainer = React.createClass({
       }
       <DendrogramPlot data_key={ plot.data_key } data={ tree } plot={{
           width: 1200,
-          height: 500,
+          height: 600,
           margin: {
             left: 50,
             top: 50,
-            bottom: 100,
+            bottom: 200,
             right: 50
           }
         }}/>

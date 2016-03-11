@@ -157,6 +157,8 @@ svg {
 		}
 	}
 	&.dendrogram_plot {
+		font-family: $value_font;
+		font-size: 10px;
 		line {
 			stroke: black;
 			stroke-width: 1px;
