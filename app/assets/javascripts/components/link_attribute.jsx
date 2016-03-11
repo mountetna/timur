@@ -11,12 +11,11 @@ var LinkAttribute = React.createClass({
           <span className="delete_link"
           onClick={
             function(e) {
-              var revision = {}
-              revision[ self.props.attribute.name ] = null
               store.dispatch(magmaActions.reviseDocument(
-                self.props.document.name,
-                self.props.template.name,
-                revision))
+                self.props.document,
+                self.props.template,
+                self.props.attribute,
+                null))
             }
           }
           >{ link.identifier }</span>

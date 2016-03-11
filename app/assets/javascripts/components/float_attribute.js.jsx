@@ -10,6 +10,7 @@ FloatAttribute = React.createClass({
     return true;
   },
   render: function() {
+    var self = this
     if (this.props.mode == "edit") {
       return <div className="value">
         <input
@@ -17,6 +18,18 @@ FloatAttribute = React.createClass({
           placeholder={this.props.attribute.placeholder} 
           className="full_text" 
           onKeyPress={ this.filter_keys } 
+          onChange={
+            function(e) {
+              store.dispatch(
+                magmaActions.reviseDocument(
+                  self.props.document,
+                  self.props.template,
+                  self.props.attribute,
+                  parseFloat(e.target.value)
+                )
+              )
+            }
+          }
           defaultValue={ this.props.value } />
       </div>
     }

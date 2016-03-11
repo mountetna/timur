@@ -80,6 +80,8 @@
 				border-left: 1px solid rgba(forestgreen,0.2);
 			}
 			textarea.text_box {
+				font-family: $value_font;
+				font-size: 14px;
 				border: 0px none black;
 				border-top: 1px solid forestgreen;
 				border-left: 1px solid forestgreen;

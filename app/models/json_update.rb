@@ -9,6 +9,13 @@ class JsonUpdate
       template_class(model).new(model).patched_template
     end
 
+    def default_document record, model
+      document_class(model).new(record).default_document
+    end
+
+    def default_template model
+      template_class(model).new(model).default_template
+    end
     private
 
     def update_class(model)
@@ -53,6 +60,12 @@ class JsonUpdate
       document
     end
 
+    def default_document
+      @document = nil
+
+      document
+    end
+
     def update
     end
 
@@ -85,6 +98,16 @@ class JsonUpdate
       template
     end
 
+    def default_template
+      @template = nil
+
+      apply_default_patches
+
+      apply_sorts
+
+      template
+    end
+
     def update
     end
 
@@ -92,6 +115,11 @@ class JsonUpdate
 
     def apply_default_patches
       template[:attributes].each do |name,att|
+
+        patch_attribute name do |att|
+          att.attribute_class = att.attribute_class.sub(/Magma::/,'')
+        end
+
         if att[:type] == "TrueClass"
           patch_attribute name do |att|
             att.attribute_class = "CheckboxAttribute"
@@ -102,12 +130,12 @@ class JsonUpdate
             att.attribute_class = "SelectAttribute"
           end
         end
-        if att[:attribute_class] =~ /ForeignKeyAttribute/
+        if att[:attribute_class] == "ForeignKeyAttribute"
           patch_attribute name do |att|
             att.attribute_class = "LinkAttribute"
           end
         end
-        if att[:attribute_class] =~ /ChildAttribute/
+        if att[:attribute_class] == "ChildAttribute"
           patch_attribute name do |att|
             att.attribute_class = "LinkAttribute"
           end

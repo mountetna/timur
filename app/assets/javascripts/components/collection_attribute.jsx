@@ -92,13 +92,13 @@ var CollectionAttribute = connect(
   function(dispatch,ownProps) {
     return {
       reviseList: function(newlist) {
-        var revision = { }
-        revision[ownProps.attribute.name] = newlist
         dispatch(
           magmaActions.reviseDocument(
-            ownProps.document.name,
-            ownProps.template.name,
-            revision))
+            ownProps.document,
+            ownProps.template,
+            ownProps.attribute,
+            newlist)
+        )
       }
     }
   }

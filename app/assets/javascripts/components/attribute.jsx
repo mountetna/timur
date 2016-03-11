@@ -9,15 +9,18 @@ Attribute = React.createClass({
       return <div className="value">
               <input type='text' className="full_text" 
                 placeholder={ this.props.attribute.placeholder }
-                onChange={ function(e) {
-                  var text = e.target.value
-                  var revision = { }
-                  revision[ self.props.attribute.name ] = text
-                  store.dispatch(magmaActions.reviseDocument(
-                    self.props.document.name,
-                    self.props.template.name,
-                    revision))
-                } }
+                onChange={
+                  function(e) {
+                    store.dispatch(
+                      magmaActions.reviseDocument(
+                        self.props.document,
+                        self.props.template,
+                        self.props.attribute,
+                        e.target.value
+                      )
+                    )
+                  }
+                }
                 defaultValue={ this.props.revision } />
              </div>
     }

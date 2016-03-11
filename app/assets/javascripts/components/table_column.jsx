@@ -1,16 +1,16 @@
 TableColumn = function(attribute,model) {
   var self = this;
 
-  var att_class = attribute.attribute_class.replace('Magma::','');
+  var att_class = attribute.attribute_class
 
-  this.name = attribute.name;
+  this.name = attribute.name
 
-  this.shown = attribute.shown;
+  this.shown = attribute.shown
   
   this.format = function(value) {
     // this returns a plain text or number version of this attribute,
     // suitable for searching
-    if (value == undefined) return "";
+    if (value == undefined) return ""
 
     switch(att_class) {
       // how to search:
@@ -48,6 +48,9 @@ TableColumn = function(attribute,model) {
     
     if (att_class == "TableAttribute")
       return <div className="value"> (table) </div>;
+
+    if (att_class == "ForeignKeyAttribute" || att_class == "ChildAttribute")
+      att_class = "LinkAttribute"
 
     var AttClass = eval(att_class);
 

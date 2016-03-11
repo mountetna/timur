@@ -50,20 +50,19 @@ var BrowserDisplay = React.createClass({
         return
     }
   },
-  skin: function() {
-    if (this.state.mode == "browse") {
-      var set = this.props.template.skin || [];
-      return set.concat(['browser']).join(' ');
-    } else
-      return 'browser';
-  },
   render: function() {
     var self = this
     var token = $( 'meta[name="csrf-token"]' ).attr('content')
     if (this.state.mode == 'loading')
-      return <div className={ this.skin() }/>
+      return <div className="browser">
+                <span className="fa fa-spinner fa-pulse"/>
+             </div>
     else {
-      return <div className={ this.skin() }>
+      var displayed_attributes = this.state.mode == "browse" ?
+        self.props.patched_attributes : self.props.attributes
+      var skin = this.state.mode == "browse" ?
+        "browser " + this.props.skin_name : "browser"
+      return <div className={ skin }>
 
         <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true }>
           { this.props.template.name }
@@ -71,7 +70,7 @@ var BrowserDisplay = React.createClass({
 
         <div id="attributes">
         {
-          self.props.displayed_attributes.map(function(att) {
+          displayed_attributes.map(function(att) {
             return <div key={att.name} className="attribute">
               <div className="name" title={ att.desc }>
                { att.display_name }
@@ -92,29 +91,36 @@ var BrowserDisplay = React.createClass({
   }
 })
 
+var filterAttributes = function(template) {
+  var atts = []
+  if (template) {
+    Object.keys( template.attributes ).forEach(
+      function(att_name) {
+        var att = template.attributes[att_name]
+        if (att.shown) atts.push(att)
+      }
+    )
+  }
+  return atts
+}
+
 var Browser = connect(
   function (state,props) {
     var template_record = state.templates[props.model_name]
     var template = template_record ? template_record.template : null
+    var patched_template = template_record ? template_record.patched_template : null
     var document = template_record ? template_record.documents[props.record_name] : null
     var revision = template_record ? template_record.revisions[props.record_name] : null
-    var atts = []
-    if (template) {
-      Object.keys( template.attributes ).forEach(
-        function(att_name) {
-          var att = template.attributes[att_name]
-          if (att.shown) atts.push(att)
-        }
-      )
-    }
     return $.extend(
       {},
       props,
       {
         template: template,
         document: document,
+        skin_name: template ? template.name.toLowerCase() : "",
         revision: revision || {},
-        displayed_attributes: atts
+        attributes: filterAttributes(template),
+        patched_attributes: filterAttributes(patched_template)
       }
     );
   },

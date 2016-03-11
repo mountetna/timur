@@ -16,10 +16,6 @@ class ProjectJsonUpdate < JsonUpdate
         att.display_name = "Immune fractions (CD45+ / live)"
         att.shown = true
       end
-
-      patch_member :skin do |set|
-        [ :project ]
-      end
     end
   end
   class Document < JsonUpdate::Document

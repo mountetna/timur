@@ -14,8 +14,8 @@ var magmaActions = {
         dataType: 'json',
         contentType: 'application/json',
         success: function(response) {
-          dispatch(magmaActions.addTemplate(response.template))
-          dispatch(magmaActions.addDocumentsForTemplate(response.template.name, response.documents))
+          dispatch(magmaActions.addTemplate(response.template, response.patched_template))
+          dispatch(magmaActions.addDocumentsForTemplate(response.template.name, response.documents, response.patched_documents))
           if (success != undefined) success()
         },
         error: function(message) {
@@ -24,25 +24,29 @@ var magmaActions = {
       })
     }
   },
-  addTemplate: function(template) {
+  addTemplate: function(template,patched_template) {
     return {
       type: 'ADD_TEMPLATE',
       template_name: template.name,
+      patched_template: patched_template,
       template: template,
     }
   },
-  addDocumentsForTemplate: function(template_name, documents) {
+  addDocumentsForTemplate: function(template_name, documents, patched_documents) {
     return {
       type: 'ADD_DOCUMENTS',
       template_name: template_name,
-      documents: documents
+      documents: documents,
+      patched_documents: patched_documents
     }
   },
-  reviseDocument: function(document_name, template_name, revision) {
+  reviseDocument: function(document, template, attribute, revised_value) {
+    var revision = { }
+    revision[ attribute.name ] = revised_value
     return {
       type: 'REVISE_DOCUMENT',
-      template_name: template_name,
-      document_name: document_name,
+      template_name: template.name,
+      document_name: document[ template.identifier ],
       revision: revision
     }
   },

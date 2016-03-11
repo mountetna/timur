@@ -17,6 +17,18 @@ IntegerAttribute = React.createClass({
                 className="full_text" 
                 placeholder={this.props.attribute.placeholder}
                 onKeyDown={ this.filter_keys }
+                onChange={
+                  function(e) {
+                    store.dispatch(
+                      magmaActions.reviseDocument(
+                        self.props.document,
+                        self.props.template,
+                        self.props.attribute,
+                        e.target.value
+                      )
+                    )
+                  }
+                }
                 defaultValue={ this.props.value } />
              </div>
     }
@@ -26,5 +38,8 @@ IntegerAttribute = React.createClass({
            </div>
   }
 })
+IntegerAttribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
 module.exports = IntegerAttribute

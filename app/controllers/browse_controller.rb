@@ -62,9 +62,13 @@ class BrowseController <  ApplicationController
   def json_payload model, records
     {
       documents: records.map do |record|
+        { record.identifier => JsonUpdate.default_document(record,model) }
+      end.reduce(:merge),
+      patched_documents: records.map do |record|
         { record.identifier => JsonUpdate.updated_document(record,model) }
       end.reduce(:merge),
-      template: JsonUpdate.updated_template(model),
+      template: JsonUpdate.default_template(model),
+      patched_template: JsonUpdate.updated_template(model),
     }
   end
 
