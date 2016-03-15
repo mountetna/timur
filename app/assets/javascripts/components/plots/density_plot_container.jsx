@@ -8,8 +8,8 @@ DensityPlotContainer = React.createClass({
     var all_series = [];
     var plot = this.props.plot;
     
-    if (plot.analyses && plot.analyses.density_plots) {
-      all_series = plot.analyses.density_plots.series.map(function(series) {
+    if (plot.results && plot.results.density) {
+      all_series = plot.results.density.series.map(function(series) {
         var series_def = self.props.saves.series[series.key];
         //var matrix = new Matrix( series.matrix.rows, series.matrix.row_names, series.matrix.col_names );
         return {

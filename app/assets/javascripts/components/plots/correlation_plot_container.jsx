@@ -1,4 +1,4 @@
-DendrogramPlotContainer = React.createClass({
+CorrelationPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },
@@ -13,16 +13,24 @@ DendrogramPlotContainer = React.createClass({
   render: function() {
     var self = this;
 
-    var tree
-    var plot = this.props.plot
+    var all_series = [];
+    var plot = this.props.plot;
     
-    if (plot.results && plot.results.dendrogram) {
-      tree = plot.results.dendrogram.tree
+    if (plot.results && plot.results.correlation) {
+      all_series = plot.results.correlation.series.map(function(series) {
+        var series_def = self.props.saves.series[series.key];
+        var matrix = new Matrix( series.matrix.rows, series.matrix.row_names, series.matrix.col_names );
+        return {
+          matrix: matrix,
+          name: series_def.name,
+          color: series_def.color
+        };
+      });
     }
 
     return <div className="plot">
       <PlotHeader mode={ this.state.mode } 
-        name="Dendrogram"
+        name="Correlation"
         plot={ plot }
         newMode={ function(mode) { self.setState({mode: mode}); } }
         onApprove={
@@ -49,21 +57,21 @@ DendrogramPlotContainer = React.createClass({
         :
         null
       }
-      <DendrogramPlot data_key={ plot.data_key } data={ tree } plot={{
+      <CorrelationPlot data_key={ plot.data_key } data={ all_series } plot={{
           width: 1200,
-          height: 600,
+          height: 1200,
           margin: {
-            left: 50,
-            top: 50,
-            bottom: 200,
-            right: 50
+            left: 250,
+            top: 250,
+            bottom: 40,
+            right: 250
           }
         }}/>
     </div>;
   },
 });
-DendrogramPlotContainer.contextTypes = {
+CorrelationPlotContainer.contextTypes = {
   store: React.PropTypes.object
 };
 
-module.exports = DendrogramPlotContainer;
+module.exports = CorrelationPlotContainer;

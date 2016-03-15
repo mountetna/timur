@@ -38,9 +38,9 @@ class PlotController <  ApplicationController
       params: analysis
     } )
 
-    render json: { 
-      pythia_request: {input:matrix_json,params:analysis},
-      pythia_response: JSON.parse(response.body) }
+    render json: matrix_json.update({ 
+      pythia_response: JSON.parse(response.body)
+    })
   end
 
   def pythia_get data

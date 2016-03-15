@@ -16,10 +16,36 @@ HeatmapPlotContainer = React.createClass({
     var all_series = [];
     var plot = this.props.plot;
     
-    if (plot.analyses && plot.analyses.corr_mat) {
-      all_series = plot.analyses.corr_mat.series.map(function(series) {
+    if (plot.series) {
+      all_series = plot.series.map(function(series) {
         var series_def = self.props.saves.series[series.key];
-        var matrix = new Matrix( series.matrix.rows, series.matrix.row_names, series.matrix.col_names );
+        var matrix = new Matrix(series.matrix.rows, 
+                                series.matrix.row_names,
+                                series.matrix.col_names
+                               );
+        if (plot.results.row_dendrogram) {
+          // sort rows according to row dendrogram
+          var tree = new Tree(plot.results.row_dendrogram.tree)
+          var leaves = {}
+          tree.leaves().forEach(function(leaf, i) {
+            leaves[leaf.name] = i
+          })
+          matrix = matrix.row_sort(function( a_row, a_name, b_row, b_name ) {
+            return leaves[a_name] - leaves[b_name]
+          })
+        }
+        
+        if (plot.results.col_dendrogram) {
+          // sort cols according to col dendrogram
+          var tree = new Tree(plot.results.col_dendrogram.tree)
+          var leaves = {}
+          tree.leaves().forEach(function(leaf, i) {
+            leaves[leaf.name] = i
+          })
+          matrix = matrix.col_sort(function( a_col, a_name, b_col, b_name ) {
+            return leaves[a_name] - leaves[b_name]
+          })
+        }
         return {
           matrix: matrix,
           name: series_def.name,

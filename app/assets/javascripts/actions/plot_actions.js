@@ -15,7 +15,7 @@ var plotActions = {
       type: 'ADD_PLOT_DATA',
       plot_id: plot_id,
       series: plot_json.series,
-      analyses: plot_json.pythia_response
+      results: plot_json.pythia_response
     }
   },
   cancelPlotConfig: function(plot_id) {

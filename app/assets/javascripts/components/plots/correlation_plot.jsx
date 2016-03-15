@@ -1,12 +1,12 @@
-HeatmapPlot = React.createClass({
+CorrelationPlot = React.createClass({
   getInitialState: function() {
     return { highlight_cell: null }
   },
   chroma_scale: chroma.scale(['red','black','green']).domain([-1.0, 1.0]),
   compute_color: function(cell) {
-    if (cell == undefined) return "white";
+    if (cell.count == undefined || cell.count < 2) return "white";
 
-    return this.chroma_scale(cell);
+    return this.chroma_scale(cell.pearson_r);
   },
   render: function() {
     var self = this;
@@ -45,7 +45,7 @@ HeatmapPlot = React.createClass({
     }
 
     return <svg 
-        className="heatmap_plot" 
+        className="correlation_plot" 
         width={ plot.width }
         height={ plot.height } >
         <PlotCanvas
@@ -78,7 +78,6 @@ HeatmapPlot = React.createClass({
                   var color = self.compute_color(cell);
 
                   return <rect className="cell"
-                    key={ i + 'x' + j }
                     x={ j*cell_width }
                     y={ i*cell_height}
                     width={ cell_width - 1 }
@@ -116,4 +115,4 @@ HeatmapPlot = React.createClass({
   },
 })
 
-module.exports = HeatmapPlot
+module.exports = CorrelationPlot
