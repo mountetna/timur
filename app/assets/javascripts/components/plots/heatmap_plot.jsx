@@ -37,9 +37,7 @@ HeatmapPlot = React.createClass({
         {
           "Row name": series.matrix.row_name(cell.row),
           "Col name": series.matrix.col_name(cell.col),
-          "Pearson R": (contents.pearson_r == undefined ? "null" : contents.pearson_r.toFixed(3)),
-          "P-value": (contents.p_value == undefined ? "null" : contents.p_value.toFixed(3)),
-          "Count": (contents.count == undefined ? "null" : contents.count),
+          "Value": contents || "none"
         }
       } />;
     }
