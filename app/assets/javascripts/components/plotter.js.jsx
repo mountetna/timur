@@ -18,6 +18,10 @@ const PLOT_TYPES = {
       col_dendrogram: {
         method: "dendrogram",
         columns: true
+      },
+      z_score: {
+        method: "z_score",
+        columns: false
       }
     }
   },
@@ -142,7 +146,7 @@ PlotList = React.createClass({
                       key={ i }
                       plot={ plot } 
                       saves={ self.state.saves }
-                      default_mappings={ self.state.default_mappings }/>;
+                      default_mappings={ $.extend({}, self.state.default_mappings) }/>;
                   })
                 }
              </div>

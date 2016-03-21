@@ -60,6 +60,7 @@ PlotCanvas = require('./components/plots/plot_canvas.js.jsx');
 XAxis = require('./components/plots/xaxis.js.jsx');
 YAxis = require('./components/plots/yaxis.js.jsx');
 Legend = require('./components/plots/legend.js.jsx');
+Dendrogram = require('./components/plots/dendrogram.jsx')
 
 ScatterPlot = require('./components/plots/scatter_plot.jsx');
 OneDScatterPlot = require('./components/plots/one_d_scatter_plot.jsx');

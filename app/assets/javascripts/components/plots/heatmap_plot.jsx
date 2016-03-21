@@ -22,6 +22,55 @@ HeatmapPlot = React.createClass({
     var cell_height = canvas_height / series.matrix.num_rows;
     var cell_width = canvas_width / series.matrix.num_cols;
 
+    var row_labels_or_dendrogram
+    var col_labels_or_dendrogram
+
+    if (this.props.col_dendrogram) {
+      // draw a col_dendrogram
+      col_labels_or_dendrogram=<g transform={
+          'translate(0,-'+margin.top+')'
+          }>
+          <Dendrogram tree={ this.props.col_dendrogram } 
+          height={margin.top-100}
+          width={canvas_width}/>
+        </g>
+    }
+    else {
+      col_labels_or_dendrogram = <g className="col_labels">
+        {
+          series.matrix.map_col(function(col,j,name) {
+            return <text key={ j } textAnchor="start" transform={ 'translate('
+                        + (j * cell_width + 10)
+                        + ','
+                        + (-5)
+                        + ') rotate(-90)' }>
+              { name }
+              </text>
+          })
+        }
+      </g>
+    }
+    if (this.props.row_dendrogram) {
+      // draw a row_dendrogram
+      row_labels_or_dendrogram=<g transform={
+          'translate(-'+margin.left+','+canvas_height+') rotate(-90)'
+        }>
+          <Dendrogram tree={ this.props.row_dendrogram } 
+          height={margin.left-200} 
+          width={canvas_height}/>
+        </g>
+    }
+    else {
+      row_labels_or_dendrogram = series.matrix.map_row(function(row,i,name) {
+         return <text key={ i } textAnchor="end" transform={ 'translate('
+                     + (-5)
+                     + ','
+                     + (i * cell_height + 12)
+                     + ')' }>
+           { name }
+           </text>
+      })
+    }
     var tooltip;
 
     if (!this.state.highlight_cell) tooltip = null;
@@ -37,7 +86,7 @@ HeatmapPlot = React.createClass({
         {
           "Row name": series.matrix.row_name(cell.row),
           "Col name": series.matrix.col_name(cell.col),
-          "Value": contents || "none"
+          "Value": contents == undefined ? "none" : contents
         }
       } />;
     }
@@ -51,26 +100,15 @@ HeatmapPlot = React.createClass({
           width={ canvas_width }
           height={ canvas_height }>
         {
-          series.matrix.map_col(function(col,j,name) {
-            return <text key={ j } textAnchor="start" transform={ 'translate('
-                        + (j * cell_width + 10)
-                        + ','
-                        + (-5)
-                        + ') rotate(-90)' }>
-              { name }
-              </text>
-          })
+          row_labels_or_dendrogram
         }
+        {
+          col_labels_or_dendrogram
+        }
+        
         {
           series.matrix.map_row(function(row,i,name) {
             return <g key={ self.props.data_key + name }>
-              <text textAnchor="end" transform={ 'translate('
-                        + (-5)
-                        + ','
-                        + (i * cell_height + 12)
-                        + ')' }>
-              { name }
-              </text>
               {
                 row.map(function(cell,j) {
                   var color = self.compute_color(cell);
