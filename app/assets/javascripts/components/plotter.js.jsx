@@ -11,18 +11,50 @@ const PLOT_TYPES = {
     name: "Heatmap",
     type: "HeatmapPlot",
     analysis: {
-      method: "correlation",
-      columns: false
+      row_dendrogram: {
+        method: "dendrogram",
+        columns: false
+      },
+      col_dendrogram: {
+        method: "dendrogram",
+        columns: true
+      },
+      z_score: {
+        method: "z_score",
+        columns: false
+      }
+    }
+  },
+  "CorrelationPlot": {
+    name: "Correlation",
+    type: "CorrelationPlot",
+    analysis: {
+      correlation: {
+        method: "correlation",
+        columns: false
+      }
     }
   },
   "DensityPlot": {
     name: "Density",
     type: "DensityPlot",
     analysis: {
-      method: "density",
-      bandwidth: 0.05
+      density: {
+        method: "density",
+        bandwidth: 0.05
+      }
     }
   },
+  "DendrogramPlot": {
+    name: "Dendrogram",
+    type: "DendrogramPlot",
+    analysis: {
+      dendrogram: {
+        method: "dendrogram",
+        columns: true
+      }
+    }
+  }
 };
 
 PlotList = React.createClass({
@@ -114,7 +146,7 @@ PlotList = React.createClass({
                       key={ i }
                       plot={ plot } 
                       saves={ self.state.saves }
-                      default_mappings={ self.state.default_mappings }/>;
+                      default_mappings={ $.extend({}, self.state.default_mappings) }/>;
                   })
                 }
              </div>

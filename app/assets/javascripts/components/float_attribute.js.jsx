@@ -6,11 +6,6 @@ FloatAttribute = React.createClass({
            </div>
   },
   filter_keys: function(e) {
-    console.log("blah");
-    console.log(e.key);
-    console.log(e.keyCode);
-    console.log(e.charCode);
-    console.log(e.which);
     if (Keycode.is_ctrl(e)) return true;
     if (Keycode.is_number(e)) return true;
     if (Keycode.match(e,/^[\.e\-]$/)) return true

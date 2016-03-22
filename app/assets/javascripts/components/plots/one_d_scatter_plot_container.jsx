@@ -21,7 +21,6 @@ OneDScatterPlotContainer = React.createClass({
           color: series_def.color
         };
       });
-      console.log(all_series);
     }
 
     return <div className="scatter plot">

@@ -5,14 +5,13 @@ plotReducer = function(plots, action) {
   console.log(action);
   switch(action.type) {
     case 'CREATE_NEW_PLOT':
-      return plots.concat( {
+      return [ {
         plot_id: action.plot_id,
         type: action.plot_type,
         requested_series: [],
         requested_mappings: [],
         analysis: action.analysis
-      }
-      );
+      } ].concat(plots)
     case 'UPDATE_REQUESTED_SERIES':
       return plots.map(function(plot) {
         if (plot.plot_id == action.plot_id) {
@@ -36,7 +35,7 @@ plotReducer = function(plots, action) {
         if (plot.plot_id == action.plot_id) {
           return $.extend({}, plot, {
             series: action.series,
-            analyses: action.analyses,
+            results: action.results,
             data_key: Math.random().toString(36).substring(7)
           })
         }

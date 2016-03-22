@@ -17,8 +17,6 @@ Browser = React.createClass({
     var submission = new FormData(node[0])
     // we need to fix some entries in our submission.
     this.update_form_tokens(submission);
-    console.log("Posting via AJAX");
-    console.log(submission);
     $.ajax({
       type: "POST",
       url: node.attr('action'), //sumbits it to the given url of the form
@@ -77,7 +75,6 @@ Browser = React.createClass({
   },
   process: function( job, item ) {
     // general workhorse function that handles stuff from the components
-    console.log(item);
     switch(job) {
       case 'form-token-update':
         if (!this.form_tokens) this.form_tokens = {};

@@ -9,7 +9,6 @@ ColorPicker = React.createClass({
   componentDidMount: function () {
     var picker = "input[type=text]"
 
-    console.log("Adding color_picker");
     var self = this;
     var node = $(React.findDOMNode(this));
     node.find(picker).spectrum({

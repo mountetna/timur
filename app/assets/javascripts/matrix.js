@@ -1,4 +1,5 @@
 Matrix = function(rows, rownames, colnames) {
+  var self = this
   this.num_rows = rows.length;
   this.num_cols = rows[0].length;
 
@@ -58,6 +59,28 @@ Matrix = function(rows, rownames, colnames) {
     });
     return new Matrix(new_rows,new_names,colnames);
   }
+  this.row_sort = function(callback) {
+    // return a new matrix with rows sorted by comparison criterion
+    var row_sorter = rows.map(function(row,i) {
+      return {
+        index: i,
+        row: row
+      }
+    }).sort(function(a, b) {
+      var a_name = rownames[a.index]
+      var b_name = rownames[b.index]
+
+      return callback(a.row, a_name, b.row, b_name)
+    })
+
+    var new_rows = row_sorter.map(function(sorter) {
+      return rows[sorter.index]
+    })
+    var new_names = row_sorter.map(function(sorter) {
+      return rownames[sorter.index]
+    })
+    return new Matrix(new_rows,new_names,colnames);
+  }
   this.map_col = function(callback) {
     var self = this;
     return rows[0].map(function (_, c) {
@@ -71,14 +94,37 @@ Matrix = function(rows, rownames, colnames) {
     var new_colnames = [];
     
     for (var j = 0; j < this.num_cols; j++) {
-      var col = this.col(j);
-      if (callback(col, j, this.col_name(j))) {
+      var col = self.col(j);
+      if (callback(col, j, self.col_name(j))) {
           selected_cols.push(col);
-          new_colnames.push(this.col_name(j))
+          new_colnames.push(self.col_name(j))
       }
     }
     // make a new matrix using selected_cols
     var col_matrix = new Matrix(selected_cols,new_colnames,rownames);
+    return col_matrix.transpose();
+  }
+  this.col_sort = function(callback) {
+    // return a new matrix with rows sorted by comparison criterion
+    var col_sorter = rows[0].map(function(_,i) {
+      return {
+        index: i,
+        col: self.col(i)
+      }
+    }).sort(function(a, b) {
+      var a_name = colnames[a.index]
+      var b_name = colnames[b.index]
+
+      return callback(a.col, a_name, b.col, b_name)
+    })
+
+    var new_cols = col_sorter.map(function(sorter) {
+      return sorter.col
+    })
+    var new_names = col_sorter.map(function(sorter) {
+      return colnames[sorter.index]
+    })
+    var col_matrix = new Matrix(new_cols,new_names,rownames);
     return col_matrix.transpose();
   }
   this.transpose = function() {
