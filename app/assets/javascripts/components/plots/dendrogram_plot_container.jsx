@@ -3,7 +3,6 @@ DendrogramPlotContainer = React.createClass({
     return { mode: 'plot' }
   },
   componentDidMount: function() {
-    console.log("Creating a new dendrogram plot");
     var store = this.context.store;
     store.dispatch(
       plotActions.updateRequestedMappings(

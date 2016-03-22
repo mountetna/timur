@@ -22,8 +22,6 @@ ScatterCurve = React.createClass({
       };
     });
 
-    console.log(this.props.x);
-
     points.sort(function(point1,point2) { return point1.value - point2.value } );
     
     var yScale = d3.scale.linear()

@@ -6,8 +6,6 @@ IntegerAttribute = React.createClass({
            </div>
   },
   filter_keys: function(e) {
-    console.log("blah");
-    console.log(e);
     if (Keycode.is_modified(e)) return true;
     if (Keycode.is_number(e)) return true;
     if (Keycode.is_printable(e)) {

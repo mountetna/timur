@@ -1,6 +1,4 @@
 Tree = function(root) {
-  console.log("Making a new tree:")
-  console.log(root)
   var self = this
   var draw_branches_for = function(node,depth,leaf_counter) {
     if (node.children.length == 0) {

@@ -1,8 +1,6 @@
 var plotActions = {
   newPlotId: 0,
   createNewPlot: function(plot_type) {
-    console.log("From createNewPlot:");
-    console.log(plot_type);
     return {
       type: 'CREATE_NEW_PLOT',
       plot_id: plotActions.newPlotId++,

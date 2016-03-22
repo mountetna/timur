@@ -37,7 +37,6 @@ DateTimeAttribute = React.createClass({
     var time = this.current_time || this.default_time();
     if (!time || time.length != 5) return null;
     var pieces = date.split(/-/).concat(time.split(/:/));
-    console.log(pieces);
     date = new Date(pieces[0], parseInt(pieces[1])-1, pieces[2], pieces[3], pieces[4])
     return date.toISOString();
   },
@@ -71,7 +70,6 @@ DateTimeAttribute = React.createClass({
     var dateInput = "input[type=text][id='" + this.component_name('date') + "']"
     var timeInput = "input[type=text][id='" + this.component_name('time') + "']"
 
-    console.log("Adding datepicker");
     $(dateInput).datepicker({
       defaultDate: this.default_date(),
       dateFormat: this.date_format,
