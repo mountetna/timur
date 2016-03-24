@@ -1,10 +1,13 @@
 TimurNavBar = React.createClass({
   render: function() {
     var self = this
-    var browse_path = Routes.browse_path()
-    var search_path = Routes.search_path()
-    var plot_path = Routes.plot_path()
     var login_path = Routes.login_path()
+
+    var tabs = {
+      browse: Routes.browse_path(),
+      search: Routes.search_path(),
+      plot: Routes.plot_path()
+    }
 
     var login
     var heading
@@ -13,17 +16,19 @@ TimurNavBar = React.createClass({
     login = this.props.user || <a href={ login_path}>Login</a>
     if (this.props.environment == 'development') {
       heading = <span>Timur Development</span>
-      logo_id = "devlogo"
+      logo_id = "dev"
     }
     else {
       heading = <span>Timur <b>:</b> Data Browser</span>
-      logo_id = "logo"
+      logo_id = "normal"
     }
     return <div id="header">
-             <a href="/">
-               <div id={ logo_id }> &nbsp; 
-               </div>
-             </a>
+             <div id="logo">
+               <a href="/">
+                 <div id={ logo_id }> &nbsp; 
+                 </div>
+               </a>
+             </div>
              <div id="help_float">
                  <Help info={ [ 
                    ">...Who, from a Scythian Shephearde  \n"+
@@ -40,15 +45,14 @@ TimurNavBar = React.createClass({
              { heading }
              </div>
              <div id="nav">
-               <div className="nav_tab">
-                 <a href={ browse_path }> Browse </a>
-               </div>
-               <div className="nav_tab">
-                 <a href={ search_path }> Search </a>
-               </div>
-               <div className="nav_tab">
-                 <a href={ plot_path }> Plot </a>
-               </div>
+              {
+                Object.keys(tabs).map(function(name) {
+                  var tab_class = "nav_tab" + (self.props.mode == name ? ' selected' : '')
+                  return <div key={ name } className={ tab_class }>
+                      <a href={ tabs[name] }> { name } </a>
+                    </div>
+                })
+              }
                <div className="nav_tab">
                  <a onClick={ 
                    function(e) {

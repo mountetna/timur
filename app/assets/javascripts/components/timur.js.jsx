@@ -9,18 +9,20 @@ Timur = React.createClass({
   },
   render: function () {
     var component;
-    if (this.props.mode == 'browser') 
+    if (this.props.mode == 'browse') 
       component = <Browser 
         model_name={ this.props.model_name }
         record_name={ this.props.record_name } />;
-    else if (this.props.mode == 'plotter')
+    else if (this.props.mode == 'plot')
       component = <Plotter />;
     else if (this.props.mode == 'search')
       component = <Search />;
 
     return <Provider store={ this.create_store() }>
             <div>
-              <TimurNav user={ this.props.user } environment={this.props.environment}/>
+              <TimurNav user={ this.props.user }
+                mode={ this.props.mode }
+                environment={this.props.environment}/>
               <Messages/>
               { component }
            </div>
