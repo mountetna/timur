@@ -28,6 +28,7 @@ magmaReducer = function(templates, action) {
         template: action.template,
         patched_template: action.patched_template,
         documents: {},
+        patched_documents: {},
         revisions: {}
       }
       return $.extend({}, templates, new_templates)

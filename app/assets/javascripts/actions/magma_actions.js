@@ -56,6 +56,29 @@ var magmaActions = {
       template_name: template_name,
       document_name: document_name
     }
+  },
+  postRevision: function(document_name, template_name, revision, success, error) {
+    var self = this;
+    var request = {
+      model_name: template_name,
+      record_name: document_name,
+      revision: revision
+    };
+    return function(dispatch) {
+      $.ajax({
+        url: Routes.update_model_path(),
+        method: 'POST',
+        data: JSON.stringify(request), 
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(response) {
+          if (success != undefined) success()
+        },
+        error: function(message) {
+          if (error != undefined) error(message)
+        }
+      })
+    }
   }
 }
 

@@ -116,7 +116,7 @@ class JsonUpdate
     def apply_default_patches
       template[:attributes].each do |name,att|
 
-        patch_attribute name do |att|
+        att = patch_attribute name do |att|
           att.attribute_class = att.attribute_class.sub(/Magma::/,'')
         end
 

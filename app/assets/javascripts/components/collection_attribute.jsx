@@ -6,7 +6,7 @@ var CollectionList = React.createClass({
     var self = this
     var links = this.props.value || []
     if (this.props.mode == "edit") {
-      var stable_links = this.props.revision.slice()
+      var stable_links = (this.props.revision || []).slice()
       var edit_link = this.state.new_link_updated ? stable_links.pop() : null
       return <div className="value">
                <div className="collection">
