@@ -63,7 +63,7 @@ var magmaActions = {
       model_name: template_name,
       record_name: document_name,
       revision: revision
-    };
+    }
     return function(dispatch) {
       $.ajax({
         url: Routes.update_model_path(),
@@ -73,6 +73,8 @@ var magmaActions = {
         contentType: 'application/json',
         success: function(response) {
           if (success != undefined) success()
+          dispatch(magmaActions.addTemplate(response.template, response.patched_template))
+          dispatch(magmaActions.addDocumentsForTemplate(response.template.name, response.documents, response.patched_documents))
         },
         error: function(message) {
           if (error != undefined) error(message)

@@ -76,8 +76,8 @@ class ProjectJsonUpdate < JsonUpdate
 
       patch_key :document do |links|
         links.map do |link|
-          doc = @record.document.find{|l| l.identifier == link[:identifier]}
-          link[:summary] = doc.description if doc
+          #doc = @record.document.find{|l| l.identifier == link}
+          #link[:summary] = doc.description if doc
           link
         end
       end

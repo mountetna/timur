@@ -31,4 +31,5 @@
 #= require model
 #= require keycode
 #= require jquery-mask
+#= require jquery.ba-throttle-debounce.min
 #= require spectrum

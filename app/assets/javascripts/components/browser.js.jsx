@@ -6,11 +6,8 @@ var BrowserDisplay = React.createClass({
   getInitialState: function() {
     return { mode: 'loading', can_edit: null }
   },
-  errors: function(messages) {
-    this.setState({mode: 'browse'})
-    this.props.showMessage(messages || ["### An unknown error occurred."] )
-  },
   header_handler: function(action) {
+    var self = this
     switch(action) {
       case 'cancel':
         this.setState({mode: 'browse'})
@@ -18,7 +15,16 @@ var BrowserDisplay = React.createClass({
         return
       case 'approve':
         this.setState({mode: 'submit'})
-        this.props.submitRevision()
+        this.props.submitRevision(
+          this.props.revised_document, 
+          function() {
+            self.setState({mode: 'browse'})
+          },
+          function ( messages ) {
+            self.setState({mode: 'edit'})
+            self.props.showMessage(messages.errors || ["### An unknown error occurred.\n\nSeek further insight elsewhere."] )
+          }
+        )
         return
       case 'edit':
         console.log('setting state to edit')
@@ -101,6 +107,7 @@ var Browser = connect(
         template: template,
         skin_name: template ? template.name.toLowerCase() : "",
         document: getDocument,
+        revised_document: revision,
         value: function(mode, att_name) {
           return getDocument(mode)[att_name]
         },
@@ -125,6 +132,15 @@ var Browser = connect(
         dispatch(magmaActions.discardRevision(
           props.record_name,
           props.model_name
+        ))
+      },
+      submitRevision: function(revision,success,error) {
+        dispatch(magmaActions.postRevision(
+          props.record_name,
+          props.model_name,
+          revision,
+          success,
+          error
         ))
       },
       showMessage: function(messages) {

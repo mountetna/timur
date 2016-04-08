@@ -2,6 +2,20 @@ var CollectionList = React.createClass({
   getInitialState: function() {
     return { new_link_updated: false }
   },
+  update: function(value) {
+    this.props.reviseList(
+      stable_links.concat(
+        value && value.length ? value : []
+      )
+    )
+    if (!value || !value.length)
+      this.setState({ new_link_updated: false })
+    else
+      this.setState({ new_link_updated: true })
+  },
+  componentWillMount: function() {
+    this.update = $.debounce(500,this.update);
+  },
   render: function() {
     var self = this
     var links = this.props.value || []
@@ -25,7 +39,7 @@ var CollectionList = React.createClass({
                             )
                           }
                         }
-                      >{ link.identifier }</span>
+                      >{ link }</span>
                       </div>
                     })
                 }
@@ -34,21 +48,7 @@ var CollectionList = React.createClass({
                   placeholder="New or existing ID"
                   onChange={
                     function(e) {
-                      var value = e.target.value
-
-                      self.props.reviseList(
-                        stable_links.concat(
-                          value && value.length ? {
-                            identifier: value,
-                            model: self.props.attribute.name
-                          } : []
-                        )
-                      )
-
-                      if (!value || !value.length)
-                        self.setState({ new_link_updated: false })
-                      else
-                        self.setState({ new_link_updated: true })
+                      self.update(e.target.value)
                     }
                   }
                   onBlur={
@@ -56,7 +56,7 @@ var CollectionList = React.createClass({
                       self.setState({new_link_updated: false })
                     }
                   }
-                  value={ edit_link ? edit_link.identifier : "" }
+                  value={ edit_link }
                   type="text"/>
                 </div>
                 { this.state.new_link_updated ? 
@@ -74,9 +74,8 @@ var CollectionList = React.createClass({
               {
                 links.map(
                   function(link) {
-                    return <div key={ link.identifier } className="collection_item">
-                      <MagmaLink link={ link }/>
-                      { link.summary ? <span> - { link.summary }</span> : null }
+                    return <div key={ link } className="collection_item">
+                      <MagmaLink link={ link } model={ self.props.template.name }/>
                     </div>
                   })
                }

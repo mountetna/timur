@@ -17,7 +17,7 @@ TableColumn = function(attribute,model) {
       case "TableAttribute":
         return "";
       case "LinkAttribute":
-        return (value || {}).identifier || "";
+        return value || "";
       case "SelectAttribute":
       case "Attribute":
         return value;
@@ -32,7 +32,7 @@ TableColumn = function(attribute,model) {
       case "ImageAttribute":
         return value.path
       case "CollectionAttribute":
-        return value.map(function(item) { return item.identifier }).join(",");
+        return value.join(",");
       case "IntegerAttribute":
       case "FloatAttribute":
         return value || 0;

@@ -24,38 +24,22 @@ class BrowseController <  ApplicationController
 
   def update
     # Update a model, redirect to the model view
-    @model = Magma.instance.get_model params[:model]
-    @record = @model[params[:record_id]]
+    @revision = Magma::Revision.new(params[:revision],params[:model_name], params[:record_name])
 
-    validate_update(params)
-
-    if @errors.count > 0
-      render json: { errors: @errors }, status: 422
+    if !@revision.valid?
+      render json: { errors: @revision.errors }, status: 422
       return
     end
 
-    destroy_links editable_attributes(params[:unlink])
-    
-    create_or_update_links editable_attributes(params[:link])
-
-    # mark any file uploads as changed.
-    @model.attributes.select do |name,att|
-      att.is_a?(Magma::DocumentAttribute) || att.is_a?(Magma::ImageAttribute)
-    end.each do |name, att|
-      if params[:values][name]
-        @record.modified! name
-      end
-    end
-
     begin
-      @record.update editable_attributes(params[:values])
+      @revision.post!
     rescue Magma::LoadFailed => m
       logger.info m.complaints
       render json: { errors: m.complaints }, status: 421
       return
     end
 
-    render json: json_payload
+    render json: json_payload(@revision.model, [@revision.record])
   end
 
   private
@@ -72,38 +56,7 @@ class BrowseController <  ApplicationController
     }
   end
 
-  def validate_update params
-    @errors = []
-    validate_links params[:link] if params[:link]
-    validate_values params[:values] if params[:values]
-  end
-
-  def validate_links linkset
-    # pull up the appropriate model
-    linkset.each do |name, links|
-      name = name.to_sym
-      next if !@model.has_attribute?(name) || links.blank?
-      logger.info "Validating #{name} for #{links}"
-      @model.attributes[name].validate links, @record do |error|
-        @errors.push error
-      end
-    end
-  end
-
-  def validate_values values
-    values.each do |name, value|
-      name = name.to_sym
-      next if !@model.has_attribute?(name) || value.blank?
-      @model.attributes[name].validate value, @record do |error|
-        @errors.push error
-      end
-    end
-  end
-
   def editable_attributes atts
-    (atts || {}).select do |att,val|
-      @model.attributes[att.to_sym] && !@model.attributes[att.to_sym].read_only?
-    end
   end
 
   def destroy_links links

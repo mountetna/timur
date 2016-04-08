@@ -24,13 +24,23 @@ magmaReducer = function(templates, action) {
     case 'ADD_TEMPLATE':
       // update if it exists
       var new_templates = { }
-      new_templates[ action.template_name ] = {
-        template: action.template,
-        patched_template: action.patched_template,
-        documents: {},
-        patched_documents: {},
-        revisions: {}
-      }
+      new_templates[action.template_name] = $.extend(
+        {},
+        templates[action.template_name],
+        {
+          template: action.template,
+          patched_template: action.patched_template,
+          documents: $.extend(
+            {},
+            templates[action.template_name] ? templates[action.template_name].documents : null
+          ),
+          patched_documents: $.extend(
+            {},
+            templates[action.template_name] ? templates[action.template_name].patched_documents : null
+          ),
+          revisions: {}
+        }
+      )
       return $.extend({}, templates, new_templates)
     case 'ADD_DOCUMENTS':
       // if there is no template defined, raise
@@ -38,6 +48,7 @@ magmaReducer = function(templates, action) {
 
       var new_templates = {}
       new_templates[action.template_name] = $.extend(
+        {},
         templates[action.template_name],
         {
           documents: $.extend(
