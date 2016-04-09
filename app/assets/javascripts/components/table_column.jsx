@@ -30,7 +30,7 @@ TableColumn = function(attribute,model) {
         return value ? "true" : "false";
       case "DocumentAttribute":
       case "ImageAttribute":
-        return value.path
+        return value.url
       case "CollectionAttribute":
         return value.map(function(item) { return item.identifier }).join(",");
       case "IntegerAttribute":
