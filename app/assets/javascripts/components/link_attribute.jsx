@@ -46,7 +46,7 @@ var LinkAttribute = React.createClass({
     }
     if (link) {
       return <div className="value">
-              <MagmaLink link={link} model={ this.props.template.name } />
+              <MagmaLink link={link} model={ this.props.attribute.name } />
              </div>
     }
     return <div className="value"/>

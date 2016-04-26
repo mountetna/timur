@@ -2,7 +2,7 @@ var CollectionList = React.createClass({
   getInitialState: function() {
     return { new_link_updated: false }
   },
-  update: function(value) {
+  update: function(value,stable_links) {
     this.props.reviseList(
       stable_links.concat(
         value && value.length ? value : []
@@ -14,7 +14,7 @@ var CollectionList = React.createClass({
       this.setState({ new_link_updated: true })
   },
   componentWillMount: function() {
-    this.update = $.debounce(500,this.update);
+    this.update = $.debounce(200,this.update);
   },
   render: function() {
     var self = this
@@ -48,15 +48,17 @@ var CollectionList = React.createClass({
                   placeholder="New or existing ID"
                   onChange={
                     function(e) {
-                      self.update(e.target.value)
+                      self.setState({ new_link_value: e.target.value })
+                      self.update(e.target.value,stable_links)
                     }
                   }
                   onBlur={
                     function(e) {
                       self.setState({new_link_updated: false })
+                      self.setState({ new_link_value: null })
                     }
                   }
-                  value={ edit_link }
+                  value={ this.state.new_link_value }
                   type="text"/>
                 </div>
                 { this.state.new_link_updated ? 
@@ -75,7 +77,7 @@ var CollectionList = React.createClass({
                 links.map(
                   function(link) {
                     return <div key={ link } className="collection_item">
-                      <MagmaLink link={ link } model={ self.props.template.name }/>
+                      <MagmaLink link={ link } model={ self.props.attribute.name }/>
                     </div>
                   })
                }

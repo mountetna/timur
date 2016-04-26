@@ -19,7 +19,7 @@ class BrowseController <  ApplicationController
     model = Magma.instance.get_model params[:model_name]
     records = model.where(model.identity => params[:record_names]).all
 
-    render json: json_payload(model, records)
+    render json: Payload.new(model, records)
   end
 
   def update
@@ -39,38 +39,6 @@ class BrowseController <  ApplicationController
       return
     end
 
-    render json: json_payload(@revision.model, [@revision.record])
-  end
-
-  private
-  def json_payload model, records
-    {
-      documents: records.map do |record|
-        { record.identifier => JsonUpdate.default_document(record,model) }
-      end.reduce(:merge),
-      patched_documents: records.map do |record|
-        { record.identifier => JsonUpdate.updated_document(record,model) }
-      end.reduce(:merge),
-      template: JsonUpdate.default_template(model),
-      patched_template: JsonUpdate.updated_template(model),
-    }
-  end
-
-  def editable_attributes atts
-  end
-
-  def destroy_links links
-    links.each do |fname,link|
-      logger.info "Attempting to undo link for #{fname} which is a #{ @model.attributes[fname.to_sym].class }"
-      @record.delete_link fname
-    end
-  end
-
-  def create_or_update_links links
-    links.each do |fname,link|
-      next if link.blank?
-      logger.info "Attempting to make #{link} for #{fname} which is a #{ @model.attributes[fname.to_sym].class }"
-      @record.create_link(fname.to_sym, link)
-    end
+    render json: Payload.new(@revision.model, [@revision.record])
   end
 end
