@@ -2,16 +2,8 @@ var CollectionList = React.createClass({
   getInitialState: function() {
     return { new_link_updated: false }
   },
-  update: function(value,stable_links) {
-    this.props.reviseList(
-      stable_links.concat(
-        value && value.length ? value : []
-      )
-    )
-    if (!value || !value.length)
-      this.setState({ new_link_updated: false })
-    else
-      this.setState({ new_link_updated: true })
+  update: function(new_links) {
+    this.props.reviseList( new_links )
   },
   componentWillMount: function() {
     this.update = $.debounce(200,this.update);
@@ -44,30 +36,35 @@ var CollectionList = React.createClass({
                     })
                 }
                 <div className="collection_item">
-                <input className="link_text" 
+                <input
+                  type='text'
+                  className="link_text" 
                   placeholder="New or existing ID"
                   onChange={
-                    function(e) {
-                      self.setState({ new_link_value: e.target.value })
-                      self.update(e.target.value,stable_links)
-                    }
-                  }
-                  onBlur={
-                    function(e) {
-                      self.setState({new_link_updated: false })
-                      self.setState({ new_link_value: null })
-                    }
+                      function(e) {
+                        var value = e.target.value
+                        var has_value = value && value.length
+                        self.setState({ new_link_updated: has_value, new_link_value: value })
+                        if (has_value) self.update(stable_links.concat(value))
+                      }
                   }
                   value={ this.state.new_link_value }
-                  type="text"/>
+                  onBlur={
+                    function(e) {
+                      self.setState({new_link_updated: false, new_link_value: null })
+                    }
+                  }
+                  />
                 </div>
-                { this.state.new_link_updated ? 
+                {
+                  this.state.new_link_updated ? 
                     <div className="collection_item">
                       <input className="link_text"
                         placeholder="New or existing ID"
                         type="text"/>
                     </div>
-                  : null }
+                  : null 
+                }
                </div>
              </div>
     }

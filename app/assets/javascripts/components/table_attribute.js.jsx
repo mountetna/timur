@@ -1,6 +1,7 @@
-var magma_records = function( state, model_name, record_names) {
+var magma_documents = function( state, model_name, record_names) {
+  if (!state.templates[model_name]) return [];
   return record_names.map(function(record_name) {
-    state.templates[model_name] ? state.templates[model_name].documents[record_name] : null
+    return state.templates[model_name].documents[record_name]
   }).filter(function(doc) { return doc != undefined })
 }
 
@@ -19,7 +20,7 @@ var TableAttribute = connect(
   function(state, props) {
     model_name = props.attribute.name
     template = state.templates[model_name] ? state.templates[model_name].template : null
-    documents = magma_records( state, model_name, props.value )
+    documents = magma_documents( state, model_name, props.value )
     var table = template ? TableSet(documents, template) : null
     return {
       page_size: 10,

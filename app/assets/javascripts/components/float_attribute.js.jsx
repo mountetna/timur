@@ -11,21 +11,21 @@ FloatAttribute = React.createClass({
   },
   render: function() {
     var self = this
+    var store = this.context.store
     if (this.props.mode == "edit") {
       return <div className="value">
-        <input
-          type='text' 
+        <SlowTextInput
           placeholder={this.props.attribute.placeholder} 
-          className="full_text" 
+          textClassName="full_text" 
           onKeyPress={ this.filter_keys } 
-          onChange={
-            function(e) {
+          update={
+            function(value) {
               store.dispatch(
                 magmaActions.reviseDocument(
                   self.props.document,
                   self.props.template,
                   self.props.attribute,
-                  parseFloat(e.target.value)
+                  parseFloat(value)
                 )
               )
             }
@@ -38,5 +38,9 @@ FloatAttribute = React.createClass({
            </div>
   }
 })
+
+FloatAttribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
 module.exports = FloatAttribute;

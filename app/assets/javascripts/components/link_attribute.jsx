@@ -1,16 +1,4 @@
 var LinkAttribute = React.createClass({
-  update: function(value) {
-    var store = this.context.store
-    store.dispatch(magmaActions.reviseDocument(
-      this.props.document,
-      this.props.template,
-      this.props.attribute,
-      value)
-    )
-  },
-  componentWillMount: function() {
-    this.update = $.debounce(500,this.update);
-  },
   render: function() {
     var link = this.props.value
     var self = this
@@ -34,14 +22,20 @@ var LinkAttribute = React.createClass({
           </div>
       }
       return <div className="value">
-                <input type='text' 
-                  className="link_text" 
-                  onChange={ 
-                    function(e) {
-                      self.update(e.target.value)
+                <SlowTextInput 
+                  textClassName="link_text" 
+                  waitTime={500}
+                  update={
+                    function(value) {
+                      store.dispatch(magmaActions.reviseDocument(
+                        self.props.document,
+                        self.props.template,
+                        self.props.attribute,
+                        value)
+                      )
                     }
                   }
-                  placeholder="New or existing ID"/> 
+                  placeholder="New or existing ID"/>
              </div>
     }
     if (link) {

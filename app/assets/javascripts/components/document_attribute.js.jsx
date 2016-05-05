@@ -1,10 +1,21 @@
 
 var DocumentAttribute = React.createClass({
   render: function() {
+    var self = this
+    var store = this.context.store
     var link = this.props.value
     if (this.props.mode == "edit") {
       return <div className="value">
-               <input type="file"/>
+               <input onChange={
+                 function(e) {
+                   store.dispatch(magmaActions.reviseDocument(
+                     self.props.document,
+                     self.props.template,
+                     self.props.attribute,
+                     e.target.files[0]))
+                 }
+               }
+               type="file"/>
              </div>
     }
     if (link) {
@@ -14,6 +25,9 @@ var DocumentAttribute = React.createClass({
     }
     return <div className="value"> <div className="document_empty">No file.</div> </div>
   }
-});
+})
+DocumentAttribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
 module.exports = DocumentAttribute

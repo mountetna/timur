@@ -1,5 +1,7 @@
 var CheckboxAttribute = React.createClass({
   render: function() {
+    var self = this
+    var store = this.context.store
     if (this.props.mode == "edit") {
       return <div className="value">
               <input type="checkbox" className="text_box" 
@@ -10,7 +12,7 @@ var CheckboxAttribute = React.createClass({
                         self.props.document,
                         self.props.template,
                         self.props.attribute,
-                        e.target.value
+                        e.target.value ? true : false
                       )
                     )
                   }

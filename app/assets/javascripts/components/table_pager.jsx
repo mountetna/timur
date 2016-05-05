@@ -5,6 +5,12 @@ TablePager = React.createClass({
   advance_page: function() {
     if (this.props.current_page < this.props.pages-1) this.props.set_page(this.props.current_page + 1);
   },
+  componentWillMount: function() {
+    this.update = $.debounce(500,this.update);
+  },
+  update: function(e) {
+    return this.props.set_filter(e)
+  },
   render: function() {
     var leftturn, rightturn;
     if (this.props.current_page > 0) leftturn = <div className="turner" onClick={ this.rewind_page }> &lt; </div>

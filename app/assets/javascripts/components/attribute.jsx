@@ -7,21 +7,20 @@ Attribute = React.createClass({
     var store = this.context.store
     if (this.props.mode == "edit") {
       return <div className="value">
-              <input type='text' className="full_text" 
+              <SlowTextInput textClassName="full_text" 
+                waitTime={500}
                 placeholder={ this.props.attribute.placeholder }
-                onChange={
-                  function(e) {
-                    store.dispatch(
-                      magmaActions.reviseDocument(
-                        self.props.document,
-                        self.props.template,
-                        self.props.attribute,
-                        e.target.value
-                      )
+                update={
+                  function(value) {
+                    store.dispatch(magmaActions.reviseDocument(
+                      self.props.document,
+                      self.props.template,
+                      self.props.attribute,
+                      value)
                     )
                   }
                 }
-                defaultValue={ this.props.revision } />
+                defaultValue={ this.props.value } />
              </div>
     }
 

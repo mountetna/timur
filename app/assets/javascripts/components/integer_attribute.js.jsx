@@ -10,21 +10,23 @@ IntegerAttribute = React.createClass({
   },
   render: function() {
 
+    var self = this
+    var store = this.context.store
+
     if (this.props.mode == 'edit') {
       return <div className="value">
-              <input 
-                type='text' 
-                className="full_text" 
+              <SlowTextInput 
+                textClassName="full_text" 
                 placeholder={this.props.attribute.placeholder}
                 onKeyDown={ this.filter_keys }
-                onChange={
-                  function(e) {
+                update={
+                  function(value) {
                     store.dispatch(
                       magmaActions.reviseDocument(
                         self.props.document,
                         self.props.template,
                         self.props.attribute,
-                        e.target.value
+                        value
                       )
                     )
                   }

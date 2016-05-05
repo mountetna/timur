@@ -1,4 +1,4 @@
-TableColumn = function(attribute,model) {
+TableColumn = function(attribute,template) {
   var self = this;
 
   var att_class = attribute.attribute_class
@@ -42,20 +42,18 @@ TableColumn = function(attribute,model) {
     }
   };
 
-  this.render = function(record, mode) {
+  this.render = function(document, mode) {
     // this returns a react class displaying the given value for 
     // this attribute
     
     if (att_class == "TableAttribute")
       return <div className="value"> (table) </div>;
 
-    if (att_class == "ForeignKeyAttribute" || att_class == "ChildAttribute")
-      att_class = "LinkAttribute"
-
     var AttClass = eval(att_class);
 
-    return <AttClass record={ record } 
-      model={ model }
+    return <AttClass document={ document } 
+      template={ template }
+      value={ document[ attribute.name ] }
       mode={ mode } 
       attribute={ attribute }/>
   }

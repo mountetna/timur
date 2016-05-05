@@ -1,4 +1,4 @@
-var BrowserDisplay = React.createClass({
+var Browser = React.createClass({
   componentDidMount: function() {
     var self = this
     this.props.request(function() { self.setState({mode: 'browse'}) })
@@ -27,7 +27,6 @@ var BrowserDisplay = React.createClass({
         )
         return
       case 'edit':
-        console.log('setting state to edit')
         this.setState({mode: 'edit'})
         return
     }
@@ -59,7 +58,7 @@ var BrowserDisplay = React.createClass({
               template={ self.props.template }
               document={ self.props.document(self.state.mode) }
               value={ self.props.value(self.state.mode, att.name ) }
-              revision={ self.props.revision(self.state.mode, att.name) }
+              revision={ self.props.revision(att.name) }
               attribute={att}/>
             </div>
           })
@@ -71,7 +70,7 @@ var BrowserDisplay = React.createClass({
 })
 
 
-var Browser = connect(
+Browser = connect(
   function (state,props) {
     var template_record = state.templates[props.model_name]
 
@@ -111,7 +110,7 @@ var Browser = connect(
         value: function(mode, att_name) {
           return getDocument(mode)[att_name]
         },
-        revision: function(mode, att_name) {
+        revision: function(att_name) {
           return revision.hasOwnProperty(att_name) ? revision[ att_name ] : document[ att_name ]
         },
         attributes: function(mode) {
@@ -149,10 +148,10 @@ var Browser = connect(
       }
     }
   }
-)(BrowserDisplay);
+)(Browser)
 
 Browser.contextTypes = {
   store: React.PropTypes.object
-};
+}
 
 module.exports = Browser;
