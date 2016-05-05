@@ -28,6 +28,6 @@ class Template
       { 
         record.identifier => JsonUpdate.default_document(record,model) 
       }
-    end.reduce(:merge),
+    end.reduce(:merge)
   end
 end
