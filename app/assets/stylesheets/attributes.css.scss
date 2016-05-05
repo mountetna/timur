@@ -44,6 +44,11 @@
 			.collection_item {
 				border-bottom: 1px solid rgba(forestgreen,0.1);
 				padding-top: 3px;
+				.add_item {
+					cursor: pointer;
+					color: green;
+					font-weight: bold;
+				}
 			}
 
 			.button {
