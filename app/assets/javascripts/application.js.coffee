@@ -20,14 +20,17 @@
 
 #= require d3
 #= require react-classnames
+#= require marked
 
+#= require libs
 #= require plots
 #= require matrix
 #= require tree
-#= require_tree ./reducers
-#= require ./marked
+#= require reducers
+#= require actions
 #= require components
 #= require model
 #= require keycode
 #= require jquery-mask
+#= require jquery.ba-throttle-debounce.min
 #= require spectrum

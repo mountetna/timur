@@ -1,23 +1,23 @@
-TableColumn = function(attribute,model) {
+TableColumn = function(attribute,template) {
   var self = this;
 
-  var att_class = attribute.attribute_class.replace('Magma::','');
+  var att_class = attribute.attribute_class
 
-  this.name = attribute.name;
+  this.name = attribute.name
 
-  this.shown = attribute.shown;
+  this.shown = attribute.shown
   
   this.format = function(value) {
     // this returns a plain text or number version of this attribute,
     // suitable for searching
-    if (value == undefined) return "";
+    if (value == undefined) return ""
 
     switch(att_class) {
       // how to search:
       case "TableAttribute":
         return "";
-      case "ForeignKeyAttribute":
-        return (value || {}).identifier || "";
+      case "LinkAttribute":
+        return value || "";
       case "SelectAttribute":
       case "Attribute":
         return value;
@@ -32,7 +32,7 @@ TableColumn = function(attribute,model) {
       case "ImageAttribute":
         return value.url
       case "CollectionAttribute":
-        return value.map(function(item) { return item.identifier }).join(",");
+        return value.join(",");
       case "IntegerAttribute":
       case "FloatAttribute":
         return value || 0;
@@ -42,7 +42,7 @@ TableColumn = function(attribute,model) {
     }
   };
 
-  this.render = function(record, mode) {
+  this.render = function(document, mode) {
     // this returns a react class displaying the given value for 
     // this attribute
     
@@ -51,8 +51,9 @@ TableColumn = function(attribute,model) {
 
     var AttClass = eval(att_class);
 
-    return <AttClass record={ record } 
-      model={ model }
+    return <AttClass document={ document } 
+      template={ template }
+      value={ document[ attribute.name ] }
       mode={ mode } 
       attribute={ attribute }/>
   }

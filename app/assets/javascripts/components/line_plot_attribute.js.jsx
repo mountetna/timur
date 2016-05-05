@@ -1,5 +1,4 @@
-LinePlotAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
+var LinePlotAttribute = React.createClass({
   componentDidMount: function() {
     this.d3_render();
   },
@@ -7,7 +6,7 @@ LinePlotAttribute = React.createClass({
     this.d3_render();
   },
   d3_render: function() {
-    var lines = this.attribute_value().map(function(line) {
+    var lines = this.props.value.map(function(line) {
       line.values = line.values.map(function(a) {
         return {
           x: new Date(a.x),
@@ -92,7 +91,7 @@ LinePlotAttribute = React.createClass({
       .attr("width", 100);
 
     legend.selectAll('rect')
-      .data(this.attribute_value())
+      .data(this.props.value)
       .enter()
       .append("rect")
       .attr("x", WIDTH - MARGINS.right + 10)
@@ -103,7 +102,7 @@ LinePlotAttribute = React.createClass({
          return d.color;
       });
     legend.selectAll('text')
-      .data(this.attribute_value())
+      .data(this.props.value)
       .enter()
       .append("text")
       .attr("text-anchor", "start")
@@ -111,15 +110,12 @@ LinePlotAttribute = React.createClass({
       .attr("y", function(d, i) { return 20 + i *  20;})
       .text(function(d) { return d.series; });;
   },
-  render_browse: function() {
+  render: function() {
+    if (this.props.mode == "edit") return <div className="value"> </div>
     return <div className="value">
               <svg className="line_plot" width="600" height="200"></svg>
            </div>
   },
-  render_edit: function() {
-    return <div className="value">
-           </div>
-  },
-});
+})
 
-module.exports = LinePlotAttribute;
+module.exports = LinePlotAttribute

@@ -16,10 +16,6 @@ class ProjectJsonUpdate < JsonUpdate
         att.display_name = "Immune fractions (CD45+ / live)"
         att.shown = true
       end
-
-      patch_member :skin do |set|
-        [ :project ]
-      end
     end
   end
   class Document < JsonUpdate::Document
@@ -82,8 +78,8 @@ class ProjectJsonUpdate < JsonUpdate
 
       patch_key :document do |links|
         links.map do |link|
-          doc = @record.document.find{|l| l.identifier == link[:identifier]}
-          link[:summary] = doc.description if doc
+          #doc = @record.document.find{|l| l.identifier == link}
+          #link[:summary] = doc.description if doc
           link
         end
       end

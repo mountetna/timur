@@ -1,10 +1,4 @@
 IntegerAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
-    return <div className="value">
-            { this.attribute_value() }
-           </div>
-  },
   filter_keys: function(e) {
     if (Keycode.is_modified(e)) return true;
     if (Keycode.is_number(e)) return true;
@@ -14,11 +8,40 @@ IntegerAttribute = React.createClass({
     }
     return true;
   },
-  render_edit: function() {
+  render: function() {
+
+    var self = this
+    var store = this.context.store
+
+    if (this.props.mode == 'edit') {
+      return <div className="value">
+              <SlowTextInput 
+                textClassName="full_text" 
+                placeholder={this.props.attribute.placeholder}
+                onKeyDown={ this.filter_keys }
+                update={
+                  function(value) {
+                    store.dispatch(
+                      magmaActions.reviseDocument(
+                        self.props.document,
+                        self.props.template,
+                        self.props.attribute,
+                        value
+                      )
+                    )
+                  }
+                }
+                defaultValue={ this.props.value } />
+             </div>
+    }
+
     return <div className="value">
-            <input type='text' className="full_text" placeholder={this.props.attribute.placeholder} onKeyDown={ this.filter_keys } name={ this.value_name() } defaultValue={ this.attribute_value() } />
+            { this.props.value }
            </div>
   }
 })
+IntegerAttribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
-module.exports = IntegerAttribute;
+module.exports = IntegerAttribute

@@ -1,20 +1,30 @@
-CheckboxAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
-    if (this.attribute_value())
-      check = "yes";
-    else
-      check = "no";
-    return <div className="value">
-            { check }
-           </div>
-  },
-  render_edit: function() {
-    return <div className="value">
-            <input type="hidden" name={ this.value_name() } value="0" />
-            <input type="checkbox" className="text_box" name={ this.value_name() } defaultChecked={ this.attribute_value() } />
-           </div>
+var CheckboxAttribute = React.createClass({
+  render: function() {
+    var self = this
+    var store = this.context.store
+    if (this.props.mode == "edit") {
+      return <div className="value">
+              <input type="checkbox" className="text_box" 
+                onChange={
+                  function(e) {
+                    store.dispatch(
+                      magmaActions.reviseDocument(
+                        self.props.document,
+                        self.props.template,
+                        self.props.attribute,
+                        e.target.value ? true : false
+                      )
+                    )
+                  }
+                }
+                defaultChecked={ this.props.value } />
+             </div>
+    }
+    return <div className="value"> { this.props.value ? "yes" : "no" } </div>
   }
 })
+CheckboxAttribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
-module.exports = CheckboxAttribute;
+module.exports = CheckboxAttribute

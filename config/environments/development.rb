@@ -36,6 +36,8 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
+  config.log_level = :debug
+
   config.serve_static_files = false
 
   config.pythia_url = "https://dev.ucsf-immunoprofiler.org/pythia/"
