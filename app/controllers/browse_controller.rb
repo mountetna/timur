@@ -19,7 +19,9 @@ class BrowseController <  ApplicationController
     model = Magma.instance.get_model params[:model_name]
     records = model.where(model.identity => params[:record_names]).all
 
-    render json: Payload.new(model, records)
+    render json: PatchedPayload.new(
+      Magma::Payload.new(model, records)
+    )
   end
 
   def update
@@ -39,6 +41,10 @@ class BrowseController <  ApplicationController
       return
     end
 
-    render json: Payload.new(@revision.model, [@revision.record])
+    render json: PatchedPayload.new(
+      Magma::Payload.new(@revision.model, [@revision.record])
+    )
   end
+  
+  
 end
