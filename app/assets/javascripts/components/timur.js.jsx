@@ -11,6 +11,7 @@ Timur = React.createClass({
     var component;
     if (this.props.mode == 'browse') 
       component = <Browser 
+        can_edit={ this.props.can_edit }
         model_name={ this.props.model_name }
         record_name={ this.props.record_name } />;
     else if (this.props.mode == 'plot')

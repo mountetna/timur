@@ -42,7 +42,7 @@ var Browser = React.createClass({
       var skin = this.state.mode == "browse" ?  "browser " + this.props.skin_name : "browser"
       return <div className={ skin }>
 
-        <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ true }>
+        <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.props.can_edit }>
           { this.props.template.name }
         </Header>
 
