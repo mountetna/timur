@@ -1,4 +1,4 @@
-messageReducer = function(messages, action) {
+var messageReducer = function(messages, action) {
   if (!messages) messages = []
   switch(action.type) {
     case 'SHOW_MESSAGES':
@@ -9,3 +9,5 @@ messageReducer = function(messages, action) {
       return messages;
   }
 }
+
+module.exports = messageReducer

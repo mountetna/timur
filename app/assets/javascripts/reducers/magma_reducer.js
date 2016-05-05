@@ -18,7 +18,7 @@
  *  }
  */
 
-documents = function(old_documents, action) {
+var documents = function(old_documents, action) {
   if (!old_documents) old_documents = {}
   switch(action.type) {
     case 'ADD_DOCUMENTS':
@@ -32,7 +32,7 @@ documents = function(old_documents, action) {
   }
 }
 
-patched_documents = function(old_patched_documents, action) {
+var patched_documents = function(old_patched_documents, action) {
   if (!old_patched_documents) old_patched_documents = {}
   switch(action.type) {
     case 'ADD_DOCUMENTS':
@@ -46,7 +46,7 @@ patched_documents = function(old_patched_documents, action) {
   }
 }
 
-revisions = function(old_revisions, action) {
+var revisions = function(old_revisions, action) {
   if (!old_revisions) old_revisions = {}
   switch(action.type) {
     case 'REVISE_DOCUMENT':
@@ -66,7 +66,7 @@ revisions = function(old_revisions, action) {
   }
 }
 
-template = function(old_template, action) {
+var template = function(old_template, action) {
   if (!old_template) old_template = {
     template: {},
     patched_template: {},
@@ -102,7 +102,7 @@ template = function(old_template, action) {
   }
 }
 
-magmaReducer = function(templates, action) {
+var magmaReducer = function(templates, action) {
   if (!templates) templates = {}
   switch(action.type) {
     case 'ADD_TEMPLATE':
@@ -117,3 +117,5 @@ magmaReducer = function(templates, action) {
       return templates
   }
 }
+
+module.exports = magmaReducer

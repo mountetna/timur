@@ -22,10 +22,11 @@
 #= require react-classnames
 #= require marked
 
+#= require libs
 #= require plots
 #= require matrix
 #= require tree
-#= require_tree ./reducers
+#= require reducers
 #= require actions
 #= require components
 #= require model

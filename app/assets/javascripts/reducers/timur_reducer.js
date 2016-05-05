@@ -1,5 +1,4 @@
-
-timurReducer = function(timur, action) {
+var timurReducer = function(timur, action) {
   if (!timur) timur = {}
   switch(action.type) {
     case 'TOGGLE_CONFIG':
@@ -10,3 +9,5 @@ timurReducer = function(timur, action) {
       return timur;
   }
 }
+
+module.exports = timurReducer
