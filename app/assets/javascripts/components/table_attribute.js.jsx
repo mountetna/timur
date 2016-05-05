@@ -1,15 +1,33 @@
-TableAttribute = React.createClass({
-  mixins: [ AttributeHelpers ],
+var magma_documents = function( state, model_name, record_names) {
+  if (!state.templates[model_name]) return [];
+  return record_names.map(function(record_name) {
+    return state.templates[model_name].documents[record_name]
+  }).filter(function(doc) { return doc != undefined })
+}
+
+var TableWidget = React.createClass({
   render: function() {
-    var self = this;
-    // the raw table is in the attribute value, which is a list of
-    var table = TableSet(this.attribute_value());
-
     return <div className="value">
-      <TableViewer page_size={ 10 }
-        mode={ this.props.mode } table={ table } />
-    </div>
-  },
-});
+        <TableViewer page_size={ this.props.page_size }
+          mode={ this.props.mode }
+          table={ this.props.table } />
+      </div>
+  }
+})
 
-module.exports = TableAttribute;
+
+var TableAttribute = connect(
+  function(state, props) {
+    model_name = props.attribute.name
+    template = state.templates[model_name] ? state.templates[model_name].template : null
+    documents = magma_documents( state, model_name, props.value )
+    var table = template ? TableSet(documents, template) : null
+    return {
+      page_size: 10,
+      mode: props.mode,
+      table: table
+    }
+  }
+)(TableWidget)
+
+module.exports = TableAttribute

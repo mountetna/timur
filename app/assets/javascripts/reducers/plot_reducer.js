@@ -1,5 +1,4 @@
-
-plotReducer = function(plots, action) {
+var plotReducer = function(plots, action) {
   if (!plots) plots = [];
   console.log(plots);
   console.log(action);
@@ -60,4 +59,4 @@ plotReducer = function(plots, action) {
   }
 }
 
-
+module.exports = plotReducer

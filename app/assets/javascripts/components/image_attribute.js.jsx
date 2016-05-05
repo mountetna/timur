@@ -1,27 +1,36 @@
+var ImageAttribute = React.createClass({
+  render: function() {
+    var self = this
+    var store = this.context.store
+    if (this.props.mode == "edit") {
+      return <div className="value">
+               <input
+                 onChange={
+                   function(e) {
+                     store.dispatch(magmaActions.reviseDocument(
+                       self.props.document,
+                       self.props.template,
+                       self.props.attribute,
+                       e.target.files[0]))
+                   }
+                 } 
+                 type="file"/>
+             </div>
+    }
 
-ImageAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
-    if (this.attribute_exists() )
-      return this.render_attribute();
+    if (this.props.value)
+      return <div className="value">
+              <a href={ this.props.value.url } >
+                <img src={ this.props.value.thumb }/></a>
+             </div>
     else
-      return this.render_empty();
-  },
-  render_attribute: function() {
-    return <div className="value">
-            <a href={ this.attribute_value().url } ><img src={ this.attribute_value().thumb }/></a>
-           </div>
-  },
-  render_empty: function() {
-    return <div className="value">
-            <div className="document_empty">No file.</div>
-           </div>
-  },
-  render_edit: function() {
-    return <div className="value">
-             <input type="file" name={ this.value_name() } />
-           </div>
+      return <div className="value">
+              <div className="document_empty">No file.</div>
+             </div>
   }
-});
+})
+ImageAttribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
-module.exports = ImageAttribute;
+module.exports = ImageAttribute

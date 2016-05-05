@@ -33,13 +33,27 @@
 			font-family: $value_font;
 			padding-top: 3px;
 
+			.delete_link {
+				&:hover {
+					text-decoration: line-through;
+					color: gray;
+					cursor: pointer;
+				}
+			}
+
 			.collection_item {
 				border-bottom: 1px solid rgba(forestgreen,0.1);
 				padding-top: 3px;
+				.add_item {
+					cursor: pointer;
+					color: green;
+					font-weight: bold;
+				}
 			}
 
 			.button {
 				@include green_button;
+				margin-left: 0px;
 			}
 			
 			.selection {
@@ -72,6 +86,8 @@
 				border-left: 1px solid rgba(forestgreen,0.2);
 			}
 			textarea.text_box {
+				font-family: $value_font;
+				font-size: 14px;
 				border: 0px none black;
 				border-top: 1px solid forestgreen;
 				border-left: 1px solid forestgreen;

@@ -1,8 +1,8 @@
-TableSet = function(table) {
-  this.records = table.records;
-  this.model = table.model;
-  this.columns = Object.keys(table.model.attributes).map(function(att_name) {
-    var column = new TableColumn(table.model.attributes[att_name]);
+var TableSet = function(documents, template) {
+  this.records = documents
+  this.model = template
+  this.columns = Object.keys(template.attributes).map(function(att_name) {
+    var column = new TableColumn(template.attributes[att_name]);
     if (!column.shown) return null;
     return column;
   }).filter(function(column) { return column != undefined });

@@ -1,27 +1,33 @@
 
-DocumentAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
-    if (this.attribute_exists() )
-      return this.render_attribute();
-    else
-      return this.render_empty();
-  },
-  render_attribute: function() {
-    return <div className="value">
-            <a href={ this.attribute_value().url } > { this.attribute_value().path }</a>
-           </div>
-  },
-  render_empty: function() {
-    return <div className="value">
-            <div className="document_empty">No file.</div>
-           </div>
-  },
-  render_edit: function() {
-    return <div className="value">
-             <input type="file" name={ this.value_name() } />
-           </div>
+var DocumentAttribute = React.createClass({
+  render: function() {
+    var self = this
+    var store = this.context.store
+    var link = this.props.value
+    if (this.props.mode == "edit") {
+      return <div className="value">
+               <input onChange={
+                 function(e) {
+                   store.dispatch(magmaActions.reviseDocument(
+                     self.props.document,
+                     self.props.template,
+                     self.props.attribute,
+                     e.target.files[0]))
+                 }
+               }
+               type="file"/>
+             </div>
+    }
+    if (link) {
+      return <div className="value">
+              <a href={ link.url } > { link.path } </a>
+             </div>
+    }
+    return <div className="value"> <div className="document_empty">No file.</div> </div>
   }
-});
+})
+DocumentAttribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
-module.exports = DocumentAttribute;
+module.exports = DocumentAttribute

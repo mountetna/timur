@@ -173,7 +173,7 @@ TableViewer = React.createClass({
                         table.columns.map(function(column, i) {
                           var value = record[ column.name ];
                           var txt = column.render(record, self.props.mode);
-                          return <div key={i} className="item_value"> { txt } </div>;
+                          return <div key={i} className="item_value">{ txt }</div>;
                         })
                       }
                     </div>;

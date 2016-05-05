@@ -1,16 +1,32 @@
 SelectAttribute = React.createClass({
-  mixins: [ BaseAttribute, AttributeHelpers ],
-  render_browse: function() {
+  render: function() {
+    var self = this
+    var store = this.context.store
+    if (this.props.mode == "edit") {
+      return <div className="value">
+              <Selector 
+                className="selection"
+                onChange={
+                  function(value) {
+                    store.dispatch(magmaActions.reviseDocument(
+                      self.props.document,
+                      self.props.template,
+                      self.props.attribute,
+                      value)
+                    )
+                  }
+                }
+                defaultValue={ this.props.value }
+                values={ this.props.attribute.options } />
+             </div>
+    }
     return <div className="value">
-            { this.attribute_value() }
-           </div>
-  },
-  render_edit: function() {
-    return <div className="value">
-            <Selector name={ this.value_name() } className="selection" defaultValue={ this.attribute_value }
-              values={ this.props.attribute.options } />
+            { this.props.value }
            </div>
   }
 })
+SelectAttribute.contextTypes = {
+  store: React.PropTypes.object
+}
 
-module.exports = SelectAttribute;
+module.exports = SelectAttribute

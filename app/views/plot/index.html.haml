@@ -7,7 +7,7 @@
       ReactDOM.render(
         React.createElement(Timur, {
           #{current_user ? "user: '#{current_user.name}', " : '' }
-          mode: 'plotter',
+          mode: 'plot',
           environment: '#{Rails.env.development? ? 'development' : 'production'}'
         }),
         $('#root')[0]

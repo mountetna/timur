@@ -2,26 +2,30 @@
 
 #header {
 	position: relative;
-	border-bottom: 2px solid forestgreen;
 	height: 80px;
 	@mixin basic_logo($color) {
 		width: 70px;
 		height: 70px;
-		border: 2px solid $color;
+		border: 3px solid $color;
 		background-size: cover;
 		background-position: 0px -6px;
 		border-radius: 50%;
-		box-shadow: 0 0 0 2px #FFF, 0 0 0 3px $color;
 		display: inline-block;
 		vertical-align:top
 	}
 	#logo {
-		background-image: image-url('Timur.png');
-		@include basic_logo(#066306);
-	}
-	#devlogo {
-		background-image: image-url('Timur-dev.png');
-		@include basic_logo(#630606);
+		#normal {
+			background-image: image-url('Timur.png');
+			@include basic_logo(#066306);
+		}
+		#dev {
+			background-image: image-url('Timur-dev.png');
+			@include basic_logo(#630606);
+		}
+		border-bottom: 2px solid forestgreen;
+		display: inline-block;
+		width: 90px;
+		height: 78px;
 	}
 	#help_float {
 		position: absolute;
@@ -33,10 +37,8 @@
 		font-size: 40px;
 		display: inline-block;
 		color: forestgreen;
-		padding-left: 10px;
 		height: 70px;
 		vertical-align: top;
-		line-height: 70px;
 	}
 	#nav {
 		font-family: $body_font;
@@ -45,11 +47,12 @@
 		left: 90px;
 		bottom: 0px;
 		border-top: 1px solid forestgreen;
+		display: flex;
 		#login {
-			position: absolute;
-			right: 10px;
-			bottom: 0px;
 			color: brown;
+			text-align: right;
+			flex-grow: 1;
+			border-bottom: 2px solid forestgreen;
 		}
 
 		.nav_tab {
@@ -57,10 +60,22 @@
 			font-size: 16px;
 			padding: 0px 25px;
 			border-right: 1px solid forestgreen;
+			border-bottom: 2px solid forestgreen;
+			text-transform: capitalize;
+			background-color: rgba(skyblue,0.1);
 			a {
-				color: goldenrod;
+				color: teal;
 				cursor: pointer;
 			}
 		}
+		.selected {
+			border-bottom: 0px;
+			background-color: white;
+			&:first-child {
+				border-left: 1px solid rgba(forestgreen,0.1);
+			}
+			color: goldenrod;
+		}
+
 	}
 }
