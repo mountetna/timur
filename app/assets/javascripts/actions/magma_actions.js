@@ -25,8 +25,11 @@ var magmaActions = {
           magmaActions.consumePayload(dispatch,response)
           if (success != undefined) success()
         },
-        error: function(message) {
-          if (error != undefined) error(message)
+        error: function(xhr, status, err) {
+          if (error != undefined) {
+            var message = JSON.parse(xhr.responseText)
+            error(message)
+          }
         }
       })
     }
@@ -89,8 +92,11 @@ var magmaActions = {
           if (success != undefined) success()
           magmaActions.consumePayload(dispatch,response)
         },
-        error: function(message) {
-          if (error != undefined) error(message)
+        error: function(xhr, status, err) {
+          if (error != undefined) {
+            var message = JSON.parse(xhr.responseText)
+            error(message)
+          }
         }
       })
     }
