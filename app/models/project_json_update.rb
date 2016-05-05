@@ -58,12 +58,14 @@ class ProjectJsonUpdate < JsonUpdate
             .join(:patients, :id => :patient_id )
             .where('experiment_id = ?', e.id)
             .where(stain: 'sort')
-            .where(name: "CD45+").select_map :count
+            .where(name: "CD45+")
+            .order(:sample_id).select_map :count
           live_counts  = Population.join(:samples, :id => :sample_id)
             .join(:patients, :id => :patient_id )
             .where('experiment_id = ?', e.id)
             .where(stain: 'sort')
-            .where(name: "Live").select_map :count
+            .where(name: "Live")
+            .order(:sample_id).select_map :count
           # pull cd45 counts and live counts
           counts = cd45_counts.zip(live_counts).reject do |c,l|
             !c || !l
