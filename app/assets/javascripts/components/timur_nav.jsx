@@ -30,16 +30,7 @@ TimurNavBar = React.createClass({
                </a>
              </div>
              <div id="help_float">
-                 <Help info={ [ 
-                   ">...Who, from a Scythian Shephearde  \n"+
-                   ">by his rare and woonderfull Conquests, became a most  \n"+
-                   ">puissant and mightye Monarque.  And (for his tyranny,  \n"+
-                   ">and terrour in Warre) was tearmed, The Scourge of God.  \n  \n"+
-                   "&mdash; Tamburlaine the Great, by Christopher Marlowe",
-
-                   "![Alliteration and Variation in Old Germanic Name-Giving](names.png)  \n"+
-                   "&mdash; George T. Flom, _Modern Language Notes_ Vol. 32, No. 1 (Jan., 1917), pp. 7-17 "
-                 ] }/>
+                 <Help info="timur"/>
               </div>
              <div id="heading">
              { heading }

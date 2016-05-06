@@ -44,6 +44,7 @@ var Browser = React.createClass({
 
         <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.props.can_edit }>
           { this.props.template.name }
+          <Help info="edit"/>
         </Header>
 
         <div id="attributes">
