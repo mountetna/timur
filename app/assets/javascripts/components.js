@@ -36,6 +36,8 @@ XAxis = require('./components/plots/xaxis.js.jsx')
 YAxis = require('./components/plots/yaxis.js.jsx')
 Legend = require('./components/plots/legend.js.jsx')
 Dendrogram = require('./components/plots/dendrogram.jsx')
+Tooltip = require('./components/tooltip.jsx')
+
 
 ScatterPlot = require('./components/plots/scatter_plot.jsx')
 OneDScatterPlot = require('./components/plots/one_d_scatter_plot.jsx')
