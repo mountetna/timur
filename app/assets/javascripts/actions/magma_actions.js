@@ -7,13 +7,48 @@ var magmaActions = {
       dispatch(magmaActions.addDocumentsForTemplate(template_name, template_def.documents, template_def.patched_documents))
     })
   },
+  requestModels: function() {
+    return function(dispatch) {
+      $.get(
+        Routes.search_json_path(),
+        function(response) {
+          magmaActions.consumePayload(dispatch,response)
+        }
+      )
+    }
+  },
+  requestAllDocuments: function( model_name, success, error ) {
+    var self = this;
+    var request = {
+      model_name: model_name
+    }
+    return function(dispatch) {
+      $.ajax({
+        url: Routes.table_json_path(),
+        method: 'POST',
+        data: JSON.stringify(request), 
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(response) {
+          magmaActions.consumePayload(dispatch,response)
+          if (success != undefined) success()
+        },
+        error: function(xhr, status, err) {
+          if (error != undefined) {
+            var message = JSON.parse(xhr.responseText)
+            error(message)
+          }
+        }
+      })
+    }
+  },
   requestTemplateAndDocuments: function( model_name, record_names, success, error ) {
     // this is an async action to get a new model from magma
     var self = this;
     var request = {
       model_name: model_name,
       record_names: record_names
-    };
+    }
     return function(dispatch) {
       $.ajax({
         url: Routes.template_json_path(),

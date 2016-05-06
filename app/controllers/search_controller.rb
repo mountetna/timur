@@ -9,22 +9,23 @@ class SearchController <  ApplicationController
   end
 
   def json
-    render json: {
-      magma_models: Magma.instance.magma_models.map do |model|
-        model.json_template
-      end
-    }
+    payload = Magma::Payload.new()
+    Magma.instance.magma_models.map do |model|
+      payload.add_model model
+    end
+    render json: PatchedPayload.new(payload,true)
   end
 
   def table_json
     # This should mimic the format of the 'table' attribute:
-    model = Magma.instance.get_model params[:model]
-    render json: {
-      model: JsonUpdate::Template.new(model).patched_template,
-      records: model.all.map do |item|
-        item.json_document
-      end
-    }
+    model = Magma.instance.get_model params[:model_name]
+    records = model.all
+
+    payload = Magma::Payload.new
+    payload.add_model model
+    payload.add_records model, records
+
+    render json: PatchedPayload.new( payload, true )
   end
 end
 

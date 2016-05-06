@@ -69,9 +69,10 @@ CorrelationPlotContainer = React.createClass({
         }}/>
     </div>;
   },
-});
+})
+
 CorrelationPlotContainer.contextTypes = {
   store: React.PropTypes.object
-};
+}
 
-module.exports = CorrelationPlotContainer;
+module.exports = CorrelationPlotContainer
