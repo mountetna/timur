@@ -48,13 +48,6 @@
 		bottom: 0px;
 		border-top: 1px solid forestgreen;
 		display: flex;
-		#login {
-			color: brown;
-			text-align: right;
-			flex-grow: 1;
-			border-bottom: 2px solid forestgreen;
-		}
-
 		.nav_tab {
 			display: inline-block;
 			font-size: 16px;
@@ -76,6 +69,70 @@
 			}
 			color: goldenrod;
 		}
-
+		#identifier_search {
+			border-bottom: 2px solid forestgreen;
+			flex-grow: 1;
+			text-align: right;
+			display: flex;
+			padding: 2px;
+			justify-content: flex-end;
+			position: relative;
+			.search {
+				display: flex;
+				background-color: rgba(teal, 0.1);
+				border: 1px solid forestgreen;
+				border-radius: 12px;
+				margin-right: 5px;
+				padding-right: 5px;
+				align-items: center;
+				span {
+					margin-left: 3px;
+					font-size: 12px;
+					color: darkgreen;
+					margin-right: 2px;
+				}
+				input[type="text"] {
+					border: none;
+					background-color: transparent;
+					color: purple;
+					font-size: 14px;
+					width: 200px;
+					font-family: $value_font;
+				}
+			}
+			.drop_down {
+				display: block;
+				border-top: none;
+				border-bottom: 2px solid forestgreen;
+				background-color: mix(forestgreen,white,20%);
+				display: inline;
+				position: absolute;
+				right: 15px;
+				text-align: left;
+				top: 22px;
+				width: 205px;
+				z-index: 1000;
+				.title {
+					font-family: $body_font;
+					font-weight: bold;
+					background-color: rgba(forestgreen,0.4);
+					font-size: 14px;
+				}
+				.list {
+					font-family: $value_font;
+					font-size: 12px;
+					max-height: 80px;
+					overflow: auto;
+					.identifier {
+						padding: 1px;
+					}
+				}
+			}
+		}
+		#login {
+			color: brown;
+			text-align: right;
+			border-bottom: 2px solid forestgreen;
+		}
 	}
 }

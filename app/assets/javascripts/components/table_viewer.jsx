@@ -1,4 +1,4 @@
-RecordFilter = function(table,filter) {
+var RecordFilter = function(table,filter) {
   var terms = filter.split(/\s+/);
 
   this.matches_any = function(term,record) {

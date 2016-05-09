@@ -105,7 +105,7 @@ Browser = connect(
       props,
       {
         template: template,
-        skin_name: template ? template.name.toLowerCase() : "",
+        skin_name: template && template.name ? template.name.toLowerCase() : "",
         document: getDocument,
         revised_document: revision,
         value: function(mode, att_name) {

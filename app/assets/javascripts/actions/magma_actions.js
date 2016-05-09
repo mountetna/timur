@@ -3,14 +3,38 @@ var magmaActions = {
     Object.keys(response.templates).forEach(function(template_name) {
       template_def = response.templates[template_name]
 
-      dispatch(magmaActions.addTemplate(template_def.template, template_def.patched_template))
-      dispatch(magmaActions.addDocumentsForTemplate(template_name, template_def.documents, template_def.patched_documents))
+      // you may not have all of these
+      
+      if (template_def.template)
+        dispatch(
+          magmaActions.addTemplate(
+            template_def.template,
+            template_def.patched_template)
+        )
+      if (template_def.documents)
+        dispatch(
+          magmaActions.addDocumentsForTemplate(
+            template_name, 
+            template_def.documents, 
+            template_def.patched_documents
+          )
+        )
     })
   },
   requestModels: function() {
     return function(dispatch) {
       $.get(
         Routes.search_json_path(),
+        function(response) {
+          magmaActions.consumePayload(dispatch,response)
+        }
+      )
+    }
+  },
+  requestIdentifiers: function() {
+    return function(dispatch) {
+      $.get(
+        Routes.identifiers_json_path(),
         function(response) {
           magmaActions.consumePayload(dispatch,response)
         }

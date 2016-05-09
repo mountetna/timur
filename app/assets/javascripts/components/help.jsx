@@ -43,12 +43,12 @@ var help_nodes = {
 
 var HelpButton = React.createClass({
   render: function() {
-    var self = this;
+    var self = this
     if (!this.props.helpShown) return <div style={{display: "none"}}></div>
     return <div className="help"
       onClick={
         function() {
-          self.props.dispatch(messageActions.showMessages(help_nodes[self.props.info]));
+          self.props.dispatch(messageActions.showMessages(help_nodes[self.props.info]))
         }
       } >
         <span className="fa-stack">
@@ -57,7 +57,7 @@ var HelpButton = React.createClass({
         </span>
       </div>
   }
-});
+})
 
 var Help = connect(
   function (state) {
@@ -65,14 +65,10 @@ var Help = connect(
       helpShown: state.timur.help_shown
     }
   }
-)(HelpButton);
-
-Help.propTypes = {
-  info: React.PropTypes.array.isRequired
-};
+)(HelpButton)
 
 Help.contextTypes = {
   store: React.PropTypes.object
-};
+}
 
-module.exports = Help;
+module.exports = Help

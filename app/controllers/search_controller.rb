@@ -27,5 +27,28 @@ class SearchController <  ApplicationController
 
     render json: PatchedPayload.new( payload, true )
   end
+
+  # TODO: this needs to be refactored to use the Payload interface along with
+  # column restriction, not yet working
+  def identifiers_json
+    render json: {
+      templates: Magma.instance.magma_models.map do |model|
+        next unless model.has_identifier?
+        identifiers = model.select_map(model.identity)
+        next if identifiers.empty?
+        {
+          model.model_name => {
+            documents: identifiers.map do |name|
+              {
+                name => {
+                  model.identity => name
+                }
+              }
+            end.reduce(:merge)
+          }
+        }
+      end.compact.reduce(:merge) || {}
+    }
+  end
 end
 

@@ -27,5 +27,6 @@ Rails.application.routes.draw do
 
   get 'search' => 'search#index', as: :search
   get 'json/search' => 'search#json', as: :search_json
+  get 'json/identifiers' => 'search#identifiers_json', as: :identifiers_json
   post 'json/table' => 'search#table_json', as: :table_json
 end
