@@ -57,6 +57,7 @@ TimurNavBar = React.createClass({
                  }
                  </a>
                </div>
+               <IdentifierSearch/>
                <div id="login">
                  { login }
                </div>
