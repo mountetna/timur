@@ -16,18 +16,22 @@ class Template
 
   private
   def patched_documents
-    @records.map do |record|
-     {
-       record.identifier => JsonUpdate.updated_document(record,@model) 
-     }
-    end.reduce(:merge)
+    Hash[
+      @records.map do |record|
+       [
+         record.identifier, JsonUpdate.updated_document(record,@model) 
+       ]
+      end
+    ]
   end
 
   def documents
-    @records.map do |record|
-      { 
-        record.identifier => JsonUpdate.default_document(record,model) 
-      }
-    end.reduce(:merge)
+    Hash[
+      @records.map do |record|
+        [ 
+          record.identifier, JsonUpdate.default_document(record,model) 
+        ]
+      end
+    ]
   end
 end
