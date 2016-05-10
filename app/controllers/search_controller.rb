@@ -32,22 +32,23 @@ class SearchController <  ApplicationController
   # column restriction, not yet working
   def identifiers_json
     render json: {
-      templates: Magma.instance.magma_models.map do |model|
-        next unless model.has_identifier?
-        identifiers = model.select_map(model.identity)
-        next if identifiers.empty?
-        {
-          model.model_name => {
-            documents: identifiers.map do |name|
-              {
-                name => {
-                  model.identity => name
-                }
-              }
-            end.reduce(:merge)
-          }
-        }
-      end.compact.reduce(:merge) || {}
+      templates: Hash[
+        Magma.instance.magma_models.map do |model|
+          next unless model.has_identifier?
+          identifiers = model.select_map(model.identity)
+          next if identifiers.empty?
+          [
+            model.model_name,
+            {
+              documents: Hash[
+                identifiers.map do |name|
+                  [ name, { model.identity => name } ]
+                end
+              ]
+            }
+          ]
+        end.compact
+      ]
     }
   end
 end

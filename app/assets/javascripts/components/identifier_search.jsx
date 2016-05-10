@@ -1,6 +1,6 @@
 var IdentifierSearch = React.createClass({
   getInitialState: function() {
-    return { match_string: '' }
+    return { match_string: '', has_focus: false }
   },
   componentWillMount: function() {
     this.props.requestIdentifiers()
@@ -8,7 +8,7 @@ var IdentifierSearch = React.createClass({
   find_matches: function() {
     var self = this
     
-    if (!this.props.identifiers || !this.state.match_string || this.state.match_string.length < 2) return null
+    if (!this.state.has_focus || !this.props.identifiers || !this.state.match_string || this.state.match_string.length < 2) return null
 
     var match_exp = new RegExp(this.state.match_string, "i")
     var matches
@@ -30,7 +30,19 @@ var IdentifierSearch = React.createClass({
 
     var matching_identifiers = this.find_matches()
 
-    return <div id="identifier_search">
+    return <div id="identifier_search"
+                  onBlur={
+                    function(e) {
+                      setTimeout(function() {
+                        self.setState({has_focus: false})
+                      },200)
+                    }
+                  }
+                  onFocus={
+                    function(e) {
+                      self.setState({has_focus: true})
+                    }
+                  }>
               <div className="search">
                 <span className="fa fa-search"/>
                 <input type="text" 
@@ -39,7 +51,8 @@ var IdentifierSearch = React.createClass({
                     function(e) {
                       self.setState({match_string: e.target.value })
                     }
-                  }/>
+                  }
+                  />
               </div>
               {
                 matching_identifiers ? 
