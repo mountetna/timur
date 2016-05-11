@@ -11,7 +11,7 @@ class FingerprintPlotJson
 
   def to_json
     myeloid = [ "BDCA1+ DCs", "BDCA2+ DCs", "pDCs", "CD16+ Monocytes", "Eosinophils", "Neutrophils", "CD14+ TAMs", "CD14- TAMs" ]
-    lineage = [ "CD3+ all", "HLADR-, CD3-, CD56+ (NK)", "B-cells" ]
+    lineage = [ "CD3+ all", "HLADR-,CD3-,CD56+ (NK)", "B-cells" ]
     {
       plot: {
         name: 'fingerprint',
@@ -58,8 +58,8 @@ class FingerprintPlotJson
         },
         { series: series_name("NK cells","lineage+", :nktb),
           color: "dodgerblue",
-          height: get_ratio(:nktb, "HLADR-, CD3-, CD56+ (NK)", lineage),
-          dots: get_dots(:nktb, "HLADR-, CD3-, CD56+ (NK)", lineage)
+          height: get_ratio(:nktb, "HLADR-,CD3-,CD56+ (NK)", lineage),
+          dots: get_dots(:nktb, "HLADR-,CD3-,CD56+ (NK)", lineage)
         },
         { series: series_name("B-cells","lineage+", :nktb),
           color: "dodgerblue",
@@ -71,13 +71,13 @@ class FingerprintPlotJson
         # t-cell
         { series: series_name("T-regs","CD3+", :treg),
           color: "chocolate",
-          height: get_ratio(:treg, "CD3 all, CD4+, CD25+, FoxP3+ (Tr)", "CD3+ all"),
-          dots: get_dots(:treg, "CD3 all, CD4+, CD25+, FoxP3+ (Tr)", "CD3+ all")
+          height: get_ratio(:treg, "CD3 all,CD4+,CD25+,FoxP3+ (Tr)", "CD3+ all"),
+          dots: get_dots(:treg, "CD3 all,CD4+,CD25+,FoxP3+ (Tr)", "CD3+ all")
         },
         { series: series_name("T-helpers(CD4+,CD25-)","CD3+", :treg),
           color: "chocolate",
-          height: get_ratio(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all"),
-          dots: get_dots(:treg, "CD3 all, CD4+, CD25- (Th)", "CD3+ all")
+          height: get_ratio(:treg, "CD3 all,CD4+,CD25- (Th)", "CD3+ all"),
+          dots: get_dots(:treg, "CD3 all,CD4+,CD25- (Th)", "CD3+ all")
         },
 
         # cd4/8
@@ -183,23 +183,23 @@ class FingerprintPlotJson
     [
       { series: series_name("CD8-,CD4+", "CD3+", stain),
         color: "magenta",
-        height: get_ratio(stain, "Q1: CD8a- , CD4+##CD3+ all", "CD3+ all"),
-        dots: get_dots(stain, "Q1: CD8a- , CD4+##CD3+ all", "CD3+ all")
+        height: get_ratio(stain, "Q1: CD8a-,CD4+##CD3+ all", "CD3+ all"),
+        dots: get_dots(stain, "Q1: CD8a-,CD4+##CD3+ all", "CD3+ all")
       },
       { series: series_name("CD4+,CD8+","CD3+", stain),
         color: "magenta",
-        height: get_ratio(stain, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all"),
-        dots: get_dots(stain, "Q2: CD8a+ , CD4+##CD3+ all", "CD3+ all")
+        height: get_ratio(stain, "Q2: CD8a+,CD4+##CD3+ all", "CD3+ all"),
+        dots: get_dots(stain, "Q2: CD8a+,CD4+##CD3+ all", "CD3+ all")
       },
       { series: series_name("CD8+,CD4-","CD3+", stain),
         color: "magenta",
-        height: get_ratio(stain, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all"),
-        dots: get_dots(stain, "Q3: CD8a+ , CD4-##CD3+ all", "CD3+ all")
+        height: get_ratio(stain, "Q3: CD8a+,CD4-##CD3+ all", "CD3+ all"),
+        dots: get_dots(stain, "Q3: CD8a+,CD4-##CD3+ all", "CD3+ all")
       },
       { series: series_name("CD4-,CD8-","CD3+", stain),
         color: "magenta",
-        height: get_ratio(stain, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all"),
-        dots: get_dots(stain, "Q4: CD8a- , CD4-##CD3+ all", "CD3+ all")
+        height: get_ratio(stain, "Q4: CD8a-,CD4-##CD3+ all", "CD3+ all"),
+        dots: get_dots(stain, "Q4: CD8a-,CD4-##CD3+ all", "CD3+ all")
       }
     ]
   end
