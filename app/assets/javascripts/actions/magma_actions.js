@@ -129,8 +129,8 @@ var magmaActions = {
   postRevision: function(document_name, template_name, revision, success, error) {
     var self = this;
     var data = new FormData()
-    data.set( 'model_name', template_name )
-    data.set( 'record_name', document_name )
+    data.append( 'model_name', template_name )
+    data.append( 'record_name', document_name )
     Object.keys(revision).forEach(function(key) {
       if (Array.isArray(revision[key])) {
         revision[key].forEach(function(value) {
