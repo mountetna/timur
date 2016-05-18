@@ -7,7 +7,7 @@ var BoxPlotAttribute = React.createClass({
   },
   d3_render: function() {
     var margin = {top: 10, right: 20, bottom: 30, left: 0},
-        width = 900 - margin.left - margin.right,
+        width = 1400 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
     var data = this.props.value;
