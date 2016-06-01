@@ -6,18 +6,12 @@ var magmaActions = {
       // you may not have all of these
       
       if (template_def.template)
-        dispatch(
-          magmaActions.addTemplate(
-            template_def.template,
-            template_def.patched_template)
+        dispatch( 
+          magmaActions.addTemplate(template_def.template)
         )
       if (template_def.documents)
         dispatch(
-          magmaActions.addDocumentsForTemplate(
-            template_name, 
-            template_def.documents, 
-            template_def.patched_documents
-          )
+          magmaActions.addDocumentsForTemplate(template_name, template_def.documents)
         )
     })
   },
@@ -66,6 +60,31 @@ var magmaActions = {
       })
     }
   },
+  requestView: function(model_name, record_name, tab_name) {
+    var self = this;
+    var request = {
+      model_name: model_name,
+      record_name: record_name,
+      tab_name: tab_name
+    }
+    return function(dispatch) {
+      $.ajax({
+        url: Routes.view_json_path(),
+        method: 'POST',
+        data: JSON.stringify(request), 
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(response) {
+          magmaActions.consumePayload(dispatch,response)
+          dispatch(
+            magmaActions.addViews(model_name, record_name, response.views)
+          )
+        },
+        error: function(xhr, status, err) {
+        }
+      })
+    }
+  },
   requestTemplateAndDocuments: function( model_name, record_names, success, error ) {
     // this is an async action to get a new model from magma
     var self = this;
@@ -93,20 +112,26 @@ var magmaActions = {
       })
     }
   },
-  addTemplate: function(template,patched_template) {
+  addTemplate: function(template) {
     return {
       type: 'ADD_TEMPLATE',
       template_name: template.name,
-      patched_template: patched_template,
-      template: template,
+      template: template
     }
   },
-  addDocumentsForTemplate: function(template_name, documents, patched_documents) {
+  addDocumentsForTemplate: function(template_name, documents) {
     return {
       type: 'ADD_DOCUMENTS',
       template_name: template_name,
-      documents: documents,
-      patched_documents: patched_documents
+      documents: documents
+    }
+  },
+  addViews: function(template_name, document_name, views) {
+    return {
+      type: 'ADD_VIEWS',
+      template_name: template_name,
+      document_name: document_name,
+      views: views
     }
   },
   reviseDocument: function(document, template, attribute, revised_value) {

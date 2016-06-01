@@ -14,8 +14,16 @@ class BrowseController <  ApplicationController
     @record_name = params[:name]
   end
 
-  def json
+  def view_json
     # Get the model name
+
+    view = TimurView.create(params[:model_name], params[:record_name])
+    view.retrieve_tab(params[:tab_name])
+
+    render json: view
+  end
+
+  def template_json
     model = Magma.instance.get_model params[:model_name]
     records = model.where(model.identity => params[:record_names]).all
 
@@ -23,7 +31,7 @@ class BrowseController <  ApplicationController
     payload.add_model model
     payload.add_records model, records
 
-    render json: PatchedPayload.new(
+    render json: TimurPayload.new(
       payload
     )
   end
@@ -45,10 +53,8 @@ class BrowseController <  ApplicationController
       return
     end
 
-    render json: PatchedPayload.new(
+    render json: TimurPayload.new(
       @revision.payload
     )
   end
-  
-  
 end

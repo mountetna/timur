@@ -1,10 +1,18 @@
+// The Browser presents views of a record/model. The views are organized into
+// tabs/panes.
+//
+// The Browser should request data for a record/model/tab - this comes with an
+// associated payload and any extra data required to draw this tab.
+//
+// The Browser has state in the form of mode (edit or not) and tab (which one is shown)
+
 var Browser = React.createClass({
   componentDidMount: function() {
     var self = this
-    this.props.request(function() { self.setState({mode: 'browse'}) })
+    this.props.request(null, function() { self.setState({mode: 'browse'}) })
   },
   getInitialState: function() {
-    return { mode: 'loading', can_edit: null }
+    return { mode: 'loading', can_edit: null, current_tab_name: null }
   },
   header_handler: function(action) {
     var self = this
@@ -33,40 +41,34 @@ var Browser = React.createClass({
   },
   render: function() {
     var self = this
-    var token = $( 'meta[name="csrf-token"]' ).attr('content')
-    if (this.state.mode == 'loading')
+
+    var view = this.props.view
+
+    if (!view)
       return <div className="browser">
                 <span className="fa fa-spinner fa-pulse"/>
              </div>
-    else {
-      var skin = this.state.mode == "browse" ?  "browser " + this.props.skin_name : "browser"
-      return <div className={ skin }>
 
-        <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.props.can_edit }>
-          { this.props.template.name }
-          <Help info="edit"/>
-        </Header>
+    var current_tab_name = this.state.current_tab_name || view.default_tab
+    
+    var skin = this.state.mode == "browse" ?  "browser " + this.props.skin_name : "browser"
 
-        <div id="attributes">
-        {
-          this.props.attributes(this.state.mode).map(function(att) {
-            return <div key={att.name} className="attribute">
-              <div className="name" title={ att.desc }>
-               { att.display_name }
-              </div>
-            <AttributeViewer 
-              mode={self.state.mode}
-              template={ self.props.template }
-              document={ self.props.document(self.state.mode) }
-              value={ self.props.value(self.state.mode, att.name ) }
-              revision={ self.props.revision(att.name) }
-              attribute={att}/>
-            </div>
-          })
-        }
-        </div>
-      </div>
-    }
+    return <div className={ skin }>
+
+      <TabBar selected={ current_tab_name } view={ view }/>
+
+      <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.props.can_edit }>
+        { this.props.template.name }
+        <Help info="edit"/>
+      </Header>
+
+      <BrowserTab 
+        template={this.props.template}
+        document={this.props.document}
+        mode={ this.state.mode }
+        tab={ view.tabs[current_tab_name] }
+        />
+    </div>
   }
 })
 
@@ -76,12 +78,12 @@ Browser = connect(
     var template_record = state.templates[props.model_name]
 
     var template = template_record ? template_record.template : null
-    var patched_template = template_record ? template_record.patched_template : null
 
     var document = template_record ? template_record.documents[props.record_name] : null
-    var patched_document = template_record ? template_record.patched_documents[props.record_name] : null
 
     var revision = (template_record ? template_record.revisions[props.record_name] : null) || {}
+
+    var view = (template_record ? template_record.views[props.record_name] : null)
 
     var getDocument = function(mode) {
       return mode == 'browse' ? patched_document : document
@@ -100,17 +102,14 @@ Browser = connect(
       return atts
     }
 
-    return $.extend(
-      {},
+    return freshen(
       props,
       {
         template: template,
         skin_name: template && template.name ? template.name.toLowerCase() : "",
         document: getDocument,
         revised_document: revision,
-        value: function(mode, att_name) {
-          return getDocument(mode)[att_name]
-        },
+        view: view,
         revision: function(att_name) {
           return revision.hasOwnProperty(att_name) ? revision[ att_name ] : document[ att_name ]
         },
@@ -122,11 +121,13 @@ Browser = connect(
   },
   function (dispatch,props) {
     return {
-      request: function(success) {
-        dispatch(magmaActions.requestTemplateAndDocuments(
+      request: function(tab_name,success) {
+        dispatch(magmaActions.requestView(
           props.model_name,
-          [ props.record_name ], 
-          success))
+          props.record_name, 
+          tab_name,
+          success
+        ))
       },
       discardRevision: function() {
         dispatch(magmaActions.discardRevision(

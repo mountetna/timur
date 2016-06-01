@@ -13,7 +13,7 @@ class SearchController <  ApplicationController
     Magma.instance.magma_models.map do |model|
       payload.add_model model
     end
-    render json: PatchedPayload.new(payload,true)
+    render json: TimurPayload.new(payload,true)
   end
 
   def table_json
@@ -25,7 +25,7 @@ class SearchController <  ApplicationController
     payload.add_model model
     payload.add_records model, records
 
-    render json: PatchedPayload.new( payload, true )
+    render json: TimurPayload.new(payload, true)
   end
 
   # TODO: this needs to be refactored to use the Payload interface along with

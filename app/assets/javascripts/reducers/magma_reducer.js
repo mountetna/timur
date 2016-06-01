@@ -33,17 +33,16 @@ var documents = function(old_documents, action) {
   }
 }
 
-var patched_documents = function(old_patched_documents, action) {
-  if (!old_patched_documents) old_patched_documents = {}
+var views = function(old_views, action) {
+  if (!old_views) old_views = {}
   switch(action.type) {
-    case 'ADD_DOCUMENTS':
-      return (
-        {},
-        old_patched_documents,
-        action.patched_documents
+    case 'ADD_VIEW':
+      return freshen(
+        old_views,
+        action.views
       )
     default:
-      return old_patched_documents
+      return old_views
   }
 }
 
@@ -52,16 +51,15 @@ var revisions = function(old_revisions, action) {
   switch(action.type) {
     case 'REVISE_DOCUMENT':
       var new_revisions = {}
-      new_revisions[action.document_name] = $.extend(
-        {},
+      new_revisions[action.document_name] = freshen(
         old_revisions[action.document_name],
         action.revision
       )
-      return $.extend( {}, old_revisions, new_revisions )
+      return freshen( old_revisions, new_revisions )
     case 'DISCARD_REVISION':
       var new_revisions = {}
       new_revisions[action.document_name] = null
-      return $.extend( {}, old_revisions, new_revisions )
+      return freshen( old_revisions, new_revisions )
     default:
       return old_revisions
   }
@@ -70,34 +68,29 @@ var revisions = function(old_revisions, action) {
 var template = function(old_template, action) {
   if (!old_template) old_template = {
     template: {},
-    patched_template: {},
     documents: {},
-    patched_documents: {},
-    revisions: {}
+    revisions: {},
+    views: {}
   }
 
   switch(action.type) {
     case 'ADD_TEMPLATE':
-      return $.extend(
-        {},
-        old_template,
-        {
-          template: action.template,
-          patched_template: action.patched_template,
-        }
-      )
+      return freshen( old_template, {
+          template: action.template
+        })
+    case 'ADD_VIEWS':
+      return freshen( old_template, {
+          views: views(old_template.views,action),
+        })
     case 'ADD_DOCUMENTS':
+      return freshen( old_template, {
+          documents: documents(old_template.documents,action),
+        })
     case 'REVISE_DOCUMENT':
     case 'DISCARD_REVISION':
-      return $.extend(
-        {},
-        old_template,
-        {
-          documents: documents(old_template.documents,action),
-          patched_documents: patched_documents( old_template.patched_documents, action),
+      return freshen( old_template, {
           revisions: revisions(old_template.revisions, action)
-        }
-      )
+        })
     default:
       return old_template
   }
@@ -108,12 +101,13 @@ var magmaReducer = function(templates, action) {
   switch(action.type) {
     case 'ADD_TEMPLATE':
     case 'ADD_DOCUMENTS':
+    case 'ADD_VIEWS':
     case 'REVISE_DOCUMENT':
     case 'DISCARD_REVISION':
       // update if it exists
       var new_templates = { }
       new_templates[action.template_name] = template(templates[action.template_name], action)
-      return $.extend( {}, templates, new_templates )
+      return freshen( templates, new_templates )
     default:
       return templates
   }
