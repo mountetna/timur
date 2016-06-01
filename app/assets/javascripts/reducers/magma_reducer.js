@@ -23,6 +23,7 @@ var documents = function(old_documents, action) {
   switch(action.type) {
     case 'ADD_DOCUMENTS':
       return $.extend(
+        true,
         {},
         old_documents,
         action.documents
