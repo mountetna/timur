@@ -35,6 +35,17 @@ const PLOT_TYPES = {
       }
     }
   },
+  
+  "MfiCorrelationPlot": {
+    name: "Mfi Correlation",
+    type: "MfiCorrelationPlot",
+    analysis: {
+      correlation: {
+        method: "correlation",
+        columns: false
+      }
+    }
+  },
   "DensityPlot": {
     name: "Density",
     type: "DensityPlot",
