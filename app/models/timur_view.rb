@@ -49,9 +49,11 @@ class TimurView
     private
 
     def columns
-      [:id] + @panes.map do |name, pane|
+      @panes.map do |name, pane|
         pane.attributes.map do |att_name|
-          @model.attributes[att_name].needs_column? ? att_name : nil
+          Rails.logger.info "Attribute is #{att_name}"
+          att = @model.attributes[att_name]
+          att.needs_column? ? att.column_name : nil
         end
       end.flatten.compact.uniq
     end
@@ -65,6 +67,7 @@ class TimurView
       @attributes = []
       @display = []
       @extra = {}
+      needs @model.identity, :created_at, :updated_at
       instance_eval( &block )
     end
 
@@ -90,7 +93,7 @@ class TimurView
     end
 
     def adds new_att, &block
-      @display.concat new_att
+      @display.push new_att
       #@data[new_att] = create_att(&block)
     end
 
@@ -124,9 +127,10 @@ class TimurView
 
     def find_view_class model
       view_name = "#{model.name}View".to_sym
-      if Kernel.const_defined? view_name
-        Kernel.const_get(view_name)
-      else
+      begin
+        Kernel.const_get view_name
+      rescue NameError => e
+        raise e unless e.message =~ /uninitialized constant/
         TimurView
       end
     end

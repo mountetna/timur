@@ -26,18 +26,6 @@ class SampleJsonUpdate < JsonUpdate
       patch_attribute(:fixation_time) {|a| a.placeholder = "Time in minutes"}
     end
   end
-
-  class Document < JsonUpdate::Document
-    def update
-      patch_key :fingerprint do |sum|
-        FingerprintPlotJson.new(@record).to_json
-      end
-
-      patch_key :qc do |sum|
-        QcPlotJson.new(@record).to_json
-      end
-    end
-  end
 end
 
 
