@@ -3,13 +3,17 @@ class TimurPayload
     @payload = payload
   end
 
-  def to_json
-    MultiJson.dump(@payload.to_hash do |model,attributes,record|
+  def to_json(options=nil)
+    MultiJson.dump(to_hash)
+  end
+  
+  def to_hash
+    @payload.to_hash do |model,attributes,record|
       if record
         record.json_document(attributes)
       else
-        JsonUpdate.default_template(model,attributes)
+        JsonUpdate.updated_template(model)
       end
-    end)
+    end
   end
 end

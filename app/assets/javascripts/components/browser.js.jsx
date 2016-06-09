@@ -14,6 +14,11 @@ var Browser = React.createClass({
   getInitialState: function() {
     return { mode: 'loading', can_edit: null, current_tab_name: null }
   },
+  camelize: function(str) {
+    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+      return letter.toUpperCase()
+    }).replace(/\s+/g, '')
+  },
   header_handler: function(action) {
     var self = this
     switch(action) {
@@ -24,7 +29,7 @@ var Browser = React.createClass({
       case 'approve':
         this.setState({mode: 'submit'})
         this.props.submitRevision(
-          this.props.revised_document, 
+          this.props.revision, 
           function() {
             self.setState({mode: 'browse'})
           },
@@ -49,29 +54,42 @@ var Browser = React.createClass({
                 <span className="fa fa-spinner fa-pulse"/>
              </div>
 
-    var current_tab_name = this.state.current_tab_name || view.default_tab
+    var current_tab_name = this.state.current_tab_name || Object.keys(view)[0]
     
-    var skin = this.state.mode == "browse" ?  "browser " + this.props.skin_name : "browser"
+    var skin = this.state.mode == "browse" ?  "browser " + this.props.template_name : "browser"
 
     return <div className={ skin }>
 
-      <TabBar selected={ current_tab_name } view={ view }/>
-
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.props.can_edit }>
-        { this.props.template.name }
+        <div className="template_name">
+        { this.camelize(this.props.template_name) }
+        </div>
+        <div className="document_name">
+        { this.props.document_name }
+        </div>
         <Help info="edit"/>
       </Header>
+
+      <TabBar mode={this.state.mode} revision={ this.props.revision } current_tab_name={ current_tab_name } view={ view }
+        clickTab={
+          function(tab_name) {
+            self.setState({current_tab_name: tab_name})
+            if (!view[tab_name]) self.props.request(tab_name)
+          }
+        }
+      />
 
       <BrowserTab 
         template={this.props.template}
         document={this.props.document}
+        revision={this.props.revision}
         mode={ this.state.mode }
-        tab={ view.tabs[current_tab_name] }
+        name={ current_tab_name }
+        tab={ view[current_tab_name] }
         />
     </div>
   }
 })
-
 
 Browser = connect(
   function (state,props) {
@@ -84,10 +102,6 @@ Browser = connect(
     var revision = (template_record ? template_record.revisions[props.record_name] : null) || {}
 
     var view = (template_record ? template_record.views[props.record_name] : null)
-
-    var getDocument = function(mode) {
-      return mode == 'browse' ? patched_document : document
-    }
 
     var filterAttributes = function(temp) {
       var atts = []
@@ -106,13 +120,11 @@ Browser = connect(
       props,
       {
         template: template,
-        skin_name: template && template.name ? template.name.toLowerCase() : "",
-        document: getDocument,
-        revised_document: revision,
+        template_name: template ? template.name : null,
+        document: document,
+        document_name: document ? document[ template.identifier ] : null,
+        revision: revision,
         view: view,
-        revision: function(att_name) {
-          return revision.hasOwnProperty(att_name) ? revision[ att_name ] : document[ att_name ]
-        },
         attributes: function(mode) {
           return filterAttributes( mode == "browse" ?  patched_template : template)
         }
@@ -121,12 +133,13 @@ Browser = connect(
   },
   function (dispatch,props) {
     return {
-      request: function(tab_name,success) {
+      request: function(tab_name,success,error) {
         dispatch(magmaActions.requestView(
           props.model_name,
           props.record_name, 
           tab_name,
-          success
+          success,
+          error
         ))
       },
       discardRevision: function() {

@@ -30,7 +30,7 @@ FloatAttribute = React.createClass({
               )
             }
           }
-          defaultValue={ this.props.value } />
+          defaultValue={ this.props.revision } />
       </div>
     }
     return <div className="value">

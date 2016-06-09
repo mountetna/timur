@@ -31,7 +31,7 @@ IntegerAttribute = React.createClass({
                     )
                   }
                 }
-                defaultValue={ this.props.value } />
+                defaultValue={ this.props.revision } />
              </div>
     }
 

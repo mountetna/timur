@@ -1,7 +1,7 @@
 require 'ostruct'
 class JsonUpdate
   class << self
-    def updated_template model, attributes
+    def updated_template model, attributes = nil
       update_class(model).new(model, attributes).updated_template
     end
 
@@ -22,7 +22,7 @@ class JsonUpdate
     @sort_order ||= order
   end
 
-  def initialize model, attributes = nil
+  def initialize model, attributes
     @model = model
     @attributes = attributes
   end
@@ -32,9 +32,14 @@ class JsonUpdate
 
     apply_default_patches
 
+    update
+
     apply_sorts
 
     template
+  end
+
+  def update
   end
 
   private

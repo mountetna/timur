@@ -14,9 +14,9 @@ class TimurView
     end
 
     def load record_name
-      @record = @model.where(@model.identity => record_name).select(*columns).first
+      @record = @model.retrieve(record_name, attributes)
 
-      payload.add_model @model, columns
+      payload.add_model @model, attributes
       payload.add_records @model, [ @record ]
     end
 
@@ -30,7 +30,7 @@ class TimurView
           @name => {
             panes: Hash[
               @panes.map do |name, pane|
-                [ name, pane.to_hash ]
+                [ name, pane.to_hash(@record) ]
               end
             ]
           }
@@ -46,19 +46,59 @@ class TimurView
         end
       ]
     end
+
     private
 
     def columns
       @panes.map do |name, pane|
         pane.attributes.map do |att_name|
-          Rails.logger.info "Attribute is #{att_name}"
           att = @model.attributes[att_name]
           att.needs_column? ? att.column_name : nil
         end
       end.flatten.compact.uniq
     end
+
+    def attributes
+      @panes.map do |name, pane|
+        pane.attributes
+      end.flatten.uniq
+    end
   end
 
+  class ExtraAttribute
+    def initialize att_name, &block
+      @name = att_name
+      instance_eval(&block)
+    end
+
+    def attribute_class txt
+      @attribute_class = txt
+    end
+
+    def display_name txt
+      @display_name = txt
+    end
+
+    def data &block
+      @data_block = block
+    end
+
+    def to_hash record
+      {
+        attribute: {
+          name: @name,
+          attribute_class: @attribute_class,
+          display_name: @display_name
+        },
+        data: data_for(record)
+      }
+    end
+
+    def data_for record
+      block = @data_block
+      block.call(record)
+    end
+  end
   class Pane
     def initialize view, name, &block
       @view = view
@@ -73,11 +113,16 @@ class TimurView
 
     attr_reader :attributes
 
-    def to_hash
+    def to_hash(record)
       {
         title: @title,
         attributes: @attributes,
-        extra: @extra
+        display: @display,
+        extra: Hash[
+          @extra.map do |name,extra_att|
+            [ name, extra_att.to_hash(record) ]
+          end
+        ]
       }
     end
 
@@ -94,11 +139,11 @@ class TimurView
 
     def adds new_att, &block
       @display.push new_att
-      #@data[new_att] = create_att(&block)
+      @extra[new_att] = ExtraAttribute.new(new_att, &block)
     end
 
     def show_all_attributes
-      shows @model.attributes.keys
+      shows *@model.attributes.keys.select{|name| @model.attributes[name].shown? }
     end
 
     def title txt

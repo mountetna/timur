@@ -1,15 +1,16 @@
 class SampleView < TimurView
   tab :overview do
     pane :default do 
+      title "Summary"
       shows :patient, :headshot, :processed, :description, :tumor_type
     end
     pane :qc do
-      title "QC"
+      title "Quality Control"
       adds :qc do
         attribute_class "BarPlotAttribute"
-        display_name "QC"
-        data do
-          QcPlotJson.new(@record).to_json
+        display_name "Immune Fractions"
+        data do |record|
+          QcPlotJson.new(record).to_json
         end
       end
     end
@@ -18,11 +19,12 @@ class SampleView < TimurView
   tab :processing do
     pane :sample_features do
       title "Characteristics"
-      shows :notes, :weight, :site, :stage, :grade
+      shows :weight, :site, :stage, :grade
     end
     
     pane :surgery_digest do
       title "Surgery & Digest"
+
       shows :physician, :ice_time, :date_of_digest, :date_of_extraction,
         :post_digest_cell_count
     end
@@ -33,8 +35,8 @@ class SampleView < TimurView
       adds :fingerprint do
         attribute_class "BarPlotAttribute"
         display_name "FingerPrint"
-        data do
-          FingerprintPlotJson.new(@record).to_json
+        data do |record|
+          FingerprintPlotJson.new(record).to_json
         end
       end
     end

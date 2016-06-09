@@ -60,7 +60,7 @@ var magmaActions = {
       })
     }
   },
-  requestView: function(model_name, record_name, tab_name) {
+  requestView: function(model_name, record_name, tab_name, success) {
     var self = this;
     var request = {
       model_name: model_name,
@@ -77,10 +77,15 @@ var magmaActions = {
         success: function(response) {
           magmaActions.consumePayload(dispatch,response)
           dispatch(
-            magmaActions.addViews(model_name, record_name, response.views)
+            magmaActions.addViews(model_name, record_name, response.tabs)
           )
+          if (success != undefined) success()
         },
         error: function(xhr, status, err) {
+          if (error != undefined) {
+            var message = JSON.parse(xhr.responseText)
+            error(message)
+          }
         }
       })
     }

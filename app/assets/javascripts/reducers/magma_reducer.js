@@ -33,13 +33,30 @@ var documents = function(old_documents, action) {
   }
 }
 
+var view = function(old_view, action) {
+  if (!old_view) old_view = {}
+  switch(action.type) {
+    case 'ADD_VIEWS':
+      new_view = {}
+      Object.keys(action.views).forEach(function(tab_name) {
+        new_view[tab_name] = old_view[tab_name] || action.views[tab_name]
+      })
+      return new_view
+    default:
+      return old_view
+  }
+}
+
 var views = function(old_views, action) {
   if (!old_views) old_views = {}
   switch(action.type) {
-    case 'ADD_VIEW':
-      return freshen(
+    case 'ADD_VIEWS':
+      new_views = {}
+      new_views[action.document_name] = view(old_views[action.document_name], action)
+      return $.extend(
+        {},
         old_views,
-        action.views
+        new_views
       )
     default:
       return old_views
