@@ -103,19 +103,6 @@ Browser = connect(
 
     var view = (template_record ? template_record.views[props.record_name] : null)
 
-    var filterAttributes = function(temp) {
-      var atts = []
-      if (temp) {
-        Object.keys( temp.attributes ).forEach(
-          function(att_name) {
-            var att = temp.attributes[att_name]
-            if (att.shown) atts.push(att)
-          }
-        )
-      }
-      return atts
-    }
-
     return freshen(
       props,
       {
@@ -125,9 +112,6 @@ Browser = connect(
         document_name: document ? document[ template.identifier ] : null,
         revision: revision,
         view: view,
-        attributes: function(mode) {
-          return filterAttributes( mode == "browse" ?  patched_template : template)
-        }
       }
     )
   },
