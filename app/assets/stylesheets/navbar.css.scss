@@ -67,7 +67,10 @@
 			&:first-child {
 				border-left: 1px solid rgba(forestgreen,0.1);
 			}
-			color: goldenrod;
+			a {
+				color: goldenrod;
+				cursor: pointer;
+			}
 		}
 		#identifier_search {
 			border-bottom: 2px solid forestgreen;

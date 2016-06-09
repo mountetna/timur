@@ -12,6 +12,7 @@ var TabBar = React.createClass({
     if (Object.keys(view).length == 1) return <div style={{display:"none"}}/>
 
     return <div className="tabbar">
+      <div className="spacer1"/>
       {
         Object.keys(view).map(function(tab_name) {
           if (self.props.current_tab_name == tab_name)
@@ -22,6 +23,7 @@ var TabBar = React.createClass({
             } }>{ self.format_name(tab_name) }</div>
         })
       }
+      <div className="spacer2"/>
     </div>
   }
 })
