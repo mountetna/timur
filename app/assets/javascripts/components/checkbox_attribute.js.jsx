@@ -12,12 +12,12 @@ var CheckboxAttribute = React.createClass({
                         self.props.document,
                         self.props.template,
                         self.props.attribute,
-                        e.target.value ? true : false
+                        e.target.checked ? true : false
                       )
                     )
                   }
                 }
-                defaultChecked={ this.props.value } />
+                defaultChecked={ this.props.revision } />
              </div>
     }
     return <div className="value"> { this.props.value ? "yes" : "no" } </div>

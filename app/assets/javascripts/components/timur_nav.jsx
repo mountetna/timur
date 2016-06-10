@@ -40,9 +40,7 @@ TimurNavBar = React.createClass({
                 Object.keys(tabs).map(function(name) {
                   var tab_class = "nav_tab" + (self.props.mode == name ? ' selected' : '')
                   return <div key={ name } className={ tab_class }>
-                    {
-                      self.props.mode == name ?  name : <a href={ tabs[name] }> { name } </a>
-                    }
+                      <a href={ tabs[name] }> { name } </a>
                     </div>
                 })
               }

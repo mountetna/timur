@@ -5,45 +5,58 @@
 		>span {
 			display: none;
 		}
+		.template_name {
+			display: none;
+		}
+		.document_name {
+			color: darkorchid
+		}
 		padding: 0;
 		margin-left: 50px;
 	}
 
-	#attributes {
-		font-family: $body_font;
-		.attribute {
-			padding-left: 50px;
-			&:first-of-type {
-				.name { 
-					display: none; 
-				}
-				.value {
-					background-color: transparent;
-					padding: 0px;
-					margin: 0px;
-					color: darkorchid;
-					font-size: 25px;
+	#tab {
+		&.overview {
+			.pane {
+				.attributes { 
+					.attribute {
+						&:first-of-type {
+							.name { 
+								display: none; 
+							}
+							.value {
+									background-color: transparent;
+									padding: 20px 0px;
+									margin: 0px;
+									color: seagreen;
+									font-size: 20px;
+							}
+						}
+					}
 				}
 			}
-			&:nth-child(2) {
-				.name {
-					display: none;
-				}
-			}
-			display: block;
-			.name {
+		}
+		.pane {
+			.attributes {
 				font-family: $body_font;
-				display: block;
-				border: none;
-				width: 100%;
-				margin-top: 10px;
-				text-align: unset;
-			}
-			.value {
-				font-family: $body_font;
-				display: block;
-				width: auto;
-				border: none;
+				.attribute {
+					padding-left: 50px;
+					display: block;
+					.name {
+						font-family: $body_font;
+						display: block;
+						border: none;
+						width: 100%;
+						margin-top: 10px;
+						text-align: unset;
+					}
+					.value {
+						font-family: $body_font;
+						display: block;
+						width: auto;
+						border: none;
+					}
+				}
 			}
 		}
 	}
