@@ -2,7 +2,7 @@ class SampleView < TimurView
   tab :overview do
     pane :default do 
       title "Summary"
-      shows :patient, :headshot, :processed, :description, :tumor_type
+      shows :patient, :headshot, :processed, :description, :notes, :tumor_type
     end
     pane :qc do
       title "Quality Control"
