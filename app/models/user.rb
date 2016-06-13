@@ -363,8 +363,7 @@ class User < ActiveRecord::Base
     '0tw2b5l' => { key: '0tw2b5l', stain: 'dc', name: 'Live_CD45-_CD209_dc', type: 'MFI', population: 'CD45-##Live##Single Cells 2##Single Cells##Time', channel: 'Comp-Alexa Fluor 647-A'},
     'nkabi7s' => { key: 'nkabi7s', stain: 'dc', name: 'Live_CD45-_PDL2_dc', type: 'MFI', population: 'CD45-##Live##Single Cells 2##Single Cells##Time', channel: 'Comp-BV711-A'},
     'xt5x89s' => { key: 'xt5x89s', stain: 'dc', name: 'Live_CD45-_PDL1_dc', type: 'MFI', population: 'CD45-##Live##Single Cells 2##Single Cells##Time', channel: 'Comp-BV786-A'},
-
- }
+  }
   
   def can_read?
     whitelist && whitelist.can_read?
