@@ -77,7 +77,8 @@ PlotList = React.createClass({
                   mode: 'plot',
                   template: result.template, 
                   saves: $.extend(self.default_saves, result.saves ),
-                  default_mappings: result.default_mappings
+                  default_mappings: result.default_mappings,
+                  mfi_default_mappings: result.mfi_default_mappings
       });
     });
   },
@@ -157,7 +158,9 @@ PlotList = React.createClass({
                       key={ i }
                       plot={ plot } 
                       saves={ self.state.saves }
-                      default_mappings={ $.extend({}, self.state.default_mappings) }/>;
+                      default_mappings={ $.extend({}, self.state.default_mappings) }
+                      mfi_default_mappings={ $.extend({}, self.state.mfi_default_mappings) }
+                      />;
                   })
                 }
              </div>

@@ -35,7 +35,7 @@ class MfiMapper < Mapper
   def initialize params
     @stain = params[:stain]
     @name, @ancestor = params[:population].split(/##/)
-    @channel = params[:mfi]
+    @channel = params[:channel]
   end
 
   def get_value sample, pops

@@ -58,8 +58,8 @@ MfiCorrelationPlotContainer = React.createClass({
         null
       }
       <MfiCorrelationPlot data_key={ plot.data_key } data={ all_series } plot={{
-          width: 1200,
-          height: 1200,
+          width: 3200,
+          height: 3200,
           margin: {
             left: 250,
             top: 250,

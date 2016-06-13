@@ -25,7 +25,8 @@ class PlotController <  ApplicationController
     # JSON description of available fixed plots
     render json: PlotTypesJson.template.merge(
       saves: current_user.saves,
-      default_mappings: User::DEFAULT_MAPPINGS
+      default_mappings: User::DEFAULT_MAPPINGS,
+      mfi_default_mappings: User::DEFAULT_MFI_MAPPINGS
     )
   end
 

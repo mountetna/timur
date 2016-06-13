@@ -379,6 +379,9 @@ class User < ActiveRecord::Base
     if DEFAULT_MAPPINGS.has_key? key
       return Mapping.new key, DEFAULT_MAPPINGS[key]
     end
+    if DEFAULT_MFI_MAPPINGS.has_key? key
+      return Mapping.new key, DEFAULT_MFI_MAPPINGS[key]
+    end
     if saves["mappings"].has_key? key
       return Mapping.new key,  saves["mappings"][key].symbolize_keys
     end

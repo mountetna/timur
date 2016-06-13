@@ -78,6 +78,7 @@ MfiCorrelationPlot = React.createClass({
                   var color = self.compute_color(cell);
 
                   return <rect className="cell"
+                    key={ self.props.data_key + j }
                     x={ j*cell_width }
                     y={ i*cell_height}
                     width={ cell_width - 1 }
