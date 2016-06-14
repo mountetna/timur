@@ -1,0 +1,26 @@
+.value {
+	.categories {
+		.category {
+			display: inline-block;
+			.metrics {
+				display: block;
+				.metric {
+					display: inline-block;
+				}
+			}
+		}
+	}
+	.metrics_view {
+		.category {
+			.metric {
+				display: inline-block;
+				&.good {
+					background-color: green;
+				}
+				&.bad {
+					background-color: red;
+				}
+			}
+		}
+	}
+}
