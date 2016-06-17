@@ -27,17 +27,22 @@ var Browser = React.createClass({
         this.props.discardRevision()
         return
       case 'approve':
-        this.setState({mode: 'submit'})
-        this.props.submitRevision(
-          this.props.revision, 
-          function() {
-            self.setState({mode: 'browse'})
-          },
-          function ( messages ) {
-            self.setState({mode: 'edit'})
-            self.props.showMessage(messages.errors || ["### An unknown error occurred.\n\nSeek further insight elsewhere."] )
-          }
-        )
+        if (this.props.hasRevisions) {
+          this.setState({mode: 'submit'})
+          this.props.submitRevision(
+            this.props.revision, 
+            function() {
+              self.setState({mode: 'browse'})
+            },
+            function ( messages ) {
+              self.setState({mode: 'edit'})
+              self.props.showMessage(messages.errors || ["### An unknown error occurred.\n\nSeek further insight elsewhere."] )
+            }
+          )
+        } else {
+          this.setState({mode: 'browse'})
+          this.props.discardRevision()
+        }
         return
       case 'edit':
         this.setState({mode: 'edit'})
@@ -111,6 +116,7 @@ Browser = connect(
         document: document,
         document_name: document ? document[ template.identifier ] : null,
         revision: revision,
+        hasRevisions: (Object.keys(revision).length > 0),
         view: view,
       }
     )
