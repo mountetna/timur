@@ -10,9 +10,6 @@
 			cursor: pointer;
 			&.hidden {
 				background-color: transparent;
-				&:hover {
-					background-color: palegreen;
-				}
 			}
 			&:hover {
 				color: mediumorchid;
@@ -37,7 +34,7 @@
 	}
 	.metrics_view {
 		display: block;
-		.sample_name {
+		.record_name {
 			display: inline-block;
 			width: 140px;
 			margin-right: 10px;
@@ -48,6 +45,7 @@
 			.metric_box {
 				display: inline-block;
 				border-left: 1px solid rgba(midnightblue,0.4);
+				padding: 2px 0;
 				.metric {
 					border: 2px solid midnightblue;
 					border-radius: 50%;
@@ -62,7 +60,7 @@
 					}
 					&.bad {
 						background-color: red;
-						box-shadow: 2px 2px 3px darkmagenta inset, -2px -2px 5px purple inset;
+						box-shadow: 1px 1px 3px darkorange inset, -2px -2px 5px purple inset;
 					}
 				}
 			}

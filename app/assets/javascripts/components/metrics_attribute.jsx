@@ -37,11 +37,11 @@ var CategoryControl = React.createClass({
   }
 })
 
-var SampleMetrics = React.createClass({
+var RecordMetrics = React.createClass({
   render: function() {
     var self = this
     return <div className="metrics">
-    <div className="sample_name">{ this.props.sample_name }</div>
+    <div className="record_name"><MagmaLink link={this.props.record_name} model={this.props.model_name}/></div>
     {
       Object.keys(this.props.categories).map(function(category) {
         if (self.props.category_hidden[category])
@@ -90,12 +90,14 @@ var MetricsAttribute = React.createClass({
               } />
              <div className="metrics_view">
              {
-               Object.keys(metrics).map(function(sample_name) {
-                 return <SampleMetrics sample_name={ sample_name } 
+               Object.keys(metrics).map(function(record_name) {
+                 return <RecordMetrics 
+                          model_name={ self.props.value.model_name }
+                          record_name={ record_name } 
                           categories={ categories }
                           category_hidden={ self.state.category_hidden }
-                          key={ sample_name }
-                          metrics={ metrics[sample_name] }/>
+                          key={ record_name }
+                          metrics={ metrics[record_name] }/>
                })
              }
              </div>
