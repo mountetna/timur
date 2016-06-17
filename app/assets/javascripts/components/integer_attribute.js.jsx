@@ -1,7 +1,7 @@
 IntegerAttribute = React.createClass({
   filter_keys: function(e) {
-    if (Keycode.is_modified(e)) return true;
-    if (Keycode.is_number(e)) return true;
+    if (Keycode.is_ctrl(e)) return true;
+    if (Keycode.is_number(e) || Keycode.match(e,/^_$/)) return true;
     if (Keycode.is_printable(e)) {
       e.preventDefault();
       return true;
@@ -18,7 +18,7 @@ IntegerAttribute = React.createClass({
               <SlowTextInput 
                 textClassName="full_text" 
                 placeholder={this.props.attribute.placeholder}
-                onKeyDown={ this.filter_keys }
+                onKeyPress={ this.filter_keys }
                 update={
                   function(value) {
                     store.dispatch(
@@ -26,7 +26,7 @@ IntegerAttribute = React.createClass({
                         self.props.document,
                         self.props.template,
                         self.props.attribute,
-                        value
+                        value.replace(/_/,'')
                       )
                     )
                   }
