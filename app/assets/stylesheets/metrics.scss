@@ -1,0 +1,70 @@
+.value {
+	.categories {
+		display: block;
+		.category_label {
+			background-color: palegreen;
+			color: midnightblue;
+			margin: 2px;
+			padding: 5px;
+			display: inline-block;
+			cursor: pointer;
+			&.hidden {
+				background-color: transparent;
+			}
+			&:hover {
+				color: mediumorchid;
+			}
+		}
+		.metrics_names {
+			.category {
+				display: inline-block;
+				color: midnightblue;
+				font-size: 14px;
+				.metric {
+					display: inline-block;
+					transform: rotate(-45deg);
+					width: 37px;
+				}
+			}
+			margin-bottom: 15px;
+			margin-left: 159px;
+			margin-top: 100px;
+			display: block;
+		}
+	}
+	.metrics_view {
+		display: block;
+		.record_name {
+			display: inline-block;
+			width: 140px;
+			margin-right: 10px;
+			text-align: right;
+		}
+		.category {
+			display: inline-block;
+			.metric_box {
+				display: inline-block;
+				border-left: 1px solid rgba(midnightblue,0.4);
+				padding: 2px 0;
+				.metric {
+					border: 2px solid midnightblue;
+					border-radius: 50%;
+					color: mediumorchid;
+					cursor: default;
+					display: inline-block;
+					height: 20px;
+					margin: 0 6px;
+					width: 20px;
+					&.good {
+						background-color: palegreen;
+						box-shadow: -2px -2px 5px mediumorchid inset, 1px 1px 1px darkolivegreen inset;
+					}
+					&.bad {
+						background-color: pink;
+						box-shadow: 1px 1px 3px darkred inset, -2px -2px 5px red inset;
+					}
+				}
+			}
+		}
+	}
+}

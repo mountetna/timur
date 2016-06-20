@@ -31,6 +31,8 @@ IntegerAttribute = require('./components/integer_attribute.js.jsx')
 SelectAttribute = require('./components/select_attribute.js.jsx')
 TextAttribute = require('./components/text_attribute.js.jsx')
 
+MetricsAttribute = require('./components/metrics_attribute.jsx')
+
 PlotSeries = require('./components/plot_series.js.jsx')
 PlotVarMapping = require('./components/plot_var_mapping.js.jsx')
 PlotVariables = require('./components/plot_variables.js.jsx')
