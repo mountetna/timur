@@ -61,7 +61,7 @@ var CategoryMetrics = React.createClass({
       this.props.metrics.map(function(metric) {
         var klass = metric.score ? "metric good" : "metric bad"
         return <div key={ metric.name } className="metric_box">
-          <div title={metric.message} className={ klass }>
+          <div title={metric.score ? "OK" : metric.message} className={ klass }>
           &nbsp;
           </div>
         </div>

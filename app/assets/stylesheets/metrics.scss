@@ -50,6 +50,7 @@
 					border: 2px solid midnightblue;
 					border-radius: 50%;
 					color: mediumorchid;
+					cursor: default;
 					display: inline-block;
 					height: 20px;
 					margin: 0 6px;
@@ -59,8 +60,8 @@
 						box-shadow: -2px -2px 5px mediumorchid inset, 1px 1px 1px darkolivegreen inset;
 					}
 					&.bad {
-						background-color: red;
-						box-shadow: 1px 1px 3px darkorange inset, -2px -2px 5px purple inset;
+						background-color: pink;
+						box-shadow: 1px 1px 3px darkred inset, -2px -2px 5px red inset;
 					}
 				}
 			}
