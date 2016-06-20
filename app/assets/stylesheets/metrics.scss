@@ -34,6 +34,8 @@
 	}
 	.metrics_view {
 		display: block;
+		height: 500px;
+		overflow: auto;
 		.record_name {
 			display: inline-block;
 			width: 140px;
