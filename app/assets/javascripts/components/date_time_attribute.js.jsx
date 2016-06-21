@@ -7,14 +7,14 @@ var DateTimeView = React.createClass({
                   type='text'
                   className="date_text" 
                   id={ this.component_name('date') }
-                  defaultValue={ this.format_date(this.props.revision) }/>
+                  defaultValue={ dates.format_date(this.props.revision) }/>
               <span className="at_spacer">@</span>
               <input 
                 placeholder="00:00"
                 type='text'
                 className="time_text"
                 id={ this.component_name('time') } 
-                defaultValue={ this.format_time(this.props.revision) }
+                defaultValue={ dates.format_time(this.props.revision) }
                 onChange={
                   function (e) {
                       self.setState({ changed_time: e.target.value },function() {
@@ -25,9 +25,9 @@ var DateTimeView = React.createClass({
              </div>
     }
     return <div className="value">
-            { this.format_date(this.props.value) || '?' }
+            { dates.format_date(this.props.value) || '?' }
             <span className="at_spacer">@</span>
-            { this.format_time(this.props.value) || '?' }
+            { dates.format_time(this.props.value) || '?' }
            </div>
   },
   componentDidUpdate: function () {
@@ -36,7 +36,7 @@ var DateTimeView = React.createClass({
     var self = this
 
     $(dateInput).datepicker({
-      defaultDate: this.format_date(this.props.value),
+      defaultDate: dates.format_date(this.props.value),
       dateFormat: 'yy-mm-dd',
       onClose: function(date) {
         self.setState({ changed_date: date }, function() {
@@ -52,21 +52,10 @@ var DateTimeView = React.createClass({
 
   component_name: function(type) { return type + this.props.attribute.name },
 
-  format_date: function(value) {
-    return value ? $.datepicker.formatDate( 'yy-mm-dd', new Date(value) ) : null
-  },
-
-  format_time: function(value) {
-    if (!value) return null;
-    var date = new Date(value);
-    var hours = ('00' + date.getHours()).slice(-2);
-    var minutes = ('00' + date.getMinutes()).slice(-2);
-    return hours + ':' + minutes;
-  },
 
   changed_date_time: function() {
-    var date = this.state.changed_date || this.format_date(this.props.revision)
-    var time = this.state.changed_time || this.format_time(this.props.revision)
+    var date = this.state.changed_date || dates.format_date(this.props.revision)
+    var time = this.state.changed_time || dates.format_time(this.props.revision)
 
     // this signals that we want to empty the field
     if (!this.state.changed_date && !this.state.changed_time && this.props.revision) return -1

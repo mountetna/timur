@@ -7,3 +7,5 @@ connect = require('react-redux').connect
 fetch = require('isomorphic-fetch')
 thunk = require('redux-thunk')
 chroma = require('chroma-js')
+
+dates = require('dates')
