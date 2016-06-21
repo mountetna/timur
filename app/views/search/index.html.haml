@@ -8,6 +8,7 @@
         React.createElement(Timur, {
           #{current_user ? "user: '#{current_user.name}', " : '' }
           mode: 'search',
+          can_edit: #{ current_user && current_user.can_edit? ? :true : :false },
           environment: '#{Rails.env.development? ? 'development' : 'production'}',
         }),
         $('#root')[0]
