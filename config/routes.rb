@@ -12,8 +12,9 @@ Rails.application.routes.draw do
   get 'auth/shibboleth' => 'welcome#auth', as: :auth_shib
 
   # Routes for the main views - just browse for now
-  #
+  
   get 'browse' => 'browse#index', as: :browse
+  get 'activity' => 'browse#activity', as: :activity
 
   get 'browse/:model/:name' => 'browse#model', as: :browse_model, constraints: { name: /[^\/]+/ }
   post 'json/template' => 'browse#template_json', as: :template_json

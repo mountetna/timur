@@ -33,17 +33,24 @@ TimurNavBar = React.createClass({
                  <Help info="timur"/>
               </div>
              <div id="heading">
-             { heading }
+               { heading }
              </div>
              <div id="nav">
-              {
-                Object.keys(tabs).map(function(name) {
-                  var tab_class = "nav_tab" + (self.props.mode == name ? ' selected' : '')
-                  return <div key={ name } className={ tab_class }>
-                      <a href={ tabs[name] }> { name } </a>
-                    </div>
-                })
-              }
+               {
+                 Object.keys(tabs).map(function(name) {
+                   var tab_class = "nav_tab" + (self.props.mode == name ? ' selected' : '')
+                   return <div key={ name } className={ tab_class }>
+                       <a href={ tabs[name] }> { name } </a>
+                     </div>
+                 })
+               }
+               {
+                 this.props.can_edit ?
+                 <div className="nav_tab">
+                   <a href={ Routes.activity_path() }>Activity</a>
+                 </div>
+                 : null
+               }
                <div className="nav_tab">
                  <a onClick={ 
                    function(e) {

@@ -14,6 +14,18 @@ class BrowseController <  ApplicationController
     @record_name = params[:name]
   end
 
+  def activity
+    @activities = Activity.order(created_at: :desc).last(50).map do |activity|
+      {
+        date: activity.created_at,
+        user: activity.user.name,
+        model_name: activity.magma_model,
+        record_name: activity.identifier,
+        action: activity.action
+      }
+    end
+  end
+
   def view_json
     # Get the model name
 
@@ -52,6 +64,9 @@ class BrowseController <  ApplicationController
       render json: { errors: m.complaints }, status: 421
       return
     end
+
+    Activity.post(current_user, params[:model_name], params[:record_name], 
+                  "updated *#{params[:revision].keys.join(", ")}*")
 
     render json: TimurPayload.new(
       @revision.payload

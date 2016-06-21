@@ -18,10 +18,13 @@ Timur = React.createClass({
       component = <Plotter />;
     else if (this.props.mode == 'search')
       component = <Search />;
+    else if (this.props.mode == 'activity')
+      component = <Activity activities={ this.props.activities }/>
 
     return <Provider store={ this.create_store() }>
             <div>
               <TimurNav user={ this.props.user }
+                can_edit={ this.props.can_edit }
                 mode={ this.props.mode }
                 environment={this.props.environment}/>
               <Messages/>
