@@ -1,0 +1,49 @@
+@import "globals";
+
+#activities {
+	font-family: $body_font;
+	font-size: 18px;
+	color: midnightblue;
+	padding: 10px;
+	.activity {
+		display: block;
+		color: blue;
+		font-size: 16px;
+		padding-left: 10px;
+		span {
+			padding-right: 4px
+		}
+		p {
+			padding: 0px;
+			margin: 0px;
+		}
+		.date {
+			display: inline-block;
+			font-family: $value_font;
+			color: royalblue;
+		}
+		.at {
+			color: teal;
+		}
+		.time {
+			font-family: $value_font;
+			display: inline-block;
+			padding-right: 10px;
+			color: royalblue;
+		}
+		.user {
+			color: purple;
+			display: inline-block;
+		}
+		.action {
+			display: inline-block;
+			em {
+				font-weight: bold;
+				color: forestgreen;
+			}
+		}
+		.link {
+			display: inline-block;
+		}
+	}
+}

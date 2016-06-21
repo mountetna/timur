@@ -22,10 +22,7 @@ TableColumn = function(attribute,template) {
       case "Attribute":
         return value;
       case "DateTimeAttribute":
-        var date = new Date(value);
-        var hours = ('00' + date.getHours()).slice(-2);
-        var minutes = ('00' + date.getMinutes()).slice(-2);
-        return $.datepicker.formatDate( 'yy-mm-dd', date ) + '@' + hours + ':' + minutes;
+        return dates.format_date(date) + '@' + dates.format_time(date)
       case "CheckboxAttribute":
         return value ? "true" : "false";
       case "DocumentAttribute":

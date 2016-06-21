@@ -1,4 +1,4 @@
-= content_for :title, "#{Rails.env.development? ? :"Dev Timur" : :Timur } - Search"
+= content_for :title, "#{Rails.env.development? ? :"Dev Timur" : :Timur } - Activity"
 
 #root
 %script{ type: "text/javascript" }
@@ -7,7 +7,8 @@
       ReactDOM.render(
         React.createElement(Timur, {
           #{current_user ? "user: '#{current_user.name}', " : '' }
-          mode: 'search',
+          mode: 'activity',
+          activities: #{@activities.to_json},
           can_edit: #{ current_user && current_user.can_edit? ? :true : :false },
           environment: '#{Rails.env.development? ? 'development' : 'production'}',
         }),
