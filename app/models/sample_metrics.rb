@@ -14,6 +14,16 @@ class SampleMetrics
       @record.headshot.file
     end
   end
+  class TumorType < TimurMetric
+    category :processing
+
+    def test
+      if !@record.tumor_type
+        @message = "Tumor type is not set."
+      end
+      @record.tumor_type
+    end
+  end
   class FlowjoXml < TimurMetric
     category :flow
 
