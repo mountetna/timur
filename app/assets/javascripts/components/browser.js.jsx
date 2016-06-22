@@ -12,7 +12,7 @@ var Browser = React.createClass({
     this.props.request(null, function() { self.setState({mode: 'browse'}) })
   },
   getInitialState: function() {
-    return { mode: 'loading', can_edit: null, current_tab_name: null }
+    return { mode: 'loading', current_tab_name: null }
   },
   camelize: function(str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {

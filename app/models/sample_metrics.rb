@@ -18,7 +18,7 @@ class SampleMetrics
     category :flow
 
     def test
-      @record.patient.flojo_file
+      @record.patient.flojo_file.file
     end
   end
   class TregFcs < TimurMetric
