@@ -17,6 +17,7 @@ SelectAttribute = React.createClass({
                   }
                 }
                 defaultValue={ this.props.value }
+                showNone="disabled"
                 values={ this.props.attribute.options } />
              </div>
     }
