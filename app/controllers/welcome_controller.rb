@@ -11,7 +11,7 @@ class WelcomeController <  ApplicationController
   end
 
   def noauth
-    render layout: "noauth"
+    render layout: "timur"
   end
 
   def static

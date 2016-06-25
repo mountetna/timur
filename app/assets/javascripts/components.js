@@ -1,4 +1,5 @@
 Help = require('./components/help.jsx')
+Noauth = require('./components/noauth.jsx')
 Messages = require('./components/messages.jsx')
 TabBar = require('./components/tab_bar.jsx')
 BrowserTab = require('./components/browser_tab.jsx')

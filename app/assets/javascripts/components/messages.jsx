@@ -1,4 +1,4 @@
-var MessageList = React.createClass({
+var Messages = React.createClass({
   getInitialState: function() {
     return { current_message: 0 }
   },
@@ -54,14 +54,18 @@ var MessageList = React.createClass({
             </div>
           </div>;
   }
-});
+})
 
-var Messages = connect(
+Messages = connect(
   function(state) {
     return {
       messages: state.messages
     }
   }
-)(MessageList);
+)(Messages)
+
+Messages.contextTypes = {
+  store: React.PropTypes.object
+}
 
 module.exports = Messages;

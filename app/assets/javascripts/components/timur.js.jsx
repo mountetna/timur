@@ -20,6 +20,8 @@ Timur = React.createClass({
       component = <Search />;
     else if (this.props.mode == 'activity')
       component = <Activity activities={ this.props.activities }/>
+    else if (this.props.mode == 'noauth')
+      component = <Noauth user={ this.props.user }/>
 
     return <Provider store={ this.create_store() }>
             <div>
