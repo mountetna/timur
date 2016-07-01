@@ -15,7 +15,7 @@ class BrowseController <  ApplicationController
   end
 
   def activity
-    @activities = Activity.order(created_at: :desc).last(50).map do |activity|
+    @activities = Activity.order(created_at: :desc).limit(50).map do |activity|
       {
         date: activity.created_at,
         user: activity.user.name,
