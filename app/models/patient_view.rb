@@ -5,7 +5,7 @@ class PatientView < TimurView
     end
     pane :processing do 
       title "Processing"
-      shows :processor, :notes, :gross_specimen, :received_blood, :date_of_digest, :date_of_extraction, :physician, :ice_time
+      shows :processor, :notes, :gross_specimen, :received_blood, :ffpe_frozen, :date_of_digest, :date_of_extraction, :physician, :ice_time
     end
     pane :flow do
       title "Flow"
