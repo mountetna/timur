@@ -19,7 +19,7 @@ class SearchController <  ApplicationController
   def table_json
     # This should mimic the format of the 'table' attribute:
     model = Magma.instance.get_model params[:model_name]
-    records = model.all
+    records = model.retrieve nil
 
     payload = Magma::Payload.new
     payload.add_model model

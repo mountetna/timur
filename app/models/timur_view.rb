@@ -14,7 +14,7 @@ class TimurView
     end
 
     def load record_name
-      @record = @model.retrieve(record_name, attributes)
+      @record = @model.retrieve(record_name, attributes).first
 
       payload.add_model @model, attributes
       payload.add_records @model, [ @record ]
