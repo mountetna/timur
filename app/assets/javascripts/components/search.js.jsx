@@ -1,3 +1,8 @@
+/*
+ * The Search view allows us to post queries for a particular table.
+ * 
+ */
+
 Search = React.createClass({
   getInitialState: function() {
     return { mode: 'search' };
@@ -14,6 +19,7 @@ Search = React.createClass({
     
     return <div id="search">
         <span className="label">Export</span>
+
         <Selector name="model"
           values={
             Object.keys(this.props.magma_models)
