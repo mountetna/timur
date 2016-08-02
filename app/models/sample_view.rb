@@ -19,14 +19,7 @@ class SampleView < TimurView
   tab :processing do
     pane :sample_features do
       title "Characteristics"
-      shows :weight, :site, :stage, :grade
-    end
-    
-    pane :surgery_digest do
-      title "Surgery & Digest"
-
-      shows :physician, :ice_time, :date_of_digest, :date_of_extraction,
-        :post_digest_cell_count
+      shows :weight, :site, :stage, :grade, :post_digest_cell_count
     end
   end
 
