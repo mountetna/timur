@@ -59,14 +59,5 @@
 				white-space: nowrap;
 			}
 		}
-		&:hover {
-			.item_value {
-				.value {
-					overflow: auto;
-					white-space: normal;
-				}
-			}
-		}
 	}
 }
-
