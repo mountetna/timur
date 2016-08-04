@@ -52,6 +52,7 @@
 		}
 		.item_value {
 			@extend .table_cell;
+			max-width: 150px;
 			.value {
 				border-left: none;
 				padding: 0px;
