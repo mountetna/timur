@@ -21,6 +21,11 @@ class SampleView < TimurView
       title "Characteristics"
       shows :weight, :site, :stage, :grade, :post_digest_cell_count
     end
+
+    pane :stains do
+      title "Stain Panels"
+      shows :treg_stain, :nktb_stain, :sort_stain, :dc_stain
+    end
   end
 
   tab :flow_cytometry do
