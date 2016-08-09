@@ -22,7 +22,7 @@ TableColumn = function(attribute,template) {
       case "Attribute":
         return value;
       case "DateTimeAttribute":
-        return dates.format_date(date) + '@' + dates.format_time(date)
+        return dates.format_date(value) + '@' + dates.format_time(value)
       case "CheckboxAttribute":
         return value ? "true" : "false";
       case "DocumentAttribute":
