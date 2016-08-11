@@ -7,24 +7,6 @@ const PLOT_TYPES = {
     name: "1D Scatter",
     type: "OneDScatterPlot"
   },
-  "HeatmapPlot": {
-    name: "Heatmap",
-    type: "HeatmapPlot",
-    analysis: {
-      row_dendrogram: {
-        method: "dendrogram",
-        columns: false
-      },
-      col_dendrogram: {
-        method: "dendrogram",
-        columns: true
-      },
-      z_score: {
-        method: "z_score",
-        columns: false
-      }
-    }
-  },
   "CorrelationPlot": {
     name: "Correlation",
     type: "CorrelationPlot",
