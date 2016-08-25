@@ -24,13 +24,13 @@
 			padding-left: 5px;
 			padding-right: 5px;
 		}
-		.filter {
-			border: 0px none black;
-			border-top: 1px solid forestgreen;
-			border-left: 1px solid forestgreen;
-			box-shadow: 2px 2px 3px 1px #ddd inset;
-			width: 300px;
-		}
+	}
+	.filter {
+		border: 0px none black;
+		border-top: 1px solid forestgreen;
+		border-left: 1px solid forestgreen;
+		box-shadow: 2px 2px 3px 1px #ddd inset;
+		width: 300px;
 	}
 	.export {
 		@include green_button;

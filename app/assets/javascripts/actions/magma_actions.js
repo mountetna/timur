@@ -15,6 +15,33 @@ var magmaActions = {
         )
     })
   },
+  requestDocuments: function( model_name, record_names, success, error ) {
+    // this is an async action to get a new model from magma
+    var self = this;
+    var request = {
+      model_name: model_name,
+      record_names: record_names
+    }
+    return function(dispatch) {
+      $.ajax({
+        url: Routes.records_json_path(),
+        method: 'POST',
+        data: JSON.stringify(request),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(response) {
+          magmaActions.consumePayload(dispatch,response)
+          if (success != undefined) success()
+        },
+        error: function(xhr, status, err) {
+          if (error != undefined) {
+            var message = JSON.parse(xhr.responseText)
+            error(message)
+          }
+        }
+      })
+    }
+  },
   requestModels: function() {
     return function(dispatch) {
       $.get(
@@ -35,10 +62,11 @@ var magmaActions = {
       )
     }
   },
-  requestAllDocuments: function( model_name, success, error ) {
+  queryDocuments: function( model_name, filter, success, error ) {
     var self = this;
     var request = {
-      model_name: model_name
+      model_name: model_name,
+      filter: filter
     }
     return function(dispatch) {
       $.ajax({
@@ -48,8 +76,7 @@ var magmaActions = {
         dataType: 'json',
         contentType: 'application/json',
         success: function(response) {
-          magmaActions.consumePayload(dispatch,response)
-          if (success != undefined) success()
+          if (success != undefined) success(response)
         },
         error: function(xhr, status, err) {
           if (error != undefined) {
@@ -79,33 +106,6 @@ var magmaActions = {
           dispatch(
             magmaActions.addViews(model_name, record_name, response.tabs)
           )
-          if (success != undefined) success()
-        },
-        error: function(xhr, status, err) {
-          if (error != undefined) {
-            var message = JSON.parse(xhr.responseText)
-            error(message)
-          }
-        }
-      })
-    }
-  },
-  requestTemplateAndDocuments: function( model_name, record_names, success, error ) {
-    // this is an async action to get a new model from magma
-    var self = this;
-    var request = {
-      model_name: model_name,
-      record_names: record_names
-    }
-    return function(dispatch) {
-      $.ajax({
-        url: Routes.template_json_path(),
-        method: 'POST',
-        data: JSON.stringify(request), 
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function(response) {
-          magmaActions.consumePayload(dispatch,response)
           if (success != undefined) success()
         },
         error: function(xhr, status, err) {

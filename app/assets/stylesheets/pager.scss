@@ -1,0 +1,19 @@
+.pager {
+	padding: 2px 4px;
+	background-color: rgba(forestgreen,0.1);
+	color: midnightblue;
+	display: table-caption;
+	border-right: 1px solid rgba(forestgreen,0.5);
+	.turner {
+		color: forestgreen;
+		display: inline;
+		cursor: pointer;
+	}
+	.search {
+		cursor: pointer;
+		display: inline-block;
+		font-size: 20px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+}
