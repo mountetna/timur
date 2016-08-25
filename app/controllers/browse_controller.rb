@@ -35,19 +35,6 @@ class BrowseController <  ApplicationController
     render json: view
   end
 
-  def template_json
-    model = Magma.instance.get_model params[:model_name]
-    records = model.where(model.identity => params[:record_names]).all
-
-    payload = Magma::Payload.new
-    payload.add_model model
-    payload.add_records model, records
-
-    render json: TimurPayload.new(
-      payload
-    )
-  end
-
   def update
     # Update a model, redirect to the model view
     @revision = Magma::Revision.new(params[:revision],params[:model_name], params[:record_name])

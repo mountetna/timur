@@ -1,15 +1,9 @@
-TablePager = React.createClass({
+Pager = React.createClass({
   rewind_page: function() {
     if (this.props.current_page > 0) this.props.set_page(this.props.current_page - 1);
   },
   advance_page: function() {
     if (this.props.current_page < this.props.pages-1) this.props.set_page(this.props.current_page + 1);
-  },
-  componentWillMount: function() {
-    this.update = $.debounce(500,this.update);
-  },
-  update: function(e) {
-    return this.props.set_filter(e)
   },
   render: function() {
     var leftturn, rightturn;
@@ -19,8 +13,6 @@ TablePager = React.createClass({
             { leftturn }
             { this.props.current_page + 1 } of { this.props.pages }
             { rightturn }
-            <div className='search'>&#x2315;</div>
-            <input className="filter" type="text" onChange={ this.props.set_filter }/>
             {
               this.props.children
             }
@@ -28,4 +20,4 @@ TablePager = React.createClass({
   }
 });
 
-module.exports = TablePager;
+module.exports = Pager
