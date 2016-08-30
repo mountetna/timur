@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get 'browse' => 'browse#index', as: :browse
   get 'activity' => 'browse#activity', as: :activity
 
-  get 'browse/:model/:name' => 'browse#model', as: :browse_model, constraints: { name: /[^\/]+/ }
+  get 'browse/:model/*name' => 'browse#model', as: :browse_model, format: false
   post 'json/template' => 'browse#template_json', as: :template_json
   post 'json/view' => 'browse#view_json', as: :view_json
   post 'browse/update' => 'browse#update', as: :update_model
