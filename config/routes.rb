@@ -27,7 +27,8 @@ Rails.application.routes.draw do
   post 'update_saves' => 'plot#update_saves', as: :update_saves
 
   get 'search' => 'search#index', as: :search
-  get 'json/search' => 'search#json', as: :search_json
-  get 'json/identifiers' => 'search#identifiers_json', as: :identifiers_json
-  post 'json/table' => 'search#table_json', as: :table_json
+  get 'search/templates' => 'search#templates_json', as: :templates_json
+  get 'search/identifiers' => 'search#identifiers_json', as: :identifiers_json
+  post 'search/table' => 'search#table_json', as: :table_json
+  post 'search/tsv' => 'search#table_tsv', as: :table_tsv
 end

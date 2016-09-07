@@ -45,7 +45,7 @@ var magmaActions = {
   requestModels: function() {
     return function(dispatch) {
       $.get(
-        Routes.search_json_path(),
+        Routes.templates_json_path(),
         function(response) {
           magmaActions.consumePayload(dispatch,response)
         }
@@ -71,8 +71,8 @@ var magmaActions = {
     return function(dispatch) {
       $.ajax({
         url: Routes.table_json_path(),
-        method: 'POST',
         data: JSON.stringify(request), 
+        method: 'POST',
         dataType: 'json',
         contentType: 'application/json',
         success: function(response) {
