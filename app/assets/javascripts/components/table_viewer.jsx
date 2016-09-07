@@ -133,7 +133,7 @@ TableViewer = React.createClass({
                 current_page={ self.state.current_page }
                 set_page={ self.set_page } >
                 <div className='search'>&#x2315;</div>
-                <input className="filter" type="text" onChange={ this.props.set_filter }/>
+                <input className="filter" type="text" onChange={ this.set_filter }/>
                 <input className="export" type="button" onClick={ self.export_table.bind(this,records) } value={"\u21af TSV"}/>
                 <Help info="table_viewer"/>
               </Pager>

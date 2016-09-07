@@ -6,12 +6,19 @@ Pager = React.createClass({
     if (this.props.current_page < this.props.pages-1) this.props.set_page(this.props.current_page + 1);
   },
   render: function() {
-    var leftturn, rightturn;
-    if (this.props.current_page > 0) leftturn = <div className="turner" onClick={ this.rewind_page }> &lt; </div>
-    if (this.props.current_page < this.props.pages-1) rightturn = <div className="turner" onClick={ this.advance_page }> &gt; </div>
+    var leftturn = <span className="turner inactive fa fa-chevron-left"/>
+    var rightturn = <span className="turner inactive fa fa-chevron-right"/>
+    if (this.props.current_page > 0) 
+      leftturn = <span className="turner active fa fa-chevron-left"
+        onClick={ this.rewind_page }/>
+    if (this.props.current_page < this.props.pages-1)
+      rightturn = <span className="turner active fa fa-chevron-right" 
+        onClick={ this.advance_page }/>
     return <div className="pager">
             { leftturn }
-            { this.props.current_page + 1 } of { this.props.pages }
+            <div className="report">
+              Page { this.props.current_page + 1 } of { this.props.pages }
+            </div>
             { rightturn }
             {
               this.props.children

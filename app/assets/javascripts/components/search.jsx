@@ -3,39 +3,113 @@
  * 
  */
 
+
+/* This holds the search query so we don't have to update state in the
+ * main component all the time.
+ */
+SearchQuery = React.createClass({
+  getInitialState: function() {
+    return { }
+  },
+  render: function() {
+    var self = this
+    return <div className="query">
+      <span className="label">Show table</span>
+      <Selector name="model"
+        values={
+          this.props.model_names
+        }
+        onChange={
+          function(model_name) {
+            self.setState({ selected_model: model_name })
+          }
+        }
+        showNone="enabled"/>
+
+      <input type="text" className="filter" 
+        placeholder="filter query"
+        onChange={
+        function(e) {
+          self.setState({ current_filter: e.target.value })
+        }
+      }/>
+
+      <input type="button" className="button" value="Search" 
+        disabled={ !this.state.selected_model }
+        onClick={ 
+          function() {
+            self.props.postQuery(
+              self.state.selected_model,
+              self.state.current_filter
+            )
+          }
+        } />
+      <input className="button" type="button" value={"\u21af TSV"}
+        disabled={ !this.state.selected_model }
+        onClick={
+          function() {
+            self.props.requestTSV(
+              self.state.selected_model,
+              self.state.current_filter
+            )
+          }
+        }/>
+    </div>
+  }
+})
+
 SearchTable = React.createClass({
   render: function() {
     var self = this
-    var table = self.props.table
+    var documents = this.props.documents
+    var template = this.props.template
 
-    if (!records) return <div className="table"></div>
+    if (!documents) return <div className="table"></div>
+
+    var att_names = Object.keys(template.attributes).filter(function(att_name) {
+      return template.attributes[att_name].shown
+    })
+
+    var att_classes = {}
+
+
+    att_names.forEach(function(att_name) {
+      var att_class = template.attributes[att_name].attribute_class
+      if (att_class != "TableAttribute") 
+        att_classes[att_name] = eval(att_class)
+    })
 
     return <div className="table">
-            <Pager pages={ pages } 
-              current_page={ self.state.current_page }
-              set_page={ self.set_page } >
-              <input className="export" type="button" value={"\u21af TSV"}/>
-            </Pager>
               <div className="table_item">
               {
-                table.columns.map(function(column,i) {
-                  return <div key={i} className="table_header">{ column.name }</div>
+                att_names.map(function(att_name,i) {
+                  return <div key={i} className="table_header">{ att_name }</div>
                 })
               }
               </div>
               {
-                records.map(
-                  function(record) {
-                    return <div key={ record.id }
+                documents.map(
+                  function(document) {
+                    return <div key={ document.id }
                       className="table_item">
                       {
-                        table.columns.map(function(column, i) {
-                          var value = record[ column.name ]
-                          var txt = column.render(record, self.props.mode)
-                          return <div key={i} className="item_value">{ txt }</div>
+                        att_names.map(function(att_name, i) {
+                          var value = document[ att_name ]
+
+                          if (!att_classes.hasOwnProperty(att_name)) return <div className="value"> (table) </div>;
+
+                          var AttClass = att_classes[att_name]
+
+                          return <div key={i} className="item_value">
+                            <AttClass document={ document } 
+                              template={ template }
+                              value={ document[ att_name ] }
+                              mode={ self.props.mode }
+                              attribute={ template.attributes[att_name] }/>
+                          </div>
                         })
                       }
-                    </div>
+                      </div>
                   })
               }
              </div>
@@ -44,79 +118,138 @@ SearchTable = React.createClass({
 
 Search = React.createClass({
   getInitialState: function() {
-    return { mode: 'search', page_size: 10, record_names: [] }
+    return { mode: 'search', page_size: 10, current_page: 0, record_names: [] }
+  },
+  setPage: function(page) {
+    var self = this
+    this.setState({ current_page: page }, function() {
+      self.ensurePageRecords()
+    })
+  },
+  page_record_names: function(page) {
+    if (!this.state.record_names.length) return null
+    return this.state.record_names.slice( this.state.page_size * page, this.state.page_size * (page + 1) )
+  },
+  ensurePageRecords: function() {
+    page_record_names = this.page_record_names(this.state.current_page)
+    if (!this.props.hasCompleteRecords(this.state.model_name, page_record_names)) {
+      this.props.requestDocuments( this.state.model_name, page_record_names )
+    }
   },
   componentDidMount: function() {
     var self = this
 
     this.props.getModels()
   },
-  page_record_names: function(page, record_names) {
-    if (!record_names) return []
-    return record_names.slice( this.state.page_size * page, this.state.page_size * (page + 1) )
+  requestTSV: function(model_name, filter) {
+    console.log("Submitting form.")
+    var newForm = $('<form>', { method: 'POST', action: Routes.table_tsv_path() })
+    newForm.append(
+      $('<input>', {
+        name: 'model_name',
+        value: model_name,
+        type: 'hidden'
+      })
+    )
+    newForm.append(
+      $('<input>', {
+        name: 'filter',
+        value: filter,
+        type: 'hidden'
+      })
+    )
+    newForm.append(
+      $('<input>', {
+        name: 'authenticity_token',
+        value: $('meta[name="csrf-token"]').attr('content'),
+        type: 'hidden'
+      })
+    )
+    console.log(newForm)
+    newForm.appendTo('body')
+    newForm.submit()
+    newForm.remove()
+  },
+  postQuery: function(model_name, filter) {
+    var self = this
+    self.props.query(
+      model_name, 
+      filter,
+      function(response) {
+        self.setState({
+          model_name: model_name,
+          record_names: response.record_names, 
+          current_page: 0
+        }, function() {
+          self.ensurePageRecords()
+        })
+
+      }
+    )
   },
   render: function() {
     var self = this
 
-    var documents // = this.props.documentsFor(this.state.selected_model)
+    var documents
 
-    var pages = Math.ceil(self.state.record_names.length / self.state.page_size)
+    var pages = self.state.record_names.length ? Math.ceil(self.state.record_names.length / self.state.page_size) : null
 
-    var page_record_names = self.page_record_names(0, self.state.record_names)
-    if (self.props.hasCompleteRecords(self.state.selected_model, page_record_names)) {
-      console.log("Getting these:")
-      console.log(page_record_names)
-      documents = self.props.documentsFor(self.state.selected_model, page_record_names)
-      console.log(documents)
+    var page_record_names = self.page_record_names(self.state.current_page, self.state.record_names)
+
+    if (page_record_names && 
+        self.props.hasCompleteRecords(self.state.model_name,
+                                      page_record_names)) {
+      documents = self.props.documentsFor(
+        self.state.model_name, 
+        page_record_names
+      )
     }
 
     return <div id="search">
-        <span className="label">Show table</span>
-
-        <Selector name="model"
-          values={
-            Object.keys(this.props.magma_models)
-          }
-          onChange={
-            function(model_name) {
-              self.setState({ selected_model: model_name, record_names: [] })
-            }
-          }
-          showNone="enabled"/>
-
-        <input type="text" className="filter" 
-          placeholder="filter query"
-          onChange={
-          function(e) {
-            self.setState({ current_filter: e.target.value })
-          }
-        }/>
-
-        <input type="button" className="button" value="Search" 
-          disabled={ !this.state.selected_model || this.state.loading_table }
-          onClick={ 
-            function(e) {
-              self.props.query(
-                self.state.selected_model, 
-                self.state.current_filter,
-                function(response) {
-                  self.setState({ record_names: response.record_names })
-
-                  page_record_names = self.page_record_names(0, response.record_names)
-                  if (!self.props.hasCompleteRecords(self.state.selected_model, page_record_names)) {
-                    self.props.requestDocuments( self.state.selected_model, page_record_names )
+        <div className="control">
+        <SearchQuery postQuery={ self.postQuery }
+          requestTSV={ self.requestTSV }
+          model_names={ self.props.model_names }/>
+        {
+          pages ? 
+            <div className="pages">
+              <div className="page_size">
+              Page size
+              <Selector 
+                values={
+                  [ 10, 25, 50, 200 ]
+                }
+                defaultValue={ self.state.page_size }
+                onChange={
+                  function(page_size) {
+                    var newpages = Math.ceil(self.state.record_names.length / page_size)
+                    self.setState({ page_size: page_size, current_page: Math.min(self.state.current_page, newpages-1) },function(){
+                      self.ensurePageRecords()
+                    })
                   }
                 }
-              )
-            }
-          } />
+                showNone="disabled"/>
+              </div>
+              <div className="results">
+                Found { self.state.record_names.length } records in <span className="model_name">{ self.state.model_name }</span>
+              </div>
+            <Pager pages={ pages } 
+              current_page={ self.state.current_page }
+              set_page={ self.setPage } >
+            </Pager>
+            </div>: null
+        }
+        </div>
         {
           documents ?  
             <SearchTable 
-            table={ TableSet( documents, this.props.templateFor(this.state.selected_model) ) }
-            pages={ pages }
-            current_page={ self.state.current_page }
-            page_size={ self.state.page_size }/> : null
+              documents={ documents }
+              template={
+                this.props.templateFor(
+                  this.state.model_name
+                ) 
+              }
+            /> : null
         }
     </div>
   }
@@ -127,7 +260,7 @@ Search = connect(
     return $.extend({},
       props,
       {
-        magma_models: state.templates,
+        model_names: Object.keys(state.templates),
         documentsFor: function(model_name, record_names) {
           if (state.templates[model_name] && state.templates[model_name].documents)
           return record_names.map(function(record_name){

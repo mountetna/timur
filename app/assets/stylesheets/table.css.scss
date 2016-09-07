@@ -12,6 +12,11 @@
 		color: midnightblue;
 		display: table-caption;
 		border-right: 1px solid rgba(forestgreen,0.5);
+		.report {
+			display: inline-block;
+			width: 160px;
+			text-align: center;
+		}
 		.turner {
 			color: forestgreen;
 			display: inline;
