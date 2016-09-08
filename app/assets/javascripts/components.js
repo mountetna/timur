@@ -32,6 +32,7 @@ ImageAttribute = require('./components/image_attribute.js.jsx')
 IntegerAttribute = require('./components/integer_attribute.js.jsx')
 SelectAttribute = require('./components/select_attribute.js.jsx')
 TextAttribute = require('./components/text_attribute.js.jsx')
+MarkdownAttribute = require('./components/markdown_attribute.jsx')
 
 MetricsAttribute = require('./components/metrics_attribute.jsx')
 
