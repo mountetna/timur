@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'activity' => 'browse#activity', as: :activity
 
   get 'browse/:model/*name' => 'browse#model', as: :browse_model, format: false
+  post 'json/records' => 'search#records_json', as: :records_json
   post 'json/view' => 'browse#view_json', as: :view_json
   post 'browse/update' => 'browse#update', as: :update_model
 
