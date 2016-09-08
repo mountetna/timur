@@ -17,6 +17,7 @@ class ProjectView < TimurView
           ProgressPlot.new(record).to_hash
         end
       end
+      shows :whats_new
     end
   end
 
@@ -29,6 +30,12 @@ class ProjectView < TimurView
   tab :project_documents do
     pane :default do
       shows :document
+    end
+  end
+
+  tab :FAQ do
+    pane :default do
+      shows :faq
     end
   end
 end
