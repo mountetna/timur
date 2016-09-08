@@ -21,6 +21,9 @@ var MarkdownAttribute = React.createClass({
              </div>
     }
 
+    if (!this.props.value)
+      return <div className="value"/>
+
     var content = marked(this.props.value)
     return <div className="value"
         dangerouslySetInnerHTML={ { __html: content } }/>
