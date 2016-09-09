@@ -12,6 +12,11 @@
 		color: midnightblue;
 		display: table-caption;
 		border-right: 1px solid rgba(forestgreen,0.5);
+		.report {
+			display: inline-block;
+			width: 160px;
+			text-align: center;
+		}
 		.turner {
 			color: forestgreen;
 			display: inline;
@@ -24,13 +29,13 @@
 			padding-left: 5px;
 			padding-right: 5px;
 		}
-		.filter {
-			border: 0px none black;
-			border-top: 1px solid forestgreen;
-			border-left: 1px solid forestgreen;
-			box-shadow: 2px 2px 3px 1px #ddd inset;
-			width: 300px;
-		}
+	}
+	.filter {
+		border: 0px none black;
+		border-top: 1px solid forestgreen;
+		border-left: 1px solid forestgreen;
+		box-shadow: 2px 2px 3px 1px #ddd inset;
+		width: 300px;
 	}
 	.export {
 		@include green_button;
@@ -52,6 +57,7 @@
 		}
 		.item_value {
 			@extend .table_cell;
+			max-width: 150px;
 			.value {
 				border-left: none;
 				padding: 0px;
@@ -59,14 +65,5 @@
 				white-space: nowrap;
 			}
 		}
-		&:hover {
-			.item_value {
-				.value {
-					overflow: auto;
-					white-space: normal;
-				}
-			}
-		}
 	}
 }
-

@@ -1,12 +1,69 @@
 @import "globals";
+
+$query_color: rgba(gold,0.4);
+
 #search {
 	font-family: $body_font;
-	padding-left: 10%;
-	padding-right: 10%;
-	padding-top: 50px;
-	
 	.button {
 		@include green_button;
+		background-color: #A6C9A6;
+	}
+	.filter {
+		@include text_defaults;
+		margin: 0 9px;
+	}
+	.control {
+		padding-top: 10px;
+		padding-bottom: 4px;
+		background-color: $query_color;
+		border-bottom: 1px solid goldenrod;
+		color: midnightblue;
+
+	}
+	.query {
+	}
+	.pages {
+		.page_size {
+			display: block;
+			padding: 2px 4px;
+			select {
+				margin-left: 4px;
+				vertical-align: middle;
+			}
+		}
+		.results {
+			display: block;
+			padding: 2px 4px;
+			.model_name {
+				display: inline;
+				color: mediumorchid;
+			}
+		}
+		.pager {
+			padding: 2px 4px;
+			display: block;
+			.turner {
+				display: inline-block;
+				width: 15px;
+				padding: 4px;
+				text-align: center;
+				&.inactive {
+					color: gray;
+				}
+				&.active {
+					color: forestgreen;
+					cursor: pointer;
+					&:hover {
+						background-color: rgba(forestgreen,0.2)
+					}
+				}
+			}
+			.report {
+				display: inline-block;
+				width: 120px;
+				text-align: center;
+			}
+		}
 	}
 	select {
 		border: 1px solid forestgreen;
@@ -17,11 +74,13 @@
 	}
 	.label {
 		padding: 4px;
-		color: midnightblue;
 	}
 	.table {
-		color: mediumorchid;
+		color: darkorchid;
 		font-family: "Cousine",monospace;
-		table-layout: auto;
+		.table_header {
+			color: teal;
+			cursor: ew-resize;
+		}
 	}
 }
