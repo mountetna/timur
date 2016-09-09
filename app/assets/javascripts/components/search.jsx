@@ -58,6 +58,41 @@ SearchQuery = React.createClass({
   }
 })
 
+SearchTableColumn = React.createClass({
+  getInitialState: function() {
+    return { sizing: false }
+  },
+  render: function() {
+    var self = this
+    var classes = "table_header c" + this.props.column
+    return <div ref='column' className={ classes }
+      onMouseDown={
+        function(e) {
+          e.preventDefault()
+          self.setState({sizing: true, x: e.nativeEvent.offsetX, width: self.refs.column.offsetWidth })
+        }
+      }
+      onMouseUp={
+        function() {
+          self.setState({sizing: false})
+        }
+      }
+
+      onMouseMove={
+        function(e) {
+          if (!self.state.sizing) return
+          e.preventDefault()
+          size_change = e.nativeEvent.offsetX - self.state.x
+          $('.c'+self.props.column).width(self.state.width + size_change)
+        }
+      }
+    
+      >
+      { this.props.label }
+    </div>
+  }
+})
+
 SearchTable = React.createClass({
   render: function() {
     var self = this
@@ -83,7 +118,10 @@ SearchTable = React.createClass({
               <div className="table_item">
               {
                 att_names.map(function(att_name,i) {
-                  return <div key={i} className="table_header">{ att_name }</div>
+                  return <SearchTableColumn key={i} 
+                    column={ i }
+                    label={ att_name }
+                  />
                 })
               }
               </div>
@@ -100,7 +138,9 @@ SearchTable = React.createClass({
 
                           var AttClass = att_classes[att_name]
 
-                          return <div key={i} className="item_value">
+                          var classes = "item_value c"+i
+
+                          return <div key={i} className={ classes }>
                             <AttClass document={ document } 
                               template={ template }
                               value={ document[ att_name ] }
@@ -132,7 +172,7 @@ Search = React.createClass({
   },
   ensurePageRecords: function() {
     page_record_names = this.page_record_names(this.state.current_page)
-    if (!this.props.hasCompleteRecords(this.state.model_name, page_record_names)) {
+    if (page_record_names && !this.props.hasCompleteRecords(this.state.model_name, page_record_names)) {
       this.props.requestDocuments( this.state.model_name, page_record_names )
     }
   },
@@ -142,7 +182,6 @@ Search = React.createClass({
     this.props.getModels()
   },
   requestTSV: function(model_name, filter) {
-    console.log("Submitting form.")
     var newForm = $('<form>', { method: 'POST', action: Routes.table_tsv_path() })
     newForm.append(
       $('<input>', {
@@ -165,7 +204,6 @@ Search = React.createClass({
         type: 'hidden'
       })
     )
-    console.log(newForm)
     newForm.appendTo('body')
     newForm.submit()
     newForm.remove()
@@ -192,7 +230,7 @@ Search = React.createClass({
 
     var documents
 
-    var pages = self.state.record_names.length ? Math.ceil(self.state.record_names.length / self.state.page_size) : null
+    var pages = self.state.model_name ? Math.ceil(self.state.record_names.length / self.state.page_size) : null
 
     var page_record_names = self.page_record_names(self.state.current_page, self.state.record_names)
 
@@ -211,7 +249,7 @@ Search = React.createClass({
           requestTSV={ self.requestTSV }
           model_names={ self.props.model_names }/>
         {
-          pages ? 
+          pages != null ? 
             <div className="pages">
               <div className="page_size">
               Page size
@@ -273,7 +311,7 @@ Search = connect(
         hasCompleteRecords: function(model_name, record_names) {
           model_info = state.templates[model_name]
 
-          if (!model_info) return false
+          if (!model_info || !record_names) return false
 
           template = model_info.template
 
@@ -281,10 +319,6 @@ Search = connect(
             record = model_info.documents[record_name]
 
             if (!record) return false
-
-            console.log(Object.keys(template.attributes).filter(function(attribute_name) {
-              return !(template.attributes[attribute_name].attribute_class == "TableAttribute" || record.hasOwnProperty(attribute_name))
-            }))
 
             return Object.keys(template.attributes).every(function(attribute_name) {
               return template.attributes[attribute_name].attribute_class == "TableAttribute" || record.hasOwnProperty(attribute_name)
