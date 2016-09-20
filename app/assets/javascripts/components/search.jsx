@@ -178,10 +178,21 @@ SearchTable = React.createClass({
                             focused_col: (self.state.focus_col == i)
                           }
 
-                          if (!att_classes.hasOwnProperty(att_name))
-                            return <div className={ classNames(class_set) }> <div className="value">(table)</div> </div>
+                          var component
 
-                          var AttClass = att_classes[att_name]
+                          if (!att_classes.hasOwnProperty(att_name))
+                            component = <div className="value">(table)</div>
+                          else {
+                            var AttClass = att_classes[att_name]
+                            component = <AttClass 
+                              document={ document }
+                              template={ template }
+                              value={ document[ att_name ] }
+                              revision={ revised_value }
+                              mode={ self.props.mode }
+                              attribute={ template.attributes[att_name] }/>
+                          }
+
 
                           return <div key={i} onClick={
                               function() {
@@ -189,13 +200,9 @@ SearchTable = React.createClass({
                               }
                             }
                             className={ classNames(class_set) } >
-                            <AttClass 
-                              document={ document }
-                              template={ template }
-                              value={ document[ att_name ] }
-                              revision={ revised_value }
-                              mode={ self.props.mode }
-                              attribute={ template.attributes[att_name] }/>
+                            {
+                              component
+                            }
                           </div>
                         })
                       }
@@ -260,10 +267,18 @@ Search = React.createClass({
         )
         return
       case 'approve':
-        if (this.props.hasRevisions) {
+        var record_names = self.page_record_names(self.state.current_page, 
+                                 self.state.record_names)
+        var revisions = this.props.revisionsFor(
+          self.state.model_name,
+          record_names
+        )
+        if (Object.keys(revisions).length > 0) {
           this.setState({mode: 'submit'})
-          this.props.submitRevision(
-            this.props.revision, 
+          console.log(revisions)
+          this.props.submitRevisions(
+            self.state.model_name,
+            revisions, 
             function() {
               self.setState({mode: 'search'})
             },
@@ -273,12 +288,10 @@ Search = React.createClass({
             }
           )
         } else {
-          var page_record_names = self.page_record_names(self.state.current_page, self.state.record_names)
           this.setState({mode: 'search'})
           this.props.discardRevisions(
             self.state.model_name,
-            self.page_record_names(self.state.current_page, 
-                                   self.state.record_names)
+            record_names
           )
         }
         return
@@ -399,7 +412,8 @@ Search = connect(
           if (state.templates[model_name] && state.templates[model_name].revisions) {
             var revisions = {}
             record_names.forEach(function(record_name){
-              revisions[record_name] = state.templates[model_name].revisions[record_name]
+              if (state.templates[model_name].revisions[record_name])
+                revisions[record_name] = state.templates[model_name].revisions[record_name]
             })
             return revisions
           }
@@ -434,6 +448,16 @@ Search = connect(
       },
       query: function(model, filter, success) {
         dispatch(magmaActions.queryDocuments(model,filter,success))
+      },
+      submitRevisions: function(model_name,revisions,success,error) {
+        console.log("Revisions:")
+        console.log(revisions)
+        dispatch(magmaActions.postRevisions(
+          model_name,
+          revisions,
+          success,
+          error
+        ))
       },
       discardRevisions: function(model_name,record_names) {
         if (!record_names || !record_names.length) return

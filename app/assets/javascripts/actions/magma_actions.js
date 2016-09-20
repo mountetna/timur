@@ -156,19 +156,22 @@ var magmaActions = {
       document_name: document_name
     }
   },
-  postRevision: function(document_name, template_name, revision, success, error) {
+  postRevisions: function(template_name, revisions, success, error) {
     var self = this;
     var data = new FormData()
     data.append( 'model_name', template_name )
-    data.append( 'record_name', document_name )
-    Object.keys(revision).forEach(function(key) {
-      if (Array.isArray(revision[key])) {
-        revision[key].forEach(function(value) {
-          data.append( 'revision['+key+'][]', value )
-        })
-      }
-      else
-        data.append( 'revision['+key+']', revision[key] )
+    //data.append( 'record_name', document_name )
+    Object.keys(revisions).forEach(function(record_name) {
+      var revision = revisions[record_name]
+      Object.keys(revision).forEach(function(key) {
+        if (Array.isArray(revision[key])) {
+          revision[key].forEach(function(value) {
+            data.append( 'revisions['+record_name+']['+key+'][]', value )
+          })
+        }
+        else
+          data.append( 'revisions['+record_name+']['+key+']', revision[key] )
+      })
     })
     return function(dispatch) {
       $.ajax({

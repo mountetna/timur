@@ -139,10 +139,11 @@ Browser = connect(
         ))
       },
       submitRevision: function(revision,success,error) {
-        dispatch(magmaActions.postRevision(
-          props.record_name,
+        var revisions = {}
+        revisions[props.record_name] = revision
+        dispatch(magmaActions.postRevisions(
           props.model_name,
-          revision,
+          revisions,
           success,
           error
         ))
