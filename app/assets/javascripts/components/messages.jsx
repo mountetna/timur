@@ -12,6 +12,9 @@ var Messages = React.createClass({
     if (new_message >= this.props.messages.length) return;
     this.setState({ current_message: new_message });
   },
+  sanitize: function(string) {
+    return string.replace(/</g,"&lt;").replace(/>/g,"&gt;")
+  },
   render: function() {
     var self = this;
     if (!this.props.messages.length) return <div></div>;
@@ -32,7 +35,11 @@ var Messages = React.createClass({
       </div>
     }
 
-    var message = marked(this.props.messages[this.state.current_message]);
+    var message = marked(
+      this.sanitize(
+        this.props.messages[this.state.current_message]
+      )
+    );
 
     return <div id="messages">
             <div id="quote">

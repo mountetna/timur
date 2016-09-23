@@ -481,6 +481,9 @@ Search = connect(
       query: function(model, filter, success) {
         dispatch(magmaActions.queryDocuments(model,filter,success))
       },
+      showMessage: function(messages) {
+        dispatch(messageActions.showMessages(messages))
+      },
       submitRevisions: function(model_name,revisions,success,error) {
         console.log("Revisions:")
         console.log(revisions)
