@@ -17,7 +17,7 @@ Timur = React.createClass({
     else if (this.props.mode == 'plot')
       component = <Plotter />;
     else if (this.props.mode == 'search')
-      component = <Search />;
+      component = <Search can_edit={ this.props.can_edit }/>;
     else if (this.props.mode == 'activity')
       component = <Activity activities={ this.props.activities }/>
     else if (this.props.mode == 'noauth')

@@ -137,7 +137,7 @@ TableViewer = React.createClass({
                 <input className="export" type="button" onClick={ self.export_table.bind(this,records) } value={"\u21af TSV"}/>
                 <Help info="table_viewer"/>
               </Pager>
-              <div className="table_item">
+              <div className="table_row">
               {
                 table.columns.map(function(column,i) {
                   return <div key={i} className="table_header">{ column.name }</div>
@@ -149,12 +149,12 @@ TableViewer = React.createClass({
                               self.row_for(self.state.current_page+1)).map(
                   function(record) {
                     return <div key={ record.id }
-                      className="table_item">
+                      className="table_row">
                       {
                         table.columns.map(function(column, i) {
                           var value = record[ column.name ];
                           var txt = column.render(record, self.props.mode);
-                          return <div key={i} className="item_value">{ txt }</div>;
+                          return <div key={i} className="table_data">{ txt }</div>;
                         })
                       }
                     </div>;

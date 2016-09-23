@@ -11,6 +11,33 @@ SearchQuery = React.createClass({
   getInitialState: function() {
     return { }
   },
+  requestTSV: function(model_name, filter) {
+    var newForm = $('<form>', { method: 'POST', action: Routes.table_tsv_path() })
+    newForm.append(
+      $('<input>', {
+        name: 'model_name',
+        value: model_name,
+        type: 'hidden'
+      })
+    )
+    newForm.append(
+      $('<input>', {
+        name: 'filter',
+        value: filter,
+        type: 'hidden'
+      })
+    )
+    newForm.append(
+      $('<input>', {
+        name: 'authenticity_token',
+        value: $('meta[name="csrf-token"]').attr('content'),
+        type: 'hidden'
+      })
+    )
+    newForm.appendTo('body')
+    newForm.submit()
+    newForm.remove()
+  },
   render: function() {
     var self = this
     return <div className="query">
@@ -48,7 +75,7 @@ SearchQuery = React.createClass({
         disabled={ !this.state.selected_model }
         onClick={
           function() {
-            self.props.requestTSV(
+            self.requestTSV(
               self.state.selected_model,
               self.state.current_filter
             )
@@ -58,14 +85,18 @@ SearchQuery = React.createClass({
   }
 })
 
-SearchTableColumn = React.createClass({
+SearchTableColumnHeader = React.createClass({
   getInitialState: function() {
     return { sizing: false }
   },
   render: function() {
     var self = this
-    var classes = "table_header c" + this.props.column
-    return <div ref='column' className={ classes }
+    var class_set = {
+      table_header: true,
+      focused_col: this.props.focused
+    }
+    class_set[ "c" + this.props.column ] = true
+    return <div ref='column' className={ classNames(class_set) }
       onMouseDown={
         function(e) {
           e.preventDefault()
@@ -88,15 +119,88 @@ SearchTableColumn = React.createClass({
       }
     
       >
-      { this.props.label }
+      { this.props.column }
+    </div>
+  }
+})
+
+SearchTableRow = React.createClass({
+  render: function() {
+    var self = this
+    return <div className="table_row">
+      {
+        this.props.att_names.map(function(att_name, i) {
+          return <SearchTableCell 
+            key={ att_name }
+            att_name={ att_name }
+            document={ self.props.document }
+            template={ self.props.template }
+            revision={ self.props.revision }
+            record_name={ self.props.record_name }
+            att_class={ self.props.att_classes[att_name] }
+            mode={ self.props.mode }
+            focusCell={ self.props.focusCell }
+          />
+        })
+      }
+    </div>
+  }
+})
+
+SearchTableCell = React.createClass({
+  render: function() {
+    var self = this
+    var document = self.props.document
+    var revision = self.props.revision
+    var record_name = self.props.record_name
+    var att_name = self.props.att_name
+    var value = document[ att_name ]
+    var revised_value = revision && revision.hasOwnProperty(att_name) ? revision[att_name] : document[att_name]
+
+    var class_set = {
+      table_data: true,
+      revised: (self.props.mode == 'edit' && value != revised_value),
+      focused_row: self.props.focusCell( record_name ),
+      focused_col: self.props.focusCell( null, att_name),
+    }
+    class_set[ "c" + att_name ] = true
+    return <div onClick={
+        function() {
+          self.props.focusCell( record_name, att_name )
+        }
+      }
+      className={
+        classNames(class_set)
+      }>
+      {
+        self.props.att_class ?
+          <self.props.att_class 
+            document={ document }
+            template={ template }
+            value={ value }
+            revision={ revised_value }
+            mode={ self.props.mode }
+            attribute={ template.attributes[att_name] }/>
+          :
+            <div className="value">(table)</div>
+      }
     </div>
   }
 })
 
 SearchTable = React.createClass({
+  getInitialState: function() {
+    return {}
+  },
+  focusCell: function(row, column) {
+    if (column == null) return (row == this.state.focus_row)
+    if (row == null) return (column == this.state.focus_col)
+    this.setState({ focus_row: row, focus_col: column })
+  },
   render: function() {
     var self = this
     var documents = this.props.documents
+    var revisions = this.props.revisions
     var template = this.props.template
 
     if (!documents) return <div className="table"></div>
@@ -105,52 +209,37 @@ SearchTable = React.createClass({
       return template.attributes[att_name].shown
     })
 
-    var att_classes = {}
+    var att_classes = this.props.att_classes
 
-
-    att_names.forEach(function(att_name) {
-      var att_class = template.attributes[att_name].attribute_class
-      if (att_class != "TableAttribute") 
-        att_classes[att_name] = eval(att_class)
-    })
 
     return <div className="table">
-              <div className="table_item">
+              <div className="table_row">
               {
                 att_names.map(function(att_name,i) {
-                  return <SearchTableColumn key={i} 
-                    column={ i }
-                    label={ att_name }
+                  return <SearchTableColumnHeader key={att_name} 
+                    column={ att_name }
+                    focused={ self.focusCell( null, att_name ) }
                   />
                 })
               }
               </div>
               {
-                documents.map(
-                  function(document) {
-                    return <div key={ document.id }
-                      className="table_item">
-                      {
-                        att_names.map(function(att_name, i) {
-                          var value = document[ att_name ]
+                self.props.record_names.map(function(record_name) {
+                  var document = documents[record_name]
+                  var revision = revisions[record_name]
 
-                          if (!att_classes.hasOwnProperty(att_name)) return <div className="value"> (table) </div>;
-
-                          var AttClass = att_classes[att_name]
-
-                          var classes = "item_value c"+i
-
-                          return <div key={i} className={ classes }>
-                            <AttClass document={ document } 
-                              template={ template }
-                              value={ document[ att_name ] }
-                              mode={ self.props.mode }
-                              attribute={ template.attributes[att_name] }/>
-                          </div>
-                        })
-                      }
-                      </div>
-                  })
+                  return <SearchTableRow 
+                    key={ record_name }
+                    mode={ self.props.mode }
+                    att_names={ att_names }
+                    att_classes={ att_classes }
+                    document={document}
+                    template={template}
+                    record_name={ record_name }
+                    revision={revision}
+                    focusCell={ self.focusCell }
+                  />
+                })
               }
              </div>
   },
@@ -181,33 +270,6 @@ Search = React.createClass({
 
     this.props.getModels()
   },
-  requestTSV: function(model_name, filter) {
-    var newForm = $('<form>', { method: 'POST', action: Routes.table_tsv_path() })
-    newForm.append(
-      $('<input>', {
-        name: 'model_name',
-        value: model_name,
-        type: 'hidden'
-      })
-    )
-    newForm.append(
-      $('<input>', {
-        name: 'filter',
-        value: filter,
-        type: 'hidden'
-      })
-    )
-    newForm.append(
-      $('<input>', {
-        name: 'authenticity_token',
-        value: $('meta[name="csrf-token"]').attr('content'),
-        type: 'hidden'
-      })
-    )
-    newForm.appendTo('body')
-    newForm.submit()
-    newForm.remove()
-  },
   postQuery: function(model_name, filter) {
     var self = this
     self.props.query(
@@ -225,10 +287,57 @@ Search = React.createClass({
       }
     )
   },
+  header_handler: function(action) {
+    var self = this
+    switch(action) {
+      case 'cancel':
+        this.setState({mode: 'search'})
+        this.props.discardRevisions(
+          self.state.model_name,
+          self.page_record_names(self.state.current_page, 
+                                 self.state.record_names)
+        )
+        return
+      case 'approve':
+        var record_names = self.page_record_names(self.state.current_page, 
+                                 self.state.record_names)
+        var revisions = this.props.revisionsFor(
+          self.state.model_name,
+          record_names
+        )
+        if (Object.keys(revisions).length > 0) {
+          this.setState({mode: 'submit'})
+          console.log(revisions)
+          this.props.submitRevisions(
+            self.state.model_name,
+            revisions, 
+            function() {
+              self.setState({mode: 'search'})
+            },
+            function ( messages ) {
+              self.setState({mode: 'edit'})
+              self.props.showMessage(messages.errors || ["### An unknown error occurred.\n\nSeek further insight elsewhere."] )
+            }
+          )
+        } else {
+          this.setState({mode: 'search'})
+          this.props.discardRevisions(
+            self.state.model_name,
+            record_names
+          )
+        }
+        return
+      case 'edit':
+        this.setState({mode: 'edit'})
+        return
+    }
+  },
   render: function() {
     var self = this
 
     var documents
+    var revisions
+    var att_classes
 
     var pages = self.state.model_name ? Math.ceil(self.state.record_names.length / self.state.page_size) : null
 
@@ -241,53 +350,76 @@ Search = React.createClass({
         self.state.model_name, 
         page_record_names
       )
+      revisions = self.props.revisionsFor(
+        self.state.model_name,
+        page_record_names
+      )
+      template = self.props.templateFor( self.state.model_name ) 
+
+      att_classes = {}
+      var att_names = Object.keys(template.attributes).filter(function(att_name) {
+        return template.attributes[att_name].shown
+      })
+      att_names.forEach(function(att_name) {
+        var att_class = template.attributes[att_name].attribute_class
+        if (att_class != "TableAttribute") 
+          att_classes[att_name] = eval(att_class)
+      })
+
     }
 
     return <div id="search">
-        <div className="control">
-        <SearchQuery postQuery={ self.postQuery }
-          requestTSV={ self.requestTSV }
-          model_names={ self.props.model_names }/>
-        {
-          pages != null ? 
-            <div className="pages">
-              <div className="page_size">
-              Page size
-              <Selector 
-                values={
-                  [ 10, 25, 50, 200 ]
-                }
-                defaultValue={ self.state.page_size }
-                onChange={
-                  function(page_size) {
-                    var newpages = Math.ceil(self.state.record_names.length / page_size)
-                    self.setState({ page_size: page_size, current_page: Math.min(self.state.current_page, newpages-1) },function(){
-                      self.ensurePageRecords()
-                    })
-                  }
-                }
-                showNone="disabled"/>
-              </div>
-              <div className="results">
-                Found { self.state.record_names.length } records in <span className="model_name">{ self.state.model_name }</span>
-              </div>
-            <Pager pages={ pages } 
-              current_page={ self.state.current_page }
-              set_page={ self.setPage } >
-            </Pager>
-            </div>: null
+        { this.state.mode == 'search' ?
+          <div className="control">
+            <SearchQuery postQuery={ self.postQuery }
+              model_names={ self.props.model_names }/>
+            {
+              pages != null ? 
+                <div className="pages">
+                  <div className="page_size">
+                  Page size
+                  <Selector 
+                    values={
+                      [ 10, 25, 50, 200 ]
+                    }
+                    defaultValue={ self.state.page_size }
+                    onChange={
+                      function(page_size) {
+                        var newpages = Math.ceil(self.state.record_names.length / page_size)
+                        self.setState({ page_size: page_size, current_page: Math.min(self.state.current_page, newpages-1) },function(){
+                          self.ensurePageRecords()
+                        })
+                      }
+                    }
+                    showNone="disabled"/>
+                  </div>
+                  <div className="results">
+                    Found { self.state.record_names.length } records in <span className="model_name">{ self.state.model_name }</span>
+                  </div>
+                <Pager pages={ pages } 
+                  current_page={ self.state.current_page }
+                  set_page={ self.setPage } >
+                </Pager>
+                </div>: null
+            }
+          </div> : null
         }
-        </div>
         {
           documents ?  
-            <SearchTable 
-              documents={ documents }
-              template={
-                this.props.templateFor(
-                  this.state.model_name
-                ) 
-              }
-            /> : null
+            <div className="documents">
+              <Header 
+                mode={ this.state.mode }
+                handler={ this.header_handler }
+                can_edit={ this.props.can_edit }/>
+              <SearchTable 
+                mode={ this.state.mode }
+                documents={ documents }
+                revisions={ revisions }
+                att_classes={ att_classes }
+                record_names={ page_record_names }
+                template={ template }
+              />
+            </div> : null
         }
     </div>
   }
@@ -300,10 +432,23 @@ Search = connect(
       {
         model_names: Object.keys(state.templates),
         documentsFor: function(model_name, record_names) {
-          if (state.templates[model_name] && state.templates[model_name].documents)
-          return record_names.map(function(record_name){
-            return state.templates[model_name].documents[record_name]
-          })
+          if (state.templates[model_name] && state.templates[model_name].documents) {
+            var documents = {}
+            record_names.forEach(function(record_name){
+              documents[record_name] = state.templates[model_name].documents[record_name]
+            })
+            return documents
+          }
+        },
+        revisionsFor: function(model_name, record_names) {
+          if (state.templates[model_name] && state.templates[model_name].revisions) {
+            var revisions = {}
+            record_names.forEach(function(record_name){
+              if (state.templates[model_name].revisions[record_name])
+                revisions[record_name] = state.templates[model_name].revisions[record_name]
+            })
+            return revisions
+          }
         },
         templateFor: function(model_name) {
           if (state.templates[model_name]) return state.templates[model_name].template
@@ -335,6 +480,27 @@ Search = connect(
       },
       query: function(model, filter, success) {
         dispatch(magmaActions.queryDocuments(model,filter,success))
+      },
+      submitRevisions: function(model_name,revisions,success,error) {
+        console.log("Revisions:")
+        console.log(revisions)
+        dispatch(magmaActions.postRevisions(
+          model_name,
+          revisions,
+          success,
+          error
+        ))
+      },
+      discardRevisions: function(model_name,record_names) {
+        if (!record_names || !record_names.length) return
+        record_names.forEach(function(record_name){
+          dispatch(
+            magmaActions.discardRevision(
+              record_name,
+              model_name
+            )
+          )
+        })
       },
       requestDocuments: function(model, record_names, success) {
         dispatch(magmaActions.requestDocuments(model,record_names,success))
