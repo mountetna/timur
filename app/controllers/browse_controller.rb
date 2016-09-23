@@ -62,11 +62,12 @@ class BrowseController <  ApplicationController
           next
         end
 
-        Activity.post(current_user, params[:model_name], 
-                      record_name, 
-                      "updated *#{revision_data.keys.join(", ")}*")
-
         payload.add_revision revision
+      end
+      params[:revisions].map do |record_name, revision_data|
+        Activity.post(current_user, params[:model_name], 
+                      record_name,
+                      "updated *#{revision_data.keys.join(", ")}*")
       end
     end
 
