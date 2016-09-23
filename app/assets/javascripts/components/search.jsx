@@ -85,7 +85,7 @@ SearchQuery = React.createClass({
   }
 })
 
-SearchTableColumn = React.createClass({
+SearchTableColumnHeader = React.createClass({
   getInitialState: function() {
     return { sizing: false }
   },
@@ -119,7 +119,71 @@ SearchTableColumn = React.createClass({
       }
     
       >
-      { this.props.label }
+      { this.props.column }
+    </div>
+  }
+})
+
+SearchTableRow = React.createClass({
+  render: function() {
+    var self = this
+    return <div className="table_row">
+      {
+        this.props.att_names.map(function(att_name, i) {
+          return <SearchTableCell 
+            key={ att_name }
+            att_name={ att_name }
+            document={ self.props.document }
+            template={ self.props.template }
+            revision={ self.props.revision }
+            record_name={ self.props.record_name }
+            att_class={ self.props.att_classes[att_name] }
+            mode={ self.props.mode }
+            focusCell={ self.props.focusCell }
+          />
+        })
+      }
+    </div>
+  }
+})
+
+SearchTableCell = React.createClass({
+  render: function() {
+    var self = this
+    var document = self.props.document
+    var revision = self.props.revision
+    var record_name = self.props.record_name
+    var att_name = self.props.att_name
+    var value = document[ att_name ]
+    var revised_value = revision && revision.hasOwnProperty(att_name) ? revision[att_name] : document[att_name]
+
+    var class_set = {
+      table_data: true,
+      revised: (self.props.mode == 'edit' && value != revised_value),
+      focused_row: self.props.focusCell( record_name ),
+      focused_col: self.props.focusCell( null, att_name),
+    }
+    class_set[ "c" + att_name ] = true
+    return <div onClick={
+        function() {
+          self.props.focusCell( record_name, att_name )
+        }
+      }
+      className={
+        classNames(class_set)
+      }>
+      {
+        self.props.att_class ?
+          <self.props.att_class 
+            document={ document }
+            template={ template }
+            value={ value }
+            revision={ revised_value }
+            mode={ self.props.mode }
+            attribute={ template.attributes[att_name] }/>
+          :
+            <div className="value">(table)</div>
+      }
     </div>
   }
 })
@@ -128,8 +192,10 @@ SearchTable = React.createClass({
   getInitialState: function() {
     return {}
   },
-  focusCell: function(record_name, column) {
-    this.setState({ focus_row: record_name, focus_col: column })
+  focusCell: function(row, column) {
+    if (column == null) return (row == this.state.focus_row)
+    if (row == null) return (column == this.state.focus_col)
+    this.setState({ focus_row: row, focus_col: column })
   },
   render: function() {
     var self = this
@@ -147,67 +213,33 @@ SearchTable = React.createClass({
 
 
     return <div className="table">
-              <div className="table_item">
+              <div className="table_row">
               {
                 att_names.map(function(att_name,i) {
-                  return <SearchTableColumn key={i} 
-                    column={ i }
-                    focused={ self.state.focus_col == i ? true : false }
-                    label={ att_name }
+                  return <SearchTableColumnHeader key={att_name} 
+                    column={ att_name }
+                    focused={ self.focusCell( null, att_name ) }
                   />
                 })
               }
               </div>
               {
-                self.props.record_names.map(
-                  function(record_name, j) {
-                    var document = documents[record_name]
-                    var revision = revisions[record_name]
-                    return <div key={ j }
-                      className="table_item">
-                      {
-                        att_names.map(function(att_name, i) {
-                          var value = document[ att_name ]
+                self.props.record_names.map(function(record_name) {
+                  var document = documents[record_name]
+                  var revision = revisions[record_name]
 
-                          var revised_value = revision && revision.hasOwnProperty(att_name) ? revision[att_name] : document[att_name]
-
-                          var class_set = {
-                            item_value: true,
-                            revised: (self.props.mode == 'edit' && value != revised_value),
-                            focused_row: (self.state.focus_row == record_name),
-                            focused_col: (self.state.focus_col == i)
-                          }
-
-                          var component
-
-                          if (!att_classes.hasOwnProperty(att_name))
-                            component = <div className="value">(table)</div>
-                          else {
-                            var AttClass = att_classes[att_name]
-                            component = <AttClass 
-                              document={ document }
-                              template={ template }
-                              value={ document[ att_name ] }
-                              revision={ revised_value }
-                              mode={ self.props.mode }
-                              attribute={ template.attributes[att_name] }/>
-                          }
-
-
-                          return <div key={i} onClick={
-                              function() {
-                                self.focusCell( record_name, i )
-                              }
-                            }
-                            className={ classNames(class_set) } >
-                            {
-                              component
-                            }
-                          </div>
-                        })
-                      }
-                      </div>
-                  })
+                  return <SearchTableRow 
+                    key={ record_name }
+                    mode={ self.props.mode }
+                    att_names={ att_names }
+                    att_classes={ att_classes }
+                    document={document}
+                    template={template}
+                    record_name={ record_name }
+                    revision={revision}
+                    focusCell={ self.focusCell }
+                  />
+                })
               }
              </div>
   },

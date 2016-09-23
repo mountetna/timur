@@ -108,34 +108,36 @@ $query_color: rgba(gold,0.4);
 			cursor: ew-resize;
 			text-align: center;
 		}
-		.item_value {
-			@include default_attribute;
-			vertical-align: middle;
-			text-align: center;
-			white-space: nowrap;
-			.value {
-				img {
-					max-width: 100%;
-					max-height: 17px;
+		.table_row {
+			.table_data {
+				@include default_attribute;
+				white-space: nowrap;
+				vertical-align: middle;
+				text-align: center;
+				.value {
+					img {
+						max-width: 100%;
+						max-height: 17px;
+					}
+					textarea.text_box {
+						max-height: 17px;
+					}
 				}
-				textarea.text_box {
-					max-height: 17px;
+				&.focused_row {
+					height: 150px;
+					background-color: rgba(midnightblue,0.1);
+					white-space: normal;
+					.value {
+						img {
+							max-height: 140px;
+						}
+						textarea.text_box {
+							max-height: 140px;
+						}
+					}
 				}
-			}
-			&.revised {
-				background-color: rgba(pink,0.3);
-			}
-		}
-		.focused_row {
-			height: 150px;
-			background-color: rgba(midnightblue,0.1);
-			white-space: normal;
-			.value {
-				img {
-					max-height: 140px;
-				}
-				textarea.text_box {
-					max-height: 140px;
+				&.revised {
+					background-color: rgba(pink,0.3);
 				}
 			}
 		}
