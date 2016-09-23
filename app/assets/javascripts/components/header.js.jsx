@@ -1,68 +1,35 @@
-HeaderApprove = React.createClass({
-  render: function() {
-    return <div className="inline">
-        <div className='cancel' onClick={ 
-          this.props.handler.bind(null,'cancel')
-        }>
-        <span className="fa fa-close"/>
-        </div>
-        <div className='approve' onClick={ 
-          this.props.handler.bind(null,'approve')
-        }>
-        <span className="fa fa-check"/>
-        </div>
-      </div>
-  }
-})
-
-HeaderWaiting = React.createClass({
-  render: function() {
-    return <div className='submit'>
-      <span className="fa fa-spinner fa-pulse"/>
-    </div>
-  }
-})
-
-
-HeaderEdit = React.createClass({
-  render: function() {
-    return <div className='edit' 
-      onClick={ this.props.handler.bind(null,'edit') }>
-      <span className="fa fa-pencil"/>
-      </div>
-  }
-})
-
-HeaderClose = React.createClass({
-  render: function() {
-    return <div 
-      onClick={ this.props.handler.bind(null,'close') }
-      className="close">
-      <span className="fa fa-times-circle"/>
-    </div>
-  }
-})
-
-
 Header = React.createClass({
-  render: function() {
-    var component
+  close_button: function() {
+    if (this.props.can_close) {
+      return <div onClick={ this.props.handler.bind(null,'close') } className="close">
+        <span className="fa fa-times-circle"/>
+      </div>
+    }
+  },
+  edit_state_button: function() {
     if (this.props.mode == 'edit')
-      component = <HeaderApprove handler={ this.props.handler }/>
+      return <div className="inline">
+          <div className='cancel' onClick={ this.props.handler.bind(null,'cancel') }>
+          <span className="fa fa-close"/>
+          </div>
+          <div className='approve' onClick={ this.props.handler.bind(null,'approve') }>
+          <span className="fa fa-check"/>
+          </div>
+        </div>
     else if (this.props.mode == 'submit')
-      component = <HeaderWaiting/>
+      return <div className='submit'><span className="fa fa-spinner fa-pulse"/></div>
     else if (this.props.can_edit)
-      component = <HeaderEdit handler = { this.props.handler }/>
+      return <div className='edit' onClick={ this.props.handler.bind(null,'edit') }>
+        <span className="fa fa-pencil"/>
+        </div>
+  },
+  render: function() {
     return <div className="header">
-      { this.props.children }
-      { component }
-      {
-        this.props.can_close ?
-        <HeaderClose handler={ this.props.handler }/>
-        : null
-      }
-    </div>
+             { this.props.children }
+             { this.edit_state_button() }
+             { this.close_button() }
+           </div>
   }
-})
+});
 
-module.exports = Header
+module.exports = Header;

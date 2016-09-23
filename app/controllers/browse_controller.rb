@@ -37,39 +37,26 @@ class BrowseController <  ApplicationController
 
   def update
     # Update a model, redirect to the model view
-    @errors = []
-    payload = Magma::Payload.new
-    params[:revisions].each do |record_name, revision_data|
-      revision = Magma::Revision.new(revision_data,
-                                      params[:model_name], 
-                                      record_name)
+    @revision = Magma::Revision.new(params[:revision],params[:model_name], params[:record_name])
 
-      if !revision.valid?
-        @errors << @revision.errors
-        next
-      end
-
-      begin
-        revision.post!
-      rescue Magma::LoadFailed => m
-        logger.info m.complaints
-        @errors << m.complaints
-        next
-      end
-
-      Activity.post(current_user, params[:model_name], 
-                    record_name, 
-                    "updated *#{revision_data.keys.join(", ")}*")
-
-      payload.add_revision revision
-    end
-
-    if !@errors.empty?
-      render json: { errors: @errors }, status: 422
+    if !@revision.valid?
+      render json: { errors: @revision.errors }, status: 422
       return
     end
+
+    begin
+      @revision.post!
+    rescue Magma::LoadFailed => m
+      logger.info m.complaints
+      render json: { errors: m.complaints }, status: 421
+      return
+    end
+
+    Activity.post(current_user, params[:model_name], params[:record_name], 
+                  "updated *#{params[:revision].keys.join(", ")}*")
+
     render json: TimurPayload.new(
-      payload
+      @revision.payload
     )
   end
 end

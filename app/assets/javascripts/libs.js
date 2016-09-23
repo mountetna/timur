@@ -8,9 +8,3 @@ thunk = require('redux-thunk')
 chroma = require('chroma-js')
 
 dates = require('dates')
-
-classNames = function(nameset) {
-  return Object.keys(nameset).filter(function(name) {
-    return nameset[name]
-  }).join(" ")
-}
