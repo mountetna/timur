@@ -17,7 +17,7 @@ LinkAttribute = require('./components/link_attribute.jsx')
 CollectionAttribute = require('./components/collection_attribute.jsx')
 TableViewer = require('./components/table_viewer.jsx')
 TableColumn = require('./components/table_column.jsx')
-TablePager = require('./components/pager.jsx')
+Pager = require('./components/pager.jsx')
 TableSet = require('./components/table_set.jsx')
 
 TableAttribute = require('./components/table_attribute.js.jsx')

@@ -17,6 +17,12 @@
 			width: 160px;
 			text-align: center;
 		}
+		.page_edit {
+			display: inline-block;
+			width: 30px;
+			border: 1px solid forestgreen;
+			font-family: $body_font;
+		}
 		.turner {
 			color: forestgreen;
 			display: inline;

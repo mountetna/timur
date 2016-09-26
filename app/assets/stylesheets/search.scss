@@ -64,6 +64,13 @@ $query_color: rgba(gold,0.4);
 				width: 120px;
 				text-align: center;
 			}
+			.page_edit {
+				display: inline-block;
+				width: 30px;
+				border: 1px solid forestgreen;
+				font-family: $body_font;
+				font-size: 16px;
+			}
 		}
 	}
 	select {
