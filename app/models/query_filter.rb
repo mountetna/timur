@@ -41,7 +41,7 @@ class QueryFilter
           )
         when '>'
           @query = @query.where(
-            "#{m[:attribute]} < ?", m[:match_string]
+            "#{m[:attribute]} > ?", m[:match_string]
           )
         end
         return true
