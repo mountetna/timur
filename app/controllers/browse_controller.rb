@@ -29,8 +29,14 @@ class BrowseController <  ApplicationController
   def view_json
     # Get the model name
 
-    view = TimurView.create(params[:model_name], params[:record_name])
-    view.retrieve_tab(params[:tab_name] ? params[:tab_name].to_sym : nil)
+    view = TimurView.create(
+      params[:model_name],
+      params[:record_name]
+    )
+
+    view.retrieve_tab(
+      params[:tab_name] ? params[:tab_name].to_sym : nil
+    )
 
     render json: view
   end
