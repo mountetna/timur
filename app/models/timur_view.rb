@@ -4,8 +4,6 @@ class TimurView
     def initialize view, name, &block
       @name = name
       @panes = {}
-      @view = view
-      @model = view.model
       instance_eval &block
     end
 
@@ -14,20 +12,39 @@ class TimurView
     end
 
     def load record_name
-      @record = @model.retrieve(record_name) do |att|
-        attributes.include? att.name
-      end.all.first
+      uri = URI.parse('https://magma-dev.ucsf-immunoprofiler.org/retrieve')
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
+      response = http.post(
+        uri.path,
+        {
+          model_name: "sample",
+          record_names: [ "IPIMEL069.T1" ],
+          hide_tables: true
+        }.to_json,
+        {
+          "Content-Type" => "application/json",
+          "Accept" => "application/json"
+        }
+      )
+
+      response.each_header do |header,value|
+        puts "#{header}\t#{value}"
+      end
+
+      if response.code == 200
+      end
       payload.add_model @model, attributes
       payload.add_records @model, [ @record ]
     end
 
-    def payload
-      @payload ||= Magma::Payload.new
+    def to_hash
+      TimurPayload.new(payload).to_hash
     end
 
-    def to_hash
-      TimurPayload.new(payload).to_hash.merge(
+    def tab_hash
         tabs: tab_hash.merge({
           @name => {
             panes: Hash[
@@ -40,14 +57,6 @@ class TimurView
       )
     end
 
-    def tab_hash
-      # this should define the names of all the tabs
-      Hash[
-        @view.class.tabs.map do |name, block|
-          [ name, nil ]
-        end
-      ]
-    end
 
     private
 
@@ -101,15 +110,15 @@ class TimurView
       block.call(record)
     end
   end
+
   class Pane
-    def initialize view, name, &block
-      @view = view
-      @model = view.model
+    def initialize model_name, name, &block
+      @model_name = model_name
       @name = name
       @attributes = []
       @display = []
       @extra = {}
-      needs @model.identity, :created_at, :updated_at
+      needs :created_at, :updated_at
       instance_eval( &block )
     end
 
@@ -145,7 +154,9 @@ class TimurView
     end
 
     def show_all_attributes
-      shows *@model.attributes.keys.select{|name| @model.attributes[name].shown? }
+      shows *@model.attributes.keys.select do |name| 
+        @model.attributes[name].shown?
+      end
     end
 
     def title txt
@@ -183,16 +194,14 @@ class TimurView
     end
   end
 
-  def initialize model, record_name
-    @model = model
+  def initialize model_name, record_name
+    @model_name = model_name
     @record_name = record_name
   end
 
-  attr_reader :model
-
   def to_json(options={})
     MultiJson.dump(
-      @tab.to_hash
+      tab_hash.merge(@payload.to_hash)
     )
   end
 
@@ -202,11 +211,15 @@ class TimurView
     end
   end
 
-  def retrieve_tab tab_name
-    tab_name ||= self.class.tabs.keys.first
-    block = self.class.tabs[tab_name]
+  def tabs
+    self.class.tabs
+  end
 
-    @tab = Tab.new(self, tab_name, &block)
+  def retrieve_tab tab_name
+    tab_name ||= tabs.keys.first
+    block = tabs[tab_name]
+
+    @tab = Tab.new(self, @model_name, tab_name, &block)
     @tab.load @record_name
   end
 end
