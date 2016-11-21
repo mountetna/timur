@@ -85,7 +85,7 @@ var CollectionList = React.createClass({
                 links.map(
                   function(link) {
                     return <div key={ link } className="collection_item">
-                      <MagmaLink link={ link } model={ self.props.attribute.name }/>
+                      <MagmaLink link={ link } model={ self.props.attribute.model_name }/>
                     </div>
                   })
                }
