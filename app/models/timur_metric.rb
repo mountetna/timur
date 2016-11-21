@@ -1,7 +1,8 @@
 class TimurMetric
   def initialize record
     @record = record
-    @message = "Test failed"
+    @score = :failure
+    @details = []
   end
 
   class << self
@@ -23,7 +24,36 @@ class TimurMetric
   end
 
   def to_hash
-    { name: metric_name, score: test ? 1 : 0, message: @message }
+    {
+      name: metric_name,
+      score: metric_score,
+      message: @message,
+      details: @details
+    }
+  end
+
+  def detail title, entries
+    @details.push title: title, entries: entries
+  end
+
+  def metric_score
+    test
+    @score
+  end
+
+  def success message = "Test passed"
+    @score = :success
+    @message = message
+  end
+
+  def failure message = "Test failed"
+    @score = :failure
+    @message = message
+  end
+
+  def invalid message = "Test is invalid"
+    @score = :invalid
+    @message = message
   end
 
   def test

@@ -9,7 +9,7 @@ class PatientView < TimurView
     end
     pane :flow do
       title "Flow"
-      shows :flojo_file, :stain_version, :flow_pdf
+      shows :flojo_file, :stain_version, :flow_pdf, :reference_patient
     end
   end
 end

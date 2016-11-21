@@ -47,7 +47,7 @@ var RecordMetrics = React.createClass({
         if (self.props.category_hidden[category])
           return null
         else
-          return <CategoryMetrics key={ category } metrics={ self.props.metrics[category] }/>
+          return <CategoryMetrics record_name={ self.props.record_name } key={ category } metrics={ self.props.metrics[category] }/>
       })
     }
     </div>
@@ -56,12 +56,30 @@ var RecordMetrics = React.createClass({
 
 var CategoryMetrics = React.createClass({
   render: function() {
+    var store = this.context.store
+    var self = this
     return <div className="category">
     {
       this.props.metrics.map(function(metric) {
-        var klass = metric.score ? "metric good" : "metric bad"
-        return <div key={ metric.name } className="metric_box">
-          <div title={metric.score ? "OK" : metric.message} className={ klass }>
+        var klass = metric.score + " metric" 
+        return <div key={ metric.name } className="metric_box"
+          onClick={
+            function() {
+              if (metric.details.length) {
+                store.dispatch(messageActions.showMessages([
+                  "# The test "+metric.name+" on "+self.props.record_name+" failed.\n"+
+                  metric.details.map(function(detail) {
+                    return "## "+detail.title +"\n" + detail.entries.map(function(entry) {
+                      return "- "+entry
+                    }).join("\n")
+                  }).join("\n")
+                ]))
+              }
+            }
+          }>
+          <div title={
+            metric.details.length ? metric.message + " [ Click for details ]" : metric.message
+          } className={ klass }>
           &nbsp;
           </div>
         </div>
@@ -70,6 +88,9 @@ var CategoryMetrics = React.createClass({
     </div>
   }
 })
+CategoryMetrics.contextTypes = {
+  store: React.PropTypes.object
+}
 
 var MetricsAttribute = React.createClass({
   getInitialState: function() {

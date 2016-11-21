@@ -2,304 +2,178 @@ class SampleMetrics
   class Clinical < TimurMetric
     category :clinical
     def test
-      ::Clinical.join(:patients, :clinical_id => :clinicals__id)
+      return success if ::Clinical.join(:patients, :clinical_id => :clinicals__id)
         .join(:samples, :samples__patient_id => :patients__id)
         .where(:sample_name => @record.sample_name).count > 0
+      failure
     end
   end
   class Headshot < TimurMetric
     category :processing
 
     def test
-      @record.headshot.file
+      return success if @record.headshot.file
+      failure "Could not find a headshot."
     end
   end
   class TumorType < TimurMetric
     category :processing
 
     def test
-      if !@record.tumor_type
-        @message = "Tumor type is not set."
-      end
-      @record.tumor_type
+      return success if @record.tumor_type
+      failure "Tumor type is not set."
     end
   end
   class FlowjoXml < TimurMetric
     category :flow
 
     def test
-      @record.patient.flojo_file.file
+      return success if @record.patient.flojo_file.file
+      failure "A FlowJo XML file (.WSP) has not been loaded for this patient."
     end
   end
-  class TregFcs < TimurMetric
+  class FcsFiles < TimurMetric
     category :flow
 
-    def test
-      @record.treg_file.file
+    def check_file stain
+      @missing_files.push stain if !@record.send(:"#{stain}_file").file
     end
-  end
-  class NktbFcs < TimurMetric
-    category :flow
 
     def test
-      @record.nktb_file.file
-    end
-  end
-  class SortFcs < TimurMetric
-    category :flow
+      @missing_files = []
 
-    def test
-      @record.sort_file.file
-    end
-  end
-  class DcFcs < TimurMetric
-    category :flow
-
-    def test
-      @record.dc_file.file
-    end
-  end
-  class TregPopulations < TimurMetric
-    category :flow
-
-    def test
-      result = @record.population.any? do |pop|
-        pop.stain == "treg"
+      [ "treg", "nktb", "sort", "dc" ].each do |stain|
+        check_file stain
       end
 
-      if !result
-        @message = "Could not find any populations from the treg stain."
+      if @missing_files.empty?
+        return success 
+      else 
+        detail "Missing files", @missing_files
+        failure "Some FCS files were missing."
+      end
+    end
+  end
+  class Populations < TimurMetric
+    category :flow
+
+    def check_population stain
+      @missing_stains.push stain unless @record.population.any? do |pop| 
+        pop.stain == stain
+      end
+    end
+
+    def test
+      @missing_stains = []
+      [ "treg", "nktb", "sort", "dc" ].each do |stain|
+        check_population stain
       end
       
-      result
-    end
-  end
-  class NktbPopulations < TimurMetric
-    category :flow
-
-    def test
-      result = @record.population.any? do |pop|
-        pop.stain == "nktb"
+      if @missing_stains.empty?
+        return success 
+      else 
+        detail "Missing stains", @missing_stains
+        failure "Population counts are absent for some stains."
       end
-
-      if !result
-        @message = "Could not find any populations from the nktb stain."
-      end
-      
-      result
-    end
-  end
-  class SortPopulations < TimurMetric
-    category :flow
-
-    def test
-      result = @record.population.any? do |pop|
-        pop.stain == "sort"
-      end
-
-      if !result
-        @message = "Could not find any populations from the sort stain."
-      end
-      
-      result
-    end
-  end
-  class DcPopulations < TimurMetric
-    category :flow
-
-    def test
-      result = @record.population.any? do |pop|
-        pop.stain == "dc"
-      end
-
-      if !result
-        @message = "Could not find any populations from the dc stain."
-      end
-      
-      result
     end
   end
   class ValidTree < TimurMetric
     category :flow
 
+    def pop_key_set pops
+      Set.new(pops.map do |pop|
+        [ pop.stain, pop.name, pop.ancestry ]
+      end)
+    end
+
     def test
-      @message = "This test is not written."
-      nil
+      patient = @record.patient
+
+      return invalid("No reference patient") unless reference_patient = patient.reference_patient
+      return invalid("No reference sample") unless reference_sample = reference_patient.sample.first
+
+      sample_stains = @record.population.map(&:stain).uniq
+
+      return invalid("No sample populations") if sample_stains.empty?
+
+      ref_key_set = pop_key_set reference_sample.population
+      sam_key_set = pop_key_set @record.population
+
+      extra_pops = @record.population.reject do |pop|
+        ref_key_set.include? [ pop.stain, pop.name, pop.ancestry ]
+      end
+
+      missing_pops = reference_sample.population.select do |pop|
+        sample_stains.include?(pop.stain) && !sam_key_set.include?([ pop.stain, pop.name, pop.ancestry ])
+      end
+
+      if !missing_pops.empty?
+        detail("Missing Populations", missing_pops.map do |pop|
+          "#{pop.stain} : #{pop.name} > #{pop.ancestry}"
+        end)
+      end
+
+      if !extra_pops.empty?
+        detail("Extra Populations", extra_pops.map do |pop|
+          "#{pop.stain} : #{pop.name} > #{pop.ancestry}"
+        end)
+      end
+
+      if missing_pops.empty?
+        success
+      else
+        failure "Required reference populations are missing."
+      end
     end
   end
-  class TregRna < TimurMetric
+  class Rna < TimurMetric
     category :rna
 
-    def test
-      result = @record.rna_seq.any? do |rna|
-        rna.compartment == "treg"
+    def check_compartment comp
+      @missing_compartments.push comp unless @record.rna_seq.any?  do |rna|
+        rna.compartment == comp
       end
-      Rails.logger.info "Testing treg_rna, got #{result} for #{@record.inspect}"
+    end
 
-      if !result
-        @message = "Could not find an rna_seq for the treg compartment"
+    def test
+      @missing_compartments = []
+
+      [ "tcell", "treg", "stroma", "live", "myeloid", "tumor" ].each do |comp|
+        check_compartment comp
       end
-      result
+
+      if @missing_compartments.empty?
+        success
+      else
+        detail "Missing compartments", @missing_compartments
+        failure "Could not find an rna_seq for some compartments."
+      end
     end
   end
-  class TcellRna < TimurMetric
+
+  class Gexp < TimurMetric
     category :rna
 
-    def test
-      result = @record.rna_seq.any? do |rna|
-        rna.compartment == "tcell"
-      end
-
-      if !result
-        @message = "Could not find an rna_seq for the tcell compartment"
-      end
-      result
-    end
-  end
-  class TumorRna < TimurMetric
-    category :rna
-
-    def test
-      result = @record.rna_seq.any? do |rna|
-        rna.compartment == "tumor"
-      end
-
-      if !result
-        @message = "Could not find an rna_seq for the tumor compartment"
-      end
-      result
-    end
-  end
-  class StromaRna < TimurMetric
-    category :rna
-
-    def test
-      result = @record.rna_seq.any? do |rna|
-        rna.compartment == "stroma"
-      end
-
-      if !result
-        @message = "Could not find an rna_seq for the stroma compartment"
-      end
-      result
-    end
-  end
-  class LiveRna < TimurMetric
-    category :rna
-
-    def test
-      result = @record.rna_seq.any? do |rna|
-        rna.compartment == "live"
-      end
-
-      if !result
-        @message = "Could not find an rna_seq for the live compartment"
-      end
-      result
-    end
-  end
-  class MyeloidRna < TimurMetric
-    category :rna
-
-    def test
-      result = @record.rna_seq.any? do |rna|
-        rna.compartment == "myeloid"
-      end
-
-      if !result
-        @message = "Could not find an rna_seq for the myeloid compartment"
-      end
-      result
-    end
-  end
-  class TregGexp < TimurMetric
-    category :rna
-
-    def test
-      result = GeneExp.join(:rna_seqs, :gene_exps__rna_seq_id => :rna_seqs__id)
+    def check_compartment comp
+      @missing_compartments.push comp unless GeneExp.join(:rna_seqs, :gene_exps__rna_seq_id => :rna_seqs__id)
         .join(:samples, :samples__id => :rna_seqs__sample_id)
-        .where(rna_seqs__compartment: "treg")
+        .where(rna_seqs__compartment: comp)
         .where(sample_name: @record.sample_name).count > 1
-
-      if !result
-        @message = "Could not find gene expression for the treg compartment"
-      end
-      result
     end
-  end
-  class TcellGexp < TimurMetric
-    category :rna
 
     def test
-      result = GeneExp.join(:rna_seqs, :gene_exps__rna_seq_id => :rna_seqs__id)
-        .join(:samples, :samples__id => :rna_seqs__sample_id)
-        .where(rna_seqs__compartment: "tcell")
-        .where(sample_name: @record.sample_name).count > 1
+      @missing_compartments = []
 
-      if !result
-        @message = "Could not find gene expression for the tcell compartment"
+      [ "tcell", "treg", "stroma", "live", "myeloid", "tumor" ].each do |comp|
+        check_compartment comp
       end
-      result
-    end
-  end
-  class TumorGexp < TimurMetric
-    category :rna
 
-    def test
-      result = GeneExp.join(:rna_seqs, :gene_exps__rna_seq_id => :rna_seqs__id)
-        .join(:samples, :samples__id => :rna_seqs__sample_id)
-        .where(rna_seqs__compartment: "tumor")
-        .where(sample_name: @record.sample_name).count > 1
-
-      if !result
-        @message = "Could not find gene expression for the tumor compartment"
+      if @missing_compartments.empty?
+        success
+      else
+        detail "Missing compartments", @missing_compartments
+        failure "Could not find gene_exp for some compartments."
       end
-      result
-    end
-  end
-  class StromaGexp < TimurMetric
-    category :rna
-
-    def test
-      result = GeneExp.join(:rna_seqs, :gene_exps__rna_seq_id => :rna_seqs__id)
-        .join(:samples, :samples__id => :rna_seqs__sample_id)
-        .where(rna_seqs__compartment: "stroma")
-        .where(sample_name: @record.sample_name).count > 1
-
-      if !result
-        @message = "Could not find gene expression for the stroma compartment"
-      end
-      result
-    end
-  end
-  class LiveGexp < TimurMetric
-    category :rna
-
-    def test
-      result = GeneExp.join(:rna_seqs, :gene_exps__rna_seq_id => :rna_seqs__id)
-        .join(:samples, :samples__id => :rna_seqs__sample_id)
-        .where(rna_seqs__compartment: "live")
-        .where(sample_name: @record.sample_name).count > 1
-
-      if !result
-        @message = "Could not find gene expression for the live compartment"
-      end
-      result
-    end
-  end
-  class MyeloidGexp < TimurMetric
-    category :rna
-
-    def test
-      result = GeneExp.join(:rna_seqs, :gene_exps__rna_seq_id => :rna_seqs__id)
-        .join(:samples, :samples__id => :rna_seqs__sample_id)
-        .where(rna_seqs__compartment: "myeloid")
-        .where(sample_name: @record.sample_name).count > 1
-
-      if !result
-        @message = "Could not find gene expression for the myeloid compartment"
-      end
-      result
     end
   end
 end

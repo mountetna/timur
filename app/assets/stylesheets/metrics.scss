@@ -36,34 +36,41 @@
 		display: block;
 		height: 500px;
 		overflow: auto;
-		.record_name {
-			display: inline-block;
-			width: 140px;
-			margin-right: 10px;
-			text-align: right;
-		}
-		.category {
-			display: inline-block;
-			.metric_box {
+		.metrics {
+			overflow: auto;
+			.record_name {
 				display: inline-block;
-				border-left: 1px solid rgba(midnightblue,0.4);
-				padding: 2px 0;
-				.metric {
-					border: 2px solid midnightblue;
-					border-radius: 50%;
-					color: mediumorchid;
-					cursor: default;
+				width: 140px;
+				margin-right: 10px;
+				text-align: right;
+			}
+			.category {
+				display: inline-block;
+				.metric_box {
 					display: inline-block;
-					height: 20px;
-					margin: 0 6px;
-					width: 20px;
-					&.good {
-						background-color: palegreen;
-						box-shadow: -2px -2px 5px mediumorchid inset, 1px 1px 1px darkolivegreen inset;
-					}
-					&.bad {
-						background-color: pink;
-						box-shadow: 1px 1px 3px darkred inset, -2px -2px 5px red inset;
+					border-left: 1px solid rgba(midnightblue,0.4);
+					padding: 2px 0;
+					.metric {
+						border: 2px solid midnightblue;
+						border-radius: 50%;
+						color: mediumorchid;
+						cursor: default;
+						display: inline-block;
+						height: 20px;
+						margin: 0 6px;
+						width: 20px;
+						&.success {
+							background-color: palegreen;
+							box-shadow: -2px -2px 5px mediumorchid inset, 1px 1px 1px darkolivegreen inset;
+						}
+						&.failure {
+							background-color: pink;
+							box-shadow: 1px 1px 3px darkred inset, -2px -2px 5px red inset;
+						}
+						&.invalid {
+							background-color: white;
+							box-shadow: 1px 1px 3px #222 inset, -2px -2px 5px #444 inset;
+						}
 					}
 				}
 			}
