@@ -61,16 +61,16 @@ var Browser = React.createClass({
 
     var current_tab_name = this.state.current_tab_name || Object.keys(view)[0]
     
-    var skin = this.state.mode == "browse" ?  "browser " + this.props.template_name : "browser"
+    var skin = this.state.mode == "browse" ?  "browser " + this.props.model_name : "browser"
 
     return <div className={ skin }>
 
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.props.can_edit }>
-        <div className="template_name">
-        { this.camelize(this.props.template_name) }
+        <div className="model_name">
+        { this.camelize(this.props.model_name) }
         </div>
-        <div className="document_name">
-        { this.props.document_name }
+        <div className="record_name">
+        { this.props.record_name }
         </div>
         <Help info="edit"/>
       </Header>
@@ -98,7 +98,7 @@ var Browser = React.createClass({
 
 Browser = connect(
   function (state,props) {
-    var template_record = state.templates[props.model_name]
+    var template_record = state.models[props.model_name]
 
     var template = template_record ? template_record.template : null
 
@@ -112,9 +112,9 @@ Browser = connect(
       props,
       {
         template: template,
-        template_name: template ? template.name : null,
+        model_name: template ? template.name : null,
         document: document,
-        document_name: document ? document[ template.identifier ] : null,
+        record_name: document ? document[ template.identifier ] : null,
         revision: revision,
         hasRevisions: (Object.keys(revision).length > 0),
         view: view,
@@ -124,9 +124,9 @@ Browser = connect(
   function (dispatch,props) {
     return {
       request: function(tab_name,success,error) {
-        dispatch(magmaActions.requestView(
+        dispatch(timurActions.requestView(
           props.model_name,
-          props.record_name, 
+          props.record_name,
           tab_name,
           success,
           error

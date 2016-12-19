@@ -9,9 +9,48 @@ class SampleView < TimurView
       adds :qc do
         attribute_class "BarPlotAttribute"
         display_name "Immune Fractions"
-        data do |record|
-          QcPlotJson.new(record).to_json
-        end
+        data(
+          query: {
+            name: "qc",
+            rows: [ "sample", [ "sample_name", "::equals", ":::record_name" ] ],
+            columns: {
+              treg_cd45_count: [ "population", [ "stain", "::equals", "treg" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
+              treg_live_count: [ "population", [ "stain", "::equals", "treg" ], [ "name", "::equals", "Live" ], "::first", "count" ],
+              nktb_cd45_count: [ "population", [ "stain", "::equals", "nktb" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
+              nktb_live_count: [ "population", [ "stain", "::equals", "nktb" ], [ "name", "::equals", "Live" ], "::first", "count" ],
+              sort_cd45_count: [ "population", [ "stain", "::equals", "sort" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
+              sort_live_count: [ "population", [ "stain", "::equals", "sort" ], [ "name", "::equals", "Live" ], "::first", "count" ],
+              dc_cd45_count: [ "population", [ "stain", "::equals", "dc" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
+              dc_live_count: [ "population", [ "stain", "::equals", "dc" ], [ "name", "::equals", "Live" ], "::first", "count" ]
+            }
+          },
+          bars: [
+            {
+              series: "CD45+/live",
+              color: "greenyellow",
+              height: "treg_cd45_count / treg_live_count",
+              highlight: [ "::first" ]
+            },
+            {
+              series: "CD45+/live",
+              color: "coral",
+              height: "nktb_cd45_count / nktb_live_count",
+              highlight: [ "::first" ]
+            },
+            {
+              series: "CD45+/live",
+              color: "khaki",
+              height: "sort_cd45_count / sort_live_count",
+              highlight: [ "::first" ]
+            },
+            {
+              series: "CD45+/live",
+              color: "seagreen",
+              height: "dc_cd45_count / dc_live_count",
+              highlight: [ "::first" ]
+            }
+          ]
+        )
       end
     end
   end
@@ -24,16 +63,6 @@ class SampleView < TimurView
   end
 
   tab :flow_cytometry do
-    pane :fingerprint do
-      adds :fingerprint do
-        attribute_class "BarPlotAttribute"
-        display_name "FingerPrint"
-        data do |record|
-          FingerprintPlotJson.new(record).to_json
-        end
-      end
-    end
-
     pane :gating do
       title "Gating"
       shows :population
