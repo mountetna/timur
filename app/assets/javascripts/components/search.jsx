@@ -430,31 +430,31 @@ Search = connect(
     return $.extend({},
       props,
       {
-        model_names: Object.keys(state.templates),
+        model_names: Object.keys(state.models),
         documentsFor: function(model_name, record_names) {
-          if (state.templates[model_name] && state.templates[model_name].documents) {
+          if (state.models[model_name] && state.models[model_name].documents) {
             var documents = {}
             record_names.forEach(function(record_name){
-              documents[record_name] = state.templates[model_name].documents[record_name]
+              documents[record_name] = state.models[model_name].documents[record_name]
             })
             return documents
           }
         },
         revisionsFor: function(model_name, record_names) {
-          if (state.templates[model_name] && state.templates[model_name].revisions) {
+          if (state.models[model_name] && state.models[model_name].revisions) {
             var revisions = {}
             record_names.forEach(function(record_name){
-              if (state.templates[model_name].revisions[record_name])
-                revisions[record_name] = state.templates[model_name].revisions[record_name]
+              if (state.models[model_name].revisions[record_name])
+                revisions[record_name] = state.models[model_name].revisions[record_name]
             })
             return revisions
           }
         },
         templateFor: function(model_name) {
-          if (state.templates[model_name]) return state.templates[model_name].template
+          if (state.models[model_name]) return state.models[model_name].template
         },
         hasCompleteRecords: function(model_name, record_names) {
-          model_info = state.templates[model_name]
+          model_info = state.models[model_name]
 
           if (!model_info || !record_names) return false
 

@@ -1,14 +1,54 @@
+# The old way:
+# We 'retrieve' a record, which uses eager loading to grab the record and associated items, which are pushed
+# into the association.
+#
+# We no longer have our nice model with its associations.
+#
+# Instead we have a JSON "payload" from Magma which contains all of the same
+# information; however, we need to parse our way through this if we are to
+# succeed.
+#
+# Timur uses this JSON payload structure in javascript and in ruby
+#
+# On the ruby end, Timur needs access to the record in order to compose a view,
+# which may require running sub-queries, etc., not available via the
+#
+#
+# Structure of the view:
+#
+# Tabs
+# Panes
+# Plots
+#
+# Each tab has a list of panes
+# Each pane has a list of attributes
+# Each pane also has a data object which specifies a data block to be passed
+# into the attribute
+#
+# To render:
+#
+# 1. Download the template, which will include Views, Tabs, Panes and Plots
+#    These are Timur objects, not Magma objects. Each has a unique key.
+#
+# 2. Attempt to render the template. On doing so, the Tab will discover that it does not have
+#    the correct data to display itself and will make requests.
+#
+#    a. The tab will request all of the require attributes for the record, and
+#       will receive a magma Payload
+#
+#    b. For each extra attribute there may be a data table request. Grab all of these and receive a magma Matrix for each
+
 class TimurView
   class Tab
     attr_reader :name
-    def initialize view, name, &block
+    def initialize name, &block
       @name = name
       @panes = {}
       instance_eval &block
     end
 
     def pane name, &block
-      @panes[name] = Pane.new(@view, name,&block)
+      @panes[name] = Pane.new(name,&block)
     end
 
     def load record_name
@@ -20,8 +60,8 @@ class TimurView
       response = http.post(
         uri.path,
         {
-          model_name: "sample",
-          record_names: [ "IPIMEL069.T1" ],
+          model_name: @model_name,
+          record_names: [ record_name ],
           hide_tables: true
         }.to_json,
         {
@@ -35,28 +75,19 @@ class TimurView
       end
 
       if response.code == 200
+        @payload = JSON.parse(response.body)
       end
-      payload.add_model @model, attributes
-      payload.add_records @model, [ @record ]
     end
 
     def to_hash
-      TimurPayload.new(payload).to_hash
+      {
+        panes: Hash[
+          @panes.map do |name, pane|
+            [ name, pane.to_hash ]
+          end
+        ]
+      }
     end
-
-    def tab_hash
-        tabs: tab_hash.merge({
-          @name => {
-            panes: Hash[
-              @panes.map do |name, pane|
-                [ name, pane.to_hash(@record) ]
-              end
-            ]
-          }
-        })
-      )
-    end
-
 
     private
 
@@ -90,67 +121,54 @@ class TimurView
       @display_name = txt
     end
 
-    def data &block
-      @data_block = block
+    def data data
+      @data = data
     end
 
-    def to_hash record
+    def to_hash
       {
         attribute: {
           name: @name,
           attribute_class: @attribute_class,
           display_name: @display_name
         },
-        data: data_for(record)
+        data: @data
       }
-    end
-
-    def data_for record
-      block = @data_block
-      block.call(record)
     end
   end
 
   class Pane
-    def initialize model_name, name, &block
-      @model_name = model_name
+    def initialize name, &block
       @name = name
       @attributes = []
       @display = []
       @extra = {}
-      needs :created_at, :updated_at
       instance_eval( &block )
     end
 
     attr_reader :attributes
 
-    def to_hash(record)
+    def to_hash
       {
         title: @title,
-        attributes: @attributes,
-        display: @display,
-        extra: Hash[
-          @extra.map do |name,extra_att|
-            [ name, extra_att.to_hash(record) ]
+        display: @display.map do |attribute|
+          if attribute.is_a? ExtraAttribute
+            attribute.to_hash
+          else
+            attribute
           end
-        ]
+        end
       }
     end
 
     private
 
     def shows *attributes
-      @attributes.concat attributes
       @display.concat attributes
     end
 
-    def needs *attributes
-      @attributes.concat attributes
-    end
-
     def adds new_att, &block
-      @display.push new_att
-      @extra[new_att] = ExtraAttribute.new(new_att, &block)
+      @display.push ExtraAttribute.new(new_att, &block)
     end
 
     def show_all_attributes
@@ -173,18 +191,16 @@ class TimurView
       @tabs ||= {}
     end
 
-    def create model_name, record_name
-      model = Magma.instance.get_model model_name
+    def create model_name, tab_name
+      view_class = find_view_class(model_name)
 
-      view_class = find_view_class(model)
-
-      view_class.new(model, record_name)
+      view_class.new(model_name, tab_name)
     end
 
     private
 
-    def find_view_class model
-      view_name = "#{model.name}View".to_sym
+    def find_view_class model_name
+      view_name = "#{model_name.to_s.camel_case}View".to_sym
       begin
         Kernel.const_get view_name
       rescue NameError => e
@@ -194,15 +210,27 @@ class TimurView
     end
   end
 
-  def initialize model_name, record_name
+  def initialize model_name, tab_name
     @model_name = model_name
-    @record_name = record_name
+    @tab_name = tab_name || tabs.keys.first
+    Rails.logger.info @tab_name
+    @tab = Tab.new(@tab_name, &tabs[@tab_name])
   end
 
   def to_json(options={})
+    # This is only a TEMPLATE of the view. The actual data is requested
+    # separately by the client
     MultiJson.dump(
-      tab_hash.merge(@payload.to_hash)
+      tabs: Hash[
+        tabs.map do |name, block|
+          [ name, name == @tab_name ? @tab.to_hash : nil ]
+        end
+      ],
+      tab_name: @tab_name
     )
+  end
+
+  def retrieve
   end
 
   tab :default do
@@ -211,15 +239,9 @@ class TimurView
     end
   end
 
+  private
+
   def tabs
     self.class.tabs
-  end
-
-  def retrieve_tab tab_name
-    tab_name ||= tabs.keys.first
-    block = tabs[tab_name]
-
-    @tab = Tab.new(self, @model_name, tab_name, &block)
-    @tab.load @record_name
   end
 end

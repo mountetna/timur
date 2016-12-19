@@ -31,10 +31,6 @@ class BrowseController <  ApplicationController
 
     view = TimurView.create(
       params[:model_name],
-      params[:record_name]
-    )
-
-    view.retrieve_tab(
       params[:tab_name] ? params[:tab_name].to_sym : nil
     )
 

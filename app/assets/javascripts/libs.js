@@ -14,3 +14,10 @@ classNames = function(nameset) {
     return nameset[name]
   }).join(" ")
 }
+
+Array.prototype.flatten = function() {
+  return this.reduce(function(flat, item) {
+    if (Array.isArray(item)) return flat.concat(item.flatten())
+    return flat.concat(item)
+  }, [])
+}

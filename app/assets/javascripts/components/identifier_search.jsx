@@ -85,8 +85,8 @@ IdentifierSearch = connect(
   function(state,props) {
     var idents = {}
 
-    Object.keys(state.templates).forEach(function(model_name) {
-      idents[model_name] = Object.keys(state.templates[model_name].documents)
+    Object.keys(state.models).forEach(function(model_name) {
+      idents[model_name] = Object.keys(state.models[model_name].documents)
     })
     return {
       identifiers: Object.keys(idents).length ? idents : null

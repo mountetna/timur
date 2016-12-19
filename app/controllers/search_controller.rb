@@ -80,30 +80,36 @@ class SearchController <  ApplicationController
   public
 
   def records_json
-    model = Magma.instance.get_model params[:model_name]
-
-    # eager load from links but not tables
-    
-    attributes = model.attributes.values.select do |att|
-      !att.is_a? Magma::TableAttribute
+    magma = Magma::Client.new
+    status, payload = magma.retrieve(
+      params
+    )
+    Rails.logger.info [ status, payload ]
+    if status == 200
+      render json: payload
+    else
+      render json: { errors: [ "Magma retrieve had errors." ] }, status: status
     end
-
-    records = model.retrieve(params[:record_names]) do |att|
-      attributes.include? att
-    end.all
-
-    payload = Magma::Payload.new
-    payload.add_model model, attributes.map(&:name)
-    payload.add_records model, records
-    
-    render json: TimurPayload.new( payload )
   end
 
+  def query_json
+    magma = Magma::Client.new
+    status, payload = magma.query(
+      params
+    )
+    Rails.logger.info [ status, payload ]
+    if status == 200
+      render json: payload
+    else
+      render json: { errors: [ "Magma retrieve had errors." ] }, status: status
+    end
+  end
+ 
   # TODO: this needs to be refactored to use the Payload interface along with
   # column restriction, not yet working
   def identifiers_json
     render json: {
-      templates: Hash[
+      models: Hash[
         Magma.instance.magma_models.map do |model|
           next unless model.has_identifier?
           identifiers = model.select_map(model.identity)
