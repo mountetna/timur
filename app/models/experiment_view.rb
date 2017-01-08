@@ -12,7 +12,7 @@ class ExperimentView < TimurView
         display_name "Completion"
         data(
           query: {
-            rows: [ "sample", [ "patient", "experiment", "name", "::equals", ":::record_name" ] ],
+            rows: [ "sample", [ "patient", "experiment", "name", "::equals", "@record_name" ] ],
             columns: {
               sample_name: [ "sample_name" ],
               metrics: [ "::metrics" ]

@@ -54,7 +54,7 @@ var Browser = React.createClass({
 
     var view = this.props.view
 
-    if (!view)
+    if (!view || !this.props.template || !this.props.document)
       return <div className="browser">
                 <span className="fa fa-spinner fa-pulse"/>
              </div>
@@ -98,23 +98,20 @@ var Browser = React.createClass({
 
 Browser = connect(
   function (state,props) {
-    var template_record = state.models[props.model_name]
+    var model = state.magma.models[props.model_name]
 
-    var template = template_record ? template_record.template : null
+    var template = model ? model.template : null
+    var document = model ? model.documents[props.record_name] : null
+    var revision = (model ? model.revisions[props.record_name] : null) || {}
 
-    var document = template_record ? template_record.documents[props.record_name] : null
-
-    var revision = (template_record ? template_record.revisions[props.record_name] : null) || {}
-
-    var view = (template_record ? template_record.views[props.record_name] : null)
+    var view = (state.timur.views ? state.timur.views[props.model_name] : null)
 
     return freshen(
       props,
       {
         template: template,
-        model_name: template ? template.name : null,
         document: document,
-        record_name: document ? document[ template.identifier ] : null,
+        record_name: template && document ? document[ template.identifier ] : null,
         revision: revision,
         hasRevisions: (Object.keys(revision).length > 0),
         view: view,

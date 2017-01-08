@@ -11,8 +11,8 @@ class SampleView < TimurView
         display_name "Immune Fractions"
         data(
           query: {
-            name: "qc",
-            rows: [ "sample", [ "sample_name", "::equals", ":::record_name" ] ],
+            name: "qc_@record_name",
+            rows: [ "sample", [ "sample_name", "::equals", "@record_name" ] ],
             columns: {
               treg_cd45_count: [ "population", [ "stain", "::equals", "treg" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
               treg_live_count: [ "population", [ "stain", "::equals", "treg" ], [ "name", "::equals", "Live" ], "::first", "count" ],

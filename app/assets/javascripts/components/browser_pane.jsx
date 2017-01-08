@@ -49,17 +49,19 @@ BrowserPane = connect(
     var revised_values = {}
     var pane = props.pane
 
+    console.log("Trying to load this pane:")
+    console.log(props)
+
     // build a hash of values using the 'display' property of
     // the pane, which should tell us what to show
-    pane.display.forEach(function(att_name) {
-      if (pane.attributes.indexOf(att_name) != -1) {
-        display_attributes[att_name] = props.template.attributes[att_name]
-        values[att_name] = props.document[att_name]
-        if (props.mode == 'edit') revised_values[att_name] = props.revision.hasOwnProperty(att_name) ? props.revision[att_name] : props.document[att_name]
-      }
-      if (pane.extra[att_name] && props.mode != 'edit') {
-        display_attributes[att_name] = pane.extra[att_name].attribute
-        values[att_name] = pane.extra[att_name].data
+    pane.display.forEach(function(att) {
+      if (typeof att === 'string' || att instanceof String) {
+        display_attributes[att] = props.template.attributes[att]
+        values[att] = props.document[att]
+        if (props.mode == 'edit') revised_values[att] = props.revision.hasOwnProperty(att) ? props.revision[att] : props.document[att]
+      } else {
+        display_attributes[att.name] = att
+        values[att.name] = att.data
       }
     })
 

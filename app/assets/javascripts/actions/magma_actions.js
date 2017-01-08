@@ -1,27 +1,59 @@
 var magmaActions = {
   consumePayload: function(dispatch,response) {
-    Object.keys(response.models).forEach(function(model_name) {
-      model = response.models[model_name]
+    if (response.models) {
+      Object.keys(response.models).forEach(function(model_name) {
+        model = response.models[model_name]
 
-      // you may not have all of these
-      
-      if (model.template)
-        dispatch( 
-          magmaActions.addTemplate(model.template)
-        )
-      if (model.documents)
+        // you may not have all of these
+        
+        if (model.template)
+          dispatch( 
+            magmaActions.addTemplate(model.template)
+          )
+        if (model.documents)
+          dispatch(
+            magmaActions.addDocumentsForTemplate(model_name, model.documents)
+          )
+      })
+    }
+    if (response.tables) {
+      response.tables.forEach(function(table) {
         dispatch(
-          magmaActions.addDocumentsForTemplate(model_name, model.documents)
+          magmaActions.addTable(table)
         )
-    })
+      })
+    }
   },
   queryData: function( model_name, params, queries, success, error ) {
     var self = this;
     var request = {
       model_name: model_name,
-      params: params,
       queries: queries
     }
+
+    var replaceParams = function(item,params) {
+      Object.keys(params).forEach(function(name) {
+        item = item.replace("@"+name,params[name])
+      })
+      return item
+    }
+
+    var recursiveReplace = function(array, params) {
+      return array.map(function(item, params) {
+        if (item instanceof Array)
+          return recursiveReplace(item,params)
+        else
+          return replaceParams(item,params)
+      })
+    }
+
+    queries.forEach(function(query) {
+      query.rows = recursiveReplace(query.rows, params)
+      Object.keys(query.columns).forEach(function(column_name) {
+        query.columns[column_name] = recursiveReplace(query.columns[column_name], params)
+      })
+    })
+
     return function(dispatch) {
       $.ajax({
         url: Routes.query_json_path(),
@@ -127,6 +159,13 @@ var magmaActions = {
       type: 'ADD_DOCUMENTS',
       model_name: model_name,
       documents: documents
+    }
+  },
+  addTable: function(table) {
+    return {
+      type: 'ADD_TABLE',
+      table_name: table.name,
+      table: table
     }
   },
   reviseDocument: function(document, template, attribute, revised_value) {
