@@ -1,5 +1,6 @@
 class WelcomeController <  ApplicationController
   def index
+    redirect_to "https://www.immunoprofiler.org"
   end
 
   def login
