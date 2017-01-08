@@ -54,7 +54,6 @@ var revisions = function(old_revisions, action) {
 
 var model = function(old_model, action) {
   if (!old_model) old_model = {
-    template: {},
     documents: {},
     revisions: {},
     views: {}
@@ -79,19 +78,48 @@ var model = function(old_model, action) {
   }
 }
 
-var magmaReducer = function(models, action) {
+var models = function(models, action) {
   if (!models) models = {}
   switch(action.type) {
     case 'ADD_TEMPLATE':
     case 'ADD_DOCUMENTS':
     case 'REVISE_DOCUMENT':
     case 'DISCARD_REVISION':
-      // update if it exists
       var new_models = { }
       new_models[action.model_name] = model(models[action.model_name], action)
       return freshen( models, new_models )
     default:
       return models
+  }
+}
+
+var tables = function(magma, action) {
+  if (!tables) tables = {}
+  switch(action.type) {
+    case 'ADD_TABLE':
+      var new_tables = {}
+      new_tables[action.table_name] = action.table
+      return freshen( tables, new_tables )
+    default:
+      return tables
+  }
+}
+
+var magmaReducer = function(magma, action) {
+  if (!magma) magma = {
+    models: {},
+    tables: {}
+  }
+  switch(action.type) {
+    case 'ADD_TEMPLATE':
+    case 'ADD_DOCUMENTS':
+    case 'REVISE_DOCUMENT':
+    case 'DISCARD_REVISION':
+      return freshen( magma, { models: models(magma.models, action) } )
+    case 'ADD_TABLE':
+      return freshen( magma, { tables: tables(magma.tables, action) } )
+    default:
+      return magma
   }
 }
 

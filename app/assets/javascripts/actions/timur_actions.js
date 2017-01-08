@@ -5,7 +5,7 @@ var timurActions = {
       key: name
     }
   },
-  requestView: function(model_name, record_name, tab_name, success) {
+  requestView: function(model_name, record_name, tab_name, success, error) {
     var self = this;
     var request = {
       model_name: model_name,

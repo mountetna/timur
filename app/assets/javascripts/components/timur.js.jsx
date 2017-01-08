@@ -8,8 +8,8 @@ var Timur = React.createClass({
     }
     return Redux.applyMiddleware(...middleWares)(Redux.createStore)(Redux.combineReducers({
       timur: timurReducer,
+      magma: magmaReducer,
       messages: messageReducer,
-      models: magmaReducer,
       plots: plotReducer
     }))
   },

@@ -1,7 +1,7 @@
-var magma_documents = function( state, model_name, record_names) {
-  if (!state.models[model_name]) return [];
+var magma_documents = function( model, record_names) {
+  if (!model) return [];
   return record_names.map(function(record_name) {
-    return state.models[model_name].documents[record_name]
+    return model.documents[record_name]
   }).filter(function(doc) { return doc != undefined })
 }
 
@@ -18,8 +18,9 @@ var TableAttribute = React.createClass({
 TableAttribute = connect(
   function(state, props) {
     var model_name = props.attribute.name
-    var template = state.models[model_name] ? state.models[model_name].template : null
-    var documents = magma_documents( state, model_name, props.value )
+    var model = state.magma.models[model_name]
+    var template = model ? model.template : null
+    var documents = magma_documents( model, props.value )
     var table = template ? new TableSet(documents, template) : null
     return {
       page_size: 10,

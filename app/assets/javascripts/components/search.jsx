@@ -428,34 +428,35 @@ var Search = React.createClass({
 
 var Search = connect(
   function(state, props) {
+    var models = state.magma.models
     return $.extend({},
       props,
       {
-        model_names: Object.keys(state.models),
+        model_names: Object.keys(models),
         documentsFor: function(model_name, record_names) {
-          if (state.models[model_name] && state.models[model_name].documents) {
+          if (models[model_name] && models[model_name].documents) {
             var documents = {}
             record_names.forEach(function(record_name){
-              documents[record_name] = state.models[model_name].documents[record_name]
+              documents[record_name] = models[model_name].documents[record_name]
             })
             return documents
           }
         },
         revisionsFor: function(model_name, record_names) {
-          if (state.models[model_name] && state.models[model_name].revisions) {
+          if (models[model_name] && models[model_name].revisions) {
             var revisions = {}
             record_names.forEach(function(record_name){
-              if (state.models[model_name].revisions[record_name])
-                revisions[record_name] = state.models[model_name].revisions[record_name]
+              if (models[model_name].revisions[record_name])
+                revisions[record_name] = models[model_name].revisions[record_name]
             })
             return revisions
           }
         },
         templateFor: function(model_name) {
-          if (state.models[model_name]) return state.models[model_name].template
+          if (models[model_name]) return models[model_name].template
         },
         hasCompleteRecords: function(model_name, record_names) {
-          var model_info = state.models[model_name]
+          var model_info = models[model_name]
 
           if (!model_info || !record_names) return false
 

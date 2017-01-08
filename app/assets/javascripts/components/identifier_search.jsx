@@ -84,9 +84,10 @@ var IdentifierSearch = React.createClass({
 IdentifierSearch = connect(
   function(state,props) {
     var idents = {}
+    var models = state.magma.models
 
-    Object.keys(state.models).forEach(function(model_name) {
-      idents[model_name] = Object.keys(state.models[model_name].documents)
+    Object.keys(models).forEach(function(model_name) {
+      idents[model_name] = Object.keys(models[model_name].documents)
     })
     return {
       identifiers: Object.keys(idents).length ? idents : null

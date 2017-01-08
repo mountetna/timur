@@ -7,8 +7,8 @@ class ProjectView < TimurView
         display_name "Immune fractions (CD45+ / live)"
         data(
           query: {
-            name: "qc",
-            rows: [ "sample", [ "patient", "experiment", "::exists" ] ],
+            name: "immune_fraction_by_sample",
+            rows: [ "sample", [ "patient", "::has", "experiment" ] ],
             columns: {
               sample_name: [ "sample_name" ],
               experiment_name: [ "patient", "experiment", "name" ],
@@ -34,9 +34,8 @@ class ProjectView < TimurView
           query: [
             {
               name: "progress_total",
-              rows: [ "sample", [ "patient", "date_of_digest", "::exists" ] ],
+              rows: [ "sample", [ "patient", "::has", "date_of_digest" ] ],
               columns: {
-                sample_name: [ "sample_name" ],
                 date_of_digest: [ "patient", "date_of_digest" ],
               },
               order: "date_of_digest",
@@ -45,11 +44,10 @@ class ProjectView < TimurView
               name: "progress_tumor",
               rows: [
                 "sample", 
-                [ "patient", "date_of_digest", "::exists" ],
-                [ "sample_name", "::matches", /.T?$/ ],
+                [ "patient", "::has", "date_of_digest" ],
+                [ "sample_name", "::matches", '\.T.$' ],
               ],
               columns: {
-                sample_name: [ "sample_name" ],
                 date_of_digest: [ "patient", "date_of_digest" ],
               },
               order: "date_of_digest",
@@ -58,11 +56,10 @@ class ProjectView < TimurView
               name: "progress_normal",
               rows: [
                 "sample", 
-                [ "patient", "date_of_digest", "::exists" ],
-                [ "sample_name", "::matches", /.N?$/ ],
+                [ "patient", "::has", "date_of_digest" ],
+                [ "sample_name", "::matches", '\.N.$' ],
               ],
               columns: {
-                sample_name: [ "sample_name" ],
                 date_of_digest: [ "patient", "date_of_digest" ],
               },
               order: "date_of_digest",
