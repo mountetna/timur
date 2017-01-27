@@ -93,15 +93,15 @@ var models = function(models, action) {
   }
 }
 
-var tables = function(magma, action) {
-  if (!tables) tables = {}
+var tables = function(old_tables, action) {
+  if (!old_tables) old_tables = {}
   switch(action.type) {
     case 'ADD_TABLE':
       var new_tables = {}
       new_tables[action.table_name] = action.table
-      return freshen( tables, new_tables )
+      return freshen( old_tables, new_tables )
     default:
-      return tables
+      return old_tables
   }
 }
 

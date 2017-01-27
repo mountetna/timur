@@ -43,11 +43,12 @@ var timurActions = {
             )
           )
 
-          dispatch(
-            magmaActions.queryData(
-              model_name, { record_name: record_name }, required_tables
+          if (required_tables.length > 0) 
+            dispatch(
+              magmaActions.queryData(
+                model_name, { record_name: record_name }, required_tables
+              )
             )
-          )
 
           console.log("Required tables for this tab:")
           console.log(required_tables)
