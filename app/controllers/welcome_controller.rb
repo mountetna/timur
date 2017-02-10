@@ -4,10 +4,10 @@ class WelcomeController <  ApplicationController
   end
 
   def login
-    if defined? OmniAuth
-      redirect_to auth_shib_path
-    else
+    if Rails.env.development?
       redirect_to auth_path
+    else
+      redirect_to auth_shib_path
     end
   end
 
@@ -21,14 +21,14 @@ class WelcomeController <  ApplicationController
 
   def auth
     auth = nil
-    if defined? OmniAuth
-      auth = request.env['omniauth.auth']['info']
-    else
+    if Rails.env.development?
       auth = {
-        'email' => 'Saurabh.Asthana@ucsf.edu',
-        'name' => 'Saurabh Asthana',
-        'ucsf_id' => '020141602'
+        'email' => 'developer@localhost',
+        'name' => 'Timothy Developer',
+        'ucsf_id' => '999999'
       }
+    else
+      auth = request.env['omniauth.auth']['info']
     end
 
     user = User.where(email: auth['email'].downcase).first_or_create do |u|
