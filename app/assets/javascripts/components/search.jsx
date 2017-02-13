@@ -7,7 +7,7 @@
 /* This holds the search query so we don't have to update state in the
  * main component all the time.
  */
-SearchQuery = React.createClass({
+var SearchQuery = React.createClass({
   getInitialState: function() {
     return { }
   },
@@ -85,7 +85,7 @@ SearchQuery = React.createClass({
   }
 })
 
-SearchTableColumnHeader = React.createClass({
+var SearchTableColumnHeader = React.createClass({
   getInitialState: function() {
     return { sizing: false }
   },
@@ -124,7 +124,7 @@ SearchTableColumnHeader = React.createClass({
   }
 })
 
-SearchTableRow = React.createClass({
+var SearchTableRow = React.createClass({
   render: function() {
     var self = this
     return <div className="table_row">
@@ -147,7 +147,7 @@ SearchTableRow = React.createClass({
   }
 })
 
-SearchTableCell = React.createClass({
+var SearchTableCell = React.createClass({
   render: function() {
     var self = this
     var document = self.props.document
@@ -188,7 +188,7 @@ SearchTableCell = React.createClass({
   }
 })
 
-SearchTable = React.createClass({
+var SearchTable = React.createClass({
   getInitialState: function() {
     return {}
   },
@@ -245,7 +245,7 @@ SearchTable = React.createClass({
   },
 })
 
-Search = React.createClass({
+var Search = React.createClass({
   getInitialState: function() {
     return { mode: 'search', page_size: 10, current_page: 0, record_names: [] }
   },
@@ -425,7 +425,7 @@ Search = React.createClass({
   }
 })
 
-Search = connect(
+var Search = connect(
   function(state, props) {
     return $.extend({},
       props,

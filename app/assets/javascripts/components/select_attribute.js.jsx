@@ -1,4 +1,4 @@
-SelectAttribute = React.createClass({
+var SelectAttribute = React.createClass({
   render: function() {
     var self = this
     var store = this.context.store

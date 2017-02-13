@@ -1,4 +1,4 @@
-PlotHeader = React.createClass({
+var PlotHeader = React.createClass({
   render: function() {
     return <Header mode={ this.props.mode } 
       handler={ this.header_handler }

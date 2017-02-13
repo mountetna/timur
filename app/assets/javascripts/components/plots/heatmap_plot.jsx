@@ -1,4 +1,4 @@
-HeatmapPlot = React.createClass({
+var HeatmapPlot = React.createClass({
   getInitialState: function() {
     return { highlight_cell: null }
   },

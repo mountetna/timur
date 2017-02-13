@@ -39,7 +39,7 @@ const PLOT_TYPES = {
   }
 };
 
-PlotList = React.createClass({
+var PlotList = React.createClass({
   componentDidMount: function() {
     var self = this;
 
@@ -136,13 +136,13 @@ PlotList = React.createClass({
   }
 });
 
-mapStateToProps = function(state) {
+var mapStateToProps = function(state) {
   return {
     plots: state.plots
   }
 }
 
-Plotter = connect(
+var Plotter = connect(
   mapStateToProps
 )(PlotList);
 

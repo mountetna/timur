@@ -1,4 +1,4 @@
-CorrelationPlot = React.createClass({
+var CorrelationPlot = React.createClass({
   getInitialState: function() {
     return { highlight_cell: null }
   },

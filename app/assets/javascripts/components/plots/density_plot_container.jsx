@@ -1,4 +1,4 @@
-DensityPlotContainer = React.createClass({
+var DensityPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },

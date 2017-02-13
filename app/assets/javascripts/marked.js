@@ -1,4 +1,4 @@
-marked = require('marked');
+window.marked = require('marked');
 var renderer = new marked.Renderer();
 
 renderer.image = function( filename, title, alt ) {

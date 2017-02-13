@@ -1,4 +1,4 @@
-DendrogramPlotContainer = React.createClass({
+var DendrogramPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },

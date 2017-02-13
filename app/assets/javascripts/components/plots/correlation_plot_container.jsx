@@ -1,4 +1,4 @@
-CorrelationPlotContainer = React.createClass({
+var CorrelationPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },

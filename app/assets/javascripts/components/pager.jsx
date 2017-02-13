@@ -1,4 +1,4 @@
-Pager = React.createClass({
+var Pager = React.createClass({
   getInitialState: function() {
     return { editing: false }
   },

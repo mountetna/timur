@@ -1,4 +1,4 @@
-ScatterPlot = React.createClass({
+var ScatterPlot = React.createClass({
   render: function() {
     var self = this;
 

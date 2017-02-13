@@ -1,4 +1,4 @@
-AttributeViewer = React.createClass({
+var AttributeViewer = React.createClass({
   render: function() {
     var class_name = this.props.attribute.attribute_class
     var AttClass = eval(class_name)

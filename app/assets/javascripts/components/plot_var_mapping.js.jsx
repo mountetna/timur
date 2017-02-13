@@ -1,4 +1,4 @@
-PlotVarMapping = React.createClass({
+var PlotVarMapping = React.createClass({
   getInitialState: function() {
     return { stain_variables: [], chain_state: {} }
   },

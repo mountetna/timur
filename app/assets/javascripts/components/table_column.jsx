@@ -1,4 +1,4 @@
-TableColumn = function(attribute,template) {
+var TableColumn = function(attribute,template) {
   var self = this;
 
   var att_class = attribute.attribute_class

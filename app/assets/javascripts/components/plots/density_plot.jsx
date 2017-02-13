@@ -1,4 +1,4 @@
-DensityPlot = React.createClass({
+var DensityPlot = React.createClass({
   render: function() {
     var self = this;
 

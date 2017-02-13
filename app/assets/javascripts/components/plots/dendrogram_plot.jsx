@@ -1,4 +1,4 @@
-DendrogramPlot = React.createClass({
+var DendrogramPlot = React.createClass({
   render: function() {
     var self = this
     var plot = this.props.plot

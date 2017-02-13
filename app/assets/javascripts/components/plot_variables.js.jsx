@@ -1,4 +1,4 @@
-PlotVariables = React.createClass({
+var PlotVariables = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },

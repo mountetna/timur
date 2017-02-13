@@ -1,4 +1,4 @@
-ColorPicker = React.createClass({
+var ColorPicker = React.createClass({
   render: function() {
     return <div className="color_picker">
              <span className="label">{ this.props.label }</span>
