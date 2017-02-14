@@ -17,7 +17,7 @@ d3.box = function() {
       var g = d3.select(this),
           n = d.length,
           min = d[0],
-          max = d[n - 1];
+          max = d[n - 1]
 
       // Compute quartiles. Must return exactly 3 elements.
       var quartileData = d.quartiles = quartiles(d);
@@ -29,7 +29,9 @@ d3.box = function() {
       // Compute outliers. If no whiskers are specified, all data are "outliers".
       // We compute the outliers as indices, so that we can join across transitions!
       var outlierIndices = whiskerIndices
-          ? d3.range(0, whiskerIndices[0]).concat(d3.range(whiskerIndices[1] + 1, n))
+          ? d3.range(0, whiskerIndices[0]).concat(
+            d3.range(whiskerIndices[1] + 1, n)
+          )
           : d3.range(n);
 
       // Compute the new x-scale.
@@ -160,7 +162,7 @@ d3.box = function() {
           .attr("y", x1)
           .style("opacity", 1);
 
-    });
+    })
     d3.timer.flush();
   }
 

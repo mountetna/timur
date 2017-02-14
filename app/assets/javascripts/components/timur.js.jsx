@@ -29,7 +29,10 @@ var Timur = React.createClass({
     else if (this.props.mode == 'noauth')
       component = <Noauth user={ this.props.user }/>
 
-    return <Provider store={ this.create_store() }>
+    var store = this.create_store()
+    window.store = store
+
+    return <Provider store={ store }>
             <div>
               <TimurNav user={ this.props.user }
                 can_edit={ this.props.can_edit }

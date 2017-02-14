@@ -1,8 +1,7 @@
-window.freshen = function(old_obj, new_obj) {
-  return $.extend(
-    {},
-    old_obj,
-    new_obj
+window.freshen = function() {
+  return $.extend.call(
+    null,
+    {}, ...arguments
   )
 }
 

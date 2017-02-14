@@ -6,6 +6,8 @@ window.Provider = require('react-redux').Provider
 window.connect = require('react-redux').connect
 window.thunk = require('redux-thunk')
 window.chroma = require('chroma-js')
+window.infix = require('infix')
+window.Calculation = require('calculation')
 
 window.dates = require('dates')
 
@@ -20,4 +22,16 @@ Array.prototype.flatten = function() {
     if (Array.isArray(item)) return flat.concat(item.flatten())
     return flat.concat(item)
   }, [])
+}
+
+Array.prototype.min = function() {
+  return this.reduce(function(a, b) {
+    return a < b ? a : b
+  })
+}
+
+Array.prototype.max = function() {
+  return this.reduce(function(a, b) {
+    return a > b ? a : b
+  })
 }

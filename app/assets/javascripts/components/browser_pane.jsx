@@ -2,7 +2,7 @@ var BrowserPane = React.createClass({
   render: function() {
     var self = this
 
-    if (Object.keys(this.props.display_attributes).length == 0)
+    if (this.props.display.length == 0)
       return <div style={{display:"none"}}/>
       
     return <div className="pane">
@@ -16,14 +16,13 @@ var BrowserPane = React.createClass({
         }
         <div className="attributes">
         {
-          Object.keys(this.props.display_attributes).map(function(att_name) {
-            var att = self.props.display_attributes[att_name]
-            var value = self.props.values[ att_name ]
-            var revised_value = self.props.revised_values[ att_name ]
-
+          this.props.display.map(function(att) {
+            var att_name = att.name
+            var value = self.props.document[ att_name ]
+            var revised_value = self.props.revision.hasOwnProperty(att_name) ? self.props.revision[att_name] : self.props.document[att_name]
             var revised = (self.props.mode == 'edit' && value != revised_value)
 
-            return <div key={att.name} className="attribute">
+            return <div key={att_name} className="attribute">
               <div className={ revised ? "name revised" : "name" } title={ att.desc }>
                { att.display_name }
               </div>
@@ -33,7 +32,7 @@ var BrowserPane = React.createClass({
               document={ self.props.document }
               value={ value }
               revision={ revised_value }
-              attribute={att}/>
+              attribute={ att }/>
             </div>
           })
         }
@@ -44,33 +43,16 @@ var BrowserPane = React.createClass({
 
 BrowserPane = connect(
   function (state,props) {
-    var values = {}
-    var display_attributes = {}
-    var revised_values = {}
-    var pane = props.pane
-
-    console.log("Trying to load this pane:")
-    console.log(props)
-
-    // build a hash of values using the 'display' property of
-    // the pane, which should tell us what to show
-    pane.display.forEach(function(att) {
-      if (typeof att === 'string' || att instanceof String) {
-        display_attributes[att] = props.template.attributes[att]
-        values[att] = props.document[att]
-        if (props.mode == 'edit') revised_values[att] = props.revision.hasOwnProperty(att) ? props.revision[att] : props.document[att]
-      } else {
-        display_attributes[att.name] = att
-        values[att.name] = att.data
-      }
-    })
-
     return freshen(
       props,
       {
-        values: values,
-        revised_values: revised_values,
-        display_attributes: display_attributes,
+        display: props.pane.display.map(function(display_att) {
+          return freshen(
+            props.template.attributes[display_att.name],
+            props.template.attributes.hasOwnProperty(display_att.name) ? { editable: true } : null,
+            display_att.overrides
+          )
+        })
       }
     )
   }

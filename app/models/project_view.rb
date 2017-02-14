@@ -1,11 +1,11 @@
 class ProjectView < TimurView
   tab :overview do
     pane :default do 
-      shows :description
-      adds :qc do
+      show :description
+      show :qc do
         attribute_class "BoxPlotAttribute"
         display_name "Immune fractions (CD45+ / live)"
-        data(
+        plot(
           query: {
             name: "immune_fraction_by_sample",
             rows: [ "sample", [ "patient", "::has", "experiment" ] ],
@@ -27,10 +27,10 @@ class ProjectView < TimurView
         )
       end
 
-      adds :progress_plot do |att|
+      show :progress_plot do |att|
         attribute_class "LinePlotAttribute"
         display_name "Progress"
-        data(
+        plot(
           query: [
             {
               name: "progress_total",
@@ -65,32 +65,35 @@ class ProjectView < TimurView
               order: "date_of_digest",
             }
           ],
+          ylabel: "sample count",
           lines: [
             {
               table: "progress_total",
               x: "date_of_digest",
-              y: "::row_number",
+              y: "row_number + 1",
               label: "total",
               color: "mediumseagreen"
             },
             {
               table: "progress_tumor",
               x: "date_of_digest",
-              y: "::row_number",
+              y: "row_number + 1",
               label: "tumor",
               color: "indigo"
             },
             {
               table: "progress_normal",
               x: "date_of_digest",
-              y: "::row_number",
+              y: "row_number + 1",
               label: "normal",
               color: "cornflowerblue"
             }
           ]
         )
       end
-      shows :whats_new
+      show :whats_new do
+        attribute_class "MarkdownAttribute"
+      end
     end
   end
 
@@ -108,7 +111,9 @@ class ProjectView < TimurView
 
   tab :FAQ do
     pane :default do
-      shows :faq
+      shows :faq do
+        attribute_class "MarkdownAttribute"
+      end
     end
   end
 end

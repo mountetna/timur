@@ -6,33 +6,61 @@ var AttributeViewer = React.createClass({
     var AttClass
 
     switch(class_name) {
-      case "BarPlotAttribute"
+      case "BarPlotAttribute":
         AttClass = BarPlotAttribute
-      case "BoxPlotAttribute"
+        break
+      case "BoxPlotAttribute":
         AttClass = BoxPlotAttribute
-      case "Magma::CollectionAttribute"
-        AttClass = CollectionAttribute
-      case "Magma::ForeignKeyAttribute"
-      case "Magma::ChildAttribute"
-        AttClass = LinkAttribute
-      case "Magma::TableAttribute"
-        AttClass = TableAttribute
-      case "Magma::DocumentAttribute"
-        AttClass = DocumentAttribute
-      case "Magma::ImageAttribute"
-        AttClass = ImageAttribute
-      case "Magma::Attribute"
-        if att[
-        AttClass = CheckboxAttribute
-        AttClass = DateTimeAttribute
-        AttClass = FloatAttribute
-        AttClass = IntegerAttribute
+        break
+      case "TextAttribute":
         AttClass = TextAttribute
-        AttClass = SelectAttribute
-
+        break
+      case "LinePlotAttribute":
         AttClass = LinePlotAttribute
+        break
+      case "MarkdownAttribute":
         AttClass = MarkdownAttribute
+        break
+      case "MetricsAttribute":
         AttClass = MetricsAttribute
+        break
+      case "Magma::CollectionAttribute":
+        AttClass = CollectionAttribute
+        break
+      case "Magma::ForeignKeyAttribute":
+      case "Magma::ChildAttribute":
+        AttClass = LinkAttribute
+        break
+      case "Magma::TableAttribute":
+        AttClass = TableAttribute
+        break
+      case "Magma::DocumentAttribute":
+        AttClass = DocumentAttribute
+        break
+      case "Magma::ImageAttribute":
+        AttClass = ImageAttribute
+        break
+      case "Magma::Attribute":
+        if (attribute.options) {
+          AttClass = SelectAttribute
+        }
+        else {
+          switch(attribute.type) {
+            case "TrueClass":
+              AttClass = CheckboxAttribute
+            case "Integer":
+              AttClass = IntegerAttribute
+            case "Float":
+              AttClass = FloatAttribute
+            case "DateTime":
+              AttClass = DateTimeAttribute
+            default:
+              AttClass = Attribute
+          }
+        }
+        break
+      default:
+        throw "Could not match attribute " + attribute.name + " with class " + class_name + " to a display class!"
     }
     return <AttClass 
               document={ this.props.document }

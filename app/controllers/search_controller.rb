@@ -84,11 +84,10 @@ class SearchController <  ApplicationController
     status, payload = magma.retrieve(
       params
     )
-    Rails.logger.info [ status, payload ]
     if status == 200
       render json: payload
     else
-      render json: { errors: [ "Magma retrieve had errors." ] }, status: status
+      render json: payload, status: status
     end
   end
 
@@ -97,36 +96,27 @@ class SearchController <  ApplicationController
     status, payload = magma.query(
       params
     )
-    Rails.logger.info [ status, payload ]
     if status == 200
       render json: payload
     else
-      render json: { errors: [ "Magma retrieve had errors." ] }, status: status
+      render json: payload, status: status
     end
   end
  
   # TODO: this needs to be refactored to use the Payload interface along with
   # column restriction, not yet working
   def identifiers_json
-    render json: {
-      models: Hash[
-        Magma.instance.magma_models.map do |model|
-          next unless model.has_identifier?
-          identifiers = model.select_map(model.identity)
-          next if identifiers.empty?
-          [
-            model.model_name,
-            {
-              documents: Hash[
-                identifiers.map do |name|
-                  [ name, { model.identity => name } ]
-                end
-              ]
-            }
-          ]
-        end.compact
-      ]
-    }
+    magma = Magma::Client.new
+    status, payload = magma.retrieve(
+      model_name: "all",
+      record_names: "all",
+      attribute_names: "identifier"
+    )
+    if status == 200
+      render json: payload
+    else
+      render json: payload, status: status
+    end
   end
 end
 

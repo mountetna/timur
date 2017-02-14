@@ -29,5 +29,6 @@ module Timur
     ]
     config.browserify_rails.commandline_options = browserify_transforms.join(" ") + " --extension='.jsx' --extension='.js.jsx'"
 
+    config.action_dispatch.perform_deep_munge = false
   end
 end

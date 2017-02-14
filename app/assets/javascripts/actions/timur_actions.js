@@ -31,10 +31,10 @@ var timurActions = {
           }
 
           var required_attributes = paneMap(function(display_item) {
-            return typeof(display_item)=="string" ? display_item : null 
+            return display_item.name
           })
           var required_tables = paneMap(function(display_item) { 
-            return display_item.data && display_item.data.query ? display_item.data.query : null
+            return display_item.overrides.plot && display_item.overrides.plot.query ? display_item.overrides.plot.query : null
           })
 
           dispatch(
@@ -49,9 +49,6 @@ var timurActions = {
                 model_name, { record_name: record_name }, required_tables
               )
             )
-
-          console.log("Required tables for this tab:")
-          console.log(required_tables)
 
           dispatch(
             timurActions.addViews(model_name, response.tabs)
