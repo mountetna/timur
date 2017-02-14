@@ -52,7 +52,7 @@ class SampleView < TimurView
 
   tab :imaging do
     pane :default do
-      shows :imaging
+      shows :imaging, :he_stain
     end
   end
 end
