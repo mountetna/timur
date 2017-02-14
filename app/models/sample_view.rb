@@ -28,7 +28,7 @@ class SampleView < TimurView
             {
               series: "CD45+/live",
               color: "greenyellow",
-              height: "treg_cd45_count / treg_live_count",
+              height: "treg_cd45_count / treg_live_count"
             },
             {
               series: "CD45+/live",

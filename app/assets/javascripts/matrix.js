@@ -126,9 +126,6 @@ window.Matrix = function() {
     var col_matrix = new Matrix(selected_cols,new_colnames,rownames);
     return col_matrix.transpose();
   }
-  this.formula = function( equation ) {
-    // infix parse the equation and return the computed values as a vector.
-  }
   this.col_sort = function(callback) {
     // return a new matrix with rows sorted by comparison criterion
     var col_sorter = rows[0].map(function(_,i) {
