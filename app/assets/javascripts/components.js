@@ -68,6 +68,8 @@ ColorPicker = require('./components/color_picker.js.jsx')
 Plotter = require('./components/plotter.js.jsx')
 
 BarPlot = require('./components/plots/bar_plot.js.jsx')
+LinePlot = require('./components/plots/line_plot.jsx')
+BoxPlot = require('./components/plots/box_plot.jsx')
 
 TimurNav = require('./components/timur_nav.jsx')
 Search = require('./components/search.jsx')

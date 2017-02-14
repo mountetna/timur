@@ -1,5 +1,18 @@
-Matrix = function(rows, rownames, colnames) {
+Matrix = function() {
   var self = this
+  var rows, rownames, colnames, coltypes
+
+  if (arguments.length == 3) {
+    rows = arguments[0]
+    rownames = arguments[1]
+    colnames = arguments[2]
+  } else {
+    rows = arguments[0].rows
+    rownames = arguments[0].row_names
+    colnames = arguments[0].col_names
+    coltypes = arguments[0].col_types
+  }
+
   this.num_rows = rows.length;
   this.num_cols = rows[0].length;
 
@@ -16,6 +29,9 @@ Matrix = function(rows, rownames, colnames) {
     // array for row i in rows
       return rows[i];
   }
+  this.row_index = function(name) {
+    if (rownames) return rownames.indexOf(name)
+  }
   this.row_name = function(i) {
     // if rownames is empty, R1, R2, etc.
       if (rownames){
@@ -28,6 +44,12 @@ Matrix = function(rows, rownames, colnames) {
   this.col = function(j) {
     // this iterates over rows and returns an array of the jth elements
       return rows.map(function(row){ return row[j]; })
+  }
+  this.col_index = function(name) {
+    if (colnames) return colnames.indexOf(name)
+  }
+  this.col_type = function(j) {
+    if (coltypes) return coltypes[j]
   }
   this.col_name = function(j) {
    // ibid
@@ -103,6 +125,9 @@ Matrix = function(rows, rownames, colnames) {
     // make a new matrix using selected_cols
     var col_matrix = new Matrix(selected_cols,new_colnames,rownames);
     return col_matrix.transpose();
+  }
+  this.formula = function( equation ) {
+    // infix parse the equation and return the computed values as a vector.
   }
   this.col_sort = function(callback) {
     // return a new matrix with rows sorted by comparison criterion

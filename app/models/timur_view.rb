@@ -91,15 +91,6 @@ class TimurView
 
     private
 
-    def columns
-      @panes.map do |name, pane|
-        pane.attributes.map do |att_name|
-          att = @model.attributes[att_name]
-          att.needs_column? ? att.column_name : nil
-        end
-      end.flatten.compact.uniq
-    end
-
     def attributes
       @panes.map do |name, pane|
         pane.attributes
@@ -107,32 +98,26 @@ class TimurView
     end
   end
 
-  class ExtraAttribute
+  class DisplayAttribute
+    
     def initialize att_name, &block
       @name = att_name
-      instance_eval(&block)
+      @overrides = {
+        name: @name
+      }
+      instance_eval(&block) if block_given?
     end
 
-    def attribute_class txt
-      @attribute_class = txt
-    end
-
-    def display_name txt
-      @display_name = txt
-    end
-
-    def data data
-      @data = data
+    [ :attribute_class, :display_name, :plot, :placeholder ].each do |name|
+      define_method name do |txt|
+        @overrides[name] = txt
+      end
     end
 
     def to_hash
       {
-        attribute: {
-          name: @name,
-          attribute_class: @attribute_class,
-          display_name: @display_name
-        },
-        data: @data
+        name: @name,
+        overrides: @overrides
       }
     end
   end
@@ -151,31 +136,20 @@ class TimurView
     def to_hash
       {
         title: @title,
-        display: @display.map do |attribute|
-          if attribute.is_a? ExtraAttribute
-            attribute.to_hash
-          else
-            attribute
-          end
-        end
+        display: @display.map(&:to_hash)
       }
     end
 
     private
 
-    def shows *attributes
-      @display.concat attributes
+    def show *attribute_names, &block
+      @display.concat(
+        attribute_names.map do |attribute_name|
+          DisplayAttribute.new(attribute_name, &block)
+        end
+      )
     end
-
-    def adds new_att, &block
-      @display.push ExtraAttribute.new(new_att, &block)
-    end
-
-    def show_all_attributes
-      shows *@model.attributes.keys.select do |name| 
-        @model.attributes[name].shown?
-      end
-    end
+    alias_method :shows, :show
 
     def title txt
       @title = txt

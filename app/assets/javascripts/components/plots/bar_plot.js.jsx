@@ -3,32 +3,32 @@ BarPlot = React.createClass({
     return { zoom: 1 }
   },
   onWheel: function(event) {
-    var zoom = this.state.zoom;
-    event.preventDefault();
+    var zoom = this.state.zoom
+    event.preventDefault()
 
     if (event.deltaY > 0)
-      zoom = zoom * 0.8;
+      zoom = zoom * 0.8
     else
-      zoom = zoom * 1.2;
+      zoom = zoom * 1.2
     if (zoom < 1e-6)
-      zoom = 1e-6;
+      zoom = 1e-6
     if (zoom > 1)
-      zoom = 1;
-    this.setState({ zoom: zoom });
+      zoom = 1
+    this.setState({ zoom: zoom })
   },
   render: function() {
-    var self = this;
-    var plot = this.props.plot;
+    var self = this
+    var plot = this.props.plot
     var margin = plot.margin,
         width = plot.width - margin.left - margin.right,
-        height = plot.height - margin.top - margin.bottom;
+        height = plot.height - margin.top - margin.bottom
 
-    var zoom_ymax = this.state.zoom * this.props.ymax;
+    var zoom_ymax = this.state.zoom * this.props.ymax
 
     var yScale = d3.scale.linear()
       .domain( [ this.props.ymin, 
           zoom_ymax ] )
-      .range([ height, 0 ]);
+      .range([ height, 0 ])
 
     return <svg 
       id={ this.props.plot.name }
@@ -48,7 +48,7 @@ BarPlot = React.createClass({
         tick_width={ 5 }/>
       <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend }/>
       {
-        this.props.data.map(function(datum,i) {
+        this.props.bars.map(function(datum,i) {
           return <BarPlotBar key={ i }
                   series={ datum.series }
                   color={ datum.color }
@@ -67,16 +67,16 @@ BarPlot = React.createClass({
     </svg>
   },
   highlight_dot_mouseover: function(dot_name) {
-    this.setState( { highlighted_dot_name: dot_name } );
+    this.setState( { highlighted_dot_name: dot_name } )
   }
-});
+})
 
-module.exports = BarPlot;
+module.exports = BarPlot
 
 BarPlotBar = React.createClass({
   render_dots: function() {
-    var self = this;
-    if (!this.props.dots) return null;
+    var self = this
+    if (!this.props.dots) return null
 
     return this.props.dots.map( function(dot,i) {
       return <Dot key={i} name={ dot.name } 
@@ -85,7 +85,7 @@ BarPlotBar = React.createClass({
         y={ self.props.scale(dot.height) }
         highlighted_dot_name={ self.props.highlighted_dot_name }
        />
-    });
+    })
   },
   render: function() {
     return <g className="bar">
@@ -107,7 +107,7 @@ BarPlotBar = React.createClass({
       </text>
     </g>
   }
-});
+})
 
 Dot = React.createClass({
   getInitialState: function() {
@@ -116,14 +116,14 @@ Dot = React.createClass({
   onMouseOver: function(event) {
     // draw tooltip 
     this.setState( { highlighted: true } )
-    this.props.mouse_handler( this.props.name );
+    this.props.mouse_handler( this.props.name )
   },
   onMouseOut: function(event) {
     this.setState( { highlighted: false } )
-    this.props.mouse_handler( null );
+    this.props.mouse_handler( null )
   },
   render_tooltip: function() {
-    if (!this.state.highlighted) return null;
+    if (!this.state.highlighted) return null
 
     return <text className="tooltip" textAnchor="start" 
       transform={ 'translate(' + (this.props.x + 5) + ',' + this.props.y + ')' }>
@@ -143,7 +143,7 @@ Dot = React.createClass({
       normal: !this.is_tumor(this.props.name),
       highlighted_tumor: this.is_tumor(this.props.name) && this.is_same_sample(this.props.name, this.props.highlighted_dot_name),
       highlighted_normal: !this.is_tumor(this.props.name) && this.is_same_sample(this.props.name, this.props.highlighted_dot_name),
-    });
+    })
 
 
     return <a xlinkHref={ Routes.browse_model_path('sample', this.props.name) }>
@@ -157,6 +157,6 @@ Dot = React.createClass({
         {
           this.render_tooltip()
         }
-      </a>;
+      </a>
   }
-});
+})

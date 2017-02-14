@@ -39,7 +39,7 @@ var magmaActions = {
     }
 
     var recursiveReplace = function(array, params) {
-      return array.map(function(item, params) {
+      return array.map(function(item) {
         if (item instanceof Array)
           return recursiveReplace(item,params)
         else
@@ -48,6 +48,7 @@ var magmaActions = {
     }
 
     queries.forEach(function(query) {
+      query.name = replaceParams(query.name, params)
       query.rows = recursiveReplace(query.rows, params)
       Object.keys(query.columns).forEach(function(column_name) {
         query.columns[column_name] = recursiveReplace(query.columns[column_name], params)

@@ -17,12 +17,23 @@ XAxis = React.createClass({
             x2={ scale(this.props.xmax) }/>
       {
         ticks.map(function(tick,i) {
-          var x = self.props.scale(tick);
+          var x = self.props.scale(tick)
+          var format_tick
+
+          if (typeof tick == "number")
+            format_tick = tick.toFixed(places)
+          else if (tick instanceof Date)
+            format_tick = scale.tickFormat()(tick)
+          else
+            format_tick = tick
+
           return <g key={i}>
               <text textAnchor="middle" 
                 transform={ 
                   'translate(' + x + ',' + (self.props.y + self.props.tick_width + 10) + ')' }>
-                    { tick.toFixed(places) }
+                    { 
+                      format_tick
+                    }
               </text>
               <line y1={ self.props.y }
                   x1={ x }

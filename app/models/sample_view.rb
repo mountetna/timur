@@ -6,10 +6,10 @@ class SampleView < TimurView
     end
     pane :qc do
       title "Quality Control"
-      adds :qc do
+      show :qc do
         attribute_class "BarPlotAttribute"
         display_name "Immune Fractions"
-        data(
+        plot(
           query: {
             name: "qc_@record_name",
             rows: [ "sample", [ "sample_name", "::equals", "@record_name" ] ],
@@ -29,25 +29,21 @@ class SampleView < TimurView
               series: "CD45+/live",
               color: "greenyellow",
               height: "treg_cd45_count / treg_live_count",
-              highlight: [ "::first" ]
             },
             {
               series: "CD45+/live",
               color: "coral",
               height: "nktb_cd45_count / nktb_live_count",
-              highlight: [ "::first" ]
             },
             {
               series: "CD45+/live",
               color: "khaki",
               height: "sort_cd45_count / sort_live_count",
-              highlight: [ "::first" ]
             },
             {
               series: "CD45+/live",
               color: "seagreen",
               height: "dc_cd45_count / dc_live_count",
-              highlight: [ "::first" ]
             }
           ]
         )

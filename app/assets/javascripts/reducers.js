@@ -1,8 +1,7 @@
-freshen = function(old_obj, new_obj) {
-  return $.extend(
-    {},
-    old_obj,
-    new_obj
+freshen = function() {
+  return $.extend.call(
+    null,
+    {}, ...arguments
   )
 }
 

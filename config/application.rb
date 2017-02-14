@@ -24,5 +24,7 @@ module Timur
     config.active_record.raise_in_transactional_callbacks = true
 
     config.browserify_rails.commandline_options = "--transform reactify --extension=\".jsx\""
+
+    config.action_dispatch.perform_deep_munge = false
   end
 end
