@@ -113,7 +113,7 @@ var SearchTableColumnHeader = React.createClass({
         function(e) {
           if (!self.state.sizing) return
           e.preventDefault()
-          size_change = e.nativeEvent.offsetX - self.state.x
+          var size_change = e.nativeEvent.offsetX - self.state.x
           $('.c'+self.props.column).width(self.state.width + size_change)
         }
       }
@@ -152,6 +152,7 @@ var SearchTableCell = React.createClass({
     var self = this
     var document = self.props.document
     var revision = self.props.revision
+    var template = self.props.template
     var record_name = self.props.record_name
     var att_name = self.props.att_name
     var value = document[ att_name ]
@@ -260,7 +261,7 @@ var Search = React.createClass({
     return this.state.record_names.slice( this.state.page_size * page, this.state.page_size * (page + 1) )
   },
   ensurePageRecords: function() {
-    page_record_names = this.page_record_names(this.state.current_page)
+    var page_record_names = this.page_record_names(this.state.current_page)
     if (page_record_names && !this.props.hasCompleteRecords(this.state.model_name, page_record_names)) {
       this.props.requestDocuments( this.state.model_name, page_record_names )
     }
@@ -337,6 +338,7 @@ var Search = React.createClass({
     var documents
     var revisions
     var att_classes
+    var template
 
     var pages = self.state.model_name ? Math.ceil(self.state.record_names.length / self.state.page_size) : null
 
@@ -453,14 +455,14 @@ var Search = connect(
           if (state.templates[model_name]) return state.templates[model_name].template
         },
         hasCompleteRecords: function(model_name, record_names) {
-          model_info = state.templates[model_name]
+          var model_info = state.templates[model_name]
 
           if (!model_info || !record_names) return false
 
-          template = model_info.template
+          var template = model_info.template
 
           return record_names.every(function(record_name) {
-            record = model_info.documents[record_name]
+            var record = model_info.documents[record_name]
 
             if (!record) return false
 
@@ -484,8 +486,6 @@ var Search = connect(
         dispatch(messageActions.showMessages(messages))
       },
       submitRevisions: function(model_name,revisions,success,error) {
-        console.log("Revisions:")
-        console.log(revisions)
         dispatch(magmaActions.postRevisions(
           model_name,
           revisions,

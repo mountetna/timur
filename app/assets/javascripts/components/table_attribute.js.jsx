@@ -18,9 +18,9 @@ var TableWidget = React.createClass({
 
 var TableAttribute = connect(
   function(state, props) {
-    model_name = props.attribute.model_name
-    template = state.templates[model_name] ? state.templates[model_name].template : null
-    documents = magma_documents( state, model_name, props.value )
+    var model_name = props.attribute.model_name
+    var template = state.templates[model_name] ? state.templates[model_name].template : null
+    var documents = magma_documents( state, model_name, props.value )
     var table = template ? TableSet(documents, template) : null
     return {
       page_size: 10,

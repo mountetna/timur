@@ -9,7 +9,7 @@ var BoxPlot = React.createClass({
       <svg className="scatter_plot" width="800" height="350">
         {
           this.plot_data.mappings.map(function(mapping) {
-            return <WhiskerBox name={ mapping.name } values={ this.plot_data.matrix.row_vector(i) }/>
+            return <WhiskerBox name={ mapping.name } values={ this.plot_data.matrix.row_vector() }/>
           })
         }
       </svg>

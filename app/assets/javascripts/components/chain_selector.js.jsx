@@ -20,7 +20,7 @@ var ChainSelector = React.createClass({
   current_values: function() {
     if (!this.props.depends) return this.props.values;
     var self = this;
-    values = this.props.depends.reduce(function(values,depend) {
+    var values = this.props.depends.reduce(function(values,depend) {
       if (values)
         return values[self.props.chain_state[ depend ]];
       else

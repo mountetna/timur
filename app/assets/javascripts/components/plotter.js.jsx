@@ -64,13 +64,13 @@ var PlotList = React.createClass({
   },
   create_variable: function(var_type) {
     // get the existing saves
-    saves = this.state.saves;
-    v = this.new_var();
+    var saves = this.state.saves;
+    var v = this.new_var();
     saves[var_type][v.key] = v;
     this.setState({ saves: saves });
   },
   update_variable: function(var_type, key, prop, value) {
-    saves = this.state.saves;
+    var saves = this.state.saves;
     if (prop == 'remove')
       delete saves[var_type][key];
     else

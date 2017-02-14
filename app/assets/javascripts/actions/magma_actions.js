@@ -1,7 +1,7 @@
 var magmaActions = {
   consumePayload: function(dispatch,response) {
     Object.keys(response.templates).forEach(function(template_name) {
-      template_def = response.templates[template_name]
+      var template_def = response.templates[template_name]
 
       // you may not have all of these
       
@@ -87,7 +87,7 @@ var magmaActions = {
       })
     }
   },
-  requestView: function(model_name, record_name, tab_name, success) {
+  requestView: function(model_name, record_name, tab_name, success, error) {
     var self = this;
     var request = {
       model_name: model_name,
