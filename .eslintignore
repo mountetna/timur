@@ -1,0 +1,7 @@
+app/assets/javascripts/application.js.coffee
+app/assets/javascripts/model.js.coffee
+app/assets/javascripts/jquery-mask.js
+app/assets/javascripts/datetimepicker/jquery.datetimepicker.js
+app/assets/javascripts/spectrum.js
+app/assets/javascripts/jquery.ba-throttle-debounce.min.js
+app/assets/javascripts/keycode.js.coffee
