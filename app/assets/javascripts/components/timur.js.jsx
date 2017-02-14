@@ -1,6 +1,12 @@
+import createLogger from 'redux-logger'
+
 var Timur = React.createClass({
   create_store: function() {
-    return Redux.applyMiddleware(thunk)(Redux.createStore)(Redux.combineReducers({
+    let middleWares = [thunk]
+    if (process.env.NODE_ENV != "production") {
+      middleWares.push(createLogger())
+    }
+    return Redux.applyMiddleware(...middleWares)(Redux.createStore)(Redux.combineReducers({
       timur: timurReducer,
       messages: messageReducer,
       templates: magmaReducer,
