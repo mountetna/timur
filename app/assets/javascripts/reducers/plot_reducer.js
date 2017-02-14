@@ -1,7 +1,5 @@
 var plotReducer = function(plots, action) {
   if (!plots) plots = [];
-  console.log(plots);
-  console.log(action);
   switch(action.type) {
     case 'CREATE_NEW_PLOT':
       return [ {

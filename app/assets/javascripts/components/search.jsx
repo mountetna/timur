@@ -307,7 +307,6 @@ var Search = React.createClass({
         )
         if (Object.keys(revisions).length > 0) {
           this.setState({mode: 'submit'})
-          console.log(revisions)
           this.props.submitRevisions(
             self.state.model_name,
             revisions, 

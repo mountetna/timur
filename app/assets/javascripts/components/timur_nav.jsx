@@ -73,7 +73,6 @@ var TimurNavBar = React.createClass({
 
 var TimurNav = connect(
   function (state) {
-    console.log(state)
     return {
       helpShown: state.timur.help_shown
     }
