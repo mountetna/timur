@@ -1,5 +1,5 @@
 
-AttributeHelpers = {
+var AttributeHelpers = {
   attribute_exists: function() {
     return(this.attribute_value() != null)
   },

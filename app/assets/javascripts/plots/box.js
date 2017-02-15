@@ -13,7 +13,7 @@ d3.box = function() {
   // For each small multiple…
   function box(g) {
     g.each(function(data, i) {
-      d = data.values.map(value).sort(d3.ascending);
+      var d = data.values.map(value).sort(d3.ascending);
       var g = d3.select(this),
           n = d.length,
           min = d[0],

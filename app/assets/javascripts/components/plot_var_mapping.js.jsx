@@ -1,4 +1,4 @@
-PlotVarMapping = React.createClass({
+var PlotVarMapping = React.createClass({
   getInitialState: function() {
     return { stain_variables: [], chain_state: {} }
   },
@@ -96,7 +96,7 @@ PlotVarMapping = React.createClass({
     }
   },
   mfi_map: function(pop) {
-    [name,ancestry] = pop.split(/##/)
+    var [name,ancestry] = pop.split(/##/)
     return {
       key: name + ancestry,
       value: name + '##' + ancestry,

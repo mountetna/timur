@@ -1,4 +1,4 @@
-HeatmapPlotContainer = React.createClass({
+var HeatmapPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },

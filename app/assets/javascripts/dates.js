@@ -11,7 +11,6 @@ var format_time = function(date) {
 
   if (!(date instanceof Date)) date = new Date(date)
 
-  console.log(date)
 
   var hours = ('00' + date.getHours()).slice(-2);
   var minutes = ('00' + date.getMinutes()).slice(-2);

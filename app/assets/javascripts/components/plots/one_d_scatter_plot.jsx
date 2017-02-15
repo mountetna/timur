@@ -1,4 +1,4 @@
-ScatterCurve = React.createClass({
+var ScatterCurve = React.createClass({
   render: function() {
     var self = this;
     var series = this.props.series;
@@ -66,7 +66,7 @@ ScatterCurve = React.createClass({
   }
 });
 
-OneDScatterPlot = React.createClass({
+var OneDScatterPlot = React.createClass({
   render: function() {
     var self = this;
 

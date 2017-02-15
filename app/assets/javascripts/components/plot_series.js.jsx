@@ -1,4 +1,4 @@
-PlotSeries = React.createClass({
+var PlotSeries = React.createClass({
   getInitialState: function() {
     return { chain_state: {} }
   },

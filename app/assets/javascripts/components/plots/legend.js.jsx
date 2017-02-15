@@ -1,6 +1,6 @@
 // expects x, y, and a 'series' array of objects with
 // name, color properties
-Legend = React.createClass({
+var Legend = React.createClass({
   render: function() {
     return <g className="legend" height="100" width="100" 
        transform={ 'translate(' + this.props.x + ',' + this.props.y + ')' }>

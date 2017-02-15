@@ -1,4 +1,4 @@
-freshen = function(old_obj, new_obj) {
+window.freshen = function(old_obj, new_obj) {
   return $.extend(
     {},
     old_obj,
@@ -6,7 +6,7 @@ freshen = function(old_obj, new_obj) {
   )
 }
 
-magmaReducer = require('./reducers/magma_reducer.js')
-messageReducer = require('./reducers/message_reducer.js')
-plotReducer = require('./reducers/plot_reducer.js')
-timurReducer = require('./reducers/timur_reducer.js')
+window.magmaReducer = require('./reducers/magma_reducer.js')
+window.messageReducer = require('./reducers/message_reducer.js')
+window.plotReducer = require('./reducers/plot_reducer.js')
+window.timurReducer = require('./reducers/timur_reducer.js')

@@ -23,6 +23,11 @@ module Timur
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
-    config.browserify_rails.commandline_options = "--transform reactify --extension=\".jsx\""
+    browserify_transforms = [
+      "-t [ babelify --presets [ es2015 react stage-0 ] --plugins [ add-module-exports ] ]",
+      "-t envify"
+    ]
+    config.browserify_rails.commandline_options = browserify_transforms.join(" ") + " --extension='.jsx' --extension='.js.jsx'"
+
   end
 end

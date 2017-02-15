@@ -1,4 +1,4 @@
-Matrix = function(rows, rownames, colnames) {
+window.Matrix = function(rows, rownames, colnames) {
   var self = this
   this.num_rows = rows.length;
   this.num_cols = rows[0].length;

@@ -1,7 +1,7 @@
 // this is a single div that will format a document to display the
 // value for a single attribute
 
-Attribute = React.createClass({
+var Attribute = React.createClass({
   render: function() {
     var self = this
     var store = this.context.store

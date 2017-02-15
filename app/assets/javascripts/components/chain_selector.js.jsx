@@ -1,4 +1,4 @@
-ChainSelector = React.createClass({
+var ChainSelector = React.createClass({
     // okay, what have we here? A 'Chain Selector' is one that shows a chain of widgets, adding the next
     // one based on the choice of the current. So, no need to show the subsequent ones until you know what
     // it should show
@@ -20,7 +20,7 @@ ChainSelector = React.createClass({
   current_values: function() {
     if (!this.props.depends) return this.props.values;
     var self = this;
-    values = this.props.depends.reduce(function(values,depend) {
+    var values = this.props.depends.reduce(function(values,depend) {
       if (values)
         return values[self.props.chain_state[ depend ]];
       else

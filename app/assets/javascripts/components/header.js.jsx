@@ -1,4 +1,4 @@
-HeaderApprove = React.createClass({
+var HeaderApprove = React.createClass({
   render: function() {
     return <div className="inline">
         <div className='cancel' onClick={ 
@@ -15,7 +15,7 @@ HeaderApprove = React.createClass({
   }
 })
 
-HeaderWaiting = React.createClass({
+var HeaderWaiting = React.createClass({
   render: function() {
     return <div className='submit'>
       <span className="fa fa-spinner fa-pulse"/>
@@ -24,7 +24,7 @@ HeaderWaiting = React.createClass({
 })
 
 
-HeaderEdit = React.createClass({
+var HeaderEdit = React.createClass({
   render: function() {
     return <div className='edit' 
       onClick={ this.props.handler.bind(null,'edit') }>
@@ -33,7 +33,7 @@ HeaderEdit = React.createClass({
   }
 })
 
-HeaderClose = React.createClass({
+var HeaderClose = React.createClass({
   render: function() {
     return <div 
       onClick={ this.props.handler.bind(null,'close') }
@@ -44,7 +44,7 @@ HeaderClose = React.createClass({
 })
 
 
-Header = React.createClass({
+var Header = React.createClass({
   render: function() {
     var component
     if (this.props.mode == 'edit')

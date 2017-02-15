@@ -1,4 +1,4 @@
-Selector = React.createClass({
+var Selector = React.createClass({
   onChange: function(evt) {
     if (this.props.onChange) {
       this.props.onChange(evt.target.value);

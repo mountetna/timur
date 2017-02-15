@@ -1,4 +1,4 @@
-TableColumn = function(attribute,template) {
+var TableColumn = function(attribute,template) {
   var self = this;
 
   var att_class = attribute.attribute_class
@@ -34,7 +34,6 @@ TableColumn = function(attribute,template) {
       case "FloatAttribute":
         return value || 0;
       default:
-        console.log("Couldn't find "+att_class);
         return value || "";
     }
   };

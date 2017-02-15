@@ -5,7 +5,7 @@ var magma_documents = function( state, model_name, record_names) {
   }).filter(function(doc) { return doc != undefined })
 }
 
-var TableWidget = React.createClass({
+var TableAttribute = React.createClass({
   render: function() {
     return <div className="value">
         <TableViewer page_size={ this.props.page_size }
@@ -15,19 +15,18 @@ var TableWidget = React.createClass({
   }
 })
 
-
-var TableAttribute = connect(
+TableAttribute = connect(
   function(state, props) {
-    model_name = props.attribute.model_name
-    template = state.templates[model_name] ? state.templates[model_name].template : null
-    documents = magma_documents( state, model_name, props.value )
-    var table = template ? TableSet(documents, template) : null
+    var model_name = props.attribute.model_name
+    var template = state.templates[model_name] ? state.templates[model_name].template : null
+    var documents = magma_documents( state, model_name, props.value )
+    var table = template ? new TableSet(documents, template) : null
     return {
       page_size: 10,
       mode: props.mode,
       table: table
     }
   }
-)(TableWidget)
+)(TableAttribute)
 
 module.exports = TableAttribute

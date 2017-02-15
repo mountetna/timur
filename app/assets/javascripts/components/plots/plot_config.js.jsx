@@ -20,7 +20,7 @@
  */
 
 
-PlotConfig = React.createClass({
+var PlotConfig = React.createClass({
   render: function() {
     var self = this;
     var store = this.context.store;

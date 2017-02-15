@@ -1,4 +1,4 @@
-BoxPlot = React.createClass({
+var BoxPlot = React.createClass({
   render: function() {
     var self = this;
     return <div className="scatter plot">
@@ -9,7 +9,7 @@ BoxPlot = React.createClass({
       <svg className="scatter_plot" width="800" height="350">
         {
           this.plot_data.mappings.map(function(mapping) {
-            return <WhiskerBox name={ mapping.name } values={ this.plot_data.matrix.row_vector(i) }/>
+            return <WhiskerBox name={ mapping.name } values={ this.plot_data.matrix.row_vector() }/>
           })
         }
       </svg>
@@ -17,7 +17,7 @@ BoxPlot = React.createClass({
   },
 });
 
-BoxPlotConfigure = React.createClass({
+var BoxPlotConfigure = React.createClass({
   render: function() {
     if (this.props.mode == 'plot') return null;
 
@@ -33,7 +33,7 @@ BoxPlotConfigure = React.createClass({
 });
 
 
-WhiskerBox = React.createClass({
+var WhiskerBox = React.createClass({
   render: function() {
     var bounds = this.calculate_bounds();
 

@@ -1,0 +1,47 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "$": false,
+    "Routes": false,
+    "React": false,
+    "d3": false,
+    "freshen": false,
+    "dates": false,
+    "marked": false,
+    "magmaActions": false,
+    "messageActions": false,
+    "connect": false,
+    "plotActions": false,
+    "timurActions": false,
+    "Keycode": false,
+    "Matrix": false,
+    "classNames": false,
+    "chroma": false,
+    "Tree": false,
+    "messageReducer": false,
+    "magmaReducer": false,
+    "plotReducer": false,
+    "timurReducer": false,
+    "Redux": false,
+    "thunk": false,
+    "TableSet": false,
+    "TableColumn": false
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "no-undef": 1
+  }
+}

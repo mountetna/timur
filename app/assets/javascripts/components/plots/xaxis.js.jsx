@@ -1,4 +1,4 @@
-XAxis = React.createClass({
+var XAxis = React.createClass({
   render: function() {
     var self = this;
     var scale = this.props.scale;

@@ -1,4 +1,4 @@
-PlotVariables = React.createClass({
+var PlotVariables = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },
@@ -25,7 +25,7 @@ PlotVariables = React.createClass({
                </div>
                {
                  Object.keys(this.props.saves.series).map(function(key) {
-                   series = self.props.saves.series[key];
+                   var series = self.props.saves.series[key];
                    return <PlotSeries 
                      update={ self.props.update }
                      key={ key }
@@ -41,7 +41,7 @@ PlotVariables = React.createClass({
                </div>
                {
                  Object.keys(this.props.saves.mappings).map(function(key) {
-                   mappings = self.props.saves.mappings[key];
+                   var mappings = self.props.saves.mappings[key];
                    return <PlotVarMapping update_query={ self.update_query }
                      key={ key }
                      update={ self.props.update }

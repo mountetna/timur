@@ -1,4 +1,4 @@
-BarPlot = React.createClass({
+var BarPlot = React.createClass({
   getInitialState: function() {
     return { zoom: 1 }
   },
@@ -73,7 +73,7 @@ BarPlot = React.createClass({
 
 module.exports = BarPlot;
 
-BarPlotBar = React.createClass({
+var BarPlotBar = React.createClass({
   render_dots: function() {
     var self = this;
     if (!this.props.dots) return null;
@@ -109,7 +109,7 @@ BarPlotBar = React.createClass({
   }
 });
 
-Dot = React.createClass({
+var Dot = React.createClass({
   getInitialState: function() {
     return { highlighted: false }
   },

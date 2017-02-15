@@ -1,4 +1,4 @@
-IntegerAttribute = React.createClass({
+var IntegerAttribute = React.createClass({
   filter_keys: function(e) {
     if (Keycode.is_ctrl(e)) return true;
     if (Keycode.is_number(e) || Keycode.match(e,/^_$/)) return true;

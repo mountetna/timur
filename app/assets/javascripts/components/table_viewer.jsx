@@ -77,7 +77,7 @@ var RecordFilter = function(table,filter) {
   }
 };
 
-TableViewer = React.createClass({
+var TableViewer = React.createClass({
   getInitialState: function() {
     return { new_items: [], current_page: 0, filter: "" }
   },

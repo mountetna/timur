@@ -1,4 +1,4 @@
-Tree = function(root) {
+window.Tree = function(root) {
   var self = this
   var draw_branches_for = function(node,depth,leaf_counter) {
     if (node.children.length == 0) {

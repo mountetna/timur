@@ -1,4 +1,4 @@
-TimurNavBar = React.createClass({
+var TimurNavBar = React.createClass({
   render: function() {
     var self = this
     var login_path = Routes.login_path()
@@ -71,9 +71,8 @@ TimurNavBar = React.createClass({
   }
 })
 
-TimurNav = connect(
+var TimurNav = connect(
   function (state) {
-    console.log(state)
     return {
       helpShown: state.timur.help_shown
     }

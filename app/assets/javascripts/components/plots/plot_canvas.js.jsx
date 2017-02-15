@@ -4,7 +4,7 @@
 //   width = width of plot
 //   height = height of plot
 
-PlotCanvas = React.createClass({
+var PlotCanvas = React.createClass({
   render: function() {
     return <g className="plot_canvas" 
             onWheel={ this.props.onWheel }

@@ -6,7 +6,7 @@
 //   num_ticks = approximate number of ticks
 //   tick_width = width of the tick in pixels
 
-YAxis = React.createClass({
+var YAxis = React.createClass({
   render: function() {
     var self = this;
     var scale = this.props.scale;

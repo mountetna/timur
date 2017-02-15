@@ -1,5 +1,7 @@
+let { cancelPlotConfig, requestPlotData, closePlot } = plotActions
 
-OneDScatterPlotContainer = React.createClass({
+
+var OneDScatterPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },

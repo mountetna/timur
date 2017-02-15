@@ -49,7 +49,7 @@ var CollectionList = React.createClass({
                             self.setState({ new_link_value: value })
 
                             // catch the first debounce for greater clarity
-                            new_links = stable_links.concat(has_value ? value : [])
+                            var new_links = stable_links.concat(has_value ? value : [])
 
                             if (value && !edit_link)
                               self.props.reviseList( new_links )

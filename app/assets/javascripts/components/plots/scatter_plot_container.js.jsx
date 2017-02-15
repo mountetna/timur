@@ -1,4 +1,4 @@
-ScatterPlotContainer = React.createClass({
+var ScatterPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
   },
