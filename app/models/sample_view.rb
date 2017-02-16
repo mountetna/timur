@@ -24,26 +24,53 @@ class SampleView < TimurView
               dc_live_count: [ "population", [ "stain", "::equals", "dc" ], [ "name", "::equals", "Live" ], "::first", "count" ]
             }
           },
+          dimensions: {
+            width: 300,
+            height: 200,
+            margin: { top: 10, right: 20, bottom: 60, left: 50},
+          },
+          legend: [
+            {
+              name: "treg",
+              color: "greenyellow"
+            },
+            {
+              name: "nktb",
+              color: "coral"
+            },
+            {
+              name: "sort",
+              color: "khaki"
+            },
+            {
+              name: "dc",
+              color: "seagreen"
+            }
+          ],
           bars: [
             {
-              series: "CD45+/live",
+              name: "CD45+/live",
               color: "greenyellow",
-              height: "treg_cd45_count / treg_live_count"
+              height: "treg_cd45_count / treg_live_count",
+              select: "@record_name"
             },
             {
-              series: "CD45+/live",
+              name: "CD45+/live",
               color: "coral",
               height: "nktb_cd45_count / nktb_live_count",
+              select: "@record_name"
             },
             {
-              series: "CD45+/live",
+              name: "CD45+/live",
               color: "khaki",
               height: "sort_cd45_count / sort_live_count",
+              select: "@record_name"
             },
             {
-              series: "CD45+/live",
+              name: "CD45+/live",
               color: "seagreen",
               height: "dc_cd45_count / dc_live_count",
+              select: "@record_name"
             }
           ]
         )

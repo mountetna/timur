@@ -46,11 +46,11 @@ var BarPlot = React.createClass({
         ymax={ zoom_ymax }
         num_ticks={5}
         tick_width={ 5 }/>
-      <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend }/>
+      <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend || this.props.bars }/>
       {
         this.props.bars.map(function(datum,i) {
           return <BarPlotBar key={ i }
-                  series={ datum.series }
+                  name={ datum.name }
                   color={ datum.color }
                   ymax={ zoom_ymax }
                   ymin={ self.props.ymin }
@@ -103,7 +103,7 @@ var BarPlotBar = React.createClass({
           'translate('+this.props.x+',' +
               (this.props.scale(this.props.ymin) + 15)+') rotate(45)'
         }>
-            { this.props.series }
+            { this.props.name }
       </text>
     </g>
   }
