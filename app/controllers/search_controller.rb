@@ -29,7 +29,7 @@ class SearchController <  ApplicationController
     end
 
     # For the table query we only give a list of identifiers
-    record_names = query.select_map(model.identity)
+    record_names = query.select_map(:"#{model.table_name}__#{model.identity}")
 
     render json: { record_names: record_names }
   end

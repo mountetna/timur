@@ -22,27 +22,44 @@ class QueryFilter
     $
   /x
 
+  def query_join att
+    @query = @query.join(
+      att.link_model.table_name, :"#{att.link_model.table_name}__id" => :"#{@model.table_name}__#{att.foreign_id}"
+    )
+  end
+
+  def query_where terms
+    @query = @query.where(
+      terms
+    )
+  end
+
   def matches_column term
     COLUMN_FORMAT.match(term) do |m|
       att_name = m[:attribute].to_sym
-      if @model.attributes[att_name]
-        case m[:operator]
-        when '='
-          @query = @query.where(
-            m[:attribute].to_sym => m[:match_string]
-          )
-        when '~'
-          @query = @query.where(
-            m[:attribute].to_sym => /#{m[:match_string]}/i
-          )
-        when '<'
-          @query = @query.where(
-            "#{m[:attribute]} < ?", m[:match_string]
-          )
-        when '>'
-          @query = @query.where(
-            "#{m[:attribute]} > ?", m[:match_string]
-          )
+      att = @model.attributes[att_name]
+      if att
+        case att
+        when Magma::ForeignKeyAttribute
+          query_join att
+          link_identity = :"#{att.link_model.table_name}__#{att.link_model.identity}"
+          case m[:operator]
+          when '='
+            query_where( link_identity => m[:match_string])
+          when '~'
+            query_where( link_identity => /#{m[:match_string]}/i)
+          end
+        else
+          case m[:operator]
+          when '='
+            query_where( att_name => m[:match_string])
+          when '~'
+            query_where( att_name => /#{m[:match_string]}/i)
+          when '<'
+            query_where( "#{att_name} < ?", m[:match_string])
+          when '>'
+            query_where( "#{att_name} > ?", m[:match_string] )
+          end
         end
         return true
       end
