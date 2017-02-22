@@ -51,8 +51,8 @@ var BoxPlot = React.createClass({
 var quantile = function(values, p) {
   if ( p == 0.0 ) { return values[ 0 ] }
   if ( p == 1.0 ) { return values[ values.length-1 ] }
-  id = ( values.length*p ) - 1
-  if ( id === Math.floor( id ) ) {
+  var id = values.length*p- 1
+  if ( id == Math.floor( id ) ) {
     return ( values[ id ] + values[ id+1 ] ) / 2.0
   }
   id = Math.ceil( id )
