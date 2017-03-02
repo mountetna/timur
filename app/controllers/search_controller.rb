@@ -92,14 +92,14 @@ class SearchController <  ApplicationController
   end
 
   def query_json
-    magma = Magma::Client.new
-    status, payload = magma.query(
-      params
-    )
-    if status == 200
-      render json: payload
-    else
-      render json: payload, status: status
+    begin
+      tables = (params[:queries] || []).map do |query_json|
+        table = DataTable.new(query_json)
+        table.to_matrix
+      end
+      render json: { tables: tables }
+    rescue Magma::ClientError => e
+      render json: e.message, status: e.status
     end
   end
  
