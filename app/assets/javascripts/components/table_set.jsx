@@ -1,6 +1,6 @@
 var TableSet = function(documents, template) {
   this.records = documents
-  this.model = template
+  this.template = template
   this.columns = Object.keys(template.attributes).map(function(att_name) {
     var column = new TableColumn(template.attributes[att_name]);
     if (!column.shown) return null;

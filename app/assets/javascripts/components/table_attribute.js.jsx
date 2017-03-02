@@ -22,6 +22,7 @@ TableAttribute = connect(
     var template = model ? model.template : null
     var documents = magma_documents( model, props.value )
     var table = template ? new TableSet(documents, template) : null
+    console.log(table)
     return {
       page_size: 10,
       mode: props.mode,

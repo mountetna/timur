@@ -3,6 +3,8 @@ var TableColumn = function(attribute,template) {
 
   var att_class = attribute.attribute_class
 
+  this.attribute = attribute
+
   this.name = attribute.name
 
   this.shown = attribute.shown
