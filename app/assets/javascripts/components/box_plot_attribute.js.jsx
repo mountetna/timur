@@ -7,7 +7,7 @@ var BoxPlotAttribute = React.createClass({
   },
   d3_render: function() {
     var margin = {top: 10, right: 20, bottom: 30, left: 0},
-        width = 900 - margin.left - margin.right,
+        width = 1200 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
     var data = this.props.value;
@@ -58,7 +58,7 @@ var BoxPlotAttribute = React.createClass({
   render: function() {
     if (this.props.mode == "edit") return <div className="value"/>
     return <div className="value">
-              <svg className="box_plot" width="900" height="200"/>
+              <svg className="box_plot" width="1200" height="200"/>
            </div>
   },
 })
