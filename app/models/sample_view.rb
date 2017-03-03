@@ -52,7 +52,7 @@ class SampleView < TimurView
 
   tab :imaging do
     pane :default do
-      shows :he_stain
+      shows :he_low, :he_high, :he_zstack
     end
   end
 end
