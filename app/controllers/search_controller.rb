@@ -93,11 +93,9 @@ class SearchController <  ApplicationController
 
   def query_json
     begin
-      tables = (params[:queries] || []).map do |query_json|
-        table = DataTable.new(query_json)
-        table.to_matrix
-      end
-      render json: { tables: tables }
+      manifest = DataManifest.new(params)
+      manifest.fill
+      render json: manifest.payload
     rescue Magma::ClientError => e
       render json: e.message, status: e.status
     end

@@ -6,24 +6,34 @@ class ProjectView < TimurView
         attribute_class "BoxPlotAttribute"
         display_name "Immune fractions (CD45+ / live)"
         plot(
-          query: {
-            name: "immune_fraction_by_sample",
-            rows: [ "sample", [ "patient", "::has", "experiment" ] ],
-            columns: {
-              sample_name: [ "sample_name" ],
-              experiment_name: [ "patient", "experiment", "name" ],
-              cd45_count: [ "population", 
-                            [ "name", "::equals", "CD45+" ],
-                            [ "stain", "::equals", "sort" ],
-                            "::first", "count" ],
-              live_count: [ "population", 
-                            [ "name", "::equals", "Live" ],
-                            [ "stain", "::equals", "sort" ],
-                            "::first", "count" ],
+          manifest: {
+            immune_fraction_by_sample: {
+              type: "table",
+              value: {
+                rows: [ "sample", [ "patient", "::has", "experiment" ] ],
+                columns: {
+                  sample_name: [ "sample_name" ],
+                  experiment_name: [ "patient", "experiment", "name" ],
+                  cd45_count: [ "population", 
+                                [ "name", "::equals", "CD45+" ],
+                                [ "stain", "::equals", "sort" ],
+                                "::first", "count" ],
+                  live_count: [ "population", 
+                                [ "name", "::equals", "Live" ],
+                                [ "stain", "::equals", "sort" ],
+                                "::first", "count" ],
+                }
+              }
+            },
+            category: {
+              type: "formula",
+              value: "@immune_fraction_by_sample.experiment_name",
+            },
+            height: {
+              type: "formula",
+              value: "@immune_fraction_by_sample.cd45_count / @immune_fraction_by_sample.live_count"
             }
-          },
-          category: "experiment_name",
-          value: "cd45_count / live_count"
+          }
         )
       end
 
@@ -31,64 +41,68 @@ class ProjectView < TimurView
         attribute_class "LinePlotAttribute"
         display_name "Progress"
         plot(
-          query: [
-            {
-              name: "progress_total",
-              rows: [ "sample", [ "patient", "::has", "date_of_digest" ] ],
-              columns: {
-                date_of_digest: [ "patient", "date_of_digest" ],
-              },
-              order: "date_of_digest",
+          manifest: {
+            progress_total: {
+              type: "table",
+              value: {
+                rows: [ "sample", [ "patient", "::has", "date_of_digest" ] ],
+                columns: {
+                  date_of_digest: [ "patient", "date_of_digest" ],
+                },
+                order: "date_of_digest",
+              }
             },
-            {
-              name: "progress_tumor",
-              rows: [
-                "sample", 
-                [ "patient", "::has", "date_of_digest" ],
-                [ "sample_name", "::matches", '\.T.$' ],
+            progress_tumor: {
+              type: "table",
+              value: {
+                rows: [
+                  "sample", 
+                  [ "patient", "::has", "date_of_digest" ],
+                  [ "sample_name", "::matches", '\.T.$' ],
+                ],
+                columns: {
+                  date_of_digest: [ "patient", "date_of_digest" ],
+                },
+                order: "date_of_digest",
+              }
+            },
+            progress_normal: {
+              type: "table",
+              value: {
+                rows: [
+                  "sample", 
+                  [ "patient", "::has", "date_of_digest" ],
+                  [ "sample_name", "::matches", '\.N.$' ],
+                ],
+                columns: {
+                  date_of_digest: [ "patient", "date_of_digest" ],
+                },
+                order: "date_of_digest",
+              }
+            },
+            x: {
+              type: "list",
+              value: [
+                "progess_total$date_of_digest",
+                "progess_tumor$date_of_digest",
+                "progess_normal$date_of_digest",
               ],
-              columns: {
-                date_of_digest: [ "patient", "date_of_digest" ],
-              },
-              order: "date_of_digest",
+              labels: [
+                "'total'",
+                "'tumor'",
+                "'normal'"
+              ]
             },
-            {
-              name: "progress_normal",
-              rows: [
-                "sample", 
-                [ "patient", "::has", "date_of_digest" ],
-                [ "sample_name", "::matches", '\.N.$' ],
-              ],
-              columns: {
-                date_of_digest: [ "patient", "date_of_digest" ],
-              },
-              order: "date_of_digest",
-            }
-          ],
-          ylabel: "sample count",
-          lines: [
-            {
-              table: "progress_total",
-              x: "date_of_digest",
-              y: "row_number + 1",
-              label: "total",
-              color: "mediumseagreen"
+            y: {
+              type: "list",
+              value: [
+                "progess_total$row_number + 1",
+                "progess_tumor$row_number + 1",
+                "progess_normal$row_number + 1",
+              ]
             },
-            {
-              table: "progress_tumor",
-              x: "date_of_digest",
-              y: "row_number + 1",
-              label: "tumor",
-              color: "indigo"
-            },
-            {
-              table: "progress_normal",
-              x: "date_of_digest",
-              y: "row_number + 1",
-              label: "normal",
-              color: "cornflowerblue"
-            }
-          ]
+            ylabel: "sample count"
+          }
         )
       end
       show :whats_new do
