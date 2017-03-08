@@ -80,7 +80,7 @@ class SearchController <  ApplicationController
   public
 
   def records_json
-    magma = Magma::Client.new
+    magma = Magma::Client.instance
     status, payload = magma.retrieve(
       params
     )
@@ -93,9 +93,14 @@ class SearchController <  ApplicationController
 
   def query_json
     begin
-      manifest = DataManifest.new(params)
-      manifest.fill
-      render json: manifest.payload
+      result = Hash[
+        params[:queries].map do |query|
+          manifest = DataManifest.new(query[:manifest])
+          manifest.fill
+          [ query[:name], manifest.payload ]
+        end
+      ]
+      render json: result
     rescue Magma::ClientError => e
       render json: e.message, status: e.status
     end
@@ -104,7 +109,7 @@ class SearchController <  ApplicationController
   # TODO: this needs to be refactored to use the Payload interface along with
   # column restriction, not yet working
   def identifiers_json
-    magma = Magma::Client.new
+    magma = Magma::Client.instance
     status, payload = magma.retrieve(
       model_name: "all",
       record_names: "all",

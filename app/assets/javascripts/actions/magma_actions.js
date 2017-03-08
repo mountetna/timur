@@ -24,57 +24,6 @@ var magmaActions = {
       })
     }
   },
-  queryData: function( model_name, params, queries, success, error ) {
-    var self = this;
-    var request = {
-      model_name: model_name,
-      queries: queries
-    }
-
-    var replaceParams = function(item,params) {
-      Object.keys(params).forEach(function(name) {
-        item = item.replace("@"+name,params[name])
-      })
-      return item
-    }
-
-    var recursiveReplace = function(array, params) {
-      return array.map(function(item) {
-        if (item instanceof Array)
-          return recursiveReplace(item,params)
-        else
-          return replaceParams(item,params)
-      })
-    }
-
-    queries.forEach(function(query) {
-      query.name = replaceParams(query.name, params)
-      query.rows = recursiveReplace(query.rows, params)
-      Object.keys(query.columns).forEach(function(column_name) {
-        query.columns[column_name] = recursiveReplace(query.columns[column_name], params)
-      })
-    })
-
-    return function(dispatch) {
-      $.ajax({
-        url: Routes.query_json_path(),
-        method: 'POST',
-        data: JSON.stringify(request),
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function(response) {
-          magmaActions.consumePayload(dispatch,response)
-          if (success != undefined) success()
-        },
-        error: function(xhr, status, err) {
-          if (error != undefined) {
-            var message = JSON.parse(xhr.responseText)
-            error(message)
-          }
-        }
-      })
-    }
-  },
   requestDocuments: function( model_name, record_names, attribute_names, success, error ) {
     // this is an async action to get a new model from magma
     var self = this;

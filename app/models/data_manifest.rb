@@ -123,8 +123,8 @@ class VarSet
   end
 
   def value_substitute text
-    if var = text[/@(\w+)/, 1]
-      @vars[var]
+    text.gsub(/@(\w+)/) do
+      @vars[Regexp.last_match[1]]
     end
   end
 end

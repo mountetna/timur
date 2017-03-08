@@ -24,7 +24,7 @@ var BarPlotAttribute = React.createClass({
 
 BarPlotAttribute = connect(
   function(state,props) {
-    var table = state.magma.tables[ props.attribute.plot.query.name ]
+    var table = state.magma.tables[ props.attribute.plot.name ]
     var document = props.document
 
     var bars = [] 

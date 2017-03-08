@@ -33,7 +33,7 @@ BoxPlotAttribute.contextTypes = {
 
 BoxPlotAttribute = connect(
   function(state,props) {
-    var table = state.magma.tables[ props.attribute.plot.query.name ]
+    var table = state.magma.tables[ props.attribute.plot.name ]
 
     var groups = {}
     if (table) {

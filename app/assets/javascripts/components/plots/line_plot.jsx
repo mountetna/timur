@@ -8,19 +8,11 @@ var LinePlot = React.createClass({
     var lines = this.props.lines
 
     var x_values = lines.map(
-      function(line) { 
-        return line.points.map(function(point) {
-          return point.x
-        })
-      }
+      (line) => line.points.map( (point) => point.x ) 
     ).flatten()
 
     var y_values = lines.map(
-      function(line) { 
-        return line.points.map(function(point) {
-          return point.y
-        })
-      }
+      (line) => line.points.map( (point) => point.y ) 
     ).flatten()
 
     var xmin = x_values.min()

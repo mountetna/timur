@@ -6,6 +6,7 @@ class ProjectView < TimurView
         attribute_class "BoxPlotAttribute"
         display_name "Immune fractions (CD45+ / live)"
         plot(
+          name: "project_qc",
           manifest: {
             immune_fraction_by_sample: {
               type: "table",
@@ -41,6 +42,7 @@ class ProjectView < TimurView
         attribute_class "LinePlotAttribute"
         display_name "Progress"
         plot(
+          name: "project_progress",
           manifest: {
             progress_total: {
               type: "table",

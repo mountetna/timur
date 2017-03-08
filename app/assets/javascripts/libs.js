@@ -25,6 +25,7 @@ Array.prototype.flatten = function() {
 }
 
 Array.prototype.min = function() {
+  if (this.length == 0) return NaN
   return this.reduce(function(a, b) {
     return a < b ? a : b
   })

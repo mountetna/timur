@@ -33,8 +33,17 @@ var timurActions = {
           var required_attributes = paneMap(function(display_item) {
             return display_item.name
           })
-          var required_tables = paneMap(function(display_item) { 
-            return display_item.overrides.plot && display_item.overrides.plot.query ? display_item.overrides.plot.query : null
+          var required_manifests = paneMap(function(display_item) { 
+            return display_item.overrides.plot ? {
+              name: display_item.overrides.plot.name,
+              manifest: {
+                record_name: {
+                  type: "formula",
+                  value: record_name
+                },
+                ...display_item.overrides.plot.manifest
+              }
+            } : null
           })
 
           dispatch(
@@ -43,10 +52,10 @@ var timurActions = {
             )
           )
 
-          if (required_tables.length > 0) 
+          if (required_manifests.length > 0) 
             dispatch(
-              magmaActions.queryData(
-                model_name, { record_name: record_name }, required_tables
+              timurActions.requestManifests(
+                model_name, required_manifests
               )
             )
 
@@ -54,6 +63,32 @@ var timurActions = {
             timurActions.addViews(model_name, response.tabs)
           )
 
+          if (success != undefined) success()
+        },
+        error: function(xhr, status, err) {
+          if (error != undefined) {
+            var message = JSON.parse(xhr.responseText)
+            error(message)
+          }
+        }
+      })
+    }
+  },
+  requestManifests: function( model_name, manifests, success, error ) {
+    var self = this;
+    var request = {
+      queries: manifests
+    }
+
+    return function(dispatch) {
+      $.ajax({
+        url: Routes.query_json_path(),
+        method: 'POST',
+        data: JSON.stringify(request),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(response) {
+          magmaActions.consumePayload(dispatch,response)
           if (success != undefined) success()
         },
         error: function(xhr, status, err) {
