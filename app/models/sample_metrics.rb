@@ -108,12 +108,21 @@ class SampleMetrics
       end
 
       if !missing_pops.empty?
+        detail("Missing Population Ancestors", missing_pops.map do |pop|
+           pop.ancestry
+        end.uniq)
+
+
         detail("Missing Populations", missing_pops.map do |pop|
           "#{pop.stain} : #{pop.name} > #{pop.ancestry}"
         end)
       end
 
       if !extra_pops.empty?
+        detail("Missing Extra Population Ancestors", missing_pops.map do |pop|
+           pop.ancestry
+        end.uniq)
+
         detail("Extra Populations", extra_pops.map do |pop|
           "#{pop.stain} : #{pop.name} > #{pop.ancestry}"
         end)
