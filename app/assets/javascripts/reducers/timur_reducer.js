@@ -1,12 +1,11 @@
 var view = function(old_view, action) {
   if (!old_view) old_view = {}
   switch(action.type) {
-    case 'ADD_VIEWS':
-      var new_view = {}
-      for (let tab_name of Object.keys(action.views)) {
-        new_view[tab_name] = old_view[tab_name] || action.views[tab_name]
+    case 'ADD_TAB':
+      return {
+        ...old_view,
+        [action.tab_name]: action.tab
       }
-      return new_view
     default:
       return old_view
   }
@@ -15,7 +14,7 @@ var view = function(old_view, action) {
 var views = function(old_views, action) {
   if (!old_views) old_views = {}
   switch(action.type) {
-    case 'ADD_VIEWS':
+    case 'ADD_TAB':
       return {
         ...old_views,
         [action.model_name]: view(old_views[action.model_name], action)
@@ -28,13 +27,18 @@ var views = function(old_views, action) {
 var timurReducer = function(timur, action) {
   if (!timur) timur = {}
   switch(action.type) {
-    case 'ADD_VIEWS':
+    case 'ADD_TAB':
       return {
         ...timur,
         views: views(timur.views,action),
       }
     case 'ADD_MANIFEST':
       return {
+        ...timur,
+        manifests: {
+          ...timur.manifests,
+          [action.manifest_name]:  action.manifest
+        }
       }
     case 'TOGGLE_CONFIG':
       return {

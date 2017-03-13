@@ -19,32 +19,20 @@ var timurActions = {
         dataType: 'json',
         contentType: 'application/json',
         success: function(response) {
-          var paneMap = function(transform) {
-            return Object.keys(response.tabs[response.tab_name].panes).map(
-              function(pane_name) {
-                return response
-                  .tabs[response.tab_name]
-                  .panes[pane_name]
-                  .display.map(transform).filter(function(n) { return n != null })
-              }
-            ).flatten()
-          }
+          var panes = response.tabs[response.tab_name].panes
+          var paneMap = (transform) => Object.keys(panes).map(
+            (pane_name) => panes[pane_name].display.map(transform).filter((n) => n != null)
+          ).flatten()
 
-          var required_attributes = paneMap(function(display_item) {
-            return display_item.name
-          })
-          var required_manifests = paneMap(function(display_item) { 
-            return display_item.overrides.plot ? {
-              name: display_item.overrides.plot.name,
-              manifest: {
-                record_name: {
-                  type: "formula",
-                  value: record_name
-                },
-                ...display_item.overrides.plot.manifest
-              }
+          var required_attributes = paneMap((display_item) => display_item.name)
+          var required_manifests = paneMap((display_item) => display_item.attribute.plot ? {
+              name: display_item.attribute.plot.name,
+              manifest: [
+                [ 'record_name', `'${ record_name }'` ],
+                ...display_item.attribute.plot.manifest
+              ]
             } : null
-          })
+          )
 
           dispatch(
             magmaActions.requestDocuments(
@@ -60,15 +48,17 @@ var timurActions = {
             )
 
           dispatch(
-            timurActions.addViews(model_name, response.tabs)
+            timurActions.addTab(model_name, 
+              response.tab_name, 
+              response.tabs[response.tab_name]
+            )
           )
 
           if (success != undefined) success()
         },
         error: function(xhr, status, err) {
           if (error != undefined) {
-            var message = JSON.parse(xhr.responseText)
-            error(message)
+            error(JSON.parse(xhr.responseText))
           }
         }
       })
@@ -88,7 +78,9 @@ var timurActions = {
         dataType: 'json',
         contentType: 'application/json',
         success: function(response) {
-          magmaActions.consumePayload(dispatch,response)
+          for (var name in response) {
+            dispatch(timurActions.addManifest(name, response[name]))
+          }
           if (success != undefined) success()
         },
         error: function(xhr, status, err) {
@@ -100,11 +92,19 @@ var timurActions = {
       })
     }
   },
-  addViews: function(model_name, views) {
+  addManifest: function(name, manifest) {
     return {
-      type: 'ADD_VIEWS',
+      type: 'ADD_MANIFEST',
+      manifest_name: name,
+      manifest: manifest
+    }
+  },
+  addTab: function(model_name, tab_name, tab) {
+    return {
+      type: 'ADD_TAB',
       model_name: model_name,
-      views: views
+      tab_name: tab_name,
+      tab: tab
     }
   }
 }

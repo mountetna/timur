@@ -50,7 +50,7 @@ BrowserPane = connect(
           return freshen(
             props.template.attributes[display_att.name],
             props.template.attributes.hasOwnProperty(display_att.name) ? { editable: true } : null,
-            display_att.overrides
+            display_att.attribute
           )
         })
       }

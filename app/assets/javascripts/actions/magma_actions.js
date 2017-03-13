@@ -16,13 +16,6 @@ var magmaActions = {
           )
       })
     }
-    if (response.tables) {
-      response.tables.forEach(function(table) {
-        dispatch(
-          magmaActions.addTable(table)
-        )
-      })
-    }
   },
   requestDocuments: function( model_name, record_names, attribute_names, success, error ) {
     // this is an async action to get a new model from magma
@@ -109,13 +102,6 @@ var magmaActions = {
       type: 'ADD_DOCUMENTS',
       model_name: model_name,
       documents: documents
-    }
-  },
-  addTable: function(table) {
-    return {
-      type: 'ADD_TABLE',
-      table_name: table.name,
-      table: table
     }
   },
   reviseDocument: function(document, template, attribute, revised_value) {
