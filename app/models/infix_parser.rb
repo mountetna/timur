@@ -1,169 +1,96 @@
-class InfixParser
-  PRECEDENCE = {
-    :^ => 3, 
-    :/ => 3, 
-    :* => 3,
-    :+ => 2,
-    :- => 2, 
-    :% => 1,
-    :")" => 0,
-    :"(" => 0,
-    :"," => 0,
+class InfixLexer < RLTK::Lexer
+  rule(/\s/)
 
-  }
+  rule(/[0-9]+\.?[0-9]*/) { |t| [ :NUM, t.to_f ] }
+  rule(/[A-Za-z]\w*/) { |t| [ :IDENT, t ] }
+  rule(/'[^\']*?'/) { |t| [ :STRING, t[1..-2] ] }
 
-  OPERATOR_MATCH = /
-    ^[#{
-      PRECEDENCE.keys.map do |op|
-        "\\#{op}"
-      end.join('')
-    }]
-  /x
+  rule(/\^/) { :EXP }
+  rule(/\//) { :DIV }
+  rule(/\*/) { :MUL }
+  rule(/\+/) { :ADD }
+  rule(/\-/) { :SUB }
+  rule(/\%/) { :MOD }
+  rule(/\@/) { :VAR }
+  rule(/\$/) { :DOLLAR }
 
-  NUMBER_MATCH = /
-    ^
-    \-?
-    [0-9]+
-    \.?[0-9]*
-  /x
+  rule(/\)/) { :RPAREN }
+  rule(/\(/) { :LPAREN }
+  rule(/\]/) { :RBRACKET }
+  rule(/\[/) { :LBRACKET }
+  rule(/\,/) { :COMMA }
+  rule(/\:/) { :COLON }
+end
 
-  WORD_MATCH = /^\w+/
+class InfixParser < RLTK::Parser
+  left :MOD
 
-  def initialize formula, vars
-    @input = formula
-    @formula = formula
-    @vars = vars
-    @stack = []
-    @output = []
-  end
+  left :SUB
+  right :ADD
 
-  def value
-    parse unless @formula.empty?
-    @output
-  end
+  left :DIV
+  right :MUL
 
-  private
+  right :EXP
 
-  def get_token
-    return nil unless @formula && !@formula.empty?
+  right :DOLLAR
+  right :VAR
 
-    @formula = @formula.sub(/^\s+/,'')
-    puts "Formula: #{@formula}"
-    
-    if !@check_negative
-      @formula.match(OPERATOR_MATCH) do |match|
-        make_term(match[0].length, :op)
-        return true
-      end
+  class Environment < RLTK::Parser::Environment
+    def self.create vars
+      env = self.new
+      env.vars = vars
+      env
     end
-
-    # you match a number
-    @formula.match(NUMBER_MATCH) do |match|
-      make_term(match[0].length, :number)
-      @term = @term.to_f
-      return true
-    end
-
-    # you match an operator
-    @formula.match(OPERATOR_MATCH) do |match|
-      make_term match[0].length, :op
-      return true
-    end
-
-    # you match a string
-    @formula.match(WORD_MATCH) do |match|
-      word_size = match[0].length
-
-      make_term(word_size, :func)
-      return true
-    end
-
-    puts "#{@formula} matched nothing."
-    return nil
+    attr_accessor :vars
   end
 
-  def make_term size, type
-    @term = @formula[0...size]
-    @formula = @formula[size..-1]
-    @term_type = type
+  production(:e) do
+    clause('NUM') { |n| n }
+    clause('STRING') { |n| n }
+    clause('list') { |l| l }
+
+    clause('VAR IDENT') { |v,i| vars[i] }
+    clause('LPAREN .e RPAREN') { |e| e }
+    clause('.e ADD .e') { |e0, e1| e0 + e1 }
+    clause('.e EXP .e') { |e0, e1| e0 ** e1 }
+    clause('.e SUB .e') { |e0, e1| e0 - e1 }
+    clause('.e DOLLAR .IDENT') { |table, column| table[column] }
+    clause('SUB .e') { |e| -e }
+    clause('.e DIV .e') { |e0, e1| e0 / e1 }
+    clause('.e MUL .e') { |e0, e1| e0 * e1 }
+
+    clause('.IDENT LPAREN .args RPAREN') { |ident, args| Functions.call(ident, args) }
   end
 
-  def parse
-    @check_negative = true
-
-    return nil if !@formula || @formula.empty?
-
-    until get_token.nil? do
-      puts "Term: '#{@term}'"
-      case @term_type
-      when :number
-        puts "number"
-        handle_number
-      when :func
-        puts "func"
-        handle_func
-      when :op
-        case @term
-        when ','
-          puts "comma"
-          handle_func_sep
-        when '('
-          puts "open"
-          handle_open
-        when ')'
-          puts "close"
-          return nil unless handle_close
-        else
-          handle_operator
-        end
-      end
-
-      print_stack
-    end
-
-    while !@stack.empty? do
-      return nil if @stack.last == '('
-      @output.push @stack.pop
-    end
-
-    return @output
+  production(:list) do
+    clause('LBRACKET .list_args RBRACKET') { |args| Vector.new(args) }
   end
 
-  def print_stack
-      puts "Stack: [#{@stack.join(", ")}]"
-      puts "Output: [#{@output.join ", "}]"
+  production(:list_args) do
+    clause('')         { || []       }
+    clause('list_items') { |items| items }
   end
 
-  def handle_number
-    @output.push @term
-    @check_negative = false
+  production(:list_items) do
+    clause('.list_item')                { |e| [e]                 }
+    clause('.list_item COMMA .list_items') { |e, args| [e] + args }
   end
 
-  def handle_open
-    @stack.push @term
-    @check_negative = true
+  production(:list_item) do
+    clause('e') {|e| [ nil, e ] }
+    clause('.IDENT COLON .e') {|i,e| [ i,e ]}
   end
 
-  def handle_close
-    while !@stack.empty? && @stack.last != '(' do
-      @output.push @stack.pop
-      print_stack
-    end
-    @stack.pop
+  production(:args) do
+    clause('')         { || []       }
+    clause('arg_list') { |args| args }
   end
 
-  def handle_func
-    @stack.push @term
-    @check_negative = true
-
-  def handle_operator
-    while !@stack.empty?  && 
-      @stack.last.match(OPERATOR_MATCH) && 
-      PRECEDENCE[@stack.last.to_sym] >= PRECEDENCE[@term.to_sym] do
-      @output.push @stack.pop
-      print_stack
-    end
-    @stack.push @term
-    @check_negative = true
+  production(:arg_list) do
+    clause('e')                { |e| [e]                 }
+    clause('e COMMA arg_list') { |e, _, args| [e] + args }
   end
+
+  finalize
 end

@@ -70,6 +70,8 @@ GEM
     excon (0.45.4)
     execjs (2.6.0)
     extlib (0.9.16)
+    ffi (1.9.18)
+    filigree (0.3.3)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
     fog (1.37.0)
@@ -301,6 +303,9 @@ GEM
       rails (>= 3.2)
       tilt
     ref (2.0.0)
+    rltk (3.0.1)
+      ffi (>= 1.0.0)
+      filigree (>= 0.2.0)
     ruby-ole (1.2.12)
     ruby_parser (3.8.1)
       sexp_processor (~> 4.1)
@@ -363,6 +368,7 @@ DEPENDENCIES
   pg
   rails (= 4.2.0)
   react-rails (~> 1.5.0)
+  rltk
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring

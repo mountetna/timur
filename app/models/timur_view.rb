@@ -102,7 +102,7 @@ class TimurView
     
     def initialize att_name, &block
       @name = att_name
-      @overrides = {
+      @attribute = {
         name: @name
       }
       instance_eval(&block) if block_given?
@@ -110,14 +110,14 @@ class TimurView
 
     [ :attribute_class, :display_name, :plot, :placeholder ].each do |name|
       define_method name do |txt|
-        @overrides[name] = txt
+        @attribute[name] = txt
       end
     end
 
     def to_hash
       {
         name: @name,
-        overrides: @overrides
+        attribute: @attribute
       }
     end
   end

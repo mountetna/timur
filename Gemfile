@@ -42,6 +42,8 @@ gem 'd3-rails'
 
 gem 'font-awesome-sass'
 
+gem 'rltk'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
