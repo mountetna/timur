@@ -30,11 +30,26 @@ var LinePlotAttribute = React.createClass({
 
 LinePlotAttribute = connect(
   function(state,props) {
-    var table = state.magma.tables[props.attribute.plot.name]
+    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
 
     var lines = []
 
-    if (table)   lines = table.lines
+    if (manifest && manifest.lines) {
+      var colors = autoColors(manifest.lines.length)
+      lines = manifest.lines.map(
+        ([label, line],i) => ({
+          label: label,
+          color: colors[i],
+          points: line.map(([identifier, x_val],j) => ({
+            label: identifier,
+            x: x_val,
+            y: manifest.y[i][1][j][1]
+          })).filter((point) => point.x != null && point.y != null)
+        })
+      )
+    }
+
+    console.log(lines)
 
     return {
       lines: lines

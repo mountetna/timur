@@ -25,7 +25,9 @@ var views = function(old_views, action) {
 }
 
 var timurReducer = function(timur, action) {
-  if (!timur) timur = {}
+  if (!timur) timur = {
+    manifests: {}
+  }
   switch(action.type) {
     case 'ADD_TAB':
       return {

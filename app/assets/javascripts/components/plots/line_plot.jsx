@@ -17,6 +17,7 @@ var LinePlot = React.createClass({
 
     var xmin = x_values.min()
     var xmax = x_values.max()
+
     var ymin = y_values.min()
     var ymax = y_values.max()
 

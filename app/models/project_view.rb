@@ -65,17 +65,20 @@ class ProjectView < TimurView
                 [ date_of_digest: [ 'patient', 'date_of_digest' ] ],
                 [ order: 'date_of_digest' ]
                 )" ],
-            [ :x, "[
-                total: @progress_total$date_of_digest,
-                tumor: @progress_tumor$date_of_digest,
-                normal: @progress_normal$date_of_digest
+            [ :lines, "[
+                total: [
+                  x: @progress_total$date_of_digest,
+                  y: @progress_total$row_number + 1
+                ],
+                tumor: [
+                  x: @progress_tumor$date_of_digest,
+                  y: @progress_total$row_number + 1
+                ],
+                normal: [
+                  x: @progress_normal$date_of_digest,
+                  y: @progress_total$row_number + 1
+                ]
               ]" ],
-            [ :y, "[
-                total: @progress_total$row_number + 1,
-                tumor: @progress_tumor$row_number + 1,
-                normal: @progress_normal$row_number + 1
-              ]" 
-            ],
             [ :ylabel, "'sample count'" ]
           ]
         )

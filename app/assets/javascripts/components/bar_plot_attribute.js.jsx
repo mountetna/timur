@@ -24,26 +24,18 @@ var BarPlotAttribute = React.createClass({
 
 BarPlotAttribute = connect(
   function(state,props) {
-    var table = state.magma.tables[ props.attribute.plot.name ]
-    var document = props.document
+    var manifest = state.timur.manifests[ props.attribute.plot.name ]
 
-    var bars = [] 
+    var bars = []
 
-    if (table && document) {
-      var matrix = new Matrix(table.matrix)
-
-      bars = props.attribute.plot.bars.map(function(bar) {
-        var calc = new Calculation(matrix, bar.height)
-
-        var heights = calc.value()
-        
-        return {
+    if (manifest && manifest.heightle) {
+      bars = manifest.height.map((height, i) => ({
           name: bar.name,
           color: bar.color,
           height: heights[0],
           dots: [],
-        }
-      })
+        })
+      )
     }
 
     return {

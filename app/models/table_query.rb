@@ -1,15 +1,15 @@
 class TableQuery
   def initialize(row_query, column_queries, order)
-    @row_query = row_query.to_a
+    @row_query = row_query.to_values
     @column_queries = Hash[
-      column_queries.map do |column_query, column_name|
+      column_queries.map do |column_name, column_query|
         [
           column_name,
             [
               @row_query.first, 
               [ "::identifier", "::in", row_names ],
               "::all"
-            ] + column_query.to_a
+            ] + column_query.to_values
         ]
       end
     ]

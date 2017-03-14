@@ -102,7 +102,7 @@ class SearchController <  ApplicationController
       ]
       render json: result
     rescue Magma::ClientError => e
-      render json: e.message, status: e.status
+      render json: e.body.merge(message: e.message), status: e.status
     end
   end
  

@@ -6,7 +6,7 @@ class Vector
 
   def each
     @vector.each do |label, value|
-      yield value, label
+      yield label, value
     end
   end
 
@@ -48,13 +48,13 @@ class Vector
     @vector.length
   end
 
-  def to_a
+  def to_values
     @vector.map do |label, value|
-      value.is_a?(Vector) ? value.to_a : value
+      value.is_a?(Vector) ? value.to_values : value
     end
   end
 
-  def labels
+  def to_labels
     @labels ||= @vector.map &:first
   end
 

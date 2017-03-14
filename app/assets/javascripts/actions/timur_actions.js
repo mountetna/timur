@@ -42,9 +42,7 @@ var timurActions = {
 
           if (required_manifests.length > 0) 
             dispatch(
-              timurActions.requestManifests(
-                model_name, required_manifests
-              )
+              timurActions.requestManifests(required_manifests)
             )
 
           dispatch(
@@ -64,7 +62,10 @@ var timurActions = {
       })
     }
   },
-  requestManifests: function( model_name, manifests, success, error ) {
+  findManifest: function( state, manifest_name ) {
+    return state.timur.manifests[ manifest_name ]
+  },
+  requestManifests: function( manifests, success, error ) {
     var self = this;
     var request = {
       queries: manifests
