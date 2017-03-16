@@ -20,6 +20,8 @@ const isUpdatingTitle = (state = false, action) => {
 
 const manifest = (state = "", action) => {
   switch (action.type) {
+    case 'UPDATE_MANIFEST':
+      return action.manifest
     default:
       return state
   }

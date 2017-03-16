@@ -21,7 +21,7 @@ class Toolbar extends Component {
     const selectedHelper = this.state.selectedHelper === helper ? undefined : helper
     this.setState({...this.state, selectedHelper: selectedHelper})
   }
-
+  //TODO add helpers to generate table queries etc...
   helperButtons() {
     return []//['Table', 'Query', 'Functions', 'View Schema']
       .map( helper => {
