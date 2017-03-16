@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { toggleIsTitleUpdating, updateManifestTitle } from '../../actions/manifest_actions'
+import { toggleIsTitleUpdating, updateManifestTitle } from '../../actions/manifest_editor_actions'
 
 const mapStateToProps = (state) => ({
-  title: state.manifest.title,
-  isUpdating: state.manifest.isUpdatingTitle
+  title: state.manifestEditor.title,
+  isUpdating: state.manifestEditor.isUpdatingTitle
 })
 
 const mapDispatchToProps = (dispatch) => ({
