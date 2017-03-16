@@ -1,4 +1,5 @@
 import createLogger from 'redux-logger'
+import rootReducer from '../reducers'
 
 var Timur = React.createClass({
   create_store: function() {
@@ -6,12 +7,7 @@ var Timur = React.createClass({
     if (process.env.NODE_ENV != "production") {
       middleWares.push(createLogger())
     }
-    return Redux.applyMiddleware(...middleWares)(Redux.createStore)(Redux.combineReducers({
-      timur: timurReducer,
-      magma: magmaReducer,
-      messages: messageReducer,
-      plots: plotReducer
-    }))
+    return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer)
   },
   render: function () {
     var component
