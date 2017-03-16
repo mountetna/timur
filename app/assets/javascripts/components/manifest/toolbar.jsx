@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import ManifestTitle from './title'
 
 const HelperButton = ({ name, onClick , selected }) => (
   <a style={{paddingLeft: 10, paddingRight: 10}} onClick={onClick}>
@@ -8,12 +10,6 @@ const HelperButton = ({ name, onClick , selected }) => (
     }
     {name}
   </a>
-)
-
-const ManifestName = ({ name, updateName, isUpdating }) => (
-  <span style={name ? {marginLeft: 10} : {marginLeft: 10, marginRight: 5, fontStyle: 'italic'}}>
-    {name ? name : 'Untitled Manifest'}
-  </span>
 )
 
 class Toolbar extends Component {
@@ -56,7 +52,7 @@ class Toolbar extends Component {
 
     return (
       <div style={style}>
-        <ManifestName />
+        <ManifestTitle />
         { this.helperButtons() }
       </div>
     )
