@@ -11,13 +11,17 @@ class DataTable
     return column(column_name)
   end
 
+  def payload
+    to_matrix
+  end
+
   def to_matrix
     {
       # you need to name your samples
       matrix: {
         col_names: @col_names,
         row_names: @row_names,
-        rows: @rows,
+        rows: @rows.map(&:to_values),
         col_types: @col_types,
       }
     }
@@ -29,6 +33,8 @@ class DataTable
     @columns[column_name] = Vector.new(
       @row_names.zip(
         case column_name
+        when "row_name"
+          @row_names
         when "row_number"
           (0...@rows.size).to_a
         else

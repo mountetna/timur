@@ -10,9 +10,18 @@ class InfixLexer < RLTK::Lexer
   rule(/\*/) { :MUL }
   rule(/\+/) { :ADD }
   rule(/\-/) { :SUB }
+  rule(/>/) { :GT }
+  rule(/>=/) { :GTE }
+  rule(/</) { :LT }
+  rule(/<=/) { :LTE }
   rule(/\%/) { :MOD }
   rule(/\@/) { :VAR }
+  rule(/\|\|/) { :OR }
+  rule(/&&/) { :AND }
+  rule(/==/) { :EQ }
   rule(/\$/) { :DOLLAR }
+  rule(/\?/) { :QUESTION }
+  rule(/=\~/) { :MATCH }
 
   rule(/\)/) { :RPAREN }
   rule(/\(/) { :LPAREN }
@@ -23,18 +32,19 @@ class InfixLexer < RLTK::Lexer
 end
 
 class InfixParser < RLTK::Parser
+  left :QUESTION
   left :MOD
 
-  left :SUB
-  right :ADD
+  left :GT, :GTE, :LT, :LTE, :EQ, :MATCH
 
-  left :DIV
-  right :MUL
+  left :SUB, :ADD
 
-  right :EXP
+  left :DIV, :MUL
 
-  right :DOLLAR
-  right :VAR
+  left :EXP
+
+  left :DOLLAR
+  left :VAR
 
   class Environment < RLTK::Parser::Environment
     def self.create vars
@@ -55,10 +65,23 @@ class InfixParser < RLTK::Parser
     clause('.e ADD .e') { |e0, e1| e0 + e1 }
     clause('.e EXP .e') { |e0, e1| e0 ** e1 }
     clause('.e SUB .e') { |e0, e1| e0 - e1 }
+    clause('.e QUESTION .e COLON .e') { |e0, e1, e2| e0.is_a?(Vector) ? e0.ternary(e1,e2) : (e0 ? e1 : e2) }
+
+    clause('.e LBRACKET .e RBRACKET') { |e0, e1| e0[e1] }
+
+    clause('.e GT .e') { |e0, e1| e0 > e1 }
+    clause('.e GTE .e') { |e0, e1| e0 >= e1 }
+    clause('.e LT .e') { |e0, e1| e0 < e1 }
+    clause('.e LTE .e') { |e0, e1| e0 <= e1 }
+
     clause('.e DOLLAR .IDENT') { |table, column| table[column] }
     clause('SUB .e') { |e| -e }
     clause('.e DIV .e') { |e0, e1| e0 / e1 }
     clause('.e MUL .e') { |e0, e1| e0 * e1 }
+    clause('.e OR .e') { |e0, e1| e0 || e1 }
+    clause('.e AND .e') { |e0, e1| e0 && e1 }
+    clause('.e EQ .e') { |e0, e1| e0 == e1 }
+    clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
 
     clause('.IDENT LPAREN .args RPAREN') { |ident, args| Functions.call(ident, args) }
   end

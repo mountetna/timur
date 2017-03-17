@@ -19,7 +19,6 @@ class DataMatrix
     @series = params[:series].map do |key|
       user.get_save(key)
     end
-    Rails.logger.info @mappings
   end
 
   def to_json

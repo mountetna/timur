@@ -1,5 +1,5 @@
 class TableQuery
-  def initialize(row_query, column_queries, order)
+  def initialize(row_query, column_queries, opts)
     @row_query = row_query.to_values
     @column_queries = Hash[
       column_queries.map do |column_name, column_query|
@@ -15,11 +15,11 @@ class TableQuery
     ]
     @columns = {}
     @types = {}
-    @order = order
+    @order = opts["order"]
   end
 
   def table
-    DataTable.new(row_names, col_names, rows, col_types)
+    DataTable.new(ordered(row_names), col_names, ordered(rows), col_types)
   end
 
   private
@@ -33,9 +33,9 @@ class TableQuery
   end
 
   def ordering
-    return nil unless @order && column[@order]
+    return nil unless @order && column(@order)
     @ordering ||= row_names.map.with_index do |row_name, i|
-      [ columns[@order][:results][row_name], i ]
+      [ column(@order)[row_name], i ]
     end.sort_by(&:first).map(&:last)
   end
 
@@ -72,7 +72,8 @@ class TableQuery
    
     query_answer = answer(@column_queries[name])
     @types[name] = query_answer["type"]
-    @columns[name] = Hash[query_answer["answer"]]
+
+    @columns[name] = Hash[query_answer["answer"] || []]
   end
 
   def answer question

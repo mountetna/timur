@@ -62,10 +62,9 @@ class DataManifest
   end
 
   def fill
-    Rails.logger.info("Manifest is #{@manifest.to_json}")
     @manifest.each do |variable, query|
       begin
-      @vars[variable] = resolve(query)
+        @vars[variable] = resolve(query)
       rescue RLTK::NotInLanguage => e
         raise "Could not resolve #{query}"
       end
@@ -75,15 +74,7 @@ class DataManifest
   def payload
     Hash[
       @vars.map do |var, value|
-        value = case value
-        when Vector
-          value.to_a
-        when DataTable
-          value.to_matrix
-        else
-          value
-        end
-        [ var, value ]
+        [ var, value.respond_to?(:payload) ? value.payload : value ]
       end
     ]
   end
@@ -91,6 +82,9 @@ class DataManifest
   private
 
   def resolve(query)
-    InfixParser::parse(InfixLexer::lex(query),env: @env)
+    InfixParser::parse(
+      InfixLexer::lex(query),
+      env: @env
+    )
   end
 end
