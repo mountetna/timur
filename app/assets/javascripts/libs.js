@@ -13,7 +13,7 @@ window.dates = require('dates')
 
 window.classNames = function(nameset) {
   return Object.keys(nameset).filter(function(name) {
-    return nameset[name]
+    return name != undefined && name != null && nameset[name]
   }).join(" ")
 }
 

@@ -1,3 +1,5 @@
+import Vector from "vector"
+
 var timurActions = {
   toggleConfig: function(name) {
     return {
@@ -45,12 +47,14 @@ var timurActions = {
               timurActions.requestManifests(required_manifests)
             )
 
-          dispatch(
-            timurActions.addTab(model_name, 
-              response.tab_name, 
-              response.tabs[response.tab_name]
+          for (var tab_name in response.tabs)
+            dispatch(
+              timurActions.addTab(
+                model_name, 
+                tab_name, 
+                response.tabs[tab_name]
+              )
             )
-          )
 
           if (success != undefined) success()
         },
@@ -63,7 +67,24 @@ var timurActions = {
     }
   },
   findManifest: function( state, manifest_name ) {
-    return state.timur.manifests[ manifest_name ]
+    var manifest = state.timur.manifests[ manifest_name ]
+    if (!manifest) return null
+
+    var ISO_FORMAT = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/ 
+
+    return JSON.parse(JSON.stringify(manifest), 
+      (key, value) => {
+        if (typeof value === 'string' && value.match(ISO_FORMAT)) {
+          return new Date(value)
+        } else if (Array.isArray(value) && value.every((item) => item != null && typeof item === 'object' && 'label' in item && 'value' in item)) {
+          return new Vector(value)
+        } else if (value != null && typeof value === 'object' && value.hasOwnProperty('matrix') && value.matrix.hasOwnProperty('rows')) {
+          return new Matrix(value.matrix)
+        }
+
+        return value
+      }
+    )
   },
   requestManifests: function( manifests, success, error ) {
     var self = this;
@@ -76,8 +97,8 @@ var timurActions = {
         url: Routes.query_json_path(),
         method: 'POST',
         data: JSON.stringify(request),
-        dataType: 'json',
         contentType: 'application/json',
+        dataType: 'json',
         success: function(response) {
           for (var name in response) {
             dispatch(timurActions.addManifest(name, response[name]))

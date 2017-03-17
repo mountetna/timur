@@ -17,7 +17,6 @@ var BarPlot = React.createClass({
     this.setState({ zoom: zoom })
   },
   render: function() {
-    var self = this
     var plot = this.props.plot
     var margin = plot.margin,
         width = plot.width - margin.left - margin.right,
@@ -25,10 +24,12 @@ var BarPlot = React.createClass({
 
     var zoom_ymax = this.state.zoom * this.props.ymax
 
-    var yScale = d3.scale.linear()
-      .domain( [ this.props.ymin, 
-          zoom_ymax ] )
-      .range([ height, 0 ])
+    var yScale = createScale(
+      [ this.props.ymin, zoom_ymax ],
+      [ height, 0 ]
+    )
+
+    console.log(this.props.bars)
 
     return <svg 
       id={ this.props.plot.name }
@@ -48,114 +49,112 @@ var BarPlot = React.createClass({
         tick_width={ 5 }/>
       <Legend x={ width - margin.right - 30 } y="0" series={ this.props.legend || this.props.bars }/>
       {
-        this.props.bars.map(function(datum,i) {
-          return <BarPlotBar key={ i }
-                  name={ datum.name }
-                  color={ datum.color }
-                  ymax={ zoom_ymax }
-                  ymin={ self.props.ymin }
-                  width={ 20 }
-                  scale={ yScale }
-                  x={ 10 + i * 30 }
-                  height={ datum.height }
-                  mouse_handler={ self.highlight_dot_mouseover }
-                  highlighted_dot_name={ self.state.highlighted_dot_name }
-                  dots={ datum.dots } />
-        })
+        // heights - all of the heights for this group 
+        // select - the height index we want to draw special (as a bar)
+        // highlight - the highlight name of the currently-moused item
+        // highlight_names - the list of highlight names for all items - all
+        //     items with the same highlight_name will light up.
+        // category - class/category names for the items
+        this.props.bars.map(
+          (bar,i) => <BarPlotBar key={ i }
+             name={ bar.name }
+             color={ bar.color }
+             ymax={ zoom_ymax }
+             ymin={ this.props.ymin }
+             width={ 20 }
+             scale={ yScale }
+             x={ 10 + i * 30 }
+             heights={ bar.heights }
+             select={ bar.select }
+             mouse_handler={
+               (name) => this.setState({ highlighted_name: name })
+             }
+             category={ bar.category }
+             highlighted_name={ this.state.highlighted_name }
+             highlight_names={ bar.highlight_names } />
+        )
       }
       </PlotCanvas>
     </svg>
-  },
-  highlight_dot_mouseover: function(dot_name) {
-    this.setState( { highlighted_dot_name: dot_name } )
   }
 })
 
 module.exports = BarPlot
 
 var BarPlotBar = React.createClass({
-  render_dots: function() {
-    var self = this
-    if (!this.props.dots) return null
-
-    return this.props.dots.map( function(dot,i) {
-      return <Dot key={i} name={ dot.name } 
-        mouse_handler={ self.props.mouse_handler }
-        x={ self.props.x + self.props.width / 2  + ((1000*dot.height) %8) - 4} 
-        y={ self.props.scale(dot.height) }
-        highlighted_dot_name={ self.props.highlighted_dot_name }
-       />
-    })
-  },
   render: function() {
+    var props = this.props
+
     return <g className="bar">
       {
-        this.render_dots()
+        props.heights.map( (name,height,i) => {
+          if (height == null) return null
+
+          if (props.select != null && props.select == i)
+            return <rect key={i}
+              x={ props.x }
+              y={ props.scale( height ) - props.scale(props.ymax) }
+              width={ props.width }
+              style={ { stroke: (props.color || "white") } }
+              height={ props.scale(props.ymin) - props.scale( height ) }/>
+          else
+            return <Dot key={i} 
+              category={ props.category ? props.category(i) : null }
+              name={ name } 
+              mouse_handler={ props.mouse_handler }
+              x={ props.x + props.width / 2  + ((1000*height) %8) - 4} 
+              y={ props.scale(height) }
+              highlighted={ props.highlight_names[i] == props.highlighted_name }
+              highlight_name={ props.highlight_names[i] }
+             />
+        })
       }
-      <rect
-        x={ this.props.x }
-        y={ this.props.scale( this.props.height ) - this.props.scale(this.props.ymax) }
-        width={ this.props.width }
-        style={ { stroke: (this.props.color || "white") } }
-        height={ this.props.scale(this.props.ymin) - this.props.scale( this.props.height ) }/>
       <text textAnchor="start" 
         transform={ 
-          'translate('+this.props.x+',' +
-              (this.props.scale(this.props.ymin) + 15)+') rotate(45)'
+          'translate('+props.x+',' +
+              (props.scale(props.ymin) + 15)+') rotate(45)'
         }>
-            { this.props.name }
+        { props.name }
       </text>
     </g>
   }
 })
 
 var Dot = React.createClass({
-  getInitialState: function() {
-    return { highlighted: false }
-  },
-  onMouseOver: function(event) {
-    // draw tooltip 
-    this.setState( { highlighted: true } )
-    this.props.mouse_handler( this.props.name )
-  },
-  onMouseOut: function(event) {
-    this.setState( { highlighted: false } )
-    this.props.mouse_handler( null )
-  },
-  render_tooltip: function() {
-    if (!this.state.highlighted) return null
-
-    return <text className="tooltip" textAnchor="start" 
-      transform={ 'translate(' + (this.props.x + 5) + ',' + this.props.y + ')' }>
-      { this.props.name }
-      </text>
-  },
-  is_tumor: function(name) {
-    return name.match(/\.T[0-9]$/)
-  },
-  is_same_sample: function(my_name, other_name) {
-    return other_name && other_name.replace(/\..*$/,'') == my_name.replace(/\..*$/,'')
-  },
+  getInitialState: () => ({ highlighted: false }),
   render: function() {
+    var props = this.props
     var classes = classNames({
       dot: true,
-      tumor: this.is_tumor(this.props.name),
-      normal: !this.is_tumor(this.props.name),
-      highlighted_tumor: this.is_tumor(this.props.name) && this.is_same_sample(this.props.name, this.props.highlighted_dot_name),
-      highlighted_normal: !this.is_tumor(this.props.name) && this.is_same_sample(this.props.name, this.props.highlighted_dot_name),
+      highlighted: props.highlighted,
+      [props.category]: true
     })
 
 
-    return <a xlinkHref={ Routes.browse_model_path('sample', this.props.name) }>
+    return <a xlinkHref={ Routes.browse_model_path('sample', props.name) }>
         <circle className={classes}
-          onMouseOver={ this.onMouseOver }
-          onMouseOut={ this.onMouseOut }
+          onMouseOver={
+            (event) => {
+              this.setState({ highlighted: true })
+              props.mouse_handler(props.highlight_name) 
+            }
+          }
+          onMouseOut={
+            (event) => {
+              this.setState({highlighted: false})
+              props.mouse_handler(null)
+            }
+          }
           r="2.5"
-          cx={ this.props.x }
-          cy={ this.props.y }
+          cx={ props.x }
+          cy={ props.y }
           />
         {
-          this.render_tooltip()
+          this.state.highlighted ?
+          <text className="tooltip" textAnchor="start" 
+            transform={ 'translate(' + (props.x + 5) + ',' + props.y + ')' }>
+            { props.name }
+          </text> : null
         }
       </a>
   }

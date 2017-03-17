@@ -4,7 +4,7 @@ var view = function(old_view, action) {
     case 'ADD_TAB':
       return {
         ...old_view,
-        [action.tab_name]: action.tab
+        [action.tab_name]: old_view[action.tab_name] || action.tab
       }
     default:
       return old_view

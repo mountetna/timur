@@ -35,18 +35,19 @@ LinePlotAttribute = connect(
     var lines = []
 
     if (manifest && manifest.lines) {
-      var colors = autoColors(manifest.lines.length)
+      var colors = autoColors(manifest.lines.size)
       lines = manifest.lines.map(
-        ([label, line],i) => ({
+        (label, line, i) => ({
           label: label,
           color: colors[i],
-          points: line.map(([identifier, x_val],j) => ({
+          points: line("x").map((identifier, x_val, j) => ({
             label: identifier,
             x: x_val,
-            y: manifest.y[i][1][j][1]
+            y: line("y")(j)
           })).filter((point) => point.x != null && point.y != null)
         })
       )
+      console.log(lines)
     }
 
     console.log(lines)

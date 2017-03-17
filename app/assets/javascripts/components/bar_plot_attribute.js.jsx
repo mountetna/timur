@@ -24,16 +24,18 @@ var BarPlotAttribute = React.createClass({
 
 BarPlotAttribute = connect(
   function(state,props) {
-    var manifest = state.timur.manifests[ props.attribute.plot.name ]
+    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
 
     var bars = []
 
-    if (manifest && manifest.heightle) {
-      bars = manifest.height.map((height, i) => ({
-          name: bar.name,
-          color: bar.color,
-          height: heights[0],
-          dots: [],
+    if (manifest && manifest.bars) {
+      bars = manifest.bars.map((_, bar, i) => ({
+          name: bar("name"),
+          color: bar("color"),
+          heights: bar("height"),
+          category: bar("category"),
+          highlight_names: bar("highlight_names") ? bar("highlight_names").values : bar("height").labels,
+          select: bar("select").which((value) => value)[0]
         })
       )
     }

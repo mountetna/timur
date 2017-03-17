@@ -33,31 +33,26 @@ BoxPlotAttribute.contextTypes = {
 
 BoxPlotAttribute = connect(
   function(state,props) {
-    var table = state.magma.tables[ props.attribute.plot.name ]
+    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
 
-    var groups = {}
-    if (table) {
-      var matrix = new Matrix(table.matrix)
-      var cat = matrix.col_index(props.attribute.plot.category)
-      var calc = new Calculation(matrix, props.attribute.plot.value)
-      var values = calc.value()
-      matrix.map_row(function(row,i,row_name) {
-        if (values[i] != null && !isNaN(values[i])) {
-          groups[row[cat]] = groups[row[cat]] || []
-          groups[row[cat]].push( values[i] )
-        }
-      })
+    var groups = []
+
+    if (manifest) {
+      var height = manifest.height
+      var category = manifest.category
+
+      var group_names = [ ...new Set(category.values) ]
+        
+      var colors = autoColors(group_names.length)
+      groups = group_names.map((group_name,i) => ({
+        name: group_name,
+        color: colors[i],
+        values: height(category.which((value) => value == group_name)).filter((v) => v != null)
+      }))
     }
 
-    var colors = autoColors(Object.keys(groups).length)
     return {
-      groups: Object.keys(groups).map(function(name,i) {
-        return {
-          name: name,
-          color: colors[i],
-          values: groups[name]
-        }
-      })
+      groups: groups
     }
   }
 )(BoxPlotAttribute)

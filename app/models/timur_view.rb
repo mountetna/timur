@@ -187,7 +187,6 @@ class TimurView
   def initialize model_name, tab_name
     @model_name = model_name
     @tab_name = tab_name || tabs.keys.first
-    Rails.logger.info @tab_name
     @tab = Tab.new(@tab_name, &tabs[@tab_name])
   end
 
