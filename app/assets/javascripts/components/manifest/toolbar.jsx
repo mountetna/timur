@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ManifestTitle from './title'
+import { submitManifest } from '../../actions/manifest_editor_actions'
 
 const HelperButton = ({ name, onClick , selected }) => (
   <a style={{paddingLeft: 10, paddingRight: 10}} onClick={onClick}>
@@ -54,9 +55,15 @@ class Toolbar extends Component {
       <div style={style}>
         <ManifestTitle />
         { this.helperButtons() }
+        <div style={{flexGrow:1, display:'flex', justifyContent: 'flex-end'}}>
+          <input type='button' style={{marginRight: 5}} value='add manifest' onClick={this.props.submitManifest}></input>
+        </div>
       </div>
     )
   }
 }
 
-export default Toolbar
+export default connect(
+  null, 
+  { submitManifest }
+)(Toolbar)
