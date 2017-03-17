@@ -20,7 +20,12 @@ export const submitManifest = () => (dispatch, getState) => {
 
   //vaildate title
   if (title === '') {
-    return dispatch(showMessages(['Manifest title cannot be empty']))
+    return dispatch(showMessages(['Manifest title cannot be blank']))
+  }
+
+    //vaildate title
+  if (manifest === '') {
+    return dispatch(showMessages(['Manifest cannot be blank']))
   }
   
   //wrap in brackets
