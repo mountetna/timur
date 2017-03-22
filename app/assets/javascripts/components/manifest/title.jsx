@@ -24,6 +24,7 @@ class ManifestTitle extends Component {
     const style = {
       marginLeft: 10, 
       marginRight: 5,
+      fontWeight: 'bold',
       fontStyle: this.props.title === '' ? 'italic' : 'normal',
     }
     const titleShown = this.titleToShow()

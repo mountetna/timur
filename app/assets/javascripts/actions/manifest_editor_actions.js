@@ -10,39 +10,46 @@ export const updateManifestTitle = (title) => ({
   title
 })
 
-export const updateManifest = (manifest) => ({
-  type: 'UPDATE_MANIFEST',
-  manifest
+export const toggleManifestElementEditor = (key = '') => ({
+  type: 'TOGGLE_IS_EDITING_MANIFEST_ELEMENT',
+  key
 })
 
-export const submitManifest = () => (dispatch, getState) => {
-  const { title, manifest } = getState().manifestEditor
+export const deleteManifestElement = (key) => ({
+  type: 'DELETE_MANIFEST_ELEMENT',
+  key
+})
 
-  //vaildate title
-  if (title === '') {
-    return dispatch(showMessages(['Manifest title cannot be blank']))
+export const selectManifestElement = (key) => ({
+  type: 'SELECT_MANIFEST_ELEMENT',
+  key
+})
+
+const addManifestElementAction = (key, value) => ({
+  type: 'ADD_MANIFEST_ELEMENT',
+  key,
+  value
+})
+
+export const addManifestElement = ({ key, value }) => (dispatch, getState) => {
+  //close manifest element editor
+  dispatch(toggleManifestElementEditor())
+
+  //vaildate name
+  if (Object.keys(getState().manifestEditor.manifest).includes(key)) {
+    return dispatch(showMessages(['Element name must be unique.']))
   }
 
-    //vaildate title
-  if (manifest === '') {
-    return dispatch(showMessages(['Manifest cannot be blank']))
+  //vaildate name
+  if (key === '') {
+    return dispatch(showMessages(['Element name cannot be blank.']))
   }
-  
-  //wrap in brackets
-  const manifestWithBrackets = `[${manifest}]`
 
-  let jsonManifest
-  //validation of json manifest
-  try {
-      jsonManifest = JSON.parse(manifestWithBrackets)
-  } catch(e) {
-      dispatch(showMessages(['Not vaild manifest syntax']))
-      throw e
+  //vaildate expression
+  if (value === '') {
+    return dispatch(showMessages(['Element expression cannot be blank.']))
   }
-  
-  dispatch(requestManifests(
-    [{ name: title, manifest: jsonManifest }], 
-    () => dispatch(showMessages(['Succesfully added manifest'])), 
-    () => dispatch(showMessages(['Failed to add manifest']))
-  ))
+
+  dispatch(addManifestElementAction(key, value))
 }
+

@@ -1,0 +1,21 @@
+@import "globals";
+
+.manifest-container {
+	margin-top: 15px;
+	margin-left: 15px;
+    margin-right: 15px;
+    min-width: 300px;
+    display: flex; 
+    flex-direction: column;
+    .action-container {
+    	display: flex;
+    	justify-content: flex-end;  
+    	flex-direction: column;  	
+    	div {
+    		margin-right: 5px;
+    		i {
+    		  margin-right: 3px;
+    		}
+    	}
+    }
+}

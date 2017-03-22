@@ -55,8 +55,11 @@ class Toolbar extends Component {
       <div style={style}>
         <ManifestTitle />
         { this.helperButtons() }
-        <div style={{flexGrow:1, display:'flex', justifyContent: 'flex-end'}}>
-          <input type='button' style={{marginRight: 5}} value='add manifest' onClick={this.props.submitManifest}></input>
+        <div style={{flexGrow:1, display:'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
+          <div style={{marginRight: 5, borderWidth: 1, padding: 3}} value='add manifest' onClick={this.props.submitManifest}>
+            Run
+            <i className="fa fa-play" aria-hidden="true" style={{marginLeft: 3}}></i>
+          </div>
         </div>
       </div>
     )

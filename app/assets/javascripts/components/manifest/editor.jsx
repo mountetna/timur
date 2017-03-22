@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Toolbar from './toolbar'
-import { updateManifest } from '../../actions/manifest_editor_actions'
+import ManifestElementEditor from './manifest_element_editor'
+import ManifestElements from './manifest_elements'
+import { updateManifest, toggleManifestElementEditor, addManifestElement } from '../../actions/manifest_editor_actions'
 
 const mapStateToProps = (state) => ({
-  manifest: state.manifestEditor.manifest
+  manifest: state.manifestEditor.manifest,
+  isEditingElement: state.manifestEditor.isEditingManifestElement
 })
 
 class Editor extends Component {
@@ -13,27 +16,13 @@ class Editor extends Component {
   }
 
   render() {
-    const containerStyle = {
-      marginLeft: 15, 
-      marginRight: 15, 
-      marginTop: 15, 
-      display: 'flex', 
-      flexDirection: 'column'
-    }
-
-    const textAreaStyle = {
-      width: '100%', 
-      height: 200, 
-      padding:0, 
-      boxSizing:'border-box', 
-      maxWidth: '100%', 
-      resize: 'vertical'
-    }
     return (
-      <div style={containerStyle}>
+      <div className='manifest-container' >
         <Toolbar />
-        <div>
-          <textarea value={this.props.manifest} style={textAreaStyle} onChange={this.handleManifestUpdate.bind(this)}></textarea>
+        <ManifestElements />
+        <div className='action-container' >
+
+          <ManifestElementEditor cancelClick={this.props.toggleManifestElementEditor} updateClick={this.props.addManifestElement}/>
         </div>
       </div>
     )
@@ -42,5 +31,15 @@ class Editor extends Component {
 
 export default connect(
   mapStateToProps, 
-  { onManifestChange: updateManifest }
+  { 
+    onManifestChange: updateManifest,
+    toggleManifestElementEditor,
+    addManifestElement
+  }
 )(Editor)
+
+//<textarea value={this.props.manifest} style={textAreaStyle} onChange={this.handleManifestUpdate.bind(this)}></textarea>
+          // <div onClick={this.props.toggleManifestElementEditor}>
+          //   <i className="fa fa-plus" aria-hidden="true" ></i>
+          //   Manifest Element
+          // </div>
