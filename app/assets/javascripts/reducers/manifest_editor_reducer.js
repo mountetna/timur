@@ -18,9 +18,9 @@ const isUpdatingTitle = (state = false, action) => {
   }
 }
 
-const isEditingManifestElement = (state = false, action) => {
+const isAddingManifestElement = (state = false, action) => {
   switch (action.type) {
-    case 'TOGGLE_IS_EDITING_MANIFEST_ELEMENT':
+    case 'TOGGLE_IS_ADDING_MANIFEST_ELEMENT':
       return !state
     default:
       return state
@@ -53,7 +53,7 @@ const manifest = (state = {}, action) => {
 export default combineReducers({
   title,
   isUpdatingTitle,
-  isEditingManifestElement,
+  isAddingManifestElement,
   selectedManifestElement,
   manifest
 })

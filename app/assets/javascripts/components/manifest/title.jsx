@@ -21,21 +21,15 @@ class ManifestTitle extends Component {
   }
 
   render() {
-    const style = {
-      marginLeft: 10, 
-      marginRight: 5,
-      fontWeight: 'bold',
-      fontStyle: this.props.title === '' ? 'italic' : 'normal',
-    }
     const titleShown = this.titleToShow()
 
     return (
-      <div style={style} >
+      <div className='title-container' style={{fontStyle: this.props.title === '' ? 'italic' : 'normal'}} >
         {this.props.isUpdating ? 
           <input autoFocus value={this.props.title} onChange={this.handleChange.bind(this)} 
             onBlur={this.props.handleClick} placeholder={titleShown}>
           </input>: 
-          <div onClick={this.props.handleClick} style={{minWidth: 70}}>
+          <div onClick={this.props.handleClick}>
             {titleShown}
           </div>
         }

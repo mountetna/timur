@@ -19,34 +19,28 @@ export default class ManifestElement extends Component {
 
   render() {
     return (
-
-        <div style={{
-          borderWidth: 1, 
-          borderStyle: 'solid', 
-          display: 'flex', 
-          flexDirection: 'column',
-          backgroundColor: 'grey',
-          padding: 10
-        }}>
+      <div className='element-editor-container'>
+        <div className='element-editor'>
           <div>
             <label>Name: </label>
             <input type='text' onChange={this.updateKey.bind(this)}></input>
           </div>
-          <div style={{display: 'flex', flexDirection: 'column'}}>
+          <div className='expression-section'>
             <label>Expression:</label>
-            <textarea style={{resize: 'vertical', minHeight: 300}} onChange={this.updateValue.bind(this)}></textarea>
+            <textarea onChange={this.updateValue.bind(this)}></textarea>
           </div>
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
-            <div onClick={this.props.cancelClick}>
+          <div className='button-container'>
+            <div className='cancel' onClick={this.props.cancelClick}>
               <i className="fa fa-ban" aria-hidden="true"></i>
               Cancel
             </div>
-            <div onClick={this.handleUpdateClick.bind(this)}>
+            <div className='update' onClick={this.handleUpdateClick.bind(this)}>
               <i className="fa fa-plus" aria-hidden="true"></i>
               Add
             </div>
           </div>
         </div>
+      </div>
     )
   }
 }

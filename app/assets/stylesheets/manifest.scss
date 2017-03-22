@@ -7,8 +7,10 @@
 	min-width: 300px;
 	display: flex; 
 	flex-direction: column;
+	border-width: 1px;
+	border-style: solid;
 
-	>.title-bar-container {
+	> .title-bar-container {
 		display: flex;
 		justify-content: flex-start; 
 		background: linear-gradient(to top, #CCFFCC, white);
@@ -16,11 +18,22 @@
 		align-items: center;
 		border-style: solid;
 		box-sizing: border-box;
-		border-width: 1px;
+		border-width: 0px 0px 1px 0px;
 		width: 100%;
 		color: forestgreen;
 
-		>.actions-container {
+		> .title-container {
+			margin-left: 10px; 
+			margin-right: 5px;
+			font-weight: bold;
+
+			>div {
+			  min-width: 70px;
+			}
+		}
+
+		> .actions-container {
+			font-size: .9em;
 			flex-grow: 1;
 			display: flex;
 			justify-content: flex-end; 
@@ -31,14 +44,14 @@
 				border-width: 1px;
 				padding: 3px;
 				
-				>i{
+				>i {
 					margin-left: 3px;
 				} 
 			}
 		}
 	}
 
-	>.actions-container {
+	> .actions-container {
 		display: flex;
 		justify-content: flex-end;  
 		flex-direction: column;  	
@@ -48,6 +61,61 @@
 			
 			>i {
 				margin-right: 3px;
+			}
+		}
+	}
+
+	> .manifest-elements-container {
+		background-color: #CCFFCC;
+
+	    .element-editor-container {
+	    	box-sizing: border-box;
+	    	border-style: solid;
+	    	border-width: 1px 0px 0px 0px;
+	    }
+
+		.element-editor {
+			margin: 4px;
+			border-width: 1px;
+			border-style: solid; 
+			display: flex;
+			flex-direction: column;
+			background-color: #D3D3D3;
+			padding: 10px;
+
+			.expression-section {
+				margin-top: 10px;
+				display: flex;
+				flex-direction: column;
+
+				textarea {
+					resize: vertical; 
+					min-height: 300px;
+				}
+			}
+
+			.button-container {
+				display: flex; 
+				align-items: center; 
+				justify-content: flex-end;
+
+				.cancel {
+					color: red;
+				}
+
+				.update {
+					color: green;
+				}
+
+				div {
+					margin: 10px 4px 0px 4px;
+					width: 70px;
+					text-align: center;
+
+					i {
+					  margin-right: 3px;
+					}
+				}
 			}
 		}
 	}

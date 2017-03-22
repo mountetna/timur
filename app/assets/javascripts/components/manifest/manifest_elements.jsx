@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { deleteManifestElement, selectManifestElement, toggleManifestElementEditor} from '../../actions/manifest_editor_actions'
+import { deleteManifestElement, selectManifestElement, toggleManifestElementEditor, addManifestElement } from '../../actions/manifest_editor_actions'
+import ElementEditor from './manifest_element_editor'
 
 const mapStateToProps = (state) => ({
   manifest: state.manifestEditor.manifest,
-  selected: state.manifestEditor.selectedManifestElement 
+  selected: state.manifestEditor.selectedManifestElement,
+  isAddingManifestElement: state.manifestEditor.isAddingManifestElement
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -17,6 +19,12 @@ const mapDispatchToProps = (dispatch) => ({
   updateElement(key) {
     dispatch(toggleManifestElementEditor(key))
   },
+  toggleManifestElementEditor() {
+    dispatch(toggleManifestElementEditor())
+  },
+  addManifestElement(element) {
+    dispatch(addManifestElement(element))
+  }
 })
 
 class ManifestElements extends Component {
@@ -42,26 +50,30 @@ class ManifestElements extends Component {
   }
 
   render() {
-    return (
+    return (<div className='manifest-elements-container'>
       
-      <div style={{display: 'flex', backgroundColor: 'white', borderStyle:'solid', 'borderWidth': 1, minWidth: 0}}>
-       <div style={{minWidth: 100, flexGrow: 1}}>
-         <div style={{fontWeight: 'bold', marginLeft:10}}>Name</div>
-         {Object.keys(this.props.manifest).map(name => (<div key={name} style={{textOverflow: 'ellipsis', overflow: 'hidden', marginLeft:10, whiteSpace: 'nowrap'}} 
+      <div style={{display: 'flex', backgroundColor: 'white', minWidth: 0}}>
+        <div style={{minWidth: 100, flexGrow: 1}}>
+          <div style={{fontWeight: 'bold', marginLeft:20}}>Name</div>
+         {Object.keys(this.props.manifest).map(name => (<div key={name} style={{textOverflow: 'ellipsis', overflow: 'hidden', marginLeft:20, whiteSpace: 'nowrap'}} 
           onMouseOver={this.props.selectElement.bind(this, name)}>@{name}</div>))}
-       </div>
-       <div style={{flexGrow: 6, minWidth: 100}}>
-         <div style={{fontWeight: 'bold', marginLeft:10}}>Expression</div>
+        </div>
+        <div style={{flexGrow: 6, minWidth: 100}}>
+          <div style={{fontWeight: 'bold', marginLeft:10}}>Expression</div>
          {Object.keys(this.props.manifest).map(name => (<div key={name} style={{textOverflow: 'ellipsis', overflow: 'hidden', marginLeft:10, whiteSpace: 'nowrap'}}
           onMouseOver={this.props.selectElement.bind(this, name)}
           >{this.props.manifest[name]}</div>))}
-       </div>
-       <div style={{display: 'flex', minWidth: 40, flexGrow: 0.4, flexDirection: 'column'}}>
-         <div style={{flexGrow: 1}}></div>
-         {this.createElementActions()}
-       </div>
-     </div>
-    )
+        </div>
+        <div style={{display: 'flex', minWidth: 40, flexGrow: 0.4, flexDirection: 'column'}}>
+          <div style={{flexGrow: 1}}></div>
+          {this.createElementActions()}
+        </div>
+      </div>
+      { this.props.isAddingManifestElement ? 
+          <ElementEditor cancelClick={this.props.toggleManifestElementEditor} updateClick={this.props.addManifestElement}/>: 
+          <div style={{backgroundColor: 'white'}}><i style={{marginLeft: 4, color: 'green'}}className="fa fa-plus" aria-hidden="true" onClick={this.props.toggleManifestElementEditor}></i></div>
+      }
+    </div>)
   }
 }
 

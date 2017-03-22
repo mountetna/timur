@@ -11,7 +11,7 @@ export const updateManifestTitle = (title) => ({
 })
 
 export const toggleManifestElementEditor = (key = '') => ({
-  type: 'TOGGLE_IS_EDITING_MANIFEST_ELEMENT',
+  type: 'TOGGLE_IS_ADDING_MANIFEST_ELEMENT',
   key
 })
 
@@ -32,9 +32,6 @@ const addManifestElementAction = (key, value) => ({
 })
 
 export const addManifestElement = ({ key, value }) => (dispatch, getState) => {
-  //close manifest element editor
-  dispatch(toggleManifestElementEditor())
-
   //vaildate name
   if (Object.keys(getState().manifestEditor.manifest).includes(key)) {
     return dispatch(showMessages(['Element name must be unique.']))
@@ -51,5 +48,8 @@ export const addManifestElement = ({ key, value }) => (dispatch, getState) => {
   }
 
   dispatch(addManifestElementAction(key, value))
+
+  //close manifest element editor
+  dispatch(toggleManifestElementEditor())
 }
 
