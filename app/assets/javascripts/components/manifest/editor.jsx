@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Toolbar from './toolbar'
+import Titlebar from './title_bar'
 import ManifestElementEditor from './manifest_element_editor'
 import ManifestElements from './manifest_elements'
 import { updateManifest, toggleManifestElementEditor, addManifestElement } from '../../actions/manifest_editor_actions'
@@ -18,9 +18,9 @@ class Editor extends Component {
   render() {
     return (
       <div className='manifest-container' >
-        <Toolbar />
+        <Titlebar />
         <ManifestElements />
-        <div className='action-container' >
+        <div className='actions-container' >
 
           <ManifestElementEditor cancelClick={this.props.toggleManifestElementEditor} updateClick={this.props.addManifestElement}/>
         </div>
