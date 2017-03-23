@@ -40,7 +40,6 @@ const updatingElementList = (state = [], action) => {
   switch (action.type) {
     case 'ADD_TO_UPDATING_LIST':
       return [...state, action.key]
-    case 'DELETE_MANIFEST_ELEMENT':
     case 'REMOVE_FROM_UPDATING_LIST':
       return state.filter(key => key !== action.key)
     default:

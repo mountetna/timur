@@ -63,3 +63,33 @@ export const addManifestElement = ({ key, value }) => (dispatch, getState) => {
   dispatch(toggleManifestElementEditor())
 }
 
+
+export const updateManifestElement = ({originalKey, key, value }) => (dispatch, getState) => {
+  //vaildate name
+  if (originalKey !== key) {
+    if (Object.keys(getState().manifestEditor.manifest).includes(key)) {
+      return dispatch(showMessages(['Element name must be unique.']))
+    }
+  }
+
+  //vaildate name
+  if (key === '') {
+    return dispatch(showMessages(['Element name cannot be blank.']))
+  }
+
+  //vaildate expression
+  if (value === '') {
+    return dispatch(showMessages(['Element expression cannot be blank.']))
+  }
+
+  dispatch(addManifestElementAction(key, value))
+
+  //remove the element editor for element
+  dispatch(removeFromUpdateList(originalKey))
+
+  //delete old element if key changed
+  if (originalKey !== key) {
+    dispatch(deleteManifestElement(originalKey))
+  }
+}
+

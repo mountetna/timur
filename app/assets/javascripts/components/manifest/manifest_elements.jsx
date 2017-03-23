@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { deleteManifestElement, selectManifestElement, 
-  toggleManifestElementEditor, addManifestElement, addToUpdateList, removeFromUpdateList } from '../../actions/manifest_editor_actions'
+  toggleManifestElementEditor, addManifestElement, addToUpdateList, 
+  removeFromUpdateList, updateManifestElement } from '../../actions/manifest_editor_actions'
 import ElementEditor from './manifest_element_editor'
 
 const mapStateToProps = (state) => ({
@@ -32,9 +33,14 @@ const mapDispatchToProps = (dispatch) => ({
   },
   removeFromUpdateList(key) {
     dispatch(removeFromUpdateList(key))
+  },
+  updateManifestElement(element) {
+    dispatch(updateManifestElement(element))
   }
 })
 
+
+//TODO clean this up and break into smaller components
 class ManifestElements extends Component {
   cellStyle(elementName) {
     return elementName === this.props.selected ? {backgroundColor: '#CCFFCC'} : {}
@@ -110,7 +116,8 @@ class ManifestElements extends Component {
         return (
           <ElementEditor key={index} name={content} 
             expression={this.props.manifest[content]} 
-            cancelClick={this.props.removeFromUpdateList.bind(this, content)} />
+            cancelClick={this.props.removeFromUpdateList.bind(this, content)}
+            updateClick={this.props.updateManifestElement.bind(this)} />
         )
       }
 

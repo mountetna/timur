@@ -3,7 +3,8 @@ import React, { Component } from 'react'
 export default class ManifestElement extends Component {
   componentWillMount() {
     const { name, expression } = this.props
-    this.setState({ 
+    this.setState({
+      originalKey: this.props.name,
       key: name || '', 
       value: expression || '' 
     })
@@ -22,8 +23,8 @@ export default class ManifestElement extends Component {
   }
 
   render() {
-    console.log(this.state)
     const { key, value } = this.state
+    const confirmIconAndText = this.props.name ? {icon: 'fa fa-check', text: 'Update'} : {icon: 'fa fa-plus', text: 'Add'}
 
     return (
       <div className='element-editor-container'>
@@ -42,8 +43,8 @@ export default class ManifestElement extends Component {
               Cancel
             </div>
             <div className='update' onClick={this.handleUpdateClick.bind(this)}>
-              <i className="fa fa-plus" aria-hidden="true"></i>
-              Add
+              <i className={confirmIconAndText.icon} aria-hidden="true"></i>
+              {confirmIconAndText.text}
             </div>
           </div>
         </div>
