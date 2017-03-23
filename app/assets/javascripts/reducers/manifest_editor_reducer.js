@@ -30,8 +30,19 @@ const isAddingManifestElement = (state = false, action) => {
 const selectedManifestElement = (state = '', action) => {
   switch (action.type) {
     case 'SELECT_MANIFEST_ELEMENT':
-    case 'TOGGLE_IS_EDITING_MANIFEST_ELEMENT':
       return action.key
+    default:
+      return state
+  }
+}
+
+const updatingElementList = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_TO_UPDATING_LIST':
+      return [...state, action.key]
+    case 'DELETE_MANIFEST_ELEMENT':
+    case 'REMOVE_FROM_UPDATING_LIST':
+      return state.filter(key => key !== action.key)
     default:
       return state
   }
@@ -55,5 +66,6 @@ export default combineReducers({
   isUpdatingTitle,
   isAddingManifestElement,
   selectedManifestElement,
+  updatingElementList,
   manifest
 })
