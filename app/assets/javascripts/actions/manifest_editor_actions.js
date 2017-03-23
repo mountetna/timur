@@ -20,7 +20,7 @@ export const deleteManifestElement = (key) => ({
   key
 })
 
-export const selectManifestElement = (key) => ({
+export const selectManifestElement = (key = '') => ({
   type: 'SELECT_MANIFEST_ELEMENT',
   key
 })
