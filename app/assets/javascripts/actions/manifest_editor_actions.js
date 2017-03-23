@@ -25,6 +25,11 @@ export const selectManifestElement = (key = '') => ({
   key
 })
 
+export const addToEditList = (key) => ({
+  type: 'ADD_TO_UPDATING_LIST',
+  key
+})
+
 const addManifestElementAction = (key, value) => ({
   type: 'ADD_MANIFEST_ELEMENT',
   key,

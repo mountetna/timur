@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { deleteManifestElement, selectManifestElement, 
-  toggleManifestElementEditor, addManifestElement } from '../../actions/manifest_editor_actions'
+  toggleManifestElementEditor, addManifestElement, addToEditList} from '../../actions/manifest_editor_actions'
 import ElementEditor from './manifest_element_editor'
 
 const mapStateToProps = (state) => ({
@@ -26,6 +26,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   addManifestElement(element) {
     dispatch(addManifestElement(element))
+  },
+  addToEditList(key) {
+    dispatch(addToEditList(key))
   }
 })
 
@@ -35,7 +38,7 @@ class ManifestElements extends Component {
   }
 
   createElementActions(elements) {
-    return Object.keys(this.props.manifest).map(name => {
+    return elements.map(name => {
       if (name === this.props.selected) {
         return (
           <div key={name} className='action-cell' style={this.cellStyle(name)} onMouseOver={this.props.selectElement.bind(this, name)}>
@@ -44,7 +47,7 @@ class ManifestElements extends Component {
                   <i className="fa fa-times" aria-hidden="true" onClick={this.props.deleteElement.bind(this, name)}></i>
                 </div>
                 <div>
-                  <i className="fa fa-pencil-square-o" aria-hidden="true" onClick={this.props.updateElement.bind(this, name)}></i>
+                  <i className="fa fa-pencil-square-o" aria-hidden="true" onClick={this.props.addToEditList.bind(this, name)}></i>
                 </div>
               </div>
           </div>
@@ -56,6 +59,7 @@ class ManifestElements extends Component {
   }
 
   createTable(elements, index) {
+    console.log(elements)
     const nameCells = elements.map(name => {
       return <div key={name} style={this.cellStyle(name)} className='cell-content name' onMouseOver={this.props.selectElement.bind(this, name)}>@{name}</div>
     })
@@ -98,12 +102,12 @@ class ManifestElements extends Component {
       return acc
     },[])
 
-    return groupedElements.map((elements, index) => {
-      if (!Array.isArray(elements)) {
+    return groupedElements.map((content, index) => {
+      if (!Array.isArray(content)) {
         return <ElementEditor key={index}/>
       }
 
-      return this.createTable(elements, index)
+      return this.createTable(content, index)
     }) 
   }
 
