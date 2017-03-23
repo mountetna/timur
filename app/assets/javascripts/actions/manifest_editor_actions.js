@@ -25,8 +25,13 @@ export const selectManifestElement = (key = '') => ({
   key
 })
 
-export const addToEditList = (key) => ({
+export const addToUpdateList = (key) => ({
   type: 'ADD_TO_UPDATING_LIST',
+  key
+})
+
+export const removeFromUpdateList = (key) => ({
+  type: 'REMOVE_FROM_UPDATING_LIST',
   key
 })
 

@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 
 export default class ManifestElement extends Component {
-  componentDidMount() {
-    this.setState({ key:'', value:'' })
+  componentWillMount() {
+    const { name, expression } = this.props
+    this.setState({ 
+      key: name || '', 
+      value: expression || '' 
+    })
   }
 
   updateKey(e) {
@@ -18,16 +22,19 @@ export default class ManifestElement extends Component {
   }
 
   render() {
+    console.log(this.state)
+    const { key, value } = this.state
+
     return (
       <div className='element-editor-container'>
         <div className='element-editor'>
           <div>
             <label>Name: </label>
-            <input type='text' onChange={this.updateKey.bind(this)}></input>
+            <input type='text' onChange={this.updateKey.bind(this)} value={key}></input>
           </div>
           <div className='expression-section'>
             <label>Expression:</label>
-            <textarea onChange={this.updateValue.bind(this)}></textarea>
+            <textarea onChange={this.updateValue.bind(this)} value={value}></textarea>
           </div>
           <div className='button-container'>
             <div className='cancel' onClick={this.props.cancelClick}>
