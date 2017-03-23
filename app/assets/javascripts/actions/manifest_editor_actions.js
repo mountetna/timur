@@ -1,6 +1,24 @@
 import { showMessages } from './message_actions'
 import { requestManifests } from './timur_actions'
 
+export const submitManifest = () => (dispatch, getState) => {
+  const { manifest, title } = getState().manifestEditor
+
+  //vaildate title
+  if (title === '') {
+    return dispatch(showMessages(['Manifest title cannot be blank.']))
+  }
+
+  const payload = { manifest, name: title }
+  dispatch(
+    requestManifests(
+      [payload],
+      () => dispatch(showMessages(['Manifest succesfully submitted.'])),
+      (e) => dispatch(showMessages(['Manifest submission error: ' + e]))
+    )
+  )
+}
+
 export const toggleIsTitleUpdating = () => ({
   type: 'TOGGLE_IS_TITLE_UPDATING'
 })

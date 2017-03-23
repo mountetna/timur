@@ -101,7 +101,7 @@ var timurActions = {
           for (var name in response) {
             dispatch(timurActions.addManifest(name, response[name]))
           }
-          if (success != undefined) success()
+          if (success != undefined) success(response)
         },
         error: function(xhr, status, err) {
           var message = JSON.parse(xhr.responseText)
