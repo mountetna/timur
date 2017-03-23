@@ -100,12 +100,9 @@
 				}
 			}
 
-			.name-column {
-				width: 190px;
 
-				.name {
-					padding-left: 4px;
-				}
+			.name {
+				width: 190px;
 			}
 
 			.expression-column {
@@ -126,7 +123,6 @@
 			.cell-content {
 				text-overflow: ellipsis; 
 				overflow: hidden; 
-				padding-left: 20px; 
 				white-space: nowrap;
 			}
 
@@ -185,7 +181,7 @@
 
 				div {
 					margin: 10px 4px 0px 4px;
-					width: 70px;
+					width: 80px;
 					text-align: center;
 
 					i {
