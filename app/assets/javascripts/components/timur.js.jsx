@@ -1,5 +1,6 @@
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
+import { loadState, saveState } from '../localStorage';
 
 var Timur = React.createClass({
   create_store: function() {
@@ -7,7 +8,9 @@ var Timur = React.createClass({
     if (process.env.NODE_ENV != "production") {
       middleWares.push(createLogger())
     }
-    return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer)
+
+    const persistedState = loadState()
+    return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer, persistedState)
   },
   render: function () {
     var component
@@ -26,6 +29,13 @@ var Timur = React.createClass({
       component = <Noauth user={ this.props.user }/>
 
     var store = this.create_store()
+
+    store.subscribe(() => {
+      saveState({
+        manifests: store.getState().manifests,
+      });
+    })
+
     window.store = store
 
     return <Provider store={ store }>

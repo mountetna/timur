@@ -2,6 +2,10 @@ import { combineReducers } from 'redux'
 
 const title = (state = '', action) => {
   switch (action.type) {
+    case 'CLEAR_EDITOR':
+      return ''
+    case 'SELECT_MANIFEST':
+      return action.name
     case 'UPDATE_MANIFEST_TITLE':
       return action.title
     default:
@@ -9,8 +13,22 @@ const title = (state = '', action) => {
   }
 }
 
+const isManifestSelectorVisible = (state = false, action) => {
+  switch (action.type) {
+    case 'SELECT_MANIFEST':
+      return false
+    case 'TOGGLE_IS_MANIFEST_SELECTOR_VISIBLE':
+      return !state
+    default:
+      return state
+  }
+}
+
 const isUpdatingTitle = (state = false, action) => {
   switch (action.type) {
+    case 'SELECT_MANIFEST':
+    case 'CLEAR_EDITOR':
+      return false
     case 'TOGGLE_IS_TITLE_UPDATING':
       return !state
     default:
@@ -29,6 +47,9 @@ const isAddingManifestElement = (state = false, action) => {
 
 const selectedManifestElement = (state = '', action) => {
   switch (action.type) {
+    case 'CLEAR_EDITOR':
+    case 'SELECT_MANIFEST':
+      return ''
     case 'SELECT_MANIFEST_ELEMENT':
       return action.key
     default:
@@ -38,6 +59,9 @@ const selectedManifestElement = (state = '', action) => {
 
 const updatingElementList = (state = [], action) => {
   switch (action.type) {
+    case 'CLEAR_EDITOR':
+    case 'SELECT_MANIFEST':
+      return []
     case 'ADD_TO_UPDATING_LIST':
       return [...state, action.key]
     case 'REMOVE_FROM_UPDATING_LIST':
@@ -49,6 +73,8 @@ const updatingElementList = (state = [], action) => {
 
 const manifest = (state = {}, action) => {
   switch (action.type) {
+    case 'SELECT_MANIFEST':
+      return action.manifest
     case 'ADD_MANIFEST_ELEMENT':
       return {...state, [action.key]: action.value}
     case 'DELETE_MANIFEST_ELEMENT':
@@ -64,6 +90,7 @@ export default combineReducers({
   title,
   isUpdatingTitle,
   isAddingManifestElement,
+  isManifestSelectorVisible,
   selectedManifestElement,
   updatingElementList,
   manifest

@@ -13,10 +13,52 @@ export const submitManifest = () => (dispatch, getState) => {
   dispatch(
     requestManifests(
       [payload],
-      () => dispatch(showMessages(['Manifest succesfully submitted.'])),
+      () => dispatch(showMessages(['Manifest submitted succesfully.'])),
       (e) => dispatch(showMessages(['Manifest submission error: ' + e]))
     )
   )
+}
+
+const saveManifestAction = (name, manifest) => ({
+  type: 'SAVE_MANIFEST',
+  name,
+  manifest
+})
+
+export const saveManifest = () => (dispatch, getState) => {
+  const { manifest, title } = getState().manifestEditor
+
+  //vaildate title
+  if (title === '') {
+    return dispatch(showMessages(['Manifest title cannot be blank.']))
+  }
+
+  const payload = { manifest, name: title }
+  dispatch(saveManifestAction(title, payload))
+  dispatch(showMessages(['Manifest saved successfully.']))
+}
+
+export const toggleIsManifestSelectorVisible = () => ({
+  type: 'TOGGLE_IS_MANIFEST_SELECTOR_VISIBLE'
+})
+
+const selectManifestAction = ({name, manifest}) => ({
+  type: 'SELECT_MANIFEST',
+  name,
+  manifest
+})
+
+const clearManifestEditor = () => ({
+  type: 'CLEAR_EDITOR'
+})
+
+export const selectManifest = (title) => (dispatch, getState) => {
+  if (title === '') {
+    dispatch(clearManifestEditor())
+    return dispatch(toggleIsManifestSelectorVisible())
+  }
+  const manifest = getState().manifests[title]
+  return dispatch(selectManifestAction(manifest))
 }
 
 export const toggleIsTitleUpdating = () => ({

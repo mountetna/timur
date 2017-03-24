@@ -36,13 +36,14 @@
 			font-size: .9em;
 			flex-grow: 1;
 			display: flex;
-			justify-content: flex-end; 
+			justify-content: center; 
 			align-items: center;
 
 			>div {
 				margin-right: 5px;
 				border-width: 1px;
 				padding: 3px;
+				text-align: center;
 				
 				>i {
 					margin-left: 3px;
