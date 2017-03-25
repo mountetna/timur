@@ -136,6 +136,12 @@ var timurActions = {
       tab_name: tab_name,
       tab: tab
     }
+  },
+  changeMode(mode) {
+    return {
+      type: 'CHANGE_MODE',
+      mode
+    }
   }
 }
 

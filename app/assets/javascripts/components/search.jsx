@@ -1,5 +1,3 @@
-import ManifestEditor from './manifest/editor'
-
 /*
  * The Search view allows us to post queries for a particular table.
  * 
@@ -448,7 +446,6 @@ ${error}`
                 </Pager>
                 </div>: null
             }
-            <ManifestEditor />
           </div> : null
         }
         {
