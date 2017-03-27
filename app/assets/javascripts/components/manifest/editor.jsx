@@ -3,12 +3,15 @@ import { connect } from 'react-redux'
 import Titlebar from './title_bar'
 import ManifestElements from './manifest_elements'
 import JSONViewer from 'react-json-viewer'
+import Manifest from './manifest'
 
 const Editor = ({manifest}) => (
-  <div className='manifest-container' >
-    <Titlebar />
-    <ManifestElements />
-    <JSONViewer json={manifest} />
+  <div>
+    <div className='manifest-container' >
+      <Titlebar />
+      <ManifestElements />
+    </div>
+    { manifest && <Manifest {...manifest} /> }
   </div>
 )
 

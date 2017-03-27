@@ -7,7 +7,6 @@
     "marked": "^0.3.5",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "react-json-viewer": "^1.6.0",
     "react-redux": "^4.2.1",
     "redux": "^3.6.0",
     "redux-thunk": "^0.1.0"
