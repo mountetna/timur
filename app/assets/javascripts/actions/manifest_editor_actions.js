@@ -2,14 +2,18 @@ import { showMessages } from './message_actions'
 import { requestManifests } from './timur_actions'
 
 export const submitManifest = () => (dispatch, getState) => {
-  const { manifest, title } = getState().manifestEditor
+  const { manifest, title, elementList } = getState().manifestEditor
 
   //vaildate title
   if (title === '') {
     return dispatch(showMessages(['Manifest title cannot be blank.']))
   }
 
-  const payload = { manifest, name: title }
+  const orderedManifest = elementList.reduce((acc, elem) => {
+    return {...acc, [elem]: manifest[elem]}
+  }, {})
+
+  const payload = { manifest: orderedManifest, name: title }
   dispatch(
     requestManifests(
       [payload],
@@ -95,10 +99,11 @@ export const removeFromUpdateList = (key) => ({
   key
 })
 
-const addManifestElementAction = (key, value) => ({
+const addManifestElementAction = (key, value, oldKey) => ({
   type: 'ADD_MANIFEST_ELEMENT',
   key,
-  value
+  value,
+  oldKey
 })
 
 export const addManifestElement = ({ key, value }) => (dispatch, getState) => {
@@ -142,7 +147,7 @@ export const updateManifestElement = ({originalKey, key, value }) => (dispatch, 
     return dispatch(showMessages(['Element expression cannot be blank.']))
   }
 
-  dispatch(addManifestElementAction(key, value))
+  dispatch(addManifestElementAction(key, value, originalKey))
 
   //remove the element editor for element
   dispatch(removeFromUpdateList(originalKey))

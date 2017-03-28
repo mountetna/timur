@@ -7,6 +7,7 @@ import ElementEditor from './manifest_element_editor'
 
 const mapStateToProps = (state) => ({
   manifest: state.manifestEditor.manifest,
+  elementList: state.manifestEditor.elementList,
   selected: state.manifestEditor.selectedManifestElement,
   isAddingManifestElement: state.manifestEditor.isAddingManifestElement,
   updatingElementsList: state.manifestEditor.updatingElementList
@@ -77,7 +78,7 @@ class ManifestElements extends Component {
     })
 
     return (
-      <div key={index} className='elements-table' onMouseLeave={this.props.selectElement.bind(this)}>
+      <div key={index} className='elements-table' onMouseLeave={this.props.selectElement.bind(this, '')}>
         <div className='actions-column'>
           {this.createElementActions(elements)}
         </div>
@@ -92,7 +93,7 @@ class ManifestElements extends Component {
   }
 
   createContents() {
-    const elements = Object.keys(this.props.manifest)
+    const elements = this.props.elementList
     const updatingList = this.props.updatingElementsList
 
     //group consecutive non-updating elements to preserve order and put the ElementEditor in the same position 
