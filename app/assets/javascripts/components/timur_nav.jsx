@@ -60,7 +60,7 @@ var TimurNavBar = React.createClass({
                <div className="nav_tab">
                  <a onClick={ 
                    function(e) {
-                     self.props.dispatch(timurActions.toggleConfig('help_shown'))
+                     self.props.toggleConfig('help_shown')
                    }
                  }>
                  {
@@ -83,7 +83,10 @@ var TimurNav = connect(
       helpShown: state.timur.help_shown
     }
   },
-  { changeMode }
+  { 
+    changeMode,
+    toggleConfig: timurActions.toggleConfig
+  }
 )(TimurNavBar)
 
 TimurNav.contextTypes = {
