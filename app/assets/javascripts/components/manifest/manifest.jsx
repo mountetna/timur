@@ -25,8 +25,10 @@ const downloadCSV = (data, fields, fileName, matrixConversion = (data, fields) =
 
 const Matrix = ({col_names, row_names, rows, name}) => (
   <div>
-    <h3>@{name}</h3>
-    <i className="fa fa-download" aria-hidden="true" onClick={() => downloadCSV(rows, col_names, name, matrixConversion)}></i>
+    <h3>
+      @{name}
+      <i className="fa fa-download" aria-hidden="true" onClick={() => downloadCSV(rows, col_names, name, matrixConversion)}></i>
+    </h3>
     <table>
       <thead>
         <tr>
@@ -48,8 +50,10 @@ const Matrix = ({col_names, row_names, rows, name}) => (
 
 const List = ({dataList, name}) => (
   <div>
-    <h3>@{name}</h3>
-    <i className="fa fa-download" aria-hidden="true" onClick={() => downloadCSV(dataList, ['label', 'value'], name)}></i>
+    <h3>
+      @{name}
+      <i className="fa fa-download" aria-hidden="true" onClick={() => downloadCSV(dataList, ['label', 'value'], name)}></i>
+    </h3>
     <table>
       <thead>
         <tr>
@@ -104,7 +108,7 @@ const manifest = (manifest) => {
   const manifestElementList = Object.keys(manifest)
 
   return (
-    <div>
+    <div className='manifest-results-container'>
       {manifestElementList.map((elementName, index) => (
         <div key={index}>
           {createManifestElement(elementName, manifest[elementName]) }
