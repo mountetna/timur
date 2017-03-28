@@ -15,6 +15,12 @@ const title = (state = '', action) => {
 
 const isManifestSelectorVisible = (state = false, action) => {
   switch (action.type) {
+    case 'TOGGLE_IS_ADDING_MANIFEST_ELEMENT':
+    case 'ADD_MANIFEST_ELEMENT':
+    case 'TOGGLE_IS_TITLE_UPDATING':
+    case 'UPDATE_MANIFEST_TITLE':
+    case 'ADD_TO_UPDATING_LIST':
+    case 'DELETE_MANIFEST_ELEMENT':
     case 'SELECT_MANIFEST':
       return false
     case 'TOGGLE_IS_MANIFEST_SELECTOR_VISIBLE':
