@@ -71,6 +71,25 @@ const updatingElementList = (state = [], action) => {
   }
 }
 
+const elementList = (state = [], action) => {
+  switch (action.type) {
+    case 'CLEAR_EDITOR':
+      return []
+    case 'SELECT_MANIFEST':
+      return Object.keys(action.manifest)
+    case 'ADD_MANIFEST_ELEMENT':
+      const { oldKey } = action
+      if (!oldKey) {
+        return [...state, action.key]
+      }
+      return [...state].map(elem => elem === action.oldKey ? action.key : elem)
+    case 'DELETE_MANIFEST_ELEMENT':
+      return state.filter(key => key !== action.key)
+    default:
+      return state
+  }
+}
+
 const manifest = (state = {}, action) => {
   switch (action.type) {
     case 'SELECT_MANIFEST':
@@ -93,5 +112,6 @@ export default combineReducers({
   isManifestSelectorVisible,
   selectedManifestElement,
   updatingElementList,
+  elementList,
   manifest
 })
