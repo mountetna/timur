@@ -9,68 +9,74 @@ class SearchController <  ApplicationController
   end
 
   def templates_json
-    payload = Magma::Payload.new()
-    Magma.instance.magma_models.map do |model|
-      payload.add_model model
+    magma = Magma::Client.instance
+    status, payload = magma.retrieve(
+      model_name: "all",
+      record_names: [],
+      attribute_names: "all"
+    )
+    if status == 200
+      render json: payload
+    else
+      render json: payload, status: status
     end
-    render json: TimurPayload.new(payload)
   end
 
   def table_json
-    # This should mimic the format of the 'table' attribute:
-    model = Magma.instance.get_model params[:model_name]
+    # Ask Magma a question to get record names matching this thing
+    
+    status, payload = Magma::Client.instance.query(
+      [ params[:model_name], "::all", "::identifier" ]
+    )
 
-    query = model.retrieve do |att|
-      !att.is_a? Magma::TableAttribute
-    end
+    ids = JSON.parse(payload)
 
-    if params[:filter]
-      query = QueryFilter.new(model, query, params[:filter]).query
-    end
-
-    # For the table query we only give a list of identifiers
-    record_names = query.select_map(:"#{model.table_name}__#{model.identity}")
-
-    render json: { record_names: record_names }
+    render json: { record_names: ids["answer"].map(&:last) }
   end
 
   def table_tsv
-    model = Magma.instance.get_model params[:model_name]
+    status, payload = Magma::Client.instance.retrieve(
+      model_name: params[:model_name],
+      record_names: params[:record_names],
+      attribute_names: "all"
+    )
 
-    attributes = model.attributes.values.select do |att|
-      !att.is_a? Magma::TableAttribute
-    end
+    payload = JSON.parse(payload)
 
-    query = model.retrieve do |att|
-      attributes.include? att
-    end
+    model = payload["models"][params[:model_name]]
+    template = model["template"]
 
-    if params[:filter]
-      query = QueryFilter.new(model, query, params[:filter]).query
-    end
+    records = model["documents"].values_at(*params[:record_names])
+    attributes = template["attributes"].keys
 
-    records = query.all
-
-    if !model.has_identifier?
-      attributes.unshift :id
-    end
+    attributes.unshift("id") if template["identifier"] == "id"
 
     filename = "#{params[:model_name]}.tsv"
-    csv = create_csv(records, attributes)
+    csv = create_csv(records, attributes, template)
     send_data(csv, type: 'text/tsv', filename: filename)
   end
 
   private
 
-  def create_csv(records, attributes)
+  def create_csv(records, attributes, template)
     CSV.generate(col_sep: "\t") do |csv|
-      csv << attributes.map do |att| att == :id ? att : att.name; end
+      csv << attributes.select do |att_name|
+          att = template["attributes"][att_name]
+          !att || att["shown"]
+      end
       records.each do |record|
-        csv << attributes.map do |att|
-          if att == :id
-            record[att]
+        csv << attributes.map do |att_name|
+          att = template["attributes"][att_name]
+          next if att && !att["shown"]
+          case att["attribute_class"]
+          when "Magma::ImageAttribute", "Magma::DocumentAttribute"
+            record[att_name] ? record[att_name]["url"] : nil
+          when "Magma::TableAttribute"
+            nil
+          when "Magma::CollectionAttribute"
+            record[att_name].join(", ")
           else
-            att.txt_for record
+            record[att_name]
           end
         end
       end

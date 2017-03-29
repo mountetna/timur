@@ -1,7 +1,7 @@
 class Vector
   include Enumerable
   def initialize list_items
-    @vector = list_items
+    @vector = list_items || []
   end
 
   def each
