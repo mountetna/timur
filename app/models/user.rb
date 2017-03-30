@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_one :whitelist, class_name: "Whitelist", foreign_key: :email, primary_key: :email
   has_many :saved_items
+  has_many :manifests
 
   DEFAULT_MAPPINGS = {
     'jriqm66' => { key: 'jriqm66', stain: 'sort', name: 'Immune fraction(sort)', type: 'Population Fraction', v1: "CD45+##Live\tSingle Cells 2\tSingle Cells\tTime", v2: "Live##Single Cells 2\tSingle Cells\tTime" },
@@ -61,6 +62,9 @@ class User < ActiveRecord::Base
   end
   def can_edit?
     whitelist && whitelist.can_edit?
+  end
+  def is_admin?
+    whitelist && whitelist.is_admin?
   end
 
   def get_save key
