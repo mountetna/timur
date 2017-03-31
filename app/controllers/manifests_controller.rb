@@ -1,4 +1,5 @@
 class ManifestsController < ApplicationController
+  protect_from_forgery with: :null_session
   before_filter :authenticate
 
   def index
@@ -8,7 +9,9 @@ class ManifestsController < ApplicationController
   end
 
   def create
-    manifest = Manifest.new(manifest_params)
+    manifest = Manifest.new(manifest_params, :data => params[:data])
+    manifest.assign_attributes(:data => params[:data])
+
     if manifest.save
       render json: { :manifest => manifest_to_JSON(manifest) }
     else
@@ -20,6 +23,8 @@ class ManifestsController < ApplicationController
     manifest = Manifest.find(params[:id])
     authorize(manifest)
     manifest.assign_attributes(manifest_params)
+    manifest.assign_attributes(:data => params[:data])
+
     if manifest.save
       render json: { :manifest => manifest_to_JSON(manifest) }
     else
@@ -46,11 +51,11 @@ class ManifestsController < ApplicationController
   end
 
   def authorized_to_edit?(manifest)
-    @current_user.id == manifest.user_id || (manifest.is_public && @current_user.is_admin?)
+    @current_user.id == manifest.user_id || (manifest.is_public? && @current_user.is_admin?)
   end
 
   def authorize(manifest)
-    if !(authorized_to_edit?)
+    if !(authorized_to_edit?(manifest))
       render :json => { :errors => ["You must be the owner to update or delete this manifest."] }, :status => 401 and return
     end
   end
@@ -61,9 +66,9 @@ class ManifestsController < ApplicationController
 
   def manifest_params
     if @current_user.is_admin?
-      params.permit(:name, :description, :project, :access, :data)
+      params.permit(:name, :description, :project, :access)
     else
-      params.permit(:name, :description, :project, :data)
+      params.permit(:name, :description, :project)
     end
   end
 
