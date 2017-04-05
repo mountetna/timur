@@ -105,13 +105,13 @@ var magmaActions = {
     }
   },
   reviseDocument: function(document, template, attribute, revised_value) {
-    var revision = { }
-    revision[ attribute.name ] = revised_value
     return {
       type: 'REVISE_DOCUMENT',
       model_name: template.name,
       record_name: document[ template.identifier ],
-      revision: revision
+      revision: {
+        [ attribute.name ]: revised_value
+      }
     }
   },
   discardRevision: function(record_name, model_name) {
@@ -125,19 +125,18 @@ var magmaActions = {
     var self = this;
     var data = new FormData()
     data.append( 'model_name', model_name )
-    //data.append( 'record_name', record_name )
-    Object.keys(revisions).forEach(function(record_name) {
+    for (var record_name in revisions) {
       var revision = revisions[record_name]
-      Object.keys(revision).forEach(function(key) {
-        if (Array.isArray(revision[key])) {
-          revision[key].forEach(function(value) {
-            data.append( 'revisions['+record_name+']['+key+'][]', value )
+      for (var attribute_name in revision) {
+        if (Array.isArray(revision[attribute_name])) {
+          revision[attribute_name].forEach(function(value) {
+            data.append( 'revisions['+record_name+']['+attribute_name+'][]', value )
           })
         }
         else
-          data.append( 'revisions['+record_name+']['+key+']', revision[key] )
-      })
-    })
+          data.append( 'revisions['+record_name+']['+attribute_name+']', revision[attribute_name] )
+      }
+    }
     return function(dispatch) {
       $.ajax({
         url: Routes.update_model_path(),

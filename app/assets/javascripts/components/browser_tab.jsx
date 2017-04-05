@@ -8,15 +8,15 @@ var BrowserTab = React.createClass({
 
     return <div id="tab" className={ this.props.name }>
       {
-        Object.keys(this.props.tab.panes).map(function(pane_name) {
-          var pane = self.props.tab.panes[pane_name]
+        Object.keys(this.props.tab.panes).map((pane_name) => {
+          var pane = this.props.tab.panes[pane_name]
 
-          return <BrowserPane mode={ self.props.mode }
+          return <BrowserPane mode={ this.props.mode }
             pane={ pane }
             name={ pane_name }
-            revision={ self.props.revision }
-            template={ self.props.template }
-            document={ self.props.document }
+            revision={ this.props.revision }
+            template={ this.props.template }
+            document={ this.props.document }
             key={ pane_name }
             />
         })
