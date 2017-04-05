@@ -38,52 +38,12 @@ class SearchController <  ApplicationController
     status, payload = Magma::Client.instance.retrieve(
       model_name: params[:model_name],
       record_names: params[:record_names],
-      attribute_names: "all"
+      attribute_names: "all",
+      format: "tsv"
     )
-
-    payload = JSON.parse(payload)
-
-    model = payload["models"][params[:model_name]]
-    template = model["template"]
-
-    records = model["documents"].values_at(*params[:record_names])
-    attributes = template["attributes"].keys
-
-    attributes.unshift("id") if template["identifier"] == "id"
-
     filename = "#{params[:model_name]}.tsv"
-    csv = create_csv(records, attributes, template)
-    send_data(csv, type: 'text/tsv', filename: filename)
+    send_data(payload, type: 'text/tsv', filename: filename)
   end
-
-  private
-
-  def create_csv(records, attributes, template)
-    CSV.generate(col_sep: "\t") do |csv|
-      csv << attributes.select do |att_name|
-          att = template["attributes"][att_name]
-          !att || att["shown"]
-      end
-      records.each do |record|
-        csv << attributes.map do |att_name|
-          att = template["attributes"][att_name]
-          next if att && !att["shown"]
-          case att["attribute_class"]
-          when "Magma::ImageAttribute", "Magma::DocumentAttribute"
-            record[att_name] ? record[att_name]["url"] : nil
-          when "Magma::TableAttribute"
-            nil
-          when "Magma::CollectionAttribute"
-            record[att_name].join(", ")
-          else
-            record[att_name]
-          end
-        end
-      end
-    end
-  end
-
-  public
 
   def records_json
     magma = Magma::Client.instance

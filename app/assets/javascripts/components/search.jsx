@@ -477,11 +477,13 @@ Search = connect(
       hasCompleteRecords: function(model_name, record_names) {
         var documents = magma.documents(model_name,record_names)
         var template = magma.template(model_name)
-        return Object.values(documents).every(
-          (document) => Object.keys(template.attributes).every(
+
+        return record_names.every((record_name) => {
+          var document = documents[record_name]
+          return document && Object.keys(template.attributes).every(
             (attribute_name) => document.hasOwnProperty(attribute_name)
           )
-        )
+        })
       }
     }
   },
