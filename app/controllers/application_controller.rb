@@ -43,9 +43,9 @@ class ApplicationController < ActionController::Base
         u.ucsf_id = auth['ucsf_id']
         u.name = auth['name']
       end
+      session[:user_id] = user.id
     end
-
-    session[:user_id] = user.id
+    
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
 end
