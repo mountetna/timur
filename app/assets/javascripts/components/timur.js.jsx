@@ -4,24 +4,22 @@ import 'whatwg-fetch'
 
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
-import { loadState, saveState } from '../localStorage';
-import ManifestEditor from './manifest/editor'
+import Manifests from './manifest/manifests'
 import { connect } from 'react-redux'
 
-const create_store = () => {
+const createStore = () => {
   let middleWares = [thunk]
   if (process.env.NODE_ENV != "production") {
     middleWares.push(createLogger())
   }
-  const persistedState = loadState()
-  return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer, persistedState)
+  return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer)
 }
 
 var Timur = React.createClass({
   render: function () {
     var component
     if (this.props.appMode == 'manifesto') {
-      component = <ManifestEditor />
+      component = <Manifests />
     } else if (this.props.mode == 'browse') 
       component = <Browser 
         can_edit={ this.props.can_edit }
@@ -53,20 +51,8 @@ const mapStateToProps = (state) => ({ appMode: state.appMode })
 Timur = connect(mapStateToProps)(Timur)
 
 
-module.exports = (props) => {
-  var store = create_store()
-
-  store.subscribe(() => {
-    saveState({
-      manifests: store.getState().manifests,
-    });
-  })
-
-  window.store = store
-
-  return (
-    <Provider store={store}>
-      <Timur {...props}/>
-    </Provider>
-  )
-}
+export default (props) => (
+  <Provider store={createStore()}>
+    <Timur {...props}/>
+  </Provider>
+)
