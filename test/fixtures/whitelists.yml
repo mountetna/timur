@@ -1,0 +1,11 @@
+admin:
+  access: admin
+  email: admin@gmail.com
+
+admin2:
+  access: admin
+  email: admin2@gmail.com
+
+viewer:
+  access: viewer
+  email: viewer@gmail.comn

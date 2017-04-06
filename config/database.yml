@@ -23,6 +23,8 @@ development:
 test:
   <<: *default
   database: timur_test
+  username: postgres
+  password: postgres
 
 production:
   <<: *default

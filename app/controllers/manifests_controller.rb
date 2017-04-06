@@ -3,14 +3,14 @@ class ManifestsController < ApplicationController
   before_filter :authenticate
 
   def index
-    manifests = Manifest.where("manifests.id = ? OR manifests.access = 'public'", @current_user.id).all
+    manifests = Manifest.where("user_id = ? OR access = ?", @current_user.id, "public").all
     manifestJSON = manifests.map { |manifest| manifest_to_JSON(manifest) }
     render json: {"manifests" => manifestJSON}
   end
 
   def create
-    manifest = Manifest.new(manifest_params, :data => params[:data])
-    manifest.assign_attributes(:data => params[:data])
+    manifest = Manifest.new(manifest_params)
+    manifest.assign_attributes(:data => params[:data], :user_id => @current_user.id)
 
     if manifest.save
       render json: { :manifest => manifest_to_JSON(manifest) }
@@ -21,28 +21,34 @@ class ManifestsController < ApplicationController
 
   def update
     manifest = Manifest.find(params[:id])
-    authorize(manifest)
+    return unless authorize(manifest)
     manifest.assign_attributes(manifest_params)
     manifest.assign_attributes(:data => params[:data])
 
     if manifest.save
       render json: { :manifest => manifest_to_JSON(manifest) }
     else
-      error(manifest)
+      error_response(manifest)
     end 
   end
 
   def destroy
     manifest = Manifest.find(params[:id])
-    authorize(manifest)
+    return unless authorize(manifest)
     if manifest.destroy
-      render json: {:success => true}
+      render json: { :success => true }
     else
-      error(manifest)
+      error_response(manifest)
     end
   end
 
   private
+
+  def authenticate
+    if !current_user
+      render :json => { :errors => ["You must be logged in."] }, :status => 401 and return
+    end
+  end
 
   def manifest_to_JSON(manifest)
     json = manifest.as_json(except: [:user_id], include: { user: { only: :name } })
@@ -55,13 +61,14 @@ class ManifestsController < ApplicationController
   end
 
   def authorize(manifest)
-    if !(authorized_to_edit?(manifest))
-      render :json => { :errors => ["You must be the owner to update or delete this manifest."] }, :status => 401 and return
+    if !authorized_to_edit?(manifest)
+      render :json => { :errors => ["You must be the owner to update or delete this manifest."] }, :status => 403
     end
+    authorized_to_edit?(manifest)
   end
 
-  def error(manifest)
-    render :json => { :errors => manifest.errors.full_messages }, :status => 422 and return
+  def error_response(manifest)
+    render :json => { :errors => manifest.errors.full_messages }, :status => 422
   end
 
   def manifest_params

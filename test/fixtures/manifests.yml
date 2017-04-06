@@ -1,11 +1,23 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+adminPublic:
+  user: admin
+  name: public manifest
+  description: public admin
+  project: ipi
+  access: public
+  data: {}
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+adminPrivate:
+  user: admin
+  name: private manifest
+  description: private admin 
+  project: ipi
+  access: private
+  data: {}
+
+viewerPrivate:
+  user: viewer
+  name: private manifest
+  description: private viewer
+  project: ipi
+  access: private
+  data: {}
