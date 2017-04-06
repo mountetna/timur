@@ -1,13 +1,1 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  user_id: 1
-  model_name: MyString
-  record_name: MyString
-  action: MyString
-
-two:
-  user_id: 1
-  model_name: MyString
-  record_name: MyString
-  action: MyString
