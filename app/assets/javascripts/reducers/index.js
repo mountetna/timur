@@ -11,7 +11,7 @@ import magma from './magma_reducer'
 import messages from './message_reducer'
 import plots from './plot_reducer'
 import timur from './timur_reducer'
-import manifestEditor from './manifest_editor_reducer'
+import manifestsUI from './manifest_ui_reducer'
 import manifests from './manifests_reducer'
 
 //TODO hack to render the manifest tab. future me needs to use react-router
@@ -29,7 +29,7 @@ export default combineReducers({
   magma,
   messages,
   plots,
-  manifestEditor,
+  manifestsUI,
   manifests,
   appMode
 })

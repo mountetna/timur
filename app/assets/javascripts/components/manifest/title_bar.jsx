@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ManifestTitle from './title'
-import { submitManifest, saveManifest, toggleIsManifestSelectorVisible, selectManifest} from '../../actions/manifest_editor_actions'
+import { submitManifest, saveManifest, toggleIsManifestSelectorVisible, selectManifest} from '../../actions/manifest_actions'
 
 const Titlebar = ({ submitManifest, saveManifest, toggleIsManifestSelectorVisible, manifestList, isManifestSelectorVisible, selectManifest, title}) => (
   <div className='title-bar-container' >
@@ -33,8 +33,8 @@ const Titlebar = ({ submitManifest, saveManifest, toggleIsManifestSelectorVisibl
 
 const mapStateToProps = (state) => ({
   manifestList: Object.keys(state.manifests),
-  isManifestSelectorVisible: state.manifestEditor.isManifestSelectorVisible,
-  title: state.manifestEditor.title
+  isManifestSelectorVisible: state.manifestsUI.isManifestSelectorVisible,
+  title: state.manifestsUI.title
 })
 
 export default connect(

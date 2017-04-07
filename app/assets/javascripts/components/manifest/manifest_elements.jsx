@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { deleteManifestElement, selectManifestElement, 
   toggleManifestElementEditor, addManifestElement, addToUpdateList, 
-  removeFromUpdateList, updateManifestElement } from '../../actions/manifest_editor_actions'
+  removeFromUpdateList, updateManifestElement } from '../../actions/manifest_actions'
 import ElementEditor from './manifest_element_editor'
 
 const mapStateToProps = (state) => ({
-  manifest: state.manifestEditor.manifest,
-  elementList: state.manifestEditor.elementList,
-  selected: state.manifestEditor.selectedManifestElement,
-  isAddingManifestElement: state.manifestEditor.isAddingManifestElement,
-  updatingElementsList: state.manifestEditor.updatingElementList
+  manifest: state.manifestsUI.manifest,
+  elementList: state.manifestsUI.elementList,
+  selected: state.manifestsUI.selectedManifestElement,
+  isAddingManifestElement: state.manifestsUI.isAddingManifestElement,
+  updatingElementsList: state.manifestsUI.updatingElementList
 })
 
 const mapDispatchToProps = (dispatch) => ({

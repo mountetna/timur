@@ -1,8 +1,20 @@
 import { showMessages } from './message_actions'
 import { requestManifests } from './timur_actions'
+import { fetchManifests } from '../api/manifests_api'
+
+const loadManifests = (manifestsById) => ({
+  type: 'LOAD_MANIFESTS',
+  manifestsById
+})
+
+export const getManifests = () => 
+  () => {
+    fetchManifests()
+      .then(data => console.log(data))
+  } 
 
 export const submitManifest = () => (dispatch, getState) => {
-  const { manifest, title, elementList } = getState().manifestEditor
+  const { manifest, title, elementList } = getState().manifestsUI
 
   //vaildate title
   if (title === '') {
@@ -30,7 +42,7 @@ const saveManifestAction = (name, manifest) => ({
 })
 
 export const saveManifest = () => (dispatch, getState) => {
-  const { manifest, title } = getState().manifestEditor
+  const { manifest, title } = getState().manifestsUI
 
   //vaildate title
   if (title === '') {
@@ -108,7 +120,7 @@ const addManifestElementAction = (key, value, oldKey) => ({
 
 export const addManifestElement = ({ key, value }) => (dispatch, getState) => {
   //vaildate name
-  if (Object.keys(getState().manifestEditor.manifest).includes(key)) {
+  if (Object.keys(getState().manifestsUI.manifest).includes(key)) {
     return dispatch(showMessages(['Element name must be unique.']))
   }
 
@@ -132,7 +144,7 @@ export const addManifestElement = ({ key, value }) => (dispatch, getState) => {
 export const updateManifestElement = ({originalKey, key, value }) => (dispatch, getState) => {
   //vaildate name
   if (originalKey !== key) {
-    if (Object.keys(getState().manifestEditor.manifest).includes(key)) {
+    if (Object.keys(getState().manifestsUI.manifest).includes(key)) {
       return dispatch(showMessages(['Element name must be unique.']))
     }
   }

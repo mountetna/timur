@@ -16,7 +16,7 @@ const Editor = ({manifest}) => (
 )
 
 const mapStateToProps = (state) => {
-  const manifest = state.timur.manifests[state.manifestEditor.title]
+  const manifest = state.timur.manifests[state.manifestsUI.title]
   return { 
     manifest
   }
