@@ -8,9 +8,16 @@ const loadManifests = (manifestsById) => ({
 })
 
 export const getManifests = () => 
-  () => {
+  (dispatch) => {
     fetchManifests()
-      .then(data => console.log(data))
+      .then(data => {
+        const manifestsById = data.manifests.reduce((acc, manifestJSON) => {
+          return { ...acc, [manifestJSON.id]: manifestJSON }
+        }, {})
+
+        dispatch(loadManifests(manifestsById))
+      })
+      .catch(e => console.error(e))
   } 
 
 export const submitManifest = () => (dispatch, getState) => {
