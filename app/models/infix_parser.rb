@@ -1,9 +1,10 @@
 class InfixLexer < RLTK::Lexer
   rule(/\s/)
+  rule(/#.*$/)
 
   rule(/[0-9]+\.?[0-9]*/) { |t| [ :NUM, t.to_f ] }
   rule(/[A-Za-z]\w*/) { |t| [ :IDENT, t ] }
-  rule(/'[^\']*?'/) { |t| [ :STRING, t[1..-2] ] }
+  rule(/'(?:[^'\\]|\\')*'/) { |t| [ :STRING, t[1..-2].gsub(/\\'/, "'") ] }
 
   rule(/\^/) { :EXP }
   rule(/\//) { :DIV }
