@@ -124,17 +124,21 @@ var magmaActions = {
   postRevisions: function(model_name, revisions, success, error) {
     var self = this;
     var data = new FormData()
-    data.append( 'model_name', model_name )
     for (var record_name in revisions) {
       var revision = revisions[record_name]
       for (var attribute_name in revision) {
         if (Array.isArray(revision[attribute_name])) {
           revision[attribute_name].forEach(function(value) {
-            data.append( 'revisions['+record_name+']['+attribute_name+'][]', value )
+            data.append(
+              `revisions[${model_name}][${record_name}][${attribute_name}][]`, value 
+            )
           })
         }
         else
-          data.append( 'revisions['+record_name+']['+attribute_name+']', revision[attribute_name] )
+          data.append(
+            `revisions[${model_name}][${record_name}][${attribute_name}]`,
+            revision[attribute_name]
+          )
       }
     }
     return function(dispatch) {

@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 
+gem 'extlib'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 # Use postgres as the database for Active Record
@@ -54,7 +55,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
-  gem 'magma-dev-ucsf-immunoprofiler'
+  gem 'magma'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   #gem 'web-console', '~> 2.0'

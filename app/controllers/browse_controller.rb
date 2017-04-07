@@ -1,3 +1,8 @@
+require 'net/http'
+require 'uri'
+require 'json'
+require 'mime/types'
+
 class BrowseController <  ApplicationController
   before_filter :authenticate
   before_filter :readable_check
@@ -40,45 +45,14 @@ class BrowseController <  ApplicationController
   def update
     # Update a model, redirect to the model view
     @errors = []
-    payload = Magma::Payload.new
-    revisions = params[:revisions].map do |record_name, revision_data|
-      revision = Magma::Revision.new(revision_data,
-                                      params[:model_name], 
-                                      record_name)
-    end
 
-    revisions.each do |revision|
-      if !revision.valid?
-        @errors.concat revision.errors
-        next
-      end
-    end
-
-    if @errors.empty?
-      revisions.each do |revision|
-        begin
-          revision.post!
-        rescue Magma::LoadFailed => m
-          logger.info m.complaints
-          @errors.concat m.complaints
-          next
-        end
-
-        payload.add_revision revision
-      end
-      params[:revisions].map do |record_name, revision_data|
-        Activity.post(current_user, params[:model_name], 
-                      record_name,
-                      "updated *#{revision_data.keys.join(", ")}*")
-      end
-    end
-
-    if !@errors.empty?
-      render json: { errors: @errors }, status: 422
-      return
-    end
-    render json: TimurPayload.new(
-      payload
+    status, payload = Magma::Client.instance.update(
+      params[:revisions]
     )
+    if status == 200
+      render json: payload
+    else
+      render json: payload, status: status
+    end
   end
 end
