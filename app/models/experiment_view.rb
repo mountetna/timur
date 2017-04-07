@@ -7,17 +7,22 @@ class ExperimentView < TimurView
 
   tab :completion_metrics do
     pane :default do
-      adds :completion do
+      show :completion do
         attribute_class "MetricsAttribute"
         display_name "Completion"
-        data(
-          query: {
-            rows: [ "sample", [ "patient", "experiment", "name", "::equals", "@record_name" ] ],
-            columns: {
-              sample_name: [ "sample_name" ],
-              metrics: [ "::metrics" ]
-            }
-          }
+        plot(
+          name: "completion_metrics",
+          manifest: [
+            [
+              :sample_metrics, 
+              "question([
+                'sample', 
+                [ 'patient', 'experiment', 'name', '::equals', @record_name ],
+                '::all',
+                '::metrics'
+              ])",
+            ]
+          ]
         )
       end
     end
