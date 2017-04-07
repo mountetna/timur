@@ -1,16 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getManifests } from '../../actions/manifest_actions'
-
-const ManifestPreview = ({name, project, updated_at, description, is_editable, user}) => (
-  <div className='manifest-preview'>
-    <div className='name'>{name}</div>
-    <div className='created-by'> created by: {user.name}</div>
-    <div className='updated-time'>last updated: {updated_at}</div>
-    <div className='project'>{project}</div>
-    <div className='description'>{description}</div>
-  </div>
-)
+import { getManifests, deleteManifest } from '../../actions/manifest_actions'
+import ManifestPreview from './manifest_preview'
 
 class Manifests extends Component {
   componentDidMount() {
@@ -18,14 +9,19 @@ class Manifests extends Component {
   }
 
   render() {
-    const visibleManifests = this.props.visibleManifests.map(manifest => (
-      <li key={manifest.id}>
-        <ManifestPreview {...manifest} />
-      </li>
-    ))
+    const visibleManifests = this.props.visibleManifests.map(manifest => {
+      const handleDelete = () => this.props.deleteManifest(manifest.id)
+      const props = {...manifest, handleDelete: handleDelete}
+      return (
+        <li key={manifest.id}>
+          <ManifestPreview {...props} />
+        </li>
+      )
+    })
 
     return (
       <div className='manifests-container'>
+        <button>New Manifest</button>
         <ol>
           {visibleManifests}
         </ol>
@@ -60,5 +56,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-  getManifests
+  getManifests,
+  deleteManifest
 })(Manifests)

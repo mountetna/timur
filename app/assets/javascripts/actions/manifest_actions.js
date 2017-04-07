@@ -1,6 +1,6 @@
 import { showMessages } from './message_actions'
 import { requestManifests } from './timur_actions'
-import { fetchManifests } from '../api/manifests_api'
+import { fetchManifests, destroyManifest } from '../api/manifests_api'
 
 const loadManifests = (manifestsById) => ({
   type: 'LOAD_MANIFESTS',
@@ -18,7 +18,21 @@ export const getManifests = () =>
         dispatch(loadManifests(manifestsById))
       })
       .catch(e => console.error(e))
-  } 
+  }
+
+const removeManifest = (id) => ({
+  type: 'REMOVE_MANIFEST',
+  id
+})
+
+export const deleteManifest = (manifestId) =>
+  (dispatch) => {
+    destroyManifest(manifestId)
+      .then(data => {
+        dispatch(removeManifest(manifestId))
+      })
+      .catch(e => console.error(e))
+  }
 
 export const submitManifest = () => (dispatch, getState) => {
   const { manifest, title, elementList } = getState().manifestsUI

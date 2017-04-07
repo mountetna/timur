@@ -16,7 +16,7 @@ export const createManifest = (manifest) =>
     .then(checkStatus)
     .then(parseJSON)
 
-export const deleteManifest = (manifestId) =>
+export const destroyManifest = (manifestId) =>
   fetch('/manifests/' + manifestId, {
     credentials: 'same-origin',
     method: 'DELETE'
