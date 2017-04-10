@@ -133,7 +133,7 @@ class ManifestsControllerTest < ActionController::TestCase
     end
   end
 
-  test "admins can only update public manifests" do
+  test "only admins can update public manifests" do
     viewer = users(:viewer)
     admin = users(:admin)
     admin2 = users(:admin2)
@@ -164,6 +164,7 @@ class ManifestsControllerTest < ActionController::TestCase
     end
   end
 
+  #TODO unique by name
   private
     def log_in_as(user)
       @controller.stub(:current_user, user) do
