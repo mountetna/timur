@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getManifests, deleteManifest, toggleManifestsFilter, selectManifest } from '../../actions/manifest_actions'
-import ManifestPreview from './manifest_preview'
+import { getManifests, toggleManifestsFilter, selectManifest } from '../../actions/manifest_actions'
+import VisibleManifests from './visible_manifests'
+import ManifestFilters from './manifest_filters'
 
 class Manifests extends Component {
   componentDidMount() {
@@ -12,37 +13,18 @@ class Manifests extends Component {
     this.props.toggleManifestsFilter(e.target.value)
   }
 
-  visibleManifests() {
-    return this.props.visibleManifests.map(manifest => {
-      const handleDelete = () => this.props.deleteManifest(manifest.id)
-      const handleClick = () => this.props.selectManifest(manifest.id)
-      const props = { ...manifest, handleDelete, handleClick }
-      return (
-        <li key={manifest.id}>
-          <ManifestPreview {...props} />
-        </li>
-      )
-    })
-  }
-
   render() {
     return (
       <div>
       {this.props.selectedManifest ? <div>Something</div> :
         <div className='manifests-container'>
-          <div className='filters'>
-            Filter:
-            <input type='radio' value='private'
-              onChange={this.handleFilterSelect.bind(this)} 
-              checked={this.props.filter === 'private'}/>private
-            <input type='radio' value='public'
-              onChange={this.handleFilterSelect.bind(this)} 
-              checked={this.props.filter === 'public'}/>public
-          </div>
-          <ol>
-            <li><button onClick={this.props.selectManifest.bind(this, 'new')}>New Manifest</button></li>
-            {this.visibleManifests()}
-          </ol>
+          <ManifestFilters 
+            handleSelect={this.props.toggleManifestsFilter}
+            accessFilters={['private', 'public']}
+            selectedFilter={this.props.filter} />
+          <VisibleManifests 
+            visibleManifests={this.props.visibleManifests}
+            handleClick={this.props.selectManifest} />
         </div>
       }
       </div>
@@ -79,7 +61,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   getManifests,
-  deleteManifest,
   toggleManifestsFilter,
   selectManifest
 })(Manifests)

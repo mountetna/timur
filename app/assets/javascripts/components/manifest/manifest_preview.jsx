@@ -1,10 +1,5 @@
-const ManifestPreview = ({ name, project, updated_at, description, is_editable, user, access, handleDelete, handleClick }) => (
+const ManifestPreview = ({ name, project, updated_at, description, is_editable, user, access, handleClick }) => (
   <div className='manifest-preview'>
-    {is_editable &&
-      <a className='delete' href='#' onClick={handleDelete}>
-        <i className="fa fa-times" aria-hidden="true"></i>
-      </a>
-    }
     <div onClick={handleClick}>
       <div className='name'>{name}</div>
       <div className='project'>{project}</div>
