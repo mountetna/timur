@@ -33,19 +33,21 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    if Rails.env.development?
-      auth = {
-        'email' => 'developer@localhost',
-        'name' => 'Timothy Developer',
-        'ucsf_id' => '999999'
-      }
-      user = User.where(email: auth['email'].downcase).first_or_create do |u|
-        u.ucsf_id = auth['ucsf_id']
-        u.name = auth['name']
+    @current_user ||= begin
+      if Rails.env.development?
+        auth = {
+          'email' => 'developer@localhost',
+          'name' => 'Timothy Developer',
+          'ucsf_id' => '999999'
+        }
+        user = User.where(email: auth['email'].downcase).first_or_create do |u|
+          u.ucsf_id = auth['ucsf_id']
+          u.name = auth['name']
+        end
+        session[:user_id] = user.id
       end
-      session[:user_id] = user.id
+      
+      User.find(session[:user_id]) if session[:user_id]      
     end
-    
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
 end
