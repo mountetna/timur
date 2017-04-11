@@ -14,8 +14,9 @@ class ExperimentView < TimurView
           name: "completion_metrics",
           manifest: [
             [
-              :sample_metrics, 
-              "question([
+              :model_name, "'sample'"
+            ],
+            [  :metrics, "question([
                 'sample', 
                 [ 'patient', 'experiment', 'name', '::equals', @record_name ],
                 '::all',

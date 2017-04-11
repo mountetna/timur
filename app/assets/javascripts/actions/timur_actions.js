@@ -43,9 +43,7 @@ var timurActions = {
           )
 
           if (required_manifests.length > 0) 
-            dispatch(
-              timurActions.requestManifests(required_manifests)
-            )
+            dispatch(timurActions.requestManifests(required_manifests))
 
           for (var tab_name in response.tabs)
             dispatch(
@@ -72,16 +70,16 @@ var timurActions = {
 
     var ISO_FORMAT = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/ 
 
-    return JSON.parse(JSON.stringify(manifest), 
+    return JSON.parse(
+      JSON.stringify(manifest), 
       (key, value) => {
         if (typeof value === 'string' && value.match(ISO_FORMAT)) {
           return new Date(value)
         } else if (Array.isArray(value) && value.every((item) => item != null && typeof item === 'object' && 'label' in item && 'value' in item)) {
           return new Vector(value)
-        } else if (value != null && typeof value === 'object' && value.hasOwnProperty('matrix') && value.matrix.hasOwnProperty('rows')) {
+        } else if (value != null && typeof value === 'object' && 'matrix' in value && 'rows' in value.matrix) {
           return new Matrix(value.matrix)
         }
-
         return value
       }
     )
@@ -106,10 +104,20 @@ var timurActions = {
           if (success != undefined) success()
         },
         error: function(xhr, status, err) {
-          if (error != undefined) {
-            var message = JSON.parse(xhr.responseText)
-            error(message)
-          }
+          var message = JSON.parse(xhr.responseText)
+          dispatch(
+            messageActions.showMessages([
+`### For our inquiry:
+
+   \`${JSON.stringify(message.query)}\`
+
+ ## this bitter response:
+
+    ${message.message}
+`
+            ])
+          )
+          if (error != undefined) error(message)
         }
       })
     }

@@ -47,10 +47,7 @@ LinePlotAttribute = connect(
           })).filter((point) => point.x != null && point.y != null)
         })
       )
-      console.log(lines)
     }
-
-    console.log(lines)
 
     return {
       lines: lines
