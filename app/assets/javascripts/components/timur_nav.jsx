@@ -5,8 +5,7 @@ var TimurNavBar = React.createClass({
 
     var tabs = {
       browse: Routes.browse_path(),
-      search: Routes.search_path(),
-      plot: Routes.plot_path()
+      search: Routes.search_path()
     }
 
     var login

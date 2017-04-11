@@ -22,9 +22,6 @@ Rails.application.routes.draw do
   post 'json/view' => 'browse#view_json', as: :view_json
   post 'browse/update' => 'browse#update', as: :update_model
 
-  get 'plot' => 'plot#index', as: :plot
-  get 'json/plot_types' => 'plot#plot_types_json', as: :plot_types_json
-  post 'json/plot' => 'plot#plot_json', as: :plot_json
   post 'json/pythia' => 'plot#pythia_json', as: :pythia_json
   post 'update_saves' => 'plot#update_saves', as: :update_saves
 
