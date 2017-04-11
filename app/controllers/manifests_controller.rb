@@ -15,30 +15,30 @@ class ManifestsController < ApplicationController
     if manifest.save
       render json: { :manifest => manifest.to_json(@current_user) }
     else
-      error(manifest)
+      error_response(manifest)
     end
   end
 
   def update
-    manifest = Manifest.find(params[:id])
-    return unless authorize(manifest)
-    manifest.assign_attributes(manifest_params)
-    manifest.assign_attributes(:data => params[:data])
+    return unless findManifest(params[:id])
+    return unless authorize(@manifest)
+    @manifest.assign_attributes(manifest_params)
+    @manifest.assign_attributes(:data => params[:data])
 
-    if manifest.save
-      render json: { :manifest => manifest.to_json(@current_user) }
+    if @manifest.save
+      render json: { :manifest => @manifest.to_json(@current_user) }
     else
-      error_response(manifest)
+      error_response(@manifest)
     end 
   end
 
   def destroy
-    manifest = Manifest.find(params[:id])
-    return unless authorize(manifest)
-    if manifest.destroy
+    return unless findManifest(params[:id])
+    return unless authorize(@manifest)
+    if @manifest.destroy
       render json: { :success => true }
     else
-      error_response(manifest)
+      error_response(@manifest)
     end
   end
 
@@ -58,6 +58,14 @@ class ManifestsController < ApplicationController
     authorized
   end
 
+  def findManifest(id)
+    @manifest = Manifest.find_by_id(id)
+    if @manifest.nil?
+      render :json => { :errors => ["Manifest with id: #{id} does not exist."] }, :status => 404
+    end
+    @manifest
+  end
+
   def error_response(manifest)
     render :json => { :errors => manifest.errors.full_messages }, :status => 422
   end
@@ -69,5 +77,4 @@ class ManifestsController < ApplicationController
       params.permit(:name, :description, :project)
     end
   end
-
 end

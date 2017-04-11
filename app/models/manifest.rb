@@ -1,6 +1,9 @@
 class Manifest < ActiveRecord::Base
   belongs_to :user
   after_initialize :set_defaults
+  validates :name, presence: true
+  validates :project, presence: true
+  validates :data, presence: true
   validates :access, inclusion: { in: %w(public private),
   message: "%{value} is not a valid access" }
 
