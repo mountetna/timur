@@ -1,6 +1,6 @@
 import { showMessages } from './message_actions'
 import { requestManifests } from './timur_actions'
-import { fetchManifests, destroyManifest } from '../api/manifests_api'
+import { fetchManifests, destroyManifest, createManifest } from '../api/manifests_api'
 
 const loadManifests = (manifestsById) => ({
   type: 'LOAD_MANIFESTS',
@@ -10,8 +10,8 @@ const loadManifests = (manifestsById) => ({
 export const getManifests = () => 
   (dispatch) => {
     fetchManifests()
-      .then(data => {
-        const manifestsById = data.manifests.reduce((acc, manifestJSON) => {
+      .then( ({ manifests }) => {
+        const manifestsById = manifests.reduce((acc, manifestJSON) => {
           return { ...acc, [manifestJSON.id]: manifestJSON }
         }, {})
 
@@ -34,6 +34,22 @@ export const deleteManifest = (manifestId) =>
       .catch(e => console.error(e))
   }
 
+const addManifest = (manifest) => ({
+  type: 'ADD_MANIFEST',
+  manifest
+})
+
+export const saveNewManifest = (manifest) =>
+  (dispatch) => {
+    console.log(manifest)
+    createManifest(manifest)
+      .then( ({ manifest }) => {
+        dispatch(addManifest(manifest))
+        dispatch(selectManifest(manifest.id))
+      })
+      .catch(e => console.error(e))
+  } 
+
 export const toggleManifestsFilter = (filter) => ({
   type: 'TOGGLE_MANIFESTS_FILTER',
   filter
@@ -43,6 +59,8 @@ export const selectManifest = (id) => ({
   type: 'SELECT_MANIFEST',
   id
 })
+
+
 
 
 // export const submitManifest = () => (dispatch, getState) => {
