@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getManifests, toggleManifestsFilter, selectManifest } from '../../actions/manifest_actions'
+import Manifest from './manifest'
 import VisibleManifests from './visible_manifests'
 import ManifestFilters from './manifest_filters'
 
@@ -16,7 +17,9 @@ class Manifests extends Component {
   render() {
     return (
       <div>
-      {this.props.selectedManifest ? <div>Something</div> :
+      {this.props.selectedManifest ? 
+        <Manifest allManifests={() => this.props.selectManifest(null)} 
+          manifestId={this.props.selectedManifest} /> :
         <div className='manifests-container'>
           <ManifestFilters 
             handleSelect={this.props.toggleManifestsFilter}

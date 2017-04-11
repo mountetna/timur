@@ -1,18 +1,18 @@
 import React from 'react'
 
-const ManifestFilters = ({ accessFilters, selectedFilter, handleSelect }) => {
+const ManifestFilters = ({ accessFilters = ['private', 'public'], selectedFilter, handleSelect, label='Filter:' }) => {
   const options = accessFilters.map(filter => (
-    <span> 
+    <span key={filter}> 
       <input type='radio'
         onChange={() => handleSelect(filter)} 
         checked={selectedFilter === filter} />
-      private
+      {filter}
     </span>
   ))
 
   return (
     <div className='filters'>
-      Filter:
+      {label}
       {options}
     </div>
   )
