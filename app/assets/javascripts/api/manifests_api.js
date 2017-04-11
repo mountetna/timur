@@ -11,7 +11,10 @@ export const createManifest = (manifest) =>
   fetch('/manifests', {
     credentials: 'same-origin',
     method: 'POST',
-    body: manifest
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(manifest)
   })
     .then(checkStatus)
     .then(parseJSON)
@@ -24,11 +27,14 @@ export const destroyManifest = (manifestId) =>
     .then(checkStatus)
     .then(parseJSON)
 
-export const updateManifest = (manifest, id) =>
+export const updateManifest = (manifestUpdates, id) =>
   fetch('/manifests/' + id, {
     credentials: 'same-origin',
     method: 'PUT',
-    body: manifest
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(manifestUpdates)
   })
     .then(checkStatus)
     .then(parseJSON)
