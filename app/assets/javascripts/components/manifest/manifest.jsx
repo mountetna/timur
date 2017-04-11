@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { selectManifest } from '../../actions/manifest_actions'
 import NewManifestForm from './new_manifest_form'
 
 class Manifest extends Component {
-
   isNewManifest() {
     return this.props.manifestId === 'new'
   }
@@ -13,8 +10,14 @@ class Manifest extends Component {
     return (
       <div className='manifest-container'>
         { this.isNewManifest() ? 
-          <NewManifestForm canEditAccess={true} /> :
-          <a href="#" onClick={this.props.allManifests}>all manifests</a>
+          <NewManifestForm 
+            //TODO add userRole
+            canEditAccess={true} 
+            cancel={this.props.allManifests}
+            save={this.props.saveNewManifest} /> :
+          <a href="#" onClick={this.props.allManifests}>
+            all manifests
+          </a>
         }
       </div>
     )
@@ -28,4 +31,4 @@ const mapStateToProps = (state, ownProps) => {
   })
 }
 
-export default connect(mapStateToProps)(Manifest)
+export default Manifest

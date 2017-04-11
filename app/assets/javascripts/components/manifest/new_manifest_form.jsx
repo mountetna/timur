@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import InputField from './input_field'
-import ManifestFilters from './manifest_filters'
+import ManifestAccess from './manifest_access'
 
 class NewManifestForm extends Component {
   componentWillMount() {
-    this.setState({ access: 'private' })
+    this.setState({ 
+      access: 'private',
+      data: {}
+    })
   }
 
   updateField(fieldName) {
@@ -14,23 +17,30 @@ class NewManifestForm extends Component {
     }
   }
 
+  save() {
+    this.props.save(this.state)
+  }
+
   render() {
     return (
       <div>
-        <button>save</button>
-        <button>cancel</button>
+        <button onClick={this.save.bind(this)}>
+          save
+        </button>
+        <button onClick={this.props.cancel}>
+          cancel
+        </button>
         <InputField type='text'
-          placeholder='Manifest Title'
-          label='Title'
+          placeholder='e.g. Populations'
+          label='Name'
           onChange={this.updateField('name')} />
         <InputField type='text'
-          placeholder='Project Name'
+          placeholder='e.g. Immunoprofiler'
           label='Project'
           onChange={this.updateField('project')} />
         { this.props.canEditAccess && 
-          <ManifestFilters
-            label='Access:'
-            selectedFilter={this.state.access}
+          <ManifestAccess
+            selectedDefault={this.state.access}
             handleSelect={this.updateField('access')} />
         }
         <label htmlFor='description'>Description:</label>

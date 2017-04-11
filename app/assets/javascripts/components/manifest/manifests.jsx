@@ -1,30 +1,29 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getManifests, toggleManifestsFilter, selectManifest } from '../../actions/manifest_actions'
+import { getManifests, toggleManifestsFilter, selectManifest, saveNewManifest } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import VisibleManifests from './visible_manifests'
-import ManifestFilters from './manifest_filters'
+import ManifestAccess from './manifest_access'
 
 class Manifests extends Component {
   componentDidMount() {
     this.props.getManifests()
   }
 
-  handleFilterSelect(e) {
-    this.props.toggleManifestsFilter(e.target.value)
-  }
-
   render() {
     return (
       <div>
       {this.props.selectedManifest ? 
-        <Manifest allManifests={() => this.props.selectManifest(null)} 
-          manifestId={this.props.selectedManifest} /> :
+        <Manifest 
+          allManifests={() => this.props.selectManifest(null)} 
+          manifestId={this.props.selectedManifest}
+          saveNewManifest={this.props.saveNewManifest} 
+          manifest={this.props.manifest} /> :
         <div className='manifests-container'>
-          <ManifestFilters 
+          <ManifestAccess
+            label='Filter:'
             handleSelect={this.props.toggleManifestsFilter}
-            accessFilters={['private', 'public']}
-            selectedFilter={this.props.filter} />
+            selectedDefault={this.props.filter} />
           <VisibleManifests 
             visibleManifests={this.props.visibleManifests}
             handleClick={this.props.selectManifest} />
@@ -58,12 +57,14 @@ const mapStateToProps = (state) => {
   return {
     visibleManifests,
     filter,
-    selectedManifest: selected
+    selectedManifest: selected,
+    manifest: manifests[selected]
   }
 }
 
 export default connect(mapStateToProps, {
   getManifests,
   toggleManifestsFilter,
-  selectManifest
+  selectManifest,
+  saveNewManifest
 })(Manifests)
