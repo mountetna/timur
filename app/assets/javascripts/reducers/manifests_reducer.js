@@ -6,8 +6,8 @@ const manifestsById = (state = {}, action) => {
       return newState
     case 'LOAD_MANIFESTS':
       return { ...state, ...action.manifestsById }
-  	case 'SAVE_MANIFEST':
-  	  return { ...state, [action.name]: action.manifest }
+  	case 'ADD_MANIFEST':
+  	  return { ...state, [action.manifest.id]: action.manifest }
   	default:
   	  return state
   }
