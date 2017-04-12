@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getManifests, toggleManifestsFilter, selectManifest, saveNewManifest } from '../../actions/manifest_actions'
+import { getManifests, toggleManifestsFilter, selectManifest, saveNewManifest, deleteManifest } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import VisibleManifests from './visible_manifests'
 import ManifestAccess from './manifest_access'
@@ -21,7 +21,7 @@ class Manifests extends Component {
           manifestId={selectedManifest}
           saveNewManifest={this.props.saveNewManifest}
           manifest={this.props.manifest}
-          delete={() => this.props.delete(selectedManifest)} /> :
+          delete={() => this.props.deleteManifest(selectedManifest)} /> :
         <div className='manifests-container'>
           <ManifestAccess
             label='Filter:'
@@ -69,5 +69,6 @@ export default connect(mapStateToProps, {
   getManifests,
   toggleManifestsFilter,
   selectManifest,
-  saveNewManifest
+  saveNewManifest,
+  deleteManifest
 })(Manifests)

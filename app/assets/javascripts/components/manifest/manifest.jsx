@@ -22,6 +22,7 @@ class Manifest extends Component {
             </a>
             <ManifestView
               manifest={this.props.manifest}
+              handleDelete={this.props.delete}
               handleEdit={()=>{}}
               handleCopy={()=>{}} />
           </div>

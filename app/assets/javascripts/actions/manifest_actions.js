@@ -29,6 +29,7 @@ export const deleteManifest = (manifestId) =>
   (dispatch) => {
     destroyManifest(manifestId)
       .then(data => {
+        dispatch(selectManifest(null))
         dispatch(removeManifest(manifestId))
       })
       .catch(e => console.error(e))
