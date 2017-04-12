@@ -46,24 +46,10 @@ var magmaActions = {
     }
   },
   requestModels: function() {
-    return function(dispatch) {
-      $.get(
-        Routes.templates_json_path(),
-        function(response) {
-          magmaActions.consumePayload(dispatch,response)
-        }
-      )
-    }
+    return magmaActions.requestDocuments("all", [], "all")
   },
   requestIdentifiers: function() {
-    return function(dispatch) {
-      $.get(
-        Routes.identifiers_json_path(),
-        function(response) {
-          magmaActions.consumePayload(dispatch,response)
-        }
-      )
-    }
+    return magmaActions.requestDocuments("all", "all", "identifier")
   },
   queryDocuments: function( model_name, filter, success, error ) {
     var self = this;

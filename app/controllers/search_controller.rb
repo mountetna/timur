@@ -8,23 +8,7 @@ class SearchController <  ApplicationController
   def index
   end
 
-  def templates_json
-    magma = Magma::Client.instance
-    status, payload = magma.retrieve(
-      model_name: "all",
-      record_names: [],
-      attribute_names: "all"
-    )
-    if status == 200
-      render json: payload
-    else
-      render json: payload, status: status
-    end
-  end
-
   def table_json
-    # Ask Magma a question to get record names matching this thing
-    
     status, payload = Magma::Client.instance.query(
       [ params[:model_name], "::all", "::identifier" ]
     )
@@ -69,22 +53,6 @@ class SearchController <  ApplicationController
       render json: result
     rescue Magma::ClientError => e
       render json: e.body.merge(message: e.message), status: e.status
-    end
-  end
- 
-  # TODO: this needs to be refactored to use the Payload interface along with
-  # column restriction, not yet working
-  def identifiers_json
-    magma = Magma::Client.instance
-    status, payload = magma.retrieve(
-      model_name: "all",
-      record_names: "all",
-      attribute_names: "identifier"
-    )
-    if status == 200
-      render json: payload
-    else
-      render json: payload, status: status
     end
   end
 end

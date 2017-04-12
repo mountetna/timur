@@ -17,17 +17,15 @@ Rails.application.routes.draw do
   get 'activity' => 'browse#activity', as: :activity
 
   get 'browse/:model/*name' => 'browse#model', as: :browse_model, format: false
+  post 'browse/update' => 'browse#update', as: :update_model
+
   post 'json/records' => 'search#records_json', as: :records_json
   post 'json/query' => 'search#query_json', as: :query_json
   post 'json/view' => 'browse#view_json', as: :view_json
-  post 'browse/update' => 'browse#update', as: :update_model
 
   post 'json/pythia' => 'plot#pythia_json', as: :pythia_json
-  post 'update_saves' => 'plot#update_saves', as: :update_saves
 
   get 'search' => 'search#index', as: :search
-  get 'search/templates' => 'search#templates_json', as: :templates_json
-  get 'search/identifiers' => 'search#identifiers_json', as: :identifiers_json
   post 'search/table' => 'search#table_json', as: :table_json
   post 'search/tsv' => 'search#table_tsv', as: :table_tsv
 end
