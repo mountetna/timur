@@ -1,9 +1,4 @@
-var magma_documents = function( model, record_names) {
-  if (!model) return [];
-  return record_names.map(function(record_name) {
-    return model.documents[record_name]
-  }).filter(function(doc) { return doc != undefined })
-}
+import Magma from 'magma'
 
 var TableAttribute = React.createClass({
   render: function() {
@@ -18,9 +13,9 @@ var TableAttribute = React.createClass({
 TableAttribute = connect(
   function(state, props) {
     var model_name = props.attribute.name
-    var model = state.magma.models[model_name]
-    var template = model ? model.template : null
-    var documents = magma_documents( model, props.value )
+    var magma = new Magma(state)
+    var template = magma.template(model_name)
+    var documents = magma.documents( model_name, props.value )
     var table = template ? new TableSet(documents, template) : null
     return {
       page_size: 10,

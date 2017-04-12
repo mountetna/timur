@@ -6,6 +6,8 @@
 //
 // The Browser has state in the form of mode (edit or not) and tab (which one is shown)
 
+import Magma from 'magma'
+
 var Browser = React.createClass({
   componentDidMount: function() {
     var self = this
@@ -98,11 +100,11 @@ var Browser = React.createClass({
 
 Browser = connect(
   function (state,props) {
-    var model = state.magma.models[props.model_name]
+    var magma = new Magma(state)
 
-    var template = model ? model.template : null
-    var document = model ? model.documents[props.record_name] : null
-    var revision = (model ? model.revisions[props.record_name] : null) || {}
+    var template = magma.template(props.model_name)
+    var document = magma.document(props.model_name, props.record_name)
+    var revision = magma.revision(props.model_name, props.record_name) || {}
 
     var view = (state.timur.views ? state.timur.views[props.model_name] : null)
 

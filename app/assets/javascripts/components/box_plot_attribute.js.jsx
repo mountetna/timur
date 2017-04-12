@@ -27,10 +27,6 @@ var BoxPlotAttribute = React.createClass({
   },
 })
 
-BoxPlotAttribute.contextTypes = {
-  store: React.PropTypes.object
-}
-
 BoxPlotAttribute = connect(
   function(state,props) {
     var manifest = timurActions.findManifest(state,props.attribute.plot.name)

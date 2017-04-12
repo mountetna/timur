@@ -6,8 +6,6 @@ window.Provider = require('react-redux').Provider
 window.connect = require('react-redux').connect
 window.thunk = require('redux-thunk')
 window.chroma = require('chroma-js')
-window.infix = require('infix')
-window.Calculation = require('calculation')
 
 window.dates = require('dates')
 

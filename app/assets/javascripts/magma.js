@@ -8,6 +8,15 @@ export default class Magma {
     return Object.keys(this.models)
   }
 
+  document(model_name, record_name) {
+    if (model_name && this.models[model_name] 
+      && this.models[model_name].documents
+      && this.models[model_name].documents[record_name]) {
+      return this.models[model_name].documents[record_name]
+    }
+    return null
+  }
+
   documents(model_name, record_names) {
     if (model_name && this.models[model_name] 
       && this.models[model_name].documents) {
@@ -19,6 +28,15 @@ export default class Magma {
       return documents
     }
     return {}
+  }
+
+  revision(model_name, record_name) {
+    if (model_name && this.models[model_name] 
+      && this.models[model_name].revisions
+      && this.models[model_name].revisions[record_name]) {
+      return this.models[model_name].revisions[record_name]
+    }
+    return null
   }
 
   revisions(model_name, record_names) {
