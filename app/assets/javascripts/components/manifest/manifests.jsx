@@ -11,14 +11,17 @@ class Manifests extends Component {
   }
 
   render() {
+    const { selectedManifest } = this.props
+
     return (
       <div>
-      {this.props.selectedManifest ? 
+      { selectedManifest ?
         <Manifest 
           allManifests={() => this.props.selectManifest(null)} 
-          manifestId={this.props.selectedManifest}
-          saveNewManifest={this.props.saveNewManifest} 
-          manifest={this.props.manifest} /> :
+          manifestId={selectedManifest}
+          saveNewManifest={this.props.saveNewManifest}
+          manifest={this.props.manifest}
+          delete={() => this.props.delete(selectedManifest)} /> :
         <div className='manifests-container'>
           <ManifestAccess
             label='Filter:'

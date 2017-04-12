@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import NewManifestForm from './new_manifest_form'
+import ManifestForm from './manifest_form'
+import ManifestView from './manifest_view'
 
 class Manifest extends Component {
   isNewManifest() {
@@ -10,25 +11,24 @@ class Manifest extends Component {
     return (
       <div className='manifest-container'>
         { this.isNewManifest() ? 
-          <NewManifestForm 
+          <ManifestForm
             //TODO add userRole
             canEditAccess={true} 
             cancel={this.props.allManifests}
             save={this.props.saveNewManifest} /> :
-          <a href="#" onClick={this.props.allManifests}>
-            all manifests
-          </a>
+          <div>
+            <a href="#" onClick={this.props.allManifests}>
+              all manifests
+            </a>
+            <ManifestView
+              manifest={this.props.manifest}
+              handleEdit={()=>{}}
+              handleCopy={()=>{}} />
+          </div>
         }
       </div>
     )
   }
-}
-
-const mapStateToProps = (state, ownProps) => {
-  const manifest = state.manifests[ownProps.manifestId]
-  return ({
-    manifest
-  })
 }
 
 export default Manifest

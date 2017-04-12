@@ -35,7 +35,7 @@ export const deleteManifest = (manifestId) =>
   }
 
 const addManifest = (manifest) => ({
-  type: 'ADD_MANIFEST',
+  type: 'ADD_USER_MANIFEST',
   manifest
 })
 
