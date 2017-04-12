@@ -1,4 +1,6 @@
 import React from 'react'
+import InputField from './input_field'
+import TextField from './text_field'
 
 const ManifestElementForm = ({ element, updateAttribute, handleRemove }) => (
   <div>
