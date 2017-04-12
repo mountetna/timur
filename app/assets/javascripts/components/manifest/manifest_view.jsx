@@ -4,8 +4,8 @@ import ManifestElement from './manifest_element'
 const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy }) => {
   const {name, project, updated_at, description, is_editable, user, access} = manifest
   const elements =  manifest.data.elements || []
-  const manifestElements = elements.map(element => (
-    <li key={element.name}>
+  const manifestElements = elements.map((element, i) => (
+    <li key={i}>
       <ManifestElement {...element}/>
     </li>
   ))
