@@ -14,7 +14,7 @@ class ManifestForm extends Component {
       const elementsByKey = elements.reduce((acc, curr) => {
         const key = v4()
         return ({
-          keys: [...acc.keys, key],
+          elementKeys: [...acc.elementKeys, key],
           elementsByKey: {...acc.elementsByKey, [key]: curr}
         })
       }, { elementKeys: [], elementsByKey: {} })
@@ -33,7 +33,7 @@ class ManifestForm extends Component {
     return (value) => this.setState({ [fieldName]: value })
   }
 
-  stateToManifestData(state) {
+  stateToManifestData() {
     const { elementKeys, elementsByKey } = this.state
     const elements = elementKeys.map(key => elementsByKey[key])
     return {
@@ -41,10 +41,22 @@ class ManifestForm extends Component {
     }
   }
 
-  save() {
-    this.props.save({
+  create() {
+    this.props.create({
       ...this.state,
-      data: this.stateToManifestData(this.state)
+      data: this.stateToManifestData()
+    })
+  }
+
+  update() {
+    console.log(this.stateToManifestData())
+    console.log({
+      ...this.state,
+      data: this.stateToManifestData()
+    })
+    this.props.update({
+      ...this.state,
+      data: this.stateToManifestData()
     })
   }
 
@@ -90,7 +102,7 @@ class ManifestForm extends Component {
   render() {
     const manifestElements = this.state.elementKeys.map((key) => {
       const props = {
-        ...this.state.elementsByKey[key],
+        element: this.state.elementsByKey[key],
         updateAttribute: this.updateElementAttribute(key),
         handleRemove: () => this.removeElement(key)
       }
@@ -104,9 +116,14 @@ class ManifestForm extends Component {
 
     return (
       <div>
-        <button onClick={this.save.bind(this)}>
-          save
-        </button>
+        { !this.props.manifest ?
+          <button onClick={this.create.bind(this)}>
+            create
+          </button> :
+          <button onClick={this.update.bind(this)}>
+            update
+          </button>
+        }
         <button onClick={this.props.cancel}>
           cancel
         </button>

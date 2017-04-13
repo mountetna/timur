@@ -1,6 +1,6 @@
 import { showMessages } from './message_actions'
 import { requestManifests } from './timur_actions'
-import { fetchManifests, destroyManifest, createManifest } from '../api/manifests_api'
+import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests_api'
 
 const loadManifests = (manifestsById) => ({
   type: 'LOAD_MANIFESTS',
@@ -40,12 +40,16 @@ const addManifest = (manifest) => ({
   manifest
 })
 
+export const toggleEdit = () =>({
+  type: 'TOGGLE_IS_EDITING_MANIFEST'
+})
+
 export const saveNewManifest = (manifest) =>
   (dispatch) => {
-    console.log(manifest)
     createManifest(manifest)
       .then( ({ manifest }) => {
         dispatch(addManifest(manifest))
+        dispatch(toggleEdit())
         dispatch(selectManifest(manifest.id))
       })
       .catch(e => console.error(e))
@@ -61,6 +65,21 @@ export const selectManifest = (id) => ({
   id
 })
 
+const editManifest = (manifest) => ({
+  type: 'UPDATE_USER_MANIFEST',
+  manifest
+})
+
+export const saveManifest = (manifest) =>
+  (dispatch) => {
+    console.log(manifest)
+    updateManifest(manifest, manifest.id)
+      .then( ({ manifest }) => {
+        dispatch(editManifest(manifest))
+        dispatch(toggleEdit())
+      })
+      .catch(e => console.error(e))
+  }
 
 
 

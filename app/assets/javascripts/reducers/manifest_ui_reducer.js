@@ -21,6 +21,15 @@ const selected = (state = null, action) => {
   }
 }
 
+const isEditing = (state = false, action) => {
+  switch (action.type) {
+    case 'TOGGLE_IS_EDITING_MANIFEST':
+      return !state
+    default:
+      return state
+  }
+}
+
 // const title = (state = '', action) => {
 //   switch (action.type) {
 //     case 'CLEAR_EDITOR':
@@ -135,6 +144,7 @@ const selected = (state = null, action) => {
 export default combineReducers({
   filter,
   selected,
+  isEditing
   // title,
   // isUpdatingTitle,
   // isAddingManifestElement,

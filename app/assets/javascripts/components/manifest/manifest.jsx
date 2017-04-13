@@ -3,19 +3,17 @@ import ManifestForm from './manifest_form'
 import ManifestView from './manifest_view'
 
 class Manifest extends Component {
-  isNewManifest() {
-    return this.props.manifestId === 'new'
-  }
-
   render () {
     return (
       <div className='manifest-container'>
-        { this.isNewManifest() ? 
+        { this.props.editing ?
           <ManifestForm
             //TODO add userRole
+            manifest={this.props.manifest}
             canEditAccess={true} 
-            cancel={this.props.allManifests}
-            save={this.props.saveNewManifest} /> :
+            cancel={this.props.edit}
+            create={this.props.saveNewManifest}
+            update={this.props.updateManifest} /> :
           <div>
             <a href="#" onClick={this.props.allManifests}>
               all manifests
@@ -23,7 +21,7 @@ class Manifest extends Component {
             <ManifestView
               manifest={this.props.manifest}
               handleDelete={this.props.delete}
-              handleEdit={()=>{}}
+              handleEdit={this.props.edit}
               handleCopy={()=>{}} />
           </div>
         }

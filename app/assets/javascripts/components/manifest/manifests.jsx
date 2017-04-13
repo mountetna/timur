@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getManifests, toggleManifestsFilter, selectManifest, saveNewManifest, deleteManifest } from '../../actions/manifest_actions'
+import { getManifests, toggleManifestsFilter, selectManifest, saveNewManifest, deleteManifest, toggleEdit, saveManifest } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import VisibleManifests from './visible_manifests'
 import ManifestAccess from './manifest_access'
@@ -15,13 +15,16 @@ class Manifests extends Component {
 
     return (
       <div>
-      { selectedManifest ?
-        <Manifest 
-          allManifests={() => this.props.selectManifest(null)} 
+      { (selectedManifest || this.props.isEditing) ?
+        <Manifest
+          editing={this.props.isEditing}
+          allManifests={() => this.props.selectManifest(null)}
           manifestId={selectedManifest}
           saveNewManifest={this.props.saveNewManifest}
           manifest={this.props.manifest}
-          delete={() => this.props.deleteManifest(selectedManifest)} /> :
+          delete={() => this.props.deleteManifest(selectedManifest)}
+          edit={this.props.toggleEdit}
+          updateManifest={this.props.saveManifest} /> :
         <div className='manifests-container'>
           <ManifestAccess
             label='Filter:'
@@ -29,7 +32,8 @@ class Manifests extends Component {
             selectedDefault={this.props.filter} />
           <VisibleManifests 
             visibleManifests={this.props.visibleManifests}
-            handleClick={this.props.selectManifest} />
+            handleClick={this.props.selectManifest}
+            newManifest={this.props.toggleEdit}/>
         </div>
       }
       </div>
@@ -38,7 +42,7 @@ class Manifests extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { manifests, manifestsUI: { filter, selected } } = state
+  const { manifests, manifestsUI: { filter, selected, isEditing } } = state
   //filter by access 'public' or 'private'
   const filteredManifests = Object.keys(manifests).reduce((acc, id) => {
     if (!filter || manifests[id].access === filter) {
@@ -61,7 +65,8 @@ const mapStateToProps = (state) => {
     visibleManifests,
     filter,
     selectedManifest: selected,
-    manifest: manifests[selected]
+    manifest: manifests[selected],
+    isEditing
   }
 }
 
@@ -70,5 +75,7 @@ export default connect(mapStateToProps, {
   toggleManifestsFilter,
   selectManifest,
   saveNewManifest,
-  deleteManifest
+  deleteManifest,
+  toggleEdit,
+  saveManifest
 })(Manifests)
