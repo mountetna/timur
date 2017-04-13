@@ -49,11 +49,6 @@ class ManifestForm extends Component {
   }
 
   update() {
-    console.log(this.stateToManifestData())
-    console.log({
-      ...this.state,
-      data: this.stateToManifestData()
-    })
     this.props.update({
       ...this.state,
       data: this.stateToManifestData()
