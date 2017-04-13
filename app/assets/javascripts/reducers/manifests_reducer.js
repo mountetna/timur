@@ -9,6 +9,13 @@ const manifestsById = (state = {}, action) => {
   	case 'ADD_USER_MANIFEST':
     case 'UPDATE_USER_MANIFEST':
   	  return { ...state, [action.manifest.id]: action.manifest }
+    case 'ADD_MANIFEST_RESULT':
+      return {
+        ...state, [action.id]: {
+          ...state[action.id],
+          result: action.result
+        }
+      }
   	default:
   	  return state
   }
