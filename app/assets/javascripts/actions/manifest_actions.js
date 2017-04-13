@@ -72,10 +72,20 @@ const editManifest = (manifest) => ({
 
 export const saveManifest = (manifest) =>
   (dispatch) => {
-    console.log(manifest)
     updateManifest(manifest, manifest.id)
       .then( ({ manifest }) => {
         dispatch(editManifest(manifest))
+        dispatch(toggleEdit())
+      })
+      .catch(e => console.error(e))
+  }
+
+export const copyManifest = (manifest) =>
+  (dispatch) => {
+    createManifest({...manifest, name: `${manifest.name}(copy)`})
+      .then(({manifest}) => {
+        dispatch(addManifest(manifest))
+        dispatch(selectManifest(manifest.id))
         dispatch(toggleEdit())
       })
       .catch(e => console.error(e))

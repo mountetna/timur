@@ -22,7 +22,7 @@ class Manifest extends Component {
               manifest={this.props.manifest}
               handleDelete={this.props.delete}
               handleEdit={this.props.edit}
-              handleCopy={()=>{}} />
+              handleCopy={()=>{ this.props.copy(this.props.manifest)}} />
           </div>
         }
       </div>
