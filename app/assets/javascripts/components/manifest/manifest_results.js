@@ -4,15 +4,16 @@ import downloadjs from 'downloadjs'
 
 import React from 'react'
 
-const ManifestResults = ({ results }) => {
+const ManifestResults = ({ results, name }) => {
   let manifestResults
 
   if (typeof results === 'string') {
     manifestResults = <span>{results}</span>
-  } else {
-    manifestResults = Object.keys(results).map((elementName, index) => (
+  } else  if (results[name]) {
+    let result = results[name]
+    manifestResults = Object.keys(result).map((elementName, index) => (
       <div key={index}>
-        {createResult(elementName, results[elementName]) }
+        {createResult(elementName, result[elementName]) }
       </div>
     ))
   }

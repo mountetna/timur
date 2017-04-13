@@ -91,29 +91,27 @@ export const copyManifest = (manifest) =>
       .catch(e => console.error(e))
   }
 
+const addManifestResult = (id, result) => ({
+  type: 'ADD_MANIFEST_RESULT',
+  id,
+  result
+})
 
+export const submitManifest = (manifest) => (dispatch) => {
+  const { name, data: { elements } } = manifest
+  const manifestElements = elements.map(({ name, script }) => {
+    return [name, script]
+  })
 
-// export const submitManifest = () => (dispatch, getState) => {
-//   const { manifest, title, elementList } = getState().manifestsUI
-
-//   //vaildate title
-//   if (title === '') {
-//     return dispatch(showMessages(['Manifest title cannot be blank.']))
-//   }
-
-//   const orderedManifest = elementList.reduce((acc, elem) => {
-//     return {...acc, [elem]: manifest[elem]}
-//   }, {})
-
-//   const payload = { manifest: orderedManifest, name: title }
-//   dispatch(
-//     requestManifests(
-//       [payload],
-//       () => dispatch(showMessages(['Manifest submitted succesfully.'])),
-//       (e) => dispatch(showMessages(['Manifest submission error: ' + e]))
-//     )
-//   )
-// }
+  const payload = { manifest: manifestElements, name: name }
+  dispatch(
+    requestManifests(
+      [payload],
+      (result) => dispatch(addManifestResult(manifest.id, result)),
+      (error) => dispatch(addManifestResult(manifest.id, error))
+    )
+  )
+}
 
 // const saveManifestAction = (name, manifest) => ({
 //   type: 'SAVE_MANIFEST',

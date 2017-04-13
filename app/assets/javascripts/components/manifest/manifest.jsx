@@ -11,16 +11,24 @@ class Manifest extends Component {
       this.setState({ result: {} })
     }
 
-    if (manifest.result) {
-      this.setState({ result: manifest.result })
-    } else {
-      this.props.submitManifest(manifest)
+    if (manifest) {
+      this.setState({ name: manifest.name })
+
+      if (manifest.result) {
+        this.setState({
+          result: manifest.result
+        })
+      } else {
+        this.props.submitManifest(manifest)
+      }
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.manifest && nextProps.manifest.result ) {
-      this.setState({ result: nextProps.manifest.result })
+    if (nextProps.manifest && nextProps.manifest.result) {
+      this.setState({
+        result: nextProps.manifest.result
+      })
     }
   }
 
@@ -47,7 +55,7 @@ class Manifest extends Component {
               handleCopy={()=>{ this.props.copy(this.props.manifest)}} />
           </div>
         }
-        <ManifestResults results={this.state.result} />
+        <ManifestResults results={this.state.result} name={this.state.name} />
       </div>
     )
   }
