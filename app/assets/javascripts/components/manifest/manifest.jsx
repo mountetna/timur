@@ -55,7 +55,7 @@ class Manifest extends Component {
               handleCopy={()=>{ this.props.copy(this.props.manifest)}} />
           </div>
         }
-        <ManifestResults results={this.state.result} name={this.state.name} />
+        <ManifestResults results={this.state.result} />
       </div>
     )
   }
