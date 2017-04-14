@@ -4,6 +4,7 @@ import { getManifests, toggleManifestsFilter, selectManifest, saveNewManifest, d
 import Manifest from './manifest'
 import VisibleManifests from './visible_manifests'
 import ManifestAccess from './manifest_access'
+import debounce from 'lodash/debounce'
 
 class Manifests extends Component {
   componentDidMount() {
@@ -27,7 +28,7 @@ class Manifests extends Component {
           updateManifest={this.props.saveManifest}
           copy={this.props.copyManifest}
           submitManifest={this.props.submitManifest}
-          fetchResults={this.props.fetchManifestResults}/> :
+          fetchResults={debounce(this.props.fetchManifestResults, 2000)}/> :
         <div className='manifests-container'>
           <ManifestAccess
             label='Filter:'

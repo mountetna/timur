@@ -3,8 +3,8 @@ import InputField from './input_field'
 import TextField from './text_field'
 import ManifestAccess from './manifest_access'
 import ManifestElementForm from './manifest_element_form'
-import { v4 } from 'node-uuid'
 import ManifestResults from './manifest_results'
+import { v4 } from 'node-uuid'
 
 class ManifestForm extends Component {
   componentWillMount() {
@@ -82,7 +82,7 @@ class ManifestForm extends Component {
       }
       this.setState(
         { elementsByKey: updatedElements },
-        () => this.updateResults()
+        this.updateResults
       )
     }
   }
@@ -98,7 +98,7 @@ class ManifestForm extends Component {
 
     this.setState(
       { elementKeys: removedKey, elementsByKey: removedElement },
-      () => this.updateResults()
+      this.updateResults
     )
   }
 
