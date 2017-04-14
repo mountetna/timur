@@ -1,5 +1,6 @@
 import React from 'react'
 import ManifestElement from './manifest_element'
+import ManifestResults from './manifest_results'
 
 const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy }) => {
   const {name, project, updated_at, description, is_editable, user, access} = manifest
@@ -26,6 +27,7 @@ const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy }) => {
       <ol>
         {manifestElements}
       </ol>
+      <ManifestResults results={manifest.result || {}}/>
     </div>
   )
 }

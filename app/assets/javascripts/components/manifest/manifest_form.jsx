@@ -4,6 +4,7 @@ import TextField from './text_field'
 import ManifestAccess from './manifest_access'
 import ManifestElementForm from './manifest_element_form'
 import { v4 } from 'node-uuid'
+import ManifestResults from './manifest_results'
 
 class ManifestForm extends Component {
   componentWillMount() {
@@ -33,26 +34,30 @@ class ManifestForm extends Component {
     return (value) => this.setState({ [fieldName]: value })
   }
 
-  stateToManifestData() {
+  stateToManifest() {
     const { elementKeys, elementsByKey } = this.state
     const elements = elementKeys.map(key => elementsByKey[key])
     return {
-      elements
+      ...this.state,
+      data: { elements }
     }
   }
 
   create() {
-    this.props.create({
-      ...this.state,
-      data: this.stateToManifestData()
-    })
+    this.props.create(this.stateToManifest())
   }
 
   update() {
-    this.props.update({
-      ...this.state,
-      data: this.stateToManifestData()
-    })
+    this.props.update(this.stateToManifest())
+  }
+
+  updateResults() {
+    this.props.updateResults(
+      this.stateToManifest(),
+      (result) => {
+        this.setState({ result })
+      }
+    )
   }
 
   addElement() {
@@ -75,7 +80,10 @@ class ManifestForm extends Component {
           [attribute]: value
         }
       }
-      this.setState({ elementsByKey: updatedElements })
+      this.setState(
+        { elementsByKey: updatedElements },
+        () => this.updateResults()
+      )
     }
   }
 
@@ -88,10 +96,10 @@ class ManifestForm extends Component {
     let removedElement = {...this.state.elementsByKey}
     delete removedElement[key]
 
-    this.setState({
-      elementKeys: removedKey,
-      elementsByKey: removedElement
-    })
+    this.setState(
+      { elementKeys: removedKey, elementsByKey: removedElement },
+      () => this.updateResults()
+    )
   }
 
   render() {
@@ -137,8 +145,8 @@ class ManifestForm extends Component {
             selectedDefault={this.state.access}
             handleSelect={this.updateField('access')} />
         }
-        { this.state.updated_at && <div>created at: this.state.manifest.updated_at</div> }
-        { this.state.user && <div>created by: this.state.manifest.user.name</div> }
+        { this.state.updated_at && <div>created at: {this.state.updated_at}</div> }
+        { this.state.user && <div>created by: {this.state.user.name}</div> }
         <TextField label='Description'
           onChange={this.updateField('description')}
           value={this.state.description} />
@@ -151,6 +159,7 @@ class ManifestForm extends Component {
           </li>
           {manifestElements}
         </ol>
+        <ManifestResults results={this.state.result || {}} />
       </div>
     )
   }

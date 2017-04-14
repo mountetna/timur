@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import ManifestForm from './manifest_form'
 import ManifestView from './manifest_view'
-import ManifestResults from './manifest_results'
 
 class Manifest extends Component {
   componentWillMount() {
@@ -12,8 +11,6 @@ class Manifest extends Component {
     }
 
     if (manifest) {
-      this.setState({ name: manifest.name })
-
       if (manifest.result) {
         this.setState({
           result: manifest.result
@@ -21,14 +18,6 @@ class Manifest extends Component {
       } else {
         this.props.submitManifest(manifest)
       }
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.manifest && nextProps.manifest.result) {
-      this.setState({
-        result: nextProps.manifest.result
-      })
     }
   }
 
@@ -43,7 +32,7 @@ class Manifest extends Component {
             cancel={this.props.edit}
             create={this.props.saveNewManifest}
             update={this.props.updateManifest}
-            submitManifest={this.props.submitManifest}/> :
+            updateResults={this.props.fetchResults} /> :
           <div>
             <a href="#" onClick={this.props.allManifests}>
               all manifests
@@ -55,7 +44,6 @@ class Manifest extends Component {
               handleCopy={()=>{ this.props.copy(this.props.manifest)}} />
           </div>
         }
-        <ManifestResults results={this.state.result} />
       </div>
     )
   }
