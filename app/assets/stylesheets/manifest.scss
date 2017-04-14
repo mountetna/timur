@@ -1,201 +1,63 @@
 @import "globals";
 
-.manifest-container {
-	margin-top: 15px;
-	margin-left: 15px;
-	margin-right: 15px;
-	min-width: 400px;
-	display: flex; 
-	flex-direction: column;
-	border-width: 1px;
-	border-style: solid;
+.manifests-container {
+  color: #333;
+  font-family: sans-serif;
+  margin-top: 10px;
+  padding-left: 15px;
 
-	> .title-bar-container {
-		display: flex;
-		justify-content: flex-start; 
-		background: linear-gradient(to top, #CCFFCC, white);
-		height: 30px;
-		align-items: center;
-		border-style: solid;
-		box-sizing: border-box;
-		border-width: 0px 0px 1px 0px;
-		width: 100%;
-		color: forestgreen;
+  a {
+    color: black;
+  }
 
-		> .title-container {
-			margin-left: 25px; 
-			margin-right: 5px;
-			font-weight: bold;
+  .new {
+    color: forestgreen;
 
-			>div {
-			  min-width: 70px;
-			}
-		}
+    &:hover {
+      text-decoration: underline
+    }
 
-		> .actions-container {
-			font-size: .9em;
-			flex-grow: 1;
-			display: flex;
-			justify-content: center; 
-			align-items: center;
+    span {
+      margin-left: 5px;
+    }
+  }
 
-			>div {
-				margin-right: 5px;
-				border-width: 1px;
-				padding: 3px;
-				text-align: center;
-				
-				>i {
-					margin-left: 3px;
-				} 
-			}
-		}
-	}
+  .filter {
+    font-size: .9em;
 
-	> .actions-container {
-		display: flex;
-		justify-content: flex-end;  
-		flex-direction: column;  	
-		
-		>div {
-			margin-right: 5px;
-			
-			>i {
-				margin-right: 3px;
-			}
-		}
-	}
+    .checkbox {
+      margin-left: 7px;
+      font-size: .8em;
+    }
+  }
 
-	> .manifest-elements-container {
-		background-color: #CCFFCC;
-
-		.cancel {
-			color: red;
-		}
-
-		.update {
-			color: green;
-		}
-
-		.last-section {
-			background-color: white;
-
-			i {
-				margin-left: 4px;
-			}
-		}
-
-		.elements-table {
-			display: flex;
-			background-color: white; 
-			min-width: 0px;
-
-			.element-header {
-				font-weight: bold;
-				position: relative;
-
-				.border {
-					border-bottom: 1px solid midnightblue;
-					position: absolute;
-					width: 80%
-				}
-			}
-
-
-			.name {
-				width: 190px;
-			}
-
-			.expression-column {
-				min-width: 100px;
-				flex-grow: 1;
-
-				.expression {
-					padding-left: 10px;
-				}
-			}
-
-			.actions-column {
-				min-width: 50px;
-				display: flex;
-				flex-direction: column
-			}
-
-			.cell-content {
-				text-overflow: ellipsis; 
-				overflow: hidden; 
-				white-space: nowrap;
-			}
-
-			.action-cell {
-				flex-grow: 1;
-				display: flex;
-				align-content: center;
-				position: relative;
-
-				.action-cell-content {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					display: flex;
-					align-items: center;
-
-					div {
-						flex-grow: 1;
-						text-align: center;
-					}
-				}
-			}
-		}
-
-	    .element-editor-container {
-	    	box-sizing: border-box;
-	    	border-style: solid;
-	    	border-width: 1px 0px 0px 0px;
-	    }
-
-		.element-editor {
-			margin: 4px;
-			border-width: 1px;
-			border-style: solid; 
-			display: flex;
-			flex-direction: column;
-			background-color: #D3D3D3;
-			padding: 10px;
-
-			.expression-section {
-				margin-top: 10px;
-				display: flex;
-				flex-direction: column;
-
-				textarea {
-					resize: vertical; 
-					min-height: 300px;
-				}
-			}
-
-			.button-container {
-				display: flex; 
-				align-items: center; 
-				justify-content: flex-end;
-
-				div {
-					margin: 10px 4px 0px 4px;
-					width: 80px;
-					text-align: center;
-
-					i {
-					  margin-right: 3px;
-					}
-				}
-			}
-		}
-	}
+  ol {
+    margin: 0px;
+    margin-top: 5px;
+    list-style-type: none;
+    padding: 0;
+  }
 }
 
-.manifest-results-container {
-	.fa.fa-download {
-	  margin-left: 5px;
-	}
+.manifest-preview {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  font-size: .8em;
+  font-weight: lighter;
+
+  .name {
+    color: teal;
+    font-size: 1.4em;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline
+    }
+  }
+
+  .project {
+    color: teal;
+    font-size: 1em;
+    font-weight: bold;
+  }
 }

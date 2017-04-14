@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { getManifests, toggleManifestsFilter, selectManifest, saveNewManifest, deleteManifest, toggleEdit, saveManifest, copyManifest, submitManifest, fetchManifestResults } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import VisibleManifests from './visible_manifests'
-import ManifestAccess from './manifest_access'
+import ManifestFilter from './manifests_filter'
 import debounce from 'lodash/debounce'
 
 class Manifests extends Component {
@@ -15,7 +15,7 @@ class Manifests extends Component {
     const { selectedManifest } = this.props
 
     return (
-      <div>
+      <div className='manifests-container'>
       { (selectedManifest || this.props.isEditing) ?
         <Manifest
           editing={this.props.isEditing}
@@ -30,14 +30,14 @@ class Manifests extends Component {
           submitManifest={this.props.submitManifest}
           fetchResults={debounce(this.props.fetchManifestResults, 2000)}/> :
         <div className='manifests-container'>
-          <ManifestAccess
-            label='Filter:'
-            handleSelect={this.props.toggleManifestsFilter}
-            selectedDefault={this.props.filter} />
+          <a href='#' onClick={this.props.toggleEdit} className="new">
+            <i className="fa fa-plus" aria-hidden="true"></i>
+            New Manifest
+          </a>
+          <ManifestFilter handleChange={this.props.toggleManifestsFilter} selected={this.props.filter} />
           <VisibleManifests 
             visibleManifests={this.props.visibleManifests}
-            handleClick={this.props.selectManifest}
-            newManifest={this.props.toggleEdit}/>
+            handleClick={this.props.selectManifest} />
         </div>
       }
       </div>

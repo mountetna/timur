@@ -1,6 +1,6 @@
 import ManifestPreview from './manifest_preview'
 
-const VisibleManifests = ({ visibleManifests, handleClick, newManifest }) => {
+const VisibleManifests = ({ visibleManifests, handleClick }) => {
   const manifests = visibleManifests.map(manifest => {
     const props = {
       ...manifest, 
@@ -15,9 +15,6 @@ const VisibleManifests = ({ visibleManifests, handleClick, newManifest }) => {
 
   return (
     <ol>
-      <li>
-        <button onClick={newManifest}>New Manifest</button>
-      </li>
       {manifests}
     </ol>
   )
