@@ -34,15 +34,17 @@ TabBar = connect(
     var view = props.view
 
     if (props.mode == 'edit' && props.revision) {
-      Object.keys(props.view).forEach(function(tab_name) {
+      Object.keys(props.view).forEach((tab_name) => {
         var tab = props.view[tab_name]
         if (tab) {
-          Object.keys(tab.panes).forEach(function(pane_name) {
-            if (tab.panes[pane_name].attributes.some(function(name) { return props.revision.hasOwnProperty(name) })) {
+          for (var pane_name in tab.panes) {
+            if (tab.panes[pane_name].display.some(
+              (display) => display.name in props.revision)
+            ) {
               revised[tab_name] = true
-              return
+              break
             }
-          })
+          }
         }
       })
     }

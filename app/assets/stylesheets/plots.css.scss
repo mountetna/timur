@@ -5,21 +5,23 @@ svg {
 		font-family: $value_font;
 		font-size: 10px;
 
-		.box line,
-		.box rect,
-		.box circle {
-			fill: #fff;
-			stroke: #000;
-			stroke-width: 1.5px;
-		}
+		.whisker_box {
+			line,
+			rect,
+			circle {
+				fill: #fff;
+				stroke: #000;
+				stroke-width: 1.5px;
+			}
 
-		.box .center {
-			stroke-dasharray: 3,3;
-		}
+			.center {
+				stroke-dasharray: 3,3;
+			}
 
-		.box .outlier {
-			fill: #ccc;
-			stroke: #ccc;
+			.outlier {
+				fill: #ccc;
+				stroke: #ccc;
+			}
 		}
 	}
 	&.line_plot {
@@ -73,15 +75,10 @@ svg {
 			circle.normal {
 				fill: #ccc;
 			}
-			circle.highlighted_tumor {
+			circle.highlighted {
 				stroke-width: 2px;
 				stroke: red;
-				fill: #fcc;
-			}
-			circle.highlighted_normal {
-				stroke-width: 2px;
-				stroke: #00f;
-				fill: #ccf;
+				//fill: #fcc;
 			}
 		}
 	}

@@ -8,28 +8,31 @@ var Timur = React.createClass({
     }
     return Redux.applyMiddleware(...middleWares)(Redux.createStore)(Redux.combineReducers({
       timur: timurReducer,
+      magma: magmaReducer,
       messages: messageReducer,
-      templates: magmaReducer,
       plots: plotReducer
     }))
   },
   render: function () {
-    var component;
+    var component
     if (this.props.mode == 'browse') 
       component = <Browser 
         can_edit={ this.props.can_edit }
         model_name={ this.props.model_name }
-        record_name={ this.props.record_name } />;
+        record_name={ this.props.record_name } />
     else if (this.props.mode == 'plot')
-      component = <Plotter />;
+      component = <Plotter />
     else if (this.props.mode == 'search')
-      component = <Search can_edit={ this.props.can_edit }/>;
+      component = <Search can_edit={ this.props.can_edit }/>
     else if (this.props.mode == 'activity')
       component = <Activity activities={ this.props.activities }/>
     else if (this.props.mode == 'noauth')
       component = <Noauth user={ this.props.user }/>
 
-    return <Provider store={ this.create_store() }>
+    var store = this.create_store()
+    window.store = store
+
+    return <Provider store={ store }>
             <div>
               <TimurNav user={ this.props.user }
                 can_edit={ this.props.can_edit }

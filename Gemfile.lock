@@ -70,6 +70,8 @@ GEM
     excon (0.45.4)
     execjs (2.6.0)
     extlib (0.9.16)
+    ffi (1.9.18)
+    filigree (0.3.3)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
     fog (1.37.0)
@@ -223,15 +225,9 @@ GEM
     libv8 (3.16.14.15)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    magma-dev-ucsf-immunoprofiler (0.3)
-      carrierwave-sequel
-      extlib
-      fog
-      germ
-      mini_magick
-      sequel
-      sequel_polymorphic (>= 0.2.2)
-      spreadsheet
+    magma (0.4)
+      multipart-post
+      net-http-persistent
     magma-production-ucsf-immunoprofiler (0.3)
       carrierwave-sequel
       extlib
@@ -250,6 +246,7 @@ GEM
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     multi_json (1.11.3)
+    multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
@@ -301,6 +298,9 @@ GEM
       rails (>= 3.2)
       tilt
     ref (2.0.0)
+    rltk (3.0.1)
+      ffi (>= 1.0.0)
+      filigree (>= 0.2.0)
     ruby-ole (1.2.12)
     ruby_parser (3.8.1)
       sexp_processor (~> 4.1)
@@ -351,18 +351,20 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   d3-rails
+  extlib
   font-awesome-sass
   haml-rails (>= 0.3.4)
   jbuilder (~> 2.0)
   jquery-rails
   jquery-ui-rails
   js-routes
-  magma-dev-ucsf-immunoprofiler
+  magma
   magma-production-ucsf-immunoprofiler
   omniauth-shibboleth
   pg
   rails (= 4.2.0)
   react-rails (~> 1.5.0)
+  rltk
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring

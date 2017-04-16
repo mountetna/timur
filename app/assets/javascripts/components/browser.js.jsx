@@ -6,6 +6,8 @@
 //
 // The Browser has state in the form of mode (edit or not) and tab (which one is shown)
 
+import Magma from 'magma'
+
 var Browser = React.createClass({
   componentDidMount: function() {
     var self = this
@@ -54,23 +56,23 @@ var Browser = React.createClass({
 
     var view = this.props.view
 
-    if (!view)
+    if (!view || !this.props.template || !this.props.document)
       return <div className="browser">
                 <span className="fa fa-spinner fa-pulse"/>
              </div>
 
     var current_tab_name = this.state.current_tab_name || Object.keys(view)[0]
     
-    var skin = this.state.mode == "browse" ?  "browser " + this.props.template_name : "browser"
+    var skin = this.state.mode == "browse" ?  "browser " + this.props.model_name : "browser"
 
     return <div className={ skin }>
 
       <Header mode={ this.state.mode } handler={ this.header_handler } can_edit={ this.props.can_edit }>
-        <div className="template_name">
-        { this.camelize(this.props.template_name) }
+        <div className="model_name">
+        { this.camelize(this.props.model_name) }
         </div>
-        <div className="document_name">
-        { this.props.document_name }
+        <div className="record_name">
+        { this.props.record_name }
         </div>
         <Help info="edit"/>
       </Header>
@@ -98,23 +100,20 @@ var Browser = React.createClass({
 
 Browser = connect(
   function (state,props) {
-    var template_record = state.templates[props.model_name]
+    var magma = new Magma(state)
 
-    var template = template_record ? template_record.template : null
+    var template = magma.template(props.model_name)
+    var document = magma.document(props.model_name, props.record_name)
+    var revision = magma.revision(props.model_name, props.record_name) || {}
 
-    var document = template_record ? template_record.documents[props.record_name] : null
-
-    var revision = (template_record ? template_record.revisions[props.record_name] : null) || {}
-
-    var view = (template_record ? template_record.views[props.record_name] : null)
+    var view = (state.timur.views ? state.timur.views[props.model_name] : null)
 
     return freshen(
       props,
       {
         template: template,
-        template_name: template ? template.name : null,
         document: document,
-        document_name: document ? document[ template.identifier ] : null,
+        record_name: template && document ? document[ template.identifier ] : null,
         revision: revision,
         hasRevisions: (Object.keys(revision).length > 0),
         view: view,
@@ -124,9 +123,9 @@ Browser = connect(
   function (dispatch,props) {
     return {
       request: function(tab_name,success,error) {
-        dispatch(magmaActions.requestView(
+        dispatch(timurActions.requestView(
           props.model_name,
-          props.record_name, 
+          props.record_name,
           tab_name,
           success,
           error

@@ -112,13 +112,15 @@ var TableViewer = React.createClass({
     var link = document.createElement("a");    
     link.href = uri;
     link.style = "visibility:hidden";
-    link.download = table.model.name + ".tsv";
+    link.download = table.template.name + ".tsv";
     
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   },
-  render_browse: function() {
+  render: function() {
+    if (this.props.mode != 'browse') return <div className="value"></div>
+
     var self = this;
     var table = self.props.table;
     var filter = new RecordFilter(table, self.state.filter)
@@ -129,48 +131,44 @@ var TableViewer = React.createClass({
     var pages = Math.ceil(records.length / self.props.page_size);
 
     return <div className="table">
-              <Pager pages={ pages } 
-                current_page={ self.state.current_page }
-                set_page={ self.set_page } >
-                <div className='search'>&#x2315;</div>
-                <input className="filter" type="text" onChange={ this.set_filter }/>
-                <input className="export" type="button" onClick={ self.export_table.bind(this,records) } value={"\u21af TSV"}/>
-                <Help info="table_viewer"/>
-              </Pager>
-              <div className="table_row">
+      <Pager pages={ pages } 
+        current_page={ self.state.current_page }
+        set_page={ self.set_page } >
+        <div className='search'>&#x2315;</div>
+        <input className="filter" type="text" onChange={ this.set_filter }/>
+        <input className="export" type="button" onClick={ self.export_table.bind(this,records) } value={"\u21af TSV"}/>
+        <Help info="table_viewer"/>
+      </Pager>
+      <div className="table_row">
+      {
+        table.columns.map(function(column,i) {
+          return <div key={i} className="table_header">{ column.name }</div>
+        })
+      }
+      </div>
+      {
+        records.slice(self.row_for(self.state.current_page), self.row_for(self.state.current_page+1)).map(
+          function(record) {
+            return <div key={ record.id }
+              className="table_row">
               {
-                table.columns.map(function(column,i) {
-                  return <div key={i} className="table_header">{ column.name }</div>
+                table.columns.map(function(column, i) {
+                  var value = record[ column.name ];
+                  return <div className="table_data" key={i}>
+                    <AttributeViewer 
+                    mode={self.props.mode}
+                    template={ table.template }
+                    document={ record }
+                    value={ value }
+                    attribute={ column.attribute }/>
+                  </div>
                 })
               }
-              </div>
-              {
-                records.slice(self.row_for(self.state.current_page),
-                              self.row_for(self.state.current_page+1)).map(
-                  function(record) {
-                    return <div key={ record.id }
-                      className="table_row">
-                      {
-                        table.columns.map(function(column, i) {
-                          var value = record[ column.name ];
-                          var txt = column.render(record, self.props.mode);
-                          return <div key={i} className="table_data">{ txt }</div>;
-                        })
-                      }
-                    </div>;
-                  })
-               }
-             </div>
-  },
-  render: function() {
-    if (this.props.mode == 'browse')
-      return this.render_browse();
-    else
-      return this.render_edit();
-  },
-  render_edit: function() {
-    return <div className="value">
-           </div>
+            </div>
+          }
+        )
+       }
+      </div>
   }
 });
 

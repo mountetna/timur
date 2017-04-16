@@ -1,6 +1,11 @@
 class TimurPayload
-  def initialize payload
-    @payload = payload
+  def initialize
+    @payload = {}
+  end
+
+  def add type, record
+    @payload[type] ||= {}
+    @payload[type][record.name] = record
   end
 
   def to_json(options=nil)
@@ -8,12 +13,17 @@ class TimurPayload
   end
   
   def to_hash
-    @payload.to_hash do |model,attributes,record|
-      if record
-        record.json_document(attributes)
-      else
-        JsonUpdate.updated_template(model)
+    Hash[
+      @payload.map do |type,records|
+        [
+          type,
+          Hash[
+            records.map do |record_name, record|
+              [ record_name, record.to_hash ]
+            end
+          ]
+        ]
       end
-    end
+    ]
   end
 end

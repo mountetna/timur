@@ -1,33 +1,31 @@
 var CategoryControl = React.createClass({
   render: function() {
-    var self = this
+    var props = this.props
+    var categories = Object.keys(props.metric_names)
     return <div className="categories">
       {
-        Object.keys(this.props.categories).map(function(category) {
-          return <div key={ category } className={ self.props.category_hidden[category] ?  "category_label hidden" : "category_label" }
-            onClick={
-              function() {
-                self.props.toggleHidden(category)
-              }
-            } >
+        categories.map((category) =>
+          <div key={ category }
+            className={ props.hidden[category] ?  "category_label hidden" : "category_label" }
+            onClick={ () => props.toggleHidden(category) }>
             { category }
           </div>
-        })
+        )
       }
       <div className="metrics_names">
       {
-        Object.keys(this.props.categories).map(function(category) {
-          var metrics_names = self.props.categories[category]
-          if (self.props.category_hidden[category])
+        categories.map((category) => {
+          var metric_names = props.metric_names[category]
+          if (props.hidden[category])
             return null
           else
             return <div className="category" key={ category }>
               {
-                metrics_names.map(function(metric) {
-                  return <div key={ metric } className="metric">
-                    { metric }
-                    </div>
-                })
+                metric_names.map((metric_name) =>
+                  <div key={ metric_name } className="metric">
+                    { metric_name }
+                  </div>
+                )
               }
             </div>
         })
@@ -39,91 +37,146 @@ var CategoryControl = React.createClass({
 
 var RecordMetrics = React.createClass({
   render: function() {
-    var self = this
+    var categories = Object.keys(this.props.metric_names)
     return <div className="metrics">
-    <div className="record_name"><MagmaLink link={this.props.record_name} model={this.props.model_name}/></div>
-    {
-      Object.keys(this.props.categories).map(function(category) {
-        if (self.props.category_hidden[category])
-          return null
-        else
-          return <CategoryMetrics record_name={ self.props.record_name } key={ category } metrics={ self.props.metrics[category] }/>
-      })
-    }
+      <div className="record_name"><MagmaLink link={this.props.record_name} model={this.props.model_name}/></div>
+      {
+        categories.map((category) =>
+          this.props.hidden[category] ?
+            null
+          :
+          <CategoryMetrics
+            record_name={ this.props.record_name }
+            key={ category }
+            metrics={ this.props.metric_names[category].map(
+              (metric_name) => this.props.metrics[metric_name]
+            ) }/>
+        )
+      }
     </div>
   }
 })
 
+var Metric = React.createClass({
+  render: function() {
+    var metric = this.props.metric
+    return <div
+      className="metric_box"
+      onClick={ () => this.props.showDetails() }>
+      <div title={
+        metric.details.length ? metric.message + " [ Click for details ]" : metric.message
+      } className={ metric.score + " metric" }>
+      &nbsp;
+      </div>
+    </div>
+  }
+})
+
+Metric = connect(
+  null,
+  function(dispatch,props) {
+    var metric = props.metric
+    var details = metric.details
+    return {
+      showDetails: function() {
+        if (details.length) {
+          dispatch(
+            messageActions.showMessages([
+`# The test ${metric.name} on ${props.record_name} failed.
+${
+  metric.details.map((detail) =>
+`## ${detail.title}
+${
+    detail.entries.map((entry) => `- ${entry}`).join("\n")
+}`).join("\n")
+}`
+            ])
+          )
+        }
+      }
+    }
+  }
+)(Metric)
+
 var CategoryMetrics = React.createClass({
   render: function() {
-    var store = this.context.store
-    var self = this
     return <div className="category">
     {
-      this.props.metrics.map(function(metric) {
-        var klass = metric.score + " metric" 
-        return <div key={ metric.name } className="metric_box"
-          onClick={
-            function() {
-              if (metric.details.length) {
-                store.dispatch(messageActions.showMessages([
-                  "# The test "+metric.name+" on "+self.props.record_name+" failed.\n"+
-                  metric.details.map(function(detail) {
-                    return "## "+detail.title +"\n" + detail.entries.map(function(entry) {
-                      return "- "+entry
-                    }).join("\n")
-                  }).join("\n")
-                ]))
-              }
-            }
-          }>
-          <div title={
-            metric.details.length ? metric.message + " [ Click for details ]" : metric.message
-          } className={ klass }>
-          &nbsp;
-          </div>
-        </div>
-      })
+      this.props.metrics.map(
+        (metric) => <Metric key={ metric.name } record_name={ this.props.record_name } metric={ metric }/>
+      )
     }
     </div>
   }
 })
-CategoryMetrics.contextTypes = {
-  store: React.PropTypes.object
-}
 
 var MetricsAttribute = React.createClass({
   getInitialState: function() {
     return { category_hidden: {} }
   },
   render: function() {
-    var categories = this.props.value.categories
-    var metrics = this.props.value.metrics
-    var self = this
+    var props = this.props
+    var categories = props.categories
     return <div className="value">
-             <CategoryControl category_hidden={ this.state.category_hidden } categories={ categories }
-              toggleHidden={
-                function(category) {
-                  var new_category_hidden = {}
-                  new_category_hidden[category] = !self.state.category_hidden[category]
-                  self.setState({ category_hidden: freshen(self.state.category_hidden, new_category_hidden) })
-                }
-              } />
-             <div className="metrics_view">
-             {
-               Object.keys(metrics).map(function(record_name) {
-                 return <RecordMetrics 
-                          model_name={ self.props.value.model_name }
-                          record_name={ record_name } 
-                          categories={ categories }
-                          category_hidden={ self.state.category_hidden }
-                          key={ record_name }
-                          metrics={ metrics[record_name] }/>
-               })
-             }
-             </div>
-           </div>
+      <CategoryControl
+        hidden={ this.state.category_hidden }
+        metric_names={ props.metric_names }
+        toggleHidden={
+          (category) => {
+            this.setState({
+              category_hidden: {
+                ...this.state.category_hidden,
+                [category]: !this.state.category_hidden[category]
+              }
+            })
+          }
+        }
+      />
+      <div className="metrics_view">
+      {
+        props.metrics.map((identifier,metric_set) => <RecordMetrics
+             model_name={ props.model_name }
+             record_name={ identifier }
+             metric_names={ props.metric_names }
+             hidden={ this.state.category_hidden }
+             key={ identifier }
+             metrics={ metric_set }/>
+        )
+      }
+      </div>
+    </div>
   },
 })
+
+MetricsAttribute = connect(
+  function(state,props) {
+    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
+
+    var metric_names = {}
+    var metrics = []
+    var model_name
+
+    if (manifest && manifest.metrics) {
+      for (var metric_name in manifest.metrics.values[0]) {
+        var metric = manifest.metrics.values[0][metric_name]
+        metric_names = {
+          ...metric_names,
+          [metric.category]: [
+            metric_name,
+            ...(metric_names[metric.category] || [])
+          ]
+        }
+      }
+
+      metrics = manifest.metrics
+      model_name = manifest.model_name
+    }
+    return {
+      metrics: metrics,
+      metric_names: metric_names,
+      model_name: model_name
+    }
+  }
+)(MetricsAttribute)
 
 module.exports = MetricsAttribute

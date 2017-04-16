@@ -29,9 +29,7 @@ class QueryFilter
   end
 
   def query_where terms
-    @query = @query.where(
-      terms
-    )
+    @query = @query.where(terms)
   end
 
   def matches_column term

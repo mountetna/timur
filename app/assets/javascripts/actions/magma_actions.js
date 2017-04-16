@@ -1,26 +1,29 @@
 var magmaActions = {
   consumePayload: function(dispatch,response) {
-    Object.keys(response.templates).forEach(function(template_name) {
-      var template_def = response.templates[template_name]
+    if (response.models) {
+      Object.keys(response.models).forEach(function(model_name) {
+        var model = response.models[model_name]
 
-      // you may not have all of these
-      
-      if (template_def.template)
-        dispatch( 
-          magmaActions.addTemplate(template_def.template)
-        )
-      if (template_def.documents)
-        dispatch(
-          magmaActions.addDocumentsForTemplate(template_name, template_def.documents)
-        )
-    })
+        // you may not have all of these
+        
+        if (model.template)
+          dispatch( 
+            magmaActions.addTemplate(model.template)
+          )
+        if (model.documents)
+          dispatch(
+            magmaActions.addDocumentsForTemplate(model_name, model.documents)
+          )
+      })
+    }
   },
-  requestDocuments: function( model_name, record_names, success, error ) {
+  requestDocuments: function( model_name, record_names, attribute_names, success, error ) {
     // this is an async action to get a new model from magma
     var self = this;
     var request = {
       model_name: model_name,
-      record_names: record_names
+      record_names: record_names,
+      attribute_names: attribute_names
     }
     return function(dispatch) {
       $.ajax({
@@ -43,24 +46,10 @@ var magmaActions = {
     }
   },
   requestModels: function() {
-    return function(dispatch) {
-      $.get(
-        Routes.templates_json_path(),
-        function(response) {
-          magmaActions.consumePayload(dispatch,response)
-        }
-      )
-    }
+    return magmaActions.requestDocuments("all", [], "all")
   },
   requestIdentifiers: function() {
-    return function(dispatch) {
-      $.get(
-        Routes.identifiers_json_path(),
-        function(response) {
-          magmaActions.consumePayload(dispatch,response)
-        }
-      )
-    }
+    return magmaActions.requestDocuments("all", "all", "identifier")
   },
   queryDocuments: function( model_name, filter, success, error ) {
     var self = this;
@@ -87,92 +76,57 @@ var magmaActions = {
       })
     }
   },
-  requestView: function(model_name, record_name, tab_name, success, error) {
-    var self = this;
-    var request = {
-      model_name: model_name,
-      record_name: record_name,
-      tab_name: tab_name
-    }
-    return function(dispatch) {
-      $.ajax({
-        url: Routes.view_json_path(),
-        method: 'POST',
-        data: JSON.stringify(request), 
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function(response) {
-          magmaActions.consumePayload(dispatch,response)
-          dispatch(
-            magmaActions.addViews(model_name, record_name, response.tabs)
-          )
-          if (success != undefined) success()
-        },
-        error: function(xhr, status, err) {
-          if (error != undefined) {
-            var message = JSON.parse(xhr.responseText)
-            error(message)
-          }
-        }
-      })
-    }
-  },
   addTemplate: function(template) {
     return {
       type: 'ADD_TEMPLATE',
-      template_name: template.name,
+      model_name: template.name,
       template: template
     }
   },
-  addDocumentsForTemplate: function(template_name, documents) {
+  addDocumentsForTemplate: function(model_name, documents) {
     return {
       type: 'ADD_DOCUMENTS',
-      template_name: template_name,
+      model_name: model_name,
       documents: documents
     }
   },
-  addViews: function(template_name, document_name, views) {
-    return {
-      type: 'ADD_VIEWS',
-      template_name: template_name,
-      document_name: document_name,
-      views: views
-    }
-  },
   reviseDocument: function(document, template, attribute, revised_value) {
-    var revision = { }
-    revision[ attribute.name ] = revised_value
     return {
       type: 'REVISE_DOCUMENT',
-      template_name: template.name,
-      document_name: document[ template.identifier ],
-      revision: revision
+      model_name: template.name,
+      record_name: document[ template.identifier ],
+      revision: {
+        [ attribute.name ]: revised_value
+      }
     }
   },
-  discardRevision: function(document_name, template_name) {
+  discardRevision: function(record_name, model_name) {
     return {
       type: 'DISCARD_REVISION',
-      template_name: template_name,
-      document_name: document_name
+      model_name: model_name,
+      record_name: record_name
     }
   },
-  postRevisions: function(template_name, revisions, success, error) {
+  postRevisions: function(model_name, revisions, success, error) {
     var self = this;
     var data = new FormData()
-    data.append( 'model_name', template_name )
-    //data.append( 'record_name', document_name )
-    Object.keys(revisions).forEach(function(record_name) {
+    for (var record_name in revisions) {
       var revision = revisions[record_name]
-      Object.keys(revision).forEach(function(key) {
-        if (Array.isArray(revision[key])) {
-          revision[key].forEach(function(value) {
-            data.append( 'revisions['+record_name+']['+key+'][]', value )
+      for (var attribute_name in revision) {
+        if (Array.isArray(revision[attribute_name])) {
+          revision[attribute_name].forEach(function(value) {
+            data.append(
+              `revisions[${model_name}][${record_name}][${attribute_name}][]`, value 
+            )
           })
         }
         else
-          data.append( 'revisions['+record_name+']['+key+']', revision[key] )
-      })
-    })
+          data.append(
+            `revisions[${model_name}][${record_name}][${attribute_name}]`,
+            revision[attribute_name]
+          )
+      }
+    }
     return function(dispatch) {
       $.ajax({
         url: Routes.update_model_path(),

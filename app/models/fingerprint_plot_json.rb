@@ -10,7 +10,7 @@ class FingerprintPlotJson
   end
 
   def to_json
-    myeloid = [ "BDCA1+ DCs", "BDCA2+ DCs", "pDCs", "CD16+ Monocytes", "Eosinophils", "Neutrophils", "CD14+ TAMs", "CD14- TAMs" ]
+    myeloid = [ "BDCA1+ DCs", "BDCA3+ DCs", "pDCs", "CD16+ Monocytes", "Eosinophils", "Neutrophils", "CD14+ TAMs", "CD14- TAMs" ]
     lineage = [ "CD3+ all", "HLADR-,CD3-,CD56+ (NK)", "B-cells" ]
     {
       plot: {
@@ -22,7 +22,8 @@ class FingerprintPlotJson
       data: [
         # overall
         best_cd45,
-        { series: series_name("EPCAM+ tumor","live", :sort),
+        {
+          series: series_name("EPCAM+ tumor","live", :sort),
           color: "seagreen",
           height: get_ratio(:sort, "EPCAM+", "Live"),
           dots: get_dots(:sort, "EPCAM+", "Live")
