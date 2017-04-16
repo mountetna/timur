@@ -51,19 +51,6 @@ $secondary-color: teal;
   .label {
     font-weight: lighter;
   }
-
-  .back {
-    color: forestgreen;
-    font-weight: bold;
-
-    &:hover {
-      text-decoration: underline
-    }
-
-    .fa {
-      margin-right: 5px;
-    }
-  }
 }
 
 .manifest-preview {

@@ -2,7 +2,7 @@ import React from 'react'
 import ManifestElement from './manifest_element'
 import ManifestPreview from './manifest_preview'
 
-const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy }) => {
+const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy, back}) => {
   const { is_editable, result, name } = manifest
 
   const elements =  manifest.data.elements || []
@@ -30,6 +30,10 @@ const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy }) => {
       <ManifestPreview {...manifest} />
       <div className='manifest-elements'>
         <div className='actions'>
+          <button onClick={back}>
+            <i className='fa fa-angle-left' aria-hidden="true"></i>
+            back
+          </button>
           { is_editable &&
             <button onClick={handleDelete}>
               <i className='fa fa-trash-o' aria-hidden="true"></i>
