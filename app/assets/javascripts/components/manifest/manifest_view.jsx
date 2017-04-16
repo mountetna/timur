@@ -30,9 +30,22 @@ const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy }) => {
       <ManifestPreview {...manifest} />
       <div className='manifest-elements'>
         <div className='actions'>
-          { is_editable && <button onClick={handleDelete}>delete</button> }
-          { is_editable && <button onClick={handleEdit}>edit</button> }
-          <button onClick={handleCopy}>copy</button>
+          { is_editable &&
+            <button onClick={handleDelete}>
+              <i className='fa fa-trash-o' aria-hidden="true"></i>
+              delete
+            </button>
+          }
+          { is_editable &&
+            <button onClick={handleEdit}>
+              <i className='fa fa-pencil-square-o' aria-hidden="true"></i>
+              edit
+            </button>
+          }
+          <button onClick={handleCopy}>
+            <i className='fa fa-files-o' aria-hidden="true"></i>
+            copy
+          </button>
         </div>
         <ol>
           {manifestElements}

@@ -51,6 +51,19 @@ $secondary-color: teal;
   .label {
     font-weight: lighter;
   }
+
+  .back {
+    color: forestgreen;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline
+    }
+
+    .fa {
+      margin-right: 5px;
+    }
+  }
 }
 
 .manifest-preview {
@@ -108,7 +121,17 @@ $secondary-color: teal;
   border-color: lightgrey;
 
   .actions {
-    text-align: center;
+    margin-left: 20%;
+
+    button {
+      font-size: 1em;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .fa {
+      margin-right: 3px;
+    }
   }
 
   .element {

@@ -87,6 +87,7 @@ export const copyManifest = (manifest) =>
       .then(({manifest}) => {
         dispatch(addManifest(manifest))
         dispatch(selectManifest(manifest.id))
+        dispatch(submitManifest(manifest))
         dispatch(toggleEdit())
       })
       .catch(e => console.error(e))

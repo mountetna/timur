@@ -34,8 +34,9 @@ class Manifest extends Component {
             update={this.props.updateManifest}
             updateResults={this.props.fetchResults} /> :
           <div>
-            <a href="#" onClick={this.props.allManifests}>
-              all manifests
+            <a className='back' href="#" onClick={this.props.allManifests}>
+              <i className="fa fa-arrow-left" aria-hidden="true"></i>
+              back to manifests
             </a>
             <ManifestView
               manifest={this.props.manifest}
