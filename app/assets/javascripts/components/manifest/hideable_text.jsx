@@ -17,16 +17,20 @@ class HideableText extends Component {
     if (this.state.hidden) {
       return <span>See {this.props.label} <i className="fa fa-caret-down" aria-hidden="true"></i></span>
     }
-    return <span>See less <i className="fa fa-caret-up" aria-hidden="true"></i></span>
+    return <span>Collapse {this.props.label} <i className="fa fa-caret-up" aria-hidden="true"></i></span>
   }
 
   render() {
     return (
       <div className='hideable-text'>
-        <text style={{ display: this.display() }}>{this.props.text}</text>
-        <div className='label' onClick={this.toggle.bind(this)}>
-          {this.label()}
+        <div className='text'>
+          <text style={{ display: this.display() }}>{this.props.text}</text>
         </div>
+        { this.props.text &&
+          <div className='label' onClick={this.toggle.bind(this)}>
+            {this.label()}
+          </div>
+        }
       </div>
     )
   }

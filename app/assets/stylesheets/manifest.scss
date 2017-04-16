@@ -1,5 +1,7 @@
 @import "globals";
 
+$secondary-color: teal;
+
 .manifests-container {
   color: #333;
   font-family: sans-serif;
@@ -45,6 +47,10 @@
     white-space: pre-wrap;
     word-break: break-all;
   }
+
+  .label {
+    font-weight: lighter;
+  }
 }
 
 .manifest-preview {
@@ -54,7 +60,7 @@
   font-weight: lighter;
 
   .name {
-    color: teal;
+    color: $secondary-color;
     font-size: 1.4em;
     font-weight: bold;
 
@@ -64,7 +70,7 @@
   }
 
   .project {
-    color: teal;
+    color: $secondary-color;
     font-size: 1em;
     font-weight: bold;
   }
@@ -75,5 +81,57 @@
 
   .label {
     text-decoration: underline;
+  }
+
+  .text {
+    margin-left: 7px;
+  }
+}
+
+.element {
+  .name {
+    color: $secondary-color;
+    font-weight: bolder;
+    text-decoration: underline;
+  }
+  .label {
+    font-size: .9em;
+    font-weight: lighter;
+    text-decoration: none;
+  }
+}
+
+.manifest-elements {
+  padding: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: lightgrey;
+
+  .actions {
+    text-align: center;
+  }
+
+  .element {
+    margin-top: 10px;
+  }
+}
+
+.underline-on-hover:hover {
+  text-decoration: underline;
+}
+
+.blue-on-hover:hover {
+  color: blue;
+}
+
+.list {
+  .toggle {
+    font-weight: lighter;
+    color: blue;
+  }
+
+  .fa {
+    margin-left: 5px;
+    margin-right: 3px;
   }
 }
