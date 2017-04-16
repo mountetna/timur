@@ -2,7 +2,10 @@ class SampleView < TimurView
   tab :overview do
     pane :default do 
       title "Summary"
-      shows :patient, :headshot, :processed, :description, :notes, :tumor_type
+      shows :patient, :headshot, :tumor_type, :processed, :description
+      show :notes do
+        attribute_class "TextAttribute"
+      end
     end
     pane :qc do
       title "Quality Control"
@@ -72,7 +75,13 @@ class SampleView < TimurView
   tab :processing do
     pane :sample_features do
       title "Characteristics"
-      shows :weight, :site, :stage, :grade, :post_digest_cell_count
+      shows :weight do
+        placeholder "Mass in grams"
+      end
+      show :site, :stage, :grade
+      show :post_digest_cell_count do
+        placeholder "Integer count, e.g. 2000 or 200_000"
+      end
     end
   end
 
