@@ -54,7 +54,7 @@ export const Result = (name, data, nestLevel = 0) => {
     } else {
       return (
         <div style={{marginLeft: nestLevel * 5 }}>
-          <div>@{name}</div>
+          <div className='label'>@{name}</div>
           {data.map((elem, index) => (
             <div key={index}>
               { Result(elem.label, elem.value, nestLevel + 1) }
