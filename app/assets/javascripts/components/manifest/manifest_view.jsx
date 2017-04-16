@@ -10,8 +10,10 @@ const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy, back}) =
     let elementResult
     if (result) {
       if (result[name] && result[name][element.name]) {
-        elementResult = result[manifest.name][element.name]
-      } else {
+        elementResult = result[name][element.name]
+      } else if (result[name] && !result[name][element.name]) {
+        elementResult = ''
+      } else if (!result[name]) {
         elementResult = result
       }
     } else {

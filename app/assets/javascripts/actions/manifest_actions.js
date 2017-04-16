@@ -101,13 +101,15 @@ const addManifestResult = (id, result) => ({
 
 const manifestToReqPayload = (manifest) => {
   const { name, data: { elements } } = manifest
-  const manifestElements = elements.map(({ name, script }) => {
-    return [name, script]
-  })
+  const manifestElements = elements.reduce((acc, { name, script }) => {
+    if (name !== '' && script !== '') {
+      return [...acc, [name, script]]
+    }
+    return acc
+  }, [])
 
   return { manifest: manifestElements, name: name }
 }
-
 
 //TODO
 //requestManifests adds the results in the state tree

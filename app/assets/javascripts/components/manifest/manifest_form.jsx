@@ -38,6 +38,10 @@ class ManifestForm extends Component {
     return (value) => this.setState({ [fieldName]: value })
   }
 
+
+  //TODO FIX SO IT DOESNT SEND EMPTY SCRIPTS
+  //ALSO ADD VALIDATION FOR DESCRIPTION AND SHOW ERROR MESSAGES
+  //DESCRIPTION CANT BE EMPTY
   stateToManifest() {
     const { elementKeys, elementsByKey } = this.state
     const elements = elementKeys.map(key => elementsByKey[key])
@@ -55,9 +59,9 @@ class ManifestForm extends Component {
     this.props.update(this.stateToManifest())
   }
 
-  updateResults(manifest) {
+  updateResults() {
     this.props.updateResults(
-      manifest,
+      this.stateToManifest(),
       (result) => {
         this.setState({ result })
       }
@@ -86,7 +90,7 @@ class ManifestForm extends Component {
       }
       this.setState(
         { elementsByKey: updatedElements },
-        this.updateResults(this.stateToManifest())
+        this.updateResults
       )
     }
   }
@@ -102,7 +106,7 @@ class ManifestForm extends Component {
 
     this.setState(
       { elementKeys: removedKey, elementsByKey: removedElement },
-      this.updateResults(this.stateToManifest())
+      this.updateResults
     )
   }
 
