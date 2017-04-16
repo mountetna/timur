@@ -29,8 +29,6 @@ var BarPlot = React.createClass({
       [ height, 0 ]
     )
 
-    console.log(this.props.bars)
-
     return <svg 
       id={ this.props.plot.name }
       className="bar_plot" 

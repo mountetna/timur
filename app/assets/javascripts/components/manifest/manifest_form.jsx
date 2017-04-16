@@ -11,6 +11,10 @@ class ManifestForm extends Component {
     if (this.props.manifest) {
       this.setState({ ...this.props.manifest })
 
+      if (!this.props.manifest.result) {
+        this.updateResults(this.props.manifest)
+      }
+
       const elements = this.props.manifest.data.elements || []
       const elementsByKey = elements.reduce((acc, curr) => {
         const key = v4()
@@ -51,9 +55,9 @@ class ManifestForm extends Component {
     this.props.update(this.stateToManifest())
   }
 
-  updateResults() {
+  updateResults(manifest) {
     this.props.updateResults(
-      this.stateToManifest(),
+      manifest,
       (result) => {
         this.setState({ result })
       }
@@ -82,7 +86,7 @@ class ManifestForm extends Component {
       }
       this.setState(
         { elementsByKey: updatedElements },
-        this.updateResults
+        this.updateResults(this.stateToManifest())
       )
     }
   }
@@ -98,7 +102,7 @@ class ManifestForm extends Component {
 
     this.setState(
       { elementKeys: removedKey, elementsByKey: removedElement },
-      this.updateResults
+      this.updateResults(this.stateToManifest())
     )
   }
 
