@@ -87,7 +87,7 @@ class SampleView < TimurView
           manifest: [
             [
               :experiment_name,
-              "question([ 'sample', [ 'sample_name', '::equals', @record_name ], '::first', 'patient', 'experiment', 'name' ])[ 0 ]"
+              "question([ 'sample', [ 'sample_name', '::equals', @record_name ], '::first', 'patient', 'experiment', 'name' ])"
             ],
             [ :fingerprint, "table(
               [ 'sample', [ 'patient', 'experiment', 'name', '::equals', @experiment_name ] ],
@@ -142,7 +142,7 @@ class SampleView < TimurView
                 [
                   name: 'EPCAM+ tumor/live (3)',
                   color: 'seagreen',
-                  height: @fingerprint$sort_epcam_count, @fingerprint$sort_live_count,
+                  height: @fingerprint$sort_epcam_count / @fingerprint$sort_live_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
                   category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
