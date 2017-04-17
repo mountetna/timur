@@ -17,7 +17,7 @@ export const getManifests = () =>
 
         dispatch(loadManifests(manifestsById))
       })
-      .catch(e => console.error(e))
+      .catch(e =>  showErrors(e, dispatch))
   }
 
 const removeManifest = (id) => ({
@@ -32,8 +32,13 @@ export const deleteManifest = (manifestId) =>
         dispatch(selectManifest(null))
         dispatch(removeManifest(manifestId))
       })
-      .catch(e => console.error(e))
+      .catch(e =>  showErrors(e, dispatch))
   }
+
+const showErrors = (e, dispatch) => {
+    e.response.json()
+      .then((json) => dispatch(showMessages(json.errors)))
+}
 
 const addManifest = (manifest) => ({
   type: 'ADD_USER_MANIFEST',
@@ -52,8 +57,8 @@ export const saveNewManifest = (manifest) =>
         dispatch(toggleEdit())
         dispatch(selectManifest(manifest.id))
       })
-      .catch(e => console.error(e))
-  } 
+      .catch(e =>  showErrors(e, dispatch))
+  }
 
 export const toggleManifestsFilter = (filter) => ({
   type: 'TOGGLE_MANIFESTS_FILTER',
@@ -78,7 +83,7 @@ export const saveManifest = (manifest) =>
         dispatch(toggleEdit())
         dispatch(submitManifest(manifest))
       })
-      .catch(e => console.error(e))
+      .catch(e =>  showErrors(e, dispatch))
   }
 
 export const copyManifest = (manifest) =>
@@ -90,7 +95,7 @@ export const copyManifest = (manifest) =>
         dispatch(submitManifest(manifest))
         dispatch(toggleEdit())
       })
-      .catch(e => console.error(e))
+      .catch(e =>  showErrors(e, dispatch))
   }
 
 const addManifestResult = (id, result) => ({

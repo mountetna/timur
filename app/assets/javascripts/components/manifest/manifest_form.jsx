@@ -44,8 +44,7 @@ class ManifestForm extends Component {
       this.updateResults
     )
   }
-  //TODO
-  //SHOW ERROR MESSAGES
+
   stateToManifest() {
     const { elementKeys, elementsByKey } = this.state
     const keys = elementKeys || []
