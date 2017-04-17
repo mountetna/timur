@@ -177,7 +177,7 @@ $secondary-color: teal;
   .remove {
     font-size: 1em;
     color: red;
-    margin-right: 10px;
+    float: right;
 
     &:hover {
     cursor: pointer;
