@@ -3,7 +3,7 @@ import InputField from './input_field'
 import TextField from './text_field'
 import { Result } from './manifest_results'
 
-const ManifestElementForm = ({ element, updateAttribute, handleRemove, result}) => {console.log(result); return (
+const ManifestElementForm = ({ element, updateAttribute, handleRemove, result}) => (
   <div className='element-form'>
     <i className='fa fa-times-circle remove' onClick={handleRemove}></i>
     {Result(element.name, result)}
@@ -20,6 +20,6 @@ const ManifestElementForm = ({ element, updateAttribute, handleRemove, result}) 
       onChange={updateAttribute('script')}
       value={element.script} />
   </div>
-)}
+)
 
 export default ManifestElementForm
