@@ -3,7 +3,7 @@ import InputField from './input_field'
 import TextField from './text_field'
 import ManifestAccess from './manifest_access'
 import ManifestElementForm from './manifest_element_form'
-import ManifestResults from './manifest_results'
+import Dates from '../../dates'
 import { v4 } from 'node-uuid'
 
 class ManifestForm extends Component {
@@ -14,7 +14,6 @@ class ManifestForm extends Component {
         () => {
           const elements = this.props.manifest.data.elements || []
 
-          console.log(elements)
           const elementsByKey = elements.reduce((acc, curr) => {
             const key = v4()
             return ({
@@ -40,7 +39,10 @@ class ManifestForm extends Component {
   }
 
   updateField(fieldName) {
-    return (value) => this.setState({ [fieldName]: value })
+    return (value) => this.setState(
+      { [fieldName]: value },
+      this.updateResults
+    )
   }
   //TODO
   //SHOW ERROR MESSAGES
@@ -125,9 +127,9 @@ class ManifestForm extends Component {
           elementResult = result[name][element.name]
         } else if (result[name] && !result[name][element.name]) {
           elementResult = ''
-        } else if (!result[name]) {
+        } else if (!result[name] && typeof result  === 'string') {
           elementResult = result
-        }
+        } else elementResult = ''
       } else {
         elementResult = ''
       }
@@ -179,7 +181,11 @@ class ManifestForm extends Component {
             selectedDefault={this.state.access}
             handleSelect={this.updateField('access')} />
         }
-        { this.state.updated_at && <div>created at: {this.state.updated_at}</div> }
+        { this.state.created_at &&
+          <div>
+            created at: {Dates.format_date(this.state.created_at) + ', '+ Dates.format_time(this.state.created_at)}
+          </div>
+        }
         { this.state.user && <div>created by: {this.state.user.name}</div> }
         <TextField label='Description'
           onChange={this.updateField('description')}
