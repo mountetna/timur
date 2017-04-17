@@ -175,7 +175,7 @@ class ManifestForm extends Component {
           label='Project'
           onChange={this.updateField('project')}
           value={this.state.project} />
-        { this.props.canEditAccess &&
+        { this.props.isAdmin &&
           <ManifestAccess
             selectedDefault={this.state.access}
             handleSelect={this.updateField('access')} />

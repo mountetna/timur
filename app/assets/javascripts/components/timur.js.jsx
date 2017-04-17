@@ -19,7 +19,7 @@ var Timur = React.createClass({
   render: function () {
     var component
     if (this.props.appMode == 'manifesto') {
-      component = <Manifests />
+      component = <Manifests isAdmin={this.props.is_admin} />
     } else if (this.props.mode == 'browse') 
       component = <Browser 
         can_edit={ this.props.can_edit }

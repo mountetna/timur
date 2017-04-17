@@ -26,7 +26,7 @@ class Manifest extends Component {
       <div className='manifest-container'>
         { this.props.editing ?
           <ManifestForm
-            //TODO add userRole
+            isAdmin={this.props.isAdmin}
             manifest={this.props.manifest}
             canEditAccess={true} 
             cancel={this.props.edit}

@@ -18,6 +18,7 @@ class Manifests extends Component {
       <div className='manifests-container'>
       { (selectedManifest || this.props.isEditing) ?
         <Manifest
+          isAdmin={this.props.isAdmin}
           editing={this.props.isEditing}
           allManifests={() => this.props.selectManifest(null)}
           manifestId={selectedManifest}

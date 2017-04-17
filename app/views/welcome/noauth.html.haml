@@ -8,7 +8,8 @@
           #{current_user ? "user: '#{current_user.name}', " : '' }
           mode: 'noauth',
           environment: '#{Rails.env.development? ? 'development' : 'production'}',
-          can_edit: #{ current_user && current_user.can_edit? ? :true : :false }
+          can_edit: #{ current_user && current_user.can_edit? ? :true : :false },
+          is_admin: #{ current_user && current_user.is_admin? ? :true : :false }
         }),
         $('#root')[0]
       );

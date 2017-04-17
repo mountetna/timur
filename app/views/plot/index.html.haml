@@ -9,7 +9,8 @@
           #{current_user ? "user: '#{current_user.name}', " : '' }
           mode: 'plot',
           can_edit: #{ current_user && current_user.can_edit? ? :true : :false },
-          environment: '#{Rails.env.development? ? 'development' : 'production'}'
+          environment: '#{Rails.env.development? ? 'development' : 'production'}',
+          is_admin: #{ current_user && current_user.is_admin? ? :true : :false }
         }),
         $('#root')[0]
       );
