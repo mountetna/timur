@@ -46,6 +46,7 @@ $secondary-color: teal;
     width: 70%;
     white-space: pre-wrap;
     word-break: break-all;
+    height: 50px;
   }
 
   .label {
@@ -101,25 +102,91 @@ $secondary-color: teal;
   }
 }
 
-.manifest-elements {
+.actions {
+  margin-top: 15px;
+  margin-left: 20%;
+
+  button {
+    font-size: 1em;
+    margin-left: 10px;
+    margin-right: 10px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .fa {
+    margin-right: 3px;
+  }
+}
+
+@mixin border {
   padding: 5px;
   border-width: 1px;
   border-style: solid;
   border-color: lightgrey;
+}
 
-  .actions {
-    margin-left: 20%;
+.form-container {
+  @include border;
 
-    button {
-      font-size: 1em;
-      margin-left: 10px;
-      margin-right: 10px;
-    }
+  .new {
+    margin-left: 8px;
+    margin-top: 15px;
+    font-size: 1.1em;
+  }
+}
 
-    .fa {
-      margin-right: 3px;
+.input-container {
+  margin-top: 7px;
+  label {
+    font-weight: bold;
+    color: $secondary-color;
+  }
+
+  input[type="text"] {
+    width: 40%;
+    font-size: 1em;
+  }
+
+  textarea {
+    width: 70%;
+    resize: vertical;
+    font-size: 1em;
+  }
+}
+
+.element-form-container {
+  margin-top: 15px;
+
+  .title {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-right: 10px;
+  }
+}
+
+.element-form {
+  @include border;
+  background-color: #f4f5f7;
+  margin-top: 10px;
+  margin-left: 8px;
+  margin-right: 8px;
+
+  .remove {
+    font-size: 1em;
+    color: red;
+    margin-right: 10px;
+
+    &:hover {
+    cursor: pointer;
     }
   }
+}
+
+.manifest-elements {
+  @include border;
 
   .element {
     margin-top: 10px;

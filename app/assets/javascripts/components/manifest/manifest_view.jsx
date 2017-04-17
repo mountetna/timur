@@ -37,12 +37,6 @@ const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy, back}) =
             back
           </button>
           { is_editable &&
-            <button onClick={handleDelete}>
-              <i className='fa fa-trash-o' aria-hidden="true"></i>
-              delete
-            </button>
-          }
-          { is_editable &&
             <button onClick={handleEdit}>
               <i className='fa fa-pencil-square-o' aria-hidden="true"></i>
               edit
@@ -52,6 +46,12 @@ const ManifestView = ({ manifest, handleDelete, handleEdit, handleCopy, back}) =
             <i className='fa fa-files-o' aria-hidden="true"></i>
             copy
           </button>
+          { is_editable &&
+          <button onClick={handleDelete}>
+            <i className='fa fa-trash-o' aria-hidden="true"></i>
+            delete
+          </button>
+          }
         </div>
         <ol>
           {manifestElements}
