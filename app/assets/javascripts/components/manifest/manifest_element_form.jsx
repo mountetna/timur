@@ -1,13 +1,15 @@
 import React from 'react'
 import InputField from './input_field'
 import TextField from './text_field'
+import { Result } from './manifest_results'
 
-const ManifestElementForm = ({ element, updateAttribute, handleRemove }) => (
-  <div>
-    <button onClick={handleRemove}>remove</button>
+const ManifestElementForm = ({ element, updateAttribute, handleRemove, result}) => {console.log(result); return (
+  <div className='element-form'>
+    <i className='fa fa-times-circle remove' onClick={handleRemove}></i>
+    {Result(element.name, result)}
     <InputField type="text"
       placeholder='e.g. mfi'
-      label='element name'
+      label='name'
       onChange={updateAttribute('name')}
       value={element.name} />
     <TextField label='description'
@@ -18,6 +20,6 @@ const ManifestElementForm = ({ element, updateAttribute, handleRemove }) => (
       onChange={updateAttribute('script')}
       value={element.script} />
   </div>
-)
+)}
 
 export default ManifestElementForm

@@ -9,22 +9,27 @@ import { v4 } from 'node-uuid'
 class ManifestForm extends Component {
   componentWillMount() {
     if (this.props.manifest) {
-      this.setState({ ...this.props.manifest })
+      this.setState(
+        { ...this.props.manifest },
+        () => {
+          const elements = this.props.manifest.data.elements || []
 
-      if (!this.props.manifest.result) {
-        this.updateResults(this.props.manifest)
-      }
+          console.log(elements)
+          const elementsByKey = elements.reduce((acc, curr) => {
+            const key = v4()
+            return ({
+              elementKeys: [...acc.elementKeys, key],
+              elementsByKey: {...acc.elementsByKey, [key]: curr}
+            })
+          }, { elementKeys: [], elementsByKey: {} })
 
-      const elements = this.props.manifest.data.elements || []
-      const elementsByKey = elements.reduce((acc, curr) => {
-        const key = v4()
-        return ({
-          elementKeys: [...acc.elementKeys, key],
-          elementsByKey: {...acc.elementsByKey, [key]: curr}
-        })
-      }, { elementKeys: [], elementsByKey: {} })
+          this.setState(elementsByKey)
 
-      this.setState(elementsByKey)
+          if (!this.props.manifest.result) {
+            this.updateResults(this.props.manifest)
+          }
+        }
+      )
     } else {
       this.setState({
         access: 'private',
@@ -37,14 +42,12 @@ class ManifestForm extends Component {
   updateField(fieldName) {
     return (value) => this.setState({ [fieldName]: value })
   }
-
-
-  //TODO FIX SO IT DOESNT SEND EMPTY SCRIPTS
-  //ALSO ADD VALIDATION FOR DESCRIPTION AND SHOW ERROR MESSAGES
-  //DESCRIPTION CANT BE EMPTY
+  //TODO
+  //SHOW ERROR MESSAGES
   stateToManifest() {
     const { elementKeys, elementsByKey } = this.state
-    const elements = elementKeys.map(key => elementsByKey[key])
+    const keys = elementKeys || []
+    const elements = keys.map(key => elementsByKey[key])
     return {
       ...this.state,
       data: { elements }
@@ -111,11 +114,29 @@ class ManifestForm extends Component {
   }
 
   render() {
-    const manifestElements = this.state.elementKeys.map((key) => {
+    const elements = this.state.elementKeys || []
+    const { result, name } = this.state
+    const manifestElements = elements.map((key) => {
+      const element = this.state.elementsByKey[key]
+
+      let elementResult
+      if (result) {
+        if (result[name] && result[name][element.name]) {
+          elementResult = result[name][element.name]
+        } else if (result[name] && !result[name][element.name]) {
+          elementResult = ''
+        } else if (!result[name]) {
+          elementResult = result
+        }
+      } else {
+        elementResult = ''
+      }
+
       const props = {
         element: this.state.elementsByKey[key],
         updateAttribute: this.updateElementAttribute(key),
-        handleRemove: () => this.removeElement(key)
+        handleRemove: () => this.removeElement(key),
+        result: elementResult
       }
 
       return (
@@ -126,18 +147,23 @@ class ManifestForm extends Component {
     })
 
     return (
-      <div>
-        { !this.props.manifest ?
-          <button onClick={this.create.bind(this)}>
-            create
-          </button> :
-          <button onClick={this.update.bind(this)}>
-            update
+      <div className='form-container'>
+        <div className='actions'>
+          { !this.props.manifest ?
+            <button onClick={this.create.bind(this)}>
+              <i className='fa fa-floppy-o' aria-hidden="true"></i>
+              save as
+            </button> :
+            <button onClick={this.update.bind(this)}>
+              <i className='fa fa-floppy-o' aria-hidden="true"></i>
+              save
+            </button>
+          }
+          <button onClick={this.props.cancel}>
+            <i className='fa fa-ban' aria-hidden="true"></i>
+            cancel
           </button>
-        }
-        <button onClick={this.props.cancel}>
-          cancel
-        </button>
+        </div>
         <InputField type='text'
           placeholder='e.g. Populations'
           label='Name'
@@ -158,16 +184,16 @@ class ManifestForm extends Component {
         <TextField label='Description'
           onChange={this.updateField('description')}
           value={this.state.description} />
-        <div>
-          Manifest
+        <div className='element-form-container'>
+          <span className='title'>Manifest Items</span>
+          <ol>
+            {manifestElements}
+          </ol>
+          <a href='javascript:void(0)' onClick={this.addElement.bind(this)} className="new">
+            <i className="fa fa-plus" aria-hidden="true"></i>
+            item
+          </a>
         </div>
-        <ol>
-          <li>
-            <button onClick={this.addElement.bind(this)}>add element</button>
-          </li>
-          {manifestElements}
-        </ol>
-        <ManifestResults results={this.state.result || {}} />
       </div>
     )
   }
