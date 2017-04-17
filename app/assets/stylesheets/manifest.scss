@@ -1,4 +1,5 @@
 @import "globals";
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
 
 $secondary-color: teal;
 
@@ -8,6 +9,12 @@ $secondary-color: teal;
   margin-top: 10px;
   padding-left: 15px;
   padding-right: 15px;
+
+  .script {
+    text, textarea {
+      font-family: 'Ubuntu Mono', monospace;
+    }
+  }
 
   a {
     color: black;

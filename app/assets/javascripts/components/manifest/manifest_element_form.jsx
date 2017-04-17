@@ -16,9 +16,11 @@ const ManifestElementForm = ({ element, updateAttribute, handleRemove, result}) 
       placeholder='e.g. cure cancer and science stuff'
       onChange={updateAttribute('description')}
       value={element.description} />
-    <TextField label='script'
-      onChange={updateAttribute('script')}
-      value={element.script} />
+    <div className='script'>
+      <TextField label='script'
+        onChange={updateAttribute('script')}
+        value={element.script} />
+    </div>
   </div>
 )
 

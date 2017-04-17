@@ -6,7 +6,9 @@ const ManifestElement = ({ name, script, description, result}) => (
   <div className="element">
     <div className='name'>@{name}</div>
     <HideableText label='description' text={description} />
-    <HideableText label='script' text={script} />
+    <div className='script'>
+      <HideableText label='script' text={script} />
+    </div>
     {Result(name, result)}
   </div>
 )
