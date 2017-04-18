@@ -48,7 +48,7 @@ var TimurNavBar = React.createClass({
                  })
                }
                <div className={'nav_tab' + (self.props.appMode == 'manifesto' ? ' selected' : '')}>
-                  <a onClick={self.props.changeMode.bind(self, 'manifesto')}>Manifesto</a>
+                  <a onClick={self.props.changeMode.bind(self, 'manifests')}>Manifesto</a>
                 </div>
                {
                  this.props.can_edit ?
