@@ -1,0 +1,23 @@
+adminPublic:
+  user: admin
+  name: public manifest
+  description: public admin
+  project: ipi
+  access: public
+  data: {}
+
+adminPrivate:
+  user: admin
+  name: private manifest
+  description: private admin 
+  project: ipi
+  access: private
+  data: {}
+
+viewerPrivate:
+  user: viewer
+  name: private manifest
+  description: private viewer
+  project: ipi
+  access: private
+  data: {}

@@ -101,7 +101,7 @@ var timurActions = {
           for (var name in response) {
             dispatch(timurActions.addManifest(name, response[name]))
           }
-          if (success != undefined) success()
+          if (success != undefined) success(response)
         },
         error: function(xhr, status, err) {
           var message = JSON.parse(xhr.responseText)
@@ -135,6 +135,12 @@ var timurActions = {
       model_name: model_name,
       tab_name: tab_name,
       tab: tab
+    }
+  },
+  changeMode(mode) {
+    return {
+      type: 'CHANGE_MODE',
+      mode
     }
   }
 }

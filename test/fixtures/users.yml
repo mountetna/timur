@@ -1,11 +1,16 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  ucsf_id: MyString
-  name: MyString
-  email: MyString
+admin:
+  ucsf_id: adminUser
+  name: admin_name
+  email: admin@gmail.com
 
-two:
-  ucsf_id: MyString
-  name: MyString
-  email: MyString
+admin2:
+  ucsf_id: adminUser2
+  name: admin2_name
+  email: admin2@gmail.com
+
+viewer:
+  ucsf_id: viewerUser
+  name: viewer_name
+  email: viewer@gmail.com

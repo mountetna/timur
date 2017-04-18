@@ -1,21 +1,26 @@
+import "babel-polyfill"
+import 'promise-polyfill'
+import 'whatwg-fetch'
+
 import createLogger from 'redux-logger'
+import rootReducer from '../reducers'
+import Manifests from './manifest/manifests'
+import { connect } from 'react-redux'
+
+const createStore = () => {
+  let middleWares = [thunk]
+  if (process.env.NODE_ENV != "production") {
+    middleWares.push(createLogger())
+  }
+  return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer)
+}
 
 var Timur = React.createClass({
-  create_store: function() {
-    let middleWares = [thunk]
-    if (process.env.NODE_ENV != "production") {
-      middleWares.push(createLogger())
-    }
-    return Redux.applyMiddleware(...middleWares)(Redux.createStore)(Redux.combineReducers({
-      timur: timurReducer,
-      magma: magmaReducer,
-      messages: messageReducer,
-      plots: plotReducer
-    }))
-  },
   render: function () {
     var component
-    if (this.props.mode == 'browse') 
+    if (this.props.appMode == 'manifesto') {
+      component = <Manifests isAdmin={this.props.is_admin} />
+    } else if (this.props.mode == 'browse') 
       component = <Browser 
         can_edit={ this.props.can_edit }
         model_name={ this.props.model_name }
@@ -29,20 +34,25 @@ var Timur = React.createClass({
     else if (this.props.mode == 'noauth')
       component = <Noauth user={ this.props.user }/>
 
-    var store = this.create_store()
-    window.store = store
-
-    return <Provider store={ store }>
-            <div>
+    return  <div>
               <TimurNav user={ this.props.user }
                 can_edit={ this.props.can_edit }
                 mode={ this.props.mode }
-                environment={this.props.environment}/>
+                environment={this.props.environment}
+                appMode={this.props.appMode}/>
               <Messages/>
               { component }
            </div>
-    </Provider>
   }
 })
 
-module.exports = Timur
+//TODO fix this. a bunch of hacks for manifest tab until start using react-router
+const mapStateToProps = (state) => ({ appMode: state.appMode })
+Timur = connect(mapStateToProps)(Timur)
+
+
+export default (props) => (
+  <Provider store={createStore()}>
+    <Timur {...props}/>
+  </Provider>
+)

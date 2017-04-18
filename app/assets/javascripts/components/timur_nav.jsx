@@ -1,3 +1,5 @@
+import { changeMode } from '../actions/timur_actions'
+
 var TimurNavBar = React.createClass({
   render: function() {
     var self = this
@@ -21,6 +23,8 @@ var TimurNavBar = React.createClass({
       heading = <span>Timur <b>:</b> Data Browser</span>
       logo_id = "normal"
     }
+
+    //TODO fix hacky addition of Manifesto tab
     return <div id="header">
              <div id="logo">
                <a href="/">
@@ -37,12 +41,15 @@ var TimurNavBar = React.createClass({
              <div id="nav">
                {
                  Object.keys(tabs).map(function(name) {
-                   var tab_class = "nav_tab" + (self.props.mode == name ? ' selected' : '')
+                   var tab_class = "nav_tab" + ((self.props.mode == name && !self.props.appMode) ? ' selected' : '')
                    return <div key={ name } className={ tab_class }>
                        <a href={ tabs[name] }> { name } </a>
                      </div>
                  })
                }
+               <div className={'nav_tab' + (self.props.appMode == 'manifesto' ? ' selected' : '')}>
+                  <a onClick={self.props.changeMode.bind(self, 'manifesto')}>Manifests</a>
+                </div>
                {
                  this.props.can_edit ?
                  <div className="nav_tab">
@@ -53,7 +60,7 @@ var TimurNavBar = React.createClass({
                <div className="nav_tab">
                  <a onClick={ 
                    function(e) {
-                     self.props.dispatch(timurActions.toggleConfig('help_shown'))
+                     self.props.toggleConfig('help_shown')
                    }
                  }>
                  {
@@ -75,6 +82,10 @@ var TimurNav = connect(
     return {
       helpShown: state.timur.help_shown
     }
+  },
+  { 
+    changeMode,
+    toggleConfig: timurActions.toggleConfig
   }
 )(TimurNavBar)
 

@@ -5,4 +5,7 @@ class Whitelist < ActiveRecord::Base
   def can_edit?
     access == "admin" || access == "editor"
   end
+  def is_admin?
+    access == "admin"
+  end
 end
