@@ -2,8 +2,9 @@
 
 createScale = function(domain, range) {
   var scale
-  if (domain[0] instanceof Date) 
-    scale = d3.time.scale()
+  if (typeof domain[0] !== 'number') {
+    return d3.time.scale().range(range).domain(domain.map(date => new Date(date)))
+  }
   else
     scale = d3.scale.linear()
 

@@ -15,8 +15,8 @@ var LinePlot = React.createClass({
       (line) => line.points.map( (point) => point.y ) 
     ).flatten()
 
-    var xmin = x_values.min()
-    var xmax = x_values.max()
+    var xmin = typeof x_values.min() === 'string' ? new Date(x_values.min()) : x_values.min()
+    var xmax = typeof x_values.max() === 'string' ? new Date(x_values.max()) : x_values.max()
 
     var ymin = y_values.min()
     var ymax = y_values.max()
@@ -67,7 +67,8 @@ var LinePlot = React.createClass({
         {
           lines.map(function(line,i) {
             var path_text = line.points.map(function(point) {
-              return xScale(point.x) + " " + yScale(point.y)
+              const x = typeof point.x === 'number' ? point.x : new Date(point.x)
+              return xScale(x) + " " + yScale(point.y)
             }).join(" L ")
 
             return <g key={i}>
