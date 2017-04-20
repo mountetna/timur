@@ -4,7 +4,7 @@ import { getManifests, toggleManifestsFilter, selectManifest, saveNewManifest, d
 import Manifest from './manifest'
 import VisibleManifests from './visible_manifests'
 import ManifestFilter from './manifests_filter'
-import debounce from 'lodash/debounce'
+import debounce from 'lodash.debounce'
 
 class Manifests extends Component {
   componentDidMount() {
