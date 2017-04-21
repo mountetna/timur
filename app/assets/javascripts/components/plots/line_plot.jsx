@@ -67,8 +67,7 @@ var LinePlot = React.createClass({
         {
           lines.map(function(line,i) {
             var path_text = line.points.map(function(point) {
-              const x = typeof point.x === 'number' ? point.x : new Date(point.x)
-              return xScale(x) + " " + yScale(point.y)
+              return xScale(point.x) + " " + yScale(point.y)
             }).join(" L ")
 
             return <g key={i}>
