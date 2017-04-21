@@ -12,7 +12,7 @@
 				background-color: transparent;
 			}
 			&:hover {
-				color: mediumorchid;
+				color: #33333c;
 			}
 		}
 		.metrics_names {
@@ -53,7 +53,7 @@
 					.metric {
 						border: 2px solid midnightblue;
 						border-radius: 50%;
-						color: mediumorchid;
+						color: #33333c;
 						cursor: default;
 						display: inline-block;
 						height: 20px;
@@ -61,7 +61,7 @@
 						width: 20px;
 						&.success {
 							background-color: palegreen;
-							box-shadow: -2px -2px 5px mediumorchid inset, 1px 1px 1px darkolivegreen inset;
+							box-shadow: -2px -2px 5px #33333c inset, 1px 1px 1px darkolivegreen inset;
 						}
 						&.failure {
 							background-color: pink;

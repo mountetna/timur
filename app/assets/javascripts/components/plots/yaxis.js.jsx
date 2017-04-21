@@ -13,6 +13,7 @@ var YAxis = React.createClass({
     var ticks = scale.ticks(this.props.num_ticks);
     var interval_size = ticks[1] - ticks[0];
     var places = Math.ceil(-Math.log10(Math.abs(interval_size)));
+    places = places < 0 ? 0 : places
     return <g className="axis">
       <text textAnchor="middle" transform={ 'translate(-45,' + (scale(this.props.ymin)+scale(this.props.ymax))/2 + ') rotate(-90)' }>
         { this.props.label }
