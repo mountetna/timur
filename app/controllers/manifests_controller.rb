@@ -1,5 +1,4 @@
 class ManifestsController < ApplicationController
-  protect_from_forgery with: :null_session
   before_filter :authenticate
 
   def index
@@ -20,7 +19,7 @@ class ManifestsController < ApplicationController
   end
 
   def update
-    return unless findManifest(params[:id])
+    return unless find_manifest(params[:id])
     return unless authorize(@manifest)
     @manifest.assign_attributes(manifest_params)
     @manifest.assign_attributes(:data => params[:data])
@@ -33,7 +32,7 @@ class ManifestsController < ApplicationController
   end
 
   def destroy
-    return unless findManifest(params[:id])
+    return unless find_manifest(params[:id])
     return unless authorize(@manifest)
     if @manifest.destroy
       render json: { :success => true }

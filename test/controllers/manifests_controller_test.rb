@@ -57,7 +57,7 @@ class ManifestsControllerTest < ActionController::TestCase
 
   test "non admins cannot create public manifests" do
     viewer = users(:viewer)
-    new_manifest = { :name => "test@test.com", :description => "foobar", :access => "public", :project => "proj", :data => {}}
+    new_manifest = { :name => "test@test.com", :description => "foobar", :access => "public", :project => "proj", :data => {"a"=> "b"}}
 
     log_in_as(viewer) do
       old_manifest_count = viewer.manifests.size
@@ -71,7 +71,7 @@ class ManifestsControllerTest < ActionController::TestCase
 
   test "admins can create public manifests" do
     admin = users(:admin)
-    new_manifest = { :name => "test@test.com", :description => "foobar", :access => "public", :project => "proj", :data => {}}
+    new_manifest = { :name => "test@test.com", :description => "foobar", :access => "public", :project => "proj", :data => {"a"=> "b"}}
 
     log_in_as(admin) do
       old_public_manifest_count = admin.manifests.where(:access => "public").size
