@@ -5,6 +5,7 @@ var XAxis = React.createClass({
     var ticks = scale.ticks(this.props.num_ticks);
     var interval_size = ticks[1] - ticks[0];
     var places = Math.ceil(-Math.log10(Math.abs(interval_size)));
+    places = places < 0 ? 0 : places
 
     return <g className="axis">
       <text textAnchor="middle" transform={ 'translate(' + (scale(this.props.xmin)+scale(this.props.xmax))/2 + ',' + (this.props.y + 35) + ')' }>
