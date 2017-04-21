@@ -5,6 +5,8 @@ var AttributeViewer = React.createClass({
 
     var AttClass
 
+    console.log(attribute)
+
     switch(class_name) {
       case "BarPlotAttribute":
         AttClass = BarPlotAttribute
