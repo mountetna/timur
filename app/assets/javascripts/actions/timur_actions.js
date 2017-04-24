@@ -1,4 +1,6 @@
-import Vector from "vector"
+import Vector from 'vector'
+import { getTSV } from '../api/timur_api'
+import { showMessages } from './message_actions'
 
 var timurActions = {
   toggleConfig: function(name) {
@@ -106,7 +108,7 @@ var timurActions = {
         error: function(xhr, status, err) {
           var message = JSON.parse(xhr.responseText)
           dispatch(
-            messageActions.showMessages([
+            showMessages([
 `### For our inquiry:
 
    \`${JSON.stringify(message.query)}\`
@@ -120,6 +122,20 @@ var timurActions = {
           if (error != undefined) error(message)
         }
       })
+    }
+  },
+  requestTSV: function(model_name,record_names) {
+    return function(dispatch) {
+      getTSV(model_name,record_names)
+        .catch(
+          (error) => dispatch(
+            showMessages([
+`### Your attempt to create a TSV failed.
+
+${error}`
+            ])
+          )
+        )
     }
   },
   addManifest: function(name, manifest) {

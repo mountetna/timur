@@ -1,28 +1,24 @@
-import Magma from 'magma'
+import TableViewer from 'components/table_viewer'
+import React from 'react'
 
-var TableAttribute = React.createClass({
-  render: function() {
+export default class TableAttribute extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { filter: "", current_page: 0 }
+  }
+
+  render() {
+    if (this.props.mode != 'browse') return <div className="value"></div>
+
     return <div className="value">
-        <TableViewer page_size={ this.props.page_size }
-          mode={ this.props.mode }
-          table={ this.props.table } />
-      </div>
+      <TableViewer 
+        page_size={ 10 }
+        current_page={ this.state.current_page }
+        set_page={ (page) => this.setState({ current_page: page }) }
+        filter={ this.state.filter }
+        set_filter={ (evt) => this.setState({ current_page: 0, filter: evt.target.value }) }
+        model_name={ this.props.attribute.model_name }
+        record_names={ this.props.value }/>
+    </div>
   }
-})
-
-TableAttribute = connect(
-  function(state, props) {
-    var model_name = props.attribute.name
-    var magma = new Magma(state)
-    var template = magma.template(model_name)
-    var documents = magma.documents( model_name, props.value )
-    var table = template ? new TableSet(documents, template) : null
-    return {
-      page_size: 10,
-      mode: props.mode,
-      table: table
-    }
-  }
-)(TableAttribute)
-
-module.exports = TableAttribute
+}

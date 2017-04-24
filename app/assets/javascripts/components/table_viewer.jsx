@@ -1,175 +1,75 @@
-var RecordFilter = function(table,filter) {
-  var terms = filter.split(/\s+/);
+import React from 'react'
+import Magma from 'magma'
+import { requestTSV } from '../actions/timur_actions'
 
-  this.matches_any = function(term,record) {
-    return table.columns.some(function(column) {
-      var value = record[ column.name ];
-      var txt = column.format( value );
-      if (txt.match) return txt.match(new RegExp(term, "i"));
-    });
-  }
+class TableViewer extends React.Component {
+  render() {
+    var props = this.props
 
-  this.matches_column = function(term, record) {
-    var column_format = RegExp(
-      "^" +
-      "([\\w]+)" + // the column name
-      "([=<>~])" + // the operator
-      "(.*)" +     // the rest
-      "$"
-    );
-
-    var match = column_format.exec(term);
-
-    // format ok, find column
-    if (match) {
-      var column_name = match[1],
-        operator = match[2],
-        match_txt = match[3];
-
-      var column = table.columns.find(function(column) {
-        return column.name == match[1];
-      });
-
-      // column exists, check match
-      if (column) {
-        // get the value
-        var value = record[ column.name ];
-
-        var txt = column.format( value );
-        switch(operator) {
-          case '=':
-            return txt == match_txt;
-          case '~':
-            return txt.match(new RegExp(match_txt, "i"));
-          case '<':
-            return txt < match_txt;
-          case '>':
-            return txt > match_txt;
-        }
-      }
-    }
-    return false;
-  },
-
-  this.records = function() {
-    var self = this;
-
-    if (!table || !table.records.length) return null;
-
-    if (!filter || !filter.length) return table.records;
-
-    return table.records.filter(function(record) {
-
-      // show records which match all terms
-      
-      return terms.every(function(term) { 
-        // ignore empty terms
-        if (!term.length) return true; 
-
-        // check column restrict
-        if (self.matches_column(term, record)) return true;
-
-        if (self.matches_any(term,record)) return true;
-
-        return false;
-      });
-    });
-  }
-};
-
-var TableViewer = React.createClass({
-  getInitialState: function() {
-    return { new_items: [], current_page: 0, filter: "" }
-  },
-  row_for: function(page) {
-    return this.props.page_size * page;
-  },
-  set_page: function(page) {
-    this.setState({ current_page: page });
-  },
-  set_filter: function(evt) {
-    this.setState({ current_page: 0, filter: evt.target.value });
-  },
-  export_table: function(records) {
-    // return a tsv for this thingy.
-    var table = this.props.table;
-
-    var header = table.columns.map(function(column) {
-      return column.name;
-    });
-    var rows = records.map(function(record) {
-      return table.columns.map(function(column) {
-        return column.format( record[ column.name ] ).toString()
-          .replace(/\t/g,"\\t")
-          .replace(/\r/g,"")
-          .replace(/\n/g,"\\n");
-      })
-    });
-    var string = [ header ].concat(rows).map(function(row) {
-      return row.join("\t");
-    }).join("\n");
-    var uri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(string);
-    var link = document.createElement("a");    
-    link.href = uri;
-    link.style = "visibility:hidden";
-    link.download = table.template.name + ".tsv";
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  },
-  render: function() {
-    if (this.props.mode != 'browse') return <div className="value"></div>
-
-    var self = this;
-    var table = self.props.table;
-    var filter = new RecordFilter(table, self.state.filter)
-    var records = filter.records();
-
-    if (!records) return <div className="table"></div>;
-
-    var pages = Math.ceil(records.length / self.props.page_size);
+    if (!props.template) return <div></div>
 
     return <div className="table">
-      <Pager pages={ pages } 
-        current_page={ self.state.current_page }
-        set_page={ self.set_page } >
+      <Pager pages={ props.pages } 
+        current_page={ props.current_page }
+        set_page={ props.set_page } >
         <div className='search'>&#x2315;</div>
-        <input className="filter" type="text" onChange={ this.set_filter }/>
-        <input className="export" type="button" onClick={ self.export_table.bind(this,records) } value={"\u21af TSV"}/>
+        <input className="filter" type="text" onChange={ props.set_filter }/>
+        <input className="export" type="button" onClick={ () => props.requestTSV(props.model_name, props.record_names) } value={"\u21af TSV"}/>
         <Help info="table_viewer"/>
       </Pager>
       <div className="table_row">
       {
-        table.columns.map(function(column,i) {
-          return <div key={i} className="table_header">{ column.name }</div>
-        })
+        props.attribute_names.map((att_name,i) => 
+          <div key={i} className="table_header">{ att_name }</div>
+        )
       }
       </div>
       {
-        records.slice(self.row_for(self.state.current_page), self.row_for(self.state.current_page+1)).map(
-          function(record) {
-            return <div key={ record.id }
-              className="table_row">
-              {
-                table.columns.map(function(column, i) {
-                  var value = record[ column.name ];
-                  return <div className="table_data" key={i}>
-                    <AttributeViewer 
-                    mode={self.props.mode}
-                    template={ table.template }
-                    document={ record }
-                    value={ value }
-                    attribute={ column.attribute }/>
-                  </div>
-                })
-              }
+        props.record_names.slice(props.page_size * props.current_page, props.page_size * (props.current_page+1)).map(
+          (record_name) => {
+            var document = props.documents[record_name]
+            return <div key={ record_name } className="table_row">
+            {
+              props.attribute_names.map(
+                (att_name, i) => <div className="table_data" key={i}>
+                  <AttributeViewer 
+                    template={ props.template }
+                    document={ document }
+                    value={ document[ att_name ] }
+                    attribute={ props.template.attributes[att_name] }/>
+                </div>
+              )
+            }
             </div>
           }
         )
-       }
+      }
       </div>
   }
-});
+}
 
-module.exports = TableViewer;
+export default connect(
+  function(state,props) {
+    var magma = new Magma(state)
+    var template = magma.template(props.model_name)
+    var documents = magma.documents( props.model_name, props.record_names, props.filter )
+    var record_names = Object.keys(documents).sort()
+    return {
+      template: template,
+      documents: documents,
+      mode: props.mode,
+      record_names: record_names,
+      pages: Math.ceil(record_names.length / props.page_size),
+      attribute_names: template ? Object.keys(template.attributes).filter(
+        (att_name) => template.attributes[att_name].shown
+      ) : null
+    }
+  },
+  function(dispatch,props) {
+    return {
+      requestTSV: function(model_name, record_names) {
+        dispatch(requestTSV(model_name, record_names))
+      }
+    }
+  }
+)(TableViewer)
