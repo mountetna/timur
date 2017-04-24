@@ -10,7 +10,6 @@ export const matrixConversion = (data, fields) => {
 }
 
 export const downloadTSV = (data, fields, fileName) => {
-  console.log(fileName)
   try {
     var result = json2csv({ data: data, fields: fields, del: '\t'});
     downloadjs(result, fileName+'.tsv', 'tsv');

@@ -1,3 +1,5 @@
+import downloadjs from 'downloadjs'
+
 export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response
@@ -12,22 +14,10 @@ export const parseJSON = (response) => response.json()
 
 export const makeBlob = (response) => response.blob()
 
-export const generateDownload = (filename) => {
-  return (blob) => {
-    var data = window.URL.createObjectURL(blob)
-    var link = document.createElement('a')
-    link.href = data
-    link.download = filename
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-}
+export const generateDownload = (filename) => (blob) => downloadjs(blob, filename, blob.type)
 
 export const headers = (...types) => {
   var _headers = {}
-
-  console.log(types)
 
   var add = (header, value) => _headers[header] = value
 
@@ -40,8 +30,6 @@ export const headers = (...types) => {
         if (csrf) add('X-CSRF-Token', csrf.getAttribute('content'))
     }
   }
-
-  console.log(_headers)
 
   return _headers
 }
