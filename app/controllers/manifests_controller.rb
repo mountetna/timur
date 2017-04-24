@@ -1,5 +1,5 @@
 class ManifestsController < ApplicationController
-  protect_from_forgery with: :null_session
+  #protect_from_forgery with: :null_session
   before_filter :authenticate
 
   def index

@@ -3,9 +3,9 @@
  * 
  */
 
-import AJAX from 'ajax'
-
 import Magma from 'magma'
+
+import { requestTSV } from '../actions/timur_actions'
 
 var COLUMN_FORMAT = /^([\w]+)([=<>~])(.*)$/
 
@@ -305,38 +305,6 @@ var Search = React.createClass({
       ]
     ]
   },
-  requestTSV: function(model_name, record_names) {
-    var request = {
-      model_name: model_name,
-      record_names: record_names
-    }
-    AJAX({
-      url: Routes.table_tsv_path(),
-      method: 'post',
-      data: JSON.stringify(request), 
-      sendType: 'application/json',
-      returnType: 'binary',
-      csrf: true,
-      success: (result, status, xhr) => {
-        var type = xhr.getResponseHeader("content-type")
-        var blob = new Blob([result], { type: type } )
-        var link = document.createElement('a')
-        var data = window.URL.createObjectURL(blob)
-        link.href = data
-        link.download = `${model_name}.tsv`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      },
-      error: (xhr, config, error) => {
-        this.props.showMessage([
-`### Your attempt to create a TSV failed.
-
-${error}`
-        ])
-      }
-    })
-  },
   postQuery: function(model_name, filter) {
     // in this case we will simply post a manifest
     // named 'search'
@@ -429,13 +397,7 @@ ${error}`
                       )
                     }
                     showNone="disabled"/>
-                    <input className="button" type="button" value={"\u21af TSV"}
-                      onClick={
-                        () => this.requestTSV(
-                          this.props.model_name,
-                          this.props.record_names
-                        )
-                      }/>
+                  <input className="button" type="button" value={"\u21af TSV"} onClick={ () => this.props.requestTSV(this.props.model_name, this.props.record_names) }/>
                   </div>
                   <div className="results">
                     Found { this.props.record_names.length } records in <span className="model_name">{ this.props.model_name }</span>
@@ -530,6 +492,9 @@ Search = connect(
       requestDocuments: function(model, record_names, success) {
         dispatch(magmaActions.requestDocuments(model,record_names,"all",success))
       },
+      requestTSV: function(model_name, record_names) {
+        dispatch(requestTSV(model_name, record_names))
+      }
     }
   }
 )(Search)

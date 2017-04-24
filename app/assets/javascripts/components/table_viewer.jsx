@@ -1,13 +1,12 @@
 import React from 'react'
+import Magma from 'magma'
+import { requestTSV } from '../actions/timur_actions'
 
 class TableViewer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { current_page: 0 }
-  }
-
   render() {
     var props = this.props
+
+    if (!props.template) return <div></div>
 
     return <div className="table">
       <Pager pages={ props.pages } 
@@ -15,29 +14,29 @@ class TableViewer extends React.Component {
         set_page={ props.set_page } >
         <div className='search'>&#x2315;</div>
         <input className="filter" type="text" onChange={ props.set_filter }/>
-        <input className="export" type="button" onClick={ this.export_table.bind(this,records) } value={"\u21af TSV"}/>
+        <input className="export" type="button" onClick={ () => props.requestTSV(props.model_name, props.record_names) } value={"\u21af TSV"}/>
         <Help info="table_viewer"/>
       </Pager>
       <div className="table_row">
       {
-        attribute_names.map((att_name,i) => 
+        props.attribute_names.map((att_name,i) => 
           <div key={i} className="table_header">{ att_name }</div>
         )
       }
       </div>
       {
-        props.record_names.slice(props.page_size * this.state.current_page, props.page_size * (this.state.current_page+1)).map(
+        props.record_names.slice(props.page_size * props.current_page, props.page_size * (props.current_page+1)).map(
           (record_name) => {
-            var document = documents[record_name]
+            var document = props.documents[record_name]
             return <div key={ record_name } className="table_row">
             {
-              attribute_names.map(
+              props.attribute_names.map(
                 (att_name, i) => <div className="table_data" key={i}>
                   <AttributeViewer 
                     template={ props.template }
                     document={ document }
                     value={ document[ att_name ] }
-                    attribute={ template.attribute[att_name] }/>
+                    attribute={ props.template.attributes[att_name] }/>
                 </div>
               )
             }
@@ -61,9 +60,16 @@ export default connect(
       mode: props.mode,
       record_names: record_names,
       pages: Math.ceil(record_names.length / props.page_size),
-      attribute_names: Object.keys(template.attributes).filter(
+      attribute_names: template ? Object.keys(template.attributes).filter(
         (att_name) => template.attributes[att_name].shown
-      )
+      ) : null
+    }
+  },
+  function(dispatch,props) {
+    return {
+      requestTSV: function(model_name, record_names) {
+        dispatch(requestTSV(model_name, record_names))
+      }
     }
   }
 )(TableViewer)

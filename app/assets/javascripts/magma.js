@@ -1,4 +1,4 @@
-class documentFilter {
+class DocumentFilter {
   constructor(template, documents, filter) {
     this.documents = documents
     this.template = template
@@ -43,7 +43,7 @@ class documentFilter {
   matchesAny(term,document) {
     return this.filter_attribute_names.some(
       (att_name) => {
-        var txt = format(document, att_name)
+        var txt = this.format(document, att_name)
         return txt.match && txt.match(new RegExp(term, "i"))
       }
     )
@@ -63,7 +63,7 @@ class documentFilter {
       var [ , att_name, operator, match_txt ] = match
 
       if (this.filter_attribute_names.includes(att_name)) {
-        var txt = format( document, att_name )
+        var txt = this.format( document, att_name )
         switch(operator) {
           case '=':
             return txt == match_txt
@@ -79,10 +79,10 @@ class documentFilter {
     return false
   }
 
-  documents() {
+  filteredDocuments() {
     if (!this.documents || !Object.keys(this.documents).length) return null
 
-    if (!filter || !filter.length) return this.documents
+    if (!this.terms.length) return this.documents
 
     var record_names = Object.keys(this.documents).filter(
       (record_name) => {
@@ -130,7 +130,7 @@ export default class Magma {
       }
 
       if (filter) {
-        documents = (new documentFilter(template(model_name), documents, filter)).documents()
+        documents = (new DocumentFilter(this.template(model_name), documents, filter)).filteredDocuments()
       }
       return documents
     }
