@@ -45,6 +45,8 @@ gem 'font-awesome-sass'
 
 gem 'rltk'
 
+gem 'magma'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
@@ -54,8 +56,6 @@ gem 'rltk'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-
-  gem 'magma'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   #gem 'web-console', '~> 2.0'
@@ -68,8 +68,4 @@ end
 
 group :test, :production do
   gem 'omniauth-shibboleth'
-end
-
-group :production do
-  gem 'magma-production-ucsf-immunoprofiler'
 end
