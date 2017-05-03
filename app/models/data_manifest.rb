@@ -66,7 +66,7 @@ class DataManifest
       begin
         @vars[variable] = resolve(query)
       rescue RLTK::NotInLanguage => e
-        raise "Could not resolve #{query}"
+        raise LanguageError, "Could not resolve @#{variable} = #{query}"
       end
     end
   end

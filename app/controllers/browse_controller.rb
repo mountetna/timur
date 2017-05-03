@@ -43,16 +43,13 @@ class BrowseController <  ApplicationController
   end
 
   def update
-    # Update a model, redirect to the model view
-    @errors = []
-
-    status, payload = Magma::Client.instance.update(
-      params[:revisions]
-    )
-    if status == 200
+    begin
+      status, payload = Magma::Client.instance.update(
+        params[:revisions]
+      )
       render json: payload
-    else
-      render json: payload, status: status
+    rescue Magma::ClientError => e
+      render json: e.body, status: e.status
     end
   end
 end
