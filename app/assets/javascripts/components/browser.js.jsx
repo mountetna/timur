@@ -33,13 +33,8 @@ var Browser = React.createClass({
           this.setState({mode: 'submit'})
           this.props.submitRevision(
             this.props.revision, 
-            function() {
-              self.setState({mode: 'browse'})
-            },
-            function ( messages ) {
-              self.setState({mode: 'edit'})
-              self.props.showMessage(messages.errors || ["### An unknown error occurred.\n\nSeek further insight elsewhere."] )
-            }
+            () => self.setState({mode: 'browse'}),
+            () => self.setState({mode: 'edit'})
           )
         } else {
           this.setState({mode: 'browse'})

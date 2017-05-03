@@ -9,35 +9,43 @@ class SearchController <  ApplicationController
   end
 
   def table_json
-    status, payload = Magma::Client.instance.query(
-      [ params[:model_name], "::all", "::identifier" ]
-    )
+    begin
+      status, payload = Magma::Client.instance.query(
+        [ params[:model_name], "::all", "::identifier" ]
+      )
 
-    ids = JSON.parse(payload)
+      ids = JSON.parse(payload)
 
-    render json: { record_names: ids["answer"].map(&:last) }
+      render json: { record_names: ids["answer"].map(&:last) }
+    rescue Magma::ClientError => e
+      render json: e.body, status: e.status
+    end
   end
 
   def table_tsv
-    status, payload = Magma::Client.instance.retrieve(
-      model_name: params[:model_name],
-      record_names: params[:record_names],
-      attribute_names: "all",
-      format: "tsv"
-    )
-    filename = "#{params[:model_name]}.tsv"
-    send_data(payload, type: 'text/tsv', filename: filename)
+    begin
+      status, payload = Magma::Client.instance.retrieve(
+        model_name: params[:model_name],
+        record_names: params[:record_names],
+        attribute_names: "all",
+        format: "tsv"
+      )
+      filename = "#{params[:model_name]}.tsv"
+      send_data(payload, type: 'text/tsv', filename: filename)
+    rescue Magma::ClientError => e
+      render json: e.body, status: e.status
+    end
   end
 
   def records_json
-    magma = Magma::Client.instance
-    status, payload = magma.retrieve(
-      params
-    )
-    if status == 200
+    begin
+      magma = Magma::Client.instance
+      status, payload = magma.retrieve(
+        params
+      )
       render json: payload
-    else
-      render json: payload, status: status
+    rescue Magma::ClientError => e
+      render json: e.body, status: e.status
     end
   end
 
@@ -52,7 +60,9 @@ class SearchController <  ApplicationController
       ]
       render json: result
     rescue Magma::ClientError => e
-      render json: e.body.merge(message: e.message), status: e.status
+      render json: e.body, status: e.status
+    rescue LanguageError => e
+      render json: { errors: [ e.message ] }, status: 422
     end
   end
 end

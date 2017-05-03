@@ -1,3 +1,5 @@
+import { showMessages } from './message_actions'
+
 var magmaActions = {
   consumePayload: function(dispatch,response) {
     if (response.models) {
@@ -139,10 +141,15 @@ var magmaActions = {
           magmaActions.consumePayload(dispatch,response)
         },
         error: function(xhr, status, err) {
-          if (error != undefined) {
-            var message = JSON.parse(xhr.responseText)
-            error(message)
-          }
+          var response = JSON.parse(xhr.responseText)
+          dispatch(
+            showMessages([
+`### The change we sought did not occur.
+
+${response.errors.map((error) => `* ${error}`)}`
+            ])
+          )
+          if (error != undefined) error()
         }
       })
     }
