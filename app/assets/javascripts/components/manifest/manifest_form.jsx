@@ -31,6 +31,7 @@ class ManifestForm extends Component {
       )
     } else {
       this.setState({
+        name: '',
         access: 'private',
         elementKeys: [],
         elementsByKey: {}
@@ -68,7 +69,10 @@ class ManifestForm extends Component {
       this.stateToManifest(),
       (result) => {
         this.setState({ result })
-      }
+      },
+      (err) => {
+        this.setState({ result: err })
+      },
     )
   }
 
@@ -126,7 +130,7 @@ class ManifestForm extends Component {
           elementResult = result[name][element.name]
         } else if (result[name] && !result[name][element.name]) {
           elementResult = ''
-        } else if (!result[name] && typeof result  === 'string') {
+        } else if (typeof result  === 'string' || result.hasOwnProperty('errors')) { //handle error results
           elementResult = result
         } else elementResult = ''
       } else {

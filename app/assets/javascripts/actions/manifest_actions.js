@@ -116,27 +116,26 @@ const manifestToReqPayload = (manifest) => {
   return { manifest: manifestElements, name: name }
 }
 
-//TODO
-//requestManifests adds the results in the state tree
-//probably need to create my own fetch request and refactor the two functions below
-export const fetchManifestResults = (manifest, callback) =>
+export const fetchManifestResults = (manifest, success = () => {}, error = () => {}) =>
   (dispatch) => {
     dispatch(
       requestManifests(
         [manifestToReqPayload(manifest)],
-        callback,
-        callback
+        result => success(result, dispatch),
+        err => {
+          error(
+            err.hasOwnProperty('errors') ? err : {errors: ['error: ' + err]},
+            dispatch
+          )
+        }
       )
     )
   }
 
-export const submitManifest = (manifest) =>
-  (dispatch) => {
-    dispatch(
-      requestManifests(
-        [manifestToReqPayload(manifest)],
-        (result) => dispatch(addManifestResult(manifest.id, result)),
-        (error) => dispatch(addManifestResult(manifest.id, error))
-      )
-    )
-  }
+export const submitManifest = (manifest) => {
+  return fetchManifestResults(
+    manifest,
+    (result, dispatch) => dispatch(addManifestResult(manifest.id, result)),
+    (err, dispatch) => dispatch(addManifestResult(manifest.id, err))
+  )
+}

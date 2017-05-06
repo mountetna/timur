@@ -106,7 +106,12 @@ var timurActions = {
           if (success != undefined) success(response)
         },
         error: function(xhr, status, err) {
-          var response = JSON.parse(xhr.responseText)
+          var response
+          try {
+            response = JSON.parse(xhr.responseText)
+          } catch(e) {
+            response = err
+          }
           if (response.query)
             dispatch(showMessages([
 `
