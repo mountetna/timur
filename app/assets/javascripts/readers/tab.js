@@ -55,9 +55,12 @@ class DisplayItem {
     this.plot = display_attribute && display_attribute.plot
     this.attribute = {
        ...this.template_attribute,
-       ...this.template_attribute && { editable: true },
        ...this.display_attribute
     }
+  }
+
+  editable() {
+    return this.template_attribute
   }
 
   manifest(record_name) {
