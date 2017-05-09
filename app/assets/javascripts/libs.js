@@ -16,10 +16,11 @@ window.classNames = function(nameset) {
 }
 
 Array.prototype.flatten = function() {
-  return this.reduce(function(flat, item) {
-    if (Array.isArray(item)) return flat.concat(item.flatten())
-    return flat.concat(item)
-  }, [])
+  return this.reduce((flat, item) => (Array.isArray(item) ? flat.concat(item.flatten()) : flat.concat(item)), [])
+}
+
+Array.prototype.compact = function() {
+  return this.filter((item) => item != null)
 }
 
 Array.prototype.min = function() {

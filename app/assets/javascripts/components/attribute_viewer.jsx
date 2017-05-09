@@ -48,12 +48,16 @@ var AttributeViewer = React.createClass({
           switch(attribute.type) {
             case "TrueClass":
               AttClass = CheckboxAttribute
+              break
             case "Integer":
               AttClass = IntegerAttribute
+              break
             case "Float":
               AttClass = FloatAttribute
+              break
             case "DateTime":
               AttClass = DateTimeAttribute
+              break
             default:
               AttClass = Attribute
           }

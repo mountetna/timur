@@ -95,6 +95,12 @@ class ProjectView < TimurView
     end
   end
 
+  tab :sequencing do
+    pane :default do
+      shows :rna_seq_plate
+    end
+  end
+
   tab :project_documents do
     pane :default do
       shows :document

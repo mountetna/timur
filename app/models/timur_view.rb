@@ -1,19 +1,3 @@
-# The old way:
-# We 'retrieve' a record, which uses eager loading to grab the record and associated items, which are pushed
-# into the association.
-#
-# We no longer have our nice model with its associations.
-#
-# Instead we have a JSON "payload" from Magma which contains all of the same
-# information; however, we need to parse our way through this if we are to
-# succeed.
-#
-# Timur uses this JSON payload structure in javascript and in ruby
-#
-# On the ruby end, Timur needs access to the record in order to compose a view,
-# which may require running sub-queries, etc., not available via the
-#
-#
 # Structure of the view:
 #
 # Tabs
@@ -208,7 +192,6 @@ class TimurView
 
   tab :default do
     pane :default do
-      show_all_attributes
     end
   end
 
