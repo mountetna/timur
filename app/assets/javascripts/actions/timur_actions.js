@@ -1,6 +1,7 @@
 import Vector from 'vector'
-import { getTSV } from '../api/timur_api'
+import { getTSV, getView } from '../api/timur_api'
 import { showMessages } from './message_actions'
+import Tab from '../readers/tab'
 
 var timurActions = {
   toggleConfig: function(name) {
@@ -10,39 +11,26 @@ var timurActions = {
     }
   },
   requestView: function(model_name, record_name, tab_name, success, error) {
-    var self = this;
-    var request = {
-      model_name: model_name,
-      tab_name: tab_name
-    }
     return function(dispatch) {
-      $.ajax({
-        url: Routes.view_json_path(),
-        method: 'POST',
-        data: JSON.stringify(request), 
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function(response) {
-          var panes = response.tabs[response.tab_name].panes
-          var paneMap = (transform) => Object.keys(panes).map(
-            (pane_name) => panes[pane_name].display.map(transform).filter((n) => n != null)
-          ).flatten()
-
-          var required_attributes = paneMap((display_item) => display_item.name)
-          var required_manifests = paneMap((display_item) => display_item.attribute.plot ? {
-              name: display_item.attribute.plot.name,
-              manifest: [
-                [ 'record_name', `'${ record_name }'` ],
-                ...display_item.attribute.plot.manifest
-              ]
-            } : null
+      getView(model_name, tab_name)
+        .then((response)=> {
+          console.log("Response is ")
+          console.log(response)
+          var tab = new Tab(
+            model_name, 
+            record_name,
+            response.tab_name,
+            response.tabs[response.tab_name],
+            null
           )
 
           dispatch(
             magmaActions.requestDocuments(
-              model_name, [ record_name ], required_attributes
+              model_name, [ record_name ], tab.requiredAttributes()
             )
           )
+
+          var required_manifests = tab.requiredManifests()
 
           if (required_manifests.length > 0) 
             dispatch(timurActions.requestManifests(required_manifests))
@@ -57,13 +45,8 @@ var timurActions = {
             )
 
           if (success != undefined) success()
-        },
-        error: function(xhr, status, err) {
-          if (error != undefined) {
-            error(JSON.parse(xhr.responseText))
-          }
-        }
-      })
+        })
+        .catch((err) => { if (error != undefined) error(err) })
     }
   },
   findManifest: function( state, manifest_name ) {

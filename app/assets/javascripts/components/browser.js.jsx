@@ -7,6 +7,8 @@
 // The Browser has state in the form of mode (edit or not) and tab (which one is shown)
 
 import Magma from 'magma'
+import BrowserTab from './browser_tab'
+import Tab from '../readers/tab'
 
 var Browser = React.createClass({
   componentDidMount: function() {
@@ -87,7 +89,13 @@ var Browser = React.createClass({
         revision={this.props.revision}
         mode={ this.state.mode }
         name={ current_tab_name }
-        tab={ view[current_tab_name] }
+        tab={ view[current_tab_name] ? new Tab(
+          this.props.model_name,
+          this.props.record_name,
+          current_tab_name,
+          view[current_tab_name],
+          this.props.template
+        ) : null }
         />
     </div>
   }

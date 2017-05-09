@@ -8,6 +8,8 @@ class TableViewer extends React.Component {
 
     if (!props.template) return <div></div>
 
+    if (!props.record_names.length) return <div>No entries</div>
+
     return <div className="table">
       <Pager pages={ props.pages } 
         current_page={ props.current_page }
