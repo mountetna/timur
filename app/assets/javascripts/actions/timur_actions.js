@@ -14,8 +14,6 @@ var timurActions = {
     return function(dispatch) {
       getView(model_name, tab_name)
         .then((response)=> {
-          console.log("Response is ")
-          console.log(response)
           var tab = new Tab(
             model_name, 
             record_name,
