@@ -3,7 +3,6 @@ var BrowserPane = React.createClass({
     var props = this.props
     var display = props.pane.display
 
-    console.log(props)
     if (display.length == 0)
       return <div style={{display:"none"}}/>
       
