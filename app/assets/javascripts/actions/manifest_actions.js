@@ -122,12 +122,7 @@ export const fetchManifestResults = (manifest, success = () => {}, error = () =>
       requestManifests(
         [manifestToReqPayload(manifest)],
         result => success(result, dispatch),
-        err => {
-          error(
-            err.hasOwnProperty('errors') ? err : {errors: ['error: ' + err]},
-            dispatch
-          )
-        }
+        err => error(err, dispatch)
       )
     )
   }

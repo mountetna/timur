@@ -77,6 +77,8 @@ export const Result = (name, data, nestLevel = 0) => {
   } else if (data.hasOwnProperty('errors')) {
     //handle error result
     return <div>{data.errors.join(', ')}</div>
+  } else if (data.hasOwnProperty('error')) {
+    return <div>{data.error}</div>
   }
 }
 

@@ -130,7 +130,7 @@ class ManifestForm extends Component {
           elementResult = result[name][element.name]
         } else if (result[name] && !result[name][element.name]) {
           elementResult = ''
-        } else if (typeof result  === 'string' || result.hasOwnProperty('errors')) { //handle error results
+        } else if (typeof result  === 'string' || result.hasOwnProperty('errors') || result.hasOwnProperty('error')) { //handle error results
           elementResult = result
         } else elementResult = ''
       } else {
