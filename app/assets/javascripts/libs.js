@@ -1,7 +1,6 @@
 window.React    = require('react')
 window.ReactDOM = require('react-dom')
 window.Redux = require('redux')
-window.Promise = require('es6-promise').Promise
 window.Provider = require('react-redux').Provider
 window.connect = require('react-redux').connect
 window.thunk = require('redux-thunk')
