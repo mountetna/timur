@@ -1,6 +1,6 @@
 import { showMessages } from './message_actions'
 import { requestManifests } from './timur_actions'
-import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests_api'
+import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests'
 
 const loadManifests = (manifestsById) => ({
   type: 'LOAD_MANIFESTS',
@@ -122,12 +122,7 @@ export const fetchManifestResults = (manifest, success = () => {}, error = () =>
       requestManifests(
         [manifestToReqPayload(manifest)],
         result => success(result, dispatch),
-        err => {
-          error(
-            err.hasOwnProperty('errors') ? err : {errors: ['error: ' + err]},
-            dispatch
-          )
-        }
+        err => error(err, dispatch)
       )
     )
   }
