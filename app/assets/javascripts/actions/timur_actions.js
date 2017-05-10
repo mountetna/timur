@@ -1,5 +1,5 @@
 import Vector from 'vector'
-import { getTSV, getView } from '../api/timur_api'
+import { getTSV, getView } from '../api/timur'
 import { showMessages } from './message_actions'
 import Tab from '../readers/tab'
 

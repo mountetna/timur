@@ -1,6 +1,6 @@
 import { showMessages } from './message_actions'
 import { requestManifests } from './timur_actions'
-import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests_api'
+import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests'
 
 const loadManifests = (manifestsById) => ({
   type: 'LOAD_MANIFESTS',
