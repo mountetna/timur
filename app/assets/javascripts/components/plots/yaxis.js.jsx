@@ -1,56 +1,39 @@
-// expects:
-//   scale = d3 scale object
-//   ymin = lowest value in coordinate space
-//   ymax = highest value in coordinate space
-//   x = x position of axis
-//   num_ticks = approximate number of ticks
-//   tick_width = width of the tick in pixels
+import React from 'react'
+import { tickFormatter } from './utils/axis-ticks.js'
 
-var YAxis = React.createClass({
-  render: function() {
-    var self = this;
-    var scale = this.props.scale;
-    var ticks = scale.ticks(this.props.num_ticks);
-    var interval_size = ticks[1] - ticks[0];
-    var places = Math.ceil(-Math.log10(Math.abs(interval_size)));
-    places = places < 0 ? 0 : places
-    return <g className="axis">
-      <text textAnchor="middle" transform={ 'translate(-45,' + (scale(this.props.ymin)+scale(this.props.ymax))/2 + ') rotate(-90)' }>
-        { this.props.label }
+const YAxis = ({ scale, num_ticks, tick_width, ymin, ymax, x, label }) => {
+  const ticks = scale.ticks(num_ticks)
+  const tickLabelFormatter = tickFormatter(ticks, scale)
+
+  return (
+    <g className="axis">
+      <text textAnchor="middle" transform={ 'translate(-45,' + (scale(ymin) + scale(ymax))/2 + ') rotate(-90)'}>
+        {label}
       </text>
-      <line 
-            x1={ this.props.x }
-            y1={ scale(this.props.ymin) }
-            x2={ this.props.x }
-            y2={ scale(this.props.ymax) }/>
-      {
-        ticks.map(function(tick,i) {
-          var y = self.props.scale(tick);
+      <line
+        x1={x}
+        y1={scale(ymin)}
+        x2={x}
+        y2={scale(ymax)}
+      />
+      {ticks.map((tick,i) => {
+        const y = scale(tick)
+        return (
+          <g key={i}>
+            <text textAnchor="end" transform={'translate(' + (x - tick_width - 2) + ',' + (y + 2) + ')' }>
+              {tickLabelFormatter(tick)}
+            </text>
+            <line
+              x1={x}
+              y1={y}
+              x2={x - tick_width}
+              y2={y}
+            />
+          </g>
+        )
+      })}
+    </g>
+  )
+}
 
-          var format_tick
-          if (typeof tick == "number")
-            format_tick = tick.toFixed(places)
-          else if (tick instanceof Date)
-            format_tick = scale.tickFormat()(tick)
-          else
-            format_tick = tick
-          return <g key={i}>
-              <text textAnchor="end" 
-                transform={ 
-                  'translate(' + (self.props.x - self.props.tick_width - 2) + ',' + (y + 2) + ')' }>
-                    {
-                      format_tick
-                    }
-              </text>
-              <line x1={ self.props.x }
-                  y1={ y }
-                  x2={ self.props.x - self.props.tick_width }
-                  y2={ y }/>
-            </g>
-        })
-      }
-    </g>;
-  }
-});
-
-module.exports = YAxis;
+export default YAxis
