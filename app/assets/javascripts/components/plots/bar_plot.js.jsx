@@ -1,3 +1,5 @@
+import YAxis from './yaxis'
+
 var BarPlot = React.createClass({
   getInitialState: function() {
     return { zoom: 1 }
