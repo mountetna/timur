@@ -1,5 +1,5 @@
 import React from 'react'
-import { tickFormatter } from './utils/axis-ticks.js'
+import { tickFormatter } from './utils/d3_scale.js'
 
 const YAxis = ({ scale, num_ticks, tick_width, ymin, ymax, x, label }) => {
   const ticks = scale.ticks(num_ticks)
