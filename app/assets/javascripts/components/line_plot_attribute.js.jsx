@@ -1,3 +1,5 @@
+import { autoColors } from '../colors'
+
 var LinePlotAttribute = React.createClass({
   render: function() {
     if (this.props.mode == "edit"

@@ -23,7 +23,6 @@
 #= require marked
 
 #= require libs
-#= require plots
 #= require matrix
 #= require tree
 #= require reducers
