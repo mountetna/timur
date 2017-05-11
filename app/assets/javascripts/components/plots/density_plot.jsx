@@ -1,3 +1,6 @@
+import XAxis from './xaxis'
+import YAxis from './yaxis'
+
 var DensityPlot = React.createClass({
   render: function() {
     var self = this;
