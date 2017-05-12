@@ -1,27 +1,34 @@
 import React from 'react'
 import { tickFormatter } from '../../utils/d3_scale.js'
 
-const XAxis = ({ scale, num_ticks, tick_width, xmin, xmax, y, label }) => {
-  const ticks = scale.ticks(num_ticks)
-  const tickLabelFormatter = tickFormatter(ticks, scale)
-
+const XAxis = ({
+  scale,
+  num_ticks,
+  tick_width,
+  xmin,
+  xmax,
+  y,
+  label,
+  ticks = scale.ticks(num_ticks),
+  plotAreaWidth,
+}) => {
   return (
     <g className="axis">
-      <text textAnchor="middle" transform={ 'translate(' + (scale(xmin) + scale(xmax))/2 + ',' + (y + 35) + ')'}>
+      <text textAnchor="middle" transform={ 'translate(' + (scale(xmin) + scale(xmax)) / 2 + ',' + (y + 35) + ')'}>
         {label}
       </text>
       <line
         y1={y}
-        x1={scale(xmin)}
+        x1={xmin ? scale(xmin) : 0}
         y2={y}
-        x2={scale(xmax)}
+        x2={xmax ? scale(xmax) : plotAreaWidth}
       />
-      {ticks.map((tick,i) => {
-        const x = scale(tick)
+      {ticks.map((tick, i) => {
+        const x = typeof tick === 'string' ? scale(tick) + scale.rangeBand()/2 : scale(tick)
         return (
           <g key={i}>
             <text textAnchor="end" transform={'translate(' + x + ',' + (y + tick_width + 10) + ') rotate(-45)'}>
-              {tickLabelFormatter(tick)}
+              {tickFormatter(ticks, scale)(tick)}
             </text>
             <line
               y1={y}

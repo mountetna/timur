@@ -4,11 +4,9 @@ export const createScale = (domain, range) => {
       .range(range)
       .domain(domain)
   } else if (typeof domain[0] === 'string') {
-    return d3.scaleBand()
+    return d3.scale.ordinal()
       .domain(domain)
-      .rangeRound(range)
-      .padding(0.02)
-      .align(0.1)
+      .rangeRoundBands(range, 0.02, 0.03)
   } else {
     return d3.scale.linear()
       .range(range)

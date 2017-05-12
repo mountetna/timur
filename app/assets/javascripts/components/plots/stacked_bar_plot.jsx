@@ -14,11 +14,11 @@ const StackedBar = ({ plotHeight, properties, datum, xScale, yScale, datumKey })
 
     return (
       <rect key={i}
-           color={color}
-           width={xScale.bandwidth()}
-           height={height}
-           x={xScale(datum[datumKey])}
-           y={yScale(top)}
+        style={{fill: color}}
+        width={xScale.rangeBand()}
+        height={height}
+        x={xScale(datum[datumKey])}
+        y={yScale(top)}
       />
     )
   })
@@ -56,17 +56,16 @@ const StackedBarPlot = ({
   const plottingAreaWidth = width - left - right
   const  plottingAreaHeight = height - top - bottom
 
-  const yScale = createScale([ymin, ymax], [height, 0])
-  const xScale = createScale(
-    data.map(datum => datum[datumKey]),
-    [0, width]
-  )
+  const yScale = createScale([ymin, ymax], [plottingAreaHeight, 0])
 
-  const barsProps = { datumKey, data, properties, xScale, yScale }
+  const xTicks = data.map(datum => datum[datumKey])
+  const xScale = createScale(xTicks, [0, plottingAreaWidth])
+
+  const barsProps = { datumKey, data, properties, xScale, yScale, plotHeight: plottingAreaHeight }
   return (
     <svg
       id={name}
-      className='stacked-bar-plot'
+      className='bar_plot'
       width={width}
       height={height}
     >
@@ -77,10 +76,11 @@ const StackedBarPlot = ({
         height={plottingAreaHeight}
       >
         <XAxis
+          y={plottingAreaHeight}
           scale={xScale}
-          xmin={0}
-          xmax={plottingAreaWidth}
           tick_width={5}
+          ticks={xTicks}
+          plotAreaWidth={plottingAreaWidth}
         />
         <YAxis
           scale={yScale}
@@ -91,7 +91,7 @@ const StackedBarPlot = ({
         <Legend
           x={width - right - 30}
           y={0}
-          series={properties}
+          series={properties.map((prop) => ({...prop, name: prop.label || prop.field}))}
         />
         <StackedBars {...barsProps} />
       </PlotCanvas>
