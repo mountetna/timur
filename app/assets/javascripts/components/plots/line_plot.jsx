@@ -1,4 +1,4 @@
-import { createScale } from './utils/d3_scale'
+import { createScale } from '../../utils/d3_scale'
 import XAxis from './xaxis'
 import YAxis from './yaxis'
 

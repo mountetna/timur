@@ -1,4 +1,4 @@
-import { autoColors } from '../colors'
+import { autoColors } from '../utils/colors'
 
 var BoxPlotAttribute = React.createClass({
   render: function() {
