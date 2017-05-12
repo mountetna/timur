@@ -1,7 +1,7 @@
 import React from 'react'
 import { tickFormatter } from '../../utils/d3_scale.js'
 
-const YAxis = ({ scale, num_ticks, tick_width, ymin, ymax, x, label }) => {
+const YAxis = ({ scale, num_ticks, tick_width, ymin, ymax, x = 0, label }) => {
   const ticks = scale.ticks(num_ticks)
   const tickLabelFormatter = tickFormatter(ticks, scale)
 

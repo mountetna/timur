@@ -1,12 +1,19 @@
 export const createScale = (domain, range) => {
-  let scale
   if (domain[0] instanceof Date) {
-    scale = d3.time.scale()
+    return d3.time.scale()
+      .range(range)
+      .domain(domain)
+  } else if (typeof domain[0] === 'string') {
+    return d3.scaleBand()
+      .domain(domain)
+      .rangeRound(range)
+      .padding(0.02)
+      .align(0.1)
   } else {
-    scale = d3.scale.linear()
+    return d3.scale.linear()
+      .range(range)
+      .domain(domain)
   }
-
-  return scale.range(range).domain(domain)
 }
 
 const tickDecimalPlaces = (ticks) => {
