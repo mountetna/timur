@@ -41,7 +41,6 @@ export const Result = (name, data, nestLevel = 0) => {
     //display primitive type result
     return (
       <div style={{ marginLeft: nestLevel * 5 }}>
-        <span className='label'>@{name} - </span>
         {data}
       </div>
     )
@@ -57,7 +56,6 @@ export const Result = (name, data, nestLevel = 0) => {
       //nested objects recursively call Result on each property
       return (
         <div style={{marginLeft: nestLevel * 5 }}>
-          <div className='label'>@{name}</div>
           {data.map((elem, index) => (
             <div key={index}>
               { Result(elem.label, elem.value, nestLevel + 1) }

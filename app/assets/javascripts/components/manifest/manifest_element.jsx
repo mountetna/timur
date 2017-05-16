@@ -1,14 +1,13 @@
 import React from 'react'
-import HideableText from "./hideable_text";
+import Script from './script'
+import HideableText from "./hideable_text"
 import { Result } from "./manifest_results"
 
 const ManifestElement = ({ name, script, description, result}) => (
   <div className="element">
     <div className='name'>@{name}</div>
-    <HideableText label='description' text={description} />
-    <div className='script'>
-      <HideableText label='script' text={script} />
-    </div>
+    <div className='equals'>=</div>
+    {Script(script)}
     {Result(name, result)}
   </div>
 )

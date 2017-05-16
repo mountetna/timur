@@ -9,6 +9,7 @@ $secondary-color: teal;
   margin-top: 10px;
   padding-left: 15px;
   padding-right: 15px;
+  display: flex;
 
   .script {
     text, textarea {
@@ -61,6 +62,10 @@ $secondary-color: teal;
   }
 }
 
+.manifest-view {
+  width: 70%;
+}
+
 .manifest-preview {
   margin-bottom: 10px;
   margin-top: 10px;
@@ -97,10 +102,21 @@ $secondary-color: teal;
 }
 
 .element {
+  font-family: $value_font;
+  font-size: .9em;
   .name {
-    color: $secondary-color;
-    font-weight: bolder;
-    text-decoration: underline;
+    &:first-letter {
+      color: purple;
+    }
+    color: darkgreen;
+    font-weight: bold;
+    display: inline-block;
+  }
+  .equals {
+    font-weight: bold;
+    display: inline-block;
+  }
+  .script {
   }
   .label {
     font-size: .9em;

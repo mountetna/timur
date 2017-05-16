@@ -9,12 +9,6 @@ const ManifestPreview = ({ name, project, updated_at, description, is_editable, 
         <span className='name'>{name}</span> {access}
       </a>
     </div>
-    <span className='project'>{project}</span>
-    <span className='created-by'> - {user.name}</span>
-    <div className='updated-time'>
-      last updated: {Dates.format_date(updated_at) + ', '+ Dates.format_time(updated_at)}
-    </div>
-    <HideableText label='description' text={description} />
   </div>
 )
 

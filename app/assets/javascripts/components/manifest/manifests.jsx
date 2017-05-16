@@ -16,21 +16,7 @@ class Manifests extends Component {
 
     return (
       <div className='manifests-container'>
-      { (selectedManifest || this.props.isEditing) ?
-        <Manifest
-          isAdmin={this.props.isAdmin}
-          editing={this.props.isEditing}
-          allManifests={() => this.props.selectManifest(null)}
-          manifestId={selectedManifest}
-          saveNewManifest={this.props.saveNewManifest}
-          manifest={this.props.manifest}
-          delete={() => this.props.deleteManifest(selectedManifest)}
-          edit={this.props.toggleEdit}
-          updateManifest={this.props.saveManifest}
-          copy={this.props.copyManifest}
-          submitManifest={this.props.submitManifest}
-          fetchResults={debounce(this.props.fetchManifestResults, 2000)}/> :
-        <div className='manifests-container'>
+        <div className='manifests-selector'>
           <a href='#' onClick={this.props.toggleEdit} className="new">
             <i className="fa fa-plus" aria-hidden="true"></i>
             New Manifest
@@ -40,7 +26,24 @@ class Manifests extends Component {
             visibleManifests={this.props.visibleManifests}
             handleClick={this.props.selectManifest} />
         </div>
-      }
+        <div className='manifest-view'>
+        { (selectedManifest || this.props.isEditing) ?
+          <Manifest
+            isAdmin={this.props.isAdmin}
+            editing={this.props.isEditing}
+            allManifests={() => this.props.selectManifest(null)}
+            manifestId={selectedManifest}
+            saveNewManifest={this.props.saveNewManifest}
+            manifest={this.props.manifest}
+            delete={() => this.props.deleteManifest(selectedManifest)}
+            edit={this.props.toggleEdit}
+            updateManifest={this.props.saveManifest}
+            copy={this.props.copyManifest}
+            submitManifest={this.props.submitManifest}
+            fetchResults={debounce(this.props.fetchManifestResults, 2000)}/>
+            : null
+        }
+        </div>
       </div>
     )
   }
