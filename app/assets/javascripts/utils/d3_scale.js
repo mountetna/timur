@@ -6,7 +6,7 @@ export const createScale = (domain, range) => {
   } else if (typeof domain[0] === 'string') {
     return d3.scale.ordinal()
       .domain(domain)
-      .rangeRoundBands(range)
+      .rangeBands(range, 0.05)
   } else {
     return d3.scale.linear()
       .range(range)

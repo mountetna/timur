@@ -90,7 +90,7 @@ const StackedBarPlot = ({
           tick_width={5}
         />
         <Legend
-          x={width - right - 30}
+          x={plottingAreaWidth + 20}
           y={0}
           series={properties.map((prop) => ({...prop, name: prop.label || prop.field}))}
         />
