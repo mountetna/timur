@@ -50,9 +50,10 @@ const StackedBarPlot = ({
   ymin = 0,
   ymax = 1,
   data,
-  datumKey,
+  datumKey = 'id',
   properties
 }) => {
+
   const plottingAreaWidth = width - left - right
   const  plottingAreaHeight = height - top - bottom
 
