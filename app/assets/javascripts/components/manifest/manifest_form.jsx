@@ -187,7 +187,7 @@ class ManifestForm extends Component {
               () => this.updateResults(this.props.manifest)
             }>
             <i className='fa fa-play' aria-hidden="true"></i>
-            test manifest
+            test
           </button>
         </div>
         <div className='element-form-container'>

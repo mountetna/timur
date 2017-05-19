@@ -74,6 +74,20 @@ $secondary-color: teal;
   .label {
     font-weight: lighter;
   }
+
+  button {
+    font-size: 1em;
+    &:nth-of-type(n+2) {
+      margin-left: 20px;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .fa {
+    margin-right: 3px;
+  }
 }
 
 .manifest-view {
@@ -187,19 +201,6 @@ $secondary-color: teal;
   margin-top: 15px;
   margin-left: 20%;
 
-  button {
-    font-size: 1em;
-    margin-left: 10px;
-    margin-right: 10px;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .fa {
-    margin-right: 3px;
-  }
 }
 
 @mixin border {
@@ -216,6 +217,7 @@ $secondary-color: teal;
     margin-top: 15px;
     font-size: 1.1em;
   }
+
 }
 
 .input-container {
