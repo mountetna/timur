@@ -10,4 +10,8 @@ class Macro
       output.gsub(/\%#{i+1}/, %Q{ '#{arg}'})
     end
   end
+
+  def payload
+    "macro"
+  end
 end

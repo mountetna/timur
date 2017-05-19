@@ -25,22 +25,15 @@ $secondary-color: teal;
       font-weight: lighter;
       padding-bottom: 5px;
       padding-top: 5px;
+      .name {
+        font-weight: bolder;
+      }
     }
     .title {
       font-weight: bold;
     }
     .new {
-      color: forestgreen;
-      font-weight: bold;
-
-      &:hover {
-        text-decoration: underline
-      }
-
-      span {
-        margin-left: 5px;
-        padding-right: 5px;
-      }
+      @include green_link;
     }
 
   }
@@ -257,6 +250,9 @@ $secondary-color: teal;
     font-weight: bold;
     font-size: 1.2em;
     margin-right: 10px;
+  }
+  .new {
+    @include green_link;
   }
 }
 

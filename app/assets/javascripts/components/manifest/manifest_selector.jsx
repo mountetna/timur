@@ -1,11 +1,16 @@
 import { Component } from 'react'
-import { toggleEdit, selectManifest } from '../../actions/manifest_actions'
+import { toggleEdit, selectManifest, submitManifest } from '../../actions/manifest_actions'
 
-const ManifestSelection = (selectManifest) => (manifest) => {
+const ManifestSelection = (selectManifest, submitManifest) => (manifest) => {
   return <li key={manifest.id}>
     <div className='manifest-selection'>
       <a href='#' 
-        onClick={ () => selectManifest(manifest.id) }
+        onClick={
+          () => {
+            selectManifest(manifest.id) 
+            if (!manifest.result) submitManifest(manifest)
+          }
+        }
         title={ manifest.description }>
         <span className='name'>{manifest.name}</span>
       </a>
@@ -25,13 +30,13 @@ class ManifestSelector extends Component {
       <span className="title">Public</span>
       <ol>
         {
-          public_manifests.map(ManifestSelection(this.props.selectManifest))
+          public_manifests.map(ManifestSelection(this.props.selectManifest, this.props.submitManifest))
         }
       </ol>
       <span className="title">Private</span>
       <ol>
         {
-          private_manifests.map(ManifestSelection(this.props.selectManifest))
+          private_manifests.map(ManifestSelection(this.props.selectManifest, this.props.submitManifest))
         }
       </ol>
       </div>
@@ -46,5 +51,5 @@ export default connect(
       private_manifests: Object.values(props.manifests).filter((m) => m.access == 'private').sort((a,b) => a > b),
     }
   },
-  { toggleEdit, selectManifest }
+  { toggleEdit, selectManifest, submitManifest }
 )(ManifestSelector)
