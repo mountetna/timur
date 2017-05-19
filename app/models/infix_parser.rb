@@ -2,6 +2,7 @@ class InfixLexer < RLTK::Lexer
   rule(/\s/)
   rule(/#.*$/)
 
+  rule(/\{(.*)\}/) { |t| [ :MACRO, t[1..-2] ] }
   rule(/[0-9]+\.?[0-9]*/) { |t| [ :NUM, t.to_f ] }
   rule(/[A-Za-z]\w*/) { |t| [ :IDENT, t ] }
   rule(/'(?:[^']|'')*'/) { |t| [ :STRING, t[1..-2].gsub(/''/, "'") ] }
@@ -54,12 +55,23 @@ class InfixParser < RLTK::Parser
       env
     end
     attr_accessor :vars
+
+    def macro mac, args
+      raise TypeError("Variable is not a macro") unless mac.is_a?(Macro)
+
+      InfixParser::parse(
+        InfixLexer::lex(mac.substitute(args)),
+        env: self
+      )
+    end
   end
 
   production(:e) do
     clause('NUM') { |n| n }
     clause('STRING') { |n| n }
     clause('list') { |l| l }
+
+    clause('MACRO') { |m| Macro.new(m) }
 
     clause('VAR IDENT') { |v,i| vars[i] }
     clause('LPAREN .e RPAREN') { |e| e }
@@ -84,6 +96,7 @@ class InfixParser < RLTK::Parser
     clause('.e EQ .e') { |e0, e1| e0 == e1 }
     clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
 
+    clause('VAR .IDENT LPAREN .args RPAREN') { |i, args| macro(vars[i], args) }
     clause('.IDENT LPAREN .args RPAREN') { |ident, args| Functions.call(ident, args) }
   end
 

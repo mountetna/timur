@@ -12,7 +12,6 @@ $secondary-color: teal;
 
   .manifests-selector {
     border-right: 1px solid lightgray;
-    padding-right: 5px;
 
     li:first-child {
       .manifest-selection {
@@ -30,6 +29,20 @@ $secondary-color: teal;
     .title {
       font-weight: bold;
     }
+    .new {
+      color: forestgreen;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline
+      }
+
+      span {
+        margin-left: 5px;
+        padding-right: 5px;
+      }
+    }
+
   }
 
   .script {
@@ -40,19 +53,6 @@ $secondary-color: teal;
 
   a {
     color: black;
-  }
-
-  .new {
-    color: forestgreen;
-    font-weight: bold;
-
-    &:hover {
-      text-decoration: underline
-    }
-
-    span {
-      margin-left: 5px;
-    }
   }
 
   .filter {
@@ -176,8 +176,8 @@ $secondary-color: teal;
       border-collapse: collapse;
       th {
         background-color: rgba(#0cf, 0.5);
-	padding: 2px;
-	text-align: center;
+        padding: 2px;
+        text-align: center;
         border-bottom: 1px solid rgba(forestgreen, 0.2);
         border-left: 1px solid forestgreen;
       }
