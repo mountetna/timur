@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { matrixConversion, downloadTSV } from '../../tsv'
 
-class Matrix extends Component {
+class MatrixResult extends Component {
   componentWillMount() {
     this.setState({ hidden: true })
   }
@@ -43,16 +43,16 @@ class Matrix extends Component {
 
   render() {
     return (
-      <div className='list'>
-        <span className='label'>@{this.props.name}</span>
+      <div className='matrix'>
+        <span className='label'>{this.props.name}</span>
         <i className="fa fa-table" aria-hidden="true"></i> -
         <i className="fa fa-download blue-on-hover" aria-hidden="true" onClick={this.downloadMatrix.bind(this)}></i>
         {this.props.rows.length + ' rows'}
         <span  className='underline-on-hover toggle' onClick={this.toggle.bind(this)}>
           {this.state.hidden ? ' show' : ' hide' }
         </span>
-        <div>
-          <table style={{ display : this.display() }}>
+        <div style={{ display : this.display() }}>
+          <table>
             <thead>
             {this.columnsRow()}
             </thead>
@@ -66,4 +66,4 @@ class Matrix extends Component {
   }
 }
 
-export default Matrix
+export default MatrixResult

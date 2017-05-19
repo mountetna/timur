@@ -6,7 +6,7 @@ const TextField = ({ label, onChange, value }) => {
   return (
     <div className='input-container'>
       <div>
-        <label htmlFor={id}>{label}:</label>
+        <label htmlFor={id}>{label}</label>
       </div>
       <div>
         <textarea id={id}

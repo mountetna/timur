@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { downloadTSV } from '../../tsv'
 
-class List extends Component {
+class VectorResult extends Component {
   componentWillMount() {
     this.setState({ hidden: true })
   }
@@ -25,15 +25,15 @@ class List extends Component {
 
   render() {
     return (
-      <div className='list'>
-        <span className='label'>@{this.props.name}</span><i className="fa fa-list" aria-hidden="true"></i> -
+      <div className='vector'>
+        <span className='label'>{this.props.name}</span><i className="fa fa-list" aria-hidden="true"></i> -
         <i className="fa fa-download blue-on-hover" aria-hidden="true" onClick={() => downloadTSV(this.props.dataList, ['label', 'value'], this.props.name)}></i>
         {this.props.dataList.length + ' items'}
         <span  className='underline-on-hover toggle' onClick={this.toggle.bind(this)}>
           {this.state.hidden ? ' show' : ' hide' }
         </span>
-        <div>
-          <table style={{ display : this.display() }}>
+        <div style={{ display : this.display() }}>
+          <table>
             <thead>
             <tr>
               <th>label</th>
@@ -48,4 +48,4 @@ class List extends Component {
   }
 }
 
-export default List
+export default VectorResult
