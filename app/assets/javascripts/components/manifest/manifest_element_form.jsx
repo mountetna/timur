@@ -5,22 +5,19 @@ import { Result } from './manifest_results'
 
 const ManifestElementForm = ({ element, updateAttribute, handleRemove, result}) => (
   <div className='element-form'>
-    <i className='fa fa-times-circle remove' onClick={handleRemove}></i>
-    {Result(element.name, result)}
+    <i className='fa fa-times-circle remove' onClick={handleRemove}/>
     <InputField type="text"
-      placeholder='e.g. mfi'
-      label='name'
+      placeholder='variable name'
+      label='@'
       onChange={updateAttribute('name')}
       value={element.name} />
-    <TextField label='description'
-      placeholder='e.g. cure cancer and science stuff'
-      onChange={updateAttribute('description')}
-      value={element.description} />
+    <span className='equals'>=</span>
     <div className='script'>
-      <TextField label='script'
-        onChange={updateAttribute('script')}
+      <textarea
+        onChange={(e) => updateAttribute('script')(e.target.value)}
         value={element.script} />
     </div>
+    {Result('',result)}
   </div>
 )
 
