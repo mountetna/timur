@@ -32,7 +32,7 @@ let StackedBarPlotAttribute = ({
 )
 
 StackedBarPlotAttribute = connect(
-  function(state, props) {
+  (state, props) => {
     const { name, properties } = props.attribute.plot
     const consignment = timurActions.findManifest(state, name)
     if (consignment) {
