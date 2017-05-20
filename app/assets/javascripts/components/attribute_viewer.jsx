@@ -1,4 +1,5 @@
 import StackedBarPlotAttribute from './stacked_bar_plot_attribute'
+import BarGraphAttribute from './bar_graph_attribute'
 
 var AttributeViewer = React.createClass({
   render: function() {
@@ -14,6 +15,9 @@ var AttributeViewer = React.createClass({
       case "StackedBarPlotAttribute":
         AttClass = StackedBarPlotAttribute
         break
+      case "BarGraphAttribute":
+          AttClass = BarGraphAttribute
+          break
       case "BoxPlotAttribute":
         AttClass = BoxPlotAttribute
         break

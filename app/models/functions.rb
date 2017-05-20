@@ -36,4 +36,8 @@ module Functions
   def self.table row_query, column_queries, opts=Vector.new([])
     TableQuery.new(row_query,column_queries, opts).table
   end
+
+  def self.length(vector)
+    vector.length
+  end
 end

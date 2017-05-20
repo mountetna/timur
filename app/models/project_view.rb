@@ -32,6 +32,145 @@ class ProjectView < TimurView
         )
       end
 
+      show :rna_progress do
+        attribute_class "BarGraphAttribute"
+        display_name "RNA Seq Progress"
+        plot(
+          name: "rna_seq_progress",
+          manifest: [
+            [ :bladder, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Bladder' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :colorectal, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Colorectal' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :gastric, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Gastric' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :gynecologic, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Gynecologic' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :hepatobiliary, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Hepatobiliary' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :head_and_neck, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Head and Neck' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :kidney, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Kidney' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :lung, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Lung' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :melanoma, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Melanoma' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :pancreatic, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Pancreatic' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :neuroendocrine, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Neuroendocrine' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :data, "[
+              [
+                id: 'Bladder',
+                color: 'dodgerblue',
+                value: length(@bladder)
+              ],
+              [
+                id: 'Colorectal',
+                color: 'forestgreen',
+                value: length(@colorectal)
+              ],
+              [
+                id: 'Gastic',
+                color: 'royalblue',
+                value: length(@gastric)
+              ],
+              [
+                id: 'Gynecologic',
+                color: 'seagreen',
+                value: length(@gynecologic)
+              ],
+              [
+                id: 'Hepatobiliary',
+                color: 'crimson',
+                value: length(@hepatobiliary)
+              ],
+              [
+                id: 'Head and Neck',
+                color: 'khaki',
+                value: length(@head_and_neck)
+              ],
+              [
+                id: 'Kidney',
+                color: 'coral',
+                value: length(@kidney)
+              ],
+              [
+                id: 'Lung',
+                color: 'gold',
+                value: length(@lung)
+              ],
+              [
+                id: 'Melanoma',
+                color: 'teal',
+                value: length(@melanoma)
+              ],
+              [
+                id: 'Pancreatic',
+                color: 'indianred',
+                value: length(@pancreatic)
+              ],
+              [
+                id: 'Neuroendocrine',
+                color: 'PaleTurquoise',
+                value: length(@neuroendocrine)
+              ]
+            ]" ]
+          ],
+            properties: [ { field: 'intergenic_ratio', label: 'intergenic count', color: 'red' } ],
+            dimensions: {
+                width: 500,
+                height: 300,
+                margin: { top: 10, right: 20, bottom: 90, left: 50}
+            }
+        )
+      end
+
       show :progress_plot do |att|
         attribute_class "LinePlotAttribute"
         display_name "Progress"
