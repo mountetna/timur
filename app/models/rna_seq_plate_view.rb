@@ -5,7 +5,7 @@ class RnaSeqPlateView < TimurView
     end
   end
 
-  tab :quality_control do
+  tab :metrics do
     pane :default do
       show :qc do
         attribute_class "StackedBarPlotAttribute"
