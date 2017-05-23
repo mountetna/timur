@@ -38,15 +38,33 @@ class ProjectView < TimurView
         plot(
           name: "rna_seq_progress",
           manifest: [
+            [ :adrenal, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Adrenal' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
             [ :bladder, "question(
               [ 'rna_seq',
                 [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Bladder' ],
                 '::all', 'tube_name'
               ]
             )" ],
+            [ :breast, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Breast' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
             [ :colorectal, "question(
               [ 'rna_seq',
                 [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Colorectal' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :gall_bladder, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Gall Bladder' ],
                 '::all', 'tube_name'
               ]
             )" ],
@@ -92,23 +110,51 @@ class ProjectView < TimurView
                 '::all', 'tube_name'
               ]
             )" ],
-            [ :pancreatic, "question(
-              [ 'rna_seq',
-                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Pancreatic' ],
-                '::all', 'tube_name'
-              ]
-            )" ],
             [ :neuroendocrine, "question(
               [ 'rna_seq',
                 [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Neuroendocrine' ],
                 '::all', 'tube_name'
               ]
             )" ],
+            [ :pancreatic, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Pancreatic' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :prostate, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Prostate' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :sarcoma, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Sarcoma' ],
+                '::all', 'tube_name'
+              ]
+            )" ],
+            [ :small_intestine, "question(
+              [ 'rna_seq',
+                [ 'sample', 'patient', 'experiment', 'name', '::equals', 'Small Intestine' ],
+                '::all', 'tube_name'
+              ]
+            )"  ],
             [ :data, "[
+              [
+                id: 'Adrenal',
+                color: 'red',
+                value: length(@adrenal)
+              ],
               [
                 id: 'Bladder',
                 color: 'dodgerblue',
                 value: length(@bladder)
+              ],
+              [
+                id: 'Breast',
+                color: 'orange',
+                value: length(@breast)
               ],
               [
                 id: 'Colorectal',
@@ -116,7 +162,12 @@ class ProjectView < TimurView
                 value: length(@colorectal)
               ],
               [
-                id: 'Gastic',
+                id: 'Gall Bladder',
+                color: 'purple',
+                value: length(@gall_bladder)
+              ],
+              [
+                id: 'Gastric',
                 color: 'royalblue',
                 value: length(@gastric)
               ],
@@ -151,14 +202,29 @@ class ProjectView < TimurView
                 value: length(@melanoma)
               ],
               [
+                id: 'Neuroendocrine',
+                color: 'yellow',
+                value: length(@neuroendocrine)
+              ],
+              [
                 id: 'Pancreatic',
                 color: 'indianred',
                 value: length(@pancreatic)
               ],
               [
-                id: 'Neuroendocrine',
+                id: 'Prostate',
                 color: 'PaleTurquoise',
-                value: length(@neuroendocrine)
+                value: length(@prostate)
+              ],
+              [
+                id: 'Sarcoma',
+                color: 'green',
+                value: length(@sarcoma)
+              ],
+              [
+                id: 'Small Intestine',
+                color: 'CadetBlue',
+                value: length(@small_intestine)
               ]
             ]" ]
           ],
