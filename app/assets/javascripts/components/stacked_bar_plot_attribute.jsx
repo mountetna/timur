@@ -35,7 +35,7 @@ let StackedBarPlotAttribute = ({
 
 StackedBarPlotAttribute = connect(
   (state, props) => {
-    const { name, properties } = props.attribute.plot
+    const { name, properties, order_by } = props.attribute.plot
     const consignment = timurActions.findManifest(state, name)
     if (consignment) {
       const allValues = consignment.data.map((label, value,) => {
@@ -64,8 +64,13 @@ StackedBarPlotAttribute = connect(
         }
       }, {})
 
+      let data = Object.values(objectsOfValuesGroupedById)
+      if (order_by) {
+        data.sort((a, b) => a[order_by] - b[order_by])
+      }
+
       return {
-        data: Object.values(objectsOfValuesGroupedById),
+        data,
         properties
       }
     }
