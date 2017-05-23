@@ -19,13 +19,15 @@ let BarGraphAttribute = ({
 
 }) => (
   <div className="value">
-    <BarGraph
-      ymin={ymin}
-      ymax={ymax}
-      plot={{ name, width, height }}
-      margin={margin}
-      data={data}
-    />
+    {data[0] &&
+      <BarGraph
+        ymin={ymin}
+        ymax={ymax}
+        plot={{name, width, height}}
+        margin={margin}
+        data={data}
+      />
+    }
   </div>
 )
 

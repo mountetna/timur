@@ -20,14 +20,16 @@ let StackedBarPlotAttribute = ({
 
 }) => (
   <div className="value">
-    <StackedBarPlot
-      ymin={ymin}
-      ymax={ymax}
-      plot={{ name, width, height }}
-      margin={margin}
-      data={data}
-      properties={properties}
-    />
+    {data[0] &&
+      <StackedBarPlot
+        ymin={ymin}
+        ymax={ymax}
+        plot={{name, width, height}}
+        margin={margin}
+        data={data}
+        properties={properties}
+      />
+    }
   </div>
 )
 
