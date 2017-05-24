@@ -28,22 +28,21 @@ const Bins = ({ bins, plotHeight, xScale, yScale, color }) => {
 }
 
 const Histogram = ({
-                    plot: {
-                      name,
-                      width,
-                      height
-                    },
-                    margin: {
-                      top,
-                      right,
-                      bottom,
-                      left
-                    },
-                    data,
-                    ymin,
-                    color
-                  }) => {
-
+  plot: {
+    name,
+    width,
+    height
+  },
+  margin: {
+    top,
+    right,
+    bottom,
+    left
+  },
+  data,
+  ymin,
+  color
+}) => {
   const plottingAreaWidth = width - left - right
   const  plottingAreaHeight = height - top - bottom
 
@@ -78,13 +77,13 @@ const Histogram = ({
           ticks={bins.map(b => b.x)}
         />
         {yScale.ticks() &&
-        <YAxis
-          num_ticks={max - min}
-          scale={yScale}
-          ymin={min}
-          ymax={max}
-          tick_width={5}
-        />
+          <YAxis
+            num_ticks={max - min}
+            scale={yScale}
+            ymin={min}
+            ymax={max}
+            tick_width={5}
+          />
         }
         <Bins {...barsProps} />
       </PlotCanvas>
