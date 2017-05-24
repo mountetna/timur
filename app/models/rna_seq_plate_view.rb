@@ -7,7 +7,28 @@ class RnaSeqPlateView < TimurView
 
   tab :metrics do
     pane :default do
-      show :qc do
+      show :total_read_distribution do
+        attribute_class "HistogramAttribute"
+        display_name "Total Reads Distribution"
+        plot(
+            name: "total_reads_distribution",
+            manifest: [
+                [ :data, "question(
+                  [ 'rna_seq',
+                    [ 'rna_seq_plate','plate_name', '::equals', @record_name ],
+                    '::all', 'read_count'
+                  ]
+                )"]
+            ],
+            dimensions: {
+                width: 600,
+                height: 400,
+                margin: { top: 10, right: 0, bottom: 100, left: 30}
+            }
+        )
+      end
+
+      show :composition_metric do
         attribute_class "StackedBarPlotAttribute"
         display_name "Read Composition"
         plot(
