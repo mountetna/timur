@@ -1,3 +1,5 @@
+import { reviseDocument } from '../actions/magma_actions'
+
 var DateTimeView = React.createClass({
   render: function() {
     var self = this
@@ -80,7 +82,7 @@ var DateTimeAttribute = connect(
             && (changed_date == -1 
             || old_date.getTime() != changed_date.getTime())) {
           dispatch(
-            magmaActions.reviseDocument(
+            reviseDocument(
               props.document,
               props.template,
               props.attribute,

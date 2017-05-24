@@ -1,3 +1,5 @@
+import { reviseDocument } from '../actions/magma_actions'
+
 var MarkdownAttribute = React.createClass({
   render: function() {
     var store = this.context.store
@@ -8,7 +10,7 @@ var MarkdownAttribute = React.createClass({
                 onChange={
                   function(e) {
                     store.dispatch(
-                      magmaActions.reviseDocument(
+                      reviseDocument(
                         self.props.document,
                         self.props.template,
                         self.props.attribute,

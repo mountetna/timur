@@ -1,159 +1,128 @@
 import { showMessages } from './message_actions'
+import { getDocuments, postRevisions } from '../api/timur'
 
-var magmaActions = {
-  consumePayload: function(dispatch,response) {
-    if (response.models) {
-      Object.keys(response.models).forEach(function(model_name) {
-        var model = response.models[model_name]
+export const consumePayload = (dispatch,response) => {
+  if (response.models) {
+    Object.keys(response.models).forEach((model_name) => {
+      let model = response.models[model_name]
 
-        // you may not have all of these
-        
-        if (model.template)
-          dispatch( 
-            magmaActions.addTemplate(model.template)
-          )
-        if (model.documents)
-          dispatch(
-            magmaActions.addDocumentsForTemplate(model_name, model.documents)
-          )
-      })
-    }
-  },
-  requestDocuments: function( model_name, record_names, attribute_names, success, error ) {
-    // this is an async action to get a new model from magma
-    var self = this;
-    var request = {
-      model_name: model_name,
-      record_names: record_names,
-      attribute_names: attribute_names
-    }
-    return function(dispatch) {
-      $.ajax({
-        url: Routes.records_json_path(),
-        method: 'POST',
-        data: JSON.stringify(request),
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function(response) {
-          magmaActions.consumePayload(dispatch,response)
-          if (success != undefined) success()
-        },
-        error: function(xhr, status, err) {
-          if (error != undefined) {
-            var message = JSON.parse(xhr.responseText)
-            error(message)
-          }
-        }
-      })
-    }
-  },
-  requestModels: function() {
-    return magmaActions.requestDocuments("all", [], "all")
-  },
-  requestIdentifiers: function() {
-    return magmaActions.requestDocuments("all", "all", "identifier")
-  },
-  queryDocuments: function( model_name, filter, success, error ) {
-    var self = this;
-    var request = {
-      model_name: model_name,
-      filter: filter
-    }
-    return function(dispatch) {
-      $.ajax({
-        url: Routes.table_json_path(),
-        data: JSON.stringify(request), 
-        method: 'POST',
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function(response) {
-          if (success != undefined) success(response)
-        },
-        error: function(xhr, status, err) {
-          if (error != undefined) {
-            var message = JSON.parse(xhr.responseText)
-            error(message)
-          }
-        }
-      })
-    }
-  },
-  addTemplate: function(template) {
-    return {
-      type: 'ADD_TEMPLATE',
-      model_name: template.name,
-      template: template
-    }
-  },
-  addDocumentsForTemplate: function(model_name, documents) {
-    return {
-      type: 'ADD_DOCUMENTS',
-      model_name: model_name,
-      documents: documents
-    }
-  },
-  reviseDocument: function(document, template, attribute, revised_value) {
-    return {
-      type: 'REVISE_DOCUMENT',
-      model_name: template.name,
-      record_name: document[ template.identifier ],
-      revision: {
-        [ attribute.name ]: revised_value
-      }
-    }
-  },
-  discardRevision: function(record_name, model_name) {
-    return {
-      type: 'DISCARD_REVISION',
-      model_name: model_name,
-      record_name: record_name
-    }
-  },
-  postRevisions: function(model_name, revisions, success, error) {
-    var self = this;
-    var data = new FormData()
-    for (var record_name in revisions) {
-      var revision = revisions[record_name]
-      for (var attribute_name in revision) {
-        if (Array.isArray(revision[attribute_name])) {
-          revision[attribute_name].forEach(function(value) {
-            data.append(
-              `revisions[${model_name}][${record_name}][${attribute_name}][]`, value 
-            )
-          })
-        }
-        else
-          data.append(
-            `revisions[${model_name}][${record_name}][${attribute_name}]`,
-            revision[attribute_name]
-          )
-      }
-    }
-    return function(dispatch) {
-      $.ajax({
-        url: Routes.update_model_path(),
-        method: 'POST',
-        data: data,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-          if (success != undefined) success()
-          magmaActions.consumePayload(dispatch,response)
-        },
-        error: function(xhr, status, err) {
-          var response = JSON.parse(xhr.responseText)
-          dispatch(
-            showMessages([
-`### The change we sought did not occur.
-
-${response.errors.map((error) => `* ${error}`)}`
-            ])
-          )
-          if (error != undefined) error()
-        }
-      })
-    }
+      if (model.template)
+        dispatch( 
+          addTemplate(model.template)
+        )
+      if (model.documents)
+        dispatch(
+          addDocumentsForTemplate(model_name, model.documents)
+        )
+    })
   }
 }
 
-module.exports = magmaActions;
+export const requestDocuments = ( model_name, record_names, attribute_names, collapse_tables, success, error ) => (dispatch) => 
+  getDocuments(
+    model_name,record_names,attribute_names,collapse_tables
+  )
+    .then(
+      (response) => {
+        consumePayload(dispatch,response)
+        if (success != undefined) success()
+      }
+    )
+    .catch(
+      (error) => {
+        if (error != undefined) {
+          var message = JSON.parse(error.response)
+          error(message)
+        }
+      }
+    )
+
+export const requestModels = () => requestDocuments("all", [], "all")
+
+export const requestIdentifiers = () => requestDocuments("all", "all", "identifier")
+
+export const addTemplate = (template) => (
+  {
+    type: 'ADD_TEMPLATE',
+    model_name: template.name,
+    template: template
+  }
+)
+
+export const addDocumentsForTemplate = (model_name, documents) => (
+  {
+    type: 'ADD_DOCUMENTS',
+    model_name: model_name,
+    documents: documents
+  }
+)
+
+export const reviseDocument = (document, template, attribute, revised_value) => (
+  {
+    type: 'REVISE_DOCUMENT',
+    model_name: template.name,
+    record_name: document[ template.identifier ],
+    revision: {
+      [ attribute.name ]: revised_value
+    }
+  }
+)
+
+export const discardRevision = (record_name, model_name)  => (
+  {
+    type: 'DISCARD_REVISION',
+    model_name: model_name,
+    record_name: record_name
+  }
+)
+
+const revision_name = (model_name, record_name, attribute_name) =>
+  `revisions[${model_name}][${record_name}][${attribute_name}]`
+
+export const sendRevisions = (model_name, revisions, success, error) => (dispatch) => {
+  var data = new FormData()
+
+  for (var record_name in revisions) {
+    var revision = revisions[record_name]
+    for (var attribute_name in revision) {
+      if (Array.isArray(revision[attribute_name])) {
+        revision[attribute_name].forEach(
+          (value) => data.append(
+            revision_name(
+              model_name,record_name,attribute_name
+            )+'[]', value
+          )
+        )
+      }
+      else
+        data.append(
+          revision_name(model_name,record_name,attribute_name),
+          revision[attribute_name]
+        )
+    }
+  }
+
+  postRevisions(data)
+    .then((response) => {
+      consumePayload(dispatch,response)
+      dispatch(
+        discardRevision(
+          record_name,
+          model_name
+        )
+      )
+      if (success != undefined) success()
+    })
+    .catch((e) => {
+       e.response.json().then((response) =>
+         dispatch(
+           showMessages([
+`### The change we sought did not occur.
+
+${response.errors.map((error) => `* ${error}`)}`
+           ])
+         )
+       )
+       if (error != undefined) error()
+      })
+  }

@@ -1,3 +1,5 @@
+import { reviseDocument } from '../actions/magma_actions'
+
 var LinkAttribute = React.createClass({
   render: function() {
     var link = this.props.value
@@ -11,7 +13,7 @@ var LinkAttribute = React.createClass({
           <span className="delete_link"
           onClick={
             function(e) {
-              store.dispatch(magmaActions.reviseDocument(
+              store.dispatch(reviseDocument(
                 self.props.document,
                 self.props.template,
                 self.props.attribute,
@@ -27,7 +29,7 @@ var LinkAttribute = React.createClass({
                   waitTime={500}
                   update={
                     function(value) {
-                      store.dispatch(magmaActions.reviseDocument(
+                      store.dispatch(reviseDocument(
                         self.props.document,
                         self.props.template,
                         self.props.attribute,

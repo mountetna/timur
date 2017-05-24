@@ -1,3 +1,5 @@
+import { reviseDocument } from '../actions/magma_actions'
+
 var CollectionList = React.createClass({
   getInitialState: function() {
     return { new_link_updated: false }
@@ -102,7 +104,7 @@ var CollectionAttribute = connect(
     return {
       reviseList: function(newlist) {
         dispatch(
-          magmaActions.reviseDocument(
+          reviseDocument(
             ownProps.document,
             ownProps.template,
             ownProps.attribute,
