@@ -20,7 +20,7 @@ var AttributeViewer = React.createClass({
       case "BarGraphAttribute":
           AttClass = BarGraphAttribute
           break
-      case "BarGraphAttribute":
+      case "HistogramAttribute":
         AttClass = HistogramAttribute
         break
       case "BoxPlotAttribute":

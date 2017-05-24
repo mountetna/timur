@@ -31,7 +31,7 @@ HistogramAttribute = connect(
     const consignment = timurActions.findManifest(state, name)
 
     if (consignment) {
-      return { data: consigment.data.values }
+      return { data: consignment.data.values }
     }
 
     return {

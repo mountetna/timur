@@ -3,7 +3,7 @@ import YAxis from './yaxis'
 import XAxis from './xaxis'
 import { createScale } from '../../utils/d3_scale'
 
-const Bin = ({ bin, xScale, yScale, plotHeight, color = 'dodgerblue' }) => {
+const Bin = ({ bin, xScale, yScale, plotHeight, color = 'steelblue' }) => {
   const width = xScale(bin.dx)
   const padding = .03
 
@@ -20,8 +20,8 @@ const Bin = ({ bin, xScale, yScale, plotHeight, color = 'dodgerblue' }) => {
 
 const Bins = ({ bins, plotHeight, xScale, yScale, color }) => {
   const bars = bins.map((bin, i) => {
-    const props = {bin, xScale, yScale}
-    return <g key={i}><Bin {...{...props, plotHeight}} /></g>
+    const props = {bin, xScale, yScale, color, plotHeight}
+    return <g key={i}><Bin {...props} /></g>
   })
 
   return <g>{bars}</g>
@@ -54,8 +54,7 @@ const Histogram = ({
 
   const xScale = createScale([d3.min(data), d3.max(data)], [0, plottingAreaWidth])
 
-
-  const barsProps = { bins, xScale, yScale, plotHeight: plottingAreaHeight, color }
+  const binsProps = { bins, xScale, yScale, plotHeight: plottingAreaHeight, color }
   return (
     <svg
       id={name}
@@ -78,14 +77,13 @@ const Histogram = ({
         />
         {yScale.ticks() &&
           <YAxis
-            num_ticks={max - min}
             scale={yScale}
             ymin={min}
             ymax={max}
             tick_width={5}
           />
         }
-        <Bins {...barsProps} />
+        <Bins {...binsProps} />
       </PlotCanvas>
     </svg>
   )
