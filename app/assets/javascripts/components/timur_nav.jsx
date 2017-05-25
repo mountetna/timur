@@ -1,8 +1,8 @@
-import { changeMode } from '../actions/timur_actions'
+import { toggleConfig, changeMode } from '../actions/timur_actions'
+import { Component } from 'react'
 
-var TimurNavBar = React.createClass({
-  render: function() {
-    var self = this
+class TimurNav extends Component {
+  render() {
     var login_path = Routes.login_path()
 
     var tabs = {
@@ -28,7 +28,9 @@ var TimurNavBar = React.createClass({
     return <div id="header">
              <div id="logo">
                <a href="/">
-                 <div id={ logo_id }> &nbsp; 
+                 <div id={ logo_id }
+                   className={ this.props.requests ? "throb" : null }
+                 > &nbsp; 
                  </div>
                </a>
              </div>
@@ -40,15 +42,15 @@ var TimurNavBar = React.createClass({
              </div>
              <div id="nav">
                {
-                 Object.keys(tabs).map(function(name) {
-                   var tab_class = "nav_tab" + ((self.props.mode == name && !self.props.appMode) ? ' selected' : '')
-                   return <div key={ name } className={ tab_class }>
+                 Object.keys(tabs).map((name) =>
+                   <div key={ name } 
+                     className={ "nav_tab" + ((this.props.mode == name && !this.props.appMode) ? ' selected' : '') }>
                        <a href={ tabs[name] }> { name } </a>
                      </div>
-                 })
+                 )
                }
-               <div className={'nav_tab' + (self.props.appMode == 'manifesto' ? ' selected' : '')}>
-                  <a onClick={self.props.changeMode.bind(self, 'manifesto')}>Manifests</a>
+               <div className={'nav_tab' + (this.props.appMode == 'manifesto' ? ' selected' : '')}>
+                  <a onClick={this.props.changeMode.bind(self, 'manifesto')}>Manifests</a>
                 </div>
                {
                  this.props.can_edit ?
@@ -58,11 +60,7 @@ var TimurNavBar = React.createClass({
                  : null
                }
                <div className="nav_tab">
-                 <a onClick={ 
-                   function(e) {
-                     self.props.toggleConfig('help_shown')
-                   }
-                 }>
+                 <a onClick={ (e) => this.props.toggleConfig('help_shown') }>
                  {
                    this.props.helpShown ? 'Hide Help' : 'Help'
                  }
@@ -75,22 +73,15 @@ var TimurNavBar = React.createClass({
              </div>
            </div>
   }
-})
-
-var TimurNav = connect(
-  function (state) {
-    return {
-      helpShown: state.timur.help_shown
-    }
-  },
-  { 
-    changeMode,
-    toggleConfig: timurActions.toggleConfig
-  }
-)(TimurNavBar)
-
-TimurNav.contextTypes = {
-  store: React.PropTypes.object
 }
 
-module.exports = TimurNav
+export default connect(
+  (state) =>({
+    helpShown: state.timur.help_shown,
+    requests: []
+  }),
+  { 
+    changeMode,
+    toggleConfig
+  }
+)(TimurNav)

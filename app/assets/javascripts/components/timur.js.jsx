@@ -6,6 +6,7 @@ import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
 import Manifests from './manifest/manifests'
 import { connect } from 'react-redux'
+import TimurNav from './timur_nav'
 
 const createStore = () => {
   let middleWares = [thunk]

@@ -22,6 +22,23 @@
 			background-image: image-url('Timur-dev.png');
 			@include basic_logo(#630606);
 		}
+		.throb {
+			animation: throb 3s infinite alternate;
+		}
+		@keyframes throb {
+			0% {
+				background-color: rgba(#f0f,0.2);
+				filter: hue-rotate(0deg);
+			}
+			50% {
+				background-color: rgba(#ff0,0.2);
+				filter: hue-rotate(90deg);
+			}
+			100% {
+				background-color: rgba(#0ff,0.2);
+				filter: hue-rotate(180deg);
+			}
+		}
 		border-bottom: 2px solid forestgreen;
 		display: inline-block;
 		width: 90px;
