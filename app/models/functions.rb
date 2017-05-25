@@ -40,4 +40,8 @@ module Functions
   def self.length(vector)
     vector.length
   end
+
+  def self.max(vector)
+    vector.max
+  end
 end
