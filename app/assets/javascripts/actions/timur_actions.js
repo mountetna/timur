@@ -2,8 +2,9 @@ import Vector from 'vector'
 import { getTSV, getView, getConsignments } from '../api/timur'
 import { showMessages } from './message_actions'
 import { requestDocuments } from './magma_actions'
-import Tab from '../readers/tab'
 import { Exchange } from './exchange_actions'
+import Tab from '../models/tab'
+import Manifest from '../models/manifest'
 
 var timurActions = {
   toggleConfig: function(name) {
@@ -58,21 +59,7 @@ var timurActions = {
     var manifest = state.timur.manifests[ manifest_name ]
     if (!manifest) return null
 
-    var ISO_FORMAT = /[+-]?\d{4}(-[01]\d(-[0-3]\d(T[0-2]\d:[0-5]\d:?([0-5]\d(.\d+)?)?([+-][0-2]\d:[0-5]\d)?Z?)?)?)?/
-
-    return JSON.parse(
-      JSON.stringify(manifest), 
-      (key, value) => {
-        if (typeof value === 'string' && value.match(ISO_FORMAT)) {
-          return new Date(value)
-        } else if (Array.isArray(value) && value.every((item) => item != null && typeof item === 'object' && 'label' in item && 'value' in item)) {
-          return new Vector(value)
-        } else if (value != null && typeof value === 'object' && 'matrix' in value && 'rows' in value.matrix) {
-          return new Matrix(value.matrix)
-        }
-        return value
-      }
-    )
+    return new Manifest(manifest)
   },
   requestManifests: ( manifests, success, error ) => 
   (dispatch) => {

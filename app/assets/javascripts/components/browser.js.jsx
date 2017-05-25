@@ -8,7 +8,7 @@
 
 import Magma from 'magma'
 import BrowserTab from './browser_tab'
-import Tab from '../readers/tab'
+import Tab from '../models/tab'
 import { discardRevision, sendRevisions } from '../actions/magma_actions'
 
 var Browser = React.createClass({

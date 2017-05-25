@@ -93,12 +93,14 @@ class Vector
   end
 
   def payload
-    @vector.map do |label, value|
-      { 
-        label: label, 
-        value: value.respond_to?(:payload) ? value.payload : value
-      }
-    end
+    {
+      vector: @vector.map do |label, value|
+        { 
+          label: label, 
+          value: value.respond_to?(:payload) ? value.payload : value
+        }
+      end
+    }
   end
 
   def to_values
