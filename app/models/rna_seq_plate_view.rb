@@ -34,7 +34,7 @@ class RnaSeqPlateView < TimurView
             dimensions: {
                 width: 600,
                 height: 400,
-                margin: { top: 10, right: 0, bottom: 100, left: 30}
+                margin: { top: 10, right: 0, bottom: 150, left: 150}
             }
         )
       end
@@ -65,7 +65,7 @@ class RnaSeqPlateView < TimurView
             dimensions: {
                 width: 600,
                 height: 400,
-                margin: { top: 10, right: 0, bottom: 100, left: 30}
+                margin: { top: 10, right: 0, bottom: 150, left: 150}
             }
         )
       end

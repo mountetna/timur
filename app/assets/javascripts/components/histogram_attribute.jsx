@@ -7,6 +7,8 @@ let HistogramAttribute = ({
   xmax,
   interval,
   ymax,
+  xLabel,
+  yLabel,
   attribute: {
     plot: {
       name,
@@ -28,6 +30,8 @@ let HistogramAttribute = ({
         xmax={xmax}
         interval={interval}
         ymax={ymax}
+        xLabel={xLabel}
+        yLabel={yLabel}
       />
     }
   </div>
@@ -39,15 +43,16 @@ HistogramAttribute = connect(
     const consignment = timurActions.findManifest(state, name)
 
     if (consignment) {
-      const { xmin, xmax, interval, ymax, data } = consignment
-      console.log(consignment)
+      const { xmin, xmax, interval, ymax, data, xLabel, yLabel} = consignment
 
       return {
         data: data.values,
         xmin,
         xmax,
         interval,
-        ymax
+        ymax,
+        xLabel,
+        yLabel
       }
     }
 

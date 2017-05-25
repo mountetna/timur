@@ -13,7 +13,7 @@ const XAxis = ({
   plotAreaWidth,
 }) => (
   <g className="axis">
-    <text textAnchor="middle" transform={'translate(' + ((scale(xmin) || 0) + (scale(xmax) || 0)) / 2 + ',' + (y + 35) + ')'}>
+    <text textAnchor="middle" transform={'translate(' + (scale(xmin) + scale(xmax)) / 2 + ',' + (y + 100) + ')'}>
       {label}
     </text>
     <line

@@ -41,8 +41,10 @@ const Histogram = ({
   },
   data,
   interval,
+  yLabel,
   ymax,
   ymin,
+  xLabel,
   xmin,
   xmax,
   color
@@ -84,10 +86,13 @@ const Histogram = ({
       >
         <XAxis
           y={plottingAreaHeight}
+          xmin={xMinRange}
+          xmax={xMaxRange}
           scale={xScale}
           tick_width={5}
           plotAreaWidth={plottingAreaWidth}
           ticks={bins.map(b => b.x)}
+          label={xLabel}
         />
         {yScale.ticks() &&
           <YAxis
@@ -95,6 +100,7 @@ const Histogram = ({
             ymin={yMinRange}
             ymax={yMaxRange}
             tick_width={5}
+            label={yLabel}
           />
         }
         <Bins {...binsProps} />
