@@ -9,6 +9,7 @@
 import Magma from 'magma'
 import BrowserTab from './browser_tab'
 import Tab from '../readers/tab'
+import { discardRevision, sendRevisions } from '../actions/magma_actions'
 
 var Browser = React.createClass({
   componentDidMount: function() {
@@ -135,17 +136,17 @@ Browser = connect(
         ))
       },
       discardRevision: function() {
-        dispatch(magmaActions.discardRevision(
+        dispatch(discardRevision(
           props.record_name,
           props.model_name
         ))
       },
       submitRevision: function(revision,success,error) {
-        var revisions = {}
-        revisions[props.record_name] = revision
-        dispatch(magmaActions.postRevisions(
+        dispatch(sendRevisions(
           props.model_name,
-          revisions,
+          {
+            [props.record_name] : revision
+          },
           success,
           error
         ))

@@ -1,3 +1,5 @@
+import { reviseDocument } from '../actions/magma_actions'
+
 var CheckboxAttribute = React.createClass({
   render: function() {
     var self = this
@@ -8,7 +10,7 @@ var CheckboxAttribute = React.createClass({
                 onChange={
                   function(e) {
                     store.dispatch(
-                      magmaActions.reviseDocument(
+                      reviseDocument(
                         self.props.document,
                         self.props.template,
                         self.props.attribute,

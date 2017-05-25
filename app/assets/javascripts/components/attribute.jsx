@@ -1,5 +1,4 @@
-// this is a single div that will format a document to display the
-// value for a single attribute
+import { reviseDocument } from '../actions/magma_actions'
 
 var Attribute = React.createClass({
   render: function() {
@@ -12,7 +11,7 @@ var Attribute = React.createClass({
                 placeholder={ this.props.attribute.placeholder }
                 update={
                   function(value) {
-                    store.dispatch(magmaActions.reviseDocument(
+                    store.dispatch(reviseDocument(
                       self.props.document,
                       self.props.template,
                       self.props.attribute,

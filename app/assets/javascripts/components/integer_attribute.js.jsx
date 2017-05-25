@@ -1,3 +1,5 @@
+import { reviseDocument } from '../actions/magma_actions'
+
 var IntegerAttribute = React.createClass({
   filter_keys: function(e) {
     if (Keycode.is_ctrl(e)) return true;
@@ -22,7 +24,7 @@ var IntegerAttribute = React.createClass({
                 update={
                   function(value) {
                     store.dispatch(
-                      magmaActions.reviseDocument(
+                      reviseDocument(
                         self.props.document,
                         self.props.template,
                         self.props.attribute,
