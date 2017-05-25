@@ -3,6 +3,10 @@ import Histogram from './plots/histogram'
 
 let HistogramAttribute = ({
   data,
+  xmin,
+  xmax,
+  interval,
+  ymax,
   attribute: {
     plot: {
       name,
@@ -10,7 +14,7 @@ let HistogramAttribute = ({
         height,
         width,
         margin
-      }
+      },
     }
   }
 }) => (
@@ -20,6 +24,10 @@ let HistogramAttribute = ({
         plot={{name, width, height}}
         margin={margin}
         data={data}
+        xmin={xmin}
+        xmax={xmax}
+        interval={interval}
+        ymax={ymax}
       />
     }
   </div>
@@ -31,7 +39,16 @@ HistogramAttribute = connect(
     const consignment = timurActions.findManifest(state, name)
 
     if (consignment) {
-      return { data: consignment.data.values }
+      const { xmin, xmax, interval, ymax, data } = consignment
+      console.log(consignment)
+
+      return {
+        data: data.values,
+        xmin,
+        xmax,
+        interval,
+        ymax
+      }
     }
 
     return {

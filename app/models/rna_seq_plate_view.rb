@@ -7,18 +7,60 @@ class RnaSeqPlateView < TimurView
 
   tab :metrics do
     pane :default do
-      show :total_read_distribution do
+      show :read_count_distribution do
         attribute_class "HistogramAttribute"
-        display_name "Total Reads Distribution"
+        display_name "Read Count Distribution"
         plot(
-            name: "total_reads_distribution",
+            name: "read_count_distribution",
             manifest: [
                 [ :data, "question(
                   [ 'rna_seq',
                     [ 'rna_seq_plate','plate_name', '::equals', @record_name ],
                     '::all', 'read_count'
                   ]
-                )"]
+                )"],
+                [ :xmin, '0' ],
+                [ :xmax, "max(question(
+                  [ 'rna_seq',
+                    '::all', 'read_count'
+                  ]
+                ))" ],
+                [ :interval, '50000000'],
+                [ :ymax, '40' ],
+                [ :yLabel, "'Number of Samples'" ],
+                [ :xLabel, "'Read Count'"]
+
+            ],
+            dimensions: {
+                width: 600,
+                height: 400,
+                margin: { top: 10, right: 0, bottom: 100, left: 30}
+            }
+        )
+      end
+
+      show :median_cv_coverage_distribution do
+        attribute_class "HistogramAttribute"
+        display_name "Median Cv Coverage Distribution"
+        plot(
+            name: "median_cv_coverage_distribution",
+            manifest: [
+                [ :data, "question(
+                  [ 'rna_seq',
+                    [ 'rna_seq_plate','plate_name', '::equals', @record_name ],
+                    '::all', 'median_cv_coverage'
+                  ]
+                )" ],
+                [ :xmin, '0' ],
+                [ :xmax, "max(question(
+                  [ 'rna_seq',
+                    '::all', 'median_cv_coverage'
+                  ]
+                ))" ],
+                [ :interval, '0.2' ],
+                [ :ymax, '40' ],
+                [ :yLabel, "'Number of Samples'" ],
+                [ :xLabel, "'Median Cv Coverage'"]
             ],
             dimensions: {
                 width: 600,

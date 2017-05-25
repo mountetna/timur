@@ -3,8 +3,8 @@ import YAxis from './yaxis'
 import XAxis from './xaxis'
 import { createScale } from '../../utils/d3_scale'
 
-const Bin = ({ bin, xScale, yScale, plotHeight, color = 'steelblue' }) => {
-  const width = xScale(bin.dx)
+const Bin = ({ bin, xScale, yScale, plotHeight, color = 'steelblue', xmin}) => {
+  const width = xScale(xmin + bin.dx) - 1
   const padding = .03
 
   return (
@@ -18,9 +18,9 @@ const Bin = ({ bin, xScale, yScale, plotHeight, color = 'steelblue' }) => {
   )
 }
 
-const Bins = ({ bins, plotHeight, xScale, yScale, color }) => {
+const Bins = ({ bins, plotHeight, xScale, yScale, color, xmin }) => {
   const bars = bins.map((bin, i) => {
-    const props = {bin, xScale, yScale, color, plotHeight}
+    const props = {bin, xScale, yScale, color, plotHeight, xmin}
     return <g key={i}><Bin {...props} /></g>
   })
 
@@ -40,21 +40,35 @@ const Histogram = ({
     left
   },
   data,
+  interval,
+  ymax,
   ymin,
+  xmin,
+  xmax,
   color
 }) => {
   const plottingAreaWidth = width - left - right
   const  plottingAreaHeight = height - top - bottom
 
-  const bins = d3.layout.histogram()(data)
+  let bins = d3.layout.histogram()
+  if (typeof xmax !== 'undefined' && typeof xmin !== 'undefined') {
+    bins.range([xmin, xmax])
+    if (interval) {
+      bins.bins(Math.abs(xmax - xmin) / interval)
+    }
+  }
+  bins = bins(data)
+
   const binCounts = bins.map(b => b.length)
-  const max = d3.max(binCounts)
-  const min = ymin ? ymin : d3.min(binCounts)
-  const yScale = createScale([min, max], [plottingAreaHeight, 0])
+  const yMaxRange = typeof ymax !== 'undefined' ? ymax : d3.max(binCounts)
+  const yMinRange = typeof ymin !== 'undefined' ? ymin : d3.min(binCounts)
+  const yScale = createScale([yMinRange, yMaxRange], [plottingAreaHeight, 0])
 
-  const xScale = createScale([d3.min(data), d3.max(data)], [0, plottingAreaWidth])
+  const xMaxRange = typeof xmax !== 'undefined' ? xmax : d3.max(data)
+  const xMinRange = typeof xmin !== 'undefined' ? xmin : d3.min(data)
+  const xScale = createScale([xMinRange, xMaxRange], [0, plottingAreaWidth])
 
-  const binsProps = { bins, xScale, yScale, plotHeight: plottingAreaHeight, color }
+  const binsProps = { bins, xScale, yScale, plotHeight: plottingAreaHeight, color, xmin: xMinRange }
   return (
     <svg
       id={name}
@@ -78,8 +92,8 @@ const Histogram = ({
         {yScale.ticks() &&
           <YAxis
             scale={yScale}
-            ymin={min}
-            ymax={max}
+            ymin={yMinRange}
+            ymax={yMaxRange}
             tick_width={5}
           />
         }
