@@ -7,10 +7,11 @@ const XAxis = ({
   tick_width,
   xmin,
   xmax,
-  y,
   label,
   ticks = scale.ticks(num_ticks),
   plotAreaWidth,
+  plotAreaHeight,
+  y = plotAreaHeight
 }) => (
   <g className="axis">
     <text textAnchor="middle" transform={'translate(' + ((scale(xmin) + scale(xmax)) / 2 || 0) + ',' + (y + 100) + ')'}>
@@ -18,9 +19,9 @@ const XAxis = ({
     </text>
     <line
       y1={y}
-      x1={xmin ? scale(xmin) : 0}
+      x1={typeof xmin !== 'undefined' ? scale(xmin) : 0}
       y2={y}
-      x2={xmax ? scale(xmax) : plotAreaWidth}
+      x2={typeof xmax !== 'undefined' ? scale(xmax) : plotAreaWidth}
     />
     {ticks.map((tick, i) => {
       const x = typeof tick === 'string' ? scale(tick) + scale.rangeBand()/2 : scale(tick)
