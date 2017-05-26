@@ -22,12 +22,16 @@ var documents = function(old_documents, action) {
   if (!old_documents) old_documents = {}
   switch(action.type) {
     case 'ADD_DOCUMENTS':
-      return $.extend(
-        true,
-        {},
-        old_documents,
-        action.documents
-      )
+      let documents = {
+        ...old_documents,
+      }
+      for (let record_name in action.documents) {
+        documents[record_name] = {
+          ...documents[record_name],
+          ...action.documents[record_name]
+        }
+      }
+      return documents
     default:
       return old_documents
   }
@@ -41,7 +45,7 @@ var revisions = function(old_revisions, action) {
         ...old_revisions,
         [action.record_name]: {
           ...old_revisions[action.record_name],
-          action.revision
+          ...action.revision
         }
       }
     case 'DISCARD_REVISION':
