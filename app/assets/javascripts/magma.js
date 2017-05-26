@@ -108,7 +108,7 @@ export default class Magma {
   }
 
   model_names() {
-    return Object.keys(this.models)
+    return Object.keys(this.models).sort()
   }
 
   document(model_name, record_name) {

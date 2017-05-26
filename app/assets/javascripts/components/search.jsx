@@ -497,8 +497,8 @@ Search = connect(
           )
         })
       },
-      requestDocuments: function(model, record_names, success) {
-        dispatch(requestDocuments(model,record_names,"all",true,success))
+      requestDocuments: function(model_name, record_names, success) {
+        dispatch(requestDocuments({ model_name, record_names, attribute_names: "all", collapse_tables: true, success, exchange_name: `request-${model_name}`}))
       },
       requestTSV: function(model_name, record_names) {
         dispatch(requestTSV(model_name, record_names))

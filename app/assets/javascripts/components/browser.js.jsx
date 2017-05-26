@@ -117,7 +117,7 @@ Browser = connect(
       template,
       document,
       revision,
-      view
+      view,
       record_name: template && document ? document[ template.identifier ] : null,
       hasRevisions: (Object.keys(revision).length > 0),
     }

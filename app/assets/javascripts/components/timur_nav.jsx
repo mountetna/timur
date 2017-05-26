@@ -29,7 +29,7 @@ class TimurNav extends Component {
              <div id="logo">
                <a href="/">
                  <div id={ logo_id }
-                   className={ this.props.requests ? "throb" : null }
+                   className={ Object.keys(this.props.exchanges).length > 0 ? "throb" : null }
                  >
                    <div className="image"/>
                  </div>
@@ -79,7 +79,7 @@ class TimurNav extends Component {
 export default connect(
   (state) =>({
     helpShown: state.timur.help_shown,
-    requests: state.requests
+    exchanges: state.exchanges
   }),
   { 
     changeMode,

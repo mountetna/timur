@@ -8,16 +8,16 @@ $logo_size: 70px;
 	@mixin basic_logo($color,$image) {
 		@keyframes throb {
 			0% {
-				box-shadow: 24px 0 45px -12px rgba(#f00, 0.76) inset;
-				background-color: rgba(#ff0,0.5);
+				box-shadow: 24px 0 45px -12px rgba(#f00, 0.2) inset;
+				background-color: rgba(#ff0,0.2);
 			}
 			50% {
-				box-shadow: -24px 24px 45px -12px rgba(#00f, 0.76) inset;
-				background-color: rgba(#0f0,0.5);
+				box-shadow: -24px 24px 45px -12px rgba(#00f, 0.2) inset;
+				background-color: rgba(#0f0,0.2);
 			}
 			100% {
-				box-shadow: 24px 0 45px -12px rgba(#f0f, 0.76) inset;
-				background-color: rgba(#0ff,0.5);
+				box-shadow: 24px 0 45px -12px rgba(#f0f, 0.2) inset;
+				background-color: rgba(#0ff,0.2);
 			}
 		}
 		@keyframes flicker {
@@ -37,8 +37,10 @@ $logo_size: 70px;
 		border-radius: 50%;
 		display: inline-block;
 		vertical-align:top;
+		transition: animation 2s;
 		.image {
 			background-image: image-url($image);
+			transition: animation 2s;
 			width: $logo_size;
 			height: $logo_size;
 			background-size: cover;
