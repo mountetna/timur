@@ -44,7 +44,7 @@ const BarGraph = ({
   const plottingAreaWidth = width - left - right
   const  plottingAreaHeight = height - top - bottom
 
-  const max = ymax ? ymax : d3.max(data.map(d => d[property]))
+  const max = typeof ymax !== 'undefined' ? ymax : d3.max(data.map(d => d[property]))
   const yScale = createScale([ymin, max ], [plottingAreaHeight, 0])
 
   const xTicks = data.map(datum => datum[datumKey])

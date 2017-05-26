@@ -7,7 +7,7 @@ const YAxis = ({ scale, num_ticks, tick_width, ymin, ymax, x = 0, label }) => {
 
   return (
     <g className="axis">
-      <text textAnchor="middle" transform={ 'translate(-45,' + (scale(ymin) + scale(ymax)) / 2 + ') rotate(-90)'}>
+      <text textAnchor="middle" transform={ 'translate(-45,' + ((scale(ymin) + scale(ymax)) / 2 || 0) + ') rotate(-90)'}>
         {label}
       </text>
       <line
