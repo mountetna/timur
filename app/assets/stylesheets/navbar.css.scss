@@ -1,42 +1,62 @@
 @import "globals";
 
+$logo_size: 70px;
+
 #header {
 	position: relative;
 	height: 80px;
-	@mixin basic_logo($color) {
-		width: 70px;
-		height: 70px;
-		border: 3px solid $color;
-		background-size: cover;
-		background-position: 0px -6px;
-		border-radius: 50%;
-		display: inline-block;
-		vertical-align:top
-	}
-	#logo {
-		#normal {
-			background-image: image-url('Timur.png');
-			@include basic_logo(#066306);
-		}
-		#dev {
-			background-image: image-url('Timur-dev.png');
-			@include basic_logo(#630606);
-		}
-		.throb {
-			animation: throb 3s infinite alternate;
-		}
+	@mixin basic_logo($color,$image) {
 		@keyframes throb {
 			0% {
-				background-color: rgba(#f0f,0.2);
+				box-shadow: 24px 0 45px -12px rgba(#f00, 0.76) inset;
+				background-color: rgba(#ff0,0.5);
+			}
+			50% {
+				box-shadow: -24px 24px 45px -12px rgba(#00f, 0.76) inset;
+				background-color: rgba(#0f0,0.5);
+			}
+			100% {
+				box-shadow: 24px 0 45px -12px rgba(#f0f, 0.76) inset;
+				background-color: rgba(#0ff,0.5);
+			}
+		}
+		@keyframes flicker {
+			0% {
 				filter: hue-rotate(0deg);
 			}
 			50% {
-				background-color: rgba(#ff0,0.2);
-				filter: hue-rotate(90deg);
+				filter: hue-rotate(180deg);
 			}
 			100% {
-				background-color: rgba(#0ff,0.2);
-				filter: hue-rotate(180deg);
+				filter: hue-rotate(360deg);
+			}
+		}
+		width: $logo_size;
+		height: $logo_size;
+		border: 3px solid $color;
+		border-radius: 50%;
+		display: inline-block;
+		vertical-align:top;
+		.image {
+			background-image: image-url($image);
+			width: $logo_size;
+			height: $logo_size;
+			background-size: cover;
+			background-position: 0px -6px;
+			border-radius: 50%;
+		}
+	}
+	#logo {
+		#normal {
+			@include basic_logo(#066306,'Timur.png');
+		}
+		#dev {
+			@include basic_logo(#630606,'Timur-dev.png');
+		}
+		.throb {
+			animation: throb 3s infinite alternate;
+			.image {
+			animation: flicker 2s infinite alternate;
 			}
 		}
 		border-bottom: 2px solid forestgreen;
