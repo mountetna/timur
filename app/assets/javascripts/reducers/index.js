@@ -1,11 +1,3 @@
-//TODO get ride "freshen"
-window.freshen = function() {
-  return $.extend.call(
-    null,
-    {}, ...arguments
-  )
-}
-
 import { combineReducers } from 'redux'
 import magma from './magma_reducer'
 import messages from './message_reducer'

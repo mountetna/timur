@@ -37,16 +37,18 @@ var revisions = function(old_revisions, action) {
   if (!old_revisions) old_revisions = {}
   switch(action.type) {
     case 'REVISE_DOCUMENT':
-      var new_revisions = {}
-      new_revisions[action.record_name] = freshen(
-        old_revisions[action.record_name],
-        action.revision
-      )
-      return freshen( old_revisions, new_revisions )
+      return {
+        ...old_revisions,
+        [action.record_name]: {
+          ...old_revisions[action.record_name],
+          action.revision
+        }
+      }
     case 'DISCARD_REVISION':
-      var new_revisions = {}
-      new_revisions[action.record_name] = null
-      return freshen( old_revisions, new_revisions )
+      return {
+        ...old_revisions,
+        [action.record_name]: null
+      }
     default:
       return old_revisions
   }
@@ -61,18 +63,21 @@ var model = function(old_model, action) {
 
   switch(action.type) {
     case 'ADD_TEMPLATE':
-      return freshen( old_model, {
-          template: action.template
-        })
+      return {
+        ...old_model,
+        template: action.template
+      }
     case 'ADD_DOCUMENTS':
-      return freshen( old_model, {
-          documents: documents(old_model.documents,action),
-        })
+      return { 
+        ...old_model,
+        documents: documents(old_model.documents,action),
+      }
     case 'REVISE_DOCUMENT':
     case 'DISCARD_REVISION':
-      return freshen( old_model, {
-          revisions: revisions(old_model.revisions, action)
-        })
+      return {
+        ...old_model,
+        revisions: revisions(old_model.revisions, action)
+      }
     default:
       return old_model
   }
@@ -85,9 +90,10 @@ var models = function(models, action) {
     case 'ADD_DOCUMENTS':
     case 'REVISE_DOCUMENT':
     case 'DISCARD_REVISION':
-      var new_models = { }
-      new_models[action.model_name] = model(models[action.model_name], action)
-      return freshen( models, new_models )
+      return {
+        ...models,
+        [action.model_name]: model(models[action.model_name], action)
+      }
     default:
       return models
   }

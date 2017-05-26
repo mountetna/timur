@@ -112,17 +112,15 @@ Browser = connect(
 
     var view = (state.timur.views ? state.timur.views[props.model_name] : null)
 
-    return freshen(
-      props,
-      {
-        template: template,
-        document: document,
-        record_name: template && document ? document[ template.identifier ] : null,
-        revision: revision,
-        hasRevisions: (Object.keys(revision).length > 0),
-        view: view,
-      }
-    )
+    return {
+      ...props,
+      template,
+      document,
+      revision,
+      view
+      record_name: template && document ? document[ template.identifier ] : null,
+      hasRevisions: (Object.keys(revision).length > 0),
+    }
   },
   function (dispatch,props) {
     return {
