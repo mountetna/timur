@@ -2,17 +2,17 @@ import PlotCanvas from './plot_canvas'
 import YAxis from './yaxis'
 import XAxis from './xaxis'
 import { createScale } from '../../utils/d3_scale'
-import { beeswarm } from 'd3-beeswarm'
+import { forceSimulation, forceX, forceY, forceCollide } from 'd3-force'
 
 const SwarmPlot = ({
   plot: {
     name,
-    width = 600,
+    width = 800,
     height = 500
   },
   margin: {
     top = 0,
-    right = 0,
+    right = 200,
     bottom = 300,
     left = 200
   },
@@ -41,23 +41,31 @@ const SwarmPlot = ({
   const xScale = createScale([min, max], [0, plottingAreaWidth])
 
   const swarms = dataSeries.map(({ label, data }) => {
-    const swarm = beeswarm()
-      .data(data)
-      .distributeOn((d) => {
-        return xScale(d[datumKey])
-      })
-      .radius(2)
-      .orientation('horizontal')
-      .side('symetric')
-      .arrange()
-      .map((node, i) => (
+    let seriesData = [...data]
+
+    const simulation = forceSimulation(seriesData)
+      .force("x", forceX(function(d) { return xScale(d.value); }).strength(1))
+      .force("y", forceY(yScale(label)))
+      .force("collide", forceCollide(2))
+      .stop();
+
+    for (var i = 0; i < 120; ++i) simulation.tick();
+
+    const yBot = yScale(label) + (yScale.rangeBand() / 2)
+    const yTop = yScale(label) - (yScale.rangeBand() / 2)
+    let swarm = seriesData.map((node, i) => {
+      let y = node.y
+      if (y > yBot) { y = yBot }
+      if (y < yTop) { y = yTop }
+      return (
         <circle key={i}
-           cx={node.x}
-           cy={yScale(label) + node.y}
-           r={2}
-           style={{fill: categories[node.datum.category]}}
+          cx={node.x}
+          cy={y}
+          r={2}
+          style={{fill: categories[node.category]}}
         />
-      ))
+      )
+    })
 
     return (
       <g key={label}>
