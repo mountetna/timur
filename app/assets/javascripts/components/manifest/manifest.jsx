@@ -33,14 +33,11 @@ class Manifest extends Component {
             create={this.props.saveNewManifest}
             update={this.props.updateManifest}
             updateResults={this.props.fetchResults} /> :
-          <div>
-            <ManifestView
-              back={this.props.allManifests}
-              manifest={this.props.manifest}
-              handleDelete={this.props.delete}
-              handleEdit={this.props.edit}
-              handleCopy={()=>{ this.props.copy(this.props.manifest)}} />
-          </div>
+          <ManifestView
+            manifest={this.props.manifest}
+            handleDelete={this.props.delete}
+            handleEdit={this.props.edit}
+            handleCopy={()=>{ this.props.copy(this.props.manifest)}} />
         }
       </div>
     )

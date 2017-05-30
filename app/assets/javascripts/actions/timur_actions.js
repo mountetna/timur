@@ -1,6 +1,7 @@
 import Vector from 'vector'
 import { getTSV, getView } from '../api/timur'
 import { showMessages } from './message_actions'
+import { requestDocuments } from './magma_actions'
 import Tab from '../readers/tab'
 
 var timurActions = {
@@ -23,7 +24,7 @@ var timurActions = {
           )
 
           dispatch(
-            magmaActions.requestDocuments(
+            requestDocuments(
               model_name, [ record_name ], tab.requiredAttributes()
             )
           )

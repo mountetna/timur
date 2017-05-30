@@ -4,7 +4,7 @@
  */
 
 import Magma from 'magma'
-
+import { requestModels, postRevisions, discardRevision, requestDocuments } from '../actions/magma_actions'
 import { requestTSV } from '../actions/timur_actions'
 
 var COLUMN_FORMAT = /^([\w]+)([=<>~])(.*)$/
@@ -75,6 +75,20 @@ class SearchQuestion {
     ]
   }
 }
+
+const completeRecord = (documents,attribute_names) =>
+  (record_name) =>
+    documents[record_name] && attribute_names.every(
+      (attribute_name) => documents[record_name].hasOwnProperty(attribute_name)
+    )
+
+// exclude things not shown and tables
+const displayedAttributes = (template) =>
+  Object.keys(template.attributes).filter(
+    (attribute_name) =>
+    template.attributes[attribute_name].shown
+    && template.attributes[attribute_name].attribute_class != "Magma::TableAttribute"
+  )
 
 var SearchQuery = React.createClass({
   getInitialState: () => ({}),
@@ -245,6 +259,7 @@ var SearchTable = React.createClass({
   },
 })
 
+
 SearchTable = connect(
   function(state,props) {
 
@@ -254,14 +269,10 @@ SearchTable = connect(
     var documents = magma.documents(props.model_name, props.record_names)
     var revisions = magma.revisions(props.model_name, props.record_names)
     var template = magma.template(props.model_name)
-    var attribute_names = Object.keys(template.attributes).filter(
-      (att_name) => template.attributes[att_name].shown
-    )
+    var attribute_names = displayedAttributes(template)
 
-    var complete = props.record_names.every((record_name) => 
-      documents[record_name] && attribute_names.every((attribute_name) => 
-        documents[record_name].hasOwnProperty(attribute_name)
-      )
+    var complete = props.record_names.every(
+      completeRecord(documents, attribute_names)
     )
 
     if (!complete) documents = null
@@ -435,24 +446,21 @@ Search = connect(
       record_names: manifest && manifest.record_names ? manifest.record_names.values : [],
       model_names: magma.model_names(),
       model_name: manifest.model_name,
+
       templateFor: (model_name) => magma.template(model_name),
       hasCompleteRecords: function(model_name, record_names) {
         var documents = magma.documents(model_name,record_names)
         var template = magma.template(model_name)
-
-        return record_names.every((record_name) => {
-          var document = documents[record_name]
-          return document && Object.keys(template.attributes).every(
-            (attribute_name) => document.hasOwnProperty(attribute_name)
-          )
-        })
+        return record_names.every(
+          completeRecord(documents, displayedAttributes(template))
+        )
       }
     }
   },
   function(dispatch,props) {
     return {
       getModels: function() {
-        dispatch(magmaActions.requestModels())
+        dispatch(requestModels())
       },
       query: function(manifest, success) {
         dispatch(
@@ -471,7 +479,7 @@ Search = connect(
         dispatch(messageActions.showMessages(messages))
       },
       submitRevisions: function(model_name,revisions,success,error) {
-        dispatch(magmaActions.postRevisions(
+        dispatch(sendRevisions(
           model_name,
           revisions,
           success,
@@ -482,7 +490,7 @@ Search = connect(
         if (!record_names || !record_names.length) return
         record_names.forEach(function(record_name){
           dispatch(
-            magmaActions.discardRevision(
+            discardRevision(
               record_name,
               model_name
             )
@@ -490,7 +498,7 @@ Search = connect(
         })
       },
       requestDocuments: function(model, record_names, success) {
-        dispatch(magmaActions.requestDocuments(model,record_names,"all",success))
+        dispatch(requestDocuments(model,record_names,"all",true,success))
       },
       requestTSV: function(model_name, record_names) {
         dispatch(requestTSV(model_name, record_names))

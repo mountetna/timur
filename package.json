@@ -2,8 +2,8 @@
   "name": "timur",
   "dependencies": {
     "chroma-js": "^0.7.8",
-    "d3-beeswarm": "0.0.4",
     "d3-force": "^1.0.6",
+    "prismjs": "^1.6.0",
     "downloadjs": "^1.4.7",
     "json2csv": "^3.7.3",
     "lodash.debounce": "^4.0.8",

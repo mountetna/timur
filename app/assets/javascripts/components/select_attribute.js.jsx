@@ -1,3 +1,5 @@
+import { reviseDocument } from '../actions/magma_actions'
+
 var SelectAttribute = React.createClass({
   render: function() {
     var self = this
@@ -8,7 +10,7 @@ var SelectAttribute = React.createClass({
                 className="selection"
                 onChange={
                   function(value) {
-                    store.dispatch(magmaActions.reviseDocument(
+                    store.dispatch(reviseDocument(
                       self.props.document,
                       self.props.template,
                       self.props.attribute,

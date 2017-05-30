@@ -4,35 +4,58 @@ $talk_font: 'Lora', serif;
 $quote_font: 'Crimson Text', serif;
 
 @mixin text_defaults {
-	color: darkorchid;
-	border: 0px none black;
-	border-bottom: 1px solid forestgreen;
-	font-family: $value_font;
-	font-size: 16px;
-	margin: 0;
-	padding: 0;
+  color: darkorchid;
+  border: 0px none black;
+  border-bottom: 1px solid forestgreen;
+  font-family: $value_font;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin text_box {
+  font-family: $value_font;
+  font-size: 14px;
+  border: 0px none black;
+  border-top: 1px solid forestgreen;
+  border-left: 1px solid forestgreen;
+  box-shadow: 2px 2px 3px 1px #ddd inset;
+}
+
+@mixin green_link {
+  color: forestgreen;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: underline
+  }
+
+  span {
+    margin-left: 5px;
+    padding-right: 5px;
+  }
 }
 
 @mixin green_button {
-	cursor: pointer;
-	font-family: $body_font;
-	color: forestgreen;
-	margin-left: 4px;
-	padding: 2px;
-	font-size: 14px;
-	background-color: rgba(forestgreen,0.2);
-	&:disabled {
-		color: grey;
-		border: darkgrey;
-		background-color: rgba(grey,0.2);
-	}
-	&:hover {
-		background-color: rgba(forestgreen,0.3);
-	}
+  cursor: pointer;
+  font-family: $body_font;
+  color: forestgreen;
+  margin-left: 4px;
+  padding: 2px;
+  font-size: 14px;
+  background-color: rgba(forestgreen,0.2);
+  &:disabled {
+    color: grey;
+    border: darkgrey;
+    background-color: rgba(grey,0.2);
+  }
+  &:hover {
+    background-color: rgba(forestgreen,0.3);
+  }
 }
 
 @mixin header_button {
-	cursor: pointer;
-	font-size: 20px;
-	color: forestgreen;
+  cursor: pointer;
+  font-size: 20px;
+  color: forestgreen;
 }

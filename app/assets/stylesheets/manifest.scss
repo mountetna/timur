@@ -1,36 +1,51 @@
 @import "globals";
-@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
 
 $secondary-color: teal;
 
 .manifests-container {
   color: #333;
-  font-family: sans-serif;
+  font-family: $body_font;
   margin-top: 10px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 5px;
+  padding-right: 5px;
+  display: flex;
+
+  .manifests-selector {
+    border-right: 1px solid lightgray;
+
+    li:first-child {
+      .manifest-selection {
+        border-top: 1px solid rgba(#0cf,0.5);
+      }
+    }
+    .manifest-selection {
+      background-color: rgba(#0cf,0.1);
+      border-bottom: 1px solid rgba(#0cf,0.5);
+      font-size: 0.8em;
+      font-weight: lighter;
+      padding-bottom: 5px;
+      padding-top: 5px;
+      a {
+        font-weight: bolder;
+      }
+    }
+    .title {
+      font-weight: bold;
+    }
+    .new {
+      @include green_link;
+    }
+
+  }
 
   .script {
     text, textarea {
-      font-family: 'Ubuntu Mono', monospace;
+      font-family: $value_font;
     }
   }
 
   a {
     color: black;
-  }
-
-  .new {
-    color: forestgreen;
-    font-weight: bold;
-
-    &:hover {
-      text-decoration: underline
-    }
-
-    span {
-      margin-left: 5px;
-    }
   }
 
   .filter {
@@ -59,6 +74,25 @@ $secondary-color: teal;
   .label {
     font-weight: lighter;
   }
+
+  button {
+    font-size: 1em;
+    &:nth-of-type(n+2) {
+      margin-left: 20px;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .fa {
+    margin-right: 3px;
+  }
+}
+
+.manifest-view {
+  padding-left: 5px;
+  width: 70%;
 }
 
 .manifest-preview {
@@ -82,6 +116,25 @@ $secondary-color: teal;
     font-size: 1em;
     font-weight: bold;
   }
+
+  .description {
+    font-size: 1.3em;
+    color: rebeccapurple;
+  }
+  .manifest-info {
+    border-bottom: 1px solid rgba(#0cf,0.1);
+    .label {
+      color: $secondary-color;
+      display: inline-block;
+      padding-right: 4px;
+      font-weight: bold;
+      text-align: right;
+      width: 15%;
+    }
+    .value {
+      font-size: 1em;
+    }
+  }
 }
 
 .hideable-text {
@@ -97,15 +150,50 @@ $secondary-color: teal;
 }
 
 .element {
+  font-family: $value_font;
+  font-size: .9em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid goldenrod;
   .name {
-    color: $secondary-color;
-    font-weight: bolder;
-    text-decoration: underline;
+    &:first-letter {
+      color: purple;
+    }
+    color: darkgreen;
+    font-weight: bold;
+    display: inline-block;
+  }
+  .equals {
+    font-weight: bold;
+    display: inline-block;
+  }
+  .script {
+    white-space: pre-wrap;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    margin-left: 5px;
   }
   .label {
     font-size: .9em;
     font-weight: lighter;
     text-decoration: none;
+  }
+  .vector, .matrix {
+    table {
+      border: 2px solid forestgreen;
+      border-collapse: collapse;
+      th {
+        background-color: rgba(#0cf, 0.5);
+        padding: 2px;
+        text-align: center;
+        border-bottom: 1px solid rgba(forestgreen, 0.2);
+        border-left: 1px solid forestgreen;
+      }
+      td {
+        padding: 2px 8px;
+        border-bottom: 1px solid rgba(forestgreen, 0.2);
+        border-left: 1px solid forestgreen;
+      }
+    }
   }
 }
 
@@ -113,19 +201,6 @@ $secondary-color: teal;
   margin-top: 15px;
   margin-left: 20%;
 
-  button {
-    font-size: 1em;
-    margin-left: 10px;
-    margin-right: 10px;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .fa {
-    margin-right: 3px;
-  }
 }
 
 @mixin border {
@@ -136,30 +211,36 @@ $secondary-color: teal;
 }
 
 .form-container {
-  @include border;
-
+  padding: 5px;
   .new {
     margin-left: 8px;
     margin-top: 15px;
     font-size: 1.1em;
   }
+
 }
 
 .input-container {
   margin-top: 7px;
+  display: inline;
   label {
-    font-weight: bold;
     color: $secondary-color;
+    padding-right: 2px;
+    width: 10%;
+    text-align: right;
+  }
+  .input {
+    display: inline;
   }
 
   input[type="text"] {
+    @include text_defaults;
     width: 40%;
-    font-size: 1em;
   }
 
   textarea {
-    width: 70%;
-    resize: vertical;
+    @include text_box;
+    width: 90%;
     font-size: 1em;
   }
 }
@@ -172,14 +253,14 @@ $secondary-color: teal;
     font-size: 1.2em;
     margin-right: 10px;
   }
+  .new {
+    @include green_link;
+  }
 }
 
 .element-form {
-  @include border;
-  background-color: #f4f5f7;
-  margin-top: 10px;
-  margin-left: 8px;
-  margin-right: 8px;
+  padding: 5px;
+  border-bottom: 1px solid goldenrod;
 
   .remove {
     font-size: 1em;
@@ -190,11 +271,83 @@ $secondary-color: teal;
     cursor: pointer;
     }
   }
+  .equals {
+    font-weight: bold;
+    display: inline-block;
+  }
+  .script {
+    textarea {
+      width: 100%;
+      border: 0px none black;
+      border-left: 2px solid forestgreen;
+      padding-left: 5px;
+    }
+  }
+}
+
+$toggle-height: 26px;
+.toggle-switch {
+  .caption {
+    display: inline;
+  }
+  .switchbox {
+    position: relative; width: 97px;
+    user-select:none;
+    display: inline-block;
+    top: 8px;
+    input[type="checkbox"] {
+      display: none;
+      &:checked + .label .left {
+        margin-left: 0;
+      }
+      &:checked + .label .right {
+        margin-left: 100%;
+      }
+      &:checked + .label .switch {
+        right: 0px; 
+      }
+    }
+    .label {
+      display: block; overflow: hidden; cursor: pointer;
+      border: 2px solid #FFFFFF; border-radius: 0px;
+      @mixin toggle-option {
+        display: block; width: 100%; height: $toggle-height; padding: 0; line-height: $toggle-height;
+        font-size: 16px; color: white; 
+        font-weight: bold;
+        box-sizing: border-box;
+      }
+      .left {
+        @include toggle-option;
+        margin-left: -100%; float: left;
+        transition: margin 0.3s ease-in 0s;
+        padding-left: 8px;
+        background-color: #49E845; color: #FFFFFF;
+      }
+      .right {
+        @include toggle-option;
+        margin-left: 0;
+        transition: margin 0.3s ease-in 0s;
+        padding-right: 8px;
+        background-color: #E85151; color: #FFFFFF;
+        text-align: right;
+      }
+      .switch {
+        display: block; width: 24px; margin: 6px;
+        background: #FFFFFF;
+        position: absolute; top: 0; bottom: 0;
+        right: 57px;
+        border: 2px solid #FFFFFF; border-radius: 0px;
+        transition: all 0.3s ease-in 0s; 
+      }
+    }
+  }
 }
 
 .manifest-elements {
-  @include border;
-
+  padding: 5px;
+  .toggle-switch {
+    display: inline-block;
+  }
   .element {
     margin-top: 10px;
   }

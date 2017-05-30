@@ -29,7 +29,18 @@
 @import "activity";
 @import "manifest";
 
-@import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen);
+@import "prismjs/themes/prism";
+
+/* prism-coy.css
+prism.css
+prism-dark.css
+prism-funky.css
+prism-okaidia.css
+prism-solarizedlight.css
+prism-tomorrow.css
+prism-twilight.css */
+
+@import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen:400,700);
 @import "font-awesome-sprockets";
 @import "font-awesome";
 

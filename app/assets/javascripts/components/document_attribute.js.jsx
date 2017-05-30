@@ -1,3 +1,4 @@
+import { reviseDocument } from '../actions/magma_actions'
 
 var DocumentAttribute = React.createClass({
   render: function() {
@@ -8,7 +9,7 @@ var DocumentAttribute = React.createClass({
       return <div className="value">
                <input onChange={
                  function(e) {
-                   store.dispatch(magmaActions.reviseDocument(
+                   store.dispatch(reviseDocument(
                      self.props.document,
                      self.props.template,
                      self.props.attribute,

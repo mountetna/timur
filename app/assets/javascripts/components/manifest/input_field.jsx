@@ -5,8 +5,8 @@ const InputField = ({ type, placeholder, label, onChange, value }) => {
 
   return (
     <div className='input-container'>
-      <div>
-        <label htmlFor={id}>{label}:</label>
+      <div style={{display: 'inline'}}>
+        <label htmlFor={id}>{label}</label>
       </div>
       <div className='input'>
         <input id={id} type={type}

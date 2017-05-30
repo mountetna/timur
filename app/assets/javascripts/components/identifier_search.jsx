@@ -1,3 +1,5 @@
+import { requestIdentifiers } from '../actions/magma_actions'
+
 var IdentifierSearch = React.createClass({
   getInitialState: function() {
     return { match_string: '', has_focus: false }
@@ -96,7 +98,7 @@ IdentifierSearch = connect(
   function(dispatch,props) {
     return {
       requestIdentifiers: function() {
-        dispatch(magmaActions.requestIdentifiers())
+        dispatch(requestIdentifiers())
       }
     }
   }

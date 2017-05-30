@@ -12,7 +12,7 @@ const RadioSelector = ({options, selected, handleSelect, label}) => {
 
   return (
     <div className='selector input-container'>
-      {label}
+      <label>{label}</label>
       {radios}
     </div>
   )

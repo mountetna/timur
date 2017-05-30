@@ -33,6 +33,7 @@ class ManifestForm extends Component {
       this.setState({
         name: '',
         access: 'private',
+        project: 'ipi',
         elementKeys: [],
         elementsByKey: {}
       })
@@ -41,8 +42,7 @@ class ManifestForm extends Component {
 
   updateField(fieldName) {
     return (value) => this.setState(
-      { [fieldName]: value },
-      this.updateResults
+      { [fieldName]: value }
     )
   }
 
@@ -97,8 +97,7 @@ class ManifestForm extends Component {
         }
       }
       this.setState(
-        { elementsByKey: updatedElements },
-        this.updateResults
+        { elementsByKey: updatedElements }
       )
     }
   }
@@ -113,8 +112,7 @@ class ManifestForm extends Component {
     delete removedElement[key]
 
     this.setState(
-      { elementKeys: removedKey, elementsByKey: removedElement },
-      this.updateResults
+      { elementKeys: removedKey, elementsByKey: removedElement }
     )
   }
 
@@ -170,31 +168,29 @@ class ManifestForm extends Component {
           </button>
         </div>
         <InputField type='text'
-          placeholder='e.g. Populations'
+          placeholder='Manifest Name'
           label='Name'
           onChange={this.updateField('name')}
           value={this.state.name}/>
-        <InputField type='text'
-          placeholder='e.g. Immunoprofiler'
-          label='Project'
-          onChange={this.updateField('project')}
-          value={this.state.project} />
+        <TextField label='Description'
+          onChange={this.updateField('description')}
+          placeholder='Describe what this manifest does'
+          value={this.state.description} />
         { this.props.isAdmin &&
           <ManifestAccess
             selectedDefault={this.state.access}
             handleSelect={this.updateField('access')} />
         }
-        { this.state.created_at &&
-          <div>
-            created at: {Dates.format_date(this.state.created_at) + ', '+ Dates.format_time(this.state.created_at)}
-          </div>
-        }
-        { this.state.user && <div>created by: {this.state.user.name}</div> }
-        <TextField label='Description'
-          onChange={this.updateField('description')}
-          value={this.state.description} />
+        <div>
+          <button
+            onClick={
+              () => this.updateResults(this.props.manifest)
+            }>
+            <i className='fa fa-play' aria-hidden="true"></i>
+            test
+          </button>
+        </div>
         <div className='element-form-container'>
-          <span className='title'>Manifest Items</span>
           <ol>
             {manifestElements}
           </ol>
