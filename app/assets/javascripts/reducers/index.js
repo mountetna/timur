@@ -1,11 +1,3 @@
-//TODO get ride "freshen"
-window.freshen = function() {
-  return $.extend.call(
-    null,
-    {}, ...arguments
-  )
-}
-
 import { combineReducers } from 'redux'
 import magma from './magma_reducer'
 import messages from './message_reducer'
@@ -13,6 +5,7 @@ import plots from './plot_reducer'
 import timur from './timur_reducer'
 import manifestsUI from './manifest_ui_reducer'
 import manifests from './manifests_reducer'
+import exchanges from './exchanges_reducer'
 
 //TODO hack to render the manifest tab. future me needs to use react-router
 const appMode = (state = '', action) => {
@@ -31,5 +24,6 @@ export default combineReducers({
   plots,
   manifestsUI,
   manifests,
+  exchanges,
   appMode
 })

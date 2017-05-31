@@ -1,5 +1,6 @@
 import { showMessages } from './message_actions'
 import { getDocuments, postRevisions } from '../api/timur'
+import { Exchange } from './exchange_actions'
 
 export const consumePayload = (dispatch,response) => {
   if (response.models) {
@@ -18,9 +19,13 @@ export const consumePayload = (dispatch,response) => {
   }
 }
 
-export const requestDocuments = ( model_name, record_names, attribute_names, collapse_tables, success, error ) => (dispatch) => 
+export const requestDocuments = ({ model_name, record_names, attribute_names, collapse_tables, exchange_name, success, error }) => (dispatch) => 
   getDocuments(
-    model_name,record_names,attribute_names,collapse_tables
+    model_name,
+    record_names,
+    attribute_names,
+    collapse_tables,
+    new Exchange(dispatch, exchange_name)
   )
     .then(
       (response) => {
@@ -29,7 +34,16 @@ export const requestDocuments = ( model_name, record_names, attribute_names, col
       }
     )
     .catch(
-      (error) => {
+      (e) => {
+         e.response.json().then((response) =>
+           dispatch(
+           showMessages([
+`### Our request was refused.
+
+${response.errors.map((error) => `* ${error}`)}`
+           ])
+         )
+       )
         if (error != undefined) {
           var message = JSON.parse(error.response)
           error(message)
@@ -37,9 +51,9 @@ export const requestDocuments = ( model_name, record_names, attribute_names, col
       }
     )
 
-export const requestModels = () => requestDocuments("all", [], "all")
+export const requestModels = () => requestDocuments({ model_name: "all", record_names: [], attribute_names: "all", exchange_name: "request-models"})
 
-export const requestIdentifiers = () => requestDocuments("all", "all", "identifier")
+export const requestIdentifiers = () => requestDocuments({ model_name: "all", record_names: "all", attribute_names: "identifier", exchange_name: "request-identifiers"})
 
 export const addTemplate = (template) => (
   {
@@ -102,7 +116,7 @@ export const sendRevisions = (model_name, revisions, success, error) => (dispatc
     }
   }
 
-  postRevisions(data)
+  postRevisions(data, new Exchange(dispatch, `revisions-${model_name}`))
     .then((response) => {
       consumePayload(dispatch,response)
       dispatch(

@@ -48,12 +48,10 @@ TabBar = connect(
         }
       })
     }
-    return freshen(
-      props,
-      {
-        revised: revised
-      }
-    )
+    return {
+      ...props,
+      revised: revised
+    }
   }
 )(TabBar)
 
