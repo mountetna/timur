@@ -4,7 +4,6 @@ export const addExchange = (exchange) => ({
   exchange: exchange
 })
 export const removeExchange = (exchange_name) => {
-  console.log("Removing exchange")
   return {
   type: 'REMOVE_EXCHANGE',
   exchange_name: exchange_name
@@ -27,7 +26,6 @@ export class Exchange {
     )
     return fetch(path, options).then(
       (response) => (new Promise((resolve, reject) => {
-        console.log("Received response from fetch")
         this.dispatch(removeExchange(this.exchange_name))
         resolve(response)
       })

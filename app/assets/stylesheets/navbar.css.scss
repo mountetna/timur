@@ -31,6 +31,12 @@ $logo_size: 70px;
 				filter: hue-rotate(360deg);
 			}
 		}
+		&.throb {
+			.halo {
+				opacity: 1;
+				transition: opacity 1s;
+			}
+		}
 		width: $logo_size;
 		height: $logo_size;
 		border: 3px solid $color;
@@ -78,12 +84,6 @@ $logo_size: 70px;
 		}
 		#dev {
 			@include basic_logo(#630606,'Timur-dev.png');
-			&.throb {
-				.halo {
-					opacity: 1;
-					transition: opacity 1s;
-				}
-			}
 		}
 		border-bottom: 2px solid forestgreen;
 		display: inline-block;
