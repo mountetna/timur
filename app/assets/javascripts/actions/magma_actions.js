@@ -116,7 +116,7 @@ export const sendRevisions = (model_name, revisions, success, error) => (dispatc
     }
   }
 
-  postRevisions(data)
+  postRevisions(data, new Exchange(dispatch, `revisions-${model_name}`))
     .then((response) => {
       consumePayload(dispatch,response)
       dispatch(

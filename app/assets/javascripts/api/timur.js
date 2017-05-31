@@ -53,8 +53,8 @@ export const getDocuments = (model_name, record_names, attribute_names, collapse
     .then(checkStatus)
     .then(parseJSON)
 
-export const postRevisions = (revision_data) =>
-  fetch(
+export const postRevisions = (revision_data, exchange) =>
+  exchange.fetch(
     Routes.update_model_path(),
     {
       method: 'POST',

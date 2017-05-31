@@ -4,7 +4,7 @@
  */
 
 import Magma from 'magma'
-import { requestModels, postRevisions, discardRevision, requestDocuments } from '../actions/magma_actions'
+import { requestModels, sendRevisions, discardRevision, requestDocuments } from '../actions/magma_actions'
 import { requestTSV } from '../actions/timur_actions'
 
 var COLUMN_FORMAT = /^([\w]+)([=<>~])(.*)$/
