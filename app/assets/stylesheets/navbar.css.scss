@@ -6,18 +6,18 @@ $logo_size: 70px;
 	position: relative;
 	height: 80px;
 	@mixin basic_logo($color,$image) {
-		@keyframes throb {
+		@keyframes spin {
 			0% {
-				box-shadow: 24px 0 45px -12px rgba(#f00, 0.2) inset;
-				background-color: rgba(#ff0,0.2);
+				transform-origin: 35px 35px;
+				transform: rotate(0deg);
 			}
 			50% {
-				box-shadow: -24px 24px 45px -12px rgba(#00f, 0.2) inset;
-				background-color: rgba(#0f0,0.2);
+				transform-origin: 35px 35px;
+				transform: rotate(180deg);
 			}
 			100% {
-				box-shadow: 24px 0 45px -12px rgba(#f0f, 0.2) inset;
-				background-color: rgba(#0ff,0.2);
+				transform-origin: 35px 35px;
+				transform: rotate(360deg);
 			}
 		}
 		@keyframes flicker {
@@ -37,15 +37,39 @@ $logo_size: 70px;
 		border-radius: 50%;
 		display: inline-block;
 		vertical-align:top;
-		transition: animation 2s;
+		position: relative;
 		.image {
 			background-image: image-url($image);
-			transition: animation 2s;
 			width: $logo_size;
 			height: $logo_size;
 			background-size: cover;
 			background-position: 0px -6px;
 			border-radius: 50%;
+			position: absolute;
+		}
+		.halo {
+			animation: flicker 3s infinite alternate, spin 5s linear infinite;
+			position: absolute;
+			opacity: 0;
+			transition: opacity 1s;
+			z-index: -1;
+			svg {
+				overflow: visible;
+				circle {
+					stroke-width: 1px;
+					stroke: goldenrod;
+					fill: none;
+				}
+				path {
+					stroke-width: 1px;
+					&.long {
+						stroke: goldenrod;
+					}
+					&.short {
+						stroke: indianred;
+					}
+				}
+			}
 		}
 	}
 	#logo {
@@ -54,11 +78,11 @@ $logo_size: 70px;
 		}
 		#dev {
 			@include basic_logo(#630606,'Timur-dev.png');
-		}
-		.throb {
-			animation: throb 3s infinite alternate;
-			.image {
-			animation: flicker 2s infinite alternate;
+			&.throb {
+				.halo {
+					opacity: 1;
+					transition: opacity 1s;
+				}
 			}
 		}
 		border-bottom: 2px solid forestgreen;

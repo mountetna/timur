@@ -32,6 +32,20 @@ class TimurNav extends Component {
                    className={ Object.keys(this.props.exchanges).length > 0 ? "throb" : null }
                  >
                    <div className="image"/>
+                   <div className="halo">
+                     <svg>
+                       <circle r="25px" cx="35" cy="35"/>
+                       {
+                         Array(36).fill().map((_,i) => {
+                           let x = (d,r) => Math.cos(Math.PI * d / 180) * r + 35
+                           let y = (d,r) => Math.sin(Math.PI * d / 180) * r + 35
+                           return <path className={ i%2==0 ? "long" : "short"} key={i} d={ `M ${x(i*10, (i%2==0 ? 42 : 32))}, ${y(i*10, (i%2==0 ? 42 : 32)) }
+                                  L ${x(i*10,25)}, ${y(i*10, 25)}` }/>
+                         
+                         })
+                       }
+                     </svg>
+                   </div>
                  </div>
                </a>
              </div>
@@ -77,7 +91,7 @@ class TimurNav extends Component {
 }
 
 export default connect(
-  (state) =>({
+  (state) => ({
     helpShown: state.timur.help_shown,
     exchanges: state.exchanges
   }),

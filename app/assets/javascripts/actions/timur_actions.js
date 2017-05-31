@@ -15,7 +15,7 @@ var timurActions = {
   requestView: function(model_name, record_name, tab_name, success, error) {
     return function(dispatch) {
       getView(model_name, tab_name, 
-        new Exchange(dispatch, `view-${model_name}-{${record_name}}`)
+        new Exchange(dispatch, `view for ${model_name} ${record_name}`)
       )
         .then((response)=> {
           var tab = new Tab(
@@ -31,7 +31,7 @@ var timurActions = {
               model_name, 
               record_names: [ record_name ], 
               attribute_names: tab.requiredAttributes(),
-              exchange_name: `request-tab-response.tab_name}-${model_name}-${record_name}`
+              exchange_name: `tab ${response.tab_name} for ${model_name} ${record_name}`
             })
           )
 
@@ -76,7 +76,7 @@ var timurActions = {
   },
   requestManifests: ( manifests, success, error ) => 
   (dispatch) => {
-    getConsignments(manifests, new Exchange(dispatch, `request-consignments-${Math.random().toString(36).slice(2)}`)).then((response) => {
+    getConsignments(manifests, new Exchange(dispatch, `consignment list ${manifests.map(m=>m.name).join(", ")}`)).then((response) => {
       for (var name in response) {
         dispatch(timurActions.addManifest(name, response[name]))
       }
