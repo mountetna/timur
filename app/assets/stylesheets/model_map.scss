@@ -1,0 +1,47 @@
+@import "globals";
+
+#map {
+	.report {
+		display: inline-block;
+		vertical-align: top;
+		font-family: $body_font;
+		padding-left: 40px;
+		.title {
+			color: salmon;
+			font-size: 2em;
+		}
+		.attribute {
+			color: dodgerblue;
+			.type {
+				color: goldenrod;
+			}
+			.description {
+				color: forestgreen;
+				font-size: 0.8em;
+				padding-left: 2px;
+				&:before {
+					content: " - ";
+				}
+			}
+		}
+	}
+	svg {
+		overflow: visible;
+		.model_node {
+			cursor: pointer;
+			circle {
+				fill: skyblue;
+				stroke-width: 2px;
+				stroke: palegreen;
+			}
+			text {
+				font-family: $body_font;
+				fill: purple;
+			}
+		}
+		line {
+			stroke-width: 3px;
+			stroke: pink;
+		}
+	}
+}

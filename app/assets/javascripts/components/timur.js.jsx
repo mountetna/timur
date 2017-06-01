@@ -7,6 +7,7 @@ import rootReducer from '../reducers'
 import Manifests from './manifest/manifests'
 import { connect } from 'react-redux'
 import TimurNav from './timur_nav'
+import ModelMap from './model_map'
 
 const createStore = () => {
   let middleWares = [thunk]
@@ -26,6 +27,8 @@ var Timur = React.createClass({
         can_edit={ this.props.can_edit }
         model_name={ this.props.model_name }
         record_name={ this.props.record_name } />
+    else if (this.props.mode == 'map')
+      component = <ModelMap />
     else if (this.props.mode == 'plot')
       component = <Plotter />
     else if (this.props.mode == 'search')

@@ -1,0 +1,15 @@
+= content_for :title, "#{Rails.env.development? ? :"Dev Timur" : :Timur } - Map"
+
+#root
+%script{ type: "text/javascript" }
+  :plain
+    $(function() {
+      ReactDOM.render(
+        React.createElement(Timur, {
+          #{current_user ? "user: '#{current_user.name}', " : '' }
+          mode: 'map',
+          environment: '#{Rails.env.development? ? 'development' : 'production'}'
+        }),
+        $('#root')[0]
+      );
+    })
