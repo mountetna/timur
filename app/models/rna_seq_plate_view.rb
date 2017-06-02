@@ -76,13 +76,13 @@ class RnaSeqPlateView < TimurView
                   [ 'rna_seq',
                     '::all', 'read_count'
                   ]
-                ))" ],
-                [ :interval, '50000000'],
-                [ :ymax, '40' ],
-                [ :yLabel, "'Number of Samples'" ],
-                [ :xLabel, "'Read Count'"]
-
+                ))" ]
             ],
+            interval: 50000000,
+            ymax: 40,
+            ymax: 40,
+            yLabel: "Number of Samples",
+            xLabel: "Read Count",
             dimensions: {
                 width: 600,
                 height: 400,
@@ -108,12 +108,12 @@ class RnaSeqPlateView < TimurView
                   [ 'rna_seq',
                     '::all', 'median_cv_coverage'
                   ]
-                ))" ],
-                [ :interval, '0.2' ],
-                [ :ymax, '40' ],
-                [ :yLabel, "'Number of Samples'" ],
-                [ :xLabel, "'Median Cv Coverage'"]
+                ))" ]
             ],
+            interval: 0.2,
+            ymax: 40,
+            yLabel: "Number of Samples",
+            xLabel: "Median Cv Coverage",
             dimensions: {
                 width: 600,
                 height: 400,

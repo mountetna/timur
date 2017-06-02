@@ -228,7 +228,6 @@ class ProjectView < TimurView
               ]
             ]" ]
           ],
-            properties: [ { field: 'intergenic_ratio', label: 'intergenic count', color: 'red' } ],
             dimensions: {
                 width: 500,
                 height: 300,
