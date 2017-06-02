@@ -13,7 +13,7 @@ const YAxis = ({
   plotAreaHeight
 }) => (
   <g className="axis">
-    <text textAnchor="middle" transform={ 'translate(-45,' + ((scale(ymin) + scale(ymax)) / 2 || 0) + ') rotate(-90)'}>
+    <text textAnchor="middle" transform={ 'translate(-70,' + ((scale(ymin) + scale(ymax)) / 2 || plotAreaHeight / 2) + ') rotate(-90)'}>
       {label}
     </text>
     <line
@@ -30,7 +30,7 @@ const YAxis = ({
             {tickFormatter(ticks, scale)(tick)}
           </text>
           <line
-            x1={x}
+            x1={x - 1}
             y1={y || 0}
             x2={x - tick_width}
             y2={y || 0}

@@ -4,55 +4,72 @@ import XAxis from './xaxis'
 import { createScale } from '../../utils/d3_scale'
 import { forceSimulation, forceX, forceY, forceCollide } from 'd3-force'
 
+const groupBy = (list, keyGetter) => {
+  const map = new Map()
+  list.forEach((item) => {
+    const key = keyGetter(item)
+    const collection = map.get(key)
+    if (!collection) {
+      map.set(key, [item])
+    } else {
+      collection.push(item)
+    }
+  })
+  return map
+}
+
 const SwarmPlot = ({
   plot: {
     name,
-    width = 800,
-    height = 500
+    width,
+    height
   },
   margin: {
-    top = 0,
-    right = 200,
-    bottom = 300,
-    left = 200
+    top,
+    right,
+    bottom,
+    left
   },
-  dataSeries = [{label: 'abugrab', data:[{value: 1, category: 'something'},{value: 3},{value: 4}, {value: 3}]}, {label: 'booboo kitty', data:[{value: 5},{value: 5},{value: 5}]}, {label: '', data: []}],
-  datumKey = 'value',
+  data = [],
+  datumKey = 'tpm_log_2',
+  groupByKey = 'hugo_name',
   categories = { something: 'blue' },
   xmin = 0,
-  xmax
+  xmax,
+  xLabel = '',
+  yLabel = ''
 }) => {
   const plottingAreaWidth = width - left - right
   const  plottingAreaHeight = height - top - bottom
 
-  const yTicks = dataSeries.map(s => s.label)
+  const dataSeriesMap = groupBy(data, item => item[groupByKey])
+  const keys = Array.from(dataSeriesMap.keys()).sort().reverse()
+
+  const yTicks = [...keys, '']
   const yScale = createScale(yTicks, [plottingAreaHeight, 0])
 
   if (typeof xmax === 'undefined' || typeof xmin === 'undefined') {
-    var allValues = dataSeries
-      .map(series => series.data
-        .map(data => data[datumKey])
-      ).
-      reduce((acc, curr) => [...acc, ...curr], [])
+    var allValues = data.map(datum => datum[datumKey]).reduce((acc, curr) => [...acc, ...curr], [])
   }
 
   const max = typeof xmax !== 'undefined' ? xmax : d3.max(allValues)
   const min = typeof xmin !== 'undefined' ? xmin : d3.min(allValues)
   const xScale = createScale([min, max], [0, plottingAreaWidth])
 
-  const swarms = dataSeries.map(({ label, data }) => {
-    let seriesData = [...data]
+
+  const swarms = keys.map(key => {
+    let seriesData = dataSeriesMap.get(key)
 
     const simulation = forceSimulation(seriesData)
-      .force("x", forceX(function(d) { return xScale(d.value); }).strength(1))
-      .force("y", forceY(yScale(label)))
+      .force("x", forceX(function(d) { return xScale(d[datumKey]); }).strength(1))
+      .force("y", forceY(yScale(key)))
       .force("collide", forceCollide(2))
       .stop();
 
     for (var i = 0; i < 120; ++i) simulation.tick();
 
-    const yBot = yScale(label) + (yScale.rangeBand() / 2)
-    const yTop = yScale(label) - (yScale.rangeBand() / 2)
+    const yBot = yScale(key) + (yScale.rangeBand() / 2)
+    const yTop = yScale(key) - (yScale.rangeBand() / 2)
     let swarm = seriesData.map((node, i) => {
       let y = node.y
       if (y > yBot) { y = yBot }
@@ -68,7 +85,7 @@ const SwarmPlot = ({
     })
 
     return (
-      <g key={label}>
+      <g key={key}>
         {swarm}
       </g>
     )
@@ -92,6 +109,7 @@ const SwarmPlot = ({
           ticks={yTicks}
           tick_width={5}
           plotAreaHeight={plottingAreaHeight}
+          label={yLabel}
         />
         <XAxis
           scale={xScale}
@@ -99,6 +117,7 @@ const SwarmPlot = ({
           xmax={max}
           tick_width={5}
           plotAreaHeight={plottingAreaHeight}
+          label={xLabel}
         />
         { swarms }
       </PlotCanvas>

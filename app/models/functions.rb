@@ -44,4 +44,10 @@ module Functions
   def self.max(vector)
     vector.max
   end
+
+  def self.log2(vector)
+    vector.to_values.map {|v|
+      Math.log2(v)
+    }
+  end
 end
