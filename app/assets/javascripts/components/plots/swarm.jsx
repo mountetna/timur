@@ -31,9 +31,10 @@ const SwarmPlot = ({
     left
   },
   data = [],
-  datumKey = 'tpm_log_2',
-  groupByKey = 'hugo_name',
-  categories = { something: 'blue' },
+  datumKey = 'value',
+  groupByKey = 'id',
+  legendKey = 'category',
+  legend = [],
   xmin = 0,
   xmax,
   xLabel = '',
@@ -56,6 +57,12 @@ const SwarmPlot = ({
   const min = typeof xmin !== 'undefined' ? xmin : d3.min(allValues)
   const xScale = createScale([min, max], [0, plottingAreaWidth])
 
+  const colorMap = legend.reduce((acc, curr) => {
+    return {
+      ...acc,
+      [curr.category]: curr.color
+    }
+  }, {})
 
   const swarms = keys.map(key => {
     let seriesData = dataSeriesMap.get(key)
@@ -66,7 +73,7 @@ const SwarmPlot = ({
       .force("collide", forceCollide(2))
       .stop();
 
-    for (var i = 0; i < 120; ++i) simulation.tick();
+    for (var i = 0; i < seriesData.length; ++i) simulation.tick();
 
     const yBot = yScale(key) + (yScale.rangeBand() / 2)
     const yTop = yScale(key) - (yScale.rangeBand() / 2)
@@ -79,7 +86,7 @@ const SwarmPlot = ({
           cx={node.x}
           cy={y}
           r={2}
-          style={{fill: categories[node.category]}}
+          style={{fill: colorMap[node[legendKey]]}}
         />
       )
     })
@@ -118,6 +125,11 @@ const SwarmPlot = ({
           tick_width={5}
           plotAreaHeight={plottingAreaHeight}
           label={xLabel}
+        />
+        <Legend
+          x={plottingAreaWidth + 20}
+          y={0}
+          series={legend.map((cat) => ({...cat, name: cat.label || cat.category}))}
         />
         { swarms }
       </PlotCanvas>

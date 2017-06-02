@@ -9,6 +9,10 @@ let SwarmAttribute = ({
      yLabel,
      xmin,
      xmax,
+     datumKey,
+     groupByKey,
+     legend,
+     legendKey,
      name,
      dimensions: {
        height,
@@ -28,6 +32,10 @@ let SwarmAttribute = ({
         xmax={xmax}
         xLabel={xLabel}
         yLabel={yLabel}
+        datumKey={datumKey}
+        groupByKey={groupByKey}
+        legend={legend}
+        legendKey={legendKey}
       />
     }
   </div>

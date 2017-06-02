@@ -126,7 +126,7 @@ class RnaSeqPlateView < TimurView
         attribute_class "SwarmAttribute"
         display_name "Eisenberg Genes"
         plot(
-            name: "eisenberg_swarm_plot",
+            name: "plate_eisenberg_swarm_plot",
             manifest: [
                 [ :genes, "['VPS29', 'VCP', 'SNRPD3', 'REEP5', 'RAB7A', 'PSMB4', 'PSMB2', 'GPI', 'CHMP2A', 'C1orf43']" ],
                 [ :data, "table(
@@ -146,6 +146,19 @@ class RnaSeqPlateView < TimurView
             xLabel: "Log2(TPM + 0.1)",
             xmin: -5,
             xmax: 15,
+            groupByKey: "hugo_name",
+            datumKey: "tpm_log_2",
+            legendKey: "indication",
+            legend: [
+                {category: "Bladder", color: "dodgerblue"},
+                {category: "Colorectal", color: "forestgreen"},
+                {category: "Gynecologic", color: "seagreen"},
+                {category: "Head and Neck", color: "khaki"},
+                {category: "Kidney", color: "coral"},
+                {category: "Lung", color: "gold"},
+                {category: "Melanoma", color: "teal"},
+                {category: "Pancreatic", color: "indianred"}
+            ],
             calculated_columns: ['tpm_log_2'],
             dimensions: {
                 width: 900,

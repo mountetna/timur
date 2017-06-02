@@ -303,6 +303,51 @@ class ProjectView < TimurView
   tab :sequencing do
     pane :default do
       shows :rna_seq_plate
+
+      show :eisenberg_genes do
+        attribute_class "SwarmAttribute"
+        display_name "Eisenberg Genes"
+        plot(
+            name: "plate_eisenberg_swarm_plot",
+            manifest: [
+                [ :genes, "['VPS29', 'VCP', 'SNRPD3', 'REEP5', 'RAB7A', 'PSMB4', 'PSMB2', 'GPI', 'CHMP2A', 'C1orf43']" ],
+                [ :data, "table(
+                  [ 'gene_exp',
+                    [ 'hugo_name', '::in', @genes ]
+                  ],
+                  [
+                    tpm: [ 'expression' ],
+                    hugo_name: [ 'hugo_name' ],
+                    indication: [ 'rna_seq', 'sample', 'patient', 'experiment', 'name' ]
+                  ]
+                )" ],
+                [ :tpm_log_2, "log2(@data$tpm + 0.1)" ],
+            ],
+            yLabel: "Eisenberg Genes",
+            xLabel: "Log2(TPM + 0.1)",
+            xmin: -5,
+            xmax: 15,
+            groupByKey: "hugo_name",
+            datumKey: "tpm_log_2",
+            legendKey: "indication",
+            legend: [
+                {category: "Bladder", color: "dodgerblue"},
+                {category: "Colorectal", color: "forestgreen"},
+                {category: "Gynecologic", color: "seagreen"},
+                {category: "Head and Neck", color: "khaki"},
+                {category: "Kidney", color: "coral"},
+                {category: "Lung", color: "gold"},
+                {category: "Melanoma", color: "teal"},
+                {category: "Pancreatic", color: "indianred"}
+            ],
+            calculated_columns: ['tpm_log_2'],
+            dimensions: {
+                width: 900,
+                height: 500,
+                margin: { top: 10, right: 200, bottom: 150, left: 150}
+            }
+        )
+      end
     end
   end
 
