@@ -3,13 +3,14 @@ import StackedBarPlot from './plots/stacked_bar_plot'
 
 let StackedBarPlotAttribute = ({
   data,
-  datumKey,
-  properties,
-  ymin,
-  ymax,
   attribute: {
     plot: {
+      datumKey,
+      legend,
+      ymin,
+      ymax,
       name,
+      order_by,
       dimensions: {
         height,
         width,
@@ -27,7 +28,7 @@ let StackedBarPlotAttribute = ({
         plot={{name, width, height}}
         margin={margin}
         data={data}
-        properties={properties}
+        legend={legend}
       />
     }
   </div>
@@ -35,7 +36,7 @@ let StackedBarPlotAttribute = ({
 
 StackedBarPlotAttribute = connect(
   (state, props) => {
-    const { name, properties, order_by } = props.attribute.plot
+    const { name, order_by } = props.attribute.plot
     const consignment = timurActions.findManifest(state, name)
     if (consignment) {
       const allValues = consignment.data.map((label, value,) => {
@@ -69,15 +70,11 @@ StackedBarPlotAttribute = connect(
         data.sort((a, b) => a[order_by] - b[order_by])
       }
 
-      return {
-        data,
-        properties
-      }
+      return { data }
     }
 
     return {
-      data: [],
-      properties
+      data: []
     }
   }
 )(StackedBarPlotAttribute)

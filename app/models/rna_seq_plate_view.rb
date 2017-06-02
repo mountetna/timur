@@ -41,14 +41,14 @@ class RnaSeqPlateView < TimurView
                     mt_rrna_ratio: @composition$mt_rrna_count / @totals
                 ]" ]
             ],
-            properties: [
-                { field: 'coding_ratio', label: 'coding count', color: 'magenta' },
-                { field: 'intergenic_ratio', label: 'intergenic count', color: 'red' },
-                { field: 'introns_ratio', label: 'introns count', color: 'green' },
-                { field: 'utr_ratio', label: 'utr count', color: 'orange' },
-                { field: 'mt_coding_ratio', label: 'mt coding count', color: 'cyan'},
-                { field: 'rrna_ratio', label: 'rrna count', color: 'lime'},
-                { field: 'mt_rrna_ratio', label: 'mt rrna count', color: 'blue'}
+            legend: [
+                { category: 'coding_ratio', label: 'coding count', color: 'magenta' },
+                { category: 'intergenic_ratio', label: 'intergenic count', color: 'red' },
+                { category: 'introns_ratio', label: 'introns count', color: 'green' },
+                { category: 'utr_ratio', label: 'utr count', color: 'orange' },
+                { category: 'mt_coding_ratio', label: 'mt coding count', color: 'cyan'},
+                { category: 'rrna_ratio', label: 'rrna count', color: 'lime'},
+                { category: 'mt_rrna_ratio', label: 'mt rrna count', color: 'blue'}
             ],
             order_by: 'coding_ratio',
             dimensions: {

@@ -4,12 +4,12 @@ import XAxis from './xaxis'
 import Legend from './legend'
 import { createScale } from '../../utils/d3_scale'
 
-const StackedBar = ({ plotHeight, properties, datum, xScale, yScale, datumKey }) => {
-  const bars = properties.map(({ field, color }, i, arr) => {
+const StackedBar = ({ plotHeight, legend, datum, xScale, yScale, datumKey }) => {
+  const bars = legend.map(({ category, color }, i, arr) => {
     const bottom = arr.slice(0, i).reduce((acc, curr) => {
-      return acc + datum[curr.field]
+      return acc + datum[curr.category]
     }, 0)
-    const top = bottom + datum[field]
+    const top = bottom + datum[category]
     const height = bottom === 0 ? plotHeight - yScale(top) : yScale(bottom) - yScale(top)
 
     return (
@@ -26,9 +26,9 @@ const StackedBar = ({ plotHeight, properties, datum, xScale, yScale, datumKey })
   return <g>{bars}</g>
 }
 
-const StackedBars = ({ datumKey, data, properties, plotHeight, xScale, yScale }) => {
+const StackedBars = ({ datumKey, data, legend, plotHeight, xScale, yScale }) => {
   const bars = data.map((datum, i) => {
-    const props = {datum, properties, xScale, yScale, datumKey }
+    const props = {datum, legend, xScale, yScale, datumKey }
     return <g key={i}><StackedBar {...{...props, plotHeight}} /></g>
   })
 
@@ -51,9 +51,8 @@ const StackedBarPlot = ({
   ymax = 1,
   data,
   datumKey = 'id',
-  properties
+  legend
 }) => {
-
   const plottingAreaWidth = width - left - right
   const  plottingAreaHeight = height - top - bottom
 
@@ -62,7 +61,7 @@ const StackedBarPlot = ({
   const xTicks = data.map(datum => datum[datumKey])
   const xScale = createScale(xTicks, [0, plottingAreaWidth])
 
-  const barsProps = { datumKey, data, properties, xScale, yScale, plotHeight: plottingAreaHeight }
+  const barsProps = { datumKey, data, legend, xScale, yScale, plotHeight: plottingAreaHeight }
   return (
     <svg
       id={name}
@@ -92,7 +91,7 @@ const StackedBarPlot = ({
         <Legend
           x={plottingAreaWidth + 20}
           y={0}
-          series={properties.map((prop) => ({...prop, name: prop.label || prop.field}))}
+          series={legend.map((cat) => ({...cat, name: cat.label || cat.category}))}
         />
         <StackedBars {...barsProps} />
       </PlotCanvas>
