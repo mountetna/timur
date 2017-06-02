@@ -1,26 +1,89 @@
 @import "globals";
 
+$logo_size: 70px;
+
 #header {
 	position: relative;
 	height: 80px;
-	@mixin basic_logo($color) {
-		width: 70px;
-		height: 70px;
+	@mixin basic_logo($color,$image) {
+		@keyframes spin {
+			0% {
+				transform-origin: 35px 35px;
+				transform: rotate(0deg);
+			}
+			50% {
+				transform-origin: 35px 35px;
+				transform: rotate(180deg);
+			}
+			100% {
+				transform-origin: 35px 35px;
+				transform: rotate(360deg);
+			}
+		}
+		@keyframes flicker {
+			0% {
+				filter: hue-rotate(0deg);
+			}
+			50% {
+				filter: hue-rotate(180deg);
+			}
+			100% {
+				filter: hue-rotate(360deg);
+			}
+		}
+		&.throb {
+			.halo {
+				opacity: 1;
+				transition: opacity 1s;
+			}
+		}
+		width: $logo_size;
+		height: $logo_size;
 		border: 3px solid $color;
-		background-size: cover;
-		background-position: 0px -6px;
 		border-radius: 50%;
 		display: inline-block;
-		vertical-align:top
+		vertical-align:top;
+		position: relative;
+		.image {
+			background-image: image-url($image);
+			width: $logo_size;
+			height: $logo_size;
+			background-size: cover;
+			background-position: 0px -6px;
+			border-radius: 50%;
+			position: absolute;
+		}
+		.halo {
+			animation: flicker 3s infinite alternate, spin 5s linear infinite;
+			position: absolute;
+			opacity: 0;
+			transition: opacity 1s;
+			z-index: -1;
+			svg {
+				overflow: visible;
+				circle {
+					stroke-width: 1px;
+					stroke: goldenrod;
+					fill: none;
+				}
+				path {
+					stroke-width: 1px;
+					&.long {
+						stroke: goldenrod;
+					}
+					&.short {
+						stroke: indianred;
+					}
+				}
+			}
+		}
 	}
 	#logo {
 		#normal {
-			background-image: image-url('Timur.png');
-			@include basic_logo(#066306);
+			@include basic_logo(#066306,'Timur.png');
 		}
 		#dev {
-			background-image: image-url('Timur-dev.png');
-			@include basic_logo(#630606);
+			@include basic_logo(#630606,'Timur-dev.png');
 		}
 		border-bottom: 2px solid forestgreen;
 		display: inline-block;

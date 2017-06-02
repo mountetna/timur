@@ -1,8 +1,9 @@
 import Vector from 'vector'
-import { getTSV, getView } from '../api/timur'
+import { getTSV, getView, getConsignments } from '../api/timur'
 import { showMessages } from './message_actions'
 import { requestDocuments } from './magma_actions'
 import Tab from '../readers/tab'
+import { Exchange } from './exchange_actions'
 
 var timurActions = {
   toggleConfig: function(name) {
@@ -13,7 +14,9 @@ var timurActions = {
   },
   requestView: function(model_name, record_name, tab_name, success, error) {
     return function(dispatch) {
-      getView(model_name, tab_name)
+      getView(model_name, tab_name, 
+        new Exchange(dispatch, `view for ${model_name} ${record_name}`)
+      )
         .then((response)=> {
           var tab = new Tab(
             model_name, 
@@ -24,9 +27,12 @@ var timurActions = {
           )
 
           dispatch(
-            requestDocuments(
-              model_name, [ record_name ], tab.requiredAttributes()
-            )
+            requestDocuments({
+              model_name, 
+              record_names: [ record_name ], 
+              attribute_names: tab.requiredAttributes(),
+              exchange_name: `tab ${response.tab_name} for ${model_name} ${record_name}`
+            })
           )
 
           var required_manifests = tab.requiredManifests()
@@ -68,27 +74,15 @@ var timurActions = {
       }
     )
   },
-  requestManifests: function( manifests, success, error ) {
-    var self = this;
-    var request = {
-      queries: manifests
-    }
+  requestManifests: ( manifests, success, error ) => 
+  (dispatch) => {
+    getConsignments(manifests, new Exchange(dispatch, `consignment list ${manifests.map(m=>m.name).join(", ")}`)).then((response) => {
+      for (var name in response) {
+        dispatch(timurActions.addManifest(name, response[name]))
+      }
+      if (success != undefined) success(response)
 
-    return function(dispatch) {
-      $.ajax({
-        url: Routes.query_json_path(),
-        method: 'POST',
-        data: JSON.stringify(request),
-        contentType: 'application/json',
-        dataType: 'json',
-        success: function(response) {
-          for (var name in response) {
-            dispatch(timurActions.addManifest(name, response[name]))
-          }
-          if (success != undefined) success(response)
-        },
-        error: function(xhr, status, err) {
-          var response = JSON.parse(xhr.responseText)
+    }).catch((e) => e.response.json().then((response) => {
           if (response.query)
             dispatch(showMessages([
 `
@@ -116,13 +110,12 @@ ${response.errors.map((error) => `* ${error}`).join('\n')}
 `
             ]))
           if (error != undefined) error(response)
-        }
       })
-    }
+    )
   },
   requestTSV: function(model_name,record_names) {
     return function(dispatch) {
-      getTSV(model_name,record_names)
+      getTSV(model_name,record_names, new Exchange(dispatch, `request-tsv-${model_name}`))
         .catch(
           (error) => dispatch(
             showMessages([
