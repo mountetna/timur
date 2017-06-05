@@ -3,15 +3,22 @@ import { requestModels } from '../actions/magma_actions'
 import Magma from '../magma'
 import { Animate } from 'react-move'
 
+class ModelLink extends Component {
+  render() {
+    let { center, parent, size } = this.props
+    if (!parent || !center) return null
+    return <g className="model_link">
+      <line x1={center[0]} y1={center[1]} x2={parent[0]} y2={parent[1]}/>
+    </g>
+  }
+}
+
 class ModelNode extends Component {
   render() {
-    let { model_name, center, parent, size } = this.props
+    let { model_name, center, size } = this.props
     if (!center) return null
     let [ x, y ] = center
     return <g className="model_node">
-        {
-          parent ? <line x1={x} y1={y} x2={parent[0]} y2={parent[1]}/> : null
-        }
         <g transform={ `translate(${x},${y})` } onClick={ () => this.props.handler(this.props.model_name) }>
         <circle 
           r={ size }
@@ -87,7 +94,13 @@ class LayoutNode {
       let attribute = template.attributes[att_name]
       if (!attribute.model_name) return null
       let other = this.layout.nodes[ attribute.model_name ]
-      if (!other || (template.parent != attribute.model_name && other.template.parent != this.model_name)) return null
+      if (!other) return null
+
+      // the link exists if - you are the other model's parents
+      if (!(template.parent == attribute.model_name
+        || other.template.parent == this.model_name 
+        || (!template.parent && other.template.parent)
+        || (!other.template.parent && template.parent))) return null
       return { other }
     }).filter(_=>_)
   }
@@ -176,7 +189,47 @@ class ModelMap extends Component {
 
     return <div id="map">
       <svg width={width} height={height}>
-        { 
+        {
+          this.props.model_names.map(
+            (model_name) => {
+              let node = layout.nodes[model_name]
+              if (layout2) {
+                let node2 = layout2.nodes[model_name]
+                return <Animate
+                  default={{
+                    center_x: node.center && node.center[0],
+                    center_y: node.center && node.center[1],
+                    parent_x: node.parent_name ? layout.nodes[node.parent_name].center[0] : null,
+                    parent_y: node.parent_name ? layout.nodes[node.parent_name].center[1] : null
+                  }}
+                  data={{
+                    center_x: node2.center && node2.center[0],
+                    center_y: node2.center && node2.center[1],
+                    parent_x: node.parent_name ? layout2.nodes[node.parent_name].center[0] : null,
+                    parent_y: node.parent_name ? layout2.nodes[node.parent_name].center[1] : null
+                  }}
+                  key={ model_name }
+                  duration={400}
+                  easing='easeQuadIn'>
+                  {data => (
+                    <ModelLink
+                      key={model_name}
+                      center={ data.center_x ? [ data.center_x, data.center_y ] : null }
+                      parent={ node.parent_name ? [ data.parent_x, data.parent_y ] : null }
+                      model_name={ model_name }/>
+                  )}
+                </Animate>
+              } else
+              return <ModelLink
+                key={model_name}
+                center={ node.center }
+                parent={ node.parent_name ? layout.nodes[node.parent_name].center : null }
+                size={ node.size }
+                handler={ this.showModel.bind(this) }/>
+            }
+          )
+        }
+        {
           this.props.model_names.map(
             (model_name) => {
               let node = layout.nodes[model_name]
@@ -186,16 +239,12 @@ class ModelMap extends Component {
                   default={{
                     size: node.size,
                     center_x: node.center && node.center[0],
-                    center_y: node.center && node.center[1],
-                    parent_x: node.parent_name ? layout.nodes[node.parent_name].center[0] : null,
-                    parent_y: node.parent_name ? layout.nodes[node.parent_name].center[1] : null
+                    center_y: node.center && node.center[1]
                   }}
                   data={{
                     size: node2.size,
                     center_x: node2.center && node2.center[0],
-                    center_y: node2.center && node2.center[1],
-                    parent_x: node.parent_name ? layout2.nodes[node.parent_name].center[0] : null,
-                    parent_y: node.parent_name ? layout2.nodes[node.parent_name].center[1] : null
+                    center_y: node2.center && node2.center[1]
                   }}
                   key={ model_name }
                   duration={400}
@@ -207,10 +256,7 @@ class ModelMap extends Component {
                   {data => (
                     <ModelNode 
                       key={model_name}
-                      width={width}
-                      height={height}
                       center={ data.center_x ? [ data.center_x, data.center_y ] : null }
-                      parent={ node.parent_name ? [ data.parent_x, data.parent_y ] : null }
                       size={ data.size }
                       handler={ this.showModel.bind(this) }
                       model_name={ model_name }/>
@@ -219,10 +265,7 @@ class ModelMap extends Component {
               } else
               return <ModelNode 
                 key={model_name}
-                width={width}
-                height={height}
                 center={ node.center }
-                parent={ node.parent_name ? layout.nodes[node.parent_name].center : null }
                 size={ node.size }
                 handler={ this.showModel.bind(this) }
                 model_name={ model_name }/>
