@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { downloadTSV } from '../../tsv'
+import { downloadTSV } from '../../utils/tsv'
 
 class VectorResult extends Component {
   componentWillMount() {

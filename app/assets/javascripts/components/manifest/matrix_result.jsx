@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { matrixConversion, downloadTSV } from '../../tsv'
+import { matrixConversion, downloadTSV } from '../../utils/tsv'
 
 class MatrixResult extends Component {
   componentWillMount() {

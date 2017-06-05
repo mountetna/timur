@@ -1,3 +1,5 @@
+import YAxis from './yaxis'
+
 var ScatterCurve = React.createClass({
   render: function() {
     var self = this;

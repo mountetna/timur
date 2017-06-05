@@ -28,7 +28,7 @@ var PlotVarMapping = React.createClass({
              {
                this.render_mapping_edit()
              }
-            <div className='close' onClick={ this.props.update.bind(null,'mappings', this.props.current.key, 'remove') } className="close">
+            <div className='close' onClick={ this.props.update.bind(null,'mappings', this.props.current.key, 'remove') }>
               
               <span className="fa fa-times-circle"/>
             </div>

@@ -1,3 +1,5 @@
+import { createScale } from '../../utils/d3_scale'
+
 var BoxPlot = React.createClass({
   render: function() {
     var self = this

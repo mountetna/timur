@@ -88,6 +88,10 @@ class Vector
     @vector.length
   end
 
+  def max
+    to_values.compact.max
+  end
+
   def payload
     @vector.map do |label, value|
       { 

@@ -36,4 +36,18 @@ module Functions
   def self.table row_query, column_queries, opts=Vector.new([])
     TableQuery.new(row_query,column_queries, opts).table
   end
+
+  def self.length(vector)
+    vector.length
+  end
+
+  def self.max(vector)
+    vector.max
+  end
+
+  def self.log2(vector)
+    vector.to_values.map {|v|
+      Math.log2(v)
+    }
+  end
 end

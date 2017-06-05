@@ -1,3 +1,9 @@
+import StackedBarPlotAttribute from './stacked_bar_plot_attribute'
+import BarGraphAttribute from './bar_graph_attribute'
+import HistogramAttribute from './histogram_attribute'
+import SwarmAttribute from './swarm_attribute'
+
+
 var AttributeViewer = React.createClass({
   render: function() {
     var attribute = this.props.attribute
@@ -8,6 +14,18 @@ var AttributeViewer = React.createClass({
     switch(class_name) {
       case "BarPlotAttribute":
         AttClass = BarPlotAttribute
+        break
+      case "StackedBarPlotAttribute":
+        AttClass = StackedBarPlotAttribute
+        break
+      case "BarGraphAttribute":
+          AttClass = BarGraphAttribute
+          break
+      case "HistogramAttribute":
+        AttClass = HistogramAttribute
+        break
+      case "SwarmAttribute":
+        AttClass = SwarmAttribute
         break
       case "BoxPlotAttribute":
         AttClass = BoxPlotAttribute

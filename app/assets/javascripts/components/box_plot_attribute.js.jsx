@@ -1,3 +1,5 @@
+import { autoColors } from '../utils/colors'
+
 var BoxPlotAttribute = React.createClass({
   render: function() {
     if (this.props.mode == "edit" || this.props.groups.length == 0)

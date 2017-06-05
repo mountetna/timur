@@ -1,3 +1,7 @@
+import { createScale } from '../../utils/d3_scale'
+import XAxis from './xaxis'
+import YAxis from './yaxis'
+
 var LinePlot = React.createClass({
   render: function() {
     var self = this
