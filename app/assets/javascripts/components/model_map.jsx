@@ -1,91 +1,29 @@
 import { Component } from 'react'
 import { requestModels } from '../actions/magma_actions'
 import Magma from '../magma'
+import { Animate } from 'react-move'
 
-class ModelNodeZ extends Component {
-  center() {
-    if (this.props.depth == 1) return [ this.props.width/2, this.props.height/2 ]
-
-    // compute the midpoint of the arc and get r, theta
-    let th = (this.props.arc[1] + this.props.arc[0])/2
-
-    // the first point has a radius of r - r / 2, the next of r - r / 4, the
-    // next of r - r / 8
-    let r = this.props.width * 3 * (1 - Math.pow(1 / this.props.depth, 0.1))
-    return [
-      this.props.width / 2 + r * Math.cos(Math.PI * th / 180),
-      this.props.height / 2 + r * Math.sin(Math.PI * th / 180)
-    ]
-  }
-  subtend(i) {
-    let gap_size = (this.props.arc[1] - this.props.arc[0]) / this.props.link_model_names.length
-    return [
-      this.props.arc[0] + i * gap_size,
-      this.props.arc[0] + (i+1) * gap_size
-    ]
-  }
+class ModelNode extends Component {
   render() {
-    let { model_name, depth } = this.props
-    let [ x, y ] = this.center()
-    return <g>
-      {
-        this.props.depth > 1 ?
-          <line x1={x} y1={y}
-            x2={this.props.parent_position[0]} y2={this.props.parent_position[1]}/>
-          : null
-      }
-      {
-        this.props.link_model_names.map((link_model_name,i) =>
-          <ModelNode
-            key={i}
-            width={this.props.width}
-            height={this.props.height}
-            depth={depth + 1}
-            arc={ this.subtend(i) }
-            parent_position={ [ x, y ] }
-            parent_name={ this.props.model_name }
-            handler={ this.props.handler }
-            model_name={ link_model_name }/>
-        )
-      }
-      <g transform={ `translate(${x},${y})` }
-        className="model_node"
-        onClick={ () => this.props.handler(this.props.model_name) }>
+    let { model_name, center, parent, size } = this.props
+    if (!center) return null
+    let [ x, y ] = center
+    return <g className="model_node">
+        {
+          parent ? <line x1={x} y1={y} x2={parent[0]} y2={parent[1]}/> : null
+        }
+        <g transform={ `translate(${x},${y})` } onClick={ () => this.props.handler(this.props.model_name) }>
         <circle 
-          r={ 40 / depth }
+          r={ size }
           cx={0}
           cy={0}/>
-        <text style={{fontSize: 16 / Math.pow(depth, 0.3333) }} dy="0.4em" textAnchor="middle">
+        <text style={{fontSize: 16 / Math.pow(40/size, 0.3333) }} dy="0.4em" textAnchor="middle">
           { model_name }
         </text>
       </g>
     </g>
   }
 }
-
-const ModelNode = connect(
-  (state,props) => {
-    let magma = new Magma(state)
-    let template = magma.template(props.model_name)
-    let link_model_names = []
-    if (template) {
-      link_model_names = Object.keys(template.attributes).filter(
-        (att_name) => {
-          let link_model_template = magma.template(template.attributes[att_name].model_name)
-          if (!link_model_template) return false
-          if (link_model_template.name == props.parent_name) return false
-          if (link_model_template.parent != props.model_name
-          && template.parent != link_model_template.name) return false
-          return true
-        }
-      )
-    }
-
-    return {
-      link_model_names: link_model_names
-    }
-  }
-)(ModelNodeZ)
 
 class ModelAttribute extends Component {
   type() {
@@ -136,6 +74,85 @@ ModelReport = connect(
   }
 )(ModelReport)
 
+class LayoutNode {
+  constructor(template, layout) {
+    this.model_name = template.name
+    this.template = template
+    this.layout = layout
+  }
+
+  createLinks() {
+    let template = this.template
+    this.links = Object.keys(template.attributes).map((att_name) => {
+      let attribute = template.attributes[att_name]
+      if (!attribute.model_name) return null
+      let other = this.layout.nodes[ attribute.model_name ]
+      if (!other || (template.parent != attribute.model_name && other.template.parent != this.model_name)) return null
+      return { other }
+    }).filter(_=>_)
+  }
+
+  unplacedLinks() {
+    // there should only be a single placed link. Return
+    // links in circular order after that
+    let index = this.links.findIndex(link => link.other.model_name == this.parent_name)
+    return Array(this.links.length-(index >= 0 ? 1 : 0)).fill().map((_,i) => this.links[(index + i + 1)%this.links.length])
+  }
+
+  subtend(i, num_links) {
+    let gap_size = (this.arc[1] - this.arc[0]) / Math.max(1.5,num_links)
+    // if num_links is 1 we will be skewed because of the low gap_size
+    return [
+      this.arc[0]/2 + this.arc[1]/2 + gap_size * (i - num_links/2),
+      this.arc[0]/2 + this.arc[1]/2 + gap_size * (i + 1 - num_links/2)
+    ]
+  }
+  place(parent_name, depth, arc) {
+    this.depth = depth
+    this.arc = arc
+    this.size = 40 / depth
+    this.parent_name = parent_name
+
+    if (depth == 1) 
+      this.center = [ this.layout.width/2, this.layout.height/2 ]
+    else {
+      let th = (arc[1] + arc[0])/2
+
+      // the first point has a radius of r - r / 2, the next of r - r / 4, the
+      // next of r - r / 8
+      let r = this.layout.width * 3 * (1 - Math.pow(1 / depth, 0.1))
+      this.center = [
+        this.layout.width / 2 + r * Math.cos(Math.PI * th / 180),
+        this.layout.height / 2 + r * Math.sin(Math.PI * th / 180)
+      ]
+    }
+
+    let unplaced = this.unplacedLinks()
+    //console.log(`${this.model_name} -> [${ unplaced.map(l=>l.other.model_name).join(", ")}]`)
+
+    for (var [ i, link ] of unplaced.entries()) {
+      link.other.place(this.model_name, depth + 1, this.subtend(i,unplaced.length))
+    }
+  }
+}
+
+class Layout {
+  constructor(center_model, templates, width, height) {
+    this.nodes = templates.reduce((nodes, template) => {
+      nodes[template.name] = new LayoutNode(template,this)
+      return nodes
+    }, {})
+    this.width = width
+    this.height = height
+
+    for (var model_name in this.nodes) {
+      this.nodes[model_name].createLinks()
+    }
+
+    if (this.nodes[center_model]) this.nodes[center_model].place(null, 1, [0,360])
+  }
+}
+
 class ModelMap extends Component {
   constructor() {
     super()
@@ -145,20 +162,73 @@ class ModelMap extends Component {
     this.props.requestModels()
   }
   showModel(model_name) {
-    console.log('click')
-    this.setState( { current_model: model_name } )
+    this.setState( { new_model: model_name } )
   }
   render() {
     let [ width, height ] = [ 500, 500 ]
+    let layout = new Layout(this.state.current_model, this.props.templates, width, height)
+    let layout2
+
+    if (this.state.new_model) {
+      layout2 = new Layout(this.state.new_model, this.props.templates, width, height)
+    }
+
+
     return <div id="map">
       <svg width={width} height={height}>
-        <ModelNode 
-          width={width}
-          height={height}
-          depth={1}
-          arc={ [ 0, 360 ] }
-          handler={ this.showModel.bind(this) }
-          model_name={ this.state.current_model }/>
+        { 
+          this.props.model_names.map(
+            (model_name) => {
+              let node = layout.nodes[model_name]
+              if (layout2) {
+                let node2 = layout2.nodes[model_name]
+                return <Animate
+                  default={{
+                    size: node.size,
+                    center_x: node.center && node.center[0],
+                    center_y: node.center && node.center[1],
+                    parent_x: node.parent_name ? layout.nodes[node.parent_name].center[0] : null,
+                    parent_y: node.parent_name ? layout.nodes[node.parent_name].center[1] : null
+                  }}
+                  data={{
+                    size: node2.size,
+                    center_x: node2.center && node2.center[0],
+                    center_y: node2.center && node2.center[1],
+                    parent_x: node.parent_name ? layout2.nodes[node.parent_name].center[0] : null,
+                    parent_y: node.parent_name ? layout2.nodes[node.parent_name].center[1] : null
+                  }}
+                  key={ model_name }
+                  duration={400}
+                  onRest={ () => {
+                      if (model_name == this.state.new_model) this.setState({ new_model: null, current_model: this.state.new_model })
+                    }
+                  }
+                  easing='easeQuadIn'>
+                  {data => (
+                    <ModelNode 
+                      key={model_name}
+                      width={width}
+                      height={height}
+                      center={ data.center_x ? [ data.center_x, data.center_y ] : null }
+                      parent={ node.parent_name ? [ data.parent_x, data.parent_y ] : null }
+                      size={ data.size }
+                      handler={ this.showModel.bind(this) }
+                      model_name={ model_name }/>
+                  )}
+                </Animate>
+              } else
+              return <ModelNode 
+                key={model_name}
+                width={width}
+                height={height}
+                center={ node.center }
+                parent={ node.parent_name ? layout.nodes[node.parent_name].center : null }
+                size={ node.size }
+                handler={ this.showModel.bind(this) }
+                model_name={ model_name }/>
+            }
+          )
+        }
       </svg>
       <ModelReport model_name={ this.state.current_model }/>
     </div>
@@ -168,8 +238,10 @@ class ModelMap extends Component {
 export default connect(
   (state) => {
     var magma = new Magma(state)
+    var model_names = magma.model_names()
     return {
-      model_names: magma.model_names()
+      model_names: model_names,
+      templates: model_names.map(model_name => magma.template(model_name))
     }
   },
   {
