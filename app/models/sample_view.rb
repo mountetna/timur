@@ -321,7 +321,7 @@ class SampleView < TimurView
     end
     pane :files do
       title "FCS files"
-      shows :treg_file, :nktb_file, :sort_file, :dc_file
+      shows :treg_file, :nktb_file, :sort_file, :dc_file, :innate_file
     end
   end
 
