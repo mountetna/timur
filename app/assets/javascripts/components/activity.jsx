@@ -1,3 +1,5 @@
+import markdown from '../markdown'
+
 var Activity = React.createClass({
   render: function() {
     return <div id="activities">
@@ -9,7 +11,7 @@ var Activity = React.createClass({
           <span className="at">@</span> 
           <span className="time">{ dates.format_time(activity.date) }</span> 
           <span className="user">{ activity.user }</span> 
-          <span className="action" dangerouslySetInnerHTML={ { __html: marked(activity.action) } } /> 
+          <span className="action" dangerouslySetInnerHTML={ { __html: markdown(activity.action) } } /> 
           on 
           <MagmaLink link={activity.record_name} model={activity.model_name}/>
         </div>

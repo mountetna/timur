@@ -20,7 +20,6 @@
 
 #= require d3
 #= require react-classnames
-#= require marked
 
 #= require libs
 #= require matrix
