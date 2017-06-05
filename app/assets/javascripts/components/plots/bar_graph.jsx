@@ -5,7 +5,7 @@ import { createScale } from '../../utils/d3_scale'
 
 const Bar = ({ plotHeight, property, datum, xScale, yScale, datumKey }) => (
   <rect
-    style={{fill: datum.color || 'forestgreen'}}
+    style={{fill: datum.color}}
     width={xScale.rangeBand()}
     height={plotHeight - yScale(datum[property])}
     x={xScale(datum[datumKey])}
