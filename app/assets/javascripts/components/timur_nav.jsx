@@ -7,7 +7,8 @@ class TimurNav extends Component {
 
     var tabs = {
       browse: Routes.browse_path(),
-      search: Routes.search_path()
+      search: Routes.search_path(),
+      map: Routes.map_path(),
     }
 
     var login

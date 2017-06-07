@@ -19,6 +19,9 @@ class BrowseController <  ApplicationController
     @record_name = params[:name]
   end
 
+  def map
+  end
+
   def activity
     @activities = Activity.order(created_at: :desc).limit(50).map do |activity|
       {

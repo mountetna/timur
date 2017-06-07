@@ -29,5 +29,7 @@ Rails.application.routes.draw do
   post 'search/table' => 'search#table_json', as: :table_json
   post 'search/tsv' => 'search#table_tsv', as: :table_tsv
 
+  get 'map' => 'browse#map', as: :map
+
   resources :manifests, only: [:index, :create, :update, :destroy]
 end

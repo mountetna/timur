@@ -1,4 +1,5 @@
 import { reviseDocument } from '../actions/magma_actions'
+import markdown from '../markdown'
 
 var MarkdownAttribute = React.createClass({
   render: function() {
@@ -26,7 +27,7 @@ var MarkdownAttribute = React.createClass({
     if (!this.props.value)
       return <div className="value"/>
 
-    var content = marked(this.props.value)
+    var content = markdown(this.props.value)
     return <div className="value"
         dangerouslySetInnerHTML={ { __html: content } }/>
   }

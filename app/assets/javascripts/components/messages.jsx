@@ -1,3 +1,5 @@
+import markdown from '../markdown'
+
 var Messages = React.createClass({
   getInitialState: function() {
     return { current_message: 0 }
@@ -35,7 +37,7 @@ var Messages = React.createClass({
       </div>
     }
 
-    var message = marked(
+    var message = markdown(
       this.sanitize(
         this.props.messages[this.state.current_message]
       )
