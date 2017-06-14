@@ -116,14 +116,10 @@ module Functions
                     p_value: p_value,
                     labels: labels
                 })
-    matrix = response["method_params"]["series"][0]["matrix"]
-    rows = matrix["rows"].map{ |r| Vector.new(r.map{ |v| [nil, v]} ) }
-
-    DataTable.new(
-        matrix["row_names"],
-        matrix["col_names"],
-        rows,
-        []
-    )
+    if response["error"]
+      response
+    else
+      response["method_params"]["series"][0]
+    end
   end
 end
