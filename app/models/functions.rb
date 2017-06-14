@@ -9,37 +9,7 @@ def recursive_parse result, &block
   end
 end
 
-class PythiaApi
-  def pythia_json( inputs, params, columns = false )
-    response = pythia_get( {
-                               input: {
-                                   series: inputs
-                               },
-                               params: {
-                                   method_params: params
-                               },
-                               columns: columns
-                           })
-    JSON.parse(response.body)
-  end
-
-  def pythia_get data
-    uri = URI.parse(Rails.configuration.pythia_url+"json/")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = false
-    request = Net::HTTP::Post.new(uri.request_uri)
-    request.basic_auth(
-        Rails.application.secrets.pythia_auth_user,
-        Rails.application.secrets.pythia_auth_passwd
-    )
-    request.body = data.to_json
-    request["Content-Type"] = "application/json"
-    http.request(request)
-  end
-end
-
 module Functions
-  @pythia_api ||= PythiaApi.new()
 
   def self.call function, args
     if Functions.respond_to? function
@@ -139,15 +109,15 @@ module Functions
     input["key"] = ""
     input["name"] = ""
 
-    labels =  group_one.to_values.map{|l| {label: l, value: 1}} + group_two.to_values.map{|l| {label: l, value: 2}}
-    response = @pythia_api.pythia_json([input],
+    labels =  group_one.to_values.map{ |l| {label: l, value: 1} } + group_two.to_values.map{ |l| {label: l, value: 2} }
+    response = Pythia.instance.get([input],
                 {
                     method: "DE",
                     p_value: p_value,
                     labels: labels
                 })
     matrix = response["method_params"]["series"][0]["matrix"]
-    rows = matrix["rows"].map{ |r| Vector.new(r.map{|v| [nil, v]}) }
+    rows = matrix["rows"].map{ |r| Vector.new(r.map{ |v| [nil, v]} ) }
 
     DataTable.new(
         matrix["row_names"],
