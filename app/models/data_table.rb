@@ -1,4 +1,6 @@
 class DataTable
+  attr_reader :row_names, :col_names, :rows
+
   def initialize row_names, col_names, rows, col_types
     @row_names = row_names
     @col_names = col_names

@@ -113,26 +113,23 @@ module Functions
     #   ]
   ##
   def self.spread(data_table)
-    puts data_table.to_matrix.to_json
-    matrix = data_table.to_matrix[:matrix]
-
     # group rows by value in the first column
-    rows_by_first_column_val = matrix[:rows].group_by{ |row| row[0] }
+    rows_by_first_column_val = data_table.rows.group_by{ |r| r.to_values[0] }
 
     # new columns are the values in the second column - key
-    new_columns = matrix[:rows].map{|r| r[1]}.uniq
+    new_columns = data_table.rows.map{ |r| r.to_values[1] }.uniq
 
     # values to the new columns are in the third column - value
-    rows = rows_by_first_column_val.map{ |_, r|
-      hash = r.map{ |v| v[1, 2] }.to_h
-      row = new_columns.map{ |c| [c, hash[c]] }
+    new_rows = rows_by_first_column_val.map{ |_, r|
+      col_to_val_map = r.map{ |v| v.to_values[1, 2] }.to_h
+      row = new_columns.map{ |c| [c, col_to_val_map[c]] }
       Vector.new(row)
     }
 
     DataTable.new(
         rows_by_first_column_val.keys,
         new_columns,
-        rows,
+        new_rows,
         []
     )
   end
