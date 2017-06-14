@@ -9,7 +9,38 @@ def recursive_parse result, &block
   end
 end
 
+class PythiaApi
+  def pythia_json( inputs, params, columns = false )
+    response = pythia_get( {
+                               input: {
+                                   series: inputs
+                               },
+                               params: {
+                                   method_params: params
+                               },
+                               columns: columns
+                           })
+    JSON.parse(response.body)
+  end
+
+  def pythia_get data
+    uri = URI.parse(Rails.configuration.pythia_url+"json/")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = false
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.basic_auth(
+        Rails.application.secrets.pythia_auth_user,
+        Rails.application.secrets.pythia_auth_passwd
+    )
+    request.body = data.to_json
+    request["Content-Type"] = "application/json"
+    http.request(request)
+  end
+end
+
 module Functions
+  @pythia_api ||= PythiaApi.new()
+
   def self.call function, args
     if Functions.respond_to? function
       Functions.send function.to_sym, *args
@@ -88,25 +119,44 @@ module Functions
     # group rows by value in the first column
     rows_by_first_column_val = matrix[:rows].group_by{ |row| row[0] }
 
-    # new spread columns are the values in the second column - key
+    # new columns are the values in the second column - key
     new_columns = matrix[:rows].map{|r| r[1]}.uniq
 
-    # values to the new columns are in the values in the third column - value
+    # values to the new columns are in the third column - value
     rows = rows_by_first_column_val.map{ |_, r|
       hash = r.map{ |v| v[1, 2] }.to_h
       row = new_columns.map{ |c| [c, hash[c]] }
       Vector.new(row)
     }
 
-    x = DataTable.new(
+    DataTable.new(
         rows_by_first_column_val.keys,
         new_columns,
         rows,
         []
     )
+  end
 
-    puts x.to_matrix.to_json
+  def self.diff_exp(data_table, p_value, group_one, group_two)
+    input = data_table.to_matrix
+    input["key"] = ""
+    input["name"] = ""
 
-    x
+    labels =  group_one.to_values.map{|l| {label: l, value: 1}} + group_two.to_values.map{|l| {label: l, value: 2}}
+    response = @pythia_api.pythia_json([input],
+                {
+                    method: "DE",
+                    p_value: p_value,
+                    labels: labels
+                })
+    matrix = response["method_params"]["series"][0]["matrix"]
+    rows = matrix["rows"].map{ |r| Vector.new(r.map{|v| [nil, v]}) }
+
+    DataTable.new(
+        matrix["row_names"],
+        matrix["col_names"],
+        rows,
+        []
+    )
   end
 end
