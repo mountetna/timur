@@ -75,7 +75,6 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.pythia_url = "https://pythia.ucsf-immunoprofiler.org/"
-  config.pythia_ssl = true
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 

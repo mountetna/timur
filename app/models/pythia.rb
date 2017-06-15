@@ -21,7 +21,7 @@ class Pythia
   def request data
     uri = URI.parse(Rails.configuration.pythia_url+"json/")
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = Rails.configuration.pythia_ssl
+    http.use_ssl = uri.scheme == "https"
     request = Net::HTTP::Post.new(uri.request_uri)
     request.basic_auth(
         Rails.application.secrets.pythia_auth_user,
