@@ -41,7 +41,7 @@ const showErrors = (e, dispatch) => {
 }
 
 const addManifest = (manifest) => ({
-  type: 'ADD_USER_MANIFEST',
+  type: 'ADD_MANIFEST',
   manifest
 })
 
@@ -98,12 +98,6 @@ export const copyManifest = (manifest) =>
       .catch(e =>  showErrors(e, dispatch))
   }
 
-const addManifestResult = (id, result) => ({
-  type: 'ADD_MANIFEST_RESULT',
-  id,
-  result
-})
-
 const manifestToReqPayload = (manifest) => {
   const { name, data: { elements } } = manifest
   const manifestElements = elements.reduce((acc, { name, script }) => {
@@ -126,11 +120,3 @@ export const fetchManifestResults = (manifest, success = () => {}, error = () =>
       )
     )
   }
-
-export const submitManifest = (manifest) => {
-  return fetchManifestResults(
-    manifest,
-    (result, dispatch) => dispatch(addManifestResult(manifest.id, result)),
-    (err, dispatch) => dispatch(addManifestResult(manifest.id, err))
-  )
-}

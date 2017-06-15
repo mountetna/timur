@@ -32,7 +32,7 @@ var LinePlotAttribute = React.createClass({
 
 LinePlotAttribute = connect(
   function(state,props) {
-    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
+    var manifest = timurActions.findConsignment(state,props.attribute.plot.name)
 
     var lines = []
 

@@ -23,10 +23,6 @@ class ManifestForm extends Component {
           }, { elementKeys: [], elementsByKey: {} })
 
           this.setState(elementsByKey)
-
-          if (!this.props.manifest.result) {
-            this.updateResults(this.props.manifest)
-          }
         }
       )
     } else {

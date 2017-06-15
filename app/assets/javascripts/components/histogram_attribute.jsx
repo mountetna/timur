@@ -40,7 +40,7 @@ let HistogramAttribute = ({
 HistogramAttribute = connect(
   (state, props) => {
     const { name } = props.attribute.plot
-    const consignment = timurActions.findManifest(state, name)
+    const consignment = timurActions.findConsignment(state, name)
 
     if (consignment) {
       const { xmin, xmax, data} = consignment

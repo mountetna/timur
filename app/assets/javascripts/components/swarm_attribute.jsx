@@ -44,7 +44,7 @@ let SwarmAttribute = ({
 SwarmAttribute = connect(
   (state, props) => {
     const { name, calculated_columns } = props.attribute.plot
-    const consignment = timurActions.findManifest(state, name)
+    const consignment = timurActions.findConsignment(state, name)
 
     if (consignment) {
       const dataMatrix = consignment.data

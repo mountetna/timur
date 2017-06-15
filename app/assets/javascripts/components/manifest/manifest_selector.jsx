@@ -6,10 +6,7 @@ const ManifestSelection = (selectManifest, submitManifest) => (manifest) => {
     <div className='manifest-selection'>
       <a href='#' 
         onClick={
-          () => {
-            selectManifest(manifest.id) 
-            if (!manifest.result) submitManifest(manifest)
-          }
+          () => selectManifest(manifest.id) 
         }
         title={ manifest.description }>
         <span className='name'>{manifest.name}</span>

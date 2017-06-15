@@ -31,7 +31,7 @@ var BoxPlotAttribute = React.createClass({
 
 BoxPlotAttribute = connect(
   function(state,props) {
-    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
+    var manifest = timurActions.findConsignment(state,props.attribute.plot.name)
 
     var groups = []
 

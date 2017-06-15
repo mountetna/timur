@@ -5,6 +5,7 @@ import plots from './plot_reducer'
 import timur from './timur_reducer'
 import manifestsUI from './manifest_ui_reducer'
 import manifests from './manifests_reducer'
+import consignments from './consignments_reducer'
 import exchanges from './exchanges_reducer'
 
 //TODO hack to render the manifest tab. future me needs to use react-router
@@ -24,6 +25,7 @@ export default combineReducers({
   plots,
   manifestsUI,
   manifests,
+  consignments,
   exchanges,
   appMode
 })

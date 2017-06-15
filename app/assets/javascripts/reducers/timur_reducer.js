@@ -25,22 +25,12 @@ var views = function(old_views, action) {
 }
 
 var timurReducer = function(timur, action) {
-  if (!timur) timur = {
-    manifests: {}
-  }
+  if (!timur) timur = { }
   switch(action.type) {
     case 'ADD_TAB':
       return {
         ...timur,
         views: views(timur.views,action),
-      }
-    case 'ADD_MANIFEST':
-      return {
-        ...timur,
-        manifests: {
-          ...timur.manifests,
-          [action.manifest_name]:  action.manifest
-        }
       }
     case 'TOGGLE_CONFIG':
       return {

@@ -34,7 +34,7 @@ let BarGraphAttribute = ({
 BarGraphAttribute = connect(
   (state, props) => {
     const { name } = props.attribute.plot
-    const consignment = timurActions.findManifest(state, name)
+    const consignment = timurActions.findConsignment(state, name)
     if (consignment) {
       const data = consignment.data.map((label, value,) => {
         return value.map((label, value) => ({ label, value })).reduce((acc, curr) => {

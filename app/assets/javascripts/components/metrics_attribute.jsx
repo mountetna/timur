@@ -152,7 +152,7 @@ var MetricsAttribute = React.createClass({
 
 MetricsAttribute = connect(
   function(state,props) {
-    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
+    var manifest = timurActions.findConsignment(state,props.attribute.plot.name)
 
     var metric_names = {}
     var metrics = []

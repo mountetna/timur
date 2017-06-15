@@ -441,7 +441,7 @@ var Search = React.createClass({
 Search = connect(
   function(state, props) {
     var magma = new Magma(state)
-    var manifest = timurActions.findManifest(state, 'search') || {}
+    var manifest = timurActions.findConsignment(state, 'search') || {}
     return {
       record_names: manifest && manifest.record_names ? manifest.record_names.values : [],
       model_names: magma.model_names(),
