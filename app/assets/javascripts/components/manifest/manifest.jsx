@@ -4,21 +4,9 @@ import ManifestView from './manifest_view'
 
 class Manifest extends Component {
   componentWillMount() {
-    const { manifest } = this.props
+    const { manifest, consignment } = this.props
 
-    if (!manifest || !manifest.result) {
-      this.setState({ result: {} })
-    }
-
-    if (manifest) {
-      if (manifest.result) {
-        this.setState({
-          result: manifest.result
-        })
-      } else {
-        this.props.submitManifest(manifest)
-      }
-    }
+    if (!consignment) this.props.requestConsignment(manifest)
   }
 
   render () {

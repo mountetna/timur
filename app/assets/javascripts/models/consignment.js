@@ -2,10 +2,10 @@ import Vector from '../vector'
 
 let ISO_FORMAT = /[+-]?\d{4}(-[01]\d(-[0-3]\d(T[0-2]\d:[0-5]\d:?([0-5]\d(.\d+)?)?([+-][0-2]\d:[0-5]\d)?Z?)?)?)?/
 
-export default class Manifest {
-  constructor(manifest) {
+export default class Consignment {
+  constructor(consignment) {
     let parsed = JSON.parse(
-      JSON.stringify(manifest), 
+      JSON.stringify(consignment), 
       (key, value) => {
         if (typeof value === 'string' && value.match(ISO_FORMAT)) {
           return new Date(value)

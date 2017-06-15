@@ -4,7 +4,7 @@ import { showMessages } from './message_actions'
 import { requestDocuments } from './magma_actions'
 import { Exchange } from './exchange_actions'
 import Tab from '../models/tab'
-import Manifest from '../models/manifest'
+import Manifest from '../models/consignment'
 
 var timurActions = {
   toggleConfig: function(name) {
@@ -39,7 +39,7 @@ var timurActions = {
           var required_manifests = tab.requiredManifests()
 
           if (required_manifests.length > 0) 
-            dispatch(timurActions.requestManifests(required_manifests))
+            dispatch(timurActions.requestConsignments(required_manifests))
 
           for (var tab_name in response.tabs)
             dispatch(
@@ -65,7 +65,7 @@ var timurActions = {
   (dispatch) => {
     getConsignments(manifests, new Exchange(dispatch, `consignment list ${manifests.map(m=>m.name).join(", ")}`)).then((response) => {
       for (var name in response) {
-        dispatch(timurActions.addManifest(name, response[name]))
+        dispatch(timurActions.addConsignment(name, response[name]))
       }
       if (success != undefined) success(response)
 
@@ -114,11 +114,11 @@ ${error}`
         )
     }
   },
-  addManifest: function(name, manifest) {
+  addConsignment: function(name, consignment) {
     return {
-      type: 'ADD_MANIFEST',
+      type: 'ADD_CONSIGNMENT',
       manifest_name: name,
-      manifest: manifest
+      consignment: consignment
     }
   },
   addTab: function(model_name, tab_name, tab) {

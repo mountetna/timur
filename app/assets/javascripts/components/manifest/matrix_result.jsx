@@ -47,7 +47,7 @@ class MatrixResult extends Component {
         <span className='label'>{this.props.name}</span>
         <i className="fa fa-table" aria-hidden="true"></i> -
         <i className="fa fa-download blue-on-hover" aria-hidden="true" onClick={this.downloadMatrix.bind(this)}></i>
-        {this.props.rows.length + ' rows'}
+        {`${this.props.rows.length} rows x ${this.props.col_names.length} cols`}
         <span  className='underline-on-hover toggle' onClick={this.toggle.bind(this)}>
           {this.state.hidden ? ' show' : ' hide' }
         </span>
