@@ -119,7 +119,7 @@ module Functions
     if response["error"]
       response
     else
-      response["method_params"]["series"][0]
+      DataTable.from_matrix(response["method_params"]["series"][0]["matrix"])
     end
   end
 end

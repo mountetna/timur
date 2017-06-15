@@ -9,6 +9,13 @@ class DataTable
     @columns = {}
   end
 
+  def self.from_matrix(matrix)
+    rows = matrix["rows"].map do |row|
+      Vector.new(matrix["col_names"].zip(row))
+    end
+    self.new(matrix["row_names"], matrix["col_names"], rows,matrix["col_types"])
+  end
+
   def [] column_name
     return column(column_name)
   end
