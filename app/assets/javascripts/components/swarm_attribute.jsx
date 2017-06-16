@@ -67,7 +67,7 @@ SwarmAttribute = connect(
         const calculatedColumns = calculated_columns.reduce((acc, curr) => {
           return {
             ...acc,
-            [curr]: consignment[curr][i]
+            [curr]: consignment[curr].values[i]
           }
         }, {})
         row = {...row, ...calculatedColumns}

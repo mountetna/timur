@@ -46,10 +46,9 @@ module Functions
     vector.max
   end
 
-  def self.log2(vector)
-    vector.to_values.map {|v|
-      Math.log2(v)
-    }
+  def self.log(vector, base)
+    new_values = vector.to_values.map{ |v| Math.log(v, base) }
+    Vector.new(vector.to_labels.zip(new_values))
   end
 
   ## spread example

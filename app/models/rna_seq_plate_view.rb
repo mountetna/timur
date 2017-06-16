@@ -140,7 +140,7 @@ class RnaSeqPlateView < TimurView
                     indication: [ 'rna_seq', 'sample', 'patient', 'experiment', 'name' ]
                   ]
                 )" ],
-                [ :tpm_log_2, "log2(@data$tpm + 0.1)" ],
+                [ :tpm_log_2, "log(@data$tpm + 0.1, 2)" ],
             ],
             yLabel: "Eisenberg Genes",
             xLabel: "Log2(TPM + 0.1)",
