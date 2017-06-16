@@ -5,6 +5,7 @@ import ManifestAccess from './manifest_access'
 import ManifestElementForm from './manifest_element_form'
 import Dates from '../../dates'
 import { v4 } from 'node-uuid'
+import { saveNewManifest, saveManifest, toggleEdit, fetchManifestResults } from '../../actions/manifest_actions'
 
 class ManifestForm extends Component {
   componentWillMount() {
@@ -53,15 +54,15 @@ class ManifestForm extends Component {
   }
 
   create() {
-    this.props.create(this.stateToManifest())
+    this.props.saveNewManifest(this.stateToManifest())
   }
 
   update() {
-    this.props.update(this.stateToManifest())
+    this.props.saveManifest(this.stateToManifest())
   }
 
   updateResults() {
-    this.props.updateResults(
+    this.props.fetchManifestResults(
       this.stateToManifest(),
       (result) => {
         this.setState({ result })
@@ -158,7 +159,7 @@ class ManifestForm extends Component {
               save
             </button>
           }
-          <button onClick={this.props.cancel}>
+          <button onClick={this.props.toggleEdit}>
             <i className='fa fa-ban' aria-hidden="true"></i>
             cancel
           </button>
@@ -200,4 +201,12 @@ class ManifestForm extends Component {
   }
 }
 
-export default ManifestForm
+export default connect(
+  null,
+  {
+    saveNewManifest,
+    saveManifest,
+    toggleEdit,
+    fetchManifestResults 
+  }
+)(ManifestForm)

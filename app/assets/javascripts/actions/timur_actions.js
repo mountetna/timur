@@ -1,8 +1,9 @@
 import Vector from 'vector'
-import { getTSV, getView, getConsignments } from '../api/timur'
+import { getTSV, getView } from '../api/timur'
 import { showMessages } from './message_actions'
 import { requestDocuments } from './magma_actions'
 import { Exchange } from './exchange_actions'
+import { requestConsignments } from './consignment_actions'
 import Tab from '../models/tab'
 
 var timurActions = {
@@ -14,7 +15,8 @@ var timurActions = {
   },
   requestView: function(model_name, record_name, tab_name, success, error) {
     return function(dispatch) {
-      getView(model_name, tab_name, 
+      getView(
+        model_name, tab_name, 
         new Exchange(dispatch, `view for ${model_name} ${record_name}`)
       )
         .then((response)=> {
@@ -37,8 +39,8 @@ var timurActions = {
 
           var required_manifests = tab.requiredManifests()
 
-          if (required_manifests.length > 0) 
-            dispatch(timurActions.requestConsignments(required_manifests))
+          if (required_manifests.length > 0)
+            dispatch(requestConsignments(required_manifests))
 
           for (var tab_name in response.tabs)
             dispatch(
@@ -54,45 +56,6 @@ var timurActions = {
         .catch((err) => { if (error != undefined) error(err) })
     }
   },
-  requestConsignments: ( manifests, success, error ) => 
-  (dispatch) => {
-    getConsignments(manifests, new Exchange(dispatch, `consignment list ${manifests.map(m=>m.name).join(", ")}`)).then((response) => {
-      for (var name in response) {
-        dispatch(timurActions.addConsignment(name, response[name]))
-      }
-      if (success != undefined) success(response)
-
-    }).catch((e) => e.response.json().then((response) => {
-          if (response.query)
-            dispatch(showMessages([
-`
-### For our inquiry:
-
-\`${JSON.stringify(response.query)}\`
-
-## this bitter response:
-
-    ${response.errors}
-`
-            ]))
-          else if (response.errors && response.errors.length == 1)
-            dispatch(showMessages([
-`### Our inquest has failed, for this fault:
-
-    ${response.errors[0]}
-`
-            ]))
-          else if (response.errors && response.errors.length > 1)
-            dispatch(showMessages([
-`### Our inquest has failed, for these faults:
-
-${response.errors.map((error) => `* ${error}`).join('\n')}
-`
-            ]))
-          if (error != undefined) error(response)
-      })
-    )
-  },
   requestTSV: function(model_name,record_names) {
     return function(dispatch) {
       getTSV(model_name,record_names, new Exchange(dispatch, `request-tsv-${model_name}`))
@@ -105,13 +68,6 @@ ${error}`
             ])
           )
         )
-    }
-  },
-  addConsignment: function(name, consignment) {
-    return {
-      type: 'ADD_CONSIGNMENT',
-      manifest_name: name,
-      consignment: consignment
     }
   },
   addTab: function(model_name, tab_name, tab) {
@@ -130,4 +86,4 @@ ${error}`
   }
 }
 
-module.exports = timurActions;
+module.exports = timurActions

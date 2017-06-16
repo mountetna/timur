@@ -37,5 +37,5 @@ const selectConsignmentData = (state, manifest_name) => state.consignments[manif
 
 export const selectConsignment = createSelector(
   selectConsignmentData,
-  (consignment) => (new Consignment(consignment))
+  (consignment) => (consignment ? new Consignment(consignment) : null)
 )

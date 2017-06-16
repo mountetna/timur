@@ -7,6 +7,7 @@ import Magma from 'magma'
 import { requestModels, sendRevisions, discardRevision, requestDocuments } from '../actions/magma_actions'
 import { requestTSV } from '../actions/timur_actions'
 import { selectConsignment } from '../selectors/consignment'
+import { requestConsignments } from '../actions/consignment_actions'
 
 var COLUMN_FORMAT = /^([\w]+)([=<>~])(.*)$/
 
@@ -465,7 +466,7 @@ Search = connect(
       },
       query: function(manifest, success) {
         dispatch(
-          timurActions.requestManifests(
+          requestConsignments(
             [
               {
                 name: "search",

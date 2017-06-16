@@ -98,7 +98,7 @@ export const copyManifest = (manifest) =>
       .catch(e =>  showErrors(e, dispatch))
   }
 
-const manifestToReqPayload = (manifest) => {
+export const manifestToReqPayload = (manifest) => {
   const { name, data: { elements } } = manifest
   const manifestElements = elements.reduce((acc, { name, script }) => {
     if (name !== '' && script !== '') {
@@ -109,14 +109,3 @@ const manifestToReqPayload = (manifest) => {
 
   return { manifest: manifestElements, name: name }
 }
-
-export const fetchManifestResults = (manifest, success = () => {}, error = () => {}) =>
-  (dispatch) => {
-    dispatch(
-      requestManifests(
-        [manifestToReqPayload(manifest)],
-        result => success(result, dispatch),
-        err => error(err, dispatch)
-      )
-    )
-  }
