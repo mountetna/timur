@@ -23,8 +23,6 @@ Rails.application.routes.draw do
   post 'json/query' => 'search#query_json', as: :query_json
   post 'json/view' => 'browse#view_json', as: :view_json
 
-  post 'json/pythia' => 'plot#pythia_json', as: :pythia_json
-
   get 'search' => 'search#index', as: :search
   post 'search/table' => 'search#table_json', as: :table_json
   post 'search/tsv' => 'search#table_tsv', as: :table_tsv

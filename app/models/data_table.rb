@@ -1,10 +1,19 @@
 class DataTable
+  attr_reader :row_names, :col_names, :rows
+
   def initialize row_names, col_names, rows, col_types
     @row_names = row_names
     @col_names = col_names
     @rows = rows
     @col_types = col_types
     @columns = {}
+  end
+
+  def self.from_matrix(matrix)
+    rows = matrix["rows"].map do |row|
+      Vector.new(matrix["col_names"].zip(row))
+    end
+    self.new(matrix["row_names"], matrix["col_names"], rows,matrix["col_types"])
   end
 
   def [] column_name
