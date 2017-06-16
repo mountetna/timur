@@ -1,8 +1,9 @@
+import { createSelector } from 'reselect'
 import Vector from '../vector'
 
 let ISO_FORMAT = /[+-]?\d{4}(-[01]\d(-[0-3]\d(T[0-2]\d:[0-5]\d:?([0-5]\d(.\d+)?)?([+-][0-2]\d:[0-5]\d)?Z?)?)?)?/
 
-export default class Consignment {
+export class Consignment {
   constructor(consignment) {
     let parsed = JSON.parse(
       JSON.stringify(consignment), 
@@ -31,3 +32,10 @@ export default class Consignment {
     }
   }
 }
+
+const selectConsignmentData = (state, manifest_name) => state.consignments[manifest_name]
+
+export const selectConsignment = createSelector(
+  selectConsignmentData,
+  (consignment) => (new Consignment(consignment))
+)

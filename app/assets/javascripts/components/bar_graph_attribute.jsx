@@ -1,5 +1,6 @@
 import React from 'react'
 import BarGraph from './plots/bar_graph'
+import { selectConsignment } from '../selectors/consignment'
 
 let BarGraphAttribute = ({
   data,
@@ -34,7 +35,7 @@ let BarGraphAttribute = ({
 BarGraphAttribute = connect(
   (state, props) => {
     const { name } = props.attribute.plot
-    const consignment = timurActions.findConsignment(state, name)
+    const consignment = selectConsignment(state, name)
     if (consignment) {
       const data = consignment.data.map((label, value,) => {
         return value.map((label, value) => ({ label, value })).reduce((acc, curr) => {

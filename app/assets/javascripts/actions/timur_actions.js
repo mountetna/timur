@@ -4,7 +4,6 @@ import { showMessages } from './message_actions'
 import { requestDocuments } from './magma_actions'
 import { Exchange } from './exchange_actions'
 import Tab from '../models/tab'
-import Consignment from '../models/consignment'
 
 var timurActions = {
   toggleConfig: function(name) {
@@ -54,12 +53,6 @@ var timurActions = {
         })
         .catch((err) => { if (error != undefined) error(err) })
     }
-  },
-  findConsignment: function( state, manifest_name ) {
-    var consignment = state.consignments[ manifest_name ]
-    if (!consignment) return null
-
-    return new Consignment(consignment)
   },
   requestConsignments: ( manifests, success, error ) => 
   (dispatch) => {

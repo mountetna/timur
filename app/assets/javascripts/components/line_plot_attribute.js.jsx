@@ -1,4 +1,5 @@
 import { autoColors } from '../utils/colors'
+import { selectConsignment } from '../selectors/consignment'
 
 var LinePlotAttribute = React.createClass({
   render: function() {
@@ -32,13 +33,13 @@ var LinePlotAttribute = React.createClass({
 
 LinePlotAttribute = connect(
   function(state,props) {
-    var manifest = timurActions.findConsignment(state,props.attribute.plot.name)
+    var consignment = selectConsignment(state,props.attribute.plot.name)
 
     var lines = []
 
-    if (manifest && manifest.lines) {
-      var colors = autoColors(manifest.lines.size)
-      lines = manifest.lines.map(
+    if (consignment && consignment.lines) {
+      var colors = autoColors(consignment.lines.size)
+      lines = consignment.lines.map(
         (label, line, i) => ({
           label: label,
           color: colors[i],

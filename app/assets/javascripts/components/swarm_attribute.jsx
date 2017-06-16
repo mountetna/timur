@@ -1,5 +1,6 @@
 import React from 'react'
 import Swarm from './plots/swarm'
+import { selectConsignment } from '../selectors/consignment'
 
 let SwarmAttribute = ({
   data,
@@ -44,7 +45,7 @@ let SwarmAttribute = ({
 SwarmAttribute = connect(
   (state, props) => {
     const { name, calculated_columns } = props.attribute.plot
-    const consignment = timurActions.findConsignment(state, name)
+    const consignment = selectConsignment(state, name)
 
     if (consignment) {
       const dataMatrix = consignment.data

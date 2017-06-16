@@ -1,3 +1,5 @@
+import { selectConsignment } from '../selectors/consignment'
+
 var CategoryControl = React.createClass({
   render: function() {
     var props = this.props
@@ -152,15 +154,15 @@ var MetricsAttribute = React.createClass({
 
 MetricsAttribute = connect(
   function(state,props) {
-    var manifest = timurActions.findConsignment(state,props.attribute.plot.name)
+    var consignment = selectConsignment(state,props.attribute.plot.name)
 
     var metric_names = {}
     var metrics = []
     var model_name
 
-    if (manifest && manifest.metrics) {
-      for (var metric_name in manifest.metrics.values[0]) {
-        var metric = manifest.metrics.values[0][metric_name]
+    if (consignment && consignment.metrics) {
+      for (var metric_name in consignment.metrics.values[0]) {
+        var metric = consignment.metrics.values[0][metric_name]
         metric_names = {
           ...metric_names,
           [metric.category]: [
@@ -170,8 +172,8 @@ MetricsAttribute = connect(
         }
       }
 
-      metrics = manifest.metrics
-      model_name = manifest.model_name
+      metrics = consignment.metrics
+      model_name = consignment.model_name
     }
     return {
       metrics: metrics,
