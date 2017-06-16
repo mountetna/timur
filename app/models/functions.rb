@@ -47,8 +47,7 @@ module Functions
   end
 
   def self.log(vector, base)
-    new_values = vector.to_values.map{ |v| Math.log(v, base) }
-    Vector.new(vector.to_labels.zip(new_values))
+    Vector.new(vector.map{|k,v| [ k, Math.log(v, base) ]})
   end
 
   ## spread example
