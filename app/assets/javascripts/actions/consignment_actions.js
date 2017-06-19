@@ -1,5 +1,6 @@
 import { getConsignments } from '../api/timur'
 import { Exchange } from './exchange_actions'
+import { showMessages } from './message_actions'
 
 export const addConsignment = (name, consignment) => ({
   type: 'ADD_CONSIGNMENT',

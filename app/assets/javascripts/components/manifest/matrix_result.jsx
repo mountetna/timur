@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { matrixConversion, downloadTSV } from '../../utils/tsv'
+import { downloadTSV } from '../../utils/tsv'
 
 class MatrixResult extends Component {
   componentWillMount() {
@@ -14,47 +14,53 @@ class MatrixResult extends Component {
     return this.state.hidden ? 'none' : 'initial'
   }
 
-  columnsRow() {
+  header() {
     return (
       <tr>
         <th>row_names</th>
-        {this.props.col_names.map((columnName, index) => <th key={index}>{columnName}</th>)}
+        {this.props.matrix.col_names.map((col_name, index) => <th key={index}>{col_name}</th>)}
       </tr>
     )
   }
 
   tableRows() {
-    return this.props.rows.map((row, index) => (
+    return this.props.matrix.map('row', (row, index, row_name) => (
       <tr key={index}>
-        <td>{this.props.row_names[index]}</td>
+        <td>{row_name}</td>
         { row.map((data, index) => <td key={index}>{data}</td>) }
       </tr>
     ))
   }
 
   downloadMatrix() {
-    const { rows, col_names, name} = this.props
+    const { name, matrix } = this.props
     downloadTSV(
-      matrixConversion(rows, col_names),
-      col_names,
+      matrix.map(
+        'row',
+        (row, _, row_name) => matrix.col_names.reduce(
+          (row_obj, col_name, i) => ({...row_obj, [col_name]: row[i]}),
+          { row_names: row_name }
+        )
+      ),
+      [ 'row_names' ].concat(matrix.col_names),
       name
     )
   }
 
   render() {
+    const { matrix } = this.props
     return (
       <div className='matrix'>
-        <span className='label'>{this.props.name}</span>
-        <i className="fa fa-table" aria-hidden="true"></i> -
-        <i className="fa fa-download blue-on-hover" aria-hidden="true" onClick={this.downloadMatrix.bind(this)}></i>
-        {`${this.props.rows.length} rows x ${this.props.col_names.length} cols`}
-        <span  className='underline-on-hover toggle' onClick={this.toggle.bind(this)}>
-          {this.state.hidden ? ' show' : ' hide' }
+        <i className="fa fa-table" aria-hidden="true"></i>
+        <i className="fa fa-download" aria-hidden="true" onClick={this.downloadMatrix.bind(this)}></i>
+        {`${matrix.num_rows} rows x ${matrix.num_cols} cols`}
+        <span className='underline-on-hover toggle' onClick={this.toggle.bind(this)}>
+          {this.state.hidden ? 'show' : 'hide' }
         </span>
         <div style={{ display : this.display() }}>
           <table>
             <thead>
-            {this.columnsRow()}
+            {this.header()}
             </thead>
             <tbody>
             {this.tableRows()}

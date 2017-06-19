@@ -8,7 +8,7 @@ const ManifestElement = ({ name, script, description, result, view_mode }) => (
     <div className='name'>@{name}</div>
     <div className='equals'>=</div>
     {
-      view_mode == 'script' ? Script(script) : Result('',result)
+      view_mode == 'script' ? Script(script) : Result(name,result)
     }
   </div>
 )

@@ -1,6 +1,8 @@
 import React from 'react'
 import VectorResult from './vector_result'
 import MatrixResult from './matrix_result'
+import Vector from '../../vector'
+import Matrix from '../../matrix'
 
 const isPrimitiveType = (value) => typeof value === 'string' || typeof value === 'number' || value === null || typeof value === 'undefined'
 
@@ -8,42 +10,41 @@ export const Result = (name, data, nestLevel = 0) => {
   if (isPrimitiveType(data)) {
     //display primitive type result
     return (
-      <div style={{ marginLeft: nestLevel * 5 }}>
+      <div className="result" style={{ marginLeft: nestLevel * 5 }}>
         {data}
       </div>
     )
-  } else if (Array.isArray(data) && data[0].label) {
-    if (isPrimitiveType(data[0].value)) {
+  } else if (data instanceof Vector) {
+    if (isPrimitiveType(data(0))) {
       //display a list/vector
       return (
-        <div style={{marginLeft: nestLevel * 5 }}>
-          <VectorResult dataList={data} name={name}/>
+        <div className="result" style={{marginLeft: nestLevel * 5 }}>
+          <VectorResult vector={data} name={name}/>
         </div>
       )
     } else {
       //nested objects recursively call Result on each property
       return (
-        <div style={{marginLeft: nestLevel * 5 }}>
-          {data.map((elem, index) => (
+        <div className="result" style={{marginLeft: nestLevel * 5 }}>
+          {data.map((label, value, index) => (
             <div key={index}>
-              { Result(elem.label, elem.value, nestLevel + 1) }
+              <span className='label'>{label}</span>
+              { Result(label, value, nestLevel + 1) }
             </div>
           ))}
         </div>
       )
     }
-  } else if (data.hasOwnProperty('matrix')) {
-    //display matrix
-    const props = { ...data.matrix, name }
+  } else if (data instanceof Matrix) {
     return (
-      <div style={{ marginLeft: nestLevel * 5 }}>
-        <MatrixResult {...props} />
+      <div className="result" style={{ marginLeft: nestLevel * 5 }}>
+        <MatrixResult matrix={data} name={name} />
       </div>
     )
   } else if (data.hasOwnProperty('errors')) {
     //handle error result
-    return <div>{data.errors.join(', ')}</div>
+    return <div className="result">{data.errors.join(', ')}</div>
   } else if (data.hasOwnProperty('error')) {
-    return <div>{data.error}</div>
+    return <div className="result">{data.error}</div>
   }
 }

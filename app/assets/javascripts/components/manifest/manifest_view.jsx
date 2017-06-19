@@ -18,9 +18,6 @@ class ManifestView extends Component {
 
     const elements =  manifest.data.elements || []
 
-    console.log("Consignment is")
-    console.log(consignment)
-
     const manifestElements = elements.map((element, i) => {
       let elementResult
       if (consignment) {

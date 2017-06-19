@@ -5,25 +5,26 @@ import ManifestAccess from './manifest_access'
 import ManifestElementForm from './manifest_element_form'
 import Dates from '../../dates'
 import { v4 } from 'node-uuid'
-import { saveNewManifest, saveManifest, toggleEdit, fetchManifestResults } from '../../actions/manifest_actions'
+import { requestConsignments } from '../../actions/consignment_actions'
+import { selectConsignment } from '../../selectors/consignment'
+import { manifestToReqPayload, saveNewManifest, saveManifest, toggleEdit } from '../../actions/manifest_actions'
 
 class ManifestForm extends Component {
   componentWillMount() {
     if (this.props.manifest) {
+      const elements = this.props.manifest.data.elements || []
+      const elementsByKey = elements.reduce((acc, curr) => {
+        const key = v4()
+        return ({
+          elementKeys: [...acc.elementKeys, key],
+          elementsByKey: {...acc.elementsByKey, [key]: curr}
+        })
+      }, { elementKeys: [], elementsByKey: {} }) 
       this.setState(
-        { ...this.props.manifest },
-        () => {
-          const elements = this.props.manifest.data.elements || []
-
-          const elementsByKey = elements.reduce((acc, curr) => {
-            const key = v4()
-            return ({
-              elementKeys: [...acc.elementKeys, key],
-              elementsByKey: {...acc.elementsByKey, [key]: curr}
-            })
-          }, { elementKeys: [], elementsByKey: {} })
-
-          this.setState(elementsByKey)
+        { 
+          ...this.props.manifest,
+          ...elementsByKey,
+          hasConsignment: false
         }
       )
     } else {
@@ -32,7 +33,8 @@ class ManifestForm extends Component {
         access: 'private',
         project: 'ipi',
         elementKeys: [],
-        elementsByKey: {}
+        elementsByKey: {},
+        hasConsignment: false
       })
     }
   }
@@ -62,14 +64,14 @@ class ManifestForm extends Component {
   }
 
   updateResults() {
-    this.props.fetchManifestResults(
-      this.stateToManifest(),
-      (result) => {
-        this.setState({ result })
-      },
-      (err) => {
-        this.setState({ result: err })
-      },
+    this.props.requestConsignments(
+      [
+        {
+          ...manifestToReqPayload(this.stateToManifest()),
+          name: 'editing-manifest'
+        }
+      ],
+      () => this.setState({hasConsignment: true})
     )
   }
 
@@ -115,18 +117,19 @@ class ManifestForm extends Component {
 
   render() {
     const elements = this.state.elementKeys || []
-    const { result, name } = this.state
+    const { name } = this.state
+    const { consignment } = this.props
     const manifestElements = elements.map((key) => {
       const element = this.state.elementsByKey[key]
 
       let elementResult
-      if (result) {
-        if (result[name] && result[name][element.name]) {
-          elementResult = result[name][element.name]
-        } else if (result[name] && !result[name][element.name]) {
+      if (consignment && this.state.hasConsignment) {
+        if (consignment[element.name]) {
+          elementResult = consignment[element.name]
+        } else if (!consignment[element.name]) {
           elementResult = ''
-        } else if (typeof result  === 'string' || result.hasOwnProperty('errors') || result.hasOwnProperty('error')) { //handle error results
-          elementResult = result
+        } else if (typeof consignment  === 'string' || consignment.hasOwnProperty('errors') || consignment.hasOwnProperty('error')) { //handle error results
+          elementResult = consignment
         } else elementResult = ''
       } else {
         elementResult = ''
@@ -202,11 +205,13 @@ class ManifestForm extends Component {
 }
 
 export default connect(
-  null,
+  (state,props) => ({
+    consignment: selectConsignment(state,'editing-manifest')
+  }),
   {
     saveNewManifest,
     saveManifest,
     toggleEdit,
-    fetchManifestResults 
+    requestConsignments 
   }
 )(ManifestForm)

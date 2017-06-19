@@ -82,8 +82,6 @@ Metric = connect(
     return {
       showDetails: function() {
         if (details.length) {
-          console.log("Details are long!")
-          console.log(details)
           dispatch(
             messageActions.showMessages([
 `# The test ${metric.name} on ${props.record_name} failed.
