@@ -2,12 +2,16 @@ import { getConsignments } from '../api/timur'
 import { Exchange } from './exchange_actions'
 import { showMessages } from './message_actions'
 
+
+// Add a consignment (the actual JSON data) to the store
 export const addConsignment = (name, consignment) => ({
   type: 'ADD_CONSIGNMENT',
   manifest_name: name,
   consignment: consignment
 })
 
+// Post a manifest to the query api and send the returned consignment to the store
+// If things go wrong, show a message with the error
 export const requestConsignments = ( manifests, success, error ) => 
   (dispatch) => {
     getConsignments(manifests, new Exchange(dispatch, `consignment list ${manifests.map(m=>m.name).join(", ")}`)).then((response) => {

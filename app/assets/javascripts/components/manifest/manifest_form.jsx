@@ -9,6 +9,8 @@ import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, saveNewManifest, saveManifest, toggleEdit } from '../../actions/manifest_actions'
 
+// Edit and save changes to a manifest.  Requests a consignment
+// based on edited data when 'test' is clicked
 class ManifestForm extends Component {
   componentWillMount() {
     if (this.props.manifest) {

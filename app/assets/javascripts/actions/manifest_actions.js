@@ -1,13 +1,14 @@
 import { showMessages } from './message_actions'
-import { requestManifests } from './timur_actions'
 import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests'
 
+// Add retrieved manifests to the store
 const loadManifests = (manifestsById) => ({
   type: 'LOAD_MANIFESTS',
   manifestsById
 })
 
-export const getManifests = () => 
+// Retrieve all user-visible manifests and send to store
+export const requestManifests = () => 
   (dispatch) => {
     fetchManifests()
       .then( ({ manifests }) => {
@@ -20,11 +21,13 @@ export const getManifests = () =>
       .catch(e =>  showErrors(e, dispatch))
   }
 
+// remove a manifest from the store
 const removeManifest = (id) => ({
   type: 'REMOVE_MANIFEST',
   id
 })
 
+// Delete a manifest from the database and the store
 export const deleteManifest = (manifestId) =>
   (dispatch) => {
     destroyManifest(manifestId)
@@ -40,15 +43,18 @@ const showErrors = (e, dispatch) => {
       .then((json) => dispatch(showMessages(json.errors)))
 }
 
+// Add a manifest to the store
 const addManifest = (manifest) => ({
   type: 'ADD_MANIFEST',
   manifest
 })
 
+// Manifest ui editing flag
 export const toggleEdit = () =>({
   type: 'TOGGLE_IS_EDITING_MANIFEST'
 })
 
+// Post to create new manifest and save in the store
 export const saveNewManifest = (manifest) =>
   (dispatch) => {
     createManifest(manifest)
@@ -98,6 +104,7 @@ export const copyManifest = (manifest) =>
       .catch(e =>  showErrors(e, dispatch))
   }
 
+// Convert a manifest to its JSON representation for query endpoint
 export const manifestToReqPayload = (manifest) => {
   const { name, data: { elements } } = manifest
   const manifestElements = elements.reduce((acc, { name, script }) => {

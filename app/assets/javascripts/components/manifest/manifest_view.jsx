@@ -6,6 +6,10 @@ import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
 
+// Shows a single manifest - it has two states, 'script', which
+// shows the manufest script, and 'output', which shows the
+// resulting data. Sends a request for a consignment when 'output'
+// is clicked if none exists.
 class ManifestView extends Component {
   constructor() {
     super()

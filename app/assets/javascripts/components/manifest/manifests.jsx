@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getManifests } from '../../actions/manifest_actions'
+import { requestManifests } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import ManifestSelector from './manifest_selector'
 import debounce from 'lodash.debounce'
 
+// Main component for viewing/editing manifests
 class Manifests extends Component {
   componentDidMount() {
-    this.props.getManifests()
+    this.props.requestManifests()
   }
 
   render() {
@@ -42,5 +43,5 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-  getManifests
+  requestManifests
 })(Manifests)
