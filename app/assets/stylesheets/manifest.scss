@@ -379,3 +379,32 @@ $toggle-height: 26px;
 .underline-on-hover:hover {
   text-decoration: underline;
 }
+<<<<<<< 2c18b850cffaa5fa077008bec2d087678e040c3a
+=======
+
+.blue-on-hover:hover {
+  color: blue;
+}
+
+.list {
+  .toggle {
+    font-weight: lighter;
+    color: blue;
+  }
+
+  .fa {
+    margin-left: 5px;
+    margin-right: 3px;
+  }
+}
+
+.plot-form-container {
+  .input-container {
+    display: block;
+  }
+}
+
+.plotlyjsicon {
+  display: none;
+}
+>>>>>>> Scatter plot form
