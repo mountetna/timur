@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import ManifestElement from './manifest_element'
 import ManifestPreview from './manifest_preview'
+import Plotter from './plotter'
 import ToggleSwitch from '../toggle_switch'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
@@ -13,7 +14,10 @@ import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '
 class ManifestView extends Component {
   constructor() {
     super()
-    this.state = { view_mode: 'script' }
+    this.state = {
+      view_mode: 'script',
+      plot: false
+    }
   }
 
   render() {
@@ -45,24 +49,31 @@ class ManifestView extends Component {
       <div className='manifest'>
         <div className='manifest-elements'>
           <div className='actions'>
-            { is_editable &&
-              <button onClick={toggleEdit}>
+            {is_editable &&
+              <button onClick={handleEdit}>
                 <i className='fa fa-pencil-square-o' aria-hidden="true"></i>
                 edit
+              </button>
+            }
+            {this.state.view_mode === 'output' &&
+              <button onClick={() => this.setState({plot: !this.state.plot})}>
+                <i className='fa fa-line-chart' aria-hidden="true"></i>
+                plot
               </button>
             }
             <button onClick={() => copyManifest(manifest)}>
               <i className='fa fa-files-o' aria-hidden="true"></i>
               copy
             </button>
-            { is_editable &&
-                <button onClick={ () => deleteManifest(manifest.id)}>
-              <i className='fa fa-trash-o' aria-hidden="true"></i>
-              delete
-            </button>
+            {is_editable &&
+              <button onClick={() => deleteManifest(manifest.id)}>
+                <i className='fa fa-trash-o' aria-hidden="true"></i>
+                delete
+              </button>
             }
           </div>
           <ManifestPreview {...manifest} />
+          {this.state.plot && <Plotter data={manifest.result} />}
           <ToggleSwitch 
             id="view_mode_switch"
             caption="Show"
