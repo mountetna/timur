@@ -45,7 +45,7 @@ export const requestView = (model_name, record_name, tab_name, success, error) =
 
         for (var tab_name in response.tabs)
           dispatch(
-            timurActions.addTab(
+            addTab(
               model_name, 
               tab_name, 
               response.tabs[tab_name]
