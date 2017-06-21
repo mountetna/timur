@@ -50,7 +50,7 @@ class ManifestView extends Component {
         <div className='manifest-elements'>
           <div className='actions'>
             {is_editable &&
-              <button onClick={handleEdit}>
+              <button onClick={toggleEdit}>
                 <i className='fa fa-pencil-square-o' aria-hidden="true"></i>
                 edit
               </button>
