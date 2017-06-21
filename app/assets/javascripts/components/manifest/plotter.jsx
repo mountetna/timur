@@ -230,6 +230,7 @@ class SeriesForm extends Component {
             </select>
           </label>
         </div>
+        <input type='button' value='Add Series' />
       </fieldset>
     )
   }

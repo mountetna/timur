@@ -73,7 +73,7 @@ class ManifestView extends Component {
             }
           </div>
           <ManifestPreview {...manifest} />
-          {this.state.plot && <Plotter data={manifest.result} />}
+          {this.state.plot && <Plotter data={consignment} />}
           <ToggleSwitch 
             id="view_mode_switch"
             caption="Show"
