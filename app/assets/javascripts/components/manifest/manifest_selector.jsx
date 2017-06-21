@@ -1,15 +1,13 @@
 import { Component } from 'react'
 import { toggleEdit, selectManifest, submitManifest } from '../../actions/manifest_actions'
 
+// Selection item for a single manifest
 const ManifestSelection = (selectManifest, submitManifest) => (manifest) => {
   return <li key={manifest.id}>
     <div className='manifest-selection'>
       <a href='#' 
         onClick={
-          () => {
-            selectManifest(manifest.id) 
-            if (!manifest.result) submitManifest(manifest)
-          }
+          () => selectManifest(manifest.id) 
         }
         title={ manifest.description }>
         <span className='name'>{manifest.name}</span>
@@ -18,6 +16,7 @@ const ManifestSelection = (selectManifest, submitManifest) => (manifest) => {
   </li>
 }
 
+// Collection of selection items for all manifests
 class ManifestSelector extends Component {
   render() {
     let { public_manifests, private_manifests } = this.props

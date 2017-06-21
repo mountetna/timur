@@ -1,6 +1,4 @@
-
-var Vector = function(list_items) {
-  
+const Vector = function(list_items) {
   var vector = function(idx) {
     if (Number.isInteger(idx)) return list_items[idx].value
 
@@ -29,7 +27,17 @@ var Vector = function(list_items) {
 
   vector.size = list_items.length
 
+  Object.setPrototypeOf(vector, Vector.prototype)
+
   return vector
 }
 
-module.exports = Vector
+Object.defineProperty(
+  Vector.prototype, 'length', {
+    get: function() {
+       return this.size
+    }
+  }
+)
+
+export default Vector

@@ -85,6 +85,29 @@ $secondary-color: teal;
       cursor: pointer;
     }
   }
+
+  .result {
+    font-weight: bolder;
+    .toggle {
+      margin-left: 3px;
+      font-weight: lighter;
+      cursor: pointer;
+      color: blue;
+    }
+    .fa-list {
+      color: goldenrod;
+    }
+    .fa-table {
+      color: salmon;
+    }
+    .fa-download {
+      color: blue;
+      cursor: pointer;
+      &:hover {
+        color: dodgerblue;
+      }
+    }
+  }
   .fa {
     margin-right: 3px;
   }
@@ -355,20 +378,4 @@ $toggle-height: 26px;
 
 .underline-on-hover:hover {
   text-decoration: underline;
-}
-
-.blue-on-hover:hover {
-  color: blue;
-}
-
-.list {
-  .toggle {
-    font-weight: lighter;
-    color: blue;
-  }
-
-  .fa {
-    margin-left: 5px;
-    margin-right: 3px;
-  }
 }

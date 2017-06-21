@@ -15,10 +15,10 @@ class VectorResult extends Component {
   }
 
   tableRows() {
-    return this.props.dataList.map((data, index) =>
+    return this.props.vector.map((label, value, index) =>
       <tr key={index}>
-        <td>{data.label}</td>
-        <td>{data.value}</td>
+        <td>{label}</td>
+        <td>{value}</td>
       </tr>
     )
   }
@@ -26,11 +26,11 @@ class VectorResult extends Component {
   render() {
     return (
       <div className='vector'>
-        <span className='label'>{this.props.name}</span><i className="fa fa-list" aria-hidden="true"></i> -
-        <i className="fa fa-download blue-on-hover" aria-hidden="true" onClick={() => downloadTSV(this.props.dataList, ['label', 'value'], this.props.name)}></i>
-        {this.props.dataList.length + ' items'}
+        <i className="fa fa-list" aria-hidden="true"></i>
+        <i className="fa fa-download" aria-hidden="true" onClick={() => downloadTSV(this.props.vector.map((label,value) => ({ label, value })), ['label', 'value'], this.props.name)}></i>
+        {this.props.vector.size + ' items'}
         <span  className='underline-on-hover toggle' onClick={this.toggle.bind(this)}>
-          {this.state.hidden ? ' show' : ' hide' }
+          {this.state.hidden ? 'show' : 'hide' }
         </span>
         <div style={{ display : this.display() }}>
           <table>

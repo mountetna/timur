@@ -141,7 +141,6 @@ class LayoutNode {
     }
 
     let unplaced = this.unplacedLinks()
-    //console.log(`${this.model_name} -> [${ unplaced.map(l=>l.other.model_name).join(", ")}]`)
 
     for (var [ i, link ] of unplaced.entries()) {
       link.other.place(this.model_name, depth + 1, this.subtend(i,unplaced.length))

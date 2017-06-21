@@ -22,7 +22,6 @@
 #= require react-classnames
 
 #= require libs
-#= require matrix
 #= require tree
 #= require reducers
 #= require actions

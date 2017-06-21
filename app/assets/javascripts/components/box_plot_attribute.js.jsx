@@ -1,4 +1,5 @@
 import { autoColors } from '../utils/colors'
+import { selectConsignment } from '../selectors/consignment'
 
 var BoxPlotAttribute = React.createClass({
   render: function() {
@@ -31,13 +32,13 @@ var BoxPlotAttribute = React.createClass({
 
 BoxPlotAttribute = connect(
   function(state,props) {
-    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
+    var consignment = selectConsignment(state,props.attribute.plot.name)
 
     var groups = []
 
-    if (manifest) {
-      var height = manifest.height
-      var category = manifest.category
+    if (consignment) {
+      var height = consignment.height
+      var category = consignment.category
 
       var group_names = [ ...new Set(category.values) ]
         

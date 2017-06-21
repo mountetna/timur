@@ -1,158 +1,113 @@
-window.Matrix = function() {
-  var self = this
-  var rows, rownames, colnames, coltypes
-
-  if (arguments.length == 3) {
-    rows = arguments[0]
-    rownames = arguments[1]
-    colnames = arguments[2]
-  } else {
-    rows = arguments[0].rows
-    rownames = arguments[0].row_names
-    colnames = arguments[0].col_names
-    coltypes = arguments[0].col_types
-  }
-
-  this.num_rows = rows.length;
-  this.num_cols = rows[0].length;
-
-  if (colnames && colnames.length != this.num_cols) {
-    throw "colnames size is different from num_cols";
-  }
-  if (rownames && rownames.length != this.num_rows) {
-    throw "rownames size is different from num_rows";
-  }
-
-  this._matrix = rows;
-  
-  this.row = function(i) {
-    // array for row i in rows
-      return rows[i];
-  }
-  this.row_index = function(name) {
-    if (rownames) return rownames.indexOf(name)
-  }
-  this.row_name = function(i) {
-    // if rownames is empty, R1, R2, etc.
-      if (rownames){
-          return rownames[i];
-      }
-      else{
-          return "R" + i;
-      }
-  }
-  this.col = function(j) {
-    // this iterates over rows and returns an array of the jth elements
-      return rows.map(function(row){ return row[j]; })
-  }
-  this.col_index = function(name) {
-    if (colnames) return colnames.indexOf(name)
-  }
-  this.col_type = function(j) {
-    if (coltypes) return coltypes[j]
-  }
-  this.col_name = function(j) {
-   // ibid
-      if (colnames){
-          return colnames[j];
-      }
-      else {
-          return "C" + j;
-      }
-  }
-  this.map_row = function(callback) {
-    var self = this;
-    return rows.map(function (_, c) {
-      return callback(self.row(c), c, self.row_name(c));
-    });
-  }
-  this.row_filter = function(callback) {
-    // new matrix of rows that return 'true' when callback is called
-    // the callback function receives: row (array), i (integer), name (string)
-    var new_rows = [];
-    var new_names = [];
-    var self = this;
-    rows.forEach(function(row,i) {
-      var name = self.row_name(i);
-      if (callback(row,i,name)){
-          new_rows.push(row); 
-          new_names.push(name);
-      }        
-    });
-    return new Matrix(new_rows,new_names,colnames);
-  }
-  this.row_sort = function(callback) {
-    // return a new matrix with rows sorted by comparison criterion
-    var row_sorter = rows.map(function(row,i) {
-      return {
-        index: i,
-        row: row
-      }
-    }).sort(function(a, b) {
-      var a_name = rownames[a.index]
-      var b_name = rownames[b.index]
-
-      return callback(a.row, a_name, b.row, b_name)
-    })
-
-    var new_rows = row_sorter.map(function(sorter) {
-      return rows[sorter.index]
-    })
-    var new_names = row_sorter.map(function(sorter) {
-      return rownames[sorter.index]
-    })
-    return new Matrix(new_rows,new_names,colnames);
-  }
-  this.map_col = function(callback) {
-    var self = this;
-    return rows[0].map(function (_, c) {
-      return callback(self.col(c), c, self.col_name(c));
-    });
-  }
-  this.col_filter = function(callback) {
-    // new matrix of all columns that return 'true' when callback is called
-    // callback receives: col (array), i (integer), name (string)
-    var selected_cols = [];
-    var new_colnames = [];
-    
-    for (var j = 0; j < this.num_cols; j++) {
-      var col = self.col(j);
-      if (callback(col, j, self.col_name(j))) {
-          selected_cols.push(col);
-          new_colnames.push(self.col_name(j))
-      }
+class Matrix {
+  constructor() {
+    if (arguments.length == 3) {
+      this.rows = arguments[0]
+      this.row_names = arguments[1]
+      this.col_names = arguments[2]
+    } else {
+      this.rows = arguments[0].rows
+      this.row_names = arguments[0].row_names
+      this.col_names = arguments[0].col_names
     }
-    // make a new matrix using selected_cols
-    var col_matrix = new Matrix(selected_cols,new_colnames,rownames);
-    return col_matrix.transpose();
+
+    this.num_rows = this.rows.length
+    this.num_cols = this.rows[0].length
+
+    if (this.col_names) {
+      if (this.col_names.length != this.num_cols) throw "col_names size is different from num_cols"
+    } else {
+      this.col_names = this.rows[0].map((_,i)=>`C${i}`)
+    }
+    if (this.row_names) {
+      if (this.row_names.length != this.num_rows) throw "row_names size is different from num_rows"
+    } else {
+      this.row_names = this.rows.map((_,i)=>`R${i}`)
+    }
   }
-  this.col_sort = function(callback) {
-    // return a new matrix with rows sorted by comparison criterion
-    var col_sorter = rows[0].map(function(_,i) {
-      return {
-        index: i,
-        col: self.col(i)
+  
+  row(i) {
+      return this.rows[i]
+  }
+
+  col(j) {
+    return this.rows.map((row) => row[j])
+  }
+
+  index(dim,name) {
+    if (dim == 'row' && this.row_names) return this.row_names.indexOf(name)
+    if (dim == 'col' && this.col_names) return this.col_names.indexOf(name)
+  }
+
+  map(dim,callback) {
+    if (dim == 'row') {
+      return this.rows.map(
+        (_, i) => callback(this.row(i), i, this.row_names[i])
+      )
+    }
+    if (dim == 'col') {
+      return this.rows[0].map(
+        (_, j) => callback(this.col(j), j, this.col_names[j])
+      )
+    }
+  }
+  filter(dim, callback) {
+    if (dim == 'row') {
+      var new_rows = []
+      var new_names = []
+      this.rows.forEach((row,i) => {
+        if (callback(row,i,this.row_names[i])) {
+            new_rows.push(row)
+            new_names.push(this.row_names[i])
+        }        
+      })
+      return new Matrix(new_rows,new_names,this.col_names)
+    }
+    if (dim == 'col') {
+      var selected_cols = []
+      var new_colnames = []
+      
+      for (var j = 0; j < this.num_cols; j++) {
+        var col = this.col(j)
+        if (callback(col, j, this.col_names[j])) {
+            selected_cols.push(col)
+            new_colnames.push(this.col_names[j])
+        }
       }
-    }).sort(function(a, b) {
-      var a_name = colnames[a.index]
-      var b_name = colnames[b.index]
-
-      return callback(a.col, a_name, b.col, b_name)
-    })
-
-    var new_cols = col_sorter.map(function(sorter) {
-      return sorter.col
-    })
-    var new_names = col_sorter.map(function(sorter) {
-      return colnames[sorter.index]
-    })
-    var col_matrix = new Matrix(new_cols,new_names,rownames);
-    return col_matrix.transpose();
+      // make a new matrix using selected_cols
+      var col_matrix = new Matrix(selected_cols,new_colnames,this.row_names)
+      return col_matrix.transpose()
+    }
   }
-  this.transpose = function() {
+
+  sort(dim,callback) {
+    // return a new matrix with rows sorted by comparison criterion
+    if (dim == 'row') {
+      var row_sorter = this.rows.map((row,index) => ({ row, index }))
+        .sort((a, b) => callback(a.row, this.row_names[a.index], b.row, this.row_names[b.index]))
+
+      var new_rows = row_sorter.map((sorter) => this.rows[sorter.index])
+      var new_names = row_sorter.map((sorter) => this.row_names[sorter.index])
+      return new Matrix(new_rows,new_names,this.col_names)
+    }
+    if (dim == 'col') {
+      var col_sorter = this.rows[0].map((_,index) => ({ index, col: this.col(i) }))
+        .sort((a, b) => callback(a.col, this.col_names[a.index] , b.col, this.col_names[b.index]))
+
+      var new_cols = col_sorter.map((sorter) => sorter.col)
+      var new_names = col_sorter.map((sorter) => this.col_names[sorter.index])
+      var col_matrix = new Matrix(new_cols,new_names,this.row_names);
+      return col_matrix.transpose()
+    }
+  }
+
+  transpose() {
     return new Matrix(
-      rows[0].map(function (_, c) { return rows.map(function (r) { return r[c]; }); }),
-      colnames, rownames
-    );
+      this.rows[0].map(
+        (_, c) => this.rows.map((r) => r[c] ) 
+      ),
+      this.col_names, this.row_names
+    )
   }
 }
+
+export default Matrix

@@ -1,5 +1,6 @@
 import React from 'react'
 import StackedBarPlot from './plots/stacked_bar_plot'
+import { selectConsignment } from '../selectors/consignment'
 
 let StackedBarPlotAttribute = ({
   data,
@@ -37,7 +38,7 @@ let StackedBarPlotAttribute = ({
 StackedBarPlotAttribute = connect(
   (state, props) => {
     const { name, order_by } = props.attribute.plot
-    const consignment = timurActions.findManifest(state, name)
+    const consignment = selectConsignment(state, name)
     if (consignment) {
       const allValues = consignment.data.map((label, value,) => {
         return value.map((valueLabel, value) => {

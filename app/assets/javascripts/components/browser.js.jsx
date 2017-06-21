@@ -8,13 +8,13 @@
 
 import Magma from 'magma'
 import BrowserTab from './browser_tab'
-import Tab from '../readers/tab'
+import Tab from '../models/tab'
 import { discardRevision, sendRevisions } from '../actions/magma_actions'
+import { requestView } from '../actions/timur_actions'
 
 var Browser = React.createClass({
   componentDidMount: function() {
-    var self = this
-    this.props.request(null, function() { self.setState({mode: 'browse'}) })
+    this.props.requestView(this.props.model_name, this.props.record_name, null, () => this.setState({mode: 'browse'}) )
   },
   getInitialState: function() {
     return { mode: 'loading', current_tab_name: null }
@@ -25,23 +25,25 @@ var Browser = React.createClass({
     }).replace(/\s+/g, '')
   },
   header_handler: function(action) {
-    var self = this
     switch(action) {
       case 'cancel':
         this.setState({mode: 'browse'})
-        this.props.discardRevision()
+        this.props.discardRevision(this.props.record_name, this.props.model_name)
         return
       case 'approve':
         if (this.props.hasRevisions) {
           this.setState({mode: 'submit'})
-          this.props.submitRevision(
-            this.props.revision, 
-            () => self.setState({mode: 'browse'}),
-            () => self.setState({mode: 'edit'})
+          this.props.sendRevisions(
+            this.props.model_name,
+            {
+              [this.props.record_name] : this.props.revision
+            },
+            () => this.setState({mode: 'browse'}),
+            () => this.setState({mode: 'edit'})
           )
         } else {
           this.setState({mode: 'browse'})
-          this.props.discardRevision()
+          this.props.discardRevision(this.props.record_name, this.props.model_name)
         }
         return
       case 'edit':
@@ -50,8 +52,6 @@ var Browser = React.createClass({
     }
   },
   render: function() {
-    var self = this
-
     var view = this.props.view
 
     if (!view || !this.props.template || !this.props.document)
@@ -77,9 +77,9 @@ var Browser = React.createClass({
 
       <TabBar mode={this.state.mode} revision={ this.props.revision } current_tab_name={ current_tab_name } view={ view }
         clickTab={
-          function(tab_name) {
-            self.setState({current_tab_name: tab_name})
-            if (!view[tab_name]) self.props.request(tab_name)
+          (tab_name) => {
+            this.setState({current_tab_name: tab_name})
+            if (!view[tab_name]) this.props.requestView(this.props.model_name, this.props.record_name, tab_name)
           }
         }
       />
@@ -113,52 +113,18 @@ Browser = connect(
     var view = (state.timur.views ? state.timur.views[props.model_name] : null)
 
     return {
-      ...props,
       template,
       document,
       revision,
       view,
-      record_name: template && document ? document[ template.identifier ] : null,
       hasRevisions: (Object.keys(revision).length > 0),
     }
   },
-  function (dispatch,props) {
-    return {
-      request: function(tab_name,success,error) {
-        dispatch(timurActions.requestView(
-          props.model_name,
-          props.record_name,
-          tab_name,
-          success,
-          error
-        ))
-      },
-      discardRevision: function() {
-        dispatch(discardRevision(
-          props.record_name,
-          props.model_name
-        ))
-      },
-      submitRevision: function(revision,success,error) {
-        dispatch(sendRevisions(
-          props.model_name,
-          {
-            [props.record_name] : revision
-          },
-          success,
-          error
-        ))
-      },
-      showMessage: function(messages) {
-        dispatch(messageActions.showMessages(
-          messages))
-      }
-    }
+  {
+    requestView, 
+    discardRevision, 
+    sendRevisions
   }
 )(Browser)
 
-Browser.contextTypes = {
-  store: React.PropTypes.object
-}
-
-module.exports = Browser;
+module.exports = Browser

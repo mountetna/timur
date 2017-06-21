@@ -6,6 +6,8 @@
 import Magma from 'magma'
 import { requestModels, sendRevisions, discardRevision, requestDocuments } from '../actions/magma_actions'
 import { requestTSV } from '../actions/timur_actions'
+import { selectConsignment } from '../selectors/consignment'
+import { requestConsignments } from '../actions/consignment_actions'
 
 var COLUMN_FORMAT = /^([\w]+)([=<>~])(.*)$/
 
@@ -441,11 +443,11 @@ var Search = React.createClass({
 Search = connect(
   function(state, props) {
     var magma = new Magma(state)
-    var manifest = timurActions.findManifest(state, 'search') || {}
+    var consignment = selectConsignment(state, 'search') || {}
     return {
-      record_names: manifest && manifest.record_names ? manifest.record_names.values : [],
+      record_names: consignment && consignment.record_names ? consignment.record_names.values : [],
       model_names: magma.model_names(),
-      model_name: manifest.model_name,
+      model_name: consignment.model_name,
 
       templateFor: (model_name) => magma.template(model_name),
       hasCompleteRecords: function(model_name, record_names) {
@@ -464,7 +466,7 @@ Search = connect(
       },
       query: function(manifest, success) {
         dispatch(
-          timurActions.requestManifests(
+          requestConsignments(
             [
               {
                 name: "search",

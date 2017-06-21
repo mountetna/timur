@@ -1,3 +1,5 @@
+import { selectConsignment } from '../selectors/consignment'
+
 var BarPlotAttribute = React.createClass({
   render: function() {
     return <div className="value">
@@ -24,12 +26,12 @@ var BarPlotAttribute = React.createClass({
 
 BarPlotAttribute = connect(
   function(state,props) {
-    var manifest = timurActions.findManifest(state,props.attribute.plot.name)
+    var consignment = selectConsignment(state,props.attribute.plot.name)
 
     var bars = []
 
-    if (manifest && manifest.bars) {
-      bars = manifest.bars.map((_, bar, i) => ({
+    if (consignment && consignment.bars) {
+      bars = consignment.bars.map((_, bar, i) => ({
           name: bar("name"),
           color: bar("color"),
           heights: bar("height"),

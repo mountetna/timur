@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getManifests, saveNewManifest, deleteManifest, toggleEdit, saveManifest, copyManifest, submitManifest, fetchManifestResults } from '../../actions/manifest_actions'
+import { requestManifests } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import ManifestSelector from './manifest_selector'
 import debounce from 'lodash.debounce'
 
+// Main component for viewing/editing manifests
 class Manifests extends Component {
   componentDidMount() {
-    this.props.getManifests()
+    this.props.requestManifests()
   }
 
   render() {
@@ -21,15 +22,8 @@ class Manifests extends Component {
           <Manifest
             isAdmin={this.props.isAdmin}
             editing={this.props.isEditing}
-            manifestId={selectedManifest}
-            saveNewManifest={this.props.saveNewManifest}
             manifest={this.props.manifest}
-            delete={() => this.props.deleteManifest(selectedManifest)}
-            edit={this.props.toggleEdit}
-            updateManifest={this.props.saveManifest}
-            copy={this.props.copyManifest}
-            submitManifest={this.props.submitManifest}
-            fetchResults={this.props.fetchManifestResults}/>
+            />
             : null
         }
         </div>
@@ -49,12 +43,5 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-  getManifests,
-  saveNewManifest,
-  deleteManifest,
-  toggleEdit,
-  saveManifest,
-  copyManifest,
-  submitManifest,
-  fetchManifestResults
+  requestManifests
 })(Manifests)

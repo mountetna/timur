@@ -1,5 +1,6 @@
 import React from 'react'
 import Histogram from './plots/histogram'
+import { selectConsignment } from '../selectors/consignment'
 
 let HistogramAttribute = ({
   data,
@@ -40,7 +41,7 @@ let HistogramAttribute = ({
 HistogramAttribute = connect(
   (state, props) => {
     const { name } = props.attribute.plot
-    const consignment = timurActions.findManifest(state, name)
+    const consignment = selectConsignment(state, name)
 
     if (consignment) {
       const { xmin, xmax, data} = consignment
