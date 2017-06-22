@@ -60,7 +60,7 @@ SwarmAttribute = connect(
         for (let j = 0; j < dataMatrix.num_cols; j++) {
           row = {
            ...row,
-           [dataMatrix.col_name(j)]: dataMatrix.row(i)[j]
+           [dataMatrix.col_names[j]]: dataMatrix.row(i)[j]
           }
         }
 
