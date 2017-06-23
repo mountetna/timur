@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import createPlotlyComponent from 'react-plotlyjs';
 import  Plotly from 'plotly.js/lib/core'
 import  InputField from './input_field'
+import { v4 } from 'node-uuid'
 
 
 Plotly.register([
@@ -12,55 +13,12 @@ const PlotlyComponent = createPlotlyComponent(Plotly);
 export default class Plotter extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      editing: false,
-      plot: {
-        data: [],
-        layout: {},
-        config: {}
-      },
-    }
   }
 
   render() {
-    console.log(this.props.data)
-    let data = [
-      {
-        type: 'scatter',
-        x: [1, 2, 3],
-        y: [6, 2, 3],
-        mode: 'markers',
-      },
-    ];
-    let layout = {
-      title: 'simple example',  // more about "layout.title": #layout-title
-      xaxis: {                  // all "layout.xaxis" attributes: #layout-xaxis
-        title: 'time',         // more about "layout.xaxis.title": #layout-xaxis-title
-        showline: true,
-        showgrid: true,
-        gridwidth: 1,
-        gridcolor: '#bdbdbd',
-      },
-      yaxis: {
-        showline: true,
-        showgrid: true,
-        gridwidth: 1,
-        gridcolor: '#bdbdbd',
-      }
-    };
-    let config = {
-      showLink: false,
-      displayModeBar: true,
-      modeBarButtonsToRemove: ['sendDataToCloud','lasso2d', 'toggleSpikelines']
-    };
     return (
       <div>
-        <div>
-          <h1>Hello World!</h1>
-          <ScatterPlotForm />
-          <PlotlyComponent className="whatever" data={data} layout={layout} config={config} />
-        </div>
+        <ScatterPlotForm data={this.props.data}/>
       </div>
     )
   }
@@ -77,12 +35,14 @@ class ScatterPlotForm extends Component {
         xaxis: {
           title: '',
           showline: true,
-          showgrid: false
+          showgrid: false,
+          gridcolor: '#bdbdbd'
         },
         yaxis: {
           title: '',
           showline: true,
-          showgrid: false
+          showgrid: false,
+          gridcolor: '#bdbdbd'
         }
       },
       config: {
@@ -94,9 +54,26 @@ class ScatterPlotForm extends Component {
   }
 
   addSeries(series) {
-    this.setState({
-      data: [...this.state.data, series]
-    })
+    if (!this.state.data.map(d => d.name).find(name => name == series.name)) {
+      const withSeriesData = {
+        ...series,
+        x: this.props.data[series.x],
+        y: this.props.data[series.y]
+      }
+
+      this.setState({
+        data: [...this.state.data, withSeriesData]
+      })
+    }
+  }
+
+  removeSeries(seriesName) {
+    const filteredData = this.state.data.filter(series => series.name != seriesName)
+    this.setState({ data: filteredData })
+  }
+
+  seriesNames() {
+    return this.state.data.map(series => series.name)
   }
 
   updateTitle(title) {
@@ -158,9 +135,14 @@ class ScatterPlotForm extends Component {
             <label htmlFor='grid'>Grid: </label>
             <input id='grid' type='checkbox' checked={layout.xaxis.showgrid && layout.yaxis.showgrid} onChange={this.toggleGrid.bind(this)} />
           </div>
-          <SeriesForm />
-          <input type='button' value='Plot' />
+          <SeriesForm
+            data={this.props.data}
+            addSeries={this.addSeries.bind(this)}
+            appliedSeries={this.seriesNames()}
+            removeSeries={this.removeSeries.bind(this)}
+          />
         </fieldset>
+        <PlotlyComponent { ...this.state } />
       </div>
     )
   }
@@ -195,10 +177,30 @@ class SeriesForm extends Component {
     this.setState({ y: evt.target.value })
   }
 
+  appliedSeries(seriesNames) {
+    return seriesNames.map(name => (
+      <li key={v4()}>
+        {name + ' '}
+        <i className='fa fa-times' aria-hidden='true'
+           onClick={() => this.props.removeSeries(name)}>
+        </i>
+      </li>
+    ))
+  }
+
+  seriesOptions(seriesMap) {
+    return Object.keys(seriesMap).map((key) => (
+      <option key={key} value={key}>{key}</option>
+    ))
+  }
+
   render() {
     return (
       <fieldset>
         <legend>Series</legend>
+        <ol>
+          {this.appliedSeries(this.props.appliedSeries)}
+        </ol>
         <InputField type='text' label='Name: ' onChange={this.updateName.bind(this)} value={this.state.name} />
         <div className='input-container'>
           <label>
@@ -214,9 +216,7 @@ class SeriesForm extends Component {
           <label>
             {'X: '}
             <select value={this.state.x} onChange={this.updateX.bind(this)}>
-              <option value='markers'>Markers</option>
-              <option value='lines'>Lines</option>
-              <option value='lines+markers'>Lines and Markers</option>
+              {this.seriesOptions(this.props.data)}
             </select>
           </label>
         </div>
@@ -224,13 +224,11 @@ class SeriesForm extends Component {
           <label>
             {'Y: '}
             <select value={this.state.y} onChange={this.updateY.bind(this)}>
-              <option value='markers'>Markers</option>
-              <option value='lines'>Lines</option>
-              <option value='lines+markers'>Lines and Markers</option>
+              {this.seriesOptions(this.props.data)}
             </select>
           </label>
         </div>
-        <input type='button' value='Add Series' />
+        <input type='button' value='Add Series' onClick={() => this.props.addSeries(this.state)} />
       </fieldset>
     )
   }
