@@ -31,6 +31,7 @@ class ScatterPlotForm extends Component {
     this.state = {
       data: [],
       layout: {
+        height: 900,
         title: '',
         xaxis: {
           title: '',
