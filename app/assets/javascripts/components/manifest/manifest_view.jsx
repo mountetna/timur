@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import ManifestElement from './manifest_element'
 import ManifestPreview from './manifest_preview'
-import Plotter from './plotter'
 import ToggleSwitch from '../toggle_switch'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
@@ -104,7 +103,6 @@ class ManifestView extends Component {
             }
           </div>
           <ManifestPreview {...manifest} />
-          {this.state.plot && consignment && <Plotter data={this.consignmentToSeriesMap(consignment)} />}
           <ToggleSwitch 
             id="view_mode_switch"
             caption="Show"

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import createPlotlyComponent from 'react-plotlyjs';
 import  Plotly from 'plotly.js/lib/core'
-import  InputField from './input_field'
+import  InputField from '../manifest/input_field'
 import { v4 } from 'node-uuid'
 
 
@@ -18,7 +18,7 @@ export default class Plotter extends Component {
   render() {
     return (
       <div>
-        <ScatterPlotForm data={this.props.data}/>
+        <ScatterPlotForm data={this.props.data || {}}/>
       </div>
     )
   }
@@ -196,7 +196,7 @@ class SeriesForm extends Component {
 
   render() {
     return (
-      <fieldset>
+      <fieldset style={{ marginBottom: 10 }}>
         <legend>Series</legend>
         <ol>
           {this.appliedSeries(this.props.appliedSeries)}

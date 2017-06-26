@@ -68,6 +68,9 @@ class TimurNav extends Component {
                <div className={'nav_tab' + (this.props.appMode == 'manifesto' ? ' selected' : '')}>
                   <a onClick={this.props.changeMode.bind(self, 'manifesto')}>Manifests</a>
                 </div>
+               <div className={'nav_tab' + (this.props.appMode == 'plot' ? ' selected' : '')}>
+                 <a onClick={this.props.changeMode.bind(self, 'plot')}>Plot</a>
+               </div>
                {
                  this.props.can_edit ?
                  <div className="nav_tab">

@@ -5,6 +5,7 @@ import 'whatwg-fetch'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
 import Manifests from './manifest/manifests'
+import Plotter from './plots/plotter'
 import { connect } from 'react-redux'
 import TimurNav from './timur_nav'
 import ModelMap from './model_map'
@@ -22,7 +23,9 @@ var Timur = React.createClass({
     var component
     if (this.props.appMode == 'manifesto') {
       component = <Manifests isAdmin={this.props.is_admin} />
-    } else if (this.props.mode == 'browse') 
+    } else if (this.props.appMode === 'plot') {
+      component = <Plotter/>
+    } else if (this.props.mode == 'browse')
       component = <Browser 
         can_edit={ this.props.can_edit }
         model_name={ this.props.model_name }
