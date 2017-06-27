@@ -1,28 +1,66 @@
 import React, { Component } from 'react'
-import createPlotlyComponent from 'react-plotlyjs';
+import createPlotlyComponent from 'react-plotlyjs'
 import  Plotly from 'plotly.js/lib/core'
+import { connect } from 'react-redux'
 import  InputField from '../manifest/input_field'
 import { v4 } from 'node-uuid'
-
+import { manifestsList } from '../../reducers/manifests_reducer'
+import { requestManifests } from '../../actions/manifest_actions'
+import selectConsignment from '../../selectors/consignment'
 
 Plotly.register([
   require('plotly.js/lib/scatter')
 ]);
 const PlotlyComponent = createPlotlyComponent(Plotly);
 
-export default class Plotter extends Component {
+class Plotter extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      selectedManifestId: null
+    }
+  }
+
+  componentWillMount() {
+    this.props.requestManifests()
+  }
+
+  componentWillUpdate() {
+
+  }
+
+  selectManifest(evt) {
+    this.setState({ selectedManifestId: evt.target.value })
   }
 
   render() {
     return (
       <div>
+        <label>
+          {'Manifest: '}
+          <select onChange={this.selectManifest.bind(this)}>
+            <option key="empty" value={null}></option>
+            {this.props.manifests.map(({ id, name }) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </label>
         <ScatterPlotForm data={this.props.data || {}}/>
       </div>
     )
   }
 }
+
+export default connect(
+  (state, props) => ({
+      manifests: manifestsList(state.manifests).map(manifest => ({ id: manifest.id, name: manifest.name })),
+      consignment: state.selectedManifestId ? selectConsignment(state, this.selectedManifestId) : null
+  }),
+  { requestManifests }
+)(Plotter)
 
 class ScatterPlotForm extends Component {
   constructor(props) {
@@ -233,6 +271,33 @@ class SeriesForm extends Component {
       </fieldset>
     )
   }
-
-
 }
+
+// consignmentToSeriesMap(consignment) {
+//   return Object.keys(consignment).reduce((plotableSeries, elementName) => {
+//     const consignmentValue = consignment[elementName]
+//
+//     if (Array.isArray(consignmentValue)) {
+//       return {
+//         ...plotableSeries,
+//         ['@' + elementName]: consignmentValue
+//       }
+//     } else if (consignmentValue instanceof Vector) {
+//       return {
+//         ...plotableSeries,
+//         ['@' + elementName]: consignmentValue.values
+//       }
+//     } else if (consignmentValue instanceof Matrix) {
+//       const matrixColumns = consignmentValue.col_names.reduce((plotableColumns, columnName, i) => {
+//         const seriesName = '@' + elementName + '$' + columnName
+//         const series = consignmentValue.col(i)
+//         return {
+//           ...plotableColumns,
+//           [seriesName]: series
+//         }
+//       }, {})
+//
+//       return { ...plotableSeries, ...matrixColumns }
+//     }
+//   }, {})
+// }

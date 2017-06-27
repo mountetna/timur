@@ -21,35 +21,6 @@ class ManifestView extends Component {
     }
   }
 
-  consignmentToSeriesMap(consignment) {
-    return Object.keys(consignment).reduce((plotableSeries, elementName) => {
-      const consignmentValue = consignment[elementName]
-
-      if (Array.isArray(consignmentValue)) {
-        return {
-          ...plotableSeries,
-          ['@' + elementName]: consignmentValue
-        }
-      } else if (consignmentValue instanceof Vector) {
-        return {
-          ...plotableSeries,
-          ['@' + elementName]: consignmentValue.values
-        }
-      } else if (consignmentValue instanceof Matrix) {
-        const matrixColumns = consignmentValue.col_names.reduce((plotableColumns, columnName, i) => {
-          const seriesName = '@' + elementName + '$' + columnName
-          const series = consignmentValue.col(i)
-          return {
-            ...plotableColumns,
-            [seriesName]: series
-          }
-        }, {})
-
-        return { ...plotableSeries, ...matrixColumns }
-      }
-    }, {})
-  }
-
   render() {
     const { manifest, consignment, deleteManifest, toggleEdit, copyManifest } = this.props
     const { is_editable, name } = manifest
