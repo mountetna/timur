@@ -1,8 +1,8 @@
 import { Component } from 'react'
-import { toggleEdit, selectManifest, submitManifest } from '../../actions/manifest_actions'
+import { toggleEdit, selectManifest} from '../../actions/manifest_actions'
 
 // Selection item for a single manifest
-const ManifestSelection = (selectManifest, submitManifest) => (manifest) => {
+const ManifestSelection = (selectManifest) => (manifest) => {
   return <li key={manifest.id}>
     <div className='manifest-selection'>
       <a href='#' 
@@ -29,13 +29,13 @@ class ManifestSelector extends Component {
       <span className="title">Public</span>
       <ol>
         {
-          public_manifests.map(ManifestSelection(this.props.selectManifest, this.props.submitManifest))
+          public_manifests.map(ManifestSelection(this.props.selectManifest))
         }
       </ol>
       <span className="title">Private</span>
       <ol>
         {
-          private_manifests.map(ManifestSelection(this.props.selectManifest, this.props.submitManifest))
+          private_manifests.map(ManifestSelection(this.props.selectManifest))
         }
       </ol>
       </div>
@@ -50,5 +50,5 @@ export default connect(
       private_manifests: Object.values(props.manifests).filter((m) => m.access == 'private').sort((a,b) => a > b),
     }
   },
-  { toggleEdit, selectManifest, submitManifest }
+  { toggleEdit, selectManifest }
 )(ManifestSelector)
