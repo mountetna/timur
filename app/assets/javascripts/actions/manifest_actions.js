@@ -87,7 +87,6 @@ export const saveManifest = (manifest) =>
       .then( ({ manifest }) => {
         dispatch(editManifest(manifest))
         dispatch(toggleEdit())
-        dispatch(submitManifest(manifest))
       })
       .catch(e =>  showErrors(e, dispatch))
   }
@@ -98,7 +97,6 @@ export const copyManifest = (manifest) =>
       .then(({manifest}) => {
         dispatch(addManifest(manifest))
         dispatch(selectManifest(manifest.id))
-        dispatch(submitManifest(manifest))
         dispatch(toggleEdit())
       })
       .catch(e =>  showErrors(e, dispatch))
