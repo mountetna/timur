@@ -15,5 +15,6 @@ const manifests = (state = {}, action) => {
 }
 
 export const manifestsList = (manifests) => Object.keys(manifests).map(id => manifests[id])
+export const manifestById = (manifests, id) => manifests[id]
 
 export default manifests

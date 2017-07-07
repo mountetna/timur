@@ -4,9 +4,11 @@ import  Plotly from 'plotly.js/lib/core'
 import { connect } from 'react-redux'
 import  InputField from '../manifest/input_field'
 import { v4 } from 'node-uuid'
-import { manifestsList } from '../../reducers/manifests_reducer'
-import { requestManifests } from '../../actions/manifest_actions'
-import selectConsignment from '../../selectors/consignment'
+import ManifestSelector from '../manifest/manifest_selector'
+import { requestConsignments } from '../../actions/consignment_actions'
+import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions'
+import { selectConsignment } from '../../selectors/consignment'
+import Vector from '../../vector'
 
 Plotly.register([
   require('plotly.js/lib/scatter')
@@ -14,52 +16,68 @@ Plotly.register([
 const PlotlyComponent = createPlotlyComponent(Plotly);
 
 class Plotter extends Component {
-  constructor(props) {
-    super(props)
 
-    this.state = {
-      selectedManifestId: null
+  componentWillMount() {
+    const { manifests, selectedManifest, requestManifests, consignment } =  this.props
+    const isEmptyManifestMap = !Object.keys(manifests)[0]
+
+    if (isEmptyManifestMap) {
+      requestManifests()
+    }
+
+    if (!consignment && selectedManifest && manifests[selectedManifest]) {
+      const manifest = manifests[selectedManifest]
+      const reqPayload = manifestToReqPayload(manifest)
+      requestConsignments([reqPayload])
     }
   }
 
-  componentWillMount() {
-    this.props.requestManifests()
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedManifest && !nextProps.consignment) {
+      if (this.props.manifests[nextProps.selectedManifest]) {
+        const manifest = this.props.manifests[nextProps.selectedManifest]
+        const reqPayload = manifestToReqPayload(manifest)
+        this.props.requestConsignments([reqPayload])
+      }
+    }
   }
 
-  componentWillUpdate() {
-
-  }
-
-  selectManifest(evt) {
-    this.setState({ selectedManifestId: evt.target.value })
+  plotableData(consignment) {
+    return Object.keys(consignment).reduce( (acc, key) => {
+      if (consignment[key] instanceof Vector) {
+        return { ...acc, [key]: consignment[key] }
+      }
+      return acc
+    },{})
   }
 
   render() {
     return (
       <div>
-        <label>
-          {'Manifest: '}
-          <select onChange={this.selectManifest.bind(this)}>
-            <option key="empty" value={null}></option>
-            {this.props.manifests.map(({ id, name }) => (
-              <option key={id} value={id}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <ScatterPlotForm data={this.props.data || {}}/>
+        <ManifestSelector manifests={this.props.manifests} />
+        <ScatterPlotForm data={this.props.consignment ? this.plotableData(this.props.consignment) : {}} />
       </div>
     )
   }
 }
 
+const mapStateToProps = (state) => {
+  const { manifests, plot: { selectedManifest } } = state
+  let consignment = null
+  if (manifests[selectedManifest]) {
+    consignment = selectConsignment(state, manifests[selectedManifest].name)
+  }
+
+  return {
+    manifests,
+    consignment,
+    selectedManifest
+  }
+}
+
 export default connect(
-  (state, props) => ({
-      manifests: manifestsList(state.manifests).map(manifest => ({ id: manifest.id, name: manifest.name })),
-      consignment: state.selectedManifestId ? selectConsignment(state, this.selectedManifestId) : null
-  }),
-  { requestManifests }
+  mapStateToProps,
+  { requestManifests, requestConsignments }
 )(Plotter)
 
 class ScatterPlotForm extends Component {
@@ -96,8 +114,8 @@ class ScatterPlotForm extends Component {
     if (!this.state.data.map(d => d.name).find(name => name == series.name)) {
       const withSeriesData = {
         ...series,
-        x: this.props.data[series.x],
-        y: this.props.data[series.y]
+        x: this.props.data[series.x].values,
+        y: this.props.data[series.y].values
       }
 
       this.setState({
@@ -199,6 +217,15 @@ class SeriesForm extends Component {
       name: ''
     }
   }
+
+  //update when switching manifests
+  // componentWillReceiveProps(nextProps) {
+  //   const firstKey = Object.keys(nextProps.data
+  //   if (nextProps.data) {
+  //
+  //     this.setState({ x: nextProps.data})
+  //   }
+  // }
 
   updateMode(evt) {
     this.setState({ mode: evt.target.value })
