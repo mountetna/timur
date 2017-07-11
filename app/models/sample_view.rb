@@ -207,7 +207,30 @@ class SampleView < TimurView
                   highlight_names: @fingerprint$patient_name,
                   category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
                 ],
-
+                [ name: 'CD8a-,CD4+ / CD3+',
+                  color: 'magenta',
+                  height: @fingerprint$nktb_cd4_count / @fingerprint$nktb_cd3_count,
+                  highlight_names: @fingerprint$patient_name,
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                ],
+                [ name: 'CD8a+,CD4+ / CD3+',
+                  color: 'magenta',
+                  height: '@fingerprint$nktb_cd8_count / @fingerprint$nktb_cd3_count',
+                  highlight_names: @fingerprint$patient_name,
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                ],
+                [ name: 'CD8a+,CD4- / CD3+',
+                  color: 'magenta',
+                  height: @fingerprint$nktb_dn_count / @fingerprint$nktb_cd3_count,
+                  highlight_names: @fingerprint$patient_name,
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                ],
+                [ name: 'CD8a-,CD4- / CD3+',
+                  color: 'magenta',
+                  height: @fingerprint$nktb_dp_count / @fingerprint$nktb_cd3_count,
+                  highlight_names: @fingerprint$patient_name,
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                ],
                 [ name: 'T-regs/CD3+ (treg)',
                   color: 'chocolate',
                   height: @fingerprint$treg_treg_count / @fingerprint$treg_cd3_count,
