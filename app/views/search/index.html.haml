@@ -8,9 +8,10 @@
         React.createElement(Timur, {
           #{current_user ? "user: '#{current_user.name}', " : '' }
           mode: 'search',
-          can_edit: #{ current_user && current_user.can_edit? ? :true : :false },
+          project_name: '#{@project_name}',
           environment: '#{Rails.env.development? ? 'development' : 'production'}',
-          is_admin: #{ current_user && current_user.is_admin? ? :true : :false }
+          can_edit: #{ current_user && current_user.can_edit?(@project_name) ? :true : :false },
+          is_admin: #{ current_user && current_user.is_admin?(@project_name) ? :true : :false }
         }),
         $('#root')[0]
       );
