@@ -1,5 +1,7 @@
 class TableQuery
-  def initialize(row_query, column_queries, opts)
+  def initialize(token, project_name, row_query, column_queries, opts)
+    @token = token
+    @project_name = project_name
     @row_query = row_query.to_values
     @column_queries = Hash[
       column_queries.map do |column_name, column_query|
@@ -7,18 +9,19 @@ class TableQuery
           column_name,
             [
               @row_query.first, 
-              [ "::identifier", "::in", row_names ],
-              "::all"
+              [ '::identifier', '::in', row_names ],
+              '::all'
             ] + column_query.to_values
         ]
       end
     ]
+
     @columns = {}
     @types = {}
-    @order = opts["order"]
+    @order = opts['order']
   end
 
-  def table
+  def table()
     DataTable.new(ordered(row_names), col_names, ordered(rows), col_types)
   end
 
@@ -40,11 +43,11 @@ class TableQuery
   end
 
   def row_names
-    @row_names ||= answer(row_question)["answer"].map(&:last)
+    @row_names ||= answer(row_question)['answer'].map(&:last)
   end
 
   def row_question
-    @row_question ||= @row_query + [ "::all", "::identifier" ]
+    @row_question ||= @row_query + [ '::all', '::identifier']
   end
 
   def rows
@@ -65,21 +68,18 @@ class TableQuery
     col_names.map do |name| @types[name] end
   end
 
-  def column name
+  def column(name)
     return @columns[name] if @columns[name]
-
     return nil unless @column_queries[name]
-   
-    query_answer = answer(@column_queries[name])
-    @types[name] = query_answer["type"]
 
-    @columns[name] = Hash[query_answer["answer"] || []]
+    query_answer = answer(@column_queries[name])
+    @types[name] = query_answer['type']
+
+    @columns[name] = Hash[query_answer['answer'] || []]
   end
 
-  def answer question
-    status, payload = client.query(
-      question
-    )
+  def answer(question)
+    status, payload = client.query(@token, @project_name, question)
     return JSON.parse(payload)
   end
 

@@ -1,52 +1,46 @@
-def recursive_parse result, &block
-  case result
-  when Array
-    block.call(result.map{ |item| recursive_parse(item, &block)})
-  when Hash
-    block.call(Hash[result.map{ |key,item| [ key, recursive_parse(item, &block)] }])
-  else
-    block.call(result)
-  end
-end
-
-module Functions
-
-  def self.call function, args
-    if Functions.respond_to? function
-      Functions.send function.to_sym, *args
-    end
+class TimurFunction
+  def initialize(token, project_name, function_name, args)
+    @token = token
+    @project_name = project_name
+    @function_name = function_name
+    @args = args
   end
 
-  def self.question(query)
-    status, payload = Magma::Client.instance.query(
-      query.to_values
-    )
+  # Check to see if the input 'function_name' is valid and then execute it.
+  def call
+    self.send(@function_name.to_sym, *@args) if self.respond_to?(@function_name)
+  end
+
+  def question(query)
+    status, payload = Magma::Client.instance.query(@token, @project_name, query.to_values)
     query_answer = JSON.parse(payload)
-    recursive_parse(query_answer["answer"]) do |item|
+
+    # Loop the data and set the data types returned from Magma.
+    recursive_parse(query_answer['answer']) do |item|
       case item
       when /^(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
         DateTime.parse(item)
       when Array
-        item.all?{|v| v.is_a?(Array) && v.length == 2} ? Vector.new(item) : item
+        item.all?{|v| v.is_a?(Array) && v.length == 2}?Vector.new(item) : item
       else
         item
       end
     end
   end
 
-  def self.table row_query, column_queries, opts=Vector.new([])
-    TableQuery.new(row_query,column_queries, opts).table
+  def table(row_query, column_queries, opts=Vector.new([]))
+    TableQuery.new(@token, @project_name, row_query, column_queries, opts).table
   end
 
-  def self.length(vector)
+  def length(vector)
     vector.length
   end
 
-  def self.max(vector)
+  def max(vector)
     vector.max
   end
 
-  def self.log(vector, base)
+  def log(vector, base)
     Vector.new(vector.map{|k,v| [ k, Math.log(v, base) ]})
   end
 
@@ -80,7 +74,8 @@ module Functions
     #     [0, 0, 0]
     #   ]
   ##
-  def self.spread(data_table)
+
+  def spread(data_table)
     # group rows by value in the first column
     rows_by_first_column_val = data_table.rows.group_by{ |r| r.to_values[0] }
 
@@ -94,30 +89,35 @@ module Functions
       Vector.new(row)
     }
 
-    DataTable.new(
-        rows_by_first_column_val.keys,
-        new_columns,
-        new_rows,
-        []
-    )
+    DataTable.new(rows_by_first_column_val.keys, new_columns, new_rows, [])
   end
 
-  def self.diff_exp(data_table, p_value, group_one, group_two)
+  def diff_exp(data_table, p_value, group_one, group_two)
     input = data_table.to_matrix
-    input["key"] = ""
-    input["name"] = ""
+    input['key'] = ''
+    input['name'] = ''
 
     labels =  group_one.to_values.map{ |l| {label: l, value: 1} } + group_two.to_values.map{ |l| {label: l, value: 2} }
-    response = Pythia.instance.get([input],
-                {
-                    method: "DE",
-                    p_value: p_value,
-                    labels: labels
-                })
-    if response["error"]
+    params = {method: 'DE', p_value: p_value, labels: labels}
+    response = Pythia.instance.get([input], params)
+
+    if response['error']
       response
     else
-      DataTable.from_matrix(response["method_params"]["series"][0]["matrix"])
+      DataTable.from_matrix(response['method_params']['series'][0]['matrix'])
+    end
+  end
+
+  private 
+
+  def recursive_parse(result, &block)
+    case result
+    when Array
+      block.call(result.map{ |item| recursive_parse(item, &block) })
+    when Hash
+      block.call(Hash[result.map{ |key,item| [ key, recursive_parse(item, &block)] }])
+    else
+      block.call(result)
     end
   end
 end
