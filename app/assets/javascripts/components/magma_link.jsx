@@ -1,11 +1,24 @@
 var MagmaLink = React.createClass({
-  render: function() {
-    var link = this.props.link
-    return <a className="link" href={ 
-               Routes.browse_model_path( this.props.model,
-                 encodeURIComponent(link))
-             }> { link } </a>
-  }
-})
+  render: function(){
 
-module.exports = MagmaLink
+    var route_args = [
+      'Ipi',
+      this.props.model,
+      encodeURIComponent(this.props.link)
+    ];
+
+    var link_props = {
+      'className': 'link',
+      'href': Routes.browse_model_path(...route_args)
+    };
+
+    return(
+      <a {...link_props}>
+
+        {this.props.link}
+      </a>
+    );
+  }
+});
+
+module.exports = MagmaLink;
