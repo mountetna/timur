@@ -178,13 +178,6 @@ class SampleView < TimurView
                   highlight_names: @fingerprint$patient_name,
                   category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
                 ],
-                [ name: 'Neutrophils/CD45+ (dc)',
-                  color: 'magenta',
-                  height: @fingerprint$dc_neutrophil_count / @fingerprint$dc_cd45_count,
-                  select: @fingerprint$row_name == @record_name,
-                  highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
-                ],
                 [ name: 'Eosinophils/CD45+ (dc)',
                   color: 'coral',
                   height: @fingerprint$dc_eosinophil_count / @fingerprint$dc_cd45_count,
