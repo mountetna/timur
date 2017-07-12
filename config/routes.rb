@@ -4,12 +4,12 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
 
-  get 'static/:path' => 'welcome#static', as: :static
-  get 'login' => 'welcome#login', as: :login
-  get 'noauth' => 'welcome#noauth', as: :noauth
-
-  match 'auth/shibboleth/callback' => 'welcome#auth', via: [ :get, :post ], as: :auth
-  get 'auth/shibboleth' => 'welcome#auth', as: :auth_shib
+  get 'static/:path'=> 'welcome#static', as: :static
+  get 'login'=> 'welcome#login', as: :login
+  get 'noauth'=> 'welcome#noauth', as: :noauth
+  get 'auth'=> 'welcome#auth', as: :auth
+  get 'auth_fail'=> 'welcome#auth_failure', as: :auth_failure
+  get 'auth_err'=> 'welcome#auth_error', as: :auth_error
 
   # Routes for the main views - just browse for now
   
