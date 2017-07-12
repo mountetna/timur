@@ -1,4 +1,4 @@
-import { reviseDocument } from '../actions/magma_actions'
+import { reviseDocument } from '../../actions/magma_actions'
 
 var SelectAttribute = React.createClass({
   render: function() {

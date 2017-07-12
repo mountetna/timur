@@ -1,7 +1,6 @@
-import { reviseDocument } from '../actions/magma_actions'
-import markdown from '../markdown'
+import { reviseDocument } from '../../actions/magma_actions'
 
-var MarkdownAttribute = React.createClass({
+var TextAttribute = React.createClass({
   render: function() {
     var store = this.context.store
     var self = this
@@ -23,18 +22,13 @@ var MarkdownAttribute = React.createClass({
                 defaultValue={ this.props.revision } />
              </div>
     }
-
-    if (!this.props.value)
-      return <div className="value"/>
-
-    var content = markdown(this.props.value)
-    return <div className="value"
-        dangerouslySetInnerHTML={ { __html: content } }/>
+    return <div className="value">
+            { this.props.value }
+           </div>
   }
 })
-
-MarkdownAttribute.contextTypes = {
+TextAttribute.contextTypes = {
   store: React.PropTypes.object
 }
 
-module.exports = MarkdownAttribute
+module.exports = TextAttribute

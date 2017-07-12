@@ -1,4 +1,4 @@
-import { reviseDocument } from '../actions/magma_actions'
+import { reviseDocument } from '../../actions/magma_actions'
 
 var FloatAttribute = React.createClass({
   filter_keys: function(e) {

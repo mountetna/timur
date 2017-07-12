@@ -1,5 +1,5 @@
-import { autoColors } from '../utils/colors'
-import { selectConsignment } from '../selectors/consignment'
+import { autoColors } from '../../utils/colors'
+import { selectConsignment } from '../../selectors/consignment'
 
 var LinePlotAttribute = React.createClass({
   render: function() {

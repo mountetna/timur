@@ -1,6 +1,6 @@
 import React from 'react'
-import StackedBarPlot from './plots/stacked_bar_plot'
-import { selectConsignment } from '../selectors/consignment'
+import StackedBarPlot from '../plots/stacked_bar_plot'
+import { selectConsignment } from '../../selectors/consignment'
 
 let StackedBarPlotAttribute = ({
   data,

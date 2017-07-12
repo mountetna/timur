@@ -1,5 +1,5 @@
-import { autoColors } from '../utils/colors'
-import { selectConsignment } from '../selectors/consignment'
+import { autoColors } from '../../utils/colors'
+import { selectConsignment } from '../../selectors/consignment'
 
 var BoxPlotAttribute = React.createClass({
   render: function() {

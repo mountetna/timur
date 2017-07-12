@@ -1,4 +1,4 @@
-import { selectConsignment } from '../selectors/consignment'
+import { selectConsignment } from '../../selectors/consignment'
 
 var CategoryControl = React.createClass({
   render: function() {

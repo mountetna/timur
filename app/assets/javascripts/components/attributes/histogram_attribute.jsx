@@ -1,6 +1,6 @@
 import React from 'react'
-import Histogram from './plots/histogram'
-import { selectConsignment } from '../selectors/consignment'
+import Histogram from '../plots/histogram'
+import { selectConsignment } from '../../selectors/consignment'
 
 let HistogramAttribute = ({
   data,

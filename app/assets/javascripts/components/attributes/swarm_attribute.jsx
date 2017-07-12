@@ -1,6 +1,6 @@
 import React from 'react'
-import Swarm from './plots/swarm'
-import { selectConsignment } from '../selectors/consignment'
+import Swarm from '../plots/swarm'
+import { selectConsignment } from '../../selectors/consignment'
 
 let SwarmAttribute = ({
   data,

@@ -1,4 +1,4 @@
-import { selectConsignment } from '../selectors/consignment'
+import { selectConsignment } from '../../selectors/consignment'
 
 var BarPlotAttribute = React.createClass({
   render: function() {
