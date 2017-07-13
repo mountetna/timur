@@ -1,4 +1,4 @@
-import TableViewer from '../components/table_viewer'
+import TableViewer from '../table_viewer'
 import React from 'react'
 
 export default class TableAttribute extends React.Component {
