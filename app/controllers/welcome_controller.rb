@@ -8,12 +8,12 @@ class WelcomeController < ApplicationController
     redirect_to(base+refer)
   end
 
-  def noauth
-    render({layout: 'timur'})
+  def no_auth
+    render({layout: 'timur', template: 'welcome/no_auth'})
   end
 
-  def static
-    render({action: params[:path]})
+  def auth_error
+    render({layout: 'timur', template: 'welcome/auth_error'})
   end
 
   # The timur user cache is just a the database table 'private.whitelists'. Here
@@ -24,12 +24,40 @@ class WelcomeController < ApplicationController
   def auth
     # There is no auth token present. Run the Janus login cycle.
     unless cookies.key?(:UCSF_ETNA_AUTH_TOKEN)
-      login
-      return
+      redirect_to(no_auth_path) and return
     end
 
+    token = cookies[:UCSF_ETNA_AUTH_TOKEN]
+
     # Sets/checks a user on the whitelist after authenticating with Janus.
-    whitelist = whitelist_user(cookies[:UCSF_ETNA_AUTH_TOKEN])
+    whitelist = whitelist_user(token)
+
+    # If there is no whitelist record, but we have a token, we need to check the
+    # token against Janus first and then create a whitelist record with it's
+    # assiciated permissions.
+    if whitelist == nil
+      user_info = check_janus(token)
+
+      # Check that the create/update was successful.
+      redirect_to(auth_error_path) and return if user_info == nil
+
+      # Update or create the whitelist record.
+      data = {
+        email: user_info['email'],
+        first_name: user_info['first_name'],
+        last_name: user_info['last_name'],
+        token: token
+      }
+      qry = {email: user_info['email']}
+      whitelist = Whitelist.where(qry).first_or_create.update(data)
+
+      # Check that the create/update was successful.
+      redirect_to(auth_error_path) and return unless whitelist
+
+      # Pull the updated whitelist record and set the permissions.
+      whitelist = Whitelist.where({token: token}).first
+      whitelist.associate_permissions(user_info['permissions'])
+    end
 
     # Pulls or creates a user based upon the whitelist email.
     user = User.where({email: whitelist[:email]}).first_or_create do |u|
@@ -58,42 +86,21 @@ class WelcomeController < ApplicationController
       whitelist = nil
     end
 
-    # If there is no whitelist record, but we have a token, we need to check the
-    # token against Janus first and then create a whitelist record with it's
-    # assiciated permissions.
-    if whitelist == nil
-      user_info = check_janus(token)
-
-      # Update or create the whitelist record.
-      data = {
-        email: user_info['email'],
-        first_name: user_info['first_name'],
-        last_name: user_info['last_name'],
-        token: token
-      }
-      qry = {email: user_info['email']}
-      whitelist = Whitelist.where(qry).first_or_create.update(data)
-
-      # Check that the create/update was successful.
-      redirect_to(auth_error) unless whitelist
-
-      # Pull the updated whitelist record and set the permissions.
-      whitelist = Whitelist.where({token: token}).first
-      whitelist.associate_permissions(user_info['permissions'])
-    end
-
     return whitelist
   end
 
   def check_janus(token)
-    user_data = JSON.parse(make_janus_request(token, 'check'))
+    response = make_janus_request(token, 'check')
+    return nil if response == nil
+
+    user_data = JSON.parse(response)
 
     # The returned data is malformed. Run the Janus auth cycle.
-    redirect_to(auth_error_path) unless user_data.key?('success')
+    return nil unless user_data.key?('success')
 
     # The data returned is fine but the check came back invalid. Run the Janus
     # auth cycle.
-    redirect_to(auth_failure_path) unless user_data['success']
+    return nil unless user_data['success']
 
     # Everything is great.
     return user_data['user_info']
@@ -105,7 +112,6 @@ class WelcomeController < ApplicationController
       app_key = Rails.application.secrets['app_key']
       janus_url = Rails.application.secrets['janus_addr']
       data = {token: token, app_key: app_key}
-
       uri = URI.parse("#{janus_url}/#{end_point}")
 
       https_conn = Net::HTTP.new(uri.host, uri.port)
@@ -121,13 +127,13 @@ class WelcomeController < ApplicationController
       status = response.code.to_i
 
       # If something went wrong with the janus server...
-      redirect_to(auth_error_path) if status >= 400
+      return nil if status >= 400
 
       # Everything worked out fine.
       return response.body
     rescue
       # If something went wrong with the janus connection...
-      redirect_to(auth_error_path)
+      return nil
     end
   end
 end

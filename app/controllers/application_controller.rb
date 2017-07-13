@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   end
 
   def unauth
-    redirect_to(:noauth)
+    redirect_to(:no_auth)
   end
 
   def can_read?
