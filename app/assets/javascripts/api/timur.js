@@ -95,4 +95,4 @@ export const getConsignments = (project_name, manifests, exchange)=>{
     .then(parseJSON)
 
   return exchangePromise;
-};   .then(parseJSON)
+};
