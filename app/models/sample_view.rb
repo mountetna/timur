@@ -128,7 +128,6 @@ class SampleView < TimurView
                 treg_thelper_count: [ 'population', [ 'stain', '::equals', 'treg' ], [ 'name', '::equals', 'CD3 all,CD4+,CD25- (Th)' ], '::first', 'count' ],
                 treg_cd3_count: [ 'population', [ 'stain', '::equals', 'treg' ], [ 'name', '::equals', 'CD3+ all' ], '::first', 'count' ],
                 dc_monocyte_count: [ 'population', [ 'stain', '::equals', 'dc' ], [ 'name', '::equals', 'CD16+ Monocytes' ], '::first', 'count' ],
-                dc_hladr_count: [ 'population', [ 'stain', '::equals', 'dc' ], [ 'name', '::equals', 'HLADR+' ], '::first', 'count' ],
                 dc_cd14pos_tam_count: [ 'population', [ 'stain', '::equals', 'dc' ], [ 'name', '::equals', 'CD14+ TAMs' ], '::first', 'count' ],
                 dc_cd14neg_tam_count: [ 'population', [ 'stain', '::equals', 'dc' ], [ 'name', '::equals', 'CD14- TAMs' ], '::first', 'count' ],
                 dc_cd11cpos_count: [ 'population', [ 'stain', '::equals', 'dc' ], [ 'name', '::equals', 'CD11c+' ], '::first', 'count' ],
