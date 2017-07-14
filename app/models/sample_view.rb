@@ -243,7 +243,7 @@ class SampleView < TimurView
                 ],
                 [ name: 'T-helpers(CD4+,CD25-)/CD3+ (treg)',
                   color: 'chocolate',
-                  height: @fingerprint$treg_thelper_count / @fingerprint$treg_thelper_count,
+                  height: @fingerprint$treg_thelper_count / @fingerprint$treg_cd3_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
                   category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
