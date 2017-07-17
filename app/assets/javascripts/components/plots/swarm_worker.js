@@ -55,6 +55,7 @@ module.exports = function (self) {
     const min = typeof xmin !== 'undefined' ? xmin : d3.min(allValues)
     const xScale = createScale([min, max], [0, plottingAreaWidth])
 
+    //remove colorMap
     const colorMap = legend.reduce((acc, curr) => {
       return {
         ...acc,
