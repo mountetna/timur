@@ -44,15 +44,7 @@ module.exports = function (self) {
     const dataSeriesMap = groupBy(data, item => item[groupByKey])
     const keys = Array.from(dataSeriesMap.keys()).sort().reverse()
 
-
-    const swarmKeys = data
-      .map(row => row[groupByKey])
-      .filter((v, i, s) => s.indexOf(v) === i)
-      .sort()
-      .reverse()
-
-
-    const yTicks = [...swarmKeys, '']
+    const yTicks = [...keys, '']
     const yScale = createScale(yTicks, [plottingAreaHeight, 0])
 
     if (typeof xmax === 'undefined' || typeof xmin === 'undefined') {
