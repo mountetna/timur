@@ -11,11 +11,12 @@ class Matrix {
     }
 
     this.num_rows = this.rows.length
-    this.num_cols = this.rows[0].length
 
     if (this.col_names) {
+      this.num_cols = this.col_names.length
       if (this.col_names.length != this.num_cols) throw "col_names size is different from num_cols"
-    } else {
+    } else if (this.rows[0]) {
+      this.num_cols = this.rows[0].length
       this.col_names = this.rows[0].map((_,i)=>`C${i}`)
     }
     if (this.row_names) {
