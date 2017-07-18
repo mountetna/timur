@@ -121,10 +121,10 @@ class SwarmPlot extends Component {
     const swarms = this.state.swarmPoints.map((node, i) => {
       return (
         <circle key={i}
-                cx={node.x}
-                cy={node.y}
-                r={node.radius}
-                style={{fill: this.colorMap[node[this.legendKey]] }}
+          cx={node.x}
+          cy={node.y}
+          r={node.radius}
+          style={{fill: this.colorMap[node[this.legendKey]] }}
         />
       )
     })
