@@ -5,20 +5,6 @@ import YAxis from './yaxis'
 import XAxis from './xaxis'
 import { createScale } from '../../utils/d3_scale'
 
-const groupBy = (list, keyGetter) => {
-  const map = new Map()
-  list.forEach((item) => {
-    const key = keyGetter(item)
-    const collection = map.get(key)
-    if (!collection) {
-      map.set(key, [item])
-    } else {
-      collection.push(item)
-    }
-  })
-  return map
-}
-
 class SwarmPlot extends Component {
   constructor(props) {
     super(props)
