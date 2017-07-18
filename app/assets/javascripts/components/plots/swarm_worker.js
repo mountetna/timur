@@ -16,70 +16,42 @@ const groupBy = (list, keyGetter) => {
 }
 
 module.exports = function (self) {
-  self.addEventListener('message',function (ev){
-
+  self.addEventListener('message', ev => {
     const {
-      plot: {
-        width,
-        height
-      },
-      margin: {
-        top,
-        right,
-        bottom,
-        left
-      },
-      data = [],
-      datumKey = 'value',
-      groupByKey = 'id',
-      legendKey = 'category',
-      legend = [],
-      xmin = 0,
+      data,
+      datumKey,
+      groupByKey,
+      plottingAreaWidth,
+      plottingAreaHeight,
+      xmin,
       xmax,
+      yTicks,
+      yValues,
+      radius = 2
     } = ev.data
 
-    const plottingAreaWidth = width - left - right
-    const plottingAreaHeight = height - top - bottom
-
-    const dataSeriesMap = groupBy(data, item => item[groupByKey])
-    const keys = Array.from(dataSeriesMap.keys()).sort().reverse()
-
-    const yTicks = [...keys, '']
+    const dataSeriesMap = groupBy(data, item => item[groupByKey]) // Map ( yValue -> [ data ] )
     const yScale = createScale(yTicks, [plottingAreaHeight, 0])
+    const xScale = createScale([xmin, xmax], [0, plottingAreaWidth])
 
-    if (typeof xmax === 'undefined' || typeof xmin === 'undefined') {
-      var allValues = data.map(datum => datum[datumKey]).reduce((acc, curr) => [...acc, ...curr], [])
-    }
-
-    const max = typeof xmax !== 'undefined' ? xmax : d3.max(allValues)
-    const min = typeof xmin !== 'undefined' ? xmin : d3.min(allValues)
-    const xScale = createScale([min, max], [0, plottingAreaWidth])
-
-    //remove colorMap
-    const colorMap = legend.reduce((acc, curr) => {
-      return {
-        ...acc,
-        [curr.category]: curr.color
-      }
-    }, {})
-
-
-    const swarms = keys.reduce((acc, key) => {
+    const swarms = yValues.reduce((acc, key) => {
+      // simulation for each series to find position of points
       let seriesData = dataSeriesMap.get(key)
-
       const simulation = forceSimulation(seriesData)
-        .force("x", forceX(function (d) {
-          return xScale(d[datumKey]);
-        }).strength(1))
-        .force("y", forceY(yScale(key)))
-        .force("collide", forceCollide(2))
+        .force("x",
+          forceX(d => xScale(d[datumKey])).strength(1)
+        )
+        .force("y",
+          forceY(yScale(key))
+        )
+        .force("collide", forceCollide(1.5))
         .stop();
-
       for (var i = 0; i < seriesData.length; ++i) simulation.tick();
 
-      const yBot = yScale(key) + (yScale.rangeBand() / 2)
-      const yTop = yScale(key) - (yScale.rangeBand() / 2)
-      const swarm = seriesData.map((node, i) => {
+      //update y value if outside the y boundaries
+      const yBot = yScale(key) + (yScale.rangeBand() / 2) - radius
+      const yTop = yScale(key) - (yScale.rangeBand() / 2) + radius
+      const swarm = seriesData.map(node => {
         let y = node.y
         if (y > yBot) {
           y = yBot
@@ -87,13 +59,12 @@ module.exports = function (self) {
         if (y < yTop) {
           y = yTop
         }
-
-        return { cx: node.x, cy: y, color: colorMap[node[legendKey]] }
+        return { ...node, y, radius }
       })
-
       return [...acc, ...swarm]
     }, [])
 
+    //return list of nodes after simulation
     self.postMessage(swarms)
   });
 };

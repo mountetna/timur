@@ -26,22 +26,94 @@ class SwarmPlot extends Component {
       swarmPoints: []
     }
 
+    //create web worker and add listener
     this.worker = work(require("./swarm_worker.js"));
     this.worker.addEventListener('message', (m) => {
       this.setState({swarmPoints: m.data});
     })
 
-    if (props.data[0]) {
-      this.worker.postMessage(props)
-    }
+    this.setPlotConfig(props)
+
+    //send data to worker
+    this.postWorkerMessage()
   }
 
   componentWillReceiveProps(nextProps) {
-    this.worker.postMessage(nextProps)
+    this.setPlotConfig(nextProps)
+    this.postWorkerMessage()
   }
 
   componentWillUnmount() {
     this.worker.terminate()
+  }
+
+  postWorkerMessage() {
+    this.worker.postMessage({
+      ...this.props,
+      plottingAreaWidth: this.plottingAreaWidth,
+      plottingAreaHeight: this.plottingAreaHeight,
+      xmin: this.xmin,
+      xmax: this.xmax,
+      yTicks: this.yTicks,
+      yValues: this.yValues
+    })
+  }
+
+  setPlotConfig(props) {
+    const {
+      plot: {
+        width,
+        height
+      },
+      margin: {
+        top,
+        right,
+        bottom,
+        left
+      },
+      data = [],
+      datumKey = 'value', //accessor for the data object
+      groupByKey = 'id',
+      legendKey = 'category', //accessor for legend category
+      legend = [], //array of objects, e.g. [{ category: 'Bladder', color: 'dodgerblue  }, { category: 'Colorectal', color: 'forestgreen' }]
+      xmin = 0,
+      xmax
+    } = props
+
+    //set legend accessor
+    this.legendKey = legendKey
+
+    //set plotting area
+    this.plottingAreaWidth = width - left - right
+    this.plottingAreaHeight = height - top - bottom
+
+    //set xmin and xmax
+    if (typeof xmax === 'undefined' || typeof xmin === 'undefined') {
+      var allValues = data.map(datum => datum[datumKey]).reduce((acc, curr) => [...acc, ...curr], [])
+    }
+    //if undefined in props, set min and max value from data
+    this.xmax = typeof xmax !== 'undefined' ? xmax : d3.max(allValues)
+    this.xmin = typeof xmin !== 'undefined' ? xmin : d3.min(allValues)
+    //set xScale
+    this.xScale = createScale([this.xmin, this.xmax], [0, this.plottingAreaWidth])
+
+    //set yTicks
+    this.yValues = data
+      .map(row => row[groupByKey])
+      .filter((v, i, s) => s.indexOf(v) === i)
+      .sort()
+      .reverse()
+    this.yTicks = [...this.yValues, '']
+    //set yScale
+    this.yScale = createScale(this.yTicks, [this.plottingAreaHeight, 0])
+
+    //set colorMap, categoryNames -> color
+    this.colorMap = legend.reduce((acc, curr) => {
+      return {
+        ...acc,
+        [curr.category]: curr.color
+      }
+    }, {})
   }
 
   render() {
@@ -53,60 +125,20 @@ class SwarmPlot extends Component {
       },
       margin: {
         top,
-        right,
-        bottom,
         left
       },
-      data = [],
-      datumKey = 'value',
-      groupByKey = 'id',
-      legendKey = 'category',
       legend = [],
-      xmin = 0,
-      xmax,
       xLabel = '',
-      yLabel = ''
+      yLabel = '',
     } = this.props
 
-    const plottingAreaWidth = width - left - right
-    const plottingAreaHeight = height - top - bottom
-
-    const dataSeriesMap = groupBy(data, item => item[groupByKey])
-    const keys = Array.from(dataSeriesMap.keys()).sort().reverse()
-
-
-    const swarmKeys = data
-      .map(row => row[groupByKey])
-      .filter((v, i, s) => s.indexOf(v) === i)
-      .sort()
-      .reverse()
-
-
-    const yTicks = [...swarmKeys, '']
-    const yScale = createScale(yTicks, [plottingAreaHeight, 0])
-
-    if (typeof xmax === 'undefined' || typeof xmin === 'undefined') {
-      var allValues = data.map(datum => datum[datumKey]).reduce((acc, curr) => [...acc, ...curr], [])
-    }
-
-    const max = typeof xmax !== 'undefined' ? xmax : d3.max(allValues)
-    const min = typeof xmin !== 'undefined' ? xmin : d3.min(allValues)
-    const xScale = createScale([min, max], [0, plottingAreaWidth])
-
-    const colorMap = legend.reduce((acc, curr) => {
-      return {
-        ...acc,
-        [curr.category]: curr.color
-      }
-    }, {})
-
-    const swarms = this.state.swarmPoints.map(({ cx, cy, color }, i) => {
+    const swarms = this.state.swarmPoints.map((node, i) => {
       return (
         <circle key={i}
-                cx={cx}
-                cy={cy}
-                r={2}
-                style={{fill: color}}
+                cx={node.x}
+                cy={node.y}
+                r={node.radius}
+                style={{fill: this.colorMap[node[this.legendKey]] }}
         />
       )
     })
@@ -121,26 +153,26 @@ class SwarmPlot extends Component {
         <PlotCanvas
           x={left}
           y={top}
-          width={plottingAreaWidth}
-          height={plottingAreaHeight}
+          width={this.plottingAreaWidth}
+          height={this.plottingAreaHeight}
         >
           <YAxis
-            scale={yScale}
-            ticks={yTicks}
+            scale={this.yScale}
+            ticks={this.yTicks}
             tick_width={5}
-            plotAreaHeight={plottingAreaHeight}
+            plotAreaHeight={this.plottingAreaHeight}
             label={yLabel}
           />
           <XAxis
-            scale={xScale}
-            xmin={min}
-            xmax={max}
+            scale={this.xScale}
+            xmin={this.xmin}
+            xmax={this.xmax}
             tick_width={5}
-            plotAreaHeight={plottingAreaHeight}
+            plotAreaHeight={this.plottingAreaHeight}
             label={xLabel}
           />
           <Legend
-            x={plottingAreaWidth + 20}
+            x={this.plottingAreaWidth + 20}
             y={0}
             series={legend.map((cat) => ({...cat, name: cat.label || cat.category}))}
           />
