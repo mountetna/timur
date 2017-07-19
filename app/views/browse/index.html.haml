@@ -7,7 +7,7 @@
     $(function() {
       ReactDOM.render(
         React.createElement(Timur, {
-          #{current_user ? "user: '#{current_user.name}', " : '' }
+          #{current_user ? "user: '#{current_user.email}', " : '' }
           mode: 'browse',
           environment: '#{Rails.env.development? ? 'development' : 'production'}',
           model_name: '#{@model_name.underscore}',
