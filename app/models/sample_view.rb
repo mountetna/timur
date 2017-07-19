@@ -98,6 +98,10 @@ class SampleView < TimurView
               :experiment_name,
               "question([ 'sample', [ 'sample_name', '::equals', @record_name ], '::first', 'patient', 'experiment', 'name' ])"
             ],
+            [
+              :patient_name,
+              "question([ 'sample', [ 'sample_name', '::equals', @record_name ], '::first', 'patient', 'ipi_number' ])"
+            ],
             [ :fingerprint, "table(
               [ 'sample', [ 'patient', 'experiment', 'name', '::equals', @experiment_name ] ],
               [
@@ -145,7 +149,8 @@ class SampleView < TimurView
                   height: @fingerprint$treg_cd45_count / @fingerprint$treg_live_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [
                   name: 'EPCAM+ tumor/live (3)',
@@ -153,7 +158,8 @@ class SampleView < TimurView
                   height: @fingerprint$sort_epcam_count / @fingerprint$sort_live_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
 
                 [ name: 'Lineage+/CD45+ (dc)',
@@ -161,28 +167,32 @@ class SampleView < TimurView
                   height: @fingerprint$dc_lineage_count / @fingerprint$dc_cd45_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'HLADR+,Lineage-/CD45+ (dc)',
                   color: 'coral',
                   height: @fingerprint$dc_hladr_count / @fingerprint$dc_cd45_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'Neutrophils/CD45+ (dc)',
                   color: 'coral',
                   height: @fingerprint$dc_neutrophil_count / @fingerprint$dc_cd45_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'Eosinophils/CD45+ (dc)',
                   color: 'coral',
                   height: @fingerprint$dc_eosinophil_count / @fingerprint$dc_cd45_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
 
                 [ name: 'T cells/lineage+ (nktb)',
@@ -190,63 +200,72 @@ class SampleView < TimurView
                   height: @fingerprint$nktb_cd3_count / @nktb_lineage_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'NK cells/lineage+ (nktb)',
                   color: 'dodgerblue',
                   height: @fingerprint$nktb_nk_count / @nktb_lineage_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'B-cells/lineage+ (nktb)',
                   color: 'dodgerblue',
                   height: @fingerprint$nktb_bcell_count / @nktb_lineage_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'CD8a-,CD4+ / CD3+',
                   color: 'magenta',
                   height: @fingerprint$nktb_cd4_count / @fingerprint$nktb_cd3_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'CD8a+,CD4+ / CD3+',
                   color: 'magenta',
                   height: @fingerprint$nktb_cd8_count / @fingerprint$nktb_cd3_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'CD8a+,CD4- / CD3+',
                   color: 'magenta',
                   height: @fingerprint$nktb_dn_count / @fingerprint$nktb_cd3_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'CD8a-,CD4- / CD3+',
                   color: 'magenta',
                   height: @fingerprint$nktb_dp_count / @fingerprint$nktb_cd3_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'T-regs/CD3+ (treg)',
                   color: 'chocolate',
                   height: @fingerprint$treg_treg_count / @fingerprint$treg_cd3_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'T-helpers(CD4+,CD25-)/CD3+ (treg)',
                   color: 'chocolate',
                   height: @fingerprint$treg_thelper_count / @fingerprint$treg_cd3_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
 
                 [ name: 'CD16+ monocytes/HLADR+ (dc)',
@@ -254,7 +273,8 @@ class SampleView < TimurView
                   height: @fingerprint$dc_monocyte_count / @fingerprint$dc_hladr_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
 
                 [ name: 'CD14+ TAMs/HLADR+ (dc)',
@@ -262,35 +282,40 @@ class SampleView < TimurView
                   height: @fingerprint$dc_cd14pos_tam_count / @fingerprint$dc_hladr_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'CD14- TAMs/HLADR+ (dc)',
                   color: 'greenyellow',
                   height: @fingerprint$dc_cd14neg_tam_count / @fingerprint$dc_hladr_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'CD11c-/HLADR+ (dc)',
                   color: 'greenyellow',
                   height: @fingerprint$dc_cd11cneg_count / @fingerprint$dc_hladr_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'CD11c+/HLADR+ (dc)',
                   color: 'greenyellow',
                   height: @fingerprint$dc_cd11cpos_count / @fingerprint$dc_hladr_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'BDCA1+ DCs/HLADR+ (dc)',
                   color: 'greenyellow',
                   height: @fingerprint$dc_bdca1_count / @fingerprint$dc_hladr_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
 
                 [ name: 'BDCA3+ DCs/HLADR+ (dc)',
@@ -298,14 +323,16 @@ class SampleView < TimurView
                   height: @fingerprint$dc_bdca3_count / @fingerprint$dc_hladr_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ],
                 [ name: 'pDCs (CD85g+)/HLADR+ (dc)',
                   color: 'greenyellow',
                   height: @fingerprint$dc_pdc_count / @fingerprint$dc_hladr_count,
                   select: @fingerprint$row_name == @record_name,
                   highlight_names: @fingerprint$patient_name,
-                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal'
+                  category: @fingerprint$row_name =~ '.T.$' ? 'tumor' : 'normal',
+                  similar: @fingerprint$patient_name == @patient_name
                 ]
               ]"
             ]
