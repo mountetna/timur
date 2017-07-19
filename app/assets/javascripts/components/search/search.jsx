@@ -256,7 +256,7 @@ const completeRecord = (documents, attribute_names)=>{
 
 // exclude things not shown and tables
 const displayedAttributes = (template)=>{
- return  Object.keys(template.attributes).filter((attribute_name)=>{
+ return Object.keys(template.attributes).filter((attribute_name)=>{
     return(
       template.attributes[attribute_name].shown &&
       template.attributes[attribute_name].attribute_class !=
