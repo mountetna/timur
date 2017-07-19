@@ -66,5 +66,4 @@ window.BarPlot = require('./components/plots/bar_plot.js.jsx')
 window.LinePlot = require('./components/plots/line_plot.jsx')
 window.BoxPlot = require('./components/plots/box_plot.jsx')
 
-window.Search = require('./components/search.jsx')
 window.Timur = require('./components/timur.js.jsx')
