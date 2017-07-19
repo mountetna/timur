@@ -12,19 +12,31 @@ class Matrix {
 
     this.num_rows = this.rows.length
 
-    if (this.col_names) {
-      this.num_cols = this.col_names.length
-      if (this.col_names.length != this.num_cols) throw "col_names size is different from num_cols"
-    } else if (this.rows[0]) {
-      this.num_cols = this.rows[0].length
-      this.col_names = this.rows[0].map((_,i)=>`C${i}`)
+    //validate number of col_names against columns in first row
+    if (this.col_names && this.rows[0] && this.rows[0].length != this.col_names.length) {
+      throw "col_names size is different from num_cols"
     }
-    if (this.row_names) {
-      if (this.row_names.length != this.num_rows) throw "row_names size is different from num_rows"
-    } else {
-      this.row_names = this.rows.map((_,i)=>`R${i}`)
+
+    //set unspecified col_names for a matrix based on first row col indexes
+    if (!this.col_names) {
+      if (this.rows[0]) {
+        this.col_names = this.rows[0].map((_, i) => `C${i}`)
+      } else {
+        this.col_names = []
+      }
+    }
+
+    this.num_cols = this.col_names.length
+
+    //validate number of row_names against number of rows
+    if (this.row_names.length != this.num_rows) throw "row_names size is different from num_rows"
+
+    //set unspecified row names for a matrix based on row's index
+    if (!this.row_names) {
+      this.row_names = this.rows.map((_, i) => `R${i}`)
     }
   }
+
   
   row(i) {
       return this.rows[i]
