@@ -96,7 +96,7 @@ export const requestView = (prj_nm,model_nm,record_nm,tab_nm,success,error)=>{
 };
 
 // Download a TSV from Magma via Timur.
-export const requestTSV = (model_name, record_names)=>{
+export const requestTSV = (project_name, model_name, record_names)=>{
   return (dispatch)=>{
 
     var err = (e)=>{
@@ -106,7 +106,7 @@ export const requestTSV = (model_name, record_names)=>{
     };
 
     var exchng = new Exchange(dispatch, `request-tsv-${model_name}`)
-    getTSV(model_name, record_names, exchng)
+    getTSV(project_name, model_name, record_names, exchng)
       .catch(err);
   };
 };

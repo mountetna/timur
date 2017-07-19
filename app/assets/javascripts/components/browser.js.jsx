@@ -54,25 +54,31 @@ var Browser = React.createClass({
       case 'cancel':
 
         this.setState({'mode': 'browse'});
-        this.props.discardRevision();
+        this.props.discardRevision(
+          this.props.record_name,
+          this.props.model_name
+        );
         return;
       case 'approve':
 
         if(this.props.hasRevisions){
 
           this.setState({'mode': 'submit'});
-
-          this.props.submitRevision(
-
-            this.props.revision, 
+          this.props.sendRevisions(
+            this.props.project_name,
+            this.props.model_name,
+            {[this.props.record_name] : this.props.revision},
             ()=>this.setState({'mode': 'browse'}),
             ()=>this.setState({'mode': 'edit'})
-          )
+          );
         }
         else{
 
           this.setState({'mode': 'browse'});
-          this.props.discardRevision();
+          this.props.discardRevision(
+            this.props.record_name,
+            this.props.model_name
+          );
         }
         return;
       case 'edit':

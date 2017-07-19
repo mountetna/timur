@@ -8,6 +8,7 @@
         React.createElement(Timur, {
           #{current_user ? "user: '#{current_user.name}', " : '' }
           mode: 'map',
+          project_name: '#{@project_name}',
           environment: '#{Rails.env.development? ? 'development' : 'production'}'
         }),
         $('#root')[0]

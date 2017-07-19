@@ -1,12 +1,13 @@
 import { headers, generateDownload, parseJSON, makeBlob, checkStatus } from './fetch_utils'
 
-export const getTSV = (model_name, record_names, exchange)=>{
+export const getTSV = (project_name, model_name, record_names, exchange)=>{
 
   var routeOpts = {
     'method': 'POST',
     'credentials': 'same-origin',
     'headers': headers('json', 'csrf'),
     'body': JSON.stringify({
+      'project_name': project_name,
       'model_name': model_name,
       'record_names': record_names
     })
@@ -62,7 +63,8 @@ export const getDocuments = (project_name, model_name, record_names, attribute_n
   return exchangePromise;
 };
 
-export const postRevisions = (revision_data, exchange)=>{
+export const postRevisions = (project_name, revision_data, exchange)=>{
+  revision_data.append('project_name', project_name);
 
   var routeOpts = {
     'method': 'POST',

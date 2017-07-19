@@ -28,7 +28,7 @@ class BrowseController < ApplicationController
   end
 
   def map
-    @project_name = 'Ipi'
+    @project_name = params[:project_name]
   end
 
   def activity
@@ -52,6 +52,8 @@ class BrowseController < ApplicationController
   def update
     begin
       status, payload = Magma::Client.instance.update(
+        session[:token],
+        params[:project_name],
         params[:revisions]
       )
       render json: payload
