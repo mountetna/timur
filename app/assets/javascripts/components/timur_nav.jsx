@@ -1,166 +1,171 @@
-import { toggleConfig, changeMode } from '../actions/timur_actions'
-import { Component } from 'react'
+import {toggleConfig, changeMode} from '../actions/timur_actions';
+import * as React from 'react';
 
-class TimurNav extends Component{
-  throbberClass(){
-    return (Object.keys(this.props.exchanges).length) > 0 ? 'throb' : null;
-  }
-
-  /*
-  render_throbber(){
-
-    console.log('sup');
-    return Array(36).fill().map((val, index)=>{
-      let x = (d, r)=>{Math.cos(Math.PI * d / 180) * r + 35};
-      let y = (d, r)=>{Math.sin(Math.PI * d / 180) * r + 35};
-      let c_name = (index%2 == 0) ? 'long' : 'short';
-      let c_num = (index%2 == 0) ? 42 : 32;
-      let mult = index * 10;
-
-      var x_point = x(mult, c_num);
-      var y_point = y(mult, c_num);
-      var x_len = x(mult, 25);
-      var y_len = y(mult, 25);
-      var desc = 'M '+x_point+','+y_point+' L '+x_len+','+y_len;
-
-      return <path className={c_name} key={index} d={desc} />;
-    });
-  }
-  */
-
-  renderThrobber(){
-    return Array(36).fill().map((_,i) => {
-      let x = (d,r) => Math.cos(Math.PI * d / 180) * r + 35
-      let y = (d,r) => Math.sin(Math.PI * d / 180) * r + 35
-      return <path className={ i%2==0 ? "long" : "short"} key={i} d={ `M ${x(i*10, (i%2==0 ? 42 : 32))}, ${y(i*10, (i%2==0 ? 42 : 32)) }
-             L ${x(i*10,25)}, ${y(i*10, 25)}` }/>
-     
-    })
-  }
-
-  logoId(){
-    return (this.props.environment == 'development') ? 'dev' : 'normal';
-  }
-
-  renderHeading(){
-    var heading = <span>{'Timur'}<b>{':'}</b>{'Data Browser'}</span>;
-
-    if(this.props.environment == 'development'){
-      heading = <span>{'Timur Development'}</span>;
-    }
-
-    return heading;
+class TimurNav extends React.Component{
+  constructor(props){
+    super(props);
+    this['state'] = {'open': false};
   }
 
   renderTabs(){
     var tabs = {
-      'browse': Routes.browse_path(this.props.project_name),
-      'search': Routes.search_path(this.props.project_name),
-      'map': Routes.map_path(this.props.project_name),
-      'manifests': Routes.manifests_path(this.props.project_name),
+      'MANIFESTS': Routes.manifests_path(this.props.project_name),
+      'MAP': Routes.map_path(this.props.project_name),
+      'SEARCH': Routes.search_path(this.props.project_name),
+      'BROWSE': Routes.browse_path(this.props.project_name),
     };
 
     return(
       Object.keys(tabs).map((name)=>{
-
-        var mode = 'nav_tab';
-        if(this.props.mode == name) mode += ' selected';
-
         return(
-          <div key={name} className={mode}>
+          <a className='nav-menu-btn' key={Math.random()} href={tabs[name]}>
 
-            <a href={tabs[name]}>
-
-              {name}
-            </a>
-          </div>
+            {name}
+          </a>
         );
       })
     );
   }
 
   renderActivityTab(){
-    if(this.props.can_edit){
-      return(
-        <div className='nav_tab'>
-          <a href='/'>
-
-            Activity
-          </a>
-        </div>
-      );
-    }
-
     return null;
-  }
-
-  renderNavTab(){
+    if(!this.props.can_edit) return null;
 
     return(
-      <div className='nav_tab'>
+      <a className='nav-menu-btn' href='#'>
 
-        <a onClick={(e)=>this.props.toggleConfig('help_shown')}>
+        {'ACTIVITY'}
+      </a>
+    );
 
-          {this.props.helpShown ? 'Hide Help' : 'Help'}
-        </a>
-      </div>
+    /* Need to fix activity_path
+    return(
+      <a className='nav-menu-btn' href={Routes.activity_path()}>
+
+        {'Activity'}
+      </a>
+    );
+    */
+  }
+
+  renderHelpTab(){
+    return null;
+    var help_props = {
+      'className': 'nav-menu-btn',
+      'href': '#',
+      'onClick': (e)=>{
+        this.props.toggleConfig('help_shown');
+      }
+    };
+
+    return(
+      <a {...help_props}>
+
+        {this.props.helpShown ? 'HIDE HELP' : 'HELP'}
+      </a>
     );
   }
 
-  renderLogin(){
+  toggleUserPanel(){
+    var open = (this['state']['open']) ? false : true;
+    this.setState({'open': open});
+  }
 
-    var login_path = Routes.login_path();
-    var login_path = '';
+  closeUserPanel(event){
+    this.setState({'open': false});
+  }
+
+  renderUserMenu(){
+    var height = (this['state']['open']) ? 'auto' : '100%';
+    var userDropdownGroupProps = {
+      'className': 'user-menu-dropdown-group',
+      'style': {'height': height},
+      'onMouseLeave': this['closeUserPanel'].bind(this)
+    };
+
+    var userMenuButtonProps = {
+      'className': 'user-menu-dropdown-btn',
+      'onClick': this['toggleUserPanel'].bind(this)
+    };
+
     return(
-      <div id='login'>
+      <div {...userDropdownGroupProps}>
 
-        {this.props.user || <a href={login_path}>Login</a>}
+        <button {...userMenuButtonProps}>
+
+          {this.props.user}
+          <div className='user-menu-arrow-group'>
+
+            <i className='fa fa-caret-down' aria-hidden='true'></i>
+          </div>
+        </button>
+        <div className='user-dropdown-menu'>
+
+          <div className='user-dropdown-menu-item'>
+
+            {'LOG OUT'}
+          </div>
+        </div>
       </div>
     );
   }
 
   render(){
+
     return(
-      <div id='header'>
+      <div id='header-container'>
 
-        <div id='logo'>
+        <div id='title-menu'>
 
-          <a href='/'>
+          <button className='title-menu-btn'>
 
-            <div id={this.logoId()} className={this.throbberClass()}>
+            {'Timur'}
+            <br />
+            <span className='title-menu-btn-sub'>
 
-              <div className='image' />
-            </div>
-          </a>
+              {'DATA BROWSER'}
+            </span>
+          </button>
+          <img id='ucsf-logo' src='/assets/ucsf_logo_dark.png' alt='' />
         </div>
-        <div id='help_float'>
+        <div id='nav-menu'>
 
-          <Help info='timur' />
-        </div>
-        <div id='heading'>
-
-          {this.renderHeading()}
-        </div>
-        <div id='nav'>
-
-          {this.renderTabs()}
+          {this.renderUserMenu()}
+          {this.renderHelpTab()}
           {this.renderActivityTab()}
-          {this.renderNavTab()}
-          <IdentifierSearch project_name={this.props.project_name} />
-          {this.renderLogin()}
+          {this.renderTabs()}
+        </div>
+        <div className='logo-container'>
+
+          <img src='/assets/timur_logo_basic.png' alt='' />
         </div>
       </div>
     );
   }
 }
 
-export default connect(
-  (state)=>({
+const mapStateToProps = (state, ownProps)=>{
+
+  return {
     'helpShown': state.timur.help_shown,
-    'exchanges': state.exchanges
-  }),
-  { 
-    changeMode,
-    toggleConfig
-  }
+    'exchanges': state.exchanges,
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps)=>{
+  return {
+
+    changeMode: function(){
+      dispatch(changeMode());
+    },
+
+    toggleConfig: function(){
+      dispatc(toggleConfig());
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(TimurNav);

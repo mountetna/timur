@@ -15,8 +15,8 @@ import BrowserTab from './browser_tab';
 import Tab from '../models/tab';
 
 // Module imports.
-import { discardRevision, sendRevisions } from '../actions/magma_actions';
-import { requestView } from '../actions/timur_actions';
+import {discardRevision, sendRevisions} from '../actions/magma_actions';
+import {requestView} from '../actions/timur_actions';
 
 var Browser = React.createClass({
   componentDidMount: function(){
@@ -94,8 +94,10 @@ var Browser = React.createClass({
     if(!view || !this.props.template || !this.props.document){
       return(
         <div className='browser'>
+          <div id='loader-container'>
 
-          <span className='fa fa-spinner fa-pulse' />
+            <div className="loader">Loading...</div>
+          </div>
         </div>
       );
     }
