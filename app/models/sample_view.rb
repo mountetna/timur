@@ -312,8 +312,8 @@ class SampleView < TimurView
           ],
           dimensions: {
             width: 900,
-            height: 200,
-            margin: { top: 10, right: 20, bottom: 60, left: 30},
+            height: 350,
+            margin: { top: 10, right: 20, bottom: 160, left: 40},
           },
           legend: [
             {
