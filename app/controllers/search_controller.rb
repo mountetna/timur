@@ -1,6 +1,7 @@
 require 'csv'
 
 class SearchController <  ApplicationController
+  include ActionController::Live
   before_filter :authenticate
   before_filter :readable_check
   layout 'timur'
@@ -11,9 +12,9 @@ class SearchController <  ApplicationController
 
   def table_json
     begin
-      req_obj = [params[:model_name], '::all', '::identifier']
-      status, payload = Magma::Client.instance.query(
-        token, params[:project_name], req_obj
+      response = Magma::Client.instance.query(
+        token, params[:project_name],
+        [ params[:model_name], "::all", "::identifier" ]
       )
       ids = JSON.parse(payload)
       render(json: { record_names: ids['answer'].map(&:last) })
@@ -24,20 +25,21 @@ class SearchController <  ApplicationController
 
   def table_tsv
     begin
-      req_obj = {
+      magma_response = Magma::Client.instance.retrieve(
+        token, params[:project_name],
         model_name: params[:model_name],
         record_names: params[:record_names],
         attribute_names: 'all',
         format: 'tsv'
-      }
-
-      status, payload = Magma::Client.instance.retrieve(
-        token, params[:project_name],
-        req_obj
       )
 
       filename = "#{params[:model_name]}.tsv"
-      send_data(payload, {type: 'text/tsv', filename: filename})
+      response.headers['Content-Type'] = 'text/tsv'
+      response.headers['Content-Disposition'] = %Q( attachment; filename="#{filename}" )
+      magma_response.read_body do |chunk|
+        response.stream.write(chunk)
+      end
+      response.stream.close
     rescue Magma::ClientError => e
       render(json: e.body, status: e.status)
     end
@@ -45,8 +47,12 @@ class SearchController <  ApplicationController
 
   def records_json
     begin
-      status, payload = Magma::Client.instance.retrieve(token, params[:project_name], params)
-      render(json: payload)
+      magma = Magma::Client.instance
+      response = magma.retrieve(
+        token, params[:project_name],
+        params
+      )
+      render json: response.body
     rescue Magma::ClientError => e
       render(json: e.body, status: e.status)
     end

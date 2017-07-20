@@ -81,8 +81,11 @@ class TableQuery
   end
 
   def answer(question)
-    status, payload = client.query(@token, @project_name, question)
-    return JSON.parse(payload)
+    response = client.query(
+      @token, @project_name,
+      question
+    )
+    return JSON.parse(response.body)
   end
 
   def client
