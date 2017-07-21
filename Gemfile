@@ -39,8 +39,6 @@ gem 'browserify-rails'
 
 gem 'js-routes'
 
-gem 'd3-rails'
-
 gem 'font-awesome-sass'
 
 gem 'rltk'

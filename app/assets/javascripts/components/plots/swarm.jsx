@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PlotCanvas from './plot_canvas'
 import YAxis from './yaxis'
 import XAxis from './xaxis'
+import * as d3 from "d3"
 import { createScale } from '../../utils/d3_scale'
 import { createWorker, terminateWorker } from '../../web-workers'
 

@@ -1,3 +1,5 @@
+import * as d3 from "d3"
+
 (function() {
 // Inspired by http://informationandvisualization.de/blog/box-plot
 d3.box = function() {

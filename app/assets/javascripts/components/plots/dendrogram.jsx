@@ -1,3 +1,5 @@
+import * as d3 from "d3"
+
 var Dendrogram = React.createClass({
   render: function() {
     var tree = this.props.tree
