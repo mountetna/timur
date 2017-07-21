@@ -5,6 +5,20 @@ import YAxis from './yaxis'
 import XAxis from './xaxis'
 import { createScale } from '../../utils/d3_scale'
 
+const groupBy = (list, keyGetter) => {
+  const map = new Map()
+  list.forEach((item) => {
+    const key = keyGetter(item)
+    const collection = map.get(key)
+    if (!collection) {
+      map.set(key, [item])
+    } else {
+      collection.push(item)
+    }
+  })
+  return map
+}
+
 class SwarmPlot extends Component {
   constructor(props) {
     super(props)
@@ -12,37 +26,59 @@ class SwarmPlot extends Component {
       swarmPoints: []
     }
 
-    //create web worker and add listener
-    this.worker = work(require("./swarm_worker.js"));
-    this.worker.addEventListener('message', (m) => {
-      this.setState({swarmPoints: m.data});
-    })
-
     this.setPlotConfig(props)
 
-    //send data to worker
-    this.postWorkerMessage()
+    //create web worker and add listener
+    this.workers = []
+    this.spawnNewWorkers(props)
   }
 
   componentWillReceiveProps(nextProps) {
+    this.killWorkers()
+    this.setState({ swarmPoints: [] }) //clear the points
     this.setPlotConfig(nextProps)
-    this.postWorkerMessage()
+    this.spawnNewWorkers(nextProps)
   }
 
   componentWillUnmount() {
-    this.worker.terminate()
+    this.killWorkers()
   }
 
-  postWorkerMessage() {
-    this.worker.postMessage({
-      ...this.props,
-      plottingAreaWidth: this.plottingAreaWidth,
-      plottingAreaHeight: this.plottingAreaHeight,
-      xmin: this.xmin,
-      xmax: this.xmax,
-      yTicks: this.yTicks,
-      yValues: this.yValues
+  spawnNewWorkers(props) {
+    //group data for the y axis - Map (groupKey -> data series)
+    const dataSeriesMap = groupBy(props.data, item => item[props.groupByKey])
+
+    //spawn worker for each group
+    dataSeriesMap.forEach((data, groupKey) => {
+      let worker = work(require('./swarm_worker.js'))
+
+      //add received message to the swarmPoints
+      worker.addEventListener('message', (m) => {
+        this.setState({swarmPoints: [...this.state.swarmPoints, ...m.data.swarm]})
+      })
+
+      //send data to the worker
+      worker.postMessage({
+        ...this.props,
+        data,
+        groupKey,
+        plottingAreaWidth: this.plottingAreaWidth,
+        plottingAreaHeight: this.plottingAreaHeight,
+        xmin: this.xmin,
+        xmax: this.xmax,
+        yTicks: this.yTicks,
+        yValues: this.yValues
+      })
+
+      //add to workers array
+      this.workers.push(worker)
     })
+  }
+
+  killWorkers() {
+    //kill potentially busy workers
+    this.workers.forEach(w => w.terminate())
+    this.workers = []
   }
 
   setPlotConfig(props) {
@@ -58,8 +94,8 @@ class SwarmPlot extends Component {
         left
       },
       data = [],
-      datumKey = 'value', //accessor for the data object
-      groupByKey = 'id',
+      datumKey = 'value', //accessor for the x values
+      groupByKey = 'id',  //accessor for y values
       legendKey = 'category', //accessor for legend category
       legend = [], //array of objects, e.g. [{ category: 'Bladder', color: 'dodgerblue  }, { category: 'Colorectal', color: 'forestgreen' }]
       xmin = 0,
@@ -90,6 +126,7 @@ class SwarmPlot extends Component {
       .sort()
       .reverse()
     this.yTicks = [...this.yValues, '']
+
     //set yScale
     this.yScale = createScale(this.yTicks, [this.plottingAreaHeight, 0])
 
