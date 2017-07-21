@@ -1,4 +1,4 @@
-import { createScale } from '../../utils/d3_scale'
+import { createScale } from '../utils/d3_scale'
 import { forceSimulation, forceX, forceY, forceCollide } from 'd3-force'
 
 module.exports = function (self) {
