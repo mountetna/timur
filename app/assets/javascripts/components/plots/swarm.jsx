@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import work from 'webworkify'
 import PlotCanvas from './plot_canvas'
 import YAxis from './yaxis'
 import XAxis from './xaxis'
 import { createScale } from '../../utils/d3_scale'
+import { createWorker, terminateWorker } from '../../web-workers'
 
 const groupBy = (list, keyGetter) => {
   const map = new Map()
@@ -42,16 +42,21 @@ class SwarmPlot extends Component {
 
   killWorker() {
     if (this.worker) {
-      this.worker.terminate()
+      terminateWorker(this.worker)
     }
   }
 
+  handleSwarmWorkerMessage(m) {
+    // append the swarm points
+    this.setState({swarmPoints: [...this.state.swarmPoints, ...m.data.swarm]})
+  }
+
   calculateSwarmPoints(props) {
+    // kill potentially busy worker
     this.killWorker()
-    this.worker = work(require('./swarm_worker.js'))
-    this.worker.addEventListener('message', (m) => {
-      this.setState({swarmPoints: [...this.state.swarmPoints, ...m.data.swarm]})
-    })
+
+    // set worker
+    this.worker = createWorker(require('./swarm_worker.js'), this.handleSwarmWorkerMessage.bind(this))
 
     // group data for the y axis - Map (groupKey -> data series)
     const dataSeriesMap = groupBy(props.data, item => item[props.groupByKey])
@@ -85,32 +90,32 @@ class SwarmPlot extends Component {
         left
       },
       data = [],
-      datumKey = 'value', //accessor for the x values
-      groupByKey = 'id',  //accessor for y values
-      legendKey = 'category', //accessor for legend category
-      legend = [], //array of objects, e.g. [{ category: 'Bladder', color: 'dodgerblue  }, { category: 'Colorectal', color: 'forestgreen' }]
+      datumKey = 'value', // accessor for the x values
+      groupByKey = 'id',  // accessor for y values
+      legendKey = 'category', // accessor for legend category
+      legend = [], // array of objects, e.g. [{ category: 'Bladder', color: 'dodgerblue  }, { category: 'Colorectal', color: 'forestgreen' }]
       xmin = 0,
       xmax
     } = props
 
-    //set legend accessor
+    // set legend accessor
     this.legendKey = legendKey
 
-    //set plotting area
+    // set plotting area
     this.plottingAreaWidth = width - left - right
     this.plottingAreaHeight = height - top - bottom
 
-    //set xmin and xmax
+    // set xmin and xmax
     if (typeof xmax === 'undefined' || typeof xmin === 'undefined') {
       var allValues = data.map(datum => datum[datumKey]).reduce((acc, curr) => [...acc, ...curr], [])
     }
-    //if undefined in props, set min and max value from data
+    // if undefined in props, set min and max value from data
     this.xmax = typeof xmax !== 'undefined' ? xmax : d3.max(allValues)
     this.xmin = typeof xmin !== 'undefined' ? xmin : d3.min(allValues)
     //set xScale
     this.xScale = createScale([this.xmin, this.xmax], [0, this.plottingAreaWidth])
 
-    //set yTicks
+    // set yTicks
     this.yValues = data
       .map(row => row[groupByKey])
       .filter((v, i, s) => s.indexOf(v) === i)
@@ -118,10 +123,10 @@ class SwarmPlot extends Component {
       .reverse()
     this.yTicks = [...this.yValues, '']
 
-    //set yScale
+    // set yScale
     this.yScale = createScale(this.yTicks, [this.plottingAreaHeight, 0])
 
-    //set colorMap, categoryNames -> color
+    // set colorMap, categoryNames -> color
     this.colorMap = legend.reduce((acc, curr) => {
       return {
         ...acc,
