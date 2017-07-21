@@ -1,4 +1,4 @@
-import d3 from 'd3'
+import * as d3 from "d3"
 
 export const createScale = (domain, range) => {
   if (domain[0] instanceof Date) {
