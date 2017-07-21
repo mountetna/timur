@@ -27,38 +27,38 @@ class SwarmPlot extends Component {
     }
 
     this.setPlotConfig(props)
-
-    //create web worker and add listener
-    this.workers = []
-    this.spawnNewWorkers(props)
+    this.calculateSwarmPoints(props)
   }
 
   componentWillReceiveProps(nextProps) {
-    this.killWorkers()
-    this.setState({ swarmPoints: [] }) //clear the points
-    this.setPlotConfig(nextProps)
-    this.spawnNewWorkers(nextProps)
+    this.killWorker() // kill potentially busy worker
+    this.setState({ swarmPoints: [] }) // clear the points
+    this.calculateSwarmPoints(nextProps)
   }
 
   componentWillUnmount() {
-    this.killWorkers()
+    this.killWorker()
   }
 
-  spawnNewWorkers(props) {
-    //group data for the y axis - Map (groupKey -> data series)
+  killWorker() {
+    if (this.worker) {
+      this.worker.terminate()
+    }
+  }
+
+  calculateSwarmPoints(props) {
+    this.killWorker()
+    this.worker = work(require('./swarm_worker.js'))
+    this.worker.addEventListener('message', (m) => {
+      this.setState({swarmPoints: [...this.state.swarmPoints, ...m.data.swarm]})
+    })
+
+    // group data for the y axis - Map (groupKey -> data series)
     const dataSeriesMap = groupBy(props.data, item => item[props.groupByKey])
 
-    //spawn worker for each group
+    // send data to the worker in chunks
     dataSeriesMap.forEach((data, groupKey) => {
-      let worker = work(require('./swarm_worker.js'))
-
-      //add received message to the swarmPoints
-      worker.addEventListener('message', (m) => {
-        this.setState({swarmPoints: [...this.state.swarmPoints, ...m.data.swarm]})
-      })
-
-      //send data to the worker
-      worker.postMessage({
+      this.worker.postMessage({
         ...this.props,
         data,
         groupKey,
@@ -69,16 +69,7 @@ class SwarmPlot extends Component {
         yTicks: this.yTicks,
         yValues: this.yValues
       })
-
-      //add to workers array
-      this.workers.push(worker)
     })
-  }
-
-  killWorkers() {
-    //kill potentially busy workers
-    this.workers.forEach(w => w.terminate())
-    this.workers = []
   }
 
   setPlotConfig(props) {

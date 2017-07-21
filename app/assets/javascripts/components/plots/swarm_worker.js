@@ -45,6 +45,5 @@ module.exports = function (self) {
     })
 
     self.postMessage({swarm})
-    self.close()
   })
 }
