@@ -15,7 +15,6 @@
     "$": false,
     "Routes": false,
     "React": false,
-    "d3": false,
     "freshen": false,
     "dates": false,
     "marked": false,

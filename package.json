@@ -2,6 +2,7 @@
   "name": "timur",
   "dependencies": {
     "chroma-js": "^0.7.8",
+    "d3": "^3.5.17",
     "d3-force": "^1.0.6",
     "downloadjs": "^1.4.7",
     "json2csv": "^3.7.3",
@@ -17,6 +18,7 @@
     "redux": "^3.6.0",
     "redux-thunk": "^0.1.0",
     "reselect": "^3.0.1",
+    "webworkify": "^1.4.0",
     "whatwg-fetch": "^2.0.3"
   },
   "engines": {
