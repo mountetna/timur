@@ -77,8 +77,21 @@ svg {
 			}
 			circle.highlighted {
 				stroke-width: 2px;
-				stroke: red;
-				//fill: #fcc;
+				&.normal {
+					fill: blue;
+				}
+				&.tumor {
+					fill: red;
+				}
+			}
+			circle.similar {
+				stroke-width: 1px;
+				&.normal {
+					fill: darkblue;
+				}
+				&.tumor {
+					fill: darkred;
+				}
 			}
 		}
 	}

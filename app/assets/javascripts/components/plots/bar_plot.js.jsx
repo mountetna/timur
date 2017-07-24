@@ -67,6 +67,7 @@ var BarPlot = React.createClass({
              x={ 10 + i * 30 }
              heights={ bar.heights }
              select={ bar.select }
+             similar={ bar.similar }
              mouse_handler={
                (name) => this.setState({ highlighted_name: name })
              }
@@ -101,6 +102,7 @@ var BarPlotBar = React.createClass({
           else
             return <Dot key={i} 
               category={ props.category ? props.category(i) : null }
+              similar={ props.similar ? props.similar[i] : null }
               name={ name } 
               mouse_handler={ props.mouse_handler }
               x={ props.x + props.width / 2  + ((1000*height) %8) - 4} 
@@ -128,7 +130,8 @@ var Dot = React.createClass({
     var classes = classNames({
       dot: true,
       highlighted: props.highlighted,
-      [props.category]: true
+      [props.category]: true,
+      similar: props.similar
     })
 
 

@@ -37,7 +37,8 @@ BarPlotAttribute = connect(
           heights: bar("height"),
           category: bar("category"),
           highlight_names: bar("highlight_names") ? bar("highlight_names").values : bar("height").labels,
-          select: bar("select").which((value) => value)[0]
+          select: bar("select").which((value) => value)[0],
+          similar: bar("similar") ? bar("similar").values : undefined
         })
       )
     }
