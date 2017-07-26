@@ -3,7 +3,6 @@ import createPlotlyComponent from 'react-plotlyjs'
 import  Plotly from 'plotly.js/lib/core'
 import { connect } from 'react-redux'
 import  InputField from '../manifest/input_field'
-import { v4 } from 'node-uuid'
 import ManifestSelector from '../manifest/manifest_selector'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions'
@@ -218,14 +217,6 @@ class SeriesForm extends Component {
     }
   }
 
-  //update when switching manifests
-  // componentWillReceiveProps(nextProps) {
-  //   const firstKey = Object.keys(nextProps.data
-  //   if (nextProps.data) {
-  //
-  //     this.setState({ x: nextProps.data})
-  //   }
-  // }
 
   updateMode(evt) {
     this.setState({ mode: evt.target.value })
@@ -245,7 +236,7 @@ class SeriesForm extends Component {
 
   appliedSeries(seriesNames) {
     return seriesNames.map(name => (
-      <li key={v4()}>
+      <li key={Math.random()}>
         {name + ' '}
         <i className='fa fa-times' aria-hidden='true'
            onClick={() => this.props.removeSeries(name)}>
@@ -299,32 +290,3 @@ class SeriesForm extends Component {
     )
   }
 }
-
-// consignmentToSeriesMap(consignment) {
-//   return Object.keys(consignment).reduce((plotableSeries, elementName) => {
-//     const consignmentValue = consignment[elementName]
-//
-//     if (Array.isArray(consignmentValue)) {
-//       return {
-//         ...plotableSeries,
-//         ['@' + elementName]: consignmentValue
-//       }
-//     } else if (consignmentValue instanceof Vector) {
-//       return {
-//         ...plotableSeries,
-//         ['@' + elementName]: consignmentValue.values
-//       }
-//     } else if (consignmentValue instanceof Matrix) {
-//       const matrixColumns = consignmentValue.col_names.reduce((plotableColumns, columnName, i) => {
-//         const seriesName = '@' + elementName + '$' + columnName
-//         const series = consignmentValue.col(i)
-//         return {
-//           ...plotableColumns,
-//           [seriesName]: series
-//         }
-//       }, {})
-//
-//       return { ...plotableSeries, ...matrixColumns }
-//     }
-//   }, {})
-// }
