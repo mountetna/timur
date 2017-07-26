@@ -52,9 +52,12 @@ class Plotter extends Component {
 
   render() {
     return (
-      <div>
-        <ManifestSelector manifests={this.props.manifests} />
-        <ScatterPlotForm data={this.props.consignment ? this.plotableData(this.props.consignment) : {}} />
+      <div className='plot-container'>
+        <ManifestSelector manifests={this.props.manifests} newManifest={false} />
+        <ScatterPlotForm className='plot-form'
+          data={this.props.consignment ? this.plotableData(this.props.consignment) : {}}
+          manifestId={this.props.selectedManifest}
+        />
       </div>
     )
   }
@@ -109,8 +112,15 @@ class ScatterPlotForm extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.manifestId != this.props.manifestId) {
+      this.setState({ data: [] })
+    }
+  }
+
   addSeries(series) {
     if (!this.state.data.map(d => d.name).find(name => name == series.name)) {
+
       const withSeriesData = {
         ...series,
         x: this.props.data[series.x].values,
@@ -217,6 +227,13 @@ class SeriesForm extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const firstDataSeriesName = Object.keys(nextProps.data)[0] || null
+    this.setState({
+      x: firstDataSeriesName,
+      y: firstDataSeriesName
+    })
+  }
 
   updateMode(evt) {
     this.setState({ mode: evt.target.value })
