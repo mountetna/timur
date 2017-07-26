@@ -1,5 +1,13 @@
 @import "globals";
 
+.plot-container {
+	display: flex;
+}
+
+.plot-form-container {
+	flex: 1;
+}
+
 svg {
 	&.box_plot {
 		font-family: $value_font;
