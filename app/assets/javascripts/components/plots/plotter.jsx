@@ -89,6 +89,7 @@ class ScatterPlotForm extends Component {
     this.state = {
       data: [],
       layout: {
+        width: 1600,
         height: 900,
         title: '',
         xaxis: {
@@ -164,6 +165,14 @@ class ScatterPlotForm extends Component {
     })
   }
 
+  updateHeight(height) {
+    this.setState({layout: {...this.state.layout, height: height}})
+  }
+
+  updateWidth(width) {
+    this.setState({layout: {...this.state.layout, width: width}})
+  }
+
   toggleGrid() {
     this.setState({
       layout: {
@@ -183,6 +192,7 @@ class ScatterPlotForm extends Component {
 
   render () {
     const { layout } = this.state
+    console.log(this.state)
 
     return (
       <div className='plot-form-container'>
@@ -191,6 +201,8 @@ class ScatterPlotForm extends Component {
           <InputField type='text' label='Title: ' onChange={this.updateTitle.bind(this)} value={layout.title} />
           <InputField type='text' label='X Axis Label: ' onChange={this.updateXAxisLabel.bind(this)} value={layout.xaxis.title} />
           <InputField type='text' label='Y Axis Label: ' onChange={this.updateYAxisLabel.bind(this)} value={layout.yaxis.title} />
+          <InputField type='text' label='height: ' onChange={this.updateHeight.bind(this)} value={layout.height} />
+          <InputField type='text' label='width: ' onChange={this.updateWidth.bind(this)} value={layout.width} />
           <div className='input-container'>
             <label htmlFor='grid'>Grid: </label>
             <input id='grid' type='checkbox' checked={layout.xaxis.showgrid && layout.yaxis.showgrid} onChange={this.toggleGrid.bind(this)} />
