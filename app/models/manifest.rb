@@ -1,5 +1,6 @@
 class Manifest < ActiveRecord::Base
   belongs_to :user
+  has_many :plots, dependent: :destroy
   after_initialize :set_defaults
   validates :name, presence: true
   validates :project, presence: true
@@ -16,7 +17,7 @@ class Manifest < ActiveRecord::Base
   end
 
   def to_json(user)
-    json = self.as_json(except: [:user_id], include: { user: { only: :name } })
+    json = self.as_json(except: [:user_id], include: [{ user: { only: :name }}, :plots] )
     json[:is_editable] =  can_edit?(user)
     json
   end

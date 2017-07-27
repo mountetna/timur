@@ -29,5 +29,7 @@ Rails.application.routes.draw do
 
   get 'map' => 'browse#map', as: :map
 
-  resources :manifests, only: [:index, :create, :update, :destroy]
+  resources :manifests, only: [:index, :create, :update, :destroy], as: :manifests do
+    resources :plots, only: [:create, :update, :destroy]
+  end
 end
