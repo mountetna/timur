@@ -1,25 +1,34 @@
 require 'net/http'
+require 'mime/types'
 require 'uri'
 require 'json'
-require 'mime/types'
 
-class BrowseController <  ApplicationController
+class BrowseController < ApplicationController
   before_filter :authenticate
-  before_filter :readable_check
-  before_filter :editable_check, only: :update
-  layout "timur"
+  #before_filter :readable_check
+  #before_filter :editable_check, only: :update
+  layout 'timur'
 
   def index
-    redirect_to browse_model_path(:project, "UCSF Immunoprofiler")
+    @model_name = 'project'
+    @record_name = 'UCSF Immunoprofiler'
+    @project_name = 'Ipi'
+  end
+
+  def browse
+    @model_name = 'project'
+    @record_name = 'UCSF Immunoprofiler'
+    @project_name = 'Ipi'
   end
 
   def model
-    # Get the model name
+    @project_name = params[:project_name]
     @model_name = params[:model]
     @record_name = params[:name]
   end
 
   def map
+    @project_name = params[:project_name]
   end
 
   def activity
@@ -35,19 +44,16 @@ class BrowseController <  ApplicationController
   end
 
   def view_json
-    # Get the model name
-
-    view = TimurView.create(
-      params[:model_name],
-      params[:tab_name] ? params[:tab_name].to_sym : nil
-    )
-
-    render json: view
+    tab = params[:tab_name] ? params[:tab_name].to_sym : nil
+    view = TimurView.create(params[:model_name], tab)
+    render({json: view})
   end
 
   def update
     begin
       status, payload = Magma::Client.instance.update(
+        session[:token],
+        params[:project_name],
         params[:revisions]
       )
       render json: payload
