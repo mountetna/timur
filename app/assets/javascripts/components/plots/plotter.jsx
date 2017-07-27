@@ -124,7 +124,9 @@ class ScatterPlotForm extends Component {
       ...series,
       id: Math.random(),
       x: this.props.data[series.x].values,
-      y: this.props.data[series.y].values
+      manifestSeriesX: series.x,
+      y: this.props.data[series.y].values,
+      manifestSeriesY: series.y
     }
 
     this.setState({
