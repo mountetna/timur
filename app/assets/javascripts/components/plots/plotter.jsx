@@ -119,27 +119,21 @@ class ScatterPlotForm extends Component {
   }
 
   addSeries(series) {
-    if (!this.state.data.map(d => d.name).find(name => name == series.name)) {
-
-      const withSeriesData = {
-        ...series,
-        x: this.props.data[series.x].values,
-        y: this.props.data[series.y].values
-      }
-
-      this.setState({
-        data: [...this.state.data, withSeriesData]
-      })
+    const withSeriesData = {
+      ...series,
+      id: Math.random(),
+      x: this.props.data[series.x].values,
+      y: this.props.data[series.y].values
     }
+
+    this.setState({
+      data: [...this.state.data, withSeriesData]
+    })
   }
 
-  removeSeries(seriesName) {
-    const filteredData = this.state.data.filter(series => series.name != seriesName)
+  removeSeries(seriesId) {
+    const filteredData = this.state.data.filter(series => series.id != seriesId)
     this.setState({ data: filteredData })
-  }
-
-  seriesNames() {
-    return this.state.data.map(series => series.name)
   }
 
   updateTitle(title) {
@@ -204,7 +198,7 @@ class ScatterPlotForm extends Component {
           <SeriesForm
             data={this.props.data}
             addSeries={this.addSeries.bind(this)}
-            appliedSeries={this.seriesNames()}
+            appliedSeries={this.state.data}
             removeSeries={this.removeSeries.bind(this)}
           />
         </fieldset>
@@ -251,12 +245,12 @@ class SeriesForm extends Component {
     this.setState({ y: evt.target.value })
   }
 
-  appliedSeries(seriesNames) {
-    return seriesNames.map(name => (
-      <li key={Math.random()}>
-        {name + ' '}
+  appliedSeries(plottedSeries) {
+    return plottedSeries.map(series => (
+      <li key={series.id}>
+        {series.name + ' '}
         <i className='fa fa-times' aria-hidden='true'
-           onClick={() => this.props.removeSeries(name)}>
+           onClick={() => this.props.removeSeries(series.id)}>
         </i>
       </li>
     ))
