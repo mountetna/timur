@@ -13,7 +13,7 @@ var IdentifierSearch = React.createClass({
 
   componentWillMount: function(){
 
-    this.props.requestIdentifiers();
+    this.props.requestIdentifiers(this.props.project_name);
   },
 
   find_matches: function(){
@@ -172,9 +172,9 @@ IdentifierSearch = connect(
 
     return {
 
-      requestIdentifiers: function(){
+      requestIdentifiers: function(project_name){
 
-        var action = requestIdentifiers(props.project_name);
+        var action = requestIdentifiers(project_name);
         dispatch(action);
       }
     };

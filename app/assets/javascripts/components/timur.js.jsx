@@ -8,6 +8,7 @@ import Manifests from './manifest/manifests'
 import {connect} from 'react-redux'
 import TimurNav from './timur_nav'
 import ModelMap from './model_map'
+import Search from './search/search'
 
 const createStore = ()=>{
   let middleWares = [thunk];
@@ -37,19 +38,24 @@ var Timur = React.createClass({
       'can_edit': this.props.can_edit,
       'mode': this.props.mode,
       'environment': this.props.environment,
-      'appMode': this.props.appMode,
       'project_name': this.props.project_name
     };
 
+    var manifest_props = {
+      'currentUser': this.props.user,
+      'isAdmin': this.props.is_admin,
+      'project_name': this.props.project_name
+    }
+
     switch(this.props.mode){
-      case 'manifesto':
-        component = <Manifests isAdmin={this.props.is_admin} />;
+      case 'manifests':
+        component = <Manifests {...manifest_props} />;
         break;
       case 'browse':
         component = <Browser {...browser_props} />;
         break;
       case 'map':
-        component = <ModelMap />
+        component = <ModelMap project_name={this.props.project_name} />;
         break;
       case 'plot':
         component = <Plotter />;
@@ -61,29 +67,21 @@ var Timur = React.createClass({
         component = <Activity activities={this.props.activities} />;
         break;
       case 'noauth':
-        component = <Noauth user={this.props.user} />
+        component = <Noauth user={this.props.user} />;
         break;
       default:
         break;
     }
 
     return(
-      <div>
+      <div id='ui-container'>
 
         <TimurNav {...timur_nav_props} />
-        <Messages />
         {component}
       </div>
     );
   }
 });
-
-/*
- * TODO fix this. a bunch of hacks for manifest tab until start using
- * react-router
- */
-const mapStateToProps = (state)=>({'appMode': state.appMode})
-Timur = connect(mapStateToProps)(Timur);
 
 // Initializes the render.
 export default (props)=>(

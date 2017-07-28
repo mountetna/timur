@@ -28,7 +28,7 @@ export const getView = (project_name, model_name, tab_name, exchange)=>{
     'credentials': 'same-origin',
     'headers': headers('json', 'csrf'),
     'body': JSON.stringify({
-      'project_name': 'Ipi',
+      'project_name': project_name,
       'model_name': model_name,
       'tab_name': tab_name
     })

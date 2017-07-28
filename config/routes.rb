@@ -30,6 +30,6 @@ Rails.application.routes.draw do
   get 'manifests/:project_name'=> 'manifests#index', as: :manifests
   post 'manifests/fetch'=> 'manifests#fetch', as: :manifests_fetch
   post 'manifests/create'=> 'manifests#create', as: :manifests_create
-  post 'manifests/update'=> 'manifests#update', as: :manifests_update
-  post 'manifests/destroy'=> 'manifests#destroy', as: :manifests_destroy
+  post 'manifests/update/:id'=> 'manifests#update', as: :manifests_update
+  post 'manifests/destroy/:id'=> 'manifests#destroy', as: :manifests_destroy
 end
