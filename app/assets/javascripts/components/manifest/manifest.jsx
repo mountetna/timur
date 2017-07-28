@@ -9,8 +9,11 @@ export default class Manifest extends Component {
         { this.props.editing ?
           <ManifestForm
             isAdmin={this.props.isAdmin}
-            manifest={this.props.manifest} /> :
-          <ManifestView manifest={this.props.manifest} />
+            manifest={this.props.manifest}
+            project_name={this.props.project_name} /> :
+          <ManifestView
+            manifest={this.props.manifest}
+            project_name={this.props.project_name} />
         }
       </div>
     )

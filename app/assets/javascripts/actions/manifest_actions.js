@@ -1,5 +1,7 @@
-import { showMessages } from './message_actions'
-import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests'
+import {Exchange} from './exchange_actions';
+
+import {showMessages} from './message_actions';
+import {fetchManifests, destroyManifest, createManifest, updateManifest} from '../api/manifests';
 
 const showErrors = (e, dispatch)=>{
   let localError = (json)=>dispatch(showMessages(json.errors));
@@ -46,22 +48,26 @@ export const selectManifest = (id)=>({
 });
 
 // Retrieve all user-visible manifests and send to store.
-export const requestManifests = ()=>{
+export const requestManifests = (project_name)=>{
   return (dispatch)=>{
 
     let localSuccess = ({manifests})=>{
+
+      // Bail out if there are no manifests.
+      if(manifests == null) return;
+
       const manifestsById = manifests.reduce((acc, manifestJSON)=>{
-        return { ...acc, [manifestJSON.id]: manifestJSON };
+        return {...acc, [manifestJSON.id]: manifestJSON};
       }, {});
 
       dispatch(loadManifests(manifestsById));
     };
 
-    let localError = (e)=>{
-      showErrors(e, dispatch);
+    let localError = (err)=>{
+      showErrors(err, dispatch);
     };
 
-    fetchManifests()
+    fetchManifests(project_name, new Exchange(dispatch, 'request-maifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -76,70 +82,68 @@ export const deleteManifest = (manifestId)=>{
       dispatch(removeManifest(manifestId));
     };
 
-    let localError = ()=>{
-      showErrors(e, dispatch);
+    let localError = (err)=>{
+      showErrors(err, dispatch);
     };
 
-    destroyManifest(manifestId)
+    destroyManifest(manifestId, new Exchange(dispatch, 'delete-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
 };
 
 // Post to create new manifest and save in the store.
-export const saveNewManifest = (manifest)=>{
+export const saveNewManifest = (project_name, manifest)=>{
   return (dispatch)=>{
 
-    let localSuccess = (data)=>{
-      dispatch(addManifest(manifest));
+    let localSuccess = (response)=>{
+      dispatch(addManifest(response.manifest));
       dispatch(toggleEdit());
-      dispatch(selectManifest(manifest.id));
+      dispatch(selectManifest(response.manifest.id));
     };
 
-    let localError = ()=>{
-      showErrors(e, dispatch);
+    let localError = (err)=>{
+      showErrors(err, dispatch);
     };
 
-    createManifest(manifest)
+    createManifest(project_name, manifest, new Exchange(dispatch, 'save-new-manifest'))
       .then(localSuccess)
       .then(localError);
   };
 };
 
-export const saveManifest = (manifest)=>{
+export const saveManifest = (project_name, manifest)=>{
   return (dispatch)=>{
 
     let localSuccess = (data)=>{
       dispatch(editManifest(manifest));
       dispatch(toggleEdit());
-      dispatch(submitManifest(manifest));
     };
 
-    let localError = ()=>{
-      showErrors(e, dispatch);
+    let localError = (err)=>{
+      showErrors(err, dispatch);
     };
 
-    updateManifest(manifest, manifest.id)
+    updateManifest(project_name, manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
 };
 
-export const copyManifest = (manifest)=>{
+export const copyManifest = (project_name, manifest)=>{
   return (dispatch)=>{
 
-    let localSuccess = (data)=>{
-      dispatch(addManifest(manifest));
-      dispatch(selectManifest(manifest.id));
-      dispatch(submitManifest(manifest));
+    let localSuccess = (response)=>{
+      dispatch(addManifest(response.manifest));
+      dispatch(selectManifest(response.manifest.id));
       dispatch(toggleEdit());
     };
 
-    let localError = ()=>{
-      showErrors(e, dispatch);
+    let localError = (err)=>{
+      showErrors(err, dispatch);
     };
 
-    createManifest({...manifest, name: `${manifest.name}(copy)`})
+    createManifest(project_name, {...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
       .then(localSuccess)
       .catch(localError);
   };

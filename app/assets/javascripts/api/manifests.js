@@ -1,50 +1,68 @@
 import { headers, parseJSON, checkStatus } from './fetch_utils'
 
-export const fetchManifests = ()=>{
-  let routeOpts = {
-    'credentials': 'same-origin',
-    'headers': headers('json', 'csrf'),
-  };
-
-  fetch(Routes.manifests_path(), routeOpts)
-    .then(checkStatus)
-    .then(parseJSON);
-};
-
-export const createManifest = (manifest)=>{
+export const fetchManifests = (project_name, exchange)=>{
   let routeOpts = {
     'credentials': 'same-origin',
     'method': 'POST',
     'headers': headers('json', 'csrf'),
-    'body': JSON.stringify(manifest)
+    'body': JSON.stringify({
+      'project_name': project_name
+    })
   };
 
-  fetch(Routes.manifests_path(), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.manifests_fetch_path(), routeOpts)
     .then(checkStatus)
     .then(parseJSON);
+
+  return exchangePromise;
 };
 
-export const destroyManifest = (manifestId)=>{
+export const createManifest = (project_name, manifest, exchange)=>{
   let routeOpts = {
     'credentials': 'same-origin',
+    'method': 'POST',
     'headers': headers('json', 'csrf'),
-    'method': 'DELETE'
+    'body': JSON.stringify({
+      'project_name': project_name,
+      ...manifest
+    })
   };
 
-  fetch(Routes.manifest_path(manifestId), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.manifests_create_path(), routeOpts)
     .then(checkStatus)
     .then(parseJSON);
+
+  return exchangePromise;
 };
 
-export const updateManifest = (manifestUpdates, manifestId)=>{
+export const updateManifest = (project_name, manifestUpdates, manifestId, exchange)=>{
   let routeOpts = {
     'credentials': 'same-origin',
-    'method': 'PUT',
+    'method': 'POST',
     'headers': headers('json', 'csrf'),
-    'body': JSON.stringify(manifestUpdates)
+    'body': JSON.stringify({
+      'project_name': project_name,
+      ...manifestUpdates
+    })
   };
 
-  fetch(Routes.manifest_path(manifestId), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.manifests_update_path(manifestId), routeOpts)
     .then(checkStatus)
     .then(parseJSON);
+
+  return exchangePromise;
+};
+
+export const destroyManifest = (manifestId, exchange)=>{
+  let routeOpts = {
+    'credentials': 'same-origin',
+    'method': 'POST',
+    'headers': headers('json', 'csrf')
+  };
+
+  var exchangePromise = exchange.fetch(Routes.manifests_destroy_path(manifestId), routeOpts)
+    .then(checkStatus)
+    .then(parseJSON);
+
+  return exchangePromise;
 };
