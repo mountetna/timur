@@ -13,25 +13,24 @@
  *= require jquery-ui/datepicker
  */
 
-@import 'fonts';
-@import 'globals';
-@import 'navbar';
-@import 'messages';
-@import 'browser';
-@import 'plotter';
-@import 'table';
-@import 'datepicker';
-@import 'project';
-@import 'plots';
-@import 'spectrum';
-@import 'search';
-@import 'help';
-@import 'metrics';
-@import 'activity';
-@import 'manifest';
-@import 'model_map';
+@import "globals";
+@import "navbar";
+@import "messages";
+@import "browser";
+@import "plotter";
+@import "table";
+@import "datepicker";
+@import "project";
+@import "plots";
+@import "spectrum";
+@import "search";
+@import "help";
+@import "metrics";
+@import "activity";
+@import "manifest";
+@import "model_map";
 
-/* @import "prismjs/themes/prism";*/
+@import "prismjs/themes/prism";
 
 /* prism-coy.css
 prism.css
