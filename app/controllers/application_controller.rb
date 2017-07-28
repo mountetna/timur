@@ -13,7 +13,9 @@ class ApplicationController < ActionController::Base
       session[:token] = cookies[:UCSF_ETNA_AUTH_TOKEN]
     end
 
-    redirect_to(:auth) unless current_user
+    unless current_user
+      redirect_to(auth_path(refer: URI::encode(request.original_url)))
+    end
   end
 
   def unauth

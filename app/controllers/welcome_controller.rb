@@ -4,7 +4,7 @@ class WelcomeController < ApplicationController
   # Run the login cycle through Janus.
   def login
     base = 'https://janus-stage.ucsf.edu/login'
-    refer = '?refer=http%3A%2F%2Ftimur-dev.ucsf.edu%2Fauth'
+    refer = '?refer='+URI::encode(params['refer'])
     redirect_to(base+refer)
   end
 
@@ -24,7 +24,7 @@ class WelcomeController < ApplicationController
   def auth
     # There is no auth token present. Run the Janus login cycle.
     unless cookies.key?(:UCSF_ETNA_AUTH_TOKEN)
-      redirect_to(no_auth_path) and return
+      redirect_to(login_path(refer: URI::encode(params['refer']))) and return
     end
 
     token = cookies[:UCSF_ETNA_AUTH_TOKEN]
@@ -70,7 +70,7 @@ class WelcomeController < ApplicationController
 
     # Right now this application is hard coded to use the Immunoprofiler
     # Initiaive project (Ipi). This needs to be changed out.
-    redirect_to('/browse/Ipi')
+    redirect_to(params['refer'])
   end
 
   private
