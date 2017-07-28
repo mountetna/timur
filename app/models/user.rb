@@ -4,12 +4,10 @@ class User < ActiveRecord::Base
   has_many :manifests
 
   def can_read?(project_name)
-    puts 'can_read?'
     whitelist && whitelist.can_read?(project_name)
   end
 
   def can_edit?(project_name)
-    puts 'can_edit?'
     whitelist && whitelist.can_edit?(project_name)
   end
 
