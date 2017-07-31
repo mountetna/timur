@@ -1,4 +1,6 @@
 class PlotsController < ManifestsAPIController
+  before_filter :authorize
+
   def create
     @plot = @manifest.plots.new(plot_params)
     save_plot
@@ -6,6 +8,7 @@ class PlotsController < ManifestsAPIController
 
   def update
     return unless find_plot(params[:id])
+    @plot.assign_attributes(plot_params)
     save_plot
   end
 
@@ -31,14 +34,14 @@ class PlotsController < ManifestsAPIController
 
   def save_plot
     if @plot.save
-      render json: plot.as_json
+      render json: @plot.as_json
     else
       render :json => { :errors => @plot.errors.full_messages }, :status => 422
     end
   end
 
   def plot_params
-    params.permit(:name, :type).tap do |whitelisted|
+    params.permit(:name, :plot_type).tap do |whitelisted|
       whitelisted[:configuration] = params[:configuration]
     end
   end
