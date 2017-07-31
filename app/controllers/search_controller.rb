@@ -25,21 +25,22 @@ class SearchController <  ApplicationController
 
   def table_tsv
     begin
-      magma_response = Magma::Client.instance.retrieve(
-        token, params[:project_name],
-        model_name: params[:model_name],
-        record_names: params[:record_names],
-        attribute_names: 'all',
-        format: 'tsv'
-      )
-
       filename = "#{params[:model_name]}.tsv"
       response.headers['Content-Type'] = 'text/tsv'
       response.headers['Content-Disposition'] = %Q( attachment; filename="#{filename}" )
-      magma_response.read_body do |chunk|
-        response.stream.write(chunk)
+
+      Magma::Client.instance.retrieve(
+        model_name: params[:model_name],
+        record_names: params[:record_names],
+        attribute_names: 'all',
+        filter: params[:filter],
+        format: 'tsv'
+      ) do |magma_response |
+        magma_response.read_body do |chunk|
+          response.stream.write(chunk)
+        end
+        response.stream.close
       end
-      response.stream.close
     rescue Magma::ClientError => e
       render(json: e.body, status: e.status)
     end
