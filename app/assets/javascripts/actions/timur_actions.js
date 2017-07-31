@@ -1,13 +1,11 @@
 // Class imports.
-import Vector from 'vector';
-import { Exchange } from './exchange_actions';
-import Tab from '../models/tab';
-
-// Module imports.
-import { getTSV, getView } from '../api/timur';
-import { showMessages } from './message_actions';
-import { requestDocuments } from './magma_actions';
-import { requestConsignments } from './consignment_actions';
+import Vector from 'vector'
+import { getTSVForm, getView } from '../api/timur'
+import { showMessages } from './message_actions'
+import { requestDocuments } from './magma_actions'
+import { Exchange } from './exchange_actions'
+import { requestConsignments } from './consignment_actions'
+import Tab from '../models/tab'
 
 // Flip a config variable.
 export const toggleConfig = (key)=>{
@@ -85,18 +83,9 @@ export const requestView = (model_name, record_name, tab_name, success, error)=>
   };
 };
 
-// Download a TSV from Magma via Timur.
-export const requestTSV = (model_name, record_names)=>{
-  return (dispatch)=>{
+// download a TSV from magma via Timur
 
-    var err = (e)=>{
-      var msg = `### Our attempt to create a TSV failed.\n\n`;
-      msg +=    `${error}`;
-      dispatch(showMessages([msg]));
-    };
-
-    var exchng = new Exchange(dispatch, `request-tsv-${model_name}`)
-    getTSV(model_name, record_names, exchng)
-      .catch(err);
-  };
-};
+export const requestTSV = (model_name,filter) =>
+  (dispatch) => {
+    getTSVForm({ model_name, filter, record_names: "all" })
+  }

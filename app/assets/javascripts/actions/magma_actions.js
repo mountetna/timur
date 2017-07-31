@@ -1,5 +1,62 @@
-// Class imports.
-import { Exchange } from './exchange_actions';
+import { showMessages } from './message_actions'
+import { getDocuments, postRevisions } from '../api/timur'
+import { Exchange } from './exchange_actions'
+
+export const consumePayload = (dispatch,response) => {
+  if (response.models) {
+    Object.keys(response.models).forEach((model_name) => {
+      let model = response.models[model_name]
+
+      if (model.template)
+        dispatch( 
+          addTemplate(model.template)
+        )
+      if (model.documents)
+        dispatch(
+          addDocumentsForTemplate(model_name, model.documents)
+        )
+    })
+  }
+}
+
+export const requestDocuments = ({ model_name, record_names, attribute_names, filter, page, page_size, collapse_tables, exchange_name, success, error }) => (dispatch) => 
+  getDocuments({
+      model_name,
+      record_names,
+      attribute_names,
+      filter,
+      page,
+      page_size,
+      collapse_tables
+    },
+    new Exchange(dispatch, exchange_name)
+  )
+    .then(
+      (response) => {
+        consumePayload(dispatch,response)
+        if (success != undefined) success(response)
+      }
+    )
+    .catch(
+      (e) => {
+        if (!e.response) throw e
+        e.response.json().then((response) =>
+          dispatch(
+            showMessages([
+`### Our request was refused.
+
+${response.errors.map((error) => `* ${error}`)}`
+            ])
+          )
+        )
+        if (error != undefined) {
+          var message = JSON.parse(error.response)
+          error(message)
+        }
+      }
+    )
+
+export const requestModels = () => requestDocuments({ model_name: "all", record_names: [], attribute_names: "all", exchange_name: "request-models"})
 
 // Module imports.
 import { showMessages } from './message_actions';

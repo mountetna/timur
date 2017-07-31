@@ -16,7 +16,7 @@ class DocumentFilter {
     var att_type = this.template.attributes[att_name].type
 
     switch(att_class) {
-      case "Magma::DocumentAttribute":
+      case "Magma::FileAttribute":
       case "Magma::ImageAttribute":
         return value.url
       case "Magma::CollectionAttribute":
@@ -121,7 +121,7 @@ export default class Magma {
   }
 
   documents(model_name, record_names, filter) {
-    if (model_name && this.models[model_name] 
+    if (model_name && record_names && this.models[model_name] 
       && this.models[model_name].documents) {
       var documents = { }
       for (var record_name of record_names) {
@@ -147,7 +147,7 @@ export default class Magma {
   }
 
   revisions(model_name, record_names) {
-    if (model_name && this.models[model_name] 
+    if (model_name && record_names && this.models[model_name] 
       && this.models[model_name].revisions) {
       var revisions = {}
       for (var record_name of record_names) {

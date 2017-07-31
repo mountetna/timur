@@ -12,7 +12,7 @@ class TableViewer extends React.Component {
 
     return <div className="table">
       <Pager pages={ props.pages } 
-        current_page={ props.current_page }
+        current_page={ props.current_page + 1 }
         set_page={ props.set_page } >
         <div className='search'>&#x2315;</div>
         <input className="filter" type="text" onChange={ props.set_filter }/>
