@@ -1,4 +1,5 @@
 import { showMessages } from './message_actions'
+import { addPlot } from './plot_actions'
 import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests'
 
 // Add retrieved manifests to the store
@@ -8,12 +9,23 @@ const loadManifests = (manifestsById) => ({
 })
 
 // Retrieve all user-visible manifests and send to store
-export const requestManifests = () => 
+export const requestManifests = () =>
   (dispatch) => {
     fetchManifests()
       .then( ({ manifests }) => {
         const manifestsById = manifests.reduce((acc, manifestJSON) => {
-          return { ...acc, [manifestJSON.id]: manifestJSON }
+
+          let manifest = {
+            ...manifestJSON,
+            // create reference to plots that belong to the manifest
+            plotIds: manifestJSON.plots.map(p => p.id)
+          }
+
+          // send plots to the store
+          manifestJSON.plots.forEach(plot => dispatch(addPlot(plot)))
+          delete manifest.plots
+
+          return { ...acc, [manifestJSON.id]: manifest }
         }, {})
 
         dispatch(loadManifests(manifestsById))
