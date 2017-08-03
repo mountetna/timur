@@ -3,13 +3,12 @@ import { headers, generateDownload, parseJSON, makeBlob, checkStatus } from './f
 const create = (name, attributes) => {
   let element = document.createElement(name)
   for (let key in attributes) {
-    let value = attributes[key]
-    element.setAttribute(key,value)
+    element.setAttribute(key,attributes[key])
   }
   return element
 }
 
-const input = (name, value) => create('input', { type: "hidden", name: name, value: value })
+const input = (name, value) => create('input', { type: "hidden", name, value })
 
 export const getTSVForm = (data) => {
   let form = create("form", {
@@ -23,9 +22,9 @@ export const getTSVForm = (data) => {
   // eliminate null and undefined values
   data = Object.keys(data)
     .filter(key => data[key] != undefined && data[key] != null)
-    .reduce((obj, key) => { obj[key] = data[key]; return obj }, {})
+    .reduce((obj, key) => ({ ...obj, [key] : data[key] }), {})
 
-  for(let name in data) {
+  for (let name in data) {
     form.appendChild( input(name, data[name]))
   }
 
