@@ -39,7 +39,9 @@ class TableQuery
     return nil unless @order && column(@order)
     @ordering ||= row_names.map.with_index do |row_name, i|
       [ column(@order)[row_name], i ]
-    end.sort_by(&:first).map(&:last)
+    end.sort do |a,b|
+      (a.first && b.first) ? (a.first <=> b.first) : (a.first ? -1 : 1 )
+    end.map(&:last)
   end
 
   def row_names
