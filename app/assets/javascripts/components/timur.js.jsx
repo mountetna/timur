@@ -31,7 +31,7 @@ var Timur = React.createClass({
     var search_props = {
       'can_edit': this.props.can_edit,
       'project_name': this.props.project_name
-    }
+    };
 
     var timur_nav_props = {
       'user': this.props.user,
@@ -45,7 +45,7 @@ var Timur = React.createClass({
       'currentUser': this.props.user,
       'isAdmin': this.props.is_admin,
       'project_name': this.props.project_name
-    }
+    };
 
     switch(this.props.mode){
       case 'manifests':
