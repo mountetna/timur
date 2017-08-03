@@ -15,11 +15,11 @@ class BrowseController < ApplicationController
     @project_name = 'Ipi'
   end
 
-  def browse
-    @model_name = 'project'
-    @record_name = 'UCSF Immunoprofiler'
-    @project_name = 'Ipi'
-  end
+#  def browse
+#    @model_name = 'project'
+#    @record_name = 'UCSF Immunoprofiler'
+#    @project_name = 'Ipi'
+#  end
 
   def model
     @project_name = params[:project_name]
@@ -31,6 +31,7 @@ class BrowseController < ApplicationController
     @project_name = params[:project_name]
   end
 
+# WTF is this?
   def activity
     @activities = Activity.order(created_at: :desc).limit(50).map do |activity|
       {
