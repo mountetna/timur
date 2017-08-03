@@ -1,6 +1,19 @@
 class WelcomeController < ApplicationController
   layout 'application'
 
+  # Usually you will see the controllers use 'before_filter :authenticate', but 
+  # since this controller handles the auth that would cause a refer loop.
+  def index
+    # Set the janus auth token to the session for later use.
+    if cookies.key?(:UCSF_ETNA_AUTH_TOKEN)
+      session[:token] = cookies[:UCSF_ETNA_AUTH_TOKEN]
+    end
+
+    unless current_user
+      redirect_to(auth_path(refer: URI::encode(request.original_url)))
+    end
+  end
+
   # Run the login cycle through Janus.
   def login
     base = 'https://janus-stage.ucsf.edu/login'
