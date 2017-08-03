@@ -3,25 +3,29 @@ import createPlotlyComponent from 'react-plotlyjs'
 import  Plotly from 'plotly.js/lib/core'
 import { connect } from 'react-redux'
 import  InputField from '../manifest/input_field'
-import ManifestSelector from '../manifest/manifest_selector'
+import { selectManifest } from '../../actions/manifest_actions'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import Vector from '../../vector'
+import { saveNewPlot } from '../../actions/plot_actions'
 
 Plotly.register([
   require('plotly.js/lib/scatter')
-]);
-const PlotlyComponent = createPlotlyComponent(Plotly);
+])
+const PlotlyComponent = createPlotlyComponent(Plotly)
 
 class Plotter extends Component {
-
   componentWillMount() {
-    const { manifests, selectedManifest, requestManifests, consignment } =  this.props
+    const { manifests, selectedManifest, requestManifests, consignment, selectManifest } =  this.props
     const isEmptyManifestMap = !Object.keys(manifests)[0]
 
     if (isEmptyManifestMap) {
       requestManifests()
+    }
+
+    if (!selectedManifest) {
+      selectManifest(Object.keys(manifests)[0] || null)
     }
 
     if (!consignment && selectedManifest && manifests[selectedManifest]) {
@@ -32,6 +36,10 @@ class Plotter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.manifests && !this.props.selectedManifest) {
+      this.props.selectManifest(Object.keys(nextProps.manifests)[0] || null)
+    }
+
     if (nextProps.selectedManifest && !nextProps.consignment) {
       if (this.props.manifests[nextProps.selectedManifest]) {
         const manifest = this.props.manifests[nextProps.selectedManifest]
@@ -41,22 +49,22 @@ class Plotter extends Component {
     }
   }
 
-  plotableData(consignment) {
-    return Object.keys(consignment).reduce( (acc, key) => {
-      if (consignment[key] instanceof Vector) {
-        return { ...acc, [key]: consignment[key] }
-      }
-      return acc
-    },{})
+  manifestOptions(manifests) {
+    return Object.keys(manifests).map(key => (
+      <option key={key} value={key}>{manifests[key].name}</option>
+    ))
   }
 
   render() {
     return (
       <div className='plot-container'>
-        <ManifestSelector manifests={this.props.manifests} newManifest={false} />
+        <select value={this.props.selectedManifest} onChange={(e) => this.props.selectManifest(e.target.value)}>
+          {this.manifestOptions(this.props.manifests)}
+        </select>
         <ScatterPlotForm className='plot-form'
-          data={this.props.consignment ? this.plotableData(this.props.consignment) : {}}
+          consignment={this.props.consignment || {}}
           manifestId={this.props.selectedManifest}
+          saveNewPlot={this.props.saveNewPlot}
         />
       </div>
     )
@@ -64,27 +72,28 @@ class Plotter extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { manifests, plot: { selectedManifest } } = state
+  const { manifests, manifestsUI: { selected } } = state
   let consignment = null
-  if (manifests[selectedManifest]) {
-    consignment = selectConsignment(state, manifests[selectedManifest].name)
+  if (manifests[selected]) {
+    consignment = selectConsignment(state, manifests[selected].name)
   }
 
   return {
     manifests,
     consignment,
-    selectedManifest
+    selectedManifest: selected
   }
 }
 
 export default connect(
   mapStateToProps,
-  { requestManifests, requestConsignments }
+  { selectManifest, requestManifests, requestConsignments, saveNewPlot }
 )(Plotter)
 
 class ScatterPlotForm extends Component {
   constructor(props) {
     super(props)
+    this.plotType = 'scatter',
 
     this.state = {
       data: [],
@@ -108,8 +117,9 @@ class ScatterPlotForm extends Component {
       config: {
         showLink: false,
         displayModeBar: true,
-        modeBarButtonsToRemove: ['sendDataToCloud','lasso2d', 'toggleSpikelines']
-      }
+        modeBarButtonsToRemove: ['sendDataToCloud', 'lasso2d', 'toggleSpikelines']
+      },
+      plotableData: this.plotableDataSeries(props.consignment)
     }
   }
 
@@ -117,15 +127,28 @@ class ScatterPlotForm extends Component {
     if (nextProps.manifestId != this.props.manifestId) {
       this.setState({ data: [] })
     }
+
+    if (nextProps.consignment != this.props.consignment) {
+      this.setState({ plotableData: nextProps.consignment ? this.plotableDataSeries(nextProps.consignment) : {} })
+    }
+  }
+
+  plotableDataSeries(consignment) {
+    return Object.keys(consignment).reduce( (acc, key) => {
+      if (consignment[key] instanceof Vector) {
+        return { ...acc, [key]: consignment[key] }
+      }
+      return acc
+    },{})
   }
 
   addSeries(series) {
     const withSeriesData = {
       ...series,
       id: Math.random(),
-      x: this.props.data[series.x].values,
+      x: this.state.plotableData[series.x].values,
       manifestSeriesX: series.x,
-      y: this.props.data[series.y].values,
+      y: this.state.plotableData[series.y].values,
       manifestSeriesY: series.y
     }
 
@@ -191,10 +214,23 @@ class ScatterPlotForm extends Component {
     })
   }
 
+  handleSave() {
+    let plotConfig = {
+      ...this.state,
+      plotType: this.plotType,
+      data: this.state.data.map(seriesData => {
+        delete seriesData.x
+        delete seriesData.y
+        return seriesData
+      })
+    }
+    delete plotConfig.plotableData
+    this.props.saveNewPlot(this.props.manifestId, plotConfig)
+  }
+
 
   render () {
     const { layout } = this.state
-    console.log(this.state)
 
     return (
       <div className='plot-form-container'>
@@ -209,11 +245,13 @@ class ScatterPlotForm extends Component {
             <label htmlFor='grid'>Grid: </label>
             <input id='grid' type='checkbox' checked={layout.xaxis.showgrid && layout.yaxis.showgrid} onChange={this.toggleGrid.bind(this)} />
           </div>
+          <input value='save' type='button' onClick={this.handleSave.bind(this)} />
           <SeriesForm
-            data={this.props.data}
+            data={this.state.plotableData}
             addSeries={this.addSeries.bind(this)}
             appliedSeries={this.state.data}
             removeSeries={this.removeSeries.bind(this)}
+            selectedManifest={this.props.selectedManifest}
           />
         </fieldset>
         <PlotlyComponent { ...this.state } />
@@ -236,11 +274,13 @@ class SeriesForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const firstDataSeriesName = Object.keys(nextProps.data)[0] || null
-    this.setState({
-      x: firstDataSeriesName,
-      y: firstDataSeriesName
-    })
+    if (!this.props.selectedManifest || this.props.selectedManifest != nextProps.selectedManifest) {
+      const firstDataSeriesName = Object.keys(nextProps.data)[0] || null
+      this.setState({
+        x: firstDataSeriesName,
+        y: firstDataSeriesName
+      })
+    }
   }
 
   updateMode(evt) {

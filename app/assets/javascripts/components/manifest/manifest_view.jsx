@@ -5,8 +5,6 @@ import ToggleSwitch from '../toggle_switch'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
-import Vector from '../../vector'
-import Matrix from '../../matrix'
 
 // Shows a single manifest - it has two states, 'script', which
 // shows the manufest script, and 'output', which shows the
