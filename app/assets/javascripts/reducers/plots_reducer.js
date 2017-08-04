@@ -19,4 +19,6 @@ const plots = (state = {}, action) => {
   }
 }
 
+export function allPlots(state) { return Object.keys(state).map(key => state[key]) }
+
 export default plots

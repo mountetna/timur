@@ -22,7 +22,12 @@ export const requestManifests = () =>
           }
 
           // send plots to the store
-          manifestJSON.plots.forEach(plot => dispatch(addPlot(plot)))
+          manifestJSON.plots.forEach(plot => {
+
+            //plot shares the same editing logic as manifests
+            let plotWithEditFlag =  { ...plot, is_editable: manifestJSON.is_editable }
+            dispatch(addPlot(plotWithEditFlag))
+          })
           delete manifest.plots
 
           return { ...acc, [manifestJSON.id]: manifest }

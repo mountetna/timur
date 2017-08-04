@@ -9,6 +9,7 @@ import { requestManifests, manifestToReqPayload } from '../../actions/manifest_a
 import { selectConsignment } from '../../selectors/consignment'
 import Vector from '../../vector'
 import { saveNewPlot } from '../../actions/plot_actions'
+import { allPlots } from '../../reducers/plots_reducer'
 
 Plotly.register([
   require('plotly.js/lib/scatter')
@@ -16,6 +17,14 @@ Plotly.register([
 const PlotlyComponent = createPlotlyComponent(Plotly)
 
 class Plotter extends Component {
+  constructor() {
+    super()
+    this.state = {
+      isEditing: false,
+      selectedPlot: null
+    }
+  }
+
   componentWillMount() {
     const { manifests, selectedManifest, requestManifests, consignment, selectManifest } =  this.props
     const isEmptyManifestMap = !Object.keys(manifests)[0]
@@ -40,7 +49,9 @@ class Plotter extends Component {
       this.props.selectManifest(Object.keys(nextProps.manifests)[0] || null)
     }
 
-    if (nextProps.selectedManifest && !nextProps.consignment) {
+    if (!this.props.selectedManifest ||
+      (this.props.selectedManifest != nextProps.selectedManifest && !nextProps.consignment)) {
+
       if (this.props.manifests[nextProps.selectedManifest]) {
         const manifest = this.props.manifests[nextProps.selectedManifest]
         const reqPayload = manifestToReqPayload(manifest)
@@ -55,19 +66,77 @@ class Plotter extends Component {
     ))
   }
 
+  selectPlot(id) {
+    this.setState({ selectedPlot: id },
+      () => this.props.selectManifest(this.props.plots.find(plot => plot.id === id).manifest_id))
+  }
+
   render() {
     return (
       <div className='plot-container'>
-        <select value={this.props.selectedManifest} onChange={(e) => this.props.selectManifest(e.target.value)}>
-          {this.manifestOptions(this.props.manifests)}
-        </select>
-        <ScatterPlotForm className='plot-form'
-          consignment={this.props.consignment || {}}
-          manifestId={this.props.selectedManifest}
-          saveNewPlot={this.props.saveNewPlot}
-        />
+        <div>
+          Plots
+          <ul>
+            {this.props.plots.map(plot => (
+              <li>
+                <a onClick={() => this.selectPlot(plot.id)}>
+                  {plot.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+          {this.state.isEditing ? (
+            <div>
+              {'Manifest: '}
+              <select value={this.props.selectedManifest} onChange={(e) => this.props.selectManifest(e.target.value)}>
+                {this.manifestOptions(this.props.manifests)}
+              </select>
+              <ScatterPlotForm className='plot-form'
+                consignment={this.props.consignment || {}}
+                manifestId={this.props.selectedManifest}
+                saveNewPlot={this.props.saveNewPlot}
+              />
+            </div>
+          ) : (
+            <Plot
+              plot={this.props.plots.find(plot => plot.id === this.state.selectedPlot)}
+              consignment={this.props.consignment}
+            />
+          )}
       </div>
     )
+  }
+}
+
+class Plot extends Component {
+  constructor(props) {
+    super(props)
+    this.state = this.toPlotly(this.props.plot, this.props.consignment)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(this.toPlotly(nextProps.plot, nextProps.consignment))
+  }
+
+  toPlotly(plot, consignment = {}) {
+    let plotType = plot ? plot.plot_type : ''
+    switch (plotType) {
+      case 'scatter':
+        let plotly = { ...plot.configuration }
+        plotly.data = plotly.data.map(d => ({
+          ...d,
+          x: consignment[d.manifestSeriesX] ? consignment[d.manifestSeriesX].values : [],
+          y: consignment[d.manifestSeriesY] ? consignment[d.manifestSeriesY].values : []
+        }))
+        return plotly
+      default:
+        return plot
+    }
+  }
+
+  render() {
+    return <PlotlyComponent { ...this.state } />
   }
 }
 
@@ -81,7 +150,8 @@ const mapStateToProps = (state) => {
   return {
     manifests,
     consignment,
-    selectedManifest: selected
+    selectedManifest: selected,
+    plots: allPlots(state.plots)
   }
 }
 
