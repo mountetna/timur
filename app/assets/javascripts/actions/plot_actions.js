@@ -1,11 +1,6 @@
 import { showMessages } from './message_actions'
-import { createPlot, destroyPlot } from '../api/plots'
-
-// Add a plot to the store
-export const addPlot = (plot) => ({
-  type: 'ADD_PLOT',
-  plot
-})
+import { createPlot, destroyPlot, updatePlot } from '../api/plots'
+import { manifestById } from '../reducers/manifests_reducer'
 
 // remove a plot from the store
 const removePlot = (id) => ({
@@ -14,18 +9,30 @@ const removePlot = (id) => ({
 })
 
 // Delete a plot from the database and the store
-export const deletePlot = (manifestId, plotId) =>
+export const deletePlot = (manifestId, plotId, callback = () => {}) =>
   (dispatch) => {
     destroyPlot(manifestId, plotId)
       .then(() => {
         dispatch(removePlot(plotId))
+        callback(plotId)
       })
   }
 
-export const savePlot = (plot) =>
-  (dispatch) => {
-    updatePlot(plot.manifest_id, plot.id)
-      .then(({manifest}) => {})
+
+const addPlot = (plot) => ({
+  type: 'ADD_PLOT',
+  plot
+})
+
+// Add a plot to the store
+export const loadPlot = (plot) =>
+  (dispatch, getState) => {
+    // is_editable flag equals the manifest is_editable flag
+    const { manifests } = getState()
+    const { is_editable } = manifestById(manifests, plot.manifest_id)
+    const plotWithEditFlag =  { ...plot, is_editable }
+
+    dispatch(addPlot(plotWithEditFlag))
   }
 
 const plotToPayload = (plot) => {
@@ -37,13 +44,24 @@ const plotToPayload = (plot) => {
   }
 }
 
+export const savePlot = (manifest_id, id, plot, callback = () => {}) =>
+  (dispatch) => {
+    const payload = plotToPayload(plot)
+    updatePlot(manifest_id, id, payload)
+      .then(plot => {
+        dispatch(loadPlot(plot))
+        callback(plot)
+      })
+  }
+
 // Post to create new plot and save in the store
-export const saveNewPlot = (manifestId = 1, plot) =>
+export const saveNewPlot = (manifestId, plot, callback = () => {}) =>
   (dispatch) => {
     const payload = plotToPayload(plot)
     createPlot(manifestId, payload)
       .then(plot => {
         dispatch(addPlot(plot))
+        callback(plot)
       })
       .catch(e => {
         e.response.json()

@@ -1,5 +1,5 @@
 import { showMessages } from './message_actions'
-import { addPlot } from './plot_actions'
+import { loadPlot } from './plot_actions'
 import { fetchManifests, destroyManifest, createManifest, updateManifest } from '../api/manifests'
 
 // Add retrieved manifests to the store
@@ -13,27 +13,25 @@ export const requestManifests = () =>
   (dispatch) => {
     fetchManifests()
       .then( ({ manifests }) => {
-        const manifestsById = manifests.reduce((acc, manifestJSON) => {
 
+        // transform manifests for store
+        const manifestsById = manifests.reduce((acc, manifestJSON) => {
           let manifest = {
             ...manifestJSON,
             // create reference to plots that belong to the manifest
             plotIds: manifestJSON.plots.map(p => p.id)
           }
-
-          // send plots to the store
-          manifestJSON.plots.forEach(plot => {
-
-            //plot shares the same editing logic as manifests
-            let plotWithEditFlag =  { ...plot, is_editable: manifestJSON.is_editable }
-            dispatch(addPlot(plotWithEditFlag))
-          })
           delete manifest.plots
-
           return { ...acc, [manifestJSON.id]: manifest }
         }, {})
-
         dispatch(loadManifests(manifestsById))
+
+        //load plots to store
+        const plots = manifests.reduce((acc, manifestJSON) => {
+          return [ ...acc, ...manifestJSON.plots]
+        }, [])
+        console.log(plots)
+        plots.forEach(plot => dispatch(loadPlot(plot)))
       })
       .catch(e =>  showErrors(e, dispatch))
   }

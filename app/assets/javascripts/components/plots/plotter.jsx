@@ -8,7 +8,7 @@ import { requestConsignments } from '../../actions/consignment_actions'
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import Vector from '../../vector'
-import { saveNewPlot } from '../../actions/plot_actions'
+import { saveNewPlot, deletePlot, savePlot } from '../../actions/plot_actions'
 import { allPlots } from '../../reducers/plots_reducer'
 
 Plotly.register([
@@ -60,15 +60,25 @@ class Plotter extends Component {
     }
   }
 
-  manifestOptions(manifests) {
-    return Object.keys(manifests).map(key => (
-      <option key={key} value={key}>{manifests[key].name}</option>
-    ))
+  newPlot() {
+    this.setState({ isEditing: true, selectedPlot: null })
   }
 
   selectPlot(id) {
-    this.setState({ selectedPlot: id },
+    this.setState({ isEditing: false, selectedPlot: id },
       () => this.props.selectManifest(this.props.plots.find(plot => plot.id === id).manifest_id))
+  }
+
+  toggleEditing() {
+    this.setState({ isEditing: !this.state.isEditing })
+  }
+
+  handleDelete() {
+    this.props.deletePlot(
+      this.props.selectedManifest,
+      this.state.selectedPlot,
+      () => this.setState({ selectedPlot: null })
+    )
   }
 
   render() {
@@ -76,9 +86,12 @@ class Plotter extends Component {
       <div className='plot-container'>
         <div>
           Plots
+          <div>
+            <a onClick={() => this.newPlot()}>new plot</a>
+          </div>
           <ul>
             {this.props.plots.map(plot => (
-              <li>
+              <li key={plot.id}>
                 <a onClick={() => this.selectPlot(plot.id)}>
                   {plot.name}
                 </a>
@@ -87,22 +100,30 @@ class Plotter extends Component {
           </ul>
         </div>
           {this.state.isEditing ? (
-            <div>
-              {'Manifest: '}
-              <select value={this.props.selectedManifest} onChange={(e) => this.props.selectManifest(e.target.value)}>
-                {this.manifestOptions(this.props.manifests)}
-              </select>
-              <ScatterPlotForm className='plot-form'
-                consignment={this.props.consignment || {}}
-                manifestId={this.props.selectedManifest}
-                saveNewPlot={this.props.saveNewPlot}
-              />
-            </div>
-          ) : (
-            <Plot
-              plot={this.props.plots.find(plot => plot.id === this.state.selectedPlot)}
+            <ScatterPlotForm className='plot-form'
               consignment={this.props.consignment}
+              selectedManifest={this.props.selectedManifest}
+              selectManifest={this.props.selectManifest}
+              saveNewPlot={this.props.saveNewPlot}
+              manifests={this.props.manifests}
+              toggleEditing={this.toggleEditing.bind(this)}
+              selectPlot={this.selectPlot.bind(this)}
+              plot={this.props.plots.find(plot => plot.id === this.state.selectedPlot)}
+              savePlot={this.props.savePlot}
             />
+          ) : (
+            <div>
+              {this.state.selectedPlot &&
+                <div>
+                  <a onClick={this.handleDelete.bind(this)}>delete </a>
+                  <a onClick={()=> this.setState({ isEditing: true })}>edit</a>
+                  <Plot
+                    plot={this.props.plots.find(plot => plot.id === this.state.selectedPlot)}
+                    consignment={this.props.consignment}
+                  />
+                </div>
+              }
+            </div>
           )}
       </div>
     )
@@ -110,20 +131,25 @@ class Plotter extends Component {
 }
 
 class Plot extends Component {
-  constructor(props) {
-    super(props)
-    this.state = this.toPlotly(this.props.plot, this.props.consignment)
+  componentDidMount() {
+    this.updatePlot(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(this.toPlotly(nextProps.plot, nextProps.consignment))
+    this.updatePlot(nextProps)
+  }
+
+  updatePlot(props) {
+    if (props.plot && props.consignment) {
+      this.setState(this.toPlotly(props.plot, props.consignment))
+    }
   }
 
   toPlotly(plot, consignment = {}) {
-    let plotType = plot ? plot.plot_type : ''
+    let plotType = plot ? plot.plot_type || plot.plotType :  ''
     switch (plotType) {
       case 'scatter':
-        let plotly = { ...plot.configuration }
+        let plotly = plot.configuration ? { ...plot.configuration } : { ...plot }
         plotly.data = plotly.data.map(d => ({
           ...d,
           x: consignment[d.manifestSeriesX] ? consignment[d.manifestSeriesX].values : [],
@@ -157,7 +183,14 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { selectManifest, requestManifests, requestConsignments, saveNewPlot }
+  {
+    selectManifest,
+    requestManifests,
+    requestConsignments,
+    saveNewPlot,
+    deletePlot,
+    savePlot
+  }
 )(Plotter)
 
 class ScatterPlotForm extends Component {
@@ -193,13 +226,23 @@ class ScatterPlotForm extends Component {
     }
   }
 
+  componentDidMount() {
+    if (this.props.plot) {
+      this.setState(this.props.plot.configuration)
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.manifestId != this.props.manifestId) {
+    if (nextProps.selectedManifest != this.props.selectedManifest) {
       this.setState({ data: [] })
     }
 
     if (nextProps.consignment != this.props.consignment) {
       this.setState({ plotableData: nextProps.consignment ? this.plotableDataSeries(nextProps.consignment) : {} })
+    }
+
+    if (nextProps.plot) {
+      this.setState(this.props.plot.configuration)
     }
   }
 
@@ -284,6 +327,12 @@ class ScatterPlotForm extends Component {
     })
   }
 
+  manifestOptions(manifests) {
+    return Object.keys(manifests).map(key => (
+      <option key={key} value={key}>{manifests[key].name}</option>
+    ))
+  }
+
   handleSave() {
     let plotConfig = {
       ...this.state,
@@ -295,15 +344,48 @@ class ScatterPlotForm extends Component {
       })
     }
     delete plotConfig.plotableData
-    this.props.saveNewPlot(this.props.manifestId, plotConfig)
-  }
+    if (this.props.plot) {
+      const { manifest_id, id } = this.props.plot
+      this.props.savePlot(
+        manifest_id,
+        id,
+        plotConfig,
+        (plot) => {
+          console.log(this.props)
+          this.props.toggleEditing()
+          this.props.selectPlot(plot.id)
+        }
+      )
+    } else {
+      this.props.saveNewPlot(
+        this.props.selectedManifest,
+        plotConfig,
+        (plot) => {
+          this.props.toggleEditing()
+          this.props.selectPlot(plot.id)
+        }
+      )
+    }
 
+  }
 
   render () {
     const { layout } = this.state
 
     return (
       <div className='plot-form-container'>
+        <div>
+          <a onClick={this.handleSave.bind(this)}>save </a>
+          <a onClick={this.props.toggleEditing}>cancel</a>
+        </div>
+        {'Manifest: '}
+        {this.props.plot ? (
+          <span>{this.props.manifests[this.props.selectedManifest].name}</span>
+        ) : (
+          <select value={this.props.selectedManifest} onChange={(e) => this.props.selectManifest(e.target.value)}>
+            {this.manifestOptions(this.props.manifests)}
+          </select>
+        )}
         <fieldset>
           <legend>Scatter Plot</legend>
           <InputField type='text' label='Title: ' onChange={this.updateTitle.bind(this)} value={layout.title} />
@@ -315,7 +397,6 @@ class ScatterPlotForm extends Component {
             <label htmlFor='grid'>Grid: </label>
             <input id='grid' type='checkbox' checked={layout.xaxis.showgrid && layout.yaxis.showgrid} onChange={this.toggleGrid.bind(this)} />
           </div>
-          <input value='save' type='button' onClick={this.handleSave.bind(this)} />
           <SeriesForm
             data={this.state.plotableData}
             addSeries={this.addSeries.bind(this)}
@@ -324,16 +405,18 @@ class ScatterPlotForm extends Component {
             selectedManifest={this.props.selectedManifest}
           />
         </fieldset>
-        <PlotlyComponent { ...this.state } />
+        <Plot
+          plot={this.state}
+          consignment={this.props.consignment}
+        />
       </div>
     )
   }
 }
 
 class SeriesForm extends Component {
-  constructor(props) {
-    super(props)
-
+  constructor() {
+    super()
     this.state = {
       type: 'scatter',
       x: null,
@@ -343,14 +426,22 @@ class SeriesForm extends Component {
     }
   }
 
+  componentDidMount() {
+    this.setDefaultXY(this.props)
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (!this.props.selectedManifest || this.props.selectedManifest != nextProps.selectedManifest) {
-      const firstDataSeriesName = Object.keys(nextProps.data)[0] || null
-      this.setState({
-        x: firstDataSeriesName,
-        y: firstDataSeriesName
-      })
+    if (this.props.data != nextProps.data) {
+      this.setDefaultXY(nextProps)
     }
+  }
+
+  setDefaultXY(props) {
+    const firstDataSeriesName = Object.keys(props.data)[0] || null
+    this.setState({
+      x: firstDataSeriesName,
+      y: firstDataSeriesName
+    })
   }
 
   updateMode(evt) {

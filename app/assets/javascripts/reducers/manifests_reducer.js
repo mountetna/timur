@@ -14,4 +14,6 @@ const manifests = (state = {}, action) => {
   }
 }
 
+export const manifestById = (state, id) => state[id]
+
 export default manifests
