@@ -3,9 +3,10 @@ import { createPlot, destroyPlot, updatePlot } from '../api/plots'
 import { manifestById } from '../reducers/manifests_reducer'
 
 // remove a plot from the store
-const removePlot = (id) => ({
+const removePlot = (id, manifestId) => ({
   type: 'REMOVE_PLOT',
-  id
+  id,
+  manifestId
 })
 
 // Delete a plot from the database and the store
@@ -13,7 +14,7 @@ export const deletePlot = (manifestId, plotId, callback = () => {}) =>
   (dispatch) => {
     destroyPlot(manifestId, plotId)
       .then(() => {
-        dispatch(removePlot(plotId))
+        dispatch(removePlot(plotId, manifestId))
         callback(plotId)
       })
   }
