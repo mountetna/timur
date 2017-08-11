@@ -7,7 +7,7 @@ import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
 import { plotsByIds } from '../../reducers/plots_reducer'
 import { changeMode } from '../../actions/timur_actions'
-import { selectPlot } from '../../actions/plot_actions'
+import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions'
 
 // Shows a single manifest - it has two states, 'script', which
 // shows the manufest script, and 'output', which shows the
@@ -16,15 +16,17 @@ import { selectPlot } from '../../actions/plot_actions'
 class ManifestView extends Component {
   constructor() {
     super()
-    this.state = {
-      view_mode: 'script',
-      plot: false
-    }
+    this.state = { view_mode: 'script' }
   }
 
   selectPlot(id) {
     this.props.changeMode('plot')
     this.props.selectPlot(id)
+  }
+
+  plotManifest() {
+    this.props.changeMode('plot')
+    this.props.plotEdit(true)
   }
 
   render() {
@@ -63,7 +65,7 @@ class ManifestView extends Component {
               </button>
             }
             {this.state.view_mode === 'output' &&
-              <button onClick={() => this.setState({plot: !this.state.plot})}>
+              <button onClick={this.plotManifest.bind(this)}>
                 <i className='fa fa-line-chart' aria-hidden="true"></i>
                 plot
               </button>
@@ -126,6 +128,7 @@ export default connect(
     toggleEdit,
     requestConsignments,
     changeMode,
-    selectPlot
+    selectPlot,
+    plotEdit
   }
 )(ManifestView)
