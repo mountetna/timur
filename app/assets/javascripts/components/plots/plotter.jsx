@@ -345,7 +345,6 @@ class ScatterPlotForm extends Component {
         id,
         plotConfig,
         (plot) => {
-          console.log(this.props)
           this.props.toggleEditing()
           this.props.selectPlot(plot.id)
         }
