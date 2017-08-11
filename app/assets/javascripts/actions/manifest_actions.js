@@ -30,7 +30,6 @@ export const requestManifests = () =>
         const plots = manifests.reduce((acc, manifestJSON) => {
           return [ ...acc, ...manifestJSON.plots]
         }, [])
-        console.log(plots)
         plots.forEach(plot => dispatch(loadPlot(plot)))
       })
       .catch(e =>  showErrors(e, dispatch))

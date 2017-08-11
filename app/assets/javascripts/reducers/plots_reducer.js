@@ -1,4 +1,6 @@
-const plots = (state = {}, action) => {
+import { combineReducers } from 'redux'
+
+const plotsMap = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_PLOT':
       return {
@@ -19,6 +21,30 @@ const plots = (state = {}, action) => {
   }
 }
 
-export function allPlots(state) { return Object.keys(state).map(key => state[key]) }
+const selected = (state = null, action) => {
+  switch (action.type) {
+    case 'SELECT_PLOT':
+      return action.id
+    default:
+      return state
+  }
+}
 
-export default plots
+const isEditing = (state = false, action) => {
+  switch (action.type) {
+    case 'TOGGLE_PLOT_EDITING':
+      return typeof action.isEditing == "undefined" ? !state : action.isEditing
+    default:
+      return state
+  }
+}
+
+export default combineReducers({
+  plotsMap,
+  selected,
+  isEditing
+})
+
+export function allPlots(state) { return Object.keys(state.plotsMap).map(key => state.plotsMap[key]) }
+
+export function plotsByIds(state, ids) { return ids.map(id => state.plotsMap[id]) }

@@ -19,6 +19,15 @@ export const deletePlot = (manifestId, plotId, callback = () => {}) =>
       })
   }
 
+export const selectPlot = (id) => ({
+  type: 'SELECT_PLOT',
+  id
+})
+
+export const toggleEditing = (isEditing) => ({
+  type: 'TOGGLE_PLOT_EDITING',
+  isEditing
+})
 
 const addPlot = (plot) => ({
   type: 'ADD_PLOT',

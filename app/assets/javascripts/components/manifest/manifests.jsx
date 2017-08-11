@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { requestManifests } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import ManifestSelector from './manifest_selector'
-import debounce from 'lodash.debounce'
 
 // Main component for viewing/editing manifests
 class Manifests extends Component {

@@ -8,7 +8,7 @@ import { requestConsignments } from '../../actions/consignment_actions'
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import Vector from '../../vector'
-import { saveNewPlot, deletePlot, savePlot } from '../../actions/plot_actions'
+import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions'
 import { allPlots } from '../../reducers/plots_reducer'
 
 Plotly.register([
@@ -17,14 +17,6 @@ Plotly.register([
 const PlotlyComponent = createPlotlyComponent(Plotly)
 
 class Plotter extends Component {
-  constructor() {
-    super()
-    this.state = {
-      isEditing: false,
-      selectedPlot: null
-    }
-  }
-
   componentWillMount() {
     const { manifests, selectedManifest, requestManifests, consignment, selectManifest } =  this.props
     const isEmptyManifestMap = !Object.keys(manifests)[0]
@@ -61,23 +53,21 @@ class Plotter extends Component {
   }
 
   newPlot() {
-    this.setState({ isEditing: true, selectedPlot: null })
+    this.props.selectPlot(null)
+    this.props.toggleEditing(true)
   }
 
   selectPlot(id) {
-    this.setState({ isEditing: false, selectedPlot: id },
-      () => this.props.selectManifest(this.props.plots.find(plot => plot.id === id).manifest_id))
-  }
-
-  toggleEditing() {
-    this.setState({ isEditing: !this.state.isEditing })
+    this.props.selectManifest(this.props.plots.find(plot => plot.id === id).manifest_id)
+    this.props.selectPlot(id)
+    this.props.toggleEditing(false)
   }
 
   handleDelete() {
     this.props.deletePlot(
       this.props.selectedManifest,
-      this.state.selectedPlot,
-      () => this.setState({ selectedPlot: null })
+      this.props.selectedPlot,
+      () => this.props.selectPlot(null)
     )
   }
 
@@ -99,26 +89,26 @@ class Plotter extends Component {
             ))}
           </ul>
         </div>
-          {this.state.isEditing ? (
+          {this.props.isEditing ? (
             <ScatterPlotForm className='plot-form'
               consignment={this.props.consignment}
               selectedManifest={this.props.selectedManifest}
               selectManifest={this.props.selectManifest}
               saveNewPlot={this.props.saveNewPlot}
               manifests={this.props.manifests}
-              toggleEditing={this.toggleEditing.bind(this)}
+              toggleEditing={this.props.toggleEditing}
               selectPlot={this.selectPlot.bind(this)}
-              plot={this.props.plots.find(plot => plot.id === this.state.selectedPlot)}
+              plot={this.props.plots.find(plot => plot.id === this.props.selectedPlot)}
               savePlot={this.props.savePlot}
             />
           ) : (
             <div>
-              {this.state.selectedPlot &&
+              {this.props.selectedPlot &&
                 <div>
                   <a onClick={this.handleDelete.bind(this)}>delete </a>
-                  <a onClick={()=> this.setState({ isEditing: true })}>edit</a>
+                  <a onClick={() => this.props.toggleEditing()}>edit</a>
                   <Plot
-                    plot={this.props.plots.find(plot => plot.id === this.state.selectedPlot)}
+                    plot={this.props.plots.find(plot => plot.id === this.props.selectedPlot)}
                     consignment={this.props.consignment}
                   />
                 </div>
@@ -167,17 +157,19 @@ class Plot extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { manifests, manifestsUI: { selected } } = state
+  const { manifests, manifestsUI, plots } = state
   let consignment = null
-  if (manifests[selected]) {
-    consignment = selectConsignment(state, manifests[selected].name)
+  if (manifests[manifestsUI.selected]) {
+    consignment = selectConsignment(state, manifests[manifestsUI.selected].name)
   }
 
   return {
     manifests,
     consignment,
-    selectedManifest: selected,
-    plots: allPlots(state.plots)
+    selectedManifest: manifestsUI.selected,
+    plots: allPlots(state.plots),
+    selectedPlot: plots.selected,
+    isEditing: plots.isEditing
   }
 }
 
@@ -189,7 +181,9 @@ export default connect(
     requestConsignments,
     saveNewPlot,
     deletePlot,
-    savePlot
+    savePlot,
+    selectPlot,
+    toggleEditing
   }
 )(Plotter)
 
@@ -246,7 +240,7 @@ class ScatterPlotForm extends Component {
     }
   }
 
-  plotableDataSeries(consignment) {
+  plotableDataSeries(consignment = {}) {
     return Object.keys(consignment).reduce( (acc, key) => {
       if (consignment[key] instanceof Vector) {
         return { ...acc, [key]: consignment[key] }
@@ -376,7 +370,7 @@ class ScatterPlotForm extends Component {
       <div className='plot-form-container'>
         <div>
           <a onClick={this.handleSave.bind(this)}>save </a>
-          <a onClick={this.props.toggleEditing}>cancel</a>
+          <a onClick={() => this.props.toggleEditing()}>cancel</a>
         </div>
         {'Manifest: '}
         {this.props.plot ? (

@@ -5,6 +5,9 @@ import ToggleSwitch from '../toggle_switch'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
+import { plotsByIds } from '../../reducers/plots_reducer'
+import { changeMode } from '../../actions/timur_actions'
+import { selectPlot } from '../../actions/plot_actions'
 
 // Shows a single manifest - it has two states, 'script', which
 // shows the manufest script, and 'output', which shows the
@@ -17,6 +20,11 @@ class ManifestView extends Component {
       view_mode: 'script',
       plot: false
     }
+  }
+
+  selectPlot(id) {
+    this.props.changeMode('plot')
+    this.props.selectPlot(id)
   }
 
   render() {
@@ -87,6 +95,20 @@ class ManifestView extends Component {
           <ol>
             {manifestElements}
           </ol>
+          {this.state.view_mode === 'output' &&
+            <div>
+              <div>{'Plots: '}</div>
+              <ul>
+                {this.props.plots.map(plot => (
+                  <li key={plot.id}>
+                    <a onClick={() => this.selectPlot(plot.id)}>
+                      {plot.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          }
         </div>
       </div>
     )
@@ -95,12 +117,15 @@ class ManifestView extends Component {
 
 export default connect(
   (state,props) => ({
-    consignment: selectConsignment(state,props.manifest.name)
+    consignment: selectConsignment(state, props.manifest.name),
+    plots: plotsByIds(state.plots, props.manifest.plotIds)
   }),
   {
     deleteManifest,
     copyManifest,
     toggleEdit,
-    requestConsignments
+    requestConsignments,
+    changeMode,
+    selectPlot
   }
 )(ManifestView)
