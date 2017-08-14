@@ -6,8 +6,9 @@
     $(function() {
       ReactDOM.render(
         React.createElement(Timur, {
-          #{current_user ? "user: '#{current_user.name}', " : '' }
+          #{current_user ? "user: '#{current_user.email}', " : '' }
           mode: 'map',
+          project_name: '#{@project_name}',
           environment: '#{Rails.env.development? ? 'development' : 'production'}'
         }),
         $('#root')[0]

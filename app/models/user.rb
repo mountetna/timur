@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_one :whitelist, class_name: "Whitelist", foreign_key: :email, primary_key: :email
+  has_one :whitelist, {class_name: 'Whitelist', foreign_key: :email, primary_key: :email}
   has_many :saved_items
   has_many :manifests
 
@@ -53,29 +53,31 @@ class User < ActiveRecord::Base
     'pzz00h5' => { key: 'pzz00h5', stain: 'dc', name: 'Neutrophil fraction', type: 'Population Fraction', v1: "Neutrophils##Lineage-,HLADR-\tCD45+\tLive\tSingle Cells 2\tSingle Cells\tTime", v2: "CD45+##Live\tSingle Cells 2\tSingle Cells\tTime" },  
     'tgd1vc3' => { key: 'tgd1vc3', stain: 'sort', name: 'CD44+ Stromal Cells CD90- fraction', type: 'Population Fraction', v1: "Q1: CD90-,CD44+##CD45-\tLive\tSingle Cells 2\tSingle Cells\tTime", v2: "CD45-##Live\tSingle Cells 2\tSingle Cells\tTime" },
     'fex3r8l' => { key: 'fex3r8l', stain: 'sort', name: 'CD44+ Stromal Cells CD90+ fraction', type: 'Population Fraction', v1: "Q2: CD90+,CD44+##CD45-\tLive\tSingle Cells 2\tSingle Cells\tTime", v2: "CD45-##Live\tSingle Cells 2\tSingle Cells\tTime" },
-
-
   }
 
-  def can_read?
-    whitelist && whitelist.can_read?
-  end
-  def can_edit?
-    whitelist && whitelist.can_edit?
-  end
-  def is_admin?
-    whitelist && whitelist.is_admin?
+  def can_read?(project_name)
+    whitelist && whitelist.can_read?(project_name)
   end
 
-  def get_save key
-    if saves["series"].has_key? key
-      return Series.new key,  saves["series"][key].symbolize_keys
+  def can_edit?(project_name)
+    whitelist && whitelist.can_edit?(project_name)
+  end
+
+  def is_admin?(project_name)
+    whitelist && whitelist.is_admin?(project_name)
+  end
+
+  def get_save(key)
+    if saves['series'].has_key?(key)
+      return Series.new(key, saves['series'][key].symbolize_keys)
     end
-    if DEFAULT_MAPPINGS.has_key? key
-      return Mapping.new key, DEFAULT_MAPPINGS[key]
+
+    if DEFAULT_MAPPINGS.has_key?(key)
+      return Mapping.new(key, DEFAULT_MAPPINGS[key])
     end
-    if saves["mappings"].has_key? key
-      return Mapping.new key,  saves["mappings"][key].symbolize_keys
+
+    if saves['mappings'].has_key?(key)
+      return Mapping.new(key, saves['mappings'][key].symbolize_keys)
     end
   end
 end

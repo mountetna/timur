@@ -55,10 +55,11 @@
 
 class DataManifest
   attr_reader :vars
-  def initialize manifest
+
+  def initialize(token, project_name, manifest)
     @manifest = manifest
     @vars = {}
-    @env = InfixParser::Environment.create(@vars)
+    @env = InfixParser::Environment.create(token, project_name, @vars)
   end
 
   def fill
@@ -82,9 +83,6 @@ class DataManifest
   private
 
   def resolve(query)
-    InfixParser::parse(
-      InfixLexer::lex(query),
-      env: @env
-    )
+    InfixParser::parse(InfixLexer::lex(query), {env: @env})
   end
 end

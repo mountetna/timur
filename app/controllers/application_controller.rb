@@ -1,27 +1,33 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-  helper_method :current_user
+  protect_from_forgery({with: :exception})
+  helper_method(:current_user)
 
   private
 
   def authenticate
-    redirect_to :login unless current_user
 
-    # you passed external auth, now internal
+    # Set the janus auth token to the session for later use.
+    if cookies.key?(:UCSF_ETNA_AUTH_TOKEN)
+      session[:token] = cookies[:UCSF_ETNA_AUTH_TOKEN]
+    end
+
+    unless current_user
+      redirect_to(auth_path(refer: URI::encode(request.original_url)))
+    end
   end
 
   def unauth
-    redirect_to :noauth
+    redirect_to(:no_auth)
   end
 
   def can_read?
-    current_user && current_user.can_read?
+    current_user && current_user.can_read?(params[:project_name])
   end
 
   def can_edit?
-    current_user && current_user.can_edit?
+    current_user && current_user.can_edit?(params[:project_name])
   end
 
   def readable_check
@@ -34,20 +40,21 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= begin
-      if Rails.env.development?
-        auth = {
-          'email' => 'developer@localhost',
-          'name' => 'Timothy Developer',
-          'ucsf_id' => '999999'
-        }
-        user = User.where(email: auth['email'].downcase).first_or_create do |u|
-          u.ucsf_id = auth['ucsf_id']
-          u.name = auth['name']
-        end
-        session[:user_id] = user.id
-      end
-      
-      User.find(session[:user_id]) if session[:user_id]      
+
+#      # Create a development user in the development environment.
+#      if Rails.env.development?
+#        user = create_developer_user
+#        session[:user_id] = user.id
+#      end
+
+      User.find(session[:user_id]) if session[:user_id]
+    rescue
+      nil
     end
+  end
+
+  def create_developer_user
+    user_data = {email: 'developer@localhost', name: 'Timothy Developer'}
+    user = User.where({email: auth['email']}).first_or_create.update(user_data)
   end
 end

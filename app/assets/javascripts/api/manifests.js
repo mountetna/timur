@@ -1,38 +1,68 @@
 import { headers, parseJSON, checkStatus } from './fetch_utils'
 
-export const fetchManifests = () =>
-  fetch(Routes.manifests_path(), {
-    credentials: 'same-origin',
-    headers: headers('json', 'csrf'),
-  })
-    .then(checkStatus)
-    .then(parseJSON)
+export const fetchManifests = (project_name, exchange)=>{
+  let routeOpts = {
+    'credentials': 'same-origin',
+    'method': 'POST',
+    'headers': headers('json', 'csrf'),
+    'body': JSON.stringify({
+      'project_name': project_name
+    })
+  };
 
-export const createManifest = (manifest) =>
-  fetch(Routes.manifests_path(), {
-    credentials: 'same-origin',
-    method: 'POST',
-    headers: headers('json', 'csrf'),
-    body: JSON.stringify(manifest)
-  })
+  var exchangePromise = exchange.fetch(Routes.manifests_fetch_path(), routeOpts)
     .then(checkStatus)
-    .then(parseJSON)
+    .then(parseJSON);
 
-export const destroyManifest = (manifestId) =>
-  fetch(Routes.manifest_path(manifestId), {
-    credentials: 'same-origin',
-    headers: headers('json', 'csrf'),
-    method: 'DELETE'
-  })
-    .then(checkStatus)
-    .then(parseJSON)
+  return exchangePromise;
+};
 
-export const updateManifest = (manifestUpdates, manifestId) =>
-  fetch(Routes.manifest_path(manifestId), {
-    credentials: 'same-origin',
-    method: 'PUT',
-    headers: headers('json', 'csrf'),
-    body: JSON.stringify(manifestUpdates)
-  })
+export const createManifest = (project_name, manifest, exchange)=>{
+  let routeOpts = {
+    'credentials': 'same-origin',
+    'method': 'POST',
+    'headers': headers('json', 'csrf'),
+    'body': JSON.stringify({
+      'project_name': project_name,
+      ...manifest
+    })
+  };
+
+  var exchangePromise = exchange.fetch(Routes.manifests_create_path(), routeOpts)
     .then(checkStatus)
-    .then(parseJSON)
+    .then(parseJSON);
+
+  return exchangePromise;
+};
+
+export const updateManifest = (project_name, manifestUpdates, manifestId, exchange)=>{
+  let routeOpts = {
+    'credentials': 'same-origin',
+    'method': 'POST',
+    'headers': headers('json', 'csrf'),
+    'body': JSON.stringify({
+      'project_name': project_name,
+      ...manifestUpdates
+    })
+  };
+
+  var exchangePromise = exchange.fetch(Routes.manifests_update_path(manifestId), routeOpts)
+    .then(checkStatus)
+    .then(parseJSON);
+
+  return exchangePromise;
+};
+
+export const destroyManifest = (manifestId, exchange)=>{
+  let routeOpts = {
+    'credentials': 'same-origin',
+    'method': 'POST',
+    'headers': headers('json', 'csrf')
+  };
+
+  var exchangePromise = exchange.fetch(Routes.manifests_destroy_path(manifestId), routeOpts)
+    .then(checkStatus)
+    .then(parseJSON);
+
+  return exchangePromise;
+};

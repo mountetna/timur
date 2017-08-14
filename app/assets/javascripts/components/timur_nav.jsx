@@ -6,9 +6,10 @@ class TimurNav extends Component {
     var login_path = Routes.login_path()
 
     var tabs = {
-      browse: Routes.browse_path(),
-      search: Routes.search_path(),
-      map: Routes.map_path(),
+      browse: Routes.browse_path(this.props.project_name),
+      search: Routes.search_path(this.props.project_name),
+      map: Routes.map_path(this.props.project_name),
+      manifest: Routes.manifests_path(this.props.project_name),
     }
 
     var login
@@ -25,7 +26,6 @@ class TimurNav extends Component {
       logo_id = "normal"
     }
 
-    //TODO fix hacky addition of Manifesto tab
     return <div id="header">
              <div id="logo">
                <a href="/">
@@ -65,12 +65,6 @@ class TimurNav extends Component {
                      </div>
                  )
                }
-               <div className={'nav_tab' + (this.props.appMode == 'manifesto' ? ' selected' : '')}>
-                  <a onClick={this.props.changeMode.bind(self, 'manifesto')}>Manifests</a>
-                </div>
-               <div className={'nav_tab' + (this.props.appMode == 'plot' ? ' selected' : '')}>
-                 <a onClick={this.props.changeMode.bind(self, 'plot')}>Plot</a>
-               </div>
                {
                  this.props.can_edit ?
                  <div className="nav_tab">
@@ -85,7 +79,7 @@ class TimurNav extends Component {
                  }
                  </a>
                </div>
-               <IdentifierSearch/>
+               <IdentifierSearch project_name={this.props.project_name}/>
                <div id="login">
                  { login }
                </div>

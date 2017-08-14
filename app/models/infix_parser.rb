@@ -34,6 +34,7 @@ class InfixLexer < RLTK::Lexer
 end
 
 class InfixParser < RLTK::Parser
+
   left :QUESTION
   left :MOD
 
@@ -48,25 +49,8 @@ class InfixParser < RLTK::Parser
   left :DOLLAR
   left :VAR
 
-  class Environment < RLTK::Parser::Environment
-    def self.create vars
-      env = self.new
-      env.vars = vars
-      env
-    end
-    attr_accessor :vars
-
-    def macro mac, args
-      raise TypeError("Variable is not a macro") unless mac.is_a?(Macro)
-
-      InfixParser::parse(
-        InfixLexer::lex(mac.substitute(args)),
-        env: self
-      )
-    end
-  end
-
   production(:e) do
+
     clause('NUM') { |n| n }
     clause('STRING') { |n| n }
     clause('list') { |l| l }
@@ -97,7 +81,13 @@ class InfixParser < RLTK::Parser
     clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
 
     clause('VAR .IDENT LPAREN .args RPAREN') { |i, args| macro(vars[i], args) }
-    clause('.IDENT LPAREN .args RPAREN') { |ident, args| Functions.call(ident, args) }
+    clause('.IDENT LPAREN .args RPAREN') { |ident, args| 
+
+      # The user token, which was set much earlier in the auth cycle, gets
+      # passed into our collection of 'timur functions'.
+      func = TimurFunction.new(token, project_name, ident, args)
+      func.call()
+    }
   end
 
   production(:list) do
@@ -130,4 +120,23 @@ class InfixParser < RLTK::Parser
   end
 
   finalize
+
+  class Environment < RLTK::Parser::Environment
+    attr_accessor :token, :project_name, :vars
+
+    class << self
+      def create(token, project_name, vars)
+        env = self.new
+        env.token = token
+        env.project_name = project_name
+        env.vars = vars
+        env
+      end
+    end
+
+    def macro(mac, args)
+      raise TypeError('Variable is not a macro') unless mac.is_a?(Macro)
+      InfixParser::parse(InfixLexer::lex(mac.substitute(args)), {env: self})
+    end
+  end
 end

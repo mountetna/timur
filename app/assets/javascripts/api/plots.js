@@ -1,7 +1,7 @@
 import { headers, parseJSON, checkStatus } from './fetch_utils'
 
 export const createPlot = (manifestId, plot) =>
-  fetch(Routes.manifest_plot_path(manifestId, ''), {
+  fetch(Routes.manifests_plots_create_path(manifestId, ''), {
     credentials: 'same-origin',
     method: 'POST',
     headers: headers('json', 'csrf'),
@@ -11,7 +11,7 @@ export const createPlot = (manifestId, plot) =>
     .then(parseJSON)
 
 export const destroyPlot = (manifestId, plotId) =>
-  fetch(Routes.manifest_plot_path(manifestId, plotId), {
+  fetch(Routes.manifests_plots_destroy_path(manifestId, plotId), {
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     method: 'DELETE'
@@ -20,7 +20,7 @@ export const destroyPlot = (manifestId, plotId) =>
     .then(parseJSON)
 
 export const updatePlot = (manifestId, plotId, plot) =>
-  fetch(Routes.manifest_plot_path(manifestId, plotId), {
+  fetch(Routes.manifests_plots_update_path(manifestId, plotId), {
     credentials: 'same-origin',
     method: 'PUT',
     headers: headers('json', 'csrf'),

@@ -1,8 +1,23 @@
 class ManifestsController < ManifestsAPIController
+  layout 'timur'
+
   def index
-    manifests = Manifest.where("user_id = ? OR access = ?", @current_user.id, "public").all
-    manifest_json = manifests.map{ |manifest| manifest.to_json(@current_user) }
-    render json: {"manifests" => manifest_json}
+    @project_name = params[:project_name]
+  end
+
+  def fetch
+
+    # Pull the manifests from the database.
+    manifests = Manifest.where('user_id = ? OR access = ?', current_user.id, 'public').all
+
+    # Extract the mainfests that: match the user, is public, or where the user
+    # is an admin.
+    manifest_json = manifests.map do |manifest|
+      next unless current_user.id == manifest.user_id || manifest.is_public? || @current_user.is_admin?(params[:project_name])
+      manifest.to_json(current_user, params[:project_name])
+    end
+
+    render json: {'manifests'=> manifest_json}
   end
 
   def create
@@ -34,7 +49,7 @@ class ManifestsController < ManifestsAPIController
   end
 
   def manifest_params
-    if @current_user.is_admin?
+    if current_user.is_admin?(params[:project_name])
       strong_params = params.permit(:name, :description, :project, :access)
     else
       strong_params = params.permit(:name, :description, :project)

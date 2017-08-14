@@ -70,7 +70,7 @@ class ManifestView extends Component {
                 plot
               </button>
             }
-            <button onClick={() => copyManifest(manifest)}>
+            <button onClick={() => copyManifest(this.props.project, manifest)}>
               <i className='fa fa-files-o' aria-hidden="true"></i>
               copy
             </button>

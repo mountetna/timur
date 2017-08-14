@@ -7,7 +7,7 @@ import ManifestSelector from './manifest_selector'
 // Main component for viewing/editing manifests
 class Manifests extends Component {
   componentDidMount() {
-    this.props.requestManifests()
+    this.props.requestManifests(this.props.project_name)
   }
 
   render() {

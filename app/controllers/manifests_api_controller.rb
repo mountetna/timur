@@ -10,7 +10,7 @@ class ManifestsAPIController < ApplicationController
   end
 
   def authorize
-    authorized = @manifest.can_edit?(@current_user)
+    authorized = @manifest.can_edit?(@current_user, params[:project_name])
     if !authorized
       render :json => { :errors => ["You must be the owner to update or delete this manifest."] }, :status => 403
     end

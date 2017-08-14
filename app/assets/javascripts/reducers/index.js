@@ -8,16 +8,6 @@ import manifests from './manifests_reducer'
 import consignments from './consignments_reducer'
 import exchanges from './exchanges_reducer'
 
-//TODO hack to render the manifest tab. future me needs to use react-router
-const appMode = (state = '', action) => {
-  switch (action.type) {
-    case 'CHANGE_MODE':
-      return action.mode
-    default:
-      return state
-  }
-}
-
 export default combineReducers({
   timur,
   magma,
@@ -26,6 +16,5 @@ export default combineReducers({
   manifestsUI,
   manifests,
   consignments,
-  exchanges,
-  appMode
+  exchanges
 })
