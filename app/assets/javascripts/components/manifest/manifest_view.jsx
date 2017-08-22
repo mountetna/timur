@@ -6,7 +6,6 @@ import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
 import { plotsByIds } from '../../reducers/plots_reducer'
-import { changeMode } from '../../actions/timur_actions'
 import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions'
 
 // Shows a single manifest - it has two states, 'script', which
@@ -137,7 +136,6 @@ export default connect(
     copyManifest,
     toggleEdit,
     requestConsignments,
-    changeMode,
     selectPlot,
     plotEdit
   }

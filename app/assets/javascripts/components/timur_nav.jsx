@@ -1,4 +1,4 @@
-import { toggleConfig, changeMode } from '../actions/timur_actions'
+import { toggleConfig } from '../actions/timur_actions'
 import { Component } from 'react'
 
 class TimurNav extends Component {
@@ -94,8 +94,7 @@ export default connect(
     helpShown: state.timur.help_shown,
     exchanges: state.exchanges
   }),
-  { 
-    changeMode,
+  {
     toggleConfig
   }
 )(TimurNav)

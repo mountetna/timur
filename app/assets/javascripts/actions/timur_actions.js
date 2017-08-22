@@ -26,13 +26,6 @@ export const addTab = (model_name, tab_name, tab)=>{
   };
 };
 
-export const changeMode = (mode)=>{
-  return {
-    'type': 'CHANGE_MODE',
-    mode
-  };
-};
-
 /*
  * Request a view for a given model/record/tab and send requests for additional 
  * data.
