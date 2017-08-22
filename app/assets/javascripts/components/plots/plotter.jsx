@@ -17,39 +17,57 @@ Plotly.register([
 const PlotlyComponent = createPlotlyComponent(Plotly)
 
 class Plotter extends Component {
-  componentWillMount() {
+  constructor() {
+    super()
+
+    this.state = {
+      requestedConsignments: new Set()
+    }
+  }
+
+  componentDidMount() {
     const { manifests, selectedManifest, requestManifests, consignment, selectManifest } =  this.props
     const isEmptyManifestMap = !Object.keys(manifests)[0]
+    const manifest = manifests[selectedManifest]
 
     if (isEmptyManifestMap) {
       requestManifests()
+    } else if (!manifest) {
+      this.selectDefaultManifest(manifests, selectManifest)
     }
 
-    if (!selectedManifest) {
-      selectManifest(Object.keys(manifests)[0] || null)
-    }
 
-    if (!consignment && selectedManifest && manifests[selectedManifest]) {
-      const manifest = manifests[selectedManifest]
-      const reqPayload = manifestToReqPayload(manifest)
-      requestConsignments([reqPayload])
+    if (!consignment && manifest && !this.state.requestedConsignments.has(manifest.name)) {
+      this.requestConsignment(manifest)
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.manifests && !this.props.selectedManifest) {
-      this.props.selectManifest(Object.keys(nextProps.manifests)[0] || null)
+    const { manifests, selectedManifest, consignment } = nextProps
+    const manifest = manifests[selectedManifest]
+
+    if (!consignment && manifest && !this.state.requestedConsignments.has(manifest.name)) {
+      this.requestConsignment(manifest)
+    } else if (consignment && manifest) {
+      let updatedSet = new Set(this.state.requestedConsignments)
+      updatedSet.delete(manifest.name)
+      this.setState({ requestedConsignments: updatedSet })
     }
 
-    if (!this.props.selectedManifest ||
-      (this.props.selectedManifest != nextProps.selectedManifest && !nextProps.consignment)) {
+  }
 
-      if (this.props.manifests[nextProps.selectedManifest]) {
-        const manifest = this.props.manifests[nextProps.selectedManifest]
+  selectDefaultManifest(manifests, selectManifest) {
+    selectManifest(parseInt(Object.keys(manifests)[0]) || null)
+  }
+
+  requestConsignment(manifest) {
+    this.setState(
+      { requestedConsignments: (new Set(this.state.requestedConsignments)).add(manifest.name) },
+      () => {
         const reqPayload = manifestToReqPayload(manifest)
         this.props.requestConsignments([reqPayload])
       }
-    }
+    )
   }
 
   newPlot() {
@@ -91,7 +109,7 @@ class Plotter extends Component {
         </div>
           {this.props.isEditing ? (
             <ScatterPlotForm className='plot-form'
-              consignment={this.props.consignment}
+              consignment={this.props.consignment || {}}
               selectedManifest={this.props.selectedManifest}
               selectManifest={this.props.selectManifest}
               saveNewPlot={this.props.saveNewPlot}
@@ -109,7 +127,7 @@ class Plotter extends Component {
                   <a onClick={() => this.props.toggleEditing()}>edit</a>
                   <Plot
                     plot={this.props.plots.find(plot => plot.id === this.props.selectedPlot)}
-                    consignment={this.props.consignment}
+                    consignment={this.props.consignment || {}}
                   />
                 </div>
               }
@@ -169,7 +187,7 @@ const mapStateToProps = (state) => {
     selectedManifest: manifestsUI.selected,
     plots: allPlots(state.plots),
     selectedPlot: plots.selected,
-    isEditing: plots.isEditing
+    isEditing: plots.isEditing,
   }
 }
 
@@ -375,7 +393,7 @@ class ScatterPlotForm extends Component {
         {this.props.plot ? (
           <span>{this.props.manifests[this.props.selectedManifest].name}</span>
         ) : (
-          <select value={this.props.selectedManifest} onChange={(e) => this.props.selectManifest(e.target.value)}>
+          <select value={this.props.selectedManifest} onChange={(e) => this.props.selectManifest(parseInt(e.target.value))}>
             {this.manifestOptions(this.props.manifests)}
           </select>
         )}

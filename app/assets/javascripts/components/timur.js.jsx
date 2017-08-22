@@ -8,11 +8,12 @@ import Manifests from './manifest/manifests'
 import TimurNav from './timur_nav'
 import ModelMap from './model_map'
 import Search from './search/search'
+import Plotter from './plots/plotter'
 
-const createStore = ()=>{
+const createStore = (initialState)=>{
   let middleWares = [thunk];
   if(process.env.NODE_ENV != 'production') middleWares.push(createLogger());
-  return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer);
+  return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer, initialState);
 }
 
 var Timur = React.createClass({
@@ -45,6 +46,10 @@ var Timur = React.createClass({
       'project_name': this.props.project_name
     };
 
+    var plots_props = {
+      'project_name': this.props.project_name,
+    }
+
     switch(this.props.mode){
       case 'manifests':
         component = <Manifests {...manifest_props} />;
@@ -55,8 +60,8 @@ var Timur = React.createClass({
       case 'map':
         component = <ModelMap project_name={this.props.project_name} />;
         break;
-      case 'plot':
-        component = <Plotter />;
+      case 'plots':
+        component = <Plotter {...plots_props}/>;
         break;
       case 'search':
         component = <Search  {...search_props} />; 
@@ -83,7 +88,7 @@ var Timur = React.createClass({
 
 // Initializes the render.
 export default (props)=>(
-  <Provider store={createStore()}>
+  <Provider store={createStore(props)}>
 
     <Timur {...props}/>
   </Provider>

@@ -1,7 +1,6 @@
 import { showMessages } from './message_actions'
 import { loadPlot } from './plot_actions'
 import {Exchange} from './exchange_actions';
-import {showMessages} from './message_actions';
 import {fetchManifests, destroyManifest, createManifest, updateManifest} from '../api/manifests';
 
 const showErrors = (e, dispatch)=>{
@@ -17,31 +16,41 @@ const loadManifests = (manifestsById)=>({
 })
 
 // Retrieve all user-visible manifests and send to store
-export const requestManifests = () =>
-  (dispatch) => {
-    fetchManifests()
-      .then( ({ manifests }) => {
+export const requestManifests = (project_name) => {
+  return (dispatch) => {
+    let localSuccess = ({manifests}) => {
+      // Bail out if there are no manifests.
+      if (manifests == null) return;
 
-        // transform manifests for store
-        const manifestsById = manifests.reduce((acc, manifestJSON) => {
-          let manifest = {
-            ...manifestJSON,
-            // create reference to plots that belong to the manifest
-            plotIds: manifestJSON.plots.map(p => p.id)
-          }
-          delete manifest.plots
-          return { ...acc, [manifestJSON.id]: manifest }
-        }, {})
-        dispatch(loadManifests(manifestsById))
+      // transform manifests for store
+      const manifestsById = manifests.reduce((acc, manifestJSON) => {
+        let manifest = {
+          ...manifestJSON,
+          // create reference to plots that belong to the manifest
+          plotIds: manifestJSON.plots.map(p => p.id)
+        };
+        delete manifest.plots;
+        return {...acc, [manifestJSON.id]: manifest};
+      }, {});
 
-        //load plots to store
-        const plots = manifests.reduce((acc, manifestJSON) => {
-          return [ ...acc, ...manifestJSON.plots]
-        }, [])
-        plots.forEach(plot => dispatch(loadPlot(plot)))
-      })
-      .catch(e =>  showErrors(e, dispatch))
-  }
+      dispatch(loadManifests(manifestsById));
+
+      //load plots to store
+      const plots = manifests.reduce((acc, manifestJSON) => {
+        return [...acc, ...manifestJSON.plots]
+      }, []);
+      plots.forEach(plot => dispatch(loadPlot(plot)));
+    };
+
+    let localError = (err) => {
+      showErrors(err, dispatch);
+    };
+
+    fetchManifests(project_name, new Exchange(dispatch, 'request-manifest'))
+      .then(localSuccess)
+      .catch(localError);
+  };
+};
 
 
 // Remove a manifest from the store.
@@ -75,32 +84,6 @@ export const selectManifest = (id)=>({
   'type': 'SELECT_MANIFEST',
   id
 });
-
-// Retrieve all user-visible manifests and send to store.
-export const requestManifests = (project_name)=>{
-  return (dispatch)=>{
-
-    let localSuccess = ({manifests})=>{
-
-      // Bail out if there are no manifests.
-      if(manifests == null) return;
-
-      const manifestsById = manifests.reduce((acc, manifestJSON)=>{
-        return {...acc, [manifestJSON.id]: manifestJSON};
-      }, {});
-
-      dispatch(loadManifests(manifestsById));
-    };
-
-    let localError = (err)=>{
-      showErrors(err, dispatch);
-    };
-
-    fetchManifests(project_name, new Exchange(dispatch, 'request-maifest'))
-      .then(localSuccess)
-      .catch(localError);
-  };
-};
 
 // Delete a manifest from the database and the store.
 export const deleteManifest = (manifestId)=>{

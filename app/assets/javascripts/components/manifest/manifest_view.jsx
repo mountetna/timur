@@ -19,19 +19,27 @@ class ManifestView extends Component {
     this.state = { view_mode: 'script' }
   }
 
-  selectPlot(id) {
-    this.props.changeMode('plot')
-    this.props.selectPlot(id)
-  }
+  plotLink(projectName, manifest_id, id, is_editing) {
+    let path = Routes.plots_path(projectName) + '?'
 
-  plotManifest() {
-    this.props.changeMode('plot')
-    this.props.plotEdit(true)
+    if (manifest_id) {
+      path = path + 'manifest_id=' + manifest_id
+    }
+
+    if (id) {
+      path = path + '&id=' + id
+    }
+
+    if (is_editing) {
+      path = path + '&is_editing=' + is_editing
+    }
+
+    return path
   }
 
   render() {
-    const { manifest, consignment, deleteManifest, toggleEdit, copyManifest } = this.props
-    const { is_editable, name } = manifest
+    const { manifest, consignment, deleteManifest, toggleEdit, copyManifest, project_name } = this.props
+    const { is_editable } = manifest
 
     const elements =  manifest.data.elements || []
 
@@ -65,9 +73,11 @@ class ManifestView extends Component {
               </button>
             }
             {this.state.view_mode === 'output' &&
-              <button onClick={this.plotManifest.bind(this)}>
-                <i className='fa fa-line-chart' aria-hidden="true"></i>
-                plot
+              <button>
+                <a href={this.plotLink(project_name, manifest.id, null, true)}>
+                  <i className='fa fa-line-chart' aria-hidden="true"></i>
+                  plot
+                </a>
               </button>
             }
             <button onClick={() => copyManifest(this.props.project, manifest)}>
@@ -103,7 +113,7 @@ class ManifestView extends Component {
               <ul>
                 {this.props.plots.map(plot => (
                   <li key={plot.id}>
-                    <a onClick={() => this.selectPlot(plot.id)}>
+                    <a href={this.plotLink(project_name, manifest.id, plot.id)}>
                       {plot.name}
                     </a>
                   </li>

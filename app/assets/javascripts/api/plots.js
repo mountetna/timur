@@ -1,7 +1,7 @@
 import { headers, parseJSON, checkStatus } from './fetch_utils'
 
 export const createPlot = (manifestId, plot) =>
-  fetch(Routes.manifests_plots_create_path(manifestId, ''), {
+  fetch(Routes.manifests_plots_create_path(manifestId), {
     credentials: 'same-origin',
     method: 'POST',
     headers: headers('json', 'csrf'),

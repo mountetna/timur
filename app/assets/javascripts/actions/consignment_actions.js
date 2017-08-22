@@ -58,7 +58,7 @@ export const requestConsignments = (manifests, success, error)=>{
     var localError = (e)=>{
 
       e.response.json()
-        .then(res);
+        .then(res => dispatch(showMessages([res])));
     };
 
     var manifest_names = manifests.map(m=>m.name).join(', ');

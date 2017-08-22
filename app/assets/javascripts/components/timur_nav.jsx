@@ -9,7 +9,8 @@ class TimurNav extends Component {
       browse: Routes.browse_path(this.props.project_name),
       search: Routes.search_path(this.props.project_name),
       map: Routes.map_path(this.props.project_name),
-      manifest: Routes.manifests_path(this.props.project_name),
+      manifests: Routes.manifests_path(this.props.project_name),
+      plots: Routes.plots_path(this.props.project_name)
     }
 
     var login
@@ -60,7 +61,7 @@ class TimurNav extends Component {
                {
                  Object.keys(tabs).map((name) =>
                    <div key={ name } 
-                     className={ "nav_tab" + ((this.props.mode == name && !this.props.appMode) ? ' selected' : '') }>
+                     className={ "nav_tab" + (this.props.mode == name ? ' selected' : '') }>
                        <a href={ tabs[name] }> { name } </a>
                      </div>
                  )
@@ -68,7 +69,7 @@ class TimurNav extends Component {
                {
                  this.props.can_edit ?
                  <div className="nav_tab">
-                   <a href={ Routes.activity_path() }>Activity</a>
+                   <a href={ Routes.activity_path(this.props.project_name) }>Activity</a>
                  </div>
                  : null
                }

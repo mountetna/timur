@@ -1,5 +1,13 @@
 class PlotsController < ManifestsAPIController
-  before_filter :authorize
+  before_filter :authorize, :except => [:index]
+  layout 'timur'
+
+  def index
+    @project_name = params[:project_name]
+    @manifest_id = params[:manifest_id]
+    @id = params[:id]
+    @is_editing = params[:is_editing]
+  end
 
   def create
     @plot = @manifest.plots.new(plot_params)

@@ -27,9 +27,10 @@ Rails.application.routes.draw do
   post 'search/tsv'=> 'search#table_tsv', as: :table_tsv
 
   # plot_controller.rb
+  get 'plots/:project_name'=> 'plots#index', as: :plots
   post 'manifests/:manifest_id/plots/create'=> 'plots#create', as: :manifests_plots_create
-  post 'manifests/:manifest_id/plots/update/:id'=> 'plots#update', as: :manifests_plots_update
-  post 'manifests/:manifest_id/plots/destroy/:id'=> 'plots#destroy', as: :manifests_plots_destroy
+  put 'manifests/:manifest_id/plots/update/:id'=> 'plots#update', as: :manifests_plots_update
+  delete 'manifests/:manifest_id/plots/destroy/:id'=> 'plots#destroy', as: :manifests_plots_destroy
 
   # manifest_controller.rb
   get 'manifests/:project_name'=> 'manifests#index', as: :manifests
