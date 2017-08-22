@@ -1,5 +1,26 @@
 import { headers, parseJSON, checkStatus } from './fetch_utils'
 
+export const plotIndexUrl = (projectName, queryParams) => {
+  let path = Routes.plots_path(projectName);
+
+  // list of params
+  const params = Object.keys(queryParams);
+
+  // append params and values to path
+  if (params[0]) {
+    path = path + '?';
+    params.forEach((param, i) => {
+      if (i === 0) {
+        path = path + param + '=' + queryParams[param];
+      } else {
+        path = path + '&' + param + '=' + queryParams[param];
+      }
+    })
+  }
+
+  return path;
+};
+
 export const createPlot = (manifestId, plot) =>
   fetch(Routes.manifests_plots_create_path(manifestId), {
     credentials: 'same-origin',

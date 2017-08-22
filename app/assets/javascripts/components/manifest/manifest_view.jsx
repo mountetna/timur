@@ -7,6 +7,7 @@ import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
 import { plotsByIds } from '../../reducers/plots_reducer'
 import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions'
+import { plotIndexUrl } from '../../api/plots'
 
 // Shows a single manifest - it has two states, 'script', which
 // shows the manufest script, and 'output', which shows the
@@ -16,24 +17,6 @@ class ManifestView extends Component {
   constructor() {
     super()
     this.state = { view_mode: 'script' }
-  }
-
-  plotLink(projectName, manifest_id, id, is_editing) {
-    let path = Routes.plots_path(projectName) + '?'
-
-    if (manifest_id) {
-      path = path + 'manifest_id=' + manifest_id
-    }
-
-    if (id) {
-      path = path + '&id=' + id
-    }
-
-    if (is_editing) {
-      path = path + '&is_editing=' + is_editing
-    }
-
-    return path
   }
 
   render() {
@@ -73,7 +56,7 @@ class ManifestView extends Component {
             }
             {this.state.view_mode === 'output' &&
               <button>
-                <a href={this.plotLink(project_name, manifest.id, null, true)}>
+                <a href={plotIndexUrl(project_name, { manifest_id: manifest.id, is_editing: true })}>
                   <i className='fa fa-line-chart' aria-hidden="true"></i>
                   plot
                 </a>
@@ -112,7 +95,7 @@ class ManifestView extends Component {
               <ul>
                 {this.props.plots.map(plot => (
                   <li key={plot.id}>
-                    <a href={this.plotLink(project_name, manifest.id, plot.id)}>
+                    <a href={plotIndexUrl(project_name, { manifest_id: manifest.id, id: plot.id })}>
                       {plot.name}
                     </a>
                   </li>
