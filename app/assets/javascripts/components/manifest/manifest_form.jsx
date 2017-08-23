@@ -32,7 +32,7 @@ class ManifestForm extends Component {
       this.setState({
         name: '',
         access: 'private',
-        project: 'ipi',
+        project: this.props.project_name,
         elementKeys: [],
         elementsByKey: {},
         hasConsignment: false

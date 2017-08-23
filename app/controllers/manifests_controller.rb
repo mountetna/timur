@@ -42,7 +42,7 @@ class ManifestsController < ManifestsAPIController
 
   def save_manifest
     if @manifest.save
-      render json: { :manifest => @manifest.to_json(@current_user) }
+      render json: { :manifest => @manifest.to_json(@current_user, params[:project]) }
     else
       error_response(@manifest)
     end
