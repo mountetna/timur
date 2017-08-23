@@ -9,7 +9,8 @@
           #{current_user ? "user: '#{current_user.email}', " : '' }
           mode: 'manifests',
           project_name: '#{@project_name}',
-          environment: '#{Rails.env.development? ? 'development' : 'production'}'
+          environment: '#{Rails.env.development? ? 'development' : 'production'}',
+          is_admin: #{ current_user && current_user.is_admin?(@project_name) ? :true : :false }
         }),
         $('#root')[0]
       );
