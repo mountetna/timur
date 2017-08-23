@@ -120,7 +120,7 @@ export const saveNewManifest = (project_name, manifest)=>{
 
     createManifest(project_name, manifest, new Exchange(dispatch, 'save-new-manifest'))
       .then(localSuccess)
-      .then(localError);
+      .catch(localError);
   };
 };
 
