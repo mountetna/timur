@@ -1,134 +1,154 @@
 import React, { Component } from 'react'
-import createPlotlyComponent from 'react-plotlyjs'
-import  Plotly from 'plotly.js/lib/core'
 import { connect } from 'react-redux'
-import  InputField from '../manifest/input_field'
 import { selectManifest } from '../../actions/manifest_actions'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions'
 import { selectConsignment } from '../../selectors/consignment'
-import Vector from '../../vector'
 import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions'
-import { allPlots } from '../../reducers/plots_reducer'
-
-Plotly.register([
-  require('plotly.js/lib/scatter')
-])
-const PlotlyComponent = createPlotlyComponent(Plotly)
+import { allPlots, plotById } from '../../reducers/plots_reducer'
+import { manifestById, manifestsFilterBy, allManifests } from '../../reducers/manifests_reducer'
+import ScatterPlotForm from './scatter_plot_form'
+import Plot from './plotly'
 
 class Plotter extends Component {
   constructor() {
-    super()
+    super();
 
     this.state = {
+      // track requested consignments so that another request is not made for the same consignment
       requestedConsignments: new Set()
-    }
+    };
   }
 
   componentDidMount() {
-    const { manifests, selectedManifest, requestManifests, consignment, selectManifest } =  this.props
-    const isEmptyManifestMap = !Object.keys(manifests)[0]
-    const manifest = manifests[selectedManifest]
+    const { shouldReqManifests, plotableManifests, selectedManifest, requestManifests, consignment } =  this.props;
 
-    if (isEmptyManifestMap) {
-      requestManifests()
-    } else if (!manifest) {
-      this.selectDefaultManifest(manifests, selectManifest)
+    if (shouldReqManifests) {
+      // request manifests during initial page load
+      requestManifests();
+    } else if (!selectedManifest) {
+      // select a manifest if not already selected
+      this.selectDefaultManifest(plotableManifests);
     }
 
-
-    if (!consignment && manifest && !this.state.requestedConsignments.has(manifest.name)) {
-      this.requestConsignment(manifest)
+    // get consignment for manifest
+    if (!consignment && selectedManifest && !this.state.requestedConsignments.has(selectedManifest.name)) {
+      this.requestConsignment(selectedManifest);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { manifests, selectedManifest, consignment } = nextProps
-    const manifest = manifests[selectedManifest]
+    const { selectedManifest, consignment, plotableManifests } = nextProps;
 
-    if (!consignment && manifest && !this.state.requestedConsignments.has(manifest.name)) {
-      this.requestConsignment(manifest)
-    } else if (consignment && manifest) {
-      let updatedSet = new Set(this.state.requestedConsignments)
-      updatedSet.delete(manifest.name)
-      this.setState({ requestedConsignments: updatedSet })
+    if (!selectedManifest) {
+      // select a manifest if not already selected
+      this.selectDefaultManifest(plotableManifests);
     }
 
+    // get consignment for manifest if needed
+    if (!consignment && selectedManifest && !this.state.requestedConsignments.has(selectedManifest.name)) {
+      this.requestConsignment(selectedManifest);
+    } else if (consignment && selectedManifest) {
+      // remove from requestedConsignments if exists
+      let updatedSet = new Set(this.state.requestedConsignments);
+      updatedSet.delete(selectedManifest.name);
+      this.setState({ requestedConsignments: updatedSet });
+    }
   }
 
-  selectDefaultManifest(manifests, selectManifest) {
-    selectManifest(parseInt(Object.keys(manifests)[0]) || null)
+  // select the first manifest
+  selectDefaultManifest(manifests) {
+    this.props.selectManifest(manifests[0] ? manifests[0].id : null);
   }
 
+  // request consignment for manifest and add to requestedConsignments
   requestConsignment(manifest) {
     this.setState(
       { requestedConsignments: (new Set(this.state.requestedConsignments)).add(manifest.name) },
       () => {
-        const reqPayload = manifestToReqPayload(manifest)
-        this.props.requestConsignments([reqPayload])
+        const reqPayload = manifestToReqPayload(manifest);
+        this.props.requestConsignments([reqPayload]);
       }
-    )
+    );
   }
 
   newPlot() {
-    this.props.selectPlot(null)
-    this.props.toggleEditing(true)
+    this.props.selectPlot(null);
+    this.props.toggleEditing(true);
   }
 
-  selectPlot(id) {
-    this.props.selectManifest(this.props.plots.find(plot => plot.id === id).manifest_id)
-    this.props.selectPlot(id)
-    this.props.toggleEditing(false)
+  selectPlot(plot) {
+    this.props.selectManifest(plot.manifest_id);
+    this.props.selectPlot(plot.id);
+    this.props.toggleEditing(false);
   }
 
   handleDelete() {
     this.props.deletePlot(
-      this.props.selectedManifest,
-      this.props.selectedPlot,
+      this.props.selectedManifest.id,
+      this.props.selectedPlot.id,
       () => this.props.selectPlot(null)
-    )
+    );
+  }
+
+  plotList(plots) {
+    return plots.map(plot => {
+      return (
+        <li key={plot.id}>
+          <a onClick={() => this.selectPlot(plot)}>
+            {plot.name}
+          </a>
+        </li>
+      );
+    });
   }
 
   render() {
+    const {
+      isEditing,
+      plots,
+      consignment,
+      selectManifest,
+      selectedManifest,
+      saveNewPlot,
+      plotableManifests,
+      toggleEditing,
+      selectedPlot,
+      savePlot
+    } = this.props;
+
     return (
       <div className='plot-container'>
         <div>
           Plots
           <div>
-            <a onClick={() => this.newPlot()}>new plot</a>
+            <a onClick={this.newPlot.bind(this)}>new plot</a>
           </div>
-          <ul>
-            {this.props.plots.map(plot => (
-              <li key={plot.id}>
-                <a onClick={() => this.selectPlot(plot.id)}>
-                  {plot.name}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <ul>{this.plotList(plots)}</ul>
         </div>
-          {this.props.isEditing ? (
+          {isEditing ? (
             <ScatterPlotForm className='plot-form'
-              consignment={this.props.consignment || {}}
-              selectedManifest={this.props.selectedManifest}
-              selectManifest={this.props.selectManifest}
-              saveNewPlot={this.props.saveNewPlot}
-              manifests={this.props.manifests}
-              toggleEditing={this.props.toggleEditing}
+              consignment={consignment || {}}
+              selectedManifest={selectedManifest}
+              selectManifest={selectManifest}
+              saveNewPlot={saveNewPlot}
+              manifests={plotableManifests}
+              toggleEditing={toggleEditing}
               selectPlot={this.selectPlot.bind(this)}
-              plot={this.props.plots.find(plot => plot.id === this.props.selectedPlot)}
-              savePlot={this.props.savePlot}
+              plot={selectedPlot}
+              savePlot={savePlot}
             />
           ) : (
             <div>
-              {this.props.selectedPlot &&
+              {selectedPlot &&
                 <div>
-                  <a onClick={this.handleDelete.bind(this)}>delete </a>
-                  <a onClick={() => this.props.toggleEditing()}>edit</a>
-                  <Plot
-                    plot={this.props.plots.find(plot => plot.id === this.props.selectedPlot)}
-                    consignment={this.props.consignment || {}}
-                  />
+                  {selectedPlot.is_editable &&
+                    <div>
+                      <a onClick={this.handleDelete.bind(this)}>delete </a>
+                      <a onClick={toggleEditing.bind(this)}>edit</a>
+                    </div>
+                  }
+                  <Plot plot={selectedPlot} consignment={consignment || {}} />
                 </div>
               }
             </div>
@@ -138,55 +158,22 @@ class Plotter extends Component {
   }
 }
 
-class Plot extends Component {
-  componentDidMount() {
-    this.updatePlot(this.props)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.updatePlot(nextProps)
-  }
-
-  updatePlot(props) {
-    if (props.plot && props.consignment) {
-      this.setState(this.toPlotly(props.plot, props.consignment))
-    }
-  }
-
-  toPlotly(plot, consignment = {}) {
-    let plotType = plot ? plot.plot_type || plot.plotType :  ''
-    switch (plotType) {
-      case 'scatter':
-        let plotly = plot.configuration ? { ...plot.configuration } : { ...plot }
-        plotly.data = plotly.data.map(d => ({
-          ...d,
-          x: consignment[d.manifestSeriesX] ? consignment[d.manifestSeriesX].values : [],
-          y: consignment[d.manifestSeriesY] ? consignment[d.manifestSeriesY].values : []
-        }))
-        return plotly
-      default:
-        return plot
-    }
-  }
-
-  render() {
-    return <PlotlyComponent { ...this.state } />
-  }
-}
-
 const mapStateToProps = (state) => {
-  const { manifests, manifestsUI, plots } = state
-  let consignment = null
-  if (manifests[manifestsUI.selected]) {
-    consignment = selectConsignment(state, manifests[manifestsUI.selected].name)
+  const { manifests, manifestsUI, plots } = state;
+  const selectedManifest = manifestById(manifests, manifestsUI.selected);
+
+  let consignment = null;
+  if (selectedManifest) {
+    consignment = selectConsignment(state, manifests[manifestsUI.selected].name);
   }
 
   return {
-    manifests,
     consignment,
-    selectedManifest: manifestsUI.selected,
-    plots: allPlots(state.plots),
-    selectedPlot: plots.selected,
+    selectedManifest,
+    shouldReqManifests: !allManifests(manifests)[0],
+    plotableManifests: manifestsFilterBy(manifests, (manifest) => manifest.is_editable),
+    plots: allPlots(plots),
+    selectedPlot: plotById(plots, plots.selected),
     isEditing: plots.isEditing,
   }
 }
@@ -204,326 +191,3 @@ export default connect(
     toggleEditing
   }
 )(Plotter)
-
-class ScatterPlotForm extends Component {
-  constructor(props) {
-    super(props)
-    this.plotType = 'scatter',
-
-    this.state = {
-      data: [],
-      layout: {
-        width: 1600,
-        height: 900,
-        title: '',
-        xaxis: {
-          title: '',
-          showline: true,
-          showgrid: false,
-          gridcolor: '#bdbdbd'
-        },
-        yaxis: {
-          title: '',
-          showline: true,
-          showgrid: false,
-          gridcolor: '#bdbdbd'
-        }
-      },
-      config: {
-        showLink: false,
-        displayModeBar: true,
-        modeBarButtonsToRemove: ['sendDataToCloud', 'lasso2d', 'toggleSpikelines']
-      },
-      plotableData: this.plotableDataSeries(props.consignment)
-    }
-  }
-
-  componentDidMount() {
-    if (this.props.plot) {
-      this.setState(this.props.plot.configuration)
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedManifest != this.props.selectedManifest) {
-      this.setState({ data: [] })
-    }
-
-    if (nextProps.consignment != this.props.consignment) {
-      this.setState({ plotableData: nextProps.consignment ? this.plotableDataSeries(nextProps.consignment) : {} })
-    }
-
-    if (nextProps.plot) {
-      this.setState(this.props.plot.configuration)
-    }
-  }
-
-  plotableDataSeries(consignment = {}) {
-    return Object.keys(consignment).reduce( (acc, key) => {
-      if (consignment[key] instanceof Vector) {
-        return { ...acc, [key]: consignment[key] }
-      }
-      return acc
-    },{})
-  }
-
-  addSeries(series) {
-    const withSeriesData = {
-      ...series,
-      id: Math.random(),
-      x: this.state.plotableData[series.x].values,
-      manifestSeriesX: series.x,
-      y: this.state.plotableData[series.y].values,
-      manifestSeriesY: series.y
-    }
-
-    this.setState({
-      data: [...this.state.data, withSeriesData]
-    })
-  }
-
-  removeSeries(seriesId) {
-    const filteredData = this.state.data.filter(series => series.id != seriesId)
-    this.setState({ data: filteredData })
-  }
-
-  updateTitle(title) {
-    this.setState({ layout: { ...this.state.layout, title }})
-  }
-
-  updateXAxisLabel(label) {
-    this.setState({
-      layout: {
-        ...this.state.layout,
-        xaxis: {
-          ...this.state.layout.xaxis,
-          title: label
-        }
-      }
-    })
-  }
-
-  updateYAxisLabel(label) {
-    this.setState({
-      layout: {
-        ...this.state.layout,
-        yaxis: {
-          ...this.state.layout.yaxis,
-          title: label
-        }
-      }
-    })
-  }
-
-  updateHeight(height) {
-    this.setState({layout: {...this.state.layout, height: height}})
-  }
-
-  updateWidth(width) {
-    this.setState({layout: {...this.state.layout, width: width}})
-  }
-
-  toggleGrid() {
-    this.setState({
-      layout: {
-        ...this.state.layout,
-        xaxis: {
-          ...this.state.layout.xaxis,
-          showgrid: !this.state.layout.xaxis.showgrid
-        },
-        yaxis: {
-          ...this.state.layout.yaxis,
-          showgrid: !this.state.layout.yaxis.showgrid
-        }
-      }
-    })
-  }
-
-  manifestOptions(manifests) {
-    return Object.keys(manifests).map(key => (
-      <option key={key} value={key}>{manifests[key].name}</option>
-    ))
-  }
-
-  handleSave() {
-    let plotConfig = {
-      ...this.state,
-      plotType: this.plotType,
-      data: this.state.data.map(seriesData => {
-        delete seriesData.x
-        delete seriesData.y
-        return seriesData
-      })
-    }
-    delete plotConfig.plotableData
-    if (this.props.plot) {
-      const { manifest_id, id } = this.props.plot
-      this.props.savePlot(
-        manifest_id,
-        id,
-        plotConfig,
-        (plot) => {
-          this.props.toggleEditing()
-          this.props.selectPlot(plot.id)
-        }
-      )
-    } else {
-      this.props.saveNewPlot(
-        this.props.selectedManifest,
-        plotConfig,
-        (plot) => {
-          this.props.toggleEditing()
-          this.props.selectPlot(plot.id)
-        }
-      )
-    }
-
-  }
-
-  render () {
-    const { layout } = this.state
-
-    return (
-      <div className='plot-form-container'>
-        <div>
-          <a onClick={this.handleSave.bind(this)}>save </a>
-          <a onClick={() => this.props.toggleEditing()}>cancel</a>
-        </div>
-        {'Manifest: '}
-        {this.props.plot ? (
-          <span>{this.props.manifests[this.props.selectedManifest].name}</span>
-        ) : (
-          <select value={this.props.selectedManifest} onChange={(e) => this.props.selectManifest(parseInt(e.target.value))}>
-            {this.manifestOptions(this.props.manifests)}
-          </select>
-        )}
-        <fieldset>
-          <legend>Scatter Plot</legend>
-          <InputField type='text' label='Title: ' onChange={this.updateTitle.bind(this)} value={layout.title} />
-          <InputField type='text' label='X Axis Label: ' onChange={this.updateXAxisLabel.bind(this)} value={layout.xaxis.title} />
-          <InputField type='text' label='Y Axis Label: ' onChange={this.updateYAxisLabel.bind(this)} value={layout.yaxis.title} />
-          <InputField type='text' label='height: ' onChange={this.updateHeight.bind(this)} value={layout.height} />
-          <InputField type='text' label='width: ' onChange={this.updateWidth.bind(this)} value={layout.width} />
-          <div className='input-container'>
-            <label htmlFor='grid'>Grid: </label>
-            <input id='grid' type='checkbox' checked={layout.xaxis.showgrid && layout.yaxis.showgrid} onChange={this.toggleGrid.bind(this)} />
-          </div>
-          <SeriesForm
-            data={this.state.plotableData}
-            addSeries={this.addSeries.bind(this)}
-            appliedSeries={this.state.data}
-            removeSeries={this.removeSeries.bind(this)}
-            selectedManifest={this.props.selectedManifest}
-          />
-        </fieldset>
-        <Plot
-          plot={this.state}
-          consignment={this.props.consignment}
-        />
-      </div>
-    )
-  }
-}
-
-class SeriesForm extends Component {
-  constructor() {
-    super()
-    this.state = {
-      type: 'scatter',
-      x: null,
-      y: null,
-      mode: 'markers',
-      name: ''
-    }
-  }
-
-  componentDidMount() {
-    this.setDefaultXY(this.props)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.data != nextProps.data) {
-      this.setDefaultXY(nextProps)
-    }
-  }
-
-  setDefaultXY(props) {
-    const firstDataSeriesName = Object.keys(props.data)[0] || null
-    this.setState({
-      x: firstDataSeriesName,
-      y: firstDataSeriesName
-    })
-  }
-
-  updateMode(evt) {
-    this.setState({ mode: evt.target.value })
-  }
-
-  updateName(name) {
-    this.setState({ name })
-  }
-
-  updateX(evt) {
-    this.setState({ x: evt.target.value })
-  }
-
-  updateY(evt) {
-    this.setState({ y: evt.target.value })
-  }
-
-  appliedSeries(plottedSeries) {
-    return plottedSeries.map(series => (
-      <li key={series.id}>
-        {series.name + ' '}
-        <i className='fa fa-times' aria-hidden='true'
-           onClick={() => this.props.removeSeries(series.id)}>
-        </i>
-      </li>
-    ))
-  }
-
-  seriesOptions(seriesMap) {
-    return Object.keys(seriesMap).map((key) => (
-      <option key={key} value={key}>{key}</option>
-    ))
-  }
-
-  render() {
-    return (
-      <fieldset style={{ marginBottom: 10 }}>
-        <legend>Series</legend>
-        <ol>
-          {this.appliedSeries(this.props.appliedSeries)}
-        </ol>
-        <InputField type='text' label='Name: ' onChange={this.updateName.bind(this)} value={this.state.name} />
-        <div className='input-container'>
-          <label>
-            {'Mode: '}
-            <select value={this.state.mode} onChange={this.updateMode.bind(this)}>
-              <option value='markers'>Markers</option>
-              <option value='lines'>Lines</option>
-              <option value='lines+markers'>Lines and Markers</option>
-            </select>
-          </label>
-        </div>
-        <div className='input-container'>
-          <label>
-            {'X: '}
-            <select value={this.state.x} onChange={this.updateX.bind(this)}>
-              {this.seriesOptions(this.props.data)}
-            </select>
-          </label>
-        </div>
-        <div className='input-container'>
-          <label>
-            {'Y: '}
-            <select value={this.state.y} onChange={this.updateY.bind(this)}>
-              {this.seriesOptions(this.props.data)}
-            </select>
-          </label>
-        </div>
-        <input type='button' value='Add Series' onClick={() => this.props.addSeries(this.state)} />
-      </fieldset>
-    )
-  }
-}

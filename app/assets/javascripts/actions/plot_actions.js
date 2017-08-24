@@ -7,15 +7,15 @@ const removePlot = (id, manifestId) => ({
   type: 'REMOVE_PLOT',
   id,
   manifestId
-})
+});
 
 // Delete a plot from the database and the store
 export const deletePlot = (manifestId, plotId, callback = () => {}) =>
   (dispatch) => {
     destroyPlot(manifestId, plotId)
       .then(() => {
-        dispatch(removePlot(plotId, manifestId))
-        callback(plotId)
+        dispatch(removePlot(plotId, manifestId));
+        callback(plotId);
       })
   }
 
@@ -38,29 +38,29 @@ const addPlot = (plot) => ({
 export const loadPlot = (plot) =>
   (dispatch, getState) => {
     // is_editable flag equals the manifest is_editable flag
-    const { manifests } = getState()
-    const { is_editable } = manifestById(manifests, plot.manifest_id)
-    const plotWithEditFlag =  { ...plot, is_editable }
+    const { manifests } = getState();
+    const { is_editable } = manifestById(manifests, plot.manifest_id);
+    const plotWithEditFlag =  { ...plot, is_editable };
 
-    dispatch(addPlot(plotWithEditFlag))
+    dispatch(addPlot(plotWithEditFlag));
   }
 
 const plotToPayload = (plot) => {
-  const { layout: { title }, plotType } = plot
+  const { layout: { title }, plotType } = plot;
   return {
     name: title,
     plot_type: plotType,
     configuration: plot
-  }
-}
+  };
+};
 
 export const savePlot = (manifest_id, id, plot, callback = () => {}) =>
   (dispatch) => {
-    const payload = plotToPayload(plot)
+    const payload = plotToPayload(plot);
     updatePlot(manifest_id, id, payload)
       .then(plot => {
-        dispatch(loadPlot(plot))
-        callback(plot)
+        dispatch(loadPlot(plot));
+        callback(plot);
       })
   }
 
@@ -70,8 +70,8 @@ export const saveNewPlot = (manifestId, plot, callback = () => {}) =>
     const payload = plotToPayload(plot)
     createPlot(manifestId, payload)
       .then(plot => {
-        dispatch(addPlot(plot))
-        callback(plot)
+        dispatch(addPlot({ ...plot, is_editable: true }));
+        callback(plot);
       })
       .catch(e => {
         e.response.json()
