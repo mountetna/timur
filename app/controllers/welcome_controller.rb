@@ -16,9 +16,7 @@ class WelcomeController < ApplicationController
 
   # Run the login cycle through Janus.
   def login
-    base = 'https://janus-stage.ucsf.edu/login'
-    refer = '?refer='+URI::encode(params['refer'])
-    redirect_to(base+refer)
+    redirect_to( "#{Rails.application.secrets.janus_addr}login?refer=#{URI::encode(params[:refer])}" )
   end
 
   def no_auth
@@ -37,7 +35,7 @@ class WelcomeController < ApplicationController
   def auth
     # There is no auth token present. Run the Janus login cycle.
     unless cookies.key?(:UCSF_ETNA_AUTH_TOKEN)
-      redirect_to(login_path(refer: URI::encode(params['refer']))) and return
+      redirect_to(login_path(refer: URI::encode(params[:refer]))) and return
     end
 
     token = cookies[:UCSF_ETNA_AUTH_TOKEN]
@@ -83,7 +81,7 @@ class WelcomeController < ApplicationController
 
     # Right now this application is hard coded to use the Immunoprofiler
     # Initiaive project (Ipi). This needs to be changed out.
-    redirect_to(params['refer'])
+    redirect_to(params[:refer])
   end
 
   private
@@ -122,8 +120,8 @@ class WelcomeController < ApplicationController
   # Make a request to Janus for the user permissions.
   def make_janus_request(token, end_point)
     begin
-      app_key = Rails.application.secrets['app_key']
-      janus_url = Rails.application.secrets['janus_addr']
+      app_key = Rails.application.secrets.app_key
+      janus_url = Rails.application.secrets.janus_addr
       data = {token: token, app_key: app_key}
       uri = URI.parse("#{janus_url}/#{end_point}")
 

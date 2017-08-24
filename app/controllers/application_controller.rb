@@ -7,14 +7,13 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate
-
     # Set the janus auth token to the session for later use.
     if cookies.key?(:UCSF_ETNA_AUTH_TOKEN)
       session[:token] = cookies[:UCSF_ETNA_AUTH_TOKEN]
     end
 
     unless current_user
-      redirect_to(auth_path(refer: URI::encode(request.original_url)))
+      redirect_to(login_path(refer: URI::encode(request.original_url)))
     end
   end
 
