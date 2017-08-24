@@ -54,7 +54,7 @@ class ManifestView extends Component {
                 edit
               </button>
             }
-            {this.state.view_mode === 'output' &&
+            {this.state.view_mode === 'output' && manifest.is_editable &&
               <button>
                 <a href={plotIndexUrl(project_name, { manifest_id: manifest.id, is_editing: true })}>
                   <i className='fa fa-line-chart' aria-hidden="true"></i>
