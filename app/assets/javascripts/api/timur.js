@@ -3,13 +3,13 @@ import { headers, generateDownload, parseJSON, makeBlob, checkStatus } from './f
 export const getTSV = (project_name, model_name, record_names, exchange)=>{
 
   var routeOpts = {
-    'method': 'POST',
-    'credentials': 'same-origin',
-    'headers': headers('json', 'csrf'),
-    'body': JSON.stringify({
-      'project_name': project_name,
-      'model_name': model_name,
-      'record_names': record_names
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf'),
+    body: JSON.stringify({
+      project_name: project_name,
+      model_name: model_name,
+      record_names: record_names
     })
   };
 
@@ -24,17 +24,13 @@ export const getTSV = (project_name, model_name, record_names, exchange)=>{
 export const getView = (project_name, model_name, tab_name, exchange)=>{
 
   var routeOpts = {
-    'method': 'POST',
-    'credentials': 'same-origin',
-    'headers': headers('json', 'csrf'),
-    'body': JSON.stringify({
-      'project_name': project_name,
-      'model_name': model_name,
-      'tab_name': tab_name
-    })
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf'),
+    body: JSON.stringify({ project_name, model_name, tab_name })
   };
 
-  var exchangePromise = exchange.fetch(Routes.view_json_path(), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.view_json_path(project_name), routeOpts)
     .then(checkStatus)
     .then(parseJSON);
 
@@ -44,15 +40,15 @@ export const getView = (project_name, model_name, tab_name, exchange)=>{
 export const getDocuments = (project_name, model_name, record_names, attribute_names, collapse_tables, exchange)=>{
 
   var routeOpts = {
-    'method': 'POST',
-    'credentials': 'same-origin',
-    'headers': headers('json', 'csrf'),
-    'body': JSON.stringify({
-      'project_name': project_name,
-      'model_name': model_name,
-      'record_names': record_names,
-      'attribute_names': attribute_names,
-      ...collapse_tables && { 'collapse_tables': true }
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf'),
+    body: JSON.stringify({
+      project_name,
+      model_name,
+      record_names,
+      attribute_names,
+      ...collapse_tables && { collapse_tables: true }
     })
   };
 
@@ -67,10 +63,10 @@ export const postRevisions = (project_name, revision_data, exchange)=>{
   revision_data.append('project_name', project_name);
 
   var routeOpts = {
-    'method': 'POST',
-    'credentials': 'same-origin',
-    'headers': headers('csrf'),
-    'body': revision_data
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('csrf'),
+    body: revision_data
   };
 
   var exchangePromise = exchange.fetch(Routes.update_model_path(), routeOpts)
@@ -83,12 +79,12 @@ export const postRevisions = (project_name, revision_data, exchange)=>{
 export const getConsignments = (project_name, manifests, exchange)=>{
 
   var routeOpts = {
-    'method': 'POST',
-    'credentials': 'same-origin',
-    'headers': headers('json', 'csrf'),
-    'body': JSON.stringify({
-      'queries': manifests,
-      'project_name': project_name
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf'),
+    body: JSON.stringify({
+      queries: manifests,
+      project_name: project_name
     })
   };
 
