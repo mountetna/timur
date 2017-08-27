@@ -18,7 +18,7 @@ export const addConsignment = (name, consignment)=>{
  * Post a manifest to the query api and send the returned consignment to the
  * store. If things go wrong, show a message with the error.
  */
-export const requestConsignments = (manifests, success, error)=>{
+export const requestConsignments = (project_name, manifests, success, error)=>{
 
   return (dispatch)=>{
     var localSuccess = (response)=>{
@@ -63,9 +63,6 @@ export const requestConsignments = (manifests, success, error)=>{
 
     var manifest_names = manifests.map(m=>m.name).join(', ');
     var exchng = new Exchange(dispatch, `consignment list ${manifest_names}`);
-
-    // WE NEED TO DYNAMICALLY SET THIS LINE!
-    let project_name = 'Ipi';
 
     getConsignments(project_name, manifests, exchng)
       .then(localSuccess)

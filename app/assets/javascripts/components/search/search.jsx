@@ -301,6 +301,7 @@ const mapDispatchToProps = (dispatch, ownProps)=>{
 
     query: function(manifest, success){
       dispatch(requestConsignments(
+        ownProps.project_name,
         [{'name': 'search','manifest': manifest}],
         success
       ));

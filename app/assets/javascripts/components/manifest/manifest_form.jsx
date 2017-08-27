@@ -33,7 +33,6 @@ class ManifestForm extends Component {
       this.setState({
         name: '',
         access: 'private',
-        project: 'ipi',
         elementKeys: [],
         elementsByKey: {},
         hasConsignment: false
@@ -67,6 +66,7 @@ class ManifestForm extends Component {
 
   updateResults() {
     this.props.requestConsignments(
+      this.props.project_name,
       [
         {
           ...manifestToReqPayload(this.stateToManifest()),
