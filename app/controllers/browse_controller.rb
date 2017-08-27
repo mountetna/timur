@@ -10,16 +10,8 @@ class BrowseController < ApplicationController
   layout 'timur'
 
   def index
-    @model_name = 'project'
-    @record_name = 'UCSF Immunoprofiler'
-    @project_name = 'Ipi'
+    redirect_to browse_model_path(:ipi, :project, "UCSF Immunoprofiler")
   end
-
-#  def browse
-#    @model_name = 'project'
-#    @record_name = 'UCSF Immunoprofiler'
-#    @project_name = 'Ipi'
-#  end
 
   def model
     @project_name = params[:project_name]
@@ -31,7 +23,6 @@ class BrowseController < ApplicationController
     @project_name = params[:project_name]
   end
 
-# WTF is this?
   def activity
     @activities = Activity.order(created_at: :desc).limit(50).map do |activity|
       {
@@ -47,13 +38,13 @@ class BrowseController < ApplicationController
   def view_json
     tab = params[:tab_name] ? params[:tab_name].to_sym : nil
     view = TimurView.create(params[:model_name], tab)
-    render({json: view})
+    render(json: view)
   end
 
   def update
     begin
       status, payload = Magma::Client.instance.update(
-        session[:token],
+        token,
         params[:project_name],
         params[:revisions]
       )
