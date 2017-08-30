@@ -48,7 +48,7 @@ export const selectManifest = (id)=>({
 });
 
 // Retrieve all user-visible manifests and send to store.
-export const requestManifests = (project_name)=>{
+export const requestManifests = ()=>{
   return (dispatch)=>{
 
     let localSuccess = ({manifests})=>{
@@ -67,7 +67,7 @@ export const requestManifests = (project_name)=>{
       showErrors(err, dispatch);
     };
 
-    fetchManifests(project_name, new Exchange(dispatch, 'request-maifest'))
+    fetchManifests(new Exchange(dispatch, 'request-maifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -93,7 +93,7 @@ export const deleteManifest = (manifestId)=>{
 };
 
 // Post to create new manifest and save in the store.
-export const saveNewManifest = (project_name, manifest)=>{
+export const saveNewManifest = (manifest)=>{
   return (dispatch)=>{
 
     let localSuccess = (response)=>{
@@ -106,13 +106,13 @@ export const saveNewManifest = (project_name, manifest)=>{
       showErrors(err, dispatch);
     };
 
-    createManifest(project_name, manifest, new Exchange(dispatch, 'save-new-manifest'))
+    createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
       .then(localSuccess)
       .then(localError);
   };
 };
 
-export const saveManifest = (project_name, manifest)=>{
+export const saveManifest = (manifest)=>{
   return (dispatch)=>{
 
     let localSuccess = (data)=>{
@@ -124,13 +124,13 @@ export const saveManifest = (project_name, manifest)=>{
       showErrors(err, dispatch);
     };
 
-    updateManifest(project_name, manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
+    updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
 };
 
-export const copyManifest = (project_name, manifest)=>{
+export const copyManifest = (manifest)=>{
   return (dispatch)=>{
 
     let localSuccess = (response)=>{
@@ -143,7 +143,7 @@ export const copyManifest = (project_name, manifest)=>{
       showErrors(err, dispatch);
     };
 
-    createManifest(project_name, {...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
+    createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
       .then(localSuccess)
       .catch(localError);
   };

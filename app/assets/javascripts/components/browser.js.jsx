@@ -24,7 +24,6 @@ var Browser = React.createClass({
     var err = (e)=>{ console.log(e) };
 
     let req_view_args = [
-      this.props.project_name,
       this.props.model_name,
       this.props.record_name,
       null,
@@ -65,7 +64,6 @@ var Browser = React.createClass({
 
           this.setState({'mode': 'submit'});
           this.props.sendRevisions(
-            this.props.project_name,
             this.props.model_name,
             {[this.props.record_name] : this.props.revision},
             ()=>this.setState({'mode': 'browse'}),
@@ -126,7 +124,6 @@ var Browser = React.createClass({
         if(!view[tab_name]){
 
           let req_view_args = [
-            self.props.project_name,
             self.props.model_name,
             self.props.record_name,
             tab_name

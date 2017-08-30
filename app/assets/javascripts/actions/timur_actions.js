@@ -37,7 +37,7 @@ export const changeMode = (mode)=>{
  * Request a view for a given model/record/tab and send requests for additional 
  * data.
  */
-export const requestView = (project_name,model_name,record_name,tab_name,success,error)=>{
+export const requestView = (model_name, record_name, tab_name, success, error)=>{
   return (dispatch)=>{
     // Handle success from 'getView'.
     var localSuccess = (response)=>{
@@ -52,7 +52,6 @@ export const requestView = (project_name,model_name,record_name,tab_name,success
       let exchange_name = `tab ${response.tab_name} for ${model_name} ${record_name}`;
       dispatch(
         requestDocuments({
-          project_name,
           model_name,
           exchange_name,
           record_names: [record_name],
@@ -66,7 +65,7 @@ export const requestView = (project_name,model_name,record_name,tab_name,success
        */
       var required_manifests = tab.requiredManifests();
       if(required_manifests.length > 0){
-        dispatch(requestConsignments(project_name, required_manifests));
+        dispatch(requestConsignments(required_manifests));
       }
 
       // Add the tabs to the store.
@@ -87,14 +86,14 @@ export const requestView = (project_name,model_name,record_name,tab_name,success
      * a data object that reperesents the layout of the page.
      */
     var exchange = new Exchange(dispatch,`view for ${model_name} ${record_name}`);
-    getView(project_name, model_name, tab_name, exchange)
+    getView(model_name, tab_name, exchange)
       .then(localSuccess)
       .catch(localError);
   };
 };
 
 // Download a TSV from Magma via Timur.
-export const requestTSV = (project_name, model_name, record_names)=>{
+export const requestTSV = (model_name, record_names)=>{
   return (dispatch)=>{
 
     var err = (e)=>{
@@ -104,7 +103,7 @@ export const requestTSV = (project_name, model_name, record_names)=>{
     };
 
     var exchng = new Exchange(dispatch, `request-tsv-${model_name}`)
-    getTSV(project_name, model_name, record_names, exchng)
+    getTSV(model_name, record_names, exchng)
       .catch(err);
   };
 };

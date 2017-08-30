@@ -8,7 +8,7 @@ import debounce from 'lodash.debounce'
 // Main component for viewing/editing manifests
 class Manifests extends Component {
   componentDidMount() {
-    this.props.requestManifests(this.props.project_name)
+    this.props.requestManifests()
   }
 
   render() {

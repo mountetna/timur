@@ -171,7 +171,7 @@ class ModelMap extends Component {
     this.state = { current_model: "project" }
   }
   componentDidMount() {
-    this.props.requestModels(this.props.project_name);
+    this.props.requestModels();
   }
   showModel(model_name) {
     this.setState( { new_model: model_name } )

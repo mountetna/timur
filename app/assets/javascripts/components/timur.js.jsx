@@ -23,14 +23,12 @@ var Timur = React.createClass({
 
     var browser_props = {
       'can_edit': this.props.can_edit,
-      'project_name': this.props.project_name,
       'model_name': this.props.model_name,
       'record_name': this.props.record_name
     };
 
     var search_props = {
       'can_edit': this.props.can_edit,
-      'project_name': this.props.project_name
     };
 
     var timur_nav_props = {
@@ -38,13 +36,11 @@ var Timur = React.createClass({
       'can_edit': this.props.can_edit,
       'mode': this.props.mode,
       'environment': this.props.environment,
-      'project_name': this.props.project_name
     };
 
     var manifest_props = {
       'currentUser': this.props.user,
       'isAdmin': this.props.is_admin,
-      'project_name': this.props.project_name
     };
 
     switch(this.props.mode){
@@ -55,7 +51,7 @@ var Timur = React.createClass({
         component = <Browser {...browser_props} />;
         break;
       case 'map':
-        component = <ModelMap project_name={this.props.project_name} />;
+        component = <ModelMap />;
         break;
       case 'plot':
         component = <Plotter />;

@@ -3,6 +3,8 @@
 #root
 %script{ type: "text/javascript" }
   :plain
+    var PROJECT_NAME = '#{@project_name}';
+
     $(function() {
       ReactDOM.render(
         React.createElement(Timur, {

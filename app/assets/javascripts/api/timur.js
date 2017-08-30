@@ -1,19 +1,18 @@
 import { headers, generateDownload, parseJSON, makeBlob, checkStatus } from './fetch_utils'
 
-export const getTSV = (project_name, model_name, record_names, exchange)=>{
+export const getTSV = (model_name, record_names, exchange)=>{
 
   var routeOpts = {
     method: 'POST',
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     body: JSON.stringify({
-      project_name: project_name,
       model_name: model_name,
       record_names: record_names
     })
   };
 
-  var exchangePromise = exchange.fetch(Routes.table_tsv_path(), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.table_tsv_path(PROJECT_NAME), routeOpts)
     .then(checkStatus)
     .then(makeBlob)
     .then(generateDownload(`${model_name}.tsv`));
@@ -21,30 +20,29 @@ export const getTSV = (project_name, model_name, record_names, exchange)=>{
   return exchangePromise;
 };
 
-export const getView = (project_name, model_name, tab_name, exchange)=>{
+export const getView = (model_name, tab_name, exchange)=>{
 
   var routeOpts = {
     method: 'POST',
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
-    body: JSON.stringify({ project_name, model_name, tab_name })
+    body: JSON.stringify({ model_name, tab_name })
   };
 
-  var exchangePromise = exchange.fetch(Routes.view_json_path(project_name), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.view_json_path(PROJECT_NAME), routeOpts)
     .then(checkStatus)
     .then(parseJSON);
 
   return exchangePromise;
 };
 
-export const getDocuments = (project_name, model_name, record_names, attribute_names, collapse_tables, exchange)=>{
+export const getDocuments = (model_name, record_names, attribute_names, collapse_tables, exchange)=>{
 
   var routeOpts = {
     method: 'POST',
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     body: JSON.stringify({
-      project_name,
       model_name,
       record_names,
       attribute_names,
@@ -52,16 +50,14 @@ export const getDocuments = (project_name, model_name, record_names, attribute_n
     })
   };
 
-  var exchangePromise = exchange.fetch(Routes.records_json_path(), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.records_json_path(PROJECT_NAME), routeOpts)
     .then(checkStatus)
     .then(parseJSON);
 
   return exchangePromise;
 };
 
-export const postRevisions = (project_name, revision_data, exchange)=>{
-  revision_data.append('project_name', project_name);
-
+export const postRevisions = (revision_data, exchange)=>{
   var routeOpts = {
     method: 'POST',
     credentials: 'same-origin',
@@ -69,26 +65,25 @@ export const postRevisions = (project_name, revision_data, exchange)=>{
     body: revision_data
   };
 
-  var exchangePromise = exchange.fetch(Routes.update_model_path(), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.update_model_path(PROJECT_NAME), routeOpts)
     .then(checkStatus)
     .then(parseJSON)
 
   return exchangePromise;
 };
 
-export const getConsignments = (project_name, manifests, exchange)=>{
+export const getConsignments = (manifests, exchange)=>{
 
   var routeOpts = {
     method: 'POST',
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     body: JSON.stringify({
-      queries: manifests,
-      project_name: project_name
+      queries: manifests
     })
   };
 
-  var exchangePromise = exchange.fetch(Routes.query_json_path(), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.query_json_path(PROJECT_NAME), routeOpts)
     .then(checkStatus)
     .then(parseJSON)
 

@@ -28,7 +28,7 @@ class Search extends Component{
   }
 
   componentDidMount(){
-    this.props.getModels(this.props.project_name);
+    this.props.getModels();
   }
 
   setPage(page){
@@ -51,7 +51,6 @@ class Search extends Component{
 
     if(page_record_names && !has_complete_records){
       this.props.requestDocuments(
-        this.props.project_name,
         this.props.model_name,
         page_record_names
       );
@@ -156,7 +155,6 @@ class Search extends Component{
       'value': "\u21af TSV",
       'onClick': ()=>{
         this.props.requestTSV(
-          this.props.project_name,
           this.props.model_name,
           this.props.record_names
         );
@@ -295,13 +293,12 @@ const mapStateToProps = (state, ownProps)=>{
 
 const mapDispatchToProps = (dispatch, ownProps)=>{
   return {
-    getModels: function(project_name){
-      dispatch(requestModels(project_name));
+    getModels: function(){
+      dispatch(requestModels());
     },
 
     query: function(manifest, success){
       dispatch(requestConsignments(
-        ownProps.project_name,
         [{'name': 'search','manifest': manifest}],
         success
       ));
@@ -319,9 +316,8 @@ const mapDispatchToProps = (dispatch, ownProps)=>{
       });
     },
 
-    requestDocuments: function(project_name, model_name, record_names, success){
+    requestDocuments: function(model_name, record_names, success){
       dispatch(requestDocuments({
-        project_name,
         model_name,
         record_names,
         'attribute_names': 'all',
@@ -331,8 +327,8 @@ const mapDispatchToProps = (dispatch, ownProps)=>{
       }));
     },
 
-    requestTSV: function(project_name, model_name, record_names){
-      dispatch(requestTSV(project_name, model_name, record_names));
+    requestTSV: function(model_name, record_names){
+      dispatch(requestTSV(model_name, record_names));
     }
   };
 };

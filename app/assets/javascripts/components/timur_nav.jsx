@@ -6,10 +6,10 @@ class TimurNav extends Component {
     var login_path = Routes.login_path()
 
     var tabs = {
-      browse: Routes.browse_path(this.props.project_name),
-      search: Routes.search_path(this.props.project_name),
-      map: Routes.map_path(this.props.project_name),
-      manifest: Routes.manifests_path(this.props.project_name),
+      browse: Routes.browse_path(PROJECT_NAME),
+      search: Routes.search_path(PROJECT_NAME),
+      map: Routes.map_path(PROJECT_NAME),
+      manifest: Routes.manifests_path(PROJECT_NAME),
     }
 
     var login
@@ -70,7 +70,7 @@ class TimurNav extends Component {
                {
                  this.props.can_edit ?
                  <div className="nav_tab">
-                   <a href={ Routes.activity_path() }>Activity</a>
+                   <a href={ Routes.activity_path(PROJECT_NAME) }>Activity</a>
                  </div>
                  : null
                }
@@ -81,7 +81,7 @@ class TimurNav extends Component {
                  }
                  </a>
                </div>
-               <IdentifierSearch project_name={this.props.project_name}/>
+               <IdentifierSearch/>
                <div id="login">
                  { login }
                </div>
