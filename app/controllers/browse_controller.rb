@@ -5,8 +5,8 @@ require 'json'
 
 class BrowseController < ApplicationController
   before_filter :authenticate
-  #before_filter :readable_check
-  #before_filter :editable_check, only: :update
+  before_filter :readable_check
+  before_filter :editable_check, only: :update
   layout 'timur'
 
   def index
@@ -15,8 +15,8 @@ class BrowseController < ApplicationController
 
   def model
     @project_name = params[:project_name]
-    @model_name = params[:model]
-    @record_name = params[:name]
+    @model_name = params[:model_name]
+    @record_name = params[:record_name]
   end
 
   def map

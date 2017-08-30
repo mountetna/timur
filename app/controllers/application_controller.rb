@@ -9,10 +9,21 @@ class ApplicationController < ActionController::Base
   def authenticate
     # If they do NOT have a cookie, they must go to Janus
     # and get one.
-    redirect_to(janus_login_path(request.original_url)) unless token
+    if !token
+      redirect_to(janus_login_path(request.original_url))
+      return
+    end
 
     # they do have a cookie, try to load a user 
-    current_user
+    redirect_to(:no_auth) unless current_user
+  end
+
+  def readable_check
+    redirect_to(:no_auth) unless can_read?
+  end
+
+  def editable_check
+    redirect_to(:no_auth) unless can_edit?
   end
 
   def token
@@ -27,24 +38,12 @@ class ApplicationController < ActionController::Base
     return uri.to_s
   end
 
-  def unauth
-    redirect_to(:no_auth)
-  end
-
   def can_read?
     current_user && current_user.can_read?(params[:project_name])
   end
 
   def can_edit?
     current_user && current_user.can_edit?(params[:project_name])
-  end
-
-  def readable_check
-    unauth unless can_read?
-  end
-
-  def editable_check
-    unauth unless can_edit?
   end
 
   def current_user

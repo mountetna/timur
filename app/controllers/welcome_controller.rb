@@ -1,6 +1,6 @@
 class WelcomeController < ApplicationController
   layout 'application'
-  before_filter :authenticate
+  before_filter :authenticate, except: :no_auth
 
   def index
   end

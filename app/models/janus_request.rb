@@ -21,7 +21,7 @@ class JanusRequest
     request = Net::HTTP::Post.new(uri.path)
 
     request.set_form_data(
-      token: token,
+      token: @token,
       app_key: Rails.application.secrets.app_key
     )
 

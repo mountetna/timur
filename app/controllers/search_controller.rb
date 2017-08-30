@@ -2,7 +2,7 @@ require 'csv'
 
 class SearchController <  ApplicationController
   before_filter :authenticate
-  #before_filter :readable_check
+  before_filter :readable_check
   layout 'timur'
 
   def index

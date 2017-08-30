@@ -1,6 +1,6 @@
 class JanusUser
   def self.retrieve(token)
-    user_info = JanusRequest.new(token, :check).json_body
+    user_info = JanusRequest.new(:check,token).json_body
 
     user_info ? new(user_info) : nil
   end
@@ -26,6 +26,6 @@ class JanusUser
   private
 
   def slice(hash, *keys)
-    Hash[ keys.zip(hash.values_at(keys)) ]
+    Hash[ keys.zip(hash.values_at(*keys)) ]
   end
 end
