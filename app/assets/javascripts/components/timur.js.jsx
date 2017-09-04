@@ -73,6 +73,7 @@ var Timur = React.createClass({
       <div id='ui-container'>
 
         <TimurNav {...timur_nav_props} />
+        <Messages/>
         {component}
       </div>
     );
