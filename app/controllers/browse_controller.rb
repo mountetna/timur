@@ -7,10 +7,14 @@ class BrowseController < ApplicationController
   before_filter :authenticate
   before_filter :readable_check
   before_filter :editable_check, only: :update
-  layout 'timur'
+  layout :timur
 
   def index
-    redirect_to browse_model_path(:ipi, :project, "UCSF Immunoprofiler")
+    status, payload = Magma::Client.instance.query(
+      token, params[:project_name], [ :project, '::first', '::identifier' ]
+    )
+    id = JSON.parse(payload, symbolize_names: true)
+    redirect_to browse_model_path(params[:project_name], :project, id[:answer])
   end
 
   def model
