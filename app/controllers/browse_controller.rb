@@ -7,7 +7,7 @@ class BrowseController < ApplicationController
   before_filter :authenticate
   before_filter :readable_check
   before_filter :editable_check, only: :update
-  layout :timur
+  layout 'timur'
 
   def index
     status, payload = Magma::Client.instance.query(
