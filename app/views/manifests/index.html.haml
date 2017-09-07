@@ -8,7 +8,7 @@
     $(function() {
       ReactDOM.render(
         React.createElement(Timur, {
-          #{current_user ? "user: '#{current_user.email}', " : '' }
+          user: "#{current_user ? current_user.name : 'null'}",
           mode: 'manifests',
           environment: '#{Rails.env.development? ? 'development' : 'production'}'
         }),
