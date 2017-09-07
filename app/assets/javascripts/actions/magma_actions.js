@@ -62,7 +62,7 @@ export const consumePayload = (dispatch, response)=>{
   }
 };
 
-export const requestDocuments = ({project_name, model_name, record_names, attribute_names, collapse_tables, exchange_name, success, error})=>{
+export const requestDocuments = ({model_name, record_names, attribute_names, collapse_tables, exchange_name, success, error})=>{
   return (dispatch)=>{
 
     let localSuccess = (response)=>{
@@ -84,7 +84,6 @@ export const requestDocuments = ({project_name, model_name, record_names, attrib
     };
 
     let get_doc_args = [
-      project_name,
       model_name,
       record_names,
       attribute_names,
@@ -98,9 +97,8 @@ export const requestDocuments = ({project_name, model_name, record_names, attrib
   }
 };
 
-export const requestModels = (project_name)=>{
+export const requestModels = ()=>{
   let reqOpts = {
-    'project_name': project_name,
     'model_name': 'all',
     'record_names': [],
     'attribute_names': 'all',
@@ -110,9 +108,8 @@ export const requestModels = (project_name)=>{
   return requestDocuments(reqOpts);
 };
 
-export const requestIdentifiers = (project_name)=>{
+export const requestIdentifiers = ()=>{
   let reqOpts = {
-    'project_name': project_name,
     'model_name': 'all',
     'record_names': 'all',
     'attribute_names': 'identifier',
@@ -151,7 +148,7 @@ const setFormData = (revisions, model_name)=>{
   return form;
 }
 
-export const sendRevisions = (project_name, model_name, revisions, success, error)=>{
+export const sendRevisions = (model_name, revisions, success, error)=>{
   return (dispatch)=>{
 
     let localSuccess = (response)=>{
@@ -180,7 +177,7 @@ export const sendRevisions = (project_name, model_name, revisions, success, erro
     };
 
     let exchng = new Exchange(dispatch, `revisions-${model_name}`);
-    postRevisions(project_name, setFormData(revisions, model_name), exchng)
+    postRevisions(setFormData(revisions, model_name), exchng)
       .then(localSuccess)
       .catch(localError);
   }

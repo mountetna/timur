@@ -33,7 +33,6 @@ class ManifestForm extends Component {
       this.setState({
         name: '',
         access: 'private',
-        project: 'ipi',
         elementKeys: [],
         elementsByKey: {},
         hasConsignment: false
@@ -58,11 +57,11 @@ class ManifestForm extends Component {
   }
 
   create() {
-    this.props.saveNewManifest(this.props.project_name, this.stateToManifest())
+    this.props.saveNewManifest(this.stateToManifest())
   }
 
   update() {
-    this.props.saveManifest(this.props.project_name, this.stateToManifest())
+    this.props.saveManifest(this.stateToManifest())
   }
 
   updateResults() {

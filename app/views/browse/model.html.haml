@@ -3,15 +3,17 @@
 #root
 %script{ type: "text/javascript" }
   :plain
+    var PROJECT_NAME = '#{@project_name}';
+
     $(function() {
       ReactDOM.render(
         React.createElement(Timur, {
-          #{current_user ? "user: '#{current_user.name}', " : '' }
+          user: "#{current_user ? current_user.name : 'null'}",
           mode: 'browse',
+          test: 'this',
           environment: '#{Rails.env.development? ? 'development' : 'production'}',
           model_name: '#{@model_name.underscore}',
           record_name: '#{@record_name}',
-          project_name: '#{@project_name}',
           can_edit: #{ current_user && current_user.can_edit?(@project_name) ? :true : :false },
           is_admin: #{ current_user && current_user.is_admin?(@project_name) ? :true : :false }
         }),

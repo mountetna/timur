@@ -18,15 +18,15 @@ class ManifestsController < ApplicationController
       manifest.to_json(current_user, params[:project_name])
     end
 
-    render json: {'manifests'=> manifest_json}
+    render json: { manifests: manifest_json }
   end
 
   def create
     manifest = Manifest.new(manifest_params)
-    manifest.assign_attributes({:data=> params[:data], :user_id=> current_user.id})
+    manifest.assign_attributes(data: params[:data], user_id: current_user.id)
 
     if manifest.save
-      render json: {:manifest=> manifest.to_json(current_user, params[:project_name])}
+      render json: { manifest: manifest.to_json(current_user, params[:project_name]) }
     else
       error_response(manifest)
     end
@@ -36,10 +36,10 @@ class ManifestsController < ApplicationController
     return unless find_manifest(params[:id])
     return unless authorize(@manifest, params[:project_name])
     @manifest.assign_attributes(manifest_params)
-    @manifest.assign_attributes(:data => params[:data])
+    @manifest.assign_attributes(data: params[:data])
 
     if @manifest.save
-      render json: {:manifest=> @manifest.to_json(@current_user, params[:project_name])}
+      render json: { manifest: @manifest.to_json(@current_user, params[:project_name])}
     else
       error_response(@manifest)
     end 
@@ -49,7 +49,7 @@ class ManifestsController < ApplicationController
     return unless find_manifest(params[:id])
     return unless authorize(@manifest, params[:project_name])
     if @manifest.destroy
-      render json: { :success => true }
+      render json: { success: true }
     else
       error_response(@manifest)
     end
@@ -59,14 +59,14 @@ class ManifestsController < ApplicationController
 
   def authenticate
     if !current_user
-      render :json => { :errors => ['You must be logged in.'] }, :status => 401 and return
+      render json: { errors: ['You must be logged in.'] }, status: 401
     end
   end
 
   def authorize(manifest, project_name)
     authorized = manifest.can_edit?(current_user, project_name)
     if !authorized
-      render :json => { :errors => ['You must be the owner to update or delete this manifest.'] }, :status => 403
+      render json: { errors: ['You must be the owner to update or delete this manifest.'] }, status: 403
     end
     authorized
   end
@@ -74,13 +74,13 @@ class ManifestsController < ApplicationController
   def find_manifest(id)
     @manifest = Manifest.find_by_id(id)
     if @manifest.nil?
-      render :json => { :errors => ['Manifest with id: #{id} does not exist.'] }, :status => 404
+      render json: { errors: ['Manifest with id: #{id} does not exist.'] }, status: 404
     end
     @manifest
   end
 
   def error_response(manifest)
-    render :json => { :errors => manifest.errors.full_messages }, :status => 422
+    render json: { errors: manifest.errors.full_messages }, status: 422
   end
 
   def manifest_params

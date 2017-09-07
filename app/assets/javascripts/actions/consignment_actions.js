@@ -64,10 +64,7 @@ export const requestConsignments = (manifests, success, error)=>{
     var manifest_names = manifests.map(m=>m.name).join(', ');
     var exchng = new Exchange(dispatch, `consignment list ${manifest_names}`);
 
-    // WE NEED TO DYNAMICALLY SET THIS LINE!
-    let project_name = 'Ipi';
-
-    getConsignments(project_name, manifests, exchng)
+    getConsignments(manifests, exchng)
       .then(localSuccess)
       .catch(localError);
   };

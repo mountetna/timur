@@ -3,12 +3,13 @@
 #root
 %script{ type: "text/javascript" }
   :plain
+    var PROJECT_NAME = '#{@project_name}';
+
     $(function() {
       ReactDOM.render(
         React.createElement(Timur, {
-          #{current_user ? "user: '#{current_user.email}', " : '' }
+          user: "#{current_user ? current_user.name : 'null'}",
           mode: 'map',
-          project_name: '#{@project_name}',
           environment: '#{Rails.env.development? ? 'development' : 'production'}'
         }),
         $('#root')[0]

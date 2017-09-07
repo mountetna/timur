@@ -2,7 +2,7 @@ var MagmaLink = React.createClass({
   render: function(){
 
     var route_args = [
-      'Ipi',
+      PROJECT_NAME,
       this.props.model,
       encodeURIComponent(this.props.link)
     ];
