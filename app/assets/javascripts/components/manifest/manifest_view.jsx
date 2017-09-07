@@ -17,7 +17,7 @@ class ManifestView extends Component {
   }
 
   render() {
-    const { manifest, consignment, deleteManifest, toggleEdit, copyManifest } = this.props
+    const { manifest, consignment, deleteManifest, toggleEdit, copyManifest, requestConsignments } = this.props
     const { is_editable, name } = manifest
 
     const elements =  manifest.data.elements || []
@@ -69,7 +69,7 @@ class ManifestView extends Component {
             onChange={ (view_mode) => {
               this.setState({ view_mode })
               if (view_mode == 'output' && !consignment) {
-                if (!consignment) this.props.requestConsignments([manifestToReqPayload(manifest)])
+                if (!consignment) requestConsignments([manifestToReqPayload(manifest)])
               }
             } }
             selected={this.state.view_mode}

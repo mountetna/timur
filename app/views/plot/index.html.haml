@@ -3,10 +3,12 @@
 #root
 %script{ type: "text/javascript" }
   :plain
+    var PROJECT_NAME = '#{@project_name}';
+
     $(function() {
       ReactDOM.render(
         React.createElement(Timur, {
-          #{current_user ? "user: '#{current_user.name}', " : '' }
+          user: "#{current_user ? current_user.name : 'null'}",
           mode: 'plot',
           can_edit: #{ current_user && current_user.can_edit? ? :true : :false },
           environment: '#{Rails.env.development? ? 'development' : 'production'}',

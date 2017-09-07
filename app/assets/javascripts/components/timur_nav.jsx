@@ -6,9 +6,10 @@ class TimurNav extends Component {
     var login_path = Routes.login_path()
 
     var tabs = {
-      browse: Routes.browse_path(),
-      search: Routes.search_path(),
-      map: Routes.map_path(),
+      browse: Routes.browse_path(PROJECT_NAME),
+      search: Routes.search_path(PROJECT_NAME),
+      map: Routes.map_path(PROJECT_NAME),
+      manifest: Routes.manifests_path(PROJECT_NAME),
     }
 
     var login
@@ -65,13 +66,11 @@ class TimurNav extends Component {
                      </div>
                  )
                }
-               <div className={'nav_tab' + (this.props.appMode == 'manifesto' ? ' selected' : '')}>
-                  <a onClick={this.props.changeMode.bind(self, 'manifesto')}>Manifests</a>
-                </div>
+
                {
                  this.props.can_edit ?
                  <div className="nav_tab">
-                   <a href={ Routes.activity_path() }>Activity</a>
+                   <a href={ Routes.activity_path(PROJECT_NAME) }>Activity</a>
                  </div>
                  : null
                }
