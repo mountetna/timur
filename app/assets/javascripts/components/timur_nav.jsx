@@ -6,11 +6,11 @@ class TimurNav extends Component {
     var login_path = Routes.login_path()
 
     var tabs = {
-      browse: Routes.browse_path(this.props.project_name),
-      search: Routes.search_path(this.props.project_name),
-      map: Routes.map_path(this.props.project_name),
-      manifests: Routes.manifests_path(this.props.project_name),
-      plots: Routes.plots_path(this.props.project_name)
+      browse: Routes.browse_path(PROJECT_NAME),
+      search: Routes.search_path(PROJECT_NAME),
+      map: Routes.map_path(PROJECT_NAME),
+      manifests: Routes.manifests_path(PROJECT_NAME),
+      plots: Routes.plots_path(PROJECT_NAME)
     }
 
     var login

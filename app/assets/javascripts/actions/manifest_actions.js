@@ -46,7 +46,7 @@ export const requestManifests = (project_name) => {
       showErrors(err, dispatch);
     };
 
-    fetchManifests(project_name, new Exchange(dispatch, 'request-manifest'))
+    fetchManifests(new Exchange(dispatch, 'request-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
