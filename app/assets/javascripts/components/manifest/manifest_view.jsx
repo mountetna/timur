@@ -5,6 +5,9 @@ import ToggleSwitch from '../toggle_switch'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
+import { plotsByIds } from '../../reducers/plots_reducer'
+import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions'
+import { plotIndexUrl } from '../../api/plots'
 
 // Shows a single manifest - it has two states, 'script', which
 // shows the manufest script, and 'output', which shows the
@@ -45,21 +48,29 @@ class ManifestView extends Component {
       <div className='manifest'>
         <div className='manifest-elements'>
           <div className='actions'>
-            { is_editable &&
+            {is_editable &&
               <button onClick={toggleEdit}>
                 <i className='fa fa-pencil-square-o' aria-hidden="true"></i>
                 edit
               </button>
             }
-            <button onClick={() => copyManifest(manifest)}>
+            {this.state.view_mode === 'output' && manifest.is_editable &&
+              <button>
+                <a href={plotIndexUrl(project_name, { manifest_id: manifest.id, is_editing: true })}>
+                  <i className='fa fa-line-chart' aria-hidden="true"></i>
+                  plot
+                </a>
+              </button>
+            }
+            <button onClick={() => copyManifest(this.props.project, manifest)}>
               <i className='fa fa-files-o' aria-hidden="true"></i>
               copy
             </button>
-            { is_editable &&
-                <button onClick={ () => deleteManifest(manifest.id)}>
-              <i className='fa fa-trash-o' aria-hidden="true"></i>
-              delete
-            </button>
+            {is_editable &&
+              <button onClick={() => deleteManifest(manifest.id)}>
+                <i className='fa fa-trash-o' aria-hidden="true"></i>
+                delete
+              </button>
             }
           </div>
           <ManifestPreview {...manifest} />
@@ -78,6 +89,20 @@ class ManifestView extends Component {
           <ol>
             {manifestElements}
           </ol>
+          {this.state.view_mode === 'output' &&
+            <div>
+              <div>{'Plots: '}</div>
+              <ul>
+                {this.props.plots.map(plot => (
+                  <li key={plot.id}>
+                    <a href={plotIndexUrl(project_name, { manifest_id: manifest.id, id: plot.id })}>
+                      {plot.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          }
         </div>
       </div>
     )
@@ -86,12 +111,15 @@ class ManifestView extends Component {
 
 export default connect(
   (state,props) => ({
-    consignment: selectConsignment(state,props.manifest.name)
+    consignment: selectConsignment(state, props.manifest.name),
+    plots: plotsByIds(state.plots, props.manifest.plotIds || [])
   }),
   {
     deleteManifest,
     copyManifest,
     toggleEdit,
-    requestConsignments
+    requestConsignments,
+    selectPlot,
+    plotEdit
   }
 )(ManifestView)

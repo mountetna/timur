@@ -26,6 +26,12 @@ Rails.application.routes.draw do
   post ':project_name/search/table'=> 'search#table_json', as: :table_json
   post ':project_name/search/tsv'=> 'search#table_tsv', as: :table_tsv
 
+  # plot_controller.rb
+  get 'plots/:project_name'=> 'plots#index', as: :plots
+  post 'manifests/:manifest_id/plots/create'=> 'plots#create', as: :manifests_plots_create
+  put 'manifests/:manifest_id/plots/update/:id'=> 'plots#update', as: :manifests_plots_update
+  delete 'manifests/:manifest_id/plots/destroy/:id'=> 'plots#destroy', as: :manifests_plots_destroy
+
   # manifest_controller.rb
   get ':project_name/manifests'=> 'manifests#index', as: :manifests
   post ':project_name/manifests/fetch'=> 'manifests#fetch', as: :manifests_fetch

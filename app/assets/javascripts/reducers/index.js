@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import magma from './magma_reducer'
 import messages from './message_reducer'
-import plots from './plot_reducer'
+import plots from './plots_reducer'
 import timur from './timur_reducer'
 import manifestsUI from './manifest_ui_reducer'
 import manifests from './manifests_reducer'

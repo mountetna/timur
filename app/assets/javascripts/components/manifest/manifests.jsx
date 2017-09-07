@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { requestManifests } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import ManifestSelector from './manifest_selector'
-import debounce from 'lodash.debounce'
 
 // Main component for viewing/editing manifests
 class Manifests extends Component {
@@ -12,7 +11,7 @@ class Manifests extends Component {
   }
 
   render() {
-    const { manifests, selectedManifest } = this.props
+    const { manifests, selectedManifest, project_name } = this.props
 
     return (
       <div className='manifests-container'>
@@ -23,6 +22,7 @@ class Manifests extends Component {
             isAdmin={this.props.isAdmin}
             editing={this.props.isEditing}
             manifest={this.props.manifest}
+            project_name={project_name}
             />
             : null
         }

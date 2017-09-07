@@ -1,4 +1,4 @@
-import { toggleConfig, changeMode } from '../actions/timur_actions'
+import { toggleConfig } from '../actions/timur_actions'
 import { Component } from 'react'
 
 class TimurNav extends Component {
@@ -6,10 +6,11 @@ class TimurNav extends Component {
     var login_path = Routes.login_path()
 
     var tabs = {
-      browse: Routes.browse_path(PROJECT_NAME),
-      search: Routes.search_path(PROJECT_NAME),
-      map: Routes.map_path(PROJECT_NAME),
-      manifest: Routes.manifests_path(PROJECT_NAME),
+      browse: Routes.browse_path(this.props.project_name),
+      search: Routes.search_path(this.props.project_name),
+      map: Routes.map_path(this.props.project_name),
+      manifests: Routes.manifests_path(this.props.project_name),
+      plots: Routes.plots_path(this.props.project_name)
     }
 
     var login
@@ -26,7 +27,6 @@ class TimurNav extends Component {
       logo_id = "normal"
     }
 
-    //TODO fix hacky addition of Manifesto tab
     return <div id="header">
              <div id="logo">
                <a href="/">
@@ -61,16 +61,19 @@ class TimurNav extends Component {
                {
                  Object.keys(tabs).map((name) =>
                    <div key={ name } 
-                     className={ "nav_tab" + ((this.props.mode == name && !this.props.appMode) ? ' selected' : '') }>
+                     className={ "nav_tab" + (this.props.mode == name ? ' selected' : '') }>
                        <a href={ tabs[name] }> { name } </a>
                      </div>
                  )
                }
-
                {
                  this.props.can_edit ?
                  <div className="nav_tab">
+<<<<<<< HEAD
                    <a href={ Routes.activity_path(PROJECT_NAME) }>Activity</a>
+=======
+                   <a href={ Routes.activity_path(this.props.project_name) }>Activity</a>
+>>>>>>> 1afaf90edb2641878d23d3425ae503957b436415
                  </div>
                  : null
                }
@@ -95,8 +98,7 @@ export default connect(
     helpShown: state.timur.help_shown,
     exchanges: state.exchanges
   }),
-  { 
-    changeMode,
+  {
     toggleConfig
   }
 )(TimurNav)

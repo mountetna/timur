@@ -3,7 +3,6 @@ import InputField from './input_field'
 import TextField from './text_field'
 import ManifestAccess from './manifest_access'
 import ManifestElementForm from './manifest_element_form'
-import Dates from '../../dates'
 import { v4 } from 'node-uuid'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
@@ -33,6 +32,7 @@ class ManifestForm extends Component {
       this.setState({
         name: '',
         access: 'private',
+        project: this.props.project_name,
         elementKeys: [],
         elementsByKey: {},
         hasConsignment: false
