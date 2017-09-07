@@ -40,8 +40,8 @@ class BrowseController < ApplicationController
   end
 
   def view_json
-    tab = params[:tab_name] ? params[:tab_name].to_sym : nil
-    view = TimurView.create(params[:model_name], tab)
+    tab_name = params[:tab_name] ? params[:tab_name].to_sym : nil
+    view = ViewPane.create(params[:model_name], params[:project_name], tab_name)
     render(json: view)
   end
 
