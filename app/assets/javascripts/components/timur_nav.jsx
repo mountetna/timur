@@ -69,7 +69,7 @@ class TimurNav extends Component {
                {
                  this.props.can_edit ?
                  <div className="nav_tab">
-                   <a href={ Routes.activity_path(this.props.project_name) }>Activity</a>
+                   <a href={ Routes.activity_path(PROJECT_NAME) }>Activity</a>
                  </div>
                  : null
                }
