@@ -1,3 +1,6 @@
+# This task takes the existing view classes (built for the IPI project) and
+# turns them into records in the view_panes and view_attributes tables.
+
 namespace :timur do
   desc "Create view models from view classes"
   task :make_view_model => [:environment] do |t,args|
