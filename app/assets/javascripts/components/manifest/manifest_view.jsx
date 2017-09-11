@@ -5,7 +5,7 @@ import ToggleSwitch from '../toggle_switch'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
-import { plotsByIds } from '../../reducers/plots_reducer'
+import { plotsByIds } from '../../selectors/plot'
 import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions'
 import { plotIndexUrl } from '../../api/plots'
 

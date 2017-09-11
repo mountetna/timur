@@ -1,6 +1,6 @@
 import { showMessages } from './message_actions'
 import { createPlot, destroyPlot, updatePlot } from '../api/plots'
-import { manifestById } from '../reducers/manifests_reducer'
+import { manifestById } from '../selectors/manifest'
 
 // remove a plot from the store
 const removePlot = (id, manifestId) => ({
@@ -38,8 +38,7 @@ const addPlot = (plot) => ({
 export const loadPlot = (plot) =>
   (dispatch, getState) => {
     // is_editable flag equals the manifest is_editable flag
-    const { manifests } = getState();
-    const { is_editable } = manifestById(manifests, plot.manifest_id);
+    const { is_editable } = manifestById(getState(), plot.manifest_id);
     const plotWithEditFlag =  { ...plot, is_editable };
 
     dispatch(addPlot(plotWithEditFlag));

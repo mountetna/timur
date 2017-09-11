@@ -21,20 +21,6 @@ const manifests = (state = {}, action) => {
     default:
       return state;
   }
-}
-
-export const manifestById = (state, id) => state[id];
-
-export const allManifests = (state) => Object.keys(state).map(id => state[id]);
-
-export const manifestsFilterBy = (state, filterBy = () => true) => {
-  return Object.keys(state).reduce((acc, id) => {
-    const manifest = manifestById(state, id)
-    if (filterBy(manifest)) {
-      return [ ...acc, manifest ]
-    }
-    return acc
-  }, [])
 };
 
-export default manifests
+export default manifests;
