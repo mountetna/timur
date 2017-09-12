@@ -188,16 +188,16 @@ class ScatterPlotForm extends Component {
 
   render () {
     const { layout, plotableData, data } = this.state;
-    const { toggleEditing, selectedManifest, selectManifest, manifests, consignment } = this.props;
-
+    const { toggleEditing, selectedManifest, selectManifest, manifests, consignment, plot } = this.props;
+    
     return (
       <div className='plot-form-container'>
         <div>
           <a onClick={this.handleSave.bind(this)}>save </a>
-          <a onClick={toggleEditing}>cancel</a>
+          <a onClick={() => toggleEditing()}>cancel</a>
         </div>
         {'Manifest: '}
-        {this.props.plot ? (
+        {plot ? (
           <span>{selectedManifest.name}</span>
         ) : (
           <select
