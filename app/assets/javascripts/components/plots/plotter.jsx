@@ -5,7 +5,7 @@ import { requestConsignments } from '../../actions/consignment_actions'
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions'
-import { allPlots, plotById } from '../../selectors/plot'
+import { getAllPlots, getSelectedPlot } from '../../selectors/plot'
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest'
 import ScatterPlotForm from './scatter_plot_form'
 import Plot from './plotly'
@@ -159,22 +159,21 @@ class Plotter extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { manifests, manifestsUI, plots } = state;
   const selectedManifest = getSelectedManifest(state);
 
   let consignment = null;
   if (selectedManifest) {
-    consignment = selectConsignment(state, manifests[manifestsUI.selected].name);
+    consignment = selectConsignment(state, selectedManifest.name);
   }
 
   return {
     consignment,
     selectedManifest,
-    shouldReqManifests: isEmptyManifests(state),
+    isEmptyManifests: isEmptyManifests(state),
     plotableManifests: getEditableManifests(state),
-    plots: allPlots(plots),
-    selectedPlot: plotById(plots, plots.selected),
-    isEditing: plots.isEditing,
+    plots: getAllPlots(state),
+    selectedPlot: getSelectedPlot(state),
+    isEditing: state.plots.isEditing,
   }
 }
 
