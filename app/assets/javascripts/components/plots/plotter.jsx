@@ -21,9 +21,9 @@ class Plotter extends Component {
   }
 
   componentDidMount() {
-    const { shouldReqManifests, plotableManifests, selectedManifest, requestManifests, consignment } =  this.props;
+    const { isEmptyManifests, plotableManifests, selectedManifest, requestManifests, consignment } =  this.props;
 
-    if (shouldReqManifests) {
+    if (isEmptyManifests) {
       // request manifests during initial page load
       requestManifests();
     } else if (!selectedManifest) {
@@ -38,9 +38,9 @@ class Plotter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedManifest, consignment, plotableManifests } = nextProps;
+    const { selectedManifest, consignment, plotableManifests, isEmptyManifests } = nextProps;
 
-    if (!selectedManifest) {
+    if (!selectedManifest && !isEmptyManifests) {
       // select a manifest if not already selected
       this.selectDefaultManifest(plotableManifests);
     }
