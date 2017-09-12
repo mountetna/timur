@@ -1,7 +1,7 @@
 import { headers, parseJSON, checkStatus } from './fetch_utils'
 
-export const plotIndexUrl = (projectName, queryParams) => {
-  let path = Routes.plots_path(projectName);
+export const plotIndexUrl = (queryParams) => {
+  let path = Routes.plots_path(PROJECT_NAME);
 
   // list of params
   const params = Object.keys(queryParams);
@@ -22,7 +22,7 @@ export const plotIndexUrl = (projectName, queryParams) => {
 };
 
 export const createPlot = (manifestId, plot) =>
-  fetch(Routes.manifests_plots_create_path(manifestId), {
+  fetch(Routes.manifests_plots_create_path(PROJECT_NAME, manifestId), {
     credentials: 'same-origin',
     method: 'POST',
     headers: headers('json', 'csrf'),
@@ -32,7 +32,7 @@ export const createPlot = (manifestId, plot) =>
     .then(parseJSON)
 
 export const destroyPlot = (manifestId, plotId) =>
-  fetch(Routes.manifests_plots_destroy_path(manifestId, plotId), {
+  fetch(Routes.manifests_plots_destroy_path(PROJECT_NAME, manifestId, plotId), {
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     method: 'DELETE'
@@ -41,7 +41,7 @@ export const destroyPlot = (manifestId, plotId) =>
     .then(parseJSON)
 
 export const updatePlot = (manifestId, plotId, plot) =>
-  fetch(Routes.manifests_plots_update_path(manifestId, plotId), {
+  fetch(Routes.manifests_plots_update_path(PROJECT_NAME, manifestId, plotId), {
     credentials: 'same-origin',
     method: 'PUT',
     headers: headers('json', 'csrf'),

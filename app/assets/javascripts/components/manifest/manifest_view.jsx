@@ -56,7 +56,7 @@ class ManifestView extends Component {
             }
             {this.state.view_mode === 'output' && manifest.is_editable &&
               <button>
-                <a href={plotIndexUrl(PROJECT_NAME, { manifest_id: manifest.id, is_editing: true })}>
+                <a href={plotIndexUrl({ manifest_id: manifest.id, is_editing: true })}>
                   <i className='fa fa-line-chart' aria-hidden="true"></i>
                   plot
                 </a>
@@ -95,7 +95,7 @@ class ManifestView extends Component {
               <ul>
                 {this.props.plots.map(plot => (
                   <li key={plot.id}>
-                    <a href={plotIndexUrl(PROJECT_NAME, { manifest_id: manifest.id, id: plot.id })}>
+                    <a href={plotIndexUrl({ manifest_id: manifest.id, id: plot.id })}>
                       {plot.name}
                     </a>
                   </li>
