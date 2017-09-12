@@ -50,8 +50,8 @@ class ManifestSelector extends Component {
 export default connect(
   (state, props) => {
     return {
-      public_manifests: Object.values(props.manifests).filter((m) => m.access == 'public').sort((a,b) => a > b),
-      private_manifests: Object.values(props.manifests).filter((m) => m.access == 'private').sort((a,b) => a > b),
+      public_manifests: props.manifests.filter((m) => m.access == 'public').sort((a,b) => a > b),
+      private_manifests: props.manifests.filter((m) => m.access == 'private').sort((a,b) => a > b),
     }
   },
   { toggleEdit, selectManifest }

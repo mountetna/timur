@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { requestManifests } from '../../actions/manifest_actions'
 import Manifest from './manifest'
 import ManifestSelector from './manifest_selector'
+import { getSelectedManifest, getAllManifests } from '../../selectors/manifest'
 
 // Main component for viewing/editing manifests
 class Manifests extends Component {
@@ -21,7 +22,7 @@ class Manifests extends Component {
           <Manifest
             isAdmin={this.props.isAdmin}
             editing={this.props.isEditing}
-            manifest={this.props.manifest}
+            manifest={this.props.selectedManifest}
             project_name={project_name}
             />
             : null
@@ -33,11 +34,10 @@ class Manifests extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { manifests, manifestsUI: { selected, isEditing } } = state
+  const { manifestsUI: { isEditing } } = state
   return {
-    manifests: manifests,
-    selectedManifest: selected,
-    manifest: manifests[selected],
+    manifests: getAllManifests(state),
+    selectedManifest: getSelectedManifest(state),
     isEditing
   }
 }

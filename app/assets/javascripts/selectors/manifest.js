@@ -13,7 +13,7 @@ export const getSelectedManifest = createSelector(
 
 export const getAllManifests = createSelector(
   getManifests,
-  manifests => Object.keys(manifests).map(id => manifests[id])
+  manifests => Object.values(manifests)
 );
 
 export const isEmptyManifests = createSelector(

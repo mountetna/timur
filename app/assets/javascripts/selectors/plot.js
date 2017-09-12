@@ -1,5 +1,12 @@
-export const allPlots = (state) => Object.keys(state.plotsMap).map(key => state.plotsMap[key]);
+import { createSelector } from 'reselect'
 
-export const plotsByIds = (state, ids) => ids.map(id => state.plotsMap[id]);
+const getPlots = (state) => state.plots.plotsMap
 
-export const plotById = (state, id) => state.plotsMap[id];
+const getSelectedPlotId = (state) => state.plots.selected
+
+export const getAllPlots = (state) => Object.values(getPlots(state));
+
+export const getSelectedPlot = createSelector(
+  [ getPlots, getSelectedPlotId ],
+  (plots, id) => plots[id]
+);

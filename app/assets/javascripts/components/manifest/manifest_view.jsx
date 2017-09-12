@@ -5,7 +5,7 @@ import ToggleSwitch from '../toggle_switch'
 import { requestConsignments } from '../../actions/consignment_actions'
 import { selectConsignment } from '../../selectors/consignment'
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
-import { plotsByIds } from '../../selectors/plot'
+import { getAllPlots } from '../../selectors/plot'
 import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions'
 import { plotIndexUrl } from '../../api/plots'
 
@@ -62,7 +62,7 @@ class ManifestView extends Component {
                 </a>
               </button>
             }
-            <button onClick={() => copyManifest(this.props.project, manifest)}>
+            <button onClick={() => copyManifest(manifest)}>
               <i className='fa fa-files-o' aria-hidden="true"></i>
               copy
             </button>
@@ -112,7 +112,7 @@ class ManifestView extends Component {
 export default connect(
   (state,props) => ({
     consignment: selectConsignment(state, props.manifest.name),
-    plots: plotsByIds(state.plots, props.manifest.plotIds || [])
+    plots: getAllPlots(state)
   }),
   {
     deleteManifest,
