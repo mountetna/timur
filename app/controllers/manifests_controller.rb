@@ -1,4 +1,8 @@
-class ManifestsController < ManifestsAPIController
+class ManifestsController < ApplicationController
+  include ManifestHelper
+
+  before_filter :authenticate, only: :index
+  before_filter :ajax_req_authenticate, except: :index
   layout 'timur'
 
   def index
@@ -8,7 +12,7 @@ class ManifestsController < ManifestsAPIController
   def fetch
 
     # Pull the manifests from the database.
-    manifests = Manifest.where('user_id = ? OR access = ?', current_user.id, 'public').all
+    manifests = Manifest.where('(user_id = ? OR access = ?) AND project = ?', current_user.id, 'public', params[:project_name]).all
 
     # Extract the mainfests that: match the user, is public, or where the user
     # is an admin.

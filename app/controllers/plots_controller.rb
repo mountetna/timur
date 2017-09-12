@@ -1,5 +1,9 @@
-class PlotsController < ManifestsAPIController
-  before_filter :authorize, :except => [:index]
+class PlotsController < ApplicationController
+  include ManifestHelper
+
+  before_filter :authenticate, only: :index
+  before_filter :ajax_req_authenticate, except: :index
+  before_filter :plot_auth, except: :index
   layout 'timur'
 
   def index
@@ -27,9 +31,9 @@ class PlotsController < ManifestsAPIController
 
   private
 
-  def authorize
+  def plot_auth
     return unless find_manifest(params[:manifest_id])
-    return unless super
+    return unless authorize
   end
 
   def find_plot(id)

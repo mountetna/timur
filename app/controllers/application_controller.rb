@@ -62,4 +62,23 @@ class ApplicationController < ActionController::Base
     user_data = {email: 'developer@localhost', name: 'Timothy Developer'}
     user = User.where(email: auth['email']).first_or_create.update(user_data)
   end
+
+
+  def ajax_req_authenticate
+    if !current_user
+      render :json => { :errors => ["You must be logged in."] }, :status => 401 and return
+    end
+  end
+
+  def error_response(resource)
+    render :json => { :errors => resource.errors.full_messages }, :status => 422
+  end
+
+  def delete(resource)
+    if resource.destroy
+      render json: { :success => true }
+    else
+      error_response(resource)
+    end
+  end
 end
