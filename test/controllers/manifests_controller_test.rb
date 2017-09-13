@@ -115,8 +115,9 @@ class ManifestsControllerTest < ActionController::TestCase
 
     log_in_as(admin) do
       old_public_manifest_count = admin.manifests.where(:access => "public").size
+      post :create, new_manifest
       assert_response 200
-      new_public_manifest_count = admin.reload.manifests.where(:access => "public").size
+      new_public_manifest_count = admin.manifests.where(:access => "public").size
       assert_equal new_public_manifest_count, old_public_manifest_count + 1
     end
   end
