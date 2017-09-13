@@ -24,7 +24,7 @@ viewerPrivate:
 
 viewerPrivateDiffProject:
   user: viewer
-  name: private manifest
+  name: private manifest 2
   description: private viewer
   project: Other Project
   access: private

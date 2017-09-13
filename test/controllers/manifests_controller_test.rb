@@ -1,37 +1,56 @@
 require 'test_helper'
 require 'minitest/autorun'
+require 'set'
 
 class ManifestsControllerTest < ActionController::TestCase
-  fixtures :users, :whitelists, :manifests
+  fixtures :users, :whitelists, :permissions, :manifests
 
   test "must be logged in" do
-    get :index
-    assert_response 401
+    get :index, project_name: 'Ipi'
+    assert_response :redirect
 
-    new_manifest = { :name => "test@test.com", :description => "foobar", :project => "proj", :access => "public", :data => {}}
-    
+    get :fetch, project_name: 'Ipi'
+    assert_response :unauthorized
+
+    new_manifest = {
+        :name => "test@test.com",
+        :description => "foobar",
+        :project => "proj",
+        :access => "public",
+        :data => {"x": "y"},
+        :project_name => 'Ipi'
+    }
+
     old_manifest_size = Manifest.all.size
-    post :create, :format => :json, :params => new_manifest
+    post :create, new_manifest
     assert_equal Manifest.all.size, old_manifest_size
-    assert_response 401
+    assert_response :unauthorized
 
     manifest_public = manifests(:adminPublic)
     manifest_private = manifests(:adminPrivate)
 
     old_manifest_size = Manifest.all.size
-    delete :destroy, id: manifest_public.id
-    delete :destroy, id: manifest_private.id
+    post :destroy, :project_name => 'Ipi', :id => manifest_public.id
+    post :destroy, :project_name => 'Ipi', :id => manifest_private.id
     assert_equal Manifest.all.size, old_manifest_size
-    assert_response 401
+    assert_response :unauthorized
 
-    put :update, id: manifest_public.id, :format => :json, :params => new_manifest
+    post :update, :project_name => 'Ipi', id: manifest_public.id, :format => :json, :params => new_manifest
     assert_equal Manifest.find(manifest_public.id).description, manifest_public.description
-    assert_response 401
+    assert_response :unauthorized
+
+    log_in_as(users(:viewer)) do
+      get :index, project_name: 'Ipi'
+      assert_response :success
+    end
   end
 
-  test "get list of your manifests and public manifests" do
+  test "get list of your manifests and public manifests from project" do
     log_in_as(users(:admin)) do
-      get :index, :format => :json
+      get :index, project_name: 'Ipi'
+      assert_response 200
+
+      get :fetch, project_name: 'Ipi'
       assert_response 200
 
       manifest_public = manifests(:adminPublic)
@@ -43,26 +62,40 @@ class ManifestsControllerTest < ActionController::TestCase
     end
 
     log_in_as(users(:viewer)) do
-      get :index, :format => :json
+      get :index, project_name: 'Ipi'
+      assert_response 200
+
+      get :fetch, project_name: 'Ipi'
       assert_response 200
 
       manifest_public = manifests(:adminPublic)
       manifest_private = manifests(:viewerPrivate)
+      manifest_other_project = manifests(:viewerPrivateDiffProject)
+
+      assert_equal users(:viewer).manifests.map{ |m| m.id }.to_set, Set.new([manifest_private.id, manifest_other_project.id])
 
       manifest_response_ids = JSON.parse(response.body)["manifests"].map{ |manifest| manifest["id"] }
       admin_manifests = [manifest_public.id, manifest_private.id]
+      assert !manifest_response_ids.include?(manifest_other_project.id)
       assert_equal manifest_response_ids.sort, admin_manifests.sort
     end
   end
 
   test "non admins cannot create public manifests" do
     viewer = users(:viewer)
-    new_manifest = { :name => "test@test.com", :description => "foobar", :access => "public", :project => "proj", :data => {"a"=> "b"}}
+    new_manifest = {
+        :name => "test@test.com",
+        :description => "foobar",
+        :access => "public",
+        :project => "proj",
+        :data => {"a"=> "b"},
+        :project_name => 'Ipi'
+    }
 
     log_in_as(viewer) do
       old_manifest_count = viewer.manifests.size
       post :create, new_manifest
-      
+
       assert_response 200
       assert_equal viewer.manifests.size, old_manifest_count + 1
       assert !viewer.manifests.all.map{ |manifest| manifest.access }.include?('public')
@@ -71,14 +104,19 @@ class ManifestsControllerTest < ActionController::TestCase
 
   test "admins can create public manifests" do
     admin = users(:admin)
-    new_manifest = { :name => "test@test.com", :description => "foobar", :access => "public", :project => "proj", :data => {"a"=> "b"}}
+    new_manifest = {
+        :name => "test@test.com",
+        :description => "foobar",
+        :access => "public",
+        :project => "proj",
+        :data => {"a"=> "b"},
+        :project_name => 'Ipi'
+    }
 
     log_in_as(admin) do
       old_public_manifest_count = admin.manifests.where(:access => "public").size
-      post :create, new_manifest
-      
       assert_response 200
-      new_public_manifest_count = admin.manifests.where(:access => "public").size
+      new_public_manifest_count = admin.reload.manifests.where(:access => "public").size
       assert_equal new_public_manifest_count, old_public_manifest_count + 1
     end
   end
@@ -86,17 +124,17 @@ class ManifestsControllerTest < ActionController::TestCase
   test "viewers can only destroy manifests they created" do
     viewer = users(:viewer)
     admin = users(:admin)
-    
+
     log_in_as(viewer) do
       admin_manifest = admin.manifests.first
 
-      delete :destroy, :id => admin_manifest.id
+      delete :destroy, :id => admin_manifest.id, :project_name => 'Ipi'
       assert_response 403
       assert Manifest.find(admin_manifest.id)
 
       viewer_manifest = viewer.manifests.first
       old_manifest_count = viewer.manifests.all.size
-      delete :destroy, :id => viewer_manifest.id
+      delete :destroy, :id => viewer_manifest.id, :project_name => 'Ipi'
       assert_response 200
       assert !viewer.manifests.all.include?(viewer_manifest)
       new_manifest_count = viewer.manifests.all.size
@@ -108,9 +146,9 @@ class ManifestsControllerTest < ActionController::TestCase
     admin2 = users(:admin2)
     admin = users(:admin)
     admin_public_manifest = admin.manifests.where(:access => "public").first
-    
+
     log_in_as(admin2) do
-      delete :destroy, :id => admin_public_manifest.id
+      delete :destroy, :id => admin_public_manifest.id, :project_name => 'Ipi'
       assert_response 200
       assert !admin.manifests.all.include?(admin_public_manifest)
     end
@@ -119,7 +157,13 @@ class ManifestsControllerTest < ActionController::TestCase
   test "viewers can update manifests they created" do
     viewer = users(:viewer)
     manifest = viewer.manifests.first
-    update_manifest = { :name => "test@test.com", :description => "test", :project => "proj", :data => { "a" => "b" } }
+    update_manifest = {
+        :name => "test@test.com",
+        :description => "test",
+        :project => "proj",
+        :data => { "a" => "b" },
+        :project_name => 'Ipi'
+    }
     update_manifest[:id] = manifest.id
 
     log_in_as(viewer) do
@@ -138,7 +182,14 @@ class ManifestsControllerTest < ActionController::TestCase
     admin = users(:admin)
     admin2 = users(:admin2)
     manifest = admin.manifests.first
-    update_manifest = { :name => "test@test.com", :description => "test", :project => "proj", :data => { "a" => "b" }, :access => "private" }
+    update_manifest = {
+        :name => "test@test.com",
+        :description => "test",
+        :project => "proj",
+        :data => { "a" => "b" },
+        :access => "private",
+        :project_name => 'Ipi'
+    }
     update_manifest[:id] = manifest.id
 
     log_in_as(viewer) do
@@ -169,6 +220,7 @@ class ManifestsControllerTest < ActionController::TestCase
     def log_in_as(user)
       @controller.stub(:current_user, user) do
         @controller.instance_variable_set(:@current_user, user)
+        @controller.instance_variable_set(:@token, true)
         yield
       end
     end
