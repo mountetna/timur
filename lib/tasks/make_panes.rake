@@ -4,12 +4,22 @@
 namespace :timur do
   desc "Create view models from view classes"
   task :make_view_model => [:environment] do |t,args|
+
+    # Start with a clean slate
+    ViewPane.delete_all
+    ViewAttribute.delete_all
+
+    # Collect the old View classes
     views = [ SampleView, ProjectView, RnaSeqPlateView, PatientView, ExperimentView ]
+
     views.each do |view|
       model_name = view.name.sub(/View/,'').snake_case
       view.tabs.each do |tab_name,tab_block|
         tab = TimurView::Tab.new(tab_name, &tab_block)
         tab.panes.each do |pane_name, pane|
+
+          # Build a new ViewPane from this Pane
+
           view_pane = ViewPane.create(
             view_model_name: model_name,
             project_name: "ipi",
@@ -17,6 +27,9 @@ namespace :timur do
             name: pane_name,
             title: pane.instance_variable_get("@title")
           )
+
+          # Build the pane's ViewAttributes
+          
           pane.display.each do |display|
             att = display.attribute
             view_att = ViewAttribute.create(

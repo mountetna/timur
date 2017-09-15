@@ -26,7 +26,7 @@
 
 class TimurView
   class Tab
-    attr_reader :name
+    attr_reader :name, :panes
 
     def initialize(name, &block)
       @name = name
@@ -104,6 +104,8 @@ class TimurView
       instance_eval(&block) if block_given?
     end
 
+    attr_reader :attribute
+
     [ :attribute_class, :display_name, :plot, :placeholder ].each do |name|
       define_method name do |txt|
         @attribute[name] = txt
@@ -127,7 +129,7 @@ class TimurView
       instance_eval( &block )
     end
 
-    attr_reader :attributes
+    attr_reader :attributes, :display
 
     def to_hash
       {
