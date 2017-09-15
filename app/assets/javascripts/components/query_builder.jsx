@@ -49,14 +49,7 @@ class QueryBuilder extends Component {
 }
 
 export default connect(
-  (state) => {
-    var magma = new Magma(state)
-    var model_names = magma.model_names().sort()
-    return {
-      model_names: model_names,
-      templates: model_names.map(model_name => magma.template(model_name))
-    }
-  },
+  null,
   {
     requestModels
   }
