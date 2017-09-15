@@ -3,11 +3,10 @@
 
 namespace :timur do
   desc "Create view models from view classes"
-  task :make_view_model => [:environment] do |t,args|
+  task :make_view_models => [:environment] do |t,args|
 
     # Start with a clean slate
-    ViewPane.delete_all
-    ViewAttribute.delete_all
+    ViewPane.where(project_name: "ipi").destroy_all
 
     # Collect the old View classes
     views = [ SampleView, ProjectView, RnaSeqPlateView, PatientView, ExperimentView ]
