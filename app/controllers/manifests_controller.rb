@@ -26,7 +26,6 @@ class ManifestsController < ApplicationController
 
   def create
     @manifest = @current_user.manifests.new(manifest_params)
-    @manifest.project = params[:project_name]
     save_manifest
   end
 

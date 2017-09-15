@@ -1,6 +1,7 @@
 class Manifest < ActiveRecord::Base
   belongs_to :user
   has_many :plots, dependent: :destroy
+  alias_attribute :project_name, :project
   after_initialize :set_defaults
   validates :name, presence: true
   validates :project, presence: true
