@@ -26,6 +26,7 @@ class ManifestsController < ApplicationController
 
   def create
     @manifest = @current_user.manifests.new(manifest_params)
+    @manifest.project = params[:project_name]
     save_manifest
   end
 
@@ -46,7 +47,7 @@ class ManifestsController < ApplicationController
 
   def save_manifest
     if @manifest.save
-      render json: { :manifest => @manifest.to_json(@current_user, params[:project]) }
+      render json: { :manifest => @manifest.to_json(@current_user, params[:project_name]) }
     else
       error_response(@manifest)
     end
@@ -54,9 +55,9 @@ class ManifestsController < ApplicationController
 
   def manifest_params
     if current_user.is_admin?(params[:project_name])
-      strong_params = params.permit(:name, :description, :project, :access)
+      strong_params = params.permit(:name, :description, :access, :project_name)
     else
-      strong_params = params.permit(:name, :description, :project)
+      strong_params = params.permit(:name, :description, :project_name)
     end
 
     strong_params.tap do |whitelisted|

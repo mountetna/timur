@@ -161,7 +161,6 @@ class ManifestsControllerTest < ActionController::TestCase
     update_manifest = {
         :name => "test@test.com",
         :description => "test",
-        :project => "proj",
         :data => { "a" => "b" },
         :project_name => 'Ipi'
     }
@@ -173,7 +172,7 @@ class ManifestsControllerTest < ActionController::TestCase
       manifest = Manifest.find(manifest.id)
       assert_equal manifest.name, update_manifest[:name]
       assert_equal manifest.description, update_manifest[:description]
-      assert_equal manifest.project, update_manifest[:project]
+      assert_equal manifest.project, update_manifest[:project_name]
       assert_equal manifest.data, update_manifest[:data]
     end
   end
@@ -186,10 +185,9 @@ class ManifestsControllerTest < ActionController::TestCase
     update_manifest = {
         :name => "test@test.com",
         :description => "test",
-        :project => "proj",
         :data => { "a" => "b" },
         :access => "private",
-        :project_name => 'Ipi'
+        :project_name => "Ipi"
     }
     update_manifest[:id] = manifest.id
 
@@ -199,7 +197,6 @@ class ManifestsControllerTest < ActionController::TestCase
       manifest = Manifest.find(manifest.id)
       assert_not_equal manifest.name, update_manifest[:name]
       assert_not_equal manifest.description, update_manifest[:description]
-      assert_not_equal manifest.project, update_manifest[:project]
       assert_not_equal manifest.data, update_manifest[:data]
       assert_not_equal manifest.access, update_manifest[:access]
     end
@@ -210,7 +207,7 @@ class ManifestsControllerTest < ActionController::TestCase
       manifest = Manifest.find(manifest.id)
       assert_equal manifest.name, update_manifest[:name]
       assert_equal manifest.description, update_manifest[:description]
-      assert_equal manifest.project, update_manifest[:project]
+      assert_equal manifest.project, update_manifest[:project_name]
       assert_equal manifest.data, update_manifest[:data]
       assert_equal manifest.access, update_manifest[:access]
     end
