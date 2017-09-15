@@ -32,9 +32,13 @@ class SwarmPlot extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.killWorker() // kill potentially busy worker
-    this.setState({ swarmPoints: [] }) // clear the points
-    this.calculateSwarmPoints(nextProps)
+    // kill potentially busy worker
+    this.killWorker()
+    // clear the points before recalculating swarm
+    this.setState(
+      { swarmPoints: [] },
+      () => this.calculateSwarmPoints(nextProps)
+    )
   }
 
   componentWillUnmount() {
@@ -49,7 +53,15 @@ class SwarmPlot extends Component {
 
   handleSwarmWorkerMessage(m) {
     // append the swarm points
-    this.setState({swarmPoints: [...this.state.swarmPoints, ...m.data.swarm]})
+    this.setState(
+      {swarmPoints: [...this.state.swarmPoints, ...m.data.swarm]},
+      // kill worker when all points are added
+      () => {
+        if (this.state.swarmPoints.length === this.props.data) {
+          this.killWorker()
+        }
+      }
+    )
   }
 
   calculateSwarmPoints(props) {

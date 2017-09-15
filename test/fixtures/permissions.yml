@@ -1,0 +1,14 @@
+admin:
+  whitelist: admin
+  role: administrator
+  project_name: Ipi
+
+admin2:
+  whitelist: admin2
+  role: administrator
+  project_name: Ipi
+
+viewer:
+  whitelist: viewer
+  role: viewer
+  project_name: Ipi

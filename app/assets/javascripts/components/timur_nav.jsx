@@ -1,4 +1,4 @@
-import { toggleConfig, changeMode } from '../actions/timur_actions'
+import { toggleConfig } from '../actions/timur_actions'
 import { Component } from 'react'
 
 class TimurNav extends Component {
@@ -9,7 +9,8 @@ class TimurNav extends Component {
       browse: Routes.browse_path(PROJECT_NAME),
       search: Routes.search_path(PROJECT_NAME),
       map: Routes.map_path(PROJECT_NAME),
-      manifest: Routes.manifests_path(PROJECT_NAME),
+      manifests: Routes.manifests_path(PROJECT_NAME),
+      plots: Routes.plots_path(PROJECT_NAME)
     }
 
     var login
@@ -26,7 +27,6 @@ class TimurNav extends Component {
       logo_id = "normal"
     }
 
-    //TODO fix hacky addition of Manifesto tab
     return <div id="header">
              <div id="logo">
                <a href="/">
@@ -61,12 +61,11 @@ class TimurNav extends Component {
                {
                  Object.keys(tabs).map((name) =>
                    <div key={ name } 
-                     className={ "nav_tab" + ((this.props.mode == name && !this.props.appMode) ? ' selected' : '') }>
+                     className={ "nav_tab" + (this.props.mode == name ? ' selected' : '') }>
                        <a href={ tabs[name] }> { name } </a>
                      </div>
                  )
                }
-
                {
                  this.props.can_edit ?
                  <div className="nav_tab">
@@ -95,8 +94,7 @@ export default connect(
     helpShown: state.timur.help_shown,
     exchanges: state.exchanges
   }),
-  { 
-    changeMode,
+  {
     toggleConfig
   }
 )(TimurNav)
