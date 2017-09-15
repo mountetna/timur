@@ -1,5 +1,5 @@
 class ViewPane < ActiveRecord::Base
-  has_many :view_attributes
+  has_many :view_attributes, dependent: :destroy
 
   def self.build_view(model_name, project_name, load_tab_name)
     # first collect all of the panes matching this thing
