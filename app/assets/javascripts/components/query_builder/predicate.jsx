@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import ModelPredicate from './model'
+import RecordPredicate from './record'
 
 export default class Predicate extends Component {
   render() {

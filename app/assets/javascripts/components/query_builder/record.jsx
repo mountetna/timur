@@ -1,9 +1,9 @@
-import { Component } from 'react'
-import { selectModelNames } from '../../selectors/magma'
+import { Component } from 'react';
+import { selectTemplate } from '../../selectors/magma';
 
-class ModelPredicate extends Component {
+class RecordPredicate extends Component {
   constructor() {
-    super()
+    super();
 
     this.state = { showList: false }
   }
@@ -15,47 +15,75 @@ class ModelPredicate extends Component {
   }
 
   update(new_terms) {
-    let { position, terms } = this.props
+    let { position, terms } = this.props;
     terms = {
       ...terms,
       ...new_terms
-    }
-    let { model, filters, action } = terms
-    let child = (model && filters && action) ? { type: "record", model } : null
+    };
+    let { model, action, arg } = terms;
+
+    let child = this.getChild(action,arg);
+
     this.props.update(position, new_terms, child)
   }
 
-  renderArguments(action) {
-    return <div className="arguments">
-      <Selector defaultValue={ action } 
+  getChild(action, arg) {
+    if (!action) return null
+
+    if (action == '::has' && arg) return { type: 'terminal-boolean' }; 
+    if (action == '::metrics') return { type: 'terminal-hash' };
+    if (action == '::identifier') return this.getAttributeChild(this.props.identifier)
+    return this.getAttributeChild(action)
+  }
+
+  getAttributeChild(attribute_name) {
+    let attribute = this.props.attributes[attribute_name];
+    let { attribute_class, type } = attribute;
+
+    // depending on the attribute_class and type we return a child
+  }
+
+  actions() {
+    return [ '::has', '::metrics', '::identifier' ].concat(this.props.attribute_names)
+  }
+
+  renderAction(action, arg) {
+    if (action == '::has') {
+      return <Selector defaultValue={ arg } 
         showNone="disabled" 
-        values={ [ '::all', '::first' ] }
-        onChange={ (action) => this.update({ action }) }/>
-    </div>
+        values={ this.props.attribute_names }
+        onChange={ (arg) => this.update({ arg }) }/>
+    }
+
+    return null
   }
 
   render() {
     // the model predicate has three terms, model, filters, and action
-    let { position, terms, update } = this.props
-    let { model, filters, action } = terms
+    let { position, terms } = this.props;
+    let { model, action, arg } = terms;
 
+    // for this predicate, if the argument is 'has', we need an additional selector
     return <div className='predicate'>
-      <Selector defaultValue={ model } 
+      <Selector defaultValue={ action } 
         showNone="disabled" 
-        values={ this.props.model_names }
-        onChange={ (model) => this.update({ model, filters: [] }) }/>
-      { 
-        model ? this.renderFilters() : null
-      }
+        values={ this.actions() }
+        onChange={ (action) => this.update({ action, arg: null }) }/>
       {
-        model ? this.renderArguments(action) : null
+        this.renderAction(action, arg)
       }
       </div>
   }
 }
 
 export default connect(
-  (state,props) => ({
-    model_names: selectModelNames(state)
-  })
-)(ModelPredicate)
+  (state,props) => {
+    let template = selectTemplate(state, props.terms.model);
+    let attribute_names = Object.keys(template.attributes).sort();
+    return {
+      attributes: template.attributes,
+      attribute_names,
+      identifier: template.identifier
+    }
+  }
+)(RecordPredicate)
