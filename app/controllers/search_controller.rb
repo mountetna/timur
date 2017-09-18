@@ -30,6 +30,8 @@ class SearchController <  ApplicationController
       response.headers['Content-Disposition'] = %Q( attachment; filename="#{filename}" )
 
       Magma::Client.instance.retrieve(
+        token,
+        params[:project_name],
         model_name: params[:model_name],
         record_names: params[:record_names],
         attribute_names: 'all',

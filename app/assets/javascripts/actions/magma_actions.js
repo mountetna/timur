@@ -1,66 +1,6 @@
-import { showMessages } from './message_actions'
-import { getDocuments, postRevisions } from '../api/timur'
-import { Exchange } from './exchange_actions'
-
-export const consumePayload = (dispatch,response) => {
-  if (response.models) {
-    Object.keys(response.models).forEach((model_name) => {
-      let model = response.models[model_name]
-
-      if (model.template)
-        dispatch( 
-          addTemplate(model.template)
-        )
-      if (model.documents)
-        dispatch(
-          addDocumentsForTemplate(model_name, model.documents)
-        )
-    })
-  }
-}
-
-export const requestDocuments = ({ model_name, record_names, attribute_names, filter, page, page_size, collapse_tables, exchange_name, success, error }) => (dispatch) => 
-  getDocuments({
-      model_name,
-      record_names,
-      attribute_names,
-      filter,
-      page,
-      page_size,
-      collapse_tables
-    },
-    new Exchange(dispatch, exchange_name)
-  )
-    .then(
-      (response) => {
-        consumePayload(dispatch,response)
-        if (success != undefined) success(response)
-      }
-    )
-    .catch(
-      (e) => {
-        if (!e.response) throw e
-        e.response.json().then((response) =>
-          dispatch(
-            showMessages([
-`### Our request was refused.
-
-${response.errors.map((error) => `* ${error}`)}`
-            ])
-          )
-        )
-        if (error != undefined) {
-          var message = JSON.parse(error.response)
-          error(message)
-        }
-      }
-    )
-
-export const requestModels = () => requestDocuments({ model_name: "all", record_names: [], attribute_names: "all", exchange_name: "request-models"})
-
-// Module imports.
 import { showMessages } from './message_actions';
 import { getDocuments, postRevisions } from '../api/timur';
+import { Exchange } from './exchange_actions'
 
 export const addTemplate = (template)=>(
   {
@@ -119,40 +59,47 @@ export const consumePayload = (dispatch, response)=>{
   }
 };
 
-export const requestDocuments = ({model_name, record_names, attribute_names, collapse_tables, exchange_name, success, error})=>{
-  return (dispatch)=>{
+export const requestDocuments = ({ model_name, record_names, attribute_names, filter, page, page_size, collapse_tables, exchange_name, success, error }) => (dispatch) => {
+  let localSuccess = (response)=> {
+    consumePayload(dispatch, response);
+    if (success != undefined) success(response);
+  };
 
-    let localSuccess = (response)=>{
-      consumePayload(dispatch, response);
-      if (success != undefined) success();
-    };
+  let localError = (e) => {
+    if (!e.response) {
+      dispatch(showMessages([`Something is amiss. ${e}`]));
+      return;
+    }
 
-    let localError = (e)=>{
-      e.response.json().then((response)=>{
-        let errStr = response.errors.map((error)=> `* ${error}`);
-        errStr = [`### Our request was refused.\n\n${errStr}`];
-        dispatch(showMessages(errStr));
-      });
+    e.response.json().then((response)=>{
+      let errStr = response.errors.map((error)=> `* ${error}`);
+      errStr = [`### Our request was refused.\n\n${errStr}`];
+      dispatch(showMessages(errStr));
+    });
 
-      if(error != undefined){
-        let message = JSON.parse(error.response);
-        error(message);
-      }
-    };
+    if(error != undefined){
+      let message = JSON.parse(error.response);
+      error(message);
+    }
+  };
 
-    let get_doc_args = [
+  let get_doc_args = [
+    {
       model_name,
       record_names,
       attribute_names,
-      collapse_tables,
-      new Exchange(dispatch, exchange_name)
-    ];
+      filter,
+      page,
+      page_size,
+      collapse_tables
+    },
+    new Exchange(dispatch, exchange_name)
+  ];
 
-    getDocuments(...get_doc_args)
-      .then(localSuccess)
-      .catch(localError);
-  }
-};
+  getDocuments(...get_doc_args)
+    .then(localSuccess)
+    .catch(localError);
+}
 
 export const requestModels = ()=>{
   let reqOpts = {

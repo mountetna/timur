@@ -43,7 +43,7 @@ var AttributeViewer = React.createClass({
         return <LinkAttribute {...attr_props} />;
       case 'Magma::TableAttribute':
         return <TableAttribute {...attr_props} />;
-      case 'Magma::DocumentAttribute':
+      case 'Magma::FileAttribute':
         return <DocumentAttribute {...attr_props} />;
       case 'Magma::ImageAttribute':
         return <ImageAttribute {...attr_props} />;

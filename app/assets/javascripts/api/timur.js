@@ -12,7 +12,7 @@ const input = (name, value) => create('input', { type: "hidden", name, value })
 
 export const getTSVForm = (data) => {
   let form = create("form", {
-    action: Routes.table_tsv_path(),
+    action: Routes.table_tsv_path(PROJECT_NAME),
     method: "POST"
   })
   form.appendChild(
@@ -36,7 +36,7 @@ export const getTSVForm = (data) => {
 
 export const getTSV = (model_name, record_names, exchange) =>
   exchange.fetch(
-    Routes.table_tsv_path(), 
+    Routes.table_tsv_path(PROJECT_NAME), 
     {
       method: 'POST',
       credentials: 'same-origin',
@@ -51,11 +51,7 @@ export const getTSV = (model_name, record_names, exchange) =>
     .then(makeBlob)
     .then(generateDownload(`${model_name}.tsv`));
 
-  return exchangePromise;
-};
-
 export const getView = (model_name, tab_name, exchange)=>{
-
   var routeOpts = {
     method: 'POST',
     credentials: 'same-origin',
@@ -72,7 +68,7 @@ export const getView = (model_name, tab_name, exchange)=>{
 
 export const getDocuments = ({ model_name, record_names, attribute_names, filter, page, page_size, collapse_tables }, exchange) =>
   exchange.fetch(
-    Routes.records_json_path(),
+    Routes.records_json_path(PROJECT_NAME),
     {
       method: 'POST',
       credentials: 'same-origin',
