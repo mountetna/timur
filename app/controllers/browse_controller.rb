@@ -10,10 +10,10 @@ class BrowseController < ApplicationController
   layout 'timur'
 
   def index
-    status, payload = Magma::Client.instance.query(
+    response = Magma::Client.instance.query(
       token, params[:project_name], [ :project, '::first', '::identifier' ]
     )
-    id = JSON.parse(payload, symbolize_names: true)
+    id = JSON.parse(response.body, symbolize_names: true)
     redirect_to browse_model_path(params[:project_name], :project, id[:answer])
   end
 
