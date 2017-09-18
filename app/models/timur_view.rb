@@ -38,52 +38,16 @@ class TimurView
       @panes[name] = Pane.new(name,&block)
     end
 
-#   It doesn't seem like this function gets used. We should verify this and
-#   remove it if necessary.
 
-#   def load(record_name)
-#
-#     puts 'sup'
-#     puts sessions[:token]
-#     puts 'mang'
-#
-#     #uri = URI.parse('https://magma-dev.ucsf-immunoprofiler.org/retrieve')
-#     uri = URI.parse('https://magma-dev.ucsf.edu:3000/retrieve')
-#     http = Net::HTTP.new(uri.host, uri.port)
-#     http.use_ssl = true
-#     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-#
-#     form_data = {
-#       model_name: @model_name,
-#       record_names: [record_name],
-#       hide_tables: true
-#     }
-#
-#     header_data = {
-#       'Content-Type'=> 'application/json',
-#       'Accept'=> 'application/json'
-#     }
-#
-#     response = http.post(uri.path, form_data.to_json, header_data)
-#
-#     response.each_header do |header, value|
-#       puts "#{header}\t#{value}"
-#     end
-#
-#     if response.code == 200
-#       @payload = JSON.parse(response.body)
-#     end
-#   end
-
-   def to_hash
-     {
-       panes: Hash[
-         @panes.map do |name, pane|
-           [ name, pane.to_hash ]
-         end
-       ]
-     }
-   end
+    def to_hash
+      {
+        panes: Hash[
+          @panes.map do |name, pane|
+            [ name, pane.to_hash ]
+          end
+        ]
+      }
+    end
 
     private
 

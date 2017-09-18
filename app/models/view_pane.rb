@@ -16,7 +16,7 @@ class ViewPane < ActiveRecord::Base
             }
           }
         },
-        tab_name: "default"
+        tab_name: 'default'
       }
     end
 

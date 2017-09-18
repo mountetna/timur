@@ -2,11 +2,11 @@
 # turns them into records in the view_panes and view_attributes tables.
 
 namespace :timur do
-  desc "Create view models from view classes"
+  desc 'Create view models from view classes'
   task :make_view_models => [:environment] do |t,args|
 
     # Start with a clean slate
-    ViewPane.where(project_name: "ipi").destroy_all
+    ViewPane.where(project_name: 'ipi').destroy_all
 
     # Collect the old View classes
     views = [ SampleView, ProjectView, RnaSeqPlateView, PatientView, ExperimentView ]
@@ -21,10 +21,10 @@ namespace :timur do
 
           view_pane = ViewPane.create(
             view_model_name: model_name,
-            project_name: "ipi",
+            project_name: 'ipi',
             tab_name: tab_name,
             name: pane_name,
-            title: pane.instance_variable_get("@title")
+            title: pane.instance_variable_get('@title')
           )
 
           # Build the pane's ViewAttributes
