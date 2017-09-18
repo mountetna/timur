@@ -41,7 +41,7 @@ class BrowseController < ApplicationController
 
   def view_json
     tab_name = params[:tab_name] ? params[:tab_name].to_sym : nil
-    view = ViewPane.create(params[:model_name], params[:project_name], tab_name)
+    view = ViewPane.build_view(params[:model_name], params[:project_name], tab_name)
     render(json: view)
   end
 

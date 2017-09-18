@@ -1,6 +1,7 @@
 class ViewPane < ActiveRecord::Base
-  has_many :view_attributes
-  def self.create(model_name, project_name, load_tab_name)
+  has_many :view_attributes, dependent: :destroy
+
+  def self.build_view(model_name, project_name, load_tab_name)
     # first collect all of the panes matching this thing
     panes = self.where(view_model_name: model_name, project_name: project_name).order(:created_at).all
     if panes.empty?
@@ -15,7 +16,7 @@ class ViewPane < ActiveRecord::Base
             }
           }
         },
-        tab_name: "default"
+        tab_name: 'default'
       }
     end
 
