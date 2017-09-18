@@ -27,9 +27,9 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "babel-jest": "^21.0.2",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-polyfill": "^6.3.14",
-    "promise-polyfill": "^6.0.2",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
@@ -39,9 +39,15 @@
     "envify": "^4.0.0",
     "eslint": "^3.15.0",
     "eslint-plugin-react": "^6.9.0",
+    "jest": "^21.1.0",
+    "promise-polyfill": "^6.0.2",
     "redux-logger": "^2.8.1"
   },
+  "jest": {
+    "testMatch": ["**/test/javascript/**/?(*.)(spec|test).js?(x)"]
+  },
   "scripts": {
-    "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./app/assets/javascripts/** "
+    "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./app/assets/javascripts/** ",
+    "test": "jest"
   }
 }
