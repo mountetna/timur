@@ -44,7 +44,9 @@
     "redux-logger": "^2.8.1"
   },
   "jest": {
-    "testMatch": ["**/test/javascript/**/?(*.)(spec|test).js?(x)"]
+    "testMatch": [
+      "**/test/javascript/**/?(*.)(spec|test).js?(x)"
+    ]
   },
   "scripts": {
     "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./app/assets/javascripts/** ",
