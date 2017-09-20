@@ -16,7 +16,7 @@ const loadManifests = (manifestsById)=>({
 })
 
 // Retrieve all user-visible manifests and send to store
-export const requestManifests = (project_name) => {
+export const requestManifests = () => {
   return (dispatch) => {
     let localSuccess = ({manifests}) => {
       // Bail out if there are no manifests.
@@ -46,7 +46,7 @@ export const requestManifests = (project_name) => {
       showErrors(err, dispatch);
     };
 
-    fetchManifests(new Exchange(dispatch, 'request-manifest'))
+    return fetchManifests(new Exchange(dispatch, 'request-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
