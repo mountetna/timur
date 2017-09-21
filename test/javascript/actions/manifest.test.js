@@ -397,3 +397,54 @@ describe('async actions', () => {
     })
   })
 })
+
+describe('actions', () => {
+  it('transforms the serialized manifest form to the manifest form for the query payload', () => {
+    const serializedManifest = {
+      "id":11,
+      "name":"manifest_for_plot",
+      "description":"for plot",
+      "project":"ipi",
+      "access":"private",
+      "data":{
+        "elements":[
+          {
+            "name":"var1",
+            "description":"",
+            "script":"[1,2,3,4]"
+          },
+          {
+            "name":"var2",
+            "description":"",
+            "script":"[1,2,3,4]"
+          }
+        ]
+      },
+      "created_at":"2017-09-19T21:05:13.224Z",
+      "updated_at":"2017-09-19T21:05:13.224Z",
+      "user":{
+        "name":"Darrell Abrau"
+      },
+      "is_editable":true,
+      "plotIds":[
+        3
+      ]
+    }
+
+    const queryPayload = {
+      "manifest":[
+        [
+          "var1",
+          "[1,2,3,4]"
+        ],
+        [
+          "var2",
+          "[1,2,3,4]"
+        ]
+      ],
+      "name":"manifest_for_plot"
+    }
+
+    expect(actions.manifestToReqPayload(serializedManifest)).toEqual(queryPayload)
+  })
+})
