@@ -49,10 +49,13 @@
   "jest": {
     "testMatch": [
       "**/test/javascript/**/?(*.)(spec|test).js?(x)"
+    ],
+    "collectCoverageFrom": [
+      "app/assets/javascripts/**/*.js?(x)"
     ]
   },
   "scripts": {
     "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./app/assets/javascripts/** ",
-    "test": "jest"
+    "test": "jest --coverage"
   }
 }
