@@ -1,48 +1,23 @@
 import { Component } from 'react'
 import { toggleEdit, selectManifest} from '../../actions/manifest_actions'
-
-// Selection item for a single manifest
-const ManifestSelection = (selectManifest) => (manifest) => {
-  return <li key={manifest.id}>
-    <div className='manifest-selection'>
-      <a href='#' 
-        onClick={
-          () => selectManifest(manifest.id) 
-        }
-        title={ manifest.description }>
-        <span className='name'>{manifest.name}</span>
-      </a>
-    </div>
-  </li>
-}
+import ListSelector from '../list_selector'
 
 // Collection of selection items for all manifests
 class ManifestSelector extends Component {
+  create() {
+    this.props.selectManifest(null);
+    this.props.toggleEdit()
+  }
+
   render() {
     let { public_manifests, private_manifests, newManifest = true } = this.props
+    let sections = { Public: public_manifests, Private: private_manifests }
     return (
-      <div className='manifests-selector'>
-          {newManifest &&
-          <a href='#' onClick={ () => this.props.selectManifest(null) && this.props.toggleEdit() } className="new">
-            <i className="fa fa-plus" aria-hidden="true"></i>
-            New Manifest
-          </a>
-          }
-        <div>
-        <span className="title">Public</span>
-        <ol>
-          {
-            public_manifests.map(ManifestSelection(this.props.selectManifest))
-          }
-        </ol>
-        <span className="title">Private</span>
-        <ol>
-          {
-            private_manifests.map(ManifestSelection(this.props.selectManifest))
-          }
-        </ol>
-        </div>
-      </div>
+      <ListSelector
+        name="Manifest"
+        create={ this.create.bind(this) }
+        select={ this.props.selectManifest }
+        sections={ sections }/>
     )
   }
 }
