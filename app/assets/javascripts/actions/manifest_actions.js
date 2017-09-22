@@ -136,7 +136,7 @@ export const saveManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
+    return updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -155,7 +155,7 @@ export const copyManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
+    return createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
       .then(localSuccess)
       .catch(localError);
   };

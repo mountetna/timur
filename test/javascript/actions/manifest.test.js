@@ -15,8 +15,9 @@ describe('async actions', () => {
   global.PROJECT_NAME = 'ipi'
   global.Routes = {
     manifests_fetch_path: (projectName) => `http://www.fake.com/${projectName}/manifests`,
-    manifests_destroy_path: (projectName, manifestId) => {console.log(`http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`); return `http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`},
-    manifests_create_path: (projectName) => `http://www.fake.com/${projectName}/manifests/create`
+    manifests_destroy_path: (projectName, manifestId) => `http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`,
+    manifests_create_path: (projectName) => `http://www.fake.com/${projectName}/manifests/create`,
+    manifests_update_path: (projectName, manifestId)=> `http://www.fake.com/${projectName}/manifests/update/${manifestId}`
   }
   global.fetch = fetch
   const currentDate = new Date()
@@ -553,6 +554,185 @@ describe('async actions', () => {
       expect(store.getActions()).toEqual(expectedActions)
     })
 
+  })
+
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, UPDATE_USER_MANIFEST, and TOGGLE_IS_EDITING_MANIFEST when updating user manifest has been done', () => {
+    const updatedManifest = {
+      "id":12,
+      "name":"updated MANIFEST",
+      "description":"updated",
+      "project":"ipi",
+      "access":"private",
+      "data":{
+        "elements":[
+          {
+            "name":"var",
+            "description":"",
+            "script":"1234"
+          },
+          {
+            "name":"var2",
+            "description":"",
+            "script":"'abcd'"
+          },
+          {
+            "name":"var2",
+            "description":"",
+            "script":"random broken stuff that gets saved"
+          }
+        ]
+      },
+      "created_at":"2017-09-22T00:20:40.451Z",
+      "updated_at":"2017-09-22T17:09:09.544Z",
+      "user":{
+        "name":"Darrell Abrau"
+      },
+      "plots":[
+
+      ],
+      "is_editable":true
+    }
+
+    nock('http://www.fake.com')
+      .post('/ipi/manifests/update/12')
+      .reply(
+        200,
+        { manifest: updatedManifest },
+        {
+          'Access-Control-Allow-Origin': '*',
+          'Content-type': 'application/json'
+        }
+      )
+
+    const expectedActions = [
+      {
+        exchange:{
+          exchange_name:"save-manifest",
+          exchange_path:"http://www.fake.com/ipi/manifests/update/12",
+          start_time: currentDate
+        },
+        exchange_name:"save-manifest",
+        type:"ADD_EXCHANGE"
+      },
+      {
+        exchange_name:"save-manifest",
+        type:"REMOVE_EXCHANGE"
+      },
+      {
+        type:"UPDATE_USER_MANIFEST",
+        manifest: updatedManifest
+      },
+      {
+        type: "TOGGLE_IS_EDITING_MANIFEST"
+      }
+    ]
+
+    const store = mockStore({})
+
+    return store.dispatch(actions.saveManifest(updatedManifest)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+
+  })
+
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, SELECT_MANIFEST, and TOGGLE_IS_EDITING_MANIFEST when copying a user manifest has been done', () => {
+    const originalManifest = {
+      id:14,
+      name:"original",
+      description:"original",
+      project:"ipi",
+      access:"private",
+      data:{
+        "elements":[
+          {
+            "name":"var1",
+            "description":"",
+            "script":"'abc 123'"
+          }
+        ]
+      },
+      created_at:"2017-09-22T18:25:09.648Z",
+      updated_at:"2017-09-22T18:25:09.648Z",
+      user:{
+        "name":"Darrell Abrau"
+      },
+      plots:[
+
+      ],
+      is_editable:true
+    }
+
+    const copiedManifest = {
+      "id":15,
+      "name":"original(copy)",
+      "description":"original",
+      "project":"ipi",
+      "access":"private",
+      "data":{
+        "elements":[
+          {
+            "name":"var1",
+            "description":"",
+            "script":"'abc 123'"
+          }
+        ]
+      },
+      "created_at":"2017-09-22T18:25:14.146Z",
+      "updated_at":"2017-09-22T18:25:14.146Z",
+      "user":{
+        "name":"Darrell Abrau"
+      },
+      "plots":[
+
+      ],
+      "is_editable":true
+    }
+
+    nock('http://www.fake.com')
+      .post('/ipi/manifests/create')
+      .reply(
+        200,
+        {
+          "manifest": copiedManifest
+        },
+        {
+          'Access-Control-Allow-Origin': '*',
+          'Content-type': 'application/json'
+        }
+      )
+
+    const expectedActions = [
+      {
+        exchange:{
+          exchange_name:"copy-manifest",
+          exchange_path:"http://www.fake.com/ipi/manifests/create",
+          start_time: currentDate
+        },
+        exchange_name:"copy-manifest",
+        type:"ADD_EXCHANGE"
+      },
+      {
+        exchange_name:"copy-manifest",
+        type:"REMOVE_EXCHANGE"
+      },
+      {
+        type:"ADD_MANIFEST",
+        manifest: copiedManifest
+      },
+      {
+        type: 'SELECT_MANIFEST',
+        id: 15
+      },
+      {
+        type: "TOGGLE_IS_EDITING_MANIFEST"
+      }
+    ]
+
+    const store = mockStore({})
+
+    return store.dispatch(actions.copyManifest(originalManifest)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions)
+    })
   })
 })
 
