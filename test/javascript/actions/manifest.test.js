@@ -319,24 +319,24 @@ describe('async actions', () => {
 
     const expectedActions = [
       {
-        "exchange":{
-          "exchange_name":"request-manifest",
-          "exchange_path":"http://www.fake.com/ipi/manifests",
-          "start_time": currentDate
+        exchange:{
+          exchange_name:"request-manifest",
+          exchange_path:"http://www.fake.com/ipi/manifests",
+          start_time: currentDate
         },
-        "exchange_name":"request-manifest",
-        "type":"ADD_EXCHANGE"
+        exchange_name:"request-manifest",
+        type:"ADD_EXCHANGE"
       },
       {
-        "exchange_name":"request-manifest",
-        "type":"REMOVE_EXCHANGE"
+        exchange_name:"request-manifest",
+        type:"REMOVE_EXCHANGE"
       },
       {
         type: 'LOAD_MANIFESTS',
         manifestsById: storedManifests
       },
       {
-        "plot":{
+        plot:{
           "configuration":{
             "config":{
               "displayModeBar":true,
@@ -385,7 +385,7 @@ describe('async actions', () => {
           "plot_type":"scatter",
           "updated_at":"2017-09-19T21:06:30.430Z"
         },
-        "type":"ADD_PLOT"
+        type:"ADD_PLOT"
       }
     ]
 
@@ -396,7 +396,7 @@ describe('async actions', () => {
     })
   })
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, SELECT_MANIFEST, and REMOVE_MANIFEST when deleting user manifests has been done', () => {
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, SELECT_MANIFEST, and REMOVE_MANIFEST when deleting a user manifest has been done', () => {
     nock('http://www.fake.com')
       .post('/ipi/manifests/destroy/1')
       .reply(
@@ -410,17 +410,17 @@ describe('async actions', () => {
 
     const expectedActions = [
       {
-        "exchange":{
-          "exchange_name":"delete-manifest",
-          "exchange_path":"http://www.fake.com/ipi/manifests/destroy/1",
-          "start_time": currentDate
+        exchange:{
+          exchange_name:"delete-manifest",
+          exchange_path:"http://www.fake.com/ipi/manifests/destroy/1",
+          start_time: currentDate
         },
-        "exchange_name":"delete-manifest",
-        "type":"ADD_EXCHANGE"
+        exchange_name:"delete-manifest",
+        type:"ADD_EXCHANGE"
       },
       {
-        "exchange_name":"delete-manifest",
-        "type":"REMOVE_EXCHANGE"
+        exchange_name:"delete-manifest",
+        type:"REMOVE_EXCHANGE"
       },
       {
         type: 'SELECT_MANIFEST',
