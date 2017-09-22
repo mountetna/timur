@@ -98,7 +98,7 @@ export const deleteManifest = (manifestId)=>{
       showErrors(err, dispatch);
     };
 
-    destroyManifest(manifestId, new Exchange(dispatch, 'delete-manifest'))
+   return destroyManifest(manifestId, new Exchange(dispatch, 'delete-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -118,7 +118,7 @@ export const saveNewManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
+    return createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
