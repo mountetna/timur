@@ -15,7 +15,8 @@ describe('async actions', () => {
   global.PROJECT_NAME = 'ipi'
   global.Routes = {
     manifests_fetch_path: (projectName) => `http://www.fake.com/${projectName}/manifests`,
-    manifests_destroy_path: (projectName, manifestId) => {console.log(`http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`); return `http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`}
+    manifests_destroy_path: (projectName, manifestId) => {console.log(`http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`); return `http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`},
+    manifests_create_path: (projectName) => `http://www.fake.com/${projectName}/manifests/create`
   }
   global.fetch = fetch
   const currentDate = new Date()
@@ -436,6 +437,122 @@ describe('async actions', () => {
     return store.dispatch(actions.deleteManifest(1)).then(() => {
       expect(store.getActions()).toEqual(expectedActions)
     })
+  })
+
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, TOGGLE_IS_EDITING_MANIFEST, and SELECT_MANIFEST when creating a new user manifest has been done', () => {
+    const savedManifest = {
+      "id":12,
+      "name":"NEW MANIFEST",
+      "description":"newest ",
+      "project":"ipi",
+      "access":"private",
+      "data":{
+        "elements":[
+          {
+            "name":"var",
+            "description":"",
+            "script":"123"
+          },
+          {
+            "name":"var2",
+            "description":"",
+            "script":"'abc'"
+          }
+        ]
+      },
+      "created_at": "2017-09-19T21:06:30.430Z",
+      "updated_at": "2017-09-19T21:06:30.430Z",
+      "user":{
+        "name":"Darrell Abrau"
+      },
+      "plots":[
+
+      ],
+      "is_editable":true
+    }
+
+    nock('http://www.fake.com')
+      .post('/ipi/manifests/create')
+      .reply(
+        200,
+        { manifest: savedManifest },
+        {
+          'Access-Control-Allow-Origin': '*',
+          'Content-type': 'application/json'
+        }
+      )
+
+
+    const newManifest = {
+      name: "NEW MANIFEST",
+      access: "private",
+      elementKeys: [
+        "cf21b242-6748-473c-8254-a3b67014ae43",
+        "db84f89b-29e2-4285-a2f4-9b24682a41d4"
+      ],
+      elementsByKey: {
+        "cf21b242-6748-473c-8254-a3b67014ae43": {
+          "name": "var",
+          "description": "",
+          "script": "123"
+        },
+        "db84f89b-29e2-4285-a2f4-9b24682a41d4": {
+          "name": "var2",
+          "description": "",
+          "script": "'abc'"
+        }
+      },
+      hasConsignment: false,
+      description: "newest ",
+      data: {
+        "elements": [
+          {
+            "name": "var",
+            "description": "",
+            "script": "123"
+          },
+          {
+            "name": "var2",
+            "description": "",
+            "script": "'abc'"
+          }
+        ]
+      }
+    }
+
+    const expectedActions = [
+      {
+        exchange:{
+          exchange_name:"save-new-manifest",
+          exchange_path:"http://www.fake.com/ipi/manifests/create",
+          start_time: currentDate
+        },
+        exchange_name:"save-new-manifest",
+        type:"ADD_EXCHANGE"
+      },
+      {
+        exchange_name:"save-new-manifest",
+        type:"REMOVE_EXCHANGE"
+      },
+      {
+        type:"ADD_MANIFEST",
+        manifest: savedManifest
+      },
+      {
+        type: "TOGGLE_IS_EDITING_MANIFEST"
+      },
+      {
+        type: 'SELECT_MANIFEST',
+        id: 12
+      }
+    ]
+
+    const store = mockStore({})
+
+    return store.dispatch(actions.saveNewManifest(newManifest)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+
   })
 })
 
