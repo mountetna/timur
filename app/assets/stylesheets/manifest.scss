@@ -2,16 +2,16 @@
 
 $secondary-color: teal;
 
-.manifests-selector {
+.list-selector {
   border-right: 1px solid lightgray;
   min-width: 130px;
 
   li:first-child {
-    .manifest-selection {
+    .selection {
       border-top: 1px solid rgba(#0cf,0.5);
     }
   }
-  .manifest-selection {
+  .selection {
     background-color: rgba(#0cf,0.1);
     border-bottom: 1px solid rgba(#0cf,0.5);
     font-size: 0.8em;
