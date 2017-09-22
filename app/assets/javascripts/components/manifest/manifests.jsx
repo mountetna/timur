@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { requestManifests } from '../../actions/manifest_actions'
+import { requestManifests, toggleEdit, selectManifest} from '../../actions/manifest_actions'
+import ListSelector from '../list_selector'
 import Manifest from './manifest'
-import ManifestSelector from './manifest_selector'
 import { getSelectedManifest, getAllManifests } from '../../selectors/manifest'
 
 // Main component for viewing/editing manifests
@@ -11,19 +11,27 @@ class Manifests extends Component {
     this.props.requestManifests()
   }
 
+  create() {
+    this.props.selectManifest(null);
+    this.props.toggleEdit()
+  }
+
   render() {
-    const { manifests, selectedManifest, project_name } = this.props
+    const { sections, selectedManifest } = this.props
 
     return (
       <div className='manifests-container'>
-        <ManifestSelector manifests={manifests}/>
+        <ListSelector
+          name="Manifest"
+          create={ this.create.bind(this) }
+          select={ this.props.selectManifest }
+          sections={ sections }/>
         <div className='manifest-view'>
         { (selectedManifest || this.props.isEditing) ?
           <Manifest
             isAdmin={this.props.isAdmin}
             editing={this.props.isEditing}
             manifest={this.props.selectedManifest}
-            project_name={project_name}
             />
             : null
         }
@@ -33,15 +41,26 @@ class Manifests extends Component {
   }
 }
 
+const accessFilter = (access, manifests) =>
+  manifests.filter(m => m.access == access)
+    .sort((a,b) => a > b);
+
 const mapStateToProps = (state) => {
   const { manifestsUI: { isEditing } } = state
+  let manifests = getAllManifests(state);
+
+  let sections = {
+    Public: accessFilter('public', manifests),
+    Private: accessFilter('private', manifests)
+  }
+
   return {
-    manifests: getAllManifests(state),
+    sections,
     selectedManifest: getSelectedManifest(state),
     isEditing
   }
 }
 
 export default connect(mapStateToProps, {
-  requestManifests
+  requestManifests, toggleEdit, selectManifest
 })(Manifests)
