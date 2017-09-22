@@ -7,6 +7,7 @@ import { selectConsignment } from '../../selectors/consignment'
 import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions'
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot'
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest'
+import ListSelector from '../list_selector'
 import ScatterPlotForm from './scatter_plot_form'
 import Plot from './plotly'
 
@@ -77,7 +78,8 @@ class Plotter extends Component {
     this.props.toggleEditing(true);
   }
 
-  selectPlot(plot) {
+  selectPlot(plot_id) {
+    let plot = this.props.plots.find(p => p.id == plot_id)
     this.props.selectManifest(plot.manifest_id);
     this.props.selectPlot(plot.id);
     this.props.toggleEditing(false);
@@ -89,18 +91,6 @@ class Plotter extends Component {
       this.props.selectedPlot.id,
       () => this.props.selectPlot(null)
     );
-  }
-
-  plotList(plots) {
-    return plots.map(plot => {
-      return (
-        <li key={plot.id}>
-          <a onClick={() => this.selectPlot(plot)}>
-            {plot.name}
-          </a>
-        </li>
-      );
-    });
   }
 
   render() {
@@ -120,11 +110,11 @@ class Plotter extends Component {
     return (
       <div className='plot-container'>
         <div>
-          Plots
-          <div>
-            <a onClick={this.newPlot.bind(this)}>new plot</a>
-          </div>
-          <ul>{this.plotList(plots)}</ul>
+        <ListSelector
+          name="Plot"
+          create={ this.newPlot.bind(this) }
+          select={ this.selectPlot.bind(this) }
+          items={ plots }/>
         </div>
           {isEditing ? (
             <ScatterPlotForm className='plot-form'

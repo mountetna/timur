@@ -1,7 +1,8 @@
 @import "globals";
 
 .plot-container {
-	display: flex;
+  display: flex;
+  font-family: $body_font;
 }
 
 .plot-form-container {
