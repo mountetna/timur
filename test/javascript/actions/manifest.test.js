@@ -12,17 +12,16 @@ describe('async actions', () => {
     nock.cleanAll()
   })
 
+  global.PROJECT_NAME = 'ipi'
+  global.Routes = {
+    manifests_fetch_path: (projectName) => `http://www.fake.com/${projectName}/manifests`,
+    manifests_destroy_path: (projectName, manifestId) => {console.log(`http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`); return `http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`}
+  }
+  global.fetch = fetch
+  const currentDate = new Date()
+  global.Date = jest.fn(() => currentDate)
+
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, LOAD_MANIFESTS, and ADD_PLOT when fetching user manifests has been done', () => {
-    global.PROJECT_NAME = 'ipi'
-    global.Routes = {
-      manifests_fetch_path: (projectName) => `http://www.fake.com/${projectName}/manifests`
-    }
-    global.fetch = fetch
-
-    const currentDate = new Date()
-    global.Date = jest.fn(() => currentDate)
-
-
     nock('http://www.fake.com')
       .post('/ipi/manifests')
       .reply(
@@ -392,7 +391,49 @@ describe('async actions', () => {
     const store = mockStore({ manifests: storedManifests })
 
     return store.dispatch(actions.requestManifests()).then(() => {
-      // return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, SELECT_MANIFEST, and REMOVE_MANIFEST when deleting user manifests has been done', () => {
+    nock('http://www.fake.com')
+      .post('/ipi/manifests/destroy/1')
+      .reply(
+        200,
+        {"success":true},
+        {
+          'Access-Control-Allow-Origin': '*',
+          'Content-type': 'application/json'
+        }
+      )
+
+    const expectedActions = [
+      {
+        "exchange":{
+          "exchange_name":"delete-manifest",
+          "exchange_path":"http://www.fake.com/ipi/manifests/destroy/1",
+          "start_time": currentDate
+        },
+        "exchange_name":"delete-manifest",
+        "type":"ADD_EXCHANGE"
+      },
+      {
+        "exchange_name":"delete-manifest",
+        "type":"REMOVE_EXCHANGE"
+      },
+      {
+        type: 'SELECT_MANIFEST',
+        id: null
+      },
+      {
+        type: 'REMOVE_MANIFEST',
+        id: 1
+      }
+    ]
+
+    const store = mockStore({})
+
+    return store.dispatch(actions.deleteManifest(1)).then(() => {
       expect(store.getActions()).toEqual(expectedActions)
     })
   })
