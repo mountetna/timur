@@ -71,14 +71,12 @@ $secondary-color: teal;
     .fa-table {
       color: salmon;
     }
-    .fa-download {
-      color: blue;
+
+    &:hover {
       cursor: pointer;
-      &:hover {
-        color: dodgerblue;
-      }
     }
   }
+
   .fa {
     margin-right: 3px;
   }
