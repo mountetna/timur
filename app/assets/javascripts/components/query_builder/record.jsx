@@ -38,9 +38,36 @@ class RecordPredicate extends Component {
 
   getAttributeChild(attribute_name) {
     let attribute = this.props.attributes[attribute_name];
-    let { attribute_class, type } = attribute;
+    let { attribute_class, model_name } = attribute;
 
     // depending on the attribute_class and type we return a child
+    console.log("Getting attribute "+attribute_name);
+
+    switch(attribute_class) {
+      case 'Magma::ChildAttribute':
+      case 'Magma::ForeignKeyAttribute':
+        return { type: 'record', model: model_name };
+      case 'Magma::TableAttribute':
+      case 'Magma::CollectionAttribute':
+        return { type: 'model', filters: [], model: model_name };
+      case 'Magma::DocumentAttribute':
+      case 'Magma::ImageAttribute':
+        return { type: 'file', attribute_name };
+      case 'Magma::Attribute':
+        return this.getAttributeChild2(attribute);
+    }
+  }
+
+  getAttributeChild2(attribute) {
+    switch(attribute.type) {
+      case 'String':
+        return { type: 'string' };
+      case 'Integer':
+      case 'Float':
+        return { type: 'number' };
+      case 'DateTime':
+        return { type: 'date-time' };
+    }
   }
 
   actions() {

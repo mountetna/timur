@@ -11,7 +11,7 @@ class QueryBuilder extends Component {
       predicates: [
         // initially there is an empty model_list predicate
         {
-          type: "model"
+          type: "start"
         }
       ]
     }
