@@ -120,6 +120,22 @@ class Plotter extends Component {
       .filter('row', (row, i, rowName) => this.state.selectedPoints.includes(rowName));
   }
 
+  plotList(plots) {
+    return plots.map(plot => {
+      return (
+        <li key={plot.id}>
+          <a onClick={() => this.selectPlot(plot)}>
+            {plot.name}
+          </a>
+        </li>
+      );
+    });
+  }
+
+  onSelected({ points }) {
+    this.setState({ selectedPoints: points.map(p => p.id) })
+  }
+
   render() {
     const {
       isEditing,
