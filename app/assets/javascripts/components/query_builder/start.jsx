@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { selectModelNames } from '../../selectors/magma'
 
-export default class ModelPredicate extends Component {
+class StartPredicate extends Component {
   constructor() {
     super()
   }
@@ -38,6 +38,10 @@ export default class ModelPredicate extends Component {
     let { model, filters, action } = terms
 
     return <div className='predicate'>
+      <Selector defaultValue={ model } 
+        showNone="disabled" 
+        values={ this.props.model_names }
+        onChange={ (model) => this.update({ model, filters: [] }) }/>
       { 
         model ? this.renderFilters() : null
       }
@@ -47,3 +51,9 @@ export default class ModelPredicate extends Component {
       </div>
   }
 }
+
+export default connect(
+  (state,props) => ({
+    model_names: selectModelNames(state)
+  })
+)(StartPredicate)
