@@ -1,0 +1,35 @@
+.list-selector {
+  border-right: 1px solid lightgray;
+  min-width: 130px;
+
+  li:first-child {
+    .selection {
+      border-top: 1px solid rgba(#0cf,0.5);
+    }
+  }
+  .selection {
+    background-color: rgba(#0cf,0.1);
+    border-bottom: 1px solid rgba(#0cf,0.5);
+    font-size: 0.8em;
+    font-weight: lighter;
+    padding: 5px 2px;
+    a {
+      font-weight: bolder;
+    }
+  }
+  .title {
+    font-weight: bold;
+  }
+  .new {
+    @include green_link;
+  }
+
+  ol {
+    margin: 0px;
+    margin-top: 5px;
+    list-style-type: none;
+    padding: 0;
+  }
+
+}
+

@@ -3,6 +3,9 @@
 .plot-container {
   display: flex;
   font-family: $body_font;
+  a {
+    color: black
+  }
 }
 
 .plot-form-container {
