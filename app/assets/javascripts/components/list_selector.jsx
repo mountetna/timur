@@ -15,7 +15,9 @@ import { Component } from 'react'
 export default class ListSelector extends Component {
   listSection(section_name, section) {
     return <div className="section">
-      <span className="title">{ section_name }</span>
+      {
+        section_name && <span className="title">{ section_name }</span> 
+      }
       <ol>
         {
           section.map(item => this.listSelection(item))
@@ -44,7 +46,7 @@ export default class ListSelector extends Component {
     if (sections)
       return Object.keys(sections).map(section_name => this.listSection(section_name, sections[section_name]))
     else if (items)
-      return items.map(item => this.listSelection(item))
+      return this.listSection(null, items)
     return null
   }
 
