@@ -8,6 +8,7 @@ import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '..
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot'
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest'
 import ListSelector from '../list_selector'
+import ButtonBar from '../button_bar'
 import ScatterPlotForm from './scatter_plot_form'
 import Plot from './plotly'
 
@@ -107,6 +108,19 @@ class Plotter extends Component {
       savePlot
     } = this.props;
 
+    let buttons = [
+      {
+        label: 'edit',
+        click: toggleEditing.bind(this),
+        icon: 'pencil-square-o'
+      },
+      {
+        click: this.handleDelete.bind(this),
+        icon: 'trash-o',
+        label: 'delete'
+      }
+    ];
+
     return (
       <div className='plot-container'>
         <div>
@@ -132,11 +146,8 @@ class Plotter extends Component {
             <div>
               {selectedPlot &&
                 <div>
-                  {selectedPlot.is_editable &&
-                    <div>
-                      <a onClick={this.handleDelete.bind(this)}>delete </a>
-                      <a onClick={toggleEditing.bind(this)}>edit</a>
-                    </div>
+                  {
+                    selectedPlot.is_editable && <ButtonBar className='actions' buttons={ buttons }/>
                   }
                   <Plot plot={selectedPlot} consignment={consignment || {}} />
                 </div>

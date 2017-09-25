@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Plot from './plotly'
+import ButtonBar from '../button_bar'
 import  InputField from '../manifest/input_field'
 import Vector from '../../vector'
 
@@ -192,10 +193,18 @@ class ScatterPlotForm extends Component {
     
     return (
       <div className='plot-form-container'>
-        <div>
-          <a onClick={this.handleSave.bind(this)}>save </a>
-          <a onClick={() => toggleEditing()}>cancel</a>
-        </div>
+        <ButtonBar className='actions' buttons={ [
+          {
+            click: this.handleSave.bind(this),
+            icon: 'floppy-o',
+            label: 'save'
+          },
+          {
+            click: () => this.props.toggleEditing(false),
+            icon: 'ban',
+            label: 'cancel'
+          }
+        ]} />
         {'Manifest: '}
         {plot ? (
           <span>{selectedManifest.name}</span>
