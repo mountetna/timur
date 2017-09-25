@@ -25,3 +25,6 @@ tmp
 /node_modules
 .DS_Store
 ._*
+
+/.idea
+/coverage
