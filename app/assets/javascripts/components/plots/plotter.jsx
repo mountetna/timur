@@ -8,6 +8,7 @@ import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '..
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot'
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest'
 import ScatterPlotForm from './scatter_plot_form'
+import MatrixResult from '../manifest/matrix_result'
 import Plot from './plotly'
 
 class Plotter extends Component {
@@ -16,7 +17,8 @@ class Plotter extends Component {
 
     this.state = {
       // track requested consignments so that another request is not made for the same consignment
-      requestedConsignments: new Set()
+      requestedConsignments: new Set(),
+      selectedPoints: []
     };
   }
 
@@ -53,6 +55,10 @@ class Plotter extends Component {
       let updatedSet = new Set(this.state.requestedConsignments);
       updatedSet.delete(selectedManifest.name);
       this.setState({ requestedConsignments: updatedSet });
+    }
+
+    if (this.props.selectedPlot != nextProps.selectedPlot) {
+      this.setState({ selectedPoints: [] })
     }
   }
 
@@ -103,6 +109,10 @@ class Plotter extends Component {
     });
   }
 
+  onSelected({ points }) {
+    this.setState({ selectedPoints: points.map(p => p.id) })
+  }
+
   render() {
     const {
       isEditing,
@@ -148,7 +158,10 @@ class Plotter extends Component {
                       <a onClick={toggleEditing.bind(this)}>edit</a>
                     </div>
                   }
-                  <Plot plot={selectedPlot} consignment={consignment || {}} />
+                  <Plot plot={selectedPlot} consignment={consignment || {}} onSelected={this.onSelected.bind(this)} />
+                  {consignment && selectedPlot.configuration.selectedReferenceTable &&
+                    <MatrixResult matrix={consignment[selectedPlot.configuration.selectedReferenceTable].filter('row', (row, i, rowName) => this.state.selectedPoints.includes(rowName))} name={selectedPlot.configuration.selectedReferenceTable}/>
+                  }
                 </div>
               }
             </div>
