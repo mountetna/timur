@@ -158,7 +158,7 @@ class Plotter extends Component {
                       <a onClick={toggleEditing.bind(this)}>edit</a>
                     </div>
                   }
-                  <Plot plot={selectedPlot} consignment={consignment || {}} onSelected={this.onSelected.bind(this)} />
+                  <Plot plot={selectedPlot} consignment={consignment} onSelected={this.onSelected.bind(this)} />
                   {consignment && selectedPlot.configuration.selectedReferenceTable &&
                     <MatrixResult matrix={consignment[selectedPlot.configuration.selectedReferenceTable].filter('row', (row, i, rowName) => this.state.selectedPoints.includes(rowName))} name={selectedPlot.configuration.selectedReferenceTable}/>
                   }

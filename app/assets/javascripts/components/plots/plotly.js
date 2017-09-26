@@ -37,6 +37,20 @@ const toPlotlyProps = (plot, consignment) => {
   }
 }
 
-export default ({ plot, consignment, onSelected}) => (
-  <PlotlyComponent { ...toPlotlyProps(plot, consignment) } onSelected={onSelected}/>
-)
+class Plot extends Component {
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.plot != nextProps.plot ||
+      (!this.props.consignment && nextProps.consignment)
+    )
+  }
+
+  render() {
+    const { plot, consignment, onSelected } = this.props
+    return (
+      <PlotlyComponent { ...toPlotlyProps(plot, consignment || {}) } onSelected={onSelected}/>
+    )
+  }
+}
+
+export default Plot
