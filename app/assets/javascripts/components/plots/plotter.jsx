@@ -110,7 +110,12 @@ class Plotter extends Component {
   }
 
   onSelected({ points }) {
-    this.setState({ selectedPoints: points.map(p => p.id) })
+    this.setState({ selectedPoints: points.map(p => p.id) });
+  }
+
+  filterMatrix(consignment, selectedPlot) {
+    return consignment[selectedPlot.configuration.selectedReferenceTable]
+      .filter('row', (row, i, rowName) => this.state.selectedPoints.includes(rowName));
   }
 
   render() {
@@ -160,7 +165,10 @@ class Plotter extends Component {
                   }
                   <Plot plot={selectedPlot} consignment={consignment} onSelected={this.onSelected.bind(this)} />
                   {consignment && selectedPlot.configuration.selectedReferenceTable &&
-                    <MatrixResult matrix={consignment[selectedPlot.configuration.selectedReferenceTable].filter('row', (row, i, rowName) => this.state.selectedPoints.includes(rowName))} name={selectedPlot.configuration.selectedReferenceTable}/>
+                    <MatrixResult
+                      matrix={this.filterMatrix(consignment, selectedPlot)}
+                      name={selectedPlot.configuration.selectedReferenceTable}
+                    />
                   }
                 </div>
               }
