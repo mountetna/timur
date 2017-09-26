@@ -37,6 +37,9 @@
     "react"
   ],
   "rules": {
-    "no-undef": 1
+    "no-undef": "error",
+    "curly": "error",
+    "quotes": ["error", "single"],
+    "semi": "error"
   }
 }
