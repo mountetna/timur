@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { selectManifest } from '../../actions/manifest_actions'
-import { requestConsignments } from '../../actions/consignment_actions'
-import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions'
-import { selectConsignment } from '../../selectors/consignment'
-import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions'
-import { getAllPlots, getSelectedPlot } from '../../selectors/plot'
-import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest'
-import ListSelector from '../list_selector'
-import ButtonBar from '../button_bar'
-import ScatterPlotForm from './scatter_plot_form'
-import Plot from './plotly'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { selectManifest } from '../../actions/manifest_actions';
+import { requestConsignments } from '../../actions/consignment_actions';
+import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions';
+import { selectConsignment } from '../../selectors/consignment';
+import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions';
+import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
+import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest';
+import ListSelector from '../list_selector';
+import ButtonBar from '../button_bar';
+import ScatterPlotForm from './scatter_plot_form';
+import Plot from './plotly';
 
 class Plotter extends Component {
   constructor() {
@@ -80,7 +80,7 @@ class Plotter extends Component {
   }
 
   selectPlot(plot_id) {
-    let plot = this.props.plots.find(p => p.id == plot_id)
+    let plot = this.props.plots.find(p => p.id == plot_id);
     this.props.selectManifest(plot.manifest_id);
     this.props.selectPlot(plot.id);
     this.props.toggleEditing(false);
@@ -155,7 +155,7 @@ class Plotter extends Component {
             </div>
           )}
       </div>
-    )
+    );
   }
 }
 
@@ -175,8 +175,8 @@ const mapStateToProps = (state) => {
     plots: getAllPlots(state),
     selectedPlot: getSelectedPlot(state),
     isEditing: state.plots.isEditing,
-  }
-}
+  };
+};
 
 export default connect(
   mapStateToProps,
@@ -190,4 +190,4 @@ export default connect(
     selectPlot,
     toggleEditing
   }
-)(Plotter)
+)(Plotter);
