@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { requestManifests, toggleEdit, selectManifest} from '../../actions/manifest_actions'
-import ListSelector from '../list_selector'
-import Manifest from './manifest'
-import { getSelectedManifest, getAllManifests } from '../../selectors/manifest'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { requestManifests, toggleEdit, selectManifest} from '../../actions/manifest_actions';
+import ListSelector from '../list_selector';
+import Manifest from './manifest';
+import { getSelectedManifest, getAllManifests } from '../../selectors/manifest';
 
 // Main component for viewing/editing manifests
 class Manifests extends Component {
@@ -22,7 +22,7 @@ class Manifests extends Component {
     return (
       <div className='manifests-container'>
         <ListSelector
-          name="Manifest"
+          name='Manifest'
           create={ this.create.bind(this) }
           select={ this.props.selectManifest }
           sections={ sections }/>
