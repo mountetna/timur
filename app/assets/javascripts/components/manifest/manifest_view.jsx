@@ -1,14 +1,14 @@
-import { Component } from 'react'
-import ManifestElement from './manifest_element'
-import ManifestPreview from './manifest_preview'
-import ButtonBar from '../button_bar'
-import ToggleSwitch from '../toggle_switch'
-import { requestConsignments } from '../../actions/consignment_actions'
-import { selectConsignment } from '../../selectors/consignment'
-import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
-import { getPlotsByIds } from '../../selectors/plot'
-import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions'
-import { plotIndexUrl } from '../../api/plots'
+import { Component } from 'react';
+import ManifestElement from './manifest_element';
+import ManifestPreview from './manifest_preview';
+import ButtonBar from '../button_bar';
+import ToggleSwitch from '../toggle_switch';
+import { requestConsignments } from '../../actions/consignment_actions';
+import { selectConsignment } from '../../selectors/consignment';
+import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions';
+import { getPlotsByIds } from '../../selectors/plot';
+import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions';
+import { plotIndexUrl } from '../../api/plots';
 
 // Shows a single manifest - it has two states, 'script', which
 // shows the manufest script, and 'output', which shows the

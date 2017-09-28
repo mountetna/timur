@@ -1,23 +1,25 @@
 import { Component } from 'react';
 
-// This component presents a list of items to select,
-// possibly divided into sections.
-//
-// props :
-//  name - the name of the item type on display
-//  create() - callback when a new item is created
-//  select(id) - callback when an item is selected
-//  items - a list of { id, title, name }
-//  sections - { section_name: items, ... }
-//
-//  if there is a 'sections', 'items' is ignored.
+/*
+ * This component presents a list of items to select, possibly divided into
+ * sections.
+ *
+ * props :
+ *   name - The name of the item type on display.
+ *   create() - Callback when a new item is created.
+ *   select(id) - Callback when an item is selected.
+ *   items - A list of { id, title, name }
+ *   sections - { section_name: items, ... }
+ *
+ * If there is a 'sections', 'items' is ignored.
+ */
 
 export default class ListSelector extends Component {
   listSection(section_name, section) {
     return (
-      <div className="section">
+      <div className='section'>
         {
-          section_name && <span className="title">{ section_name }</span> 
+          section_name && <span className='title'>{ section_name }</span> 
         }
         <ol>
           {
@@ -61,8 +63,8 @@ export default class ListSelector extends Component {
     if (!create) return null;
 
     return (
-      <a href='#' onClick={ () => create() } className="new">
-        <i className="fa fa-plus" aria-hidden="true"/>
+      <a href='#' onClick={ () => create() } className='new'>
+        <i className='fa fa-plus' aria-hidden='true' />
         New { name }
       </a>
     );

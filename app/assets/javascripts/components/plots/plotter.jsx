@@ -125,7 +125,7 @@ class Plotter extends Component {
       <div className='plot-container'>
         <div>
         <ListSelector
-          name="Plot"
+          name='Plot'
           create={ this.newPlot.bind(this) }
           select={ this.selectPlot.bind(this) }
           items={ plots }/>
