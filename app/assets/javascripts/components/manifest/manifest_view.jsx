@@ -1,13 +1,14 @@
-import { Component } from 'react'
-import ManifestElement from './manifest_element'
-import ManifestPreview from './manifest_preview'
-import ToggleSwitch from '../toggle_switch'
-import { requestConsignments } from '../../actions/consignment_actions'
-import { selectConsignment } from '../../selectors/consignment'
-import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions'
-import { getPlotsByIds } from '../../selectors/plot'
-import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions'
-import { plotIndexUrl } from '../../api/plots'
+import { Component } from 'react';
+import ManifestElement from './manifest_element';
+import ManifestPreview from './manifest_preview';
+import ButtonBar from '../button_bar';
+import ToggleSwitch from '../toggle_switch';
+import { requestConsignments } from '../../actions/consignment_actions';
+import { selectConsignment } from '../../selectors/consignment';
+import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions';
+import { getPlotsByIds } from '../../selectors/plot';
+import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions';
+import { plotIndexUrl } from '../../api/plots';
 
 // Shows a single manifest - it has two states, 'script', which
 // shows the manufest script, and 'output', which shows the
@@ -44,35 +45,36 @@ class ManifestView extends Component {
       )
     })
 
+    let buttons = [
+      is_editable && {
+        click: toggleEdit,
+        icon: 'pencil-square-o',
+        label: 'edit'
+      },
+
+      this.state.view_mode == 'output' && is_editable && {
+        click: () => location.href = plotIndexUrl({ manifest_id: manifest.id, is_editing: true }),
+        icon: 'line-chart',
+        label: 'plot'
+      },
+
+      {
+        click: () => copyManifest(manifest),
+        icon: 'files-o',
+        label: 'copy'
+      },
+
+      is_editable && {
+        click: () => deleteManifest(manifest.id),
+        icon: 'trash-o',
+        label: 'delete'
+      }
+    ].filter(_=>_)
+
     return (
       <div className='manifest'>
         <div className='manifest-elements'>
-          <div className='actions'>
-            {is_editable &&
-              <button onClick={toggleEdit}>
-                <i className='fa fa-pencil-square-o' aria-hidden="true"></i>
-                edit
-              </button>
-            }
-            {this.state.view_mode === 'output' && manifest.is_editable &&
-              <button>
-                <a href={plotIndexUrl({ manifest_id: manifest.id, is_editing: true })}>
-                  <i className='fa fa-line-chart' aria-hidden="true"></i>
-                  plot
-                </a>
-              </button>
-            }
-            <button onClick={() => copyManifest(manifest)}>
-              <i className='fa fa-files-o' aria-hidden="true"></i>
-              copy
-            </button>
-            {is_editable &&
-              <button onClick={() => deleteManifest(manifest.id)}>
-                <i className='fa fa-trash-o' aria-hidden="true"></i>
-                delete
-              </button>
-            }
-          </div>
+          <ButtonBar className='actions' buttons={ buttons }/>
           <ManifestPreview {...manifest} />
           <ToggleSwitch 
             id="view_mode_switch"
