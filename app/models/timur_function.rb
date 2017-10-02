@@ -13,7 +13,8 @@ class TimurFunction
 
   def question(query)
     response = Magma::Client.instance.query(
-      @token, @project_name,
+      @token,
+      @project_name,
       query.to_values
     )
     query_answer = JSON.parse(response.body)

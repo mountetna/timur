@@ -27,12 +27,12 @@ class Pager extends Component {
   }
 
   renderReport() {
-    return <div className="report" onClick={ () => this.setState({ editing: true }) } >
+    return <div className='report' onClick={ () => this.setState({ editing: true }) } >
       Page { 
         this.state.editing 
-          ? <input className="page_edit"
-            ref="page_edit"
-            type="text"
+          ? <input className='page_edit'
+            ref='page_edit'
+            type='text'
             defaultValue={ this.props.current_page }
             autoFocus
             onBlur={ this.enterPage.bind(this) } 
@@ -44,22 +44,22 @@ class Pager extends Component {
 
   renderLeft() {
     if (this.props.current_page > 1) {
-      return <span className="turner active fa fa-chevron-left" onClick={ this.rewindPage.bind(this) } />
+      return <span className='turner active fa fa-chevron-left' onClick={ this.rewindPage.bind(this) } />
     } else {
-      return <span className="turner inactive fa fa-chevron-left"/>
+      return <span className='turner inactive fa fa-chevron-left'/>
     }
   }
 
   renderRight() {
     if (this.props.current_page < this.props.pages) {
-      return <span className="turner active fa fa-chevron-right" onClick={ this.advancePage.bind(this) }/>
+      return <span className='turner active fa fa-chevron-right' onClick={ this.advancePage.bind(this) }/>
     } else {
-      return <span className="turner inactive fa fa-chevron-right"/>
+      return <span className='turner inactive fa fa-chevron-right'/>
     }
   }
 
   render() {
-    return <div className="pager">
+    return <div className='pager'>
       { this.renderLeft() }
       { this.renderReport() }
       { this.renderRight() }

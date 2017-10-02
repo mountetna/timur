@@ -10,33 +10,33 @@ class DocumentFilter {
 
   format(document, att_name) {
     var value = document[att_name]
-    if (value == undefined) return ""
+    if (value == undefined) return ''
 
     var att_class = this.template.attributes[att_name].attribute_class
     var att_type = this.template.attributes[att_name].type
 
     switch(att_class) {
-      case "Magma::FileAttribute":
-      case "Magma::ImageAttribute":
+      case 'Magma::FileAttribute':
+      case 'Magma::ImageAttribute':
         return value.url
-      case "Magma::CollectionAttribute":
-        return value.join(",")
-      case "Magma::TableAttribute":
-        return "";
-      case "Magma::LinkAttribute":
-        return value || "";
-      case "Magma::Attribute":
+      case 'Magma::CollectionAttribute':
+        return value.join(',')
+      case 'Magma::TableAttribute':
+        return '';
+      case 'Magma::LinkAttribute':
+        return value || '';
+      case 'Magma::Attribute':
         switch(att_type) {
-          case "DateTime":
+          case 'DateTime':
             return dates.format_date(value) + '@' + dates.format_time(value)
-          case "Integer":
-          case "Float":
+          case 'Integer':
+          case 'Float':
             return value || 0;
           default:
-            return value || "";
+            return value || '';
         }
       default:
-        return value || "";
+        return value || '';
     }
   }
 
@@ -44,18 +44,18 @@ class DocumentFilter {
     return this.filter_attribute_names.some(
       (att_name) => {
         var txt = this.format(document, att_name)
-        return txt.match && txt.match(new RegExp(term, "i"))
+        return txt.match && txt.match(new RegExp(term, 'i'))
       }
     )
   }
 
   matchesAttribute(term,document) {
     var attribute_match = RegExp(
-      "^" +
-      "([\\w]+)" + // the attribute name
-      "([=<>~])" + // the operator
-      "(.*)" +     // the rest
-      "$"
+      '^' +
+      '([\\w]+)' + // the attribute name
+      '([=<>~])' + // the operator
+      '(.*)' +     // the rest
+      '$'
     )
     var match = attribute_match.exec(term)
 
@@ -68,7 +68,7 @@ class DocumentFilter {
           case '=':
             return txt == match_txt
           case '~':
-            return txt.match(new RegExp(match_txt, "i"))
+            return txt.match(new RegExp(match_txt, 'i'))
           case '<':
             return txt < match_txt
           case '>':

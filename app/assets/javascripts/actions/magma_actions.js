@@ -1,6 +1,6 @@
 import { showMessages } from './message_actions';
 import { getDocuments, postRevisions } from '../api/timur';
-import { Exchange } from './exchange_actions'
+import { Exchange } from './exchange_actions';
 
 export const addTemplate = (template)=>(
   {

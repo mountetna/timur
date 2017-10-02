@@ -9,7 +9,7 @@ const displayedAttributes = (template) =>
   Object.keys(template.attributes).filter(
     (attribute_name) =>
     template.attributes[attribute_name].shown
-    && template.attributes[attribute_name].attribute_class != "Magma::TableAttribute"
+    && template.attributes[attribute_name].attribute_class != 'Magma::TableAttribute'
   )
 
 class SearchTable extends Component {
@@ -27,10 +27,10 @@ class SearchTable extends Component {
   render() {
     let { record_names, documents, template, attribute_names, mode } = this.props
 
-    if (!record_names) return <div className="table"></div>
+    if (!record_names) return <div className='table'></div>
 
-    return <div className="table">
-              <div className="table_row">
+    return <div className='table'>
+              <div className='table_row'>
               {
                 attribute_names.map((att_name,i) =>
                   <SearchTableColumnHeader key={att_name} 

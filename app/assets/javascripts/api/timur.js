@@ -8,12 +8,12 @@ const create = (name, attributes) => {
   return element
 }
 
-const input = (name, value) => create('input', { type: "hidden", name, value })
+const input = (name, value) => create('input', { type: 'hidden', name, value })
 
 export const getTSVForm = (data) => {
-  let form = create("form", {
+  let form = create('form', {
     action: Routes.table_tsv_path(PROJECT_NAME),
-    method: "POST"
+    method: 'POST'
   })
   form.appendChild(
     input('authenticity_token', headers('csrf')['X-CSRF-Token'])
@@ -28,7 +28,7 @@ export const getTSVForm = (data) => {
     form.appendChild( input(name, data[name]))
   }
 
-  form.style.display = "none"
+  form.style.display = 'none'
   document.body.appendChild(form)
   form.submit()
   document.body.removeChild(form)

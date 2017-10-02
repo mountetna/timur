@@ -1,11 +1,11 @@
 // Class imports.
-import Vector from 'vector'
-import { getTSVForm, getView } from '../api/timur'
-import { showMessages } from './message_actions'
-import { requestDocuments } from './magma_actions'
-import { Exchange } from './exchange_actions'
-import { requestConsignments } from './consignment_actions'
-import Tab from '../models/tab'
+import Vector from 'vector';
+import { getTSVForm, getView } from '../api/timur';
+import { showMessages } from './message_actions';
+import { requestDocuments } from './magma_actions';
+import { Exchange } from './exchange_actions';
+import { requestConsignments } from './consignment_actions';
+import Tab from '../models/tab';
 
 // Flip a config variable.
 export const toggleConfig = (key)=>{
@@ -87,5 +87,5 @@ export const requestView = (model_name, record_name, tab_name, success, error)=>
 
 export const requestTSV = (model_name,filter) =>
   (dispatch) => {
-    getTSVForm({ model_name, filter, record_names: "all" })
+    getTSVForm({ model_name, filter, record_names: 'all' })
   }
