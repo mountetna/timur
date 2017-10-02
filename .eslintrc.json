@@ -37,6 +37,11 @@
     "react"
   ],
   "rules": {
-    "no-undef": 1
+    "no-undef": "error",
+    "quotes": ["error", "single", {"avoidEscape": true}],
+    "semi": "warn",
+    "no-var": "warn",
+    "curly": "warn",
+    "brace-style": ["warn", "stroustrup", {"allowSingleLine": true}]
   }
 }

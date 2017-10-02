@@ -2,46 +2,9 @@
 
 $secondary-color: teal;
 
-.manifests-selector {
-  border-right: 1px solid lightgray;
-  min-width: 130px;
-
-  li:first-child {
-    .manifest-selection {
-      border-top: 1px solid rgba(#0cf,0.5);
-    }
-  }
-  .manifest-selection {
-    background-color: rgba(#0cf,0.1);
-    border-bottom: 1px solid rgba(#0cf,0.5);
-    font-size: 0.8em;
-    font-weight: lighter;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    a {
-      font-weight: bolder;
-    }
-  }
-  .title {
-    font-weight: bold;
-  }
-  .new {
-    @include green_link;
-  }
-
-  ol {
-    margin: 0px;
-    margin-top: 5px;
-    list-style-type: none;
-    padding: 0;
-  }
-
-}
-
 .manifests-container {
   color: #333;
   font-family: $body_font;
-  margin-top: 10px;
   padding-left: 5px;
   padding-right: 5px;
   display: flex;
@@ -81,17 +44,6 @@ $secondary-color: teal;
 
   .label {
     font-weight: lighter;
-  }
-
-  button {
-    font-size: 1em;
-    &:nth-of-type(n+2) {
-      margin-left: 20px;
-    }
-
-    &:hover {
-      cursor: pointer;
-    }
   }
 
   .result {
@@ -232,6 +184,16 @@ $secondary-color: teal;
   margin-top: 15px;
   margin-left: 20%;
 
+  button {
+    font-size: 1em;
+    &:nth-of-type(n+2) {
+      margin-left: 20px;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 @mixin border {
