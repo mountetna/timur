@@ -10,7 +10,7 @@ import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../
 import ListSelector from '../list_selector';
 import ButtonBar from '../button_bar';
 import ScatterPlotForm from './scatter_plot_form';
-import Plot from './plotly';
+import Plotly from './plotly';
 
 class Plotter extends Component {
   constructor() {
@@ -83,10 +83,9 @@ class Plotter extends Component {
     this.props.selectPlot(null);
     this.props.toggleEditing(true);
   }
-
-  selectPlot(plot_id) {
-    let plot = this.props.plots.find(p => p.id == plot_id);
-    this.props.selectManifest(plot.manifest_id);
+    
+  selectPlot(plot) {
+    this.props.selectManifest(plot.manifestId);
     this.props.selectPlot(plot.id);
     this.props.toggleEditing(false);
   }
@@ -116,7 +115,7 @@ class Plotter extends Component {
   }
 
   filterMatrix(consignment, selectedPlot) {
-    return consignment[selectedPlot.configuration.selectedReferenceTable]
+    return consignment[selectedPlot.selectedReferenceTable]
       .filter('row', (row, i, rowName) => this.state.selectedPoints.includes(rowName));
   }
 
@@ -173,7 +172,7 @@ class Plotter extends Component {
           items={ plots }/>
         </div>
           {isEditing ? (
-            <ScatterPlotForm className='plot-form'
+            <PlotForm className='plot-form'
               consignment={consignment || {}}
               selectedManifest={selectedManifest}
               selectManifest={selectManifest}
@@ -191,11 +190,11 @@ class Plotter extends Component {
                   {
                     selectedPlot.is_editable && <ButtonBar className='actions' buttons={ buttons }/>
                   }
-                  <Plot plot={selectedPlot} consignment={consignment} onSelected={this.onSelected.bind(this)} />
-                  {consignment && selectedPlot.configuration.selectedReferenceTable &&
+                  <Plotly plot={selectedPlot} consignment={consignment} onSelected={this.onSelected.bind(this)} />
+                  {consignment && selectedPlot.selectedReferenceTable &&
                     <MatrixResult
                       matrix={this.filterMatrix(consignment, selectedPlot)}
-                      name={selectedPlot.configuration.selectedReferenceTable}
+                      name={selectedPlot.selectedReferenceTable}
                     />
                   }
                 </div>

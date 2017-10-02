@@ -4,38 +4,44 @@ import  Plotly from 'plotly.js/lib/core'
 
 // require plots that can be displayed with plotly component
 Plotly.register([
-  require('plotly.js/lib/scatter')
+  require('plotly.js/lib/scatter'),
+  require('plotly.js/lib/heatmap')
 ])
 const PlotlyComponent = createPlotlyComponent(Plotly)
 
 // create plotly props from plot configuration and data references to consignment
-const toPlotlyProps = (plot, consignment) => {
-  let plotType = plot ? plot.plot_type || plot.plotType :  '';
-  switch (plotType) {
-    case 'scatter':
-      let plotly = plot.configuration ? { ...plot.configuration } : { ...plot };
-
-      // replace insert x and y data from the consignment
-      plotly.data = plotly.data.map(d => {
-        let ids = []
-        if (consignment[d.manifestSeriesY]) {
-          ids = consignment[d.manifestSeriesY].labels
-        } else if (consignment[d.manifestSeriesX]) {
-          ids = consignment[d.manifestSeriesX].labels
-        }
-
-        return {
-          ...d,
-          x: consignment[d.manifestSeriesX] ? consignment[d.manifestSeriesX].values : [],
-          y: consignment[d.manifestSeriesY] ? consignment[d.manifestSeriesY].values : [],
-          ids,
-        }
-      });
-      return plotly;
-    default:
-      return plot;
-  }
-}
+// const toPlotlyProps = (plot, consignment) => {
+//   let plotType = plot ? plot.plot_type || plot.plotType :  '';
+//   switch (plotType) {
+//     case 'scatter':
+//       let plotly = plot.configuration ? { ...plot.configuration } : { ...plot };
+//
+//       // replace insert x and y data from the consignment
+//       plotly.data = plotly.data.map(d => {
+//         let ids = []
+//         if (consignment[d.manifestSeriesY]) {
+//           ids = consignment[d.manifestSeriesY].labels
+//         } else if (consignment[d.manifestSeriesX]) {
+//           ids = consignment[d.manifestSeriesX].labels
+//         }
+//
+//         return {
+//           ...d,
+//           x: consignment[d.manifestSeriesX] ? consignment[d.manifestSeriesX].values : [],
+//           y: consignment[d.manifestSeriesY] ? consignment[d.manifestSeriesY].values : [],
+//           ids,
+//         }
+//       });
+//       // plotly.data = [{
+//       //   z: [[1, 20, 30], [20, 1, 60], [30, 60, 1]],
+//       //   type: 'heatmap'
+//       // }]
+//     case 'heatmap':
+//       return plotly;
+//     default:
+//       return plot;
+//   }
+// }
 
 class Plot extends Component {
   shouldComponentUpdate(nextProps) {
@@ -48,7 +54,7 @@ class Plot extends Component {
   render() {
     const { plot, consignment, onSelected } = this.props
     return (
-      <PlotlyComponent { ...toPlotlyProps(plot, consignment || {}) } onSelected={onSelected}/>
+      <PlotlyComponent { ...plot.toPlotly(consignment) } onSelected={onSelected}/>
     )
   }
 }
