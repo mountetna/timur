@@ -12,8 +12,12 @@ class TimurFunction
   end
 
   def question(query)
-    status, payload = Magma::Client.instance.query(@token, @project_name, query.to_values)
-    query_answer = JSON.parse(payload)
+    response = Magma::Client.instance.query(
+      @token,
+      @project_name,
+      query.to_values
+    )
+    query_answer = JSON.parse(response.body)
 
     # Loop the data and set the data types returned from Magma.
     recursive_parse(query_answer['answer']) do |item|

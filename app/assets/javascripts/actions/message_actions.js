@@ -1,15 +1,8 @@
-var messageActions = {
-  showMessages: function(messages) {
-    return {
-      type: 'SHOW_MESSAGES',
-      messages: messages
-    }
-  },
-  dismissMessages: function() {
-    return {
-      type: 'DISMISS_MESSAGES'
-    }
-  }
-}
+export const showMessages = (messages) => ({
+  type: 'SHOW_MESSAGES',
+  messages: messages
+});
 
-module.exports = messageActions;
+export const dismissMessages = () => ({
+  type: 'DISMISS_MESSAGES'
+});
