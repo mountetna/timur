@@ -11,10 +11,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import Magma from 'magma';
-import { requestModels, requestDocuments } from '../../actions/magma_actions';
-import { requestTSV } from '../../actions/timur_actions';
+import { requestTSV, requestModels, requestDocuments } from '../../actions/magma_actions';
 import { selectSearchCache } from '../../selectors/search_cache';
-import { requestConsignments } from '../../actions/consignment_actions';
 import { cacheSearchPage, setSearchPageSize, setSearchPage } from '../../actions/search_actions';
 
 import SearchQuery from './search_query';

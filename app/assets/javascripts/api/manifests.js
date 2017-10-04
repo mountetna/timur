@@ -57,3 +57,21 @@ export const destroyManifest = (manifestId, exchange)=>{
 
   return exchangePromise;
 };
+
+export const getConsignments = (manifests, exchange)=>{
+
+  var routeOpts = {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf'),
+    body: JSON.stringify({
+      queries: manifests
+    })
+  };
+
+  var exchangePromise = exchange.fetch(Routes.query_json_path(PROJECT_NAME), routeOpts)
+    .then(checkStatus)
+    .then(parseJSON)
+
+  return exchangePromise;
+};
