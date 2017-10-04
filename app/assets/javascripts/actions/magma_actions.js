@@ -99,7 +99,7 @@ export const requestDocuments = ({ model_name, record_names, attribute_names, fi
   getDocuments(...get_doc_args)
     .then(localSuccess)
     .catch(localError);
-}
+};
 
 export const requestModels = ()=>{
   let reqOpts = {
@@ -150,7 +150,7 @@ const setFormData = (revisions, model_name)=>{
   }
 
   return form;
-}
+};
 
 export const sendRevisions = (model_name, revisions, success, error)=>{
   return (dispatch)=>{
@@ -185,11 +185,25 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
       .then(localSuccess)
       .catch(localError);
   }
-}
+};
 
 // download a TSV from magma via Timur
 
 export const requestTSV = (model_name,filter) =>
   (dispatch) => {
     getTSVForm({ model_name, filter, record_names: 'all' })
-  }
+  };
+
+
+export const requestAnswer = (question, callback) =>
+  (dispatch) => {
+    let question_name = Array.isArray(question) ? [].concat.apply([], question).join('-') : question;
+    let exchange = new Exchange(dispatch, question_name);
+
+    getAnswer(question, exchange).then(callback)
+  };
+
+export const requestPredicates = () =>
+  requestAnswer('::predicates', (predicates) => {
+    console.log(predicates)
+  });
