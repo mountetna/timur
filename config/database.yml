@@ -1,21 +1,10 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
-#
 default: &default
   adapter: postgresql
   encoding: unicode
-  username: timur
+  username: developer
   pool: 5
   timeout: 5000
-
-development:
-  <<: *default
-  database: timur_development
-  username: postgres
-  password: postgres
+  schema_search_path: private
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,9 +12,17 @@ development:
 test:
   <<: *default
   database: timur_test
-  username: postgres
-  password: postgres
+  username: developer
+  password: <%= @psql_developer_password =>
+
+development:
+  <<: *default
+  database: timur
+  username: developer
+  password: <%= @psql_developer_password =>
 
 production:
   <<: *default
-  database: timur_production
+  database: timur
+  username: developer
+  password: <%= @psql_developer_password =>

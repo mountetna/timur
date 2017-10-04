@@ -1,83 +1,91 @@
-import Vector from 'vector'
-import { getTSV, getView } from '../api/timur'
-import { showMessages } from './message_actions'
-import { requestDocuments } from './magma_actions'
-import { Exchange } from './exchange_actions'
-import { requestConsignments } from './consignment_actions'
-import Tab from '../models/tab'
+// Class imports.
+import Vector from 'vector';
+import { getTSVForm, getView } from '../api/timur';
+import { showMessages } from './message_actions';
+import { requestDocuments } from './magma_actions';
+import { Exchange } from './exchange_actions';
+import { requestConsignments } from './consignment_actions';
+import Tab from '../models/tab';
 
-// flip a config variable
-export const toggleConfig = (key) => ({
-  type: 'TOGGLE_CONFIG',
-  key
-})
+// Flip a config variable.
+export const toggleConfig = (key)=>{
+  return {
+    'type': 'TOGGLE_CONFIG',
+    key
+  };
+};
 
-// request a View for a given model/record/tab, and send requests
-// for additional data
-export const requestView = (model_name, record_name, tab_name, success, error) =>
-  (dispatch) =>
-    getView(
-      model_name, tab_name, 
-      new Exchange(dispatch, `view for ${model_name} ${record_name}`)
-    )
-      .then((response)=> {
-        var tab = new Tab(
-          model_name, 
-          record_name,
-          response.tab_name,
-          response.tabs[response.tab_name],
-          null
-        )
+export const addTab = (model_name, tab_name, tab)=>{
+  return {
+    'type': 'ADD_TAB',
+    model_name,
+    tab_name,
+    tab
+  };
+};
 
-        dispatch(
-          requestDocuments({
-            model_name, 
-            record_names: [ record_name ], 
-            attribute_names: tab.requiredAttributes(),
-            exchange_name: `tab ${response.tab_name} for ${model_name} ${record_name}`
-          })
-        )
+/*
+ * Request a view for a given model/record/tab and send requests for additional 
+ * data.
+ */
+export const requestView = (model_name, record_name, tab_name, success, error)=>{
+  return (dispatch)=>{
+    // Handle success from 'getView'.
+    var localSuccess = (response)=>{
+      /*
+       * Second (see 'first' below), we create a 'tab'. A 'tab' is the root
+       * component on a page.
+       */
+      let config = response.tabs[response.tab_name];
+      let tab = new Tab(model_name, record_name, response.tab_name, config, null);
 
-        var required_manifests = tab.requiredManifests()
+      // Request the documents needed to populate this 'tab'.
+      let exchange_name = `tab ${response.tab_name} for ${model_name} ${record_name}`;
+      dispatch(
+        requestDocuments({
+          model_name,
+          exchange_name,
+          record_names: [record_name],
+          attribute_names: tab.requiredAttributes(),
+        })
+      );
 
-        if (required_manifests.length > 0)
-          dispatch(requestConsignments(required_manifests))
+      /*
+       * Request the consignments (see README.md under manifests/consignments) 
+       * needed to populate this tab.
+       */
+      var required_manifests = tab.requiredManifests();
+      if(required_manifests.length > 0){
+        dispatch(requestConsignments(required_manifests));
+      }
 
-        for (var tab_name in response.tabs)
-          dispatch(
-            addTab(
-              model_name, 
-              tab_name, 
-              response.tabs[tab_name]
-            )
-          )
+      // Add the tabs to the store.
+      for(var tab_name in response.tabs){
+        dispatch(addTab(model_name, tab_name, response.tabs[tab_name]));
+      }
 
-        if (success != undefined) success()
-      })
-      .catch((err) => { if (error != undefined) error(err) })
+      if(success != undefined) success();
+    };
+
+    // Handle an error from 'getView'.
+    var localError = (e)=>{
+      if(error != undefined) error(e);
+    };
+
+    /*
+     * First, we pull the view file from the Timur server. This will contain a
+     * a data object that reperesents the layout of the page.
+     */
+    var exchange = new Exchange(dispatch,`view for ${model_name} ${record_name}`);
+    getView(model_name, tab_name, exchange)
+      .then(localSuccess)
+      .catch(localError);
+  };
+};
 
 // download a TSV from magma via Timur
-export const requestTSV = (model_name,record_names) =>
-  (dispatch) =>
-    getTSV(model_name,record_names, new Exchange(dispatch, `request-tsv-${model_name}`))
-      .catch(
-        (error) => dispatch(
-          showMessages([
-`### Our attempt to create a TSV failed.
 
-${error}`
-          ])
-        )
-      )
-
-export const addTab = (model_name, tab_name, tab) => ({
-  type: 'ADD_TAB',
-  model_name,
-  tab_name,
-  tab
-})
-
-export const changeMode = (mode) => ({
-  type: 'CHANGE_MODE',
-  mode
-})
+export const requestTSV = (model_name,filter) =>
+  (dispatch) => {
+    getTSVForm({ model_name, filter, record_names: 'all' })
+  }

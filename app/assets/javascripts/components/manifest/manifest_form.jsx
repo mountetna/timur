@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import InputField from './input_field'
-import TextField from './text_field'
-import ManifestAccess from './manifest_access'
-import ManifestElementForm from './manifest_element_form'
-import Dates from '../../dates'
-import { v4 } from 'node-uuid'
-import { requestConsignments } from '../../actions/consignment_actions'
-import { selectConsignment } from '../../selectors/consignment'
-import { manifestToReqPayload, saveNewManifest, saveManifest, toggleEdit } from '../../actions/manifest_actions'
+import React, { Component } from 'react';
+import InputField from './input_field';
+import ButtonBar from '../button_bar';
+import TextField from './text_field';
+import ManifestAccess from './manifest_access';
+import ManifestElementForm from './manifest_element_form';
+import { v4 } from 'node-uuid';
+import { requestConsignments } from '../../actions/consignment_actions';
+import { selectConsignment } from '../../selectors/consignment';
+import { manifestToReqPayload, saveNewManifest, saveManifest, toggleEdit } from '../../actions/manifest_actions';
 
 // Edit and save changes to a manifest.  Requests a consignment
 // based on edited data when 'test' is clicked
@@ -33,7 +33,6 @@ class ManifestForm extends Component {
       this.setState({
         name: '',
         access: 'private',
-        project: 'ipi',
         elementKeys: [],
         elementsByKey: {},
         hasConsignment: false
@@ -151,24 +150,29 @@ class ManifestForm extends Component {
       )
     })
 
+    let buttons = [
+      this.props.manifest && {
+        click: this.create.bind(this),
+        icon: 'floppy-o',
+        label: 'save new'
+      },
+
+      !this.props.manifest && {
+        click: this.update.bind(this),
+        icon: 'floppy-o',
+        label: 'save'
+      },
+
+      {
+        click: this.props.toggleEdit,
+        icon: 'ban',
+        label: 'cancel'
+      }
+    ].filter(_=>_)
+
     return (
       <div className='form-container'>
-        <div className='actions'>
-          { !this.props.manifest ?
-            <button onClick={this.create.bind(this)}>
-              <i className='fa fa-floppy-o' aria-hidden="true"></i>
-              save as
-            </button> :
-            <button onClick={this.update.bind(this)}>
-              <i className='fa fa-floppy-o' aria-hidden="true"></i>
-              save
-            </button>
-          }
-          <button onClick={this.props.toggleEdit}>
-            <i className='fa fa-ban' aria-hidden="true"></i>
-            cancel
-          </button>
-        </div>
+        <ButtonBar className='actions' buttons={ buttons }/>
         <InputField type='text'
           placeholder='Manifest Name'
           label='Name'

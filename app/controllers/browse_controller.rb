@@ -1,25 +1,30 @@
 require 'net/http'
+require 'mime/types'
 require 'uri'
 require 'json'
-require 'mime/types'
 
-class BrowseController <  ApplicationController
+class BrowseController < ApplicationController
   before_filter :authenticate
   before_filter :readable_check
   before_filter :editable_check, only: :update
-  layout "timur"
+  layout 'timur'
 
   def index
-    redirect_to browse_model_path(:project, "UCSF Immunoprofiler")
+    response = Magma::Client.instance.query(
+      token, params[:project_name], [ :project, '::first', '::identifier' ]
+    )
+    id = JSON.parse(response.body, symbolize_names: true)
+    redirect_to browse_model_path(params[:project_name], :project, id[:answer])
   end
 
   def model
-    # Get the model name
-    @model_name = params[:model]
-    @record_name = params[:name]
+    @project_name = params[:project_name]
+    @model_name = params[:model_name]
+    @record_name = params[:record_name]
   end
 
   def map
+    @project_name = params[:project_name]
   end
 
   def activity
@@ -35,19 +40,16 @@ class BrowseController <  ApplicationController
   end
 
   def view_json
-    # Get the model name
-
-    view = TimurView.create(
-      params[:model_name],
-      params[:tab_name] ? params[:tab_name].to_sym : nil
-    )
-
-    render json: view
+    tab_name = params[:tab_name] ? params[:tab_name].to_sym : nil
+    view = ViewPane.build_view(params[:model_name], params[:project_name], tab_name)
+    render(json: view)
   end
 
   def update
     begin
       status, payload = Magma::Client.instance.update(
+        token,
+        params[:project_name],
         params[:revisions]
       )
       render json: payload

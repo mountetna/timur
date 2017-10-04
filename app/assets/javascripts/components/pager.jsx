@@ -1,67 +1,71 @@
-var Pager = React.createClass({
-  getInitialState: function() {
-    return { editing: false }
-  },
-  rewind_page: function() {
-    if (this.props.current_page > 0) this.props.set_page(this.props.current_page - 1)
-  },
-  advance_page: function() {
-    if (this.props.current_page < this.props.pages-1) this.props.set_page(this.props.current_page + 1)
-  },
-  enter_page: function() {
-    if (parseInt(this.refs.page_edit.value) == this.refs.page_edit.value)
-      this.props.set_page(
-        Math.max( 0, Math.min( this.props.pages - 1, parseInt(this.refs.page_edit.value) - 1 ) )
-      )
-    this.setState({ editing: false })
-  },
-  render: function() {
-    var self = this
-    return <div className="pager">
-            { 
-              (this.props.current_page > 0)
-                ?
-                  <span className="turner active fa fa-chevron-left" onClick={ this.rewind_page } />
-                :
-                  <span className="turner inactive fa fa-chevron-left"/>
-            }
-            <div className="report"
-              onClick={
-                function() {
-                  self.setState({ editing: true })
-                }
-              }
-            >
-              Page { 
-                this.state.editing 
-                  ?
-                    <input 
-                      className="page_edit" 
-                      ref="page_edit" 
-                      type="text" 
-                      defaultValue={ self.props.current_page + 1 }
-                      autoFocus
-                      onBlur={ self.enter_page }
-                      onEnter={ self.enter_page } />
-                  :
-                    this.props.current_page + 1 
-              } of { this.props.pages }
-            </div>
-            { 
-              (this.props.current_page < this.props.pages-1)
-                ? 
-                  <span 
-                    className="turner active fa fa-chevron-right" 
-                    onClick={ this.advance_page }/>
-                :
-                  <span 
-                    className="turner inactive fa fa-chevron-right"/>
-            }
-            {
-              this.props.children
-            }
-           </div>
-  }
-})
+import { Component } from 'react';
 
-module.exports = Pager
+class Pager extends Component {
+  constructor() {
+    super();
+    this.state = { editing: false }
+  }
+
+  rewindPage() {
+    if (this.props.current_page > 1)
+      this.props.set_page(this.props.current_page - 1);
+  }
+
+  advancePage() {
+    if (this.props.current_page < this.props.pages)
+      this.props.set_page(this.props.current_page + 1);
+  }
+
+  enterPage() {
+    let page_edit = parseInt(this.refs.page_edit.value)
+    if (page_edit == this.refs.page_edit.value) {
+      this.props.set_page(
+        Math.max( 1, Math.min( this.props.pages, page_edit ) )
+      )
+    }
+    this.setState({ editing: false })
+  }
+
+  renderReport() {
+    return <div className='report' onClick={ () => this.setState({ editing: true }) } >
+      Page { 
+        this.state.editing 
+          ? <input className='page_edit'
+            ref='page_edit'
+            type='text'
+            defaultValue={ this.props.current_page }
+            autoFocus
+            onBlur={ this.enterPage.bind(this) } 
+            onEnter={ this.enterPage.bind(this) } />
+          : this.props.current_page
+      } of { this.props.pages }
+    </div>
+  }
+
+  renderLeft() {
+    if (this.props.current_page > 1) {
+      return <span className='turner active fa fa-chevron-left' onClick={ this.rewindPage.bind(this) } />
+    } else {
+      return <span className='turner inactive fa fa-chevron-left'/>
+    }
+  }
+
+  renderRight() {
+    if (this.props.current_page < this.props.pages) {
+      return <span className='turner active fa fa-chevron-right' onClick={ this.advancePage.bind(this) }/>
+    } else {
+      return <span className='turner inactive fa fa-chevron-right'/>
+    }
+  }
+
+  render() {
+    return <div className='pager'>
+      { this.renderLeft() }
+      { this.renderReport() }
+      { this.renderRight() }
+      { this.props.children }
+      </div>
+  }
+}
+
+module.exports = Pager;

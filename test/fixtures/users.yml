@@ -1,16 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 admin:
-  ucsf_id: adminUser
   name: admin_name
   email: admin@gmail.com
 
 admin2:
-  ucsf_id: adminUser2
   name: admin2_name
   email: admin2@gmail.com
 
 viewer:
-  ucsf_id: viewerUser
   name: viewer_name
   email: viewer@gmail.com
