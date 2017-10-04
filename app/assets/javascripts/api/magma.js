@@ -87,3 +87,7 @@ export const postRevisions = (revision_data, exchange)=>{
   return exchangePromise;
 };
 
+export const getAnswer = (question, exchange) =>
+  exchange.fetch(Routes.question_json_path(PROJECT_NAME), { question })
+    .then(checkStatus)
+    .then(parseJSON)

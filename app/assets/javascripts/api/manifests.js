@@ -69,7 +69,7 @@ export const getConsignments = (manifests, exchange)=>{
     })
   };
 
-  var exchangePromise = exchange.fetch(Routes.query_json_path(PROJECT_NAME), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.consignment_json_path(PROJECT_NAME), routeOpts)
     .then(checkStatus)
     .then(parseJSON)
 

@@ -61,7 +61,20 @@ class SearchController <  ApplicationController
     end
   end
 
-  def query_json
+  def question_json
+    begin
+      magma = Magma::Client.instance
+      response = magma.query(
+        token, params[:project_name],
+        params[:question]
+      )
+      render json: response.body
+    rescue Magma::ClientError => e
+      render(json: e.body, status: e.status)
+    end
+  end
+
+  def consignment_json
     begin
       result = Hash[
         params[:queries].map do |query|
