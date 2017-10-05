@@ -25,3 +25,9 @@ tmp
 /node_modules
 .DS_Store
 ._*
+
+# Ignore IDE files
+.idea/
+
+# Ignore jest reporting files
+/coverage
