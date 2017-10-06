@@ -11,6 +11,7 @@ import ListSelector from '../list_selector';
 import ButtonBar from '../button_bar';
 import ScatterPlotForm from './scatter_plot_form';
 import Plot from './plotly';
+import MatrixResult from '../manifest/matrix_result'
 
 class Plotter extends Component {
   constructor() {
@@ -18,7 +19,8 @@ class Plotter extends Component {
 
     this.state = {
       // track requested consignments so that another request is not made for the same consignment
-      requestedConsignments: new Set()
+      requestedConsignments: new Set(),
+      selectedPoints: []
     };
   }
 
@@ -56,6 +58,10 @@ class Plotter extends Component {
       updatedSet.delete(selectedManifest.name);
       this.setState({ requestedConsignments: updatedSet });
     }
+
+    if (this.props.selectedPlot != nextProps.selectedPlot) {
+      this.setState({ selectedPoints: [] })
+    }
   }
 
   // select the first manifest
@@ -92,6 +98,15 @@ class Plotter extends Component {
       this.props.selectedPlot.id,
       () => this.props.selectPlot(null)
     );
+  }
+
+  onSelected({ points }) {
+    this.setState({ selectedPoints: points.map(p => p.id) });
+  }
+
+  filterMatrix(consignment, selectedPlot) {
+    return consignment[selectedPlot.configuration.selectedReferenceTable]
+      .filter('row', (row, i, rowName) => this.state.selectedPoints.includes(rowName));
   }
 
   render() {
@@ -149,7 +164,13 @@ class Plotter extends Component {
                   {
                     selectedPlot.is_editable && <ButtonBar className='actions' buttons={ buttons }/>
                   }
-                  <Plot plot={selectedPlot} consignment={consignment || {}} />
+                  <Plot plot={selectedPlot} consignment={consignment} onSelected={this.onSelected.bind(this)} />
+                  {consignment && selectedPlot.configuration.selectedReferenceTable &&
+                    <MatrixResult
+                      matrix={this.filterMatrix(consignment, selectedPlot)}
+                      name={selectedPlot.configuration.selectedReferenceTable}
+                    />
+                  }
                 </div>
               }
             </div>

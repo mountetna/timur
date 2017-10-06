@@ -3,6 +3,8 @@ import Plot from './plotly'
 import ButtonBar from '../button_bar'
 import  InputField from '../manifest/input_field'
 import Vector from '../../vector'
+import Matrix from '../../matrix'
+
 
 class ScatterPlotForm extends Component {
   constructor(props) {
@@ -32,9 +34,11 @@ class ScatterPlotForm extends Component {
       config: {
         showLink: false,
         displayModeBar: true,
-        modeBarButtonsToRemove: ['sendDataToCloud', 'lasso2d', 'toggleSpikelines']
+        modeBarButtonsToRemove: ['sendDataToCloud', 'toggleSpikelines']
       },
-      plotableData: this.plotableDataSeries(props.consignment)
+      plotableData: this.plotableDataSeries(props.consignment),
+      referenceableTables: this.referenceableTables(props.consignment),
+      selectedReferenceTable: this.plot ? this.selectedReferenceTable : null
     };
   }
 
@@ -51,15 +55,40 @@ class ScatterPlotForm extends Component {
       this.setState({ data: [] });
     }
 
-    // update plotable data when consignment changes
+    // update plotable data and referenceable tables when consignment changes
     if (nextProps.consignment != this.props.consignment) {
-      this.setState({ plotableData: nextProps.consignment ? this.plotableDataSeries(nextProps.consignment) : {} });
+      this.setState({
+          plotableData: nextProps.consignment ? this.plotableDataSeries(nextProps.consignment) : {},
+          referenceableTables: nextProps.consignment ? this.referenceableTables(nextProps.consignment) : {}
+      });
     }
 
     // update plot configuration if plot is selected
     if (nextProps.plot) {
       this.setState(this.props.plot.configuration);
     }
+  }
+
+
+  // only allow matrix elements to be selected as tables
+  referenceableTables(consignment = {}) {
+    return Object.keys(consignment).reduce( (acc, key) => {
+      if (consignment[key] instanceof Matrix) {
+        return { ...acc, [key]: consignment[key] };
+      }
+      return acc;
+    },{});
+  }
+
+  setReferenceTable(key) {
+    this.setState({ selectedReferenceTable: key })
+  }
+
+  referenceTableOptions(tables) {
+    const options = Object.keys(this.state.referenceableTables).map(name => (
+      <option key={name} value={name}>{name}</option>
+    ));
+    return [ <option key={null} value={null}></option>, ...options ]
   }
 
   // only allow vector elements to be selected
@@ -157,12 +186,17 @@ class ScatterPlotForm extends Component {
       ...this.state,
       plotType: this.plotType, // add plot type
       data: this.state.data.map(seriesData => { // remove actual consignment data
-        delete seriesData.x
-        delete seriesData.y
-        return seriesData
+        delete seriesData.x;
+        delete seriesData.y;
+        delete seriesData.ids;
+        return seriesData;
       })
     };
-    delete plotConfig.plotableData; // remove UI options
+
+    // remove UI options
+    delete plotConfig.plotableData;
+    delete plotConfig.referenceableTables;
+
 
     if (this.props.plot) { // update a selected plot
       const { manifest_id, id } = this.props.plot;
@@ -188,7 +222,7 @@ class ScatterPlotForm extends Component {
   }
 
   render () {
-    const { layout, plotableData, data } = this.state;
+    const { layout, plotableData, data, referenceableTables } = this.state;
     const { toggleEditing, selectedManifest, selectManifest, manifests, consignment, plot } = this.props;
     
     return (
@@ -245,6 +279,14 @@ class ScatterPlotForm extends Component {
               onChange={this.toggleGrid.bind(this)}
             />
           </div>
+          <div className='input-container'>
+            <label>
+              {'Reference Table: '}
+              <select value={this.state.selectedReferenceTable} onChange={e => this.setReferenceTable(e.target.value)}>
+                {this.referenceTableOptions(referenceableTables)}
+              </select>
+            </label>
+          </div>
           <SeriesForm
             data={plotableData}
             addSeries={this.addSeries.bind(this)}
@@ -269,7 +311,8 @@ class SeriesForm extends Component {
       x: null,
       y: null,
       mode: 'markers',
-      name: ''
+      name: '',
+      hovertext: null
     };
   }
 
@@ -307,6 +350,10 @@ class SeriesForm extends Component {
     this.setState({ y: evt.target.value });
   }
 
+  updateLabels(evt) {
+    this.setState({ hovertext: evt.target.value });
+  }
+
   appliedSeries(plottedSeries) {
     return plottedSeries.map(series => (
       <li key={series.id}>
@@ -339,6 +386,14 @@ class SeriesForm extends Component {
               <option value='markers'>Markers</option>
               <option value='lines'>Lines</option>
               <option value='lines+markers'>Lines and Markers</option>
+            </select>
+          </label>
+        </div>
+        <div className='input-container'>
+          <label>
+            {'Labels: '}
+            <select value={this.state.labels} onChange={this.updateLabels.bind(this)}>
+              {[<option key={null} value={null}></option>, ...this.seriesOptions(this.props.data)]}
             </select>
           </label>
         </div>

@@ -16,15 +16,42 @@ const toPlotlyProps = (plot, consignment) => {
       let plotly = plot.configuration ? { ...plot.configuration } : { ...plot };
 
       // replace insert x and y data from the consignment
-      plotly.data = plotly.data.map(d => ({
-        ...d,
-        x: consignment[d.manifestSeriesX] ? consignment[d.manifestSeriesX].values : [],
-        y: consignment[d.manifestSeriesY] ? consignment[d.manifestSeriesY].values : []
-      }));
+      plotly.data = plotly.data.map(d => {
+        let ids = []
+        if (consignment[d.manifestSeriesY]) {
+          ids = consignment[d.manifestSeriesY].labels
+        } else if (consignment[d.manifestSeriesX]) {
+          ids = consignment[d.manifestSeriesX].labels
+        }
+
+        return {
+          ...d,
+          x: consignment[d.manifestSeriesX] ? consignment[d.manifestSeriesX].values : [],
+          y: consignment[d.manifestSeriesY] ? consignment[d.manifestSeriesY].values : [],
+          ids,
+        }
+      });
+
       return plotly;
     default:
       return plot;
   }
 }
 
-export default ({ plot, consignment }) => <PlotlyComponent { ...toPlotlyProps(plot, consignment) }/>
+class Plot extends Component {
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.plot != nextProps.plot ||
+      (!this.props.consignment && nextProps.consignment)
+    )
+  }
+
+  render() {
+    const { plot, consignment, onSelected } = this.props
+    return (
+      <PlotlyComponent { ...toPlotlyProps(plot, consignment || {}) } onSelected={onSelected}/>
+    )
+  }
+}
+
+export default Plot
