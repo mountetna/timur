@@ -1,5 +1,5 @@
 import { showMessages } from './message_actions';
-import { getTSVForm, getDocuments, postRevisions } from '../api/magma';
+import { getAnswer, getTSVForm, getDocuments, postRevisions } from '../api/magma';
 import { Exchange } from './exchange_actions';
 
 export const addTemplate = (template)=>(
@@ -203,7 +203,10 @@ export const requestAnswer = (question, callback) =>
     getAnswer(question, exchange).then(callback)
   };
 
+const addPredicates = (predicates) => ({ type: 'ADD_PREDICATES', predicates });
+
 export const requestPredicates = () =>
-  requestAnswer('::predicates', (predicates) => {
-    console.log(predicates)
-  });
+  (dispatch) =>
+    requestAnswer('::predicates', (response) => {
+      dispatch(addPredicates(response.predicates));
+    });

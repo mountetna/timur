@@ -8,6 +8,7 @@ import manifestsUI from './manifest_ui_reducer'
 import manifests from './manifests_reducer'
 import consignments from './consignments_reducer'
 import exchanges from './exchanges_reducer'
+import predicates from './predicates_reducer'
 
 export default combineReducers({
   timur,
@@ -18,5 +19,6 @@ export default combineReducers({
   manifestsUI,
   manifests,
   consignments,
-  exchanges
+  exchanges,
+  predicates
 })

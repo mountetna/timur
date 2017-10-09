@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { requestModels } from '../actions/magma_actions'
+import { requestPredicates, requestModels } from '../actions/magma_actions'
 import Magma from '../magma'
 import { Animate } from 'react-move'
 import Predicate from './query_builder/predicate'
@@ -36,6 +36,7 @@ class QueryBuilder extends Component {
 
   componentDidMount() {
     this.props.requestModels();
+    this.props.requestPredicates();
   }
 
   render() {
@@ -51,6 +52,7 @@ class QueryBuilder extends Component {
 export default connect(
   null,
   {
-    requestModels
+    requestModels,
+    requestPredicates
   }
 )(QueryBuilder)

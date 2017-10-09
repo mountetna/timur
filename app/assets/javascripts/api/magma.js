@@ -88,6 +88,14 @@ export const postRevisions = (revision_data, exchange)=>{
 };
 
 export const getAnswer = (question, exchange) =>
-  exchange.fetch(Routes.question_json_path(PROJECT_NAME), { question })
+  exchange.fetch(
+    Routes.question_json_path(PROJECT_NAME), 
+    { 
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: headers('csrf', 'json'),
+      body: JSON.stringify({ question })
+    }
+  )
     .then(checkStatus)
     .then(parseJSON)
