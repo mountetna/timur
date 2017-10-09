@@ -114,7 +114,7 @@ class ManifestView extends Component {
 export default connect(
   (state, props) => ({
     consignment: selectConsignment(state, props.manifest.name),
-    plots: getPlotsByIds(state, props.manifest.plotIds || [])
+    plots: getPlotsByIds(state, props.manifest.plotIds)
   }),
   {
     deleteManifest,
