@@ -12,8 +12,8 @@ Rails.application.routes.draw do
   get 'auth_error'=> 'welcome#auth_error', as: :auth_error
 
   # browse_controller.rb
-  get ':project_name'=> 'browse#index', as: :browse
-  get ':project_name/browse'=> 'browse#index', as: :browse2
+  get ':project_name'=> 'browse#index', as: :project_path
+  get ':project_name/browse'=> 'browse#index', as: :browse_path
   get ':project_name/activity'=> 'browse#activity', as: :activity
   get ':project_name/browse/:model_name/*record_name'=> 'browse#model', as: :browse_model, format: false
   get ':project_name/map'=> 'browse#map', as: :map
