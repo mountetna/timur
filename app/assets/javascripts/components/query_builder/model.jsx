@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { selectModelNames } from '../../selectors/magma'
 
-export default class ModelPredicate extends Component {
+class ModelPredicate extends Component {
   constructor() {
     super()
   }
@@ -18,32 +18,48 @@ export default class ModelPredicate extends Component {
       ...terms,
       ...new_terms
     }
-    let { model, filters, action } = terms
-    let child = (model && filters && action) ? { type: "record", model } : null
+    let { model, filters, verb } = terms
+    let child = (model && filters && verb) ? { type: "record", model } : null
     this.props.update(position, new_terms, child)
   }
 
-  renderArguments(action) {
+  renderArguments(verb) {
     return <div className="arguments">
-      <Selector defaultValue={ action } 
+      <Selector defaultValue={ verb } 
         showNone="disabled" 
-        values={ [ '::all', '::first' ] }
-        onChange={ (action) => this.update({ action }) }/>
+        values={ this.verbs() }
+        onChange={ (verb) => this.update({ verb }) }/>
     </div>
   }
 
+  renderModelSelect(model) {
+    return <Selector defaultValue={ model } 
+      showNone="disabled" 
+      values={ this.props.model_names }
+      onChange={ (model) => this.update({ model, filters: [] }) }/>
+  }
+
   render() {
-    // the model predicate has three terms, model, filters, and action
-    let { position, terms, update } = this.props
-    let { model, filters, action } = terms
+    // the model predicate has three terms, model, filters, and verb
+    let { start, position, terms, update } = this.props
+    let { model, filters, verb } = terms
 
     return <div className='predicate'>
+      {
+        start ? this.renderModelSelect(model) : null
+      }
       { 
         model ? this.renderFilters() : null
       }
       {
-        model ? this.renderArguments(action) : null
+        model ? this.renderArguments(verb) : null
       }
       </div>
   }
 }
+
+export default connect(
+  (state,props) => ({
+    model_names: selectModelNames(state)
+  })
+)(ModelPredicate)
