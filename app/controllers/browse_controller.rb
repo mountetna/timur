@@ -47,12 +47,12 @@ class BrowseController < ApplicationController
 
   def update
     begin
-      status, payload = Magma::Client.instance.update(
+      response = Magma::Client.instance.update(
         token,
         params[:project_name],
         params[:revisions]
       )
-      render json: payload
+      render json: response.body
     rescue Magma::ClientError => e
       render json: e.body, status: e.status
     end
