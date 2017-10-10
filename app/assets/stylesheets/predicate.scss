@@ -1,0 +1,26 @@
+@import "globals";
+
+.predicate {
+  display: inline;
+  select {
+    display: inline;
+    font-family: $value_font;
+    border: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    color: forestgreen;
+    font-weight: bold;
+    font-size: 1.2em;
+    &:hover {
+      background: rgba(#ccc,0.2);
+    }
+  }
+  .filter {
+    display: inline;
+  }
+  .arguments {
+    display: inline;
+  }
+}
