@@ -1,65 +1,52 @@
-import { Component } from 'react'
-import { selectModelNames } from '../../selectors/magma'
+import { Component } from 'react';
+import Predicate from './predicate'
+import { selectModelNames } from '../../selectors/magma';
+import { selectVerbs } from '../../selectors/predicate';
 
 class ModelPredicate extends Component {
-  constructor() {
-    super()
-  }
-
   renderFilters() {
     return <div className="filter">
       +
-    </div>
+    </div>;
   }
 
-  update(new_terms) {
-    let { position, terms } = this.props
-    terms = {
-      ...terms,
-      ...new_terms
-    }
-    let { model, filters, verb } = terms
-    let child = (model && filters && verb) ? { type: "record", model } : null
-    this.props.update(position, new_terms, child)
-  }
+  getChild(verb) {
+    let { terms: { model } } = this.props;
+    let { return_type } = verb;
 
-  renderArguments(verb) {
-    return <div className="arguments">
-      <Selector defaultValue={ verb } 
-        showNone="disabled" 
-        values={ this.verbs() }
-        onChange={ (verb) => this.update({ verb }) }/>
-    </div>
+    return return_type ? { type: 'terminal', return_type } : { type: 'record', model, args: [] };
   }
 
   renderModelSelect(model) {
+    let { model_names, position, update } = this.props;
     return <Selector defaultValue={ model } 
       showNone="disabled" 
-      values={ this.props.model_names }
-      onChange={ (model) => this.update({ model, filters: [] }) }/>
+      values={ model_names }
+      onChange={ (model) => update(position, { model, filters: [], args: [] }) }/>
   }
 
   render() {
-    // the model predicate has three terms, model, filters, and verb
-    let { start, position, terms, update } = this.props
-    let { model, filters, verb } = terms
+    // the model predicate has three terms, model, filters, and args
+    let { verbs, position, terms, update } = this.props;
+    let { model, filters, args, start } = terms;
+    let child = this.getChild.bind(this);
 
-    return <div className='predicate'>
+    return <Predicate
+      { ...{ verbs, args, position, terms, update, child } }
+    >
       {
         start ? this.renderModelSelect(model) : null
       }
       { 
         model ? this.renderFilters() : null
       }
-      {
-        model ? this.renderArguments(verb) : null
-      }
-      </div>
+    </Predicate>
   }
 }
 
 export default connect(
   (state,props) => ({
-    model_names: selectModelNames(state)
+    model_names: selectModelNames(state),
+    verbs: selectVerbs(state,'model')
   })
 )(ModelPredicate)
