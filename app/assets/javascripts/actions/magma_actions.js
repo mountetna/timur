@@ -207,6 +207,6 @@ const addPredicates = (predicates) => ({ type: 'ADD_PREDICATES', predicates });
 
 export const requestPredicates = () =>
   (dispatch) =>
-    requestAnswer('::predicates', (response) => {
+    dispatch(requestAnswer('::predicates', (response) => {
       dispatch(addPredicates(response.predicates));
-    });
+    }));
