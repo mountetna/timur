@@ -1,8 +1,11 @@
-import { Component } from 'react'
-import { requestPredicates, requestModels } from '../actions/magma_actions'
-import Magma from '../magma'
-import { Animate } from 'react-move'
-import Predicate from './query_builder/predicate'
+import { Component } from 'react';
+import { requestPredicates, requestModels } from '../actions/magma_actions';
+import Magma from '../magma';
+import { Animate } from 'react-move';
+import ModelPredicate from './query_builder/model';
+import RecordPredicate from './query_builder/record';
+import ValuePredicate from './query_builder/value';
+import TerminalPredicate from './query_builder/terminal';
 
 class QueryBuilder extends Component {
   constructor() {
@@ -11,7 +14,8 @@ class QueryBuilder extends Component {
       predicates: [
         // initially there is an empty model_list predicate
         {
-          type: "start"
+          type: "model",
+          start: true
         }
       ]
     }
@@ -39,11 +43,37 @@ class QueryBuilder extends Component {
     this.props.requestPredicates();
   }
 
+  renderPredicate(terms, position) {
+    let { type } = terms;
+
+    let props = {
+      type,
+      terms,
+      position,
+      key: position,
+      update: this.updatePredicate.bind(this)
+    };
+
+    switch(type) {
+      case 'model':
+        return <ModelPredicate { ...props }/>
+      case 'record':
+        return <RecordPredicate { ...props }/>
+      case 'file':
+      case 'string':
+      case 'number':
+      case 'date-time':
+        return <ValuePredicate { ...props }/>
+      case 'terminal':
+        return <TerminalPredicate { ...props }/>
+    }
+  }
+
   render() {
     let [ width, height ] = [ 500, 500 ]
     return <div id="query">
       {
-        this.state.predicates.map( (pred, num) => <Predicate type={pred.type} terms={pred} key={num} position={num} update={ this.updatePredicate.bind(this) } /> )
+        this.state.predicates.map(this.renderPredicate.bind(this))
       }
     </div>
   }
