@@ -10,35 +10,35 @@ class ModelPredicate extends Component {
     </div>;
   }
 
-  getChild(verb) {
-    let { terms: { model } } = this.props;
+  getChild(verb, new_args) {
+    let { terms: { model_name } } = this.props;
     let { return_type } = verb;
 
-    return return_type ? { type: 'terminal', return_type } : { type: 'record', model, args: [] };
+    return return_type ? { type: 'terminal', return_type } : { type: 'record', model_name, args: [] };
   }
 
-  renderModelSelect(model) {
+  renderModelSelect(model_name) {
     let { model_names, position, update } = this.props;
-    return <Selector defaultValue={ model } 
+    return <Selector defaultValue={ model_name } 
       showNone="disabled" 
       values={ model_names }
-      onChange={ (model) => update(position, { model, filters: [], args: [] }) }/>
+      onChange={ (model_name) => update(position, { model_name, filters: [], args: [] }) }/>
   }
 
   render() {
-    // the model predicate has three terms, model, filters, and args
+    // the model predicate has three terms, model_name, filters, and args
     let { verbs, position, terms, update } = this.props;
-    let { model, filters, args, start } = terms;
+    let { model_name, filters, args, start } = terms;
     let child = this.getChild.bind(this);
 
     return <Predicate
       { ...{ verbs, args, position, terms, update, child } }
     >
       {
-        start ? this.renderModelSelect(model) : null
+        start ? this.renderModelSelect(model_name) : null
       }
       { 
-        model ? this.renderFilters() : null
+        model_name ? this.renderFilters() : null
       }
     </Predicate>
   }

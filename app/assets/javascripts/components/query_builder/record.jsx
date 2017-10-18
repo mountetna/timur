@@ -1,50 +1,50 @@
 import { Component } from 'react';
 import { selectTemplate } from '../../selectors/magma';
-import Predicate from './predicate'
 import { selectVerbs } from '../../selectors/predicate';
+import Predicate from './predicate';
 
 class RecordPredicate extends Component {
-  getChild(verb) {
-    let { return_type } = verb;
+  getChild(verb, new_args) {
+    let { return_type, args } = verb;
 
-    return return_type ? { type: 'terminal', return_type } : 
-      { type: 'record', model, args: [] };
+    if (return_type) return { type: 'terminal', return_type };
 
-    if (action == '::identifier') return this.getAttributeChild(this.props.identifier)
-    return this.getAttributeChild(action)
+    if (args[0] == '::identifier') return this.getAttributeChild(this.props.identifier);
+
+    // all that remains must be an attribute name
+    return this.getAttributeChild(new_args[0]);
   }
 
   getAttributeChild(attribute_name) {
-    let attribute = this.props.attributes[attribute_name];
-    let { attribute_class, model_name } = attribute;
+    let { terms, attributes } = this.props;
+    let { type, attribute_class, model_name } = attributes[attribute_name];
 
     // depending on the attribute_class and type we return a child
-    console.log("Getting attribute "+attribute_name);
-
     switch(attribute_class) {
       case 'Magma::ChildAttribute':
       case 'Magma::ForeignKeyAttribute':
-        return { type: 'record', model: model_name };
+        return { type: 'record', model_name };
       case 'Magma::TableAttribute':
       case 'Magma::CollectionAttribute':
-        return { type: 'model', filters: [], model: model_name };
+        return { type: 'model', filters: [], model_name, args: [] };
       case 'Magma::DocumentAttribute':
       case 'Magma::ImageAttribute':
-        return { type: 'file', attribute_name };
+        return { type: 'file', attribute_name, model_name: terms.model_name, args: [] };
       case 'Magma::Attribute':
-        return this.getAttributeChild2(attribute);
+        return this.getAttributeChild2(type, attribute_name, terms.model_name);
     }
   }
 
-  getAttributeChild2(attribute) {
-    switch(attribute.type) {
+  getAttributeChild2(type, attribute_name, model_name) {
+    let terms = { model_name, attribute_name, args: [] };
+    switch(type) {
       case 'String':
-        return { type: 'string' };
+        return { ...terms, type: 'string' };
       case 'Integer':
       case 'Float':
-        return { type: 'number' };
+        return { ...terms, type: 'number' };
       case 'DateTime':
-        return { type: 'date-time' };
+        return { ...terms, type: 'date-time' };
     }
   }
 
@@ -63,8 +63,8 @@ class RecordPredicate extends Component {
 export default connect(
   (state,props) => {
     let verbs =  selectVerbs(state,'record');
-    let { attributes, identifier } = selectTemplate(state, props.terms.model);
+    let { attributes, identifier } = selectTemplate(state, props.terms.model_name);
     let attribute_names = Object.keys(attributes).sort();
     return { verbs, attributes, attribute_names, identifier }
   }
-)(RecordPredicate)
+)(RecordPredicate);

@@ -1,51 +1,62 @@
 import { Component } from 'react'
 
 export default class Predicate extends Component {
-  setNewArguments(new_arg, i) {
-    let { position, terms, args, verbs, update } = this.props;
+  setNewArguments(pos, new_arg) {
+    let { position, args, verbs, update } = this.props;
 
-    let new_args = args.slice(0,i).concat(new_arg);
+    let new_args = args.slice(0,pos).concat(new_arg);
     let completed = this.completed(verbs, new_args);
-    let child = completed ? this.props.child(completed) : null;
+    let child = completed ? this.props.child(completed, new_args) : null;
 
-    this.props.update(position, { args: new_args }, child);
-  }
-
-  verbChoices(args,i) {
-    let previous = args.slice(0,i);
-    let verbs = this.props.verbs.filter(verb => verb.matches(previous));
-
-    return verbs.map(verb => verb.choices(args,i,this.props.special)).flatten().sort();
+    update(position, { args: new_args }, child);
   }
 
   completed(verbs, args) {
-    return verbs && args && verbs.find(verb => verb.complete(args));
+    return verbs && args && verbs.find(verb => verb.complete(args, this.props.special));
   }
 
-  renderVerbChoices() {
-    let { verbs, args } = this.props;
-    if (!args) return null;
+  verbChoices(pos) {
+    let { args, special, verbs } = this.props;
+    let previous = args.slice(0,pos);
+    let choices = verbs.filter(
+      verb => verb.matches(previous, special)
+    ).map(
+      verb => verb.choices(pos, special)
+    ).flatten().sort();
 
-    let newChoices = this.verbChoices(args, args.length);
+    return choices;
+  }
+
+  renderInput(type, pos) {
+    return type;
+  }
+
+  verbInput(arg,pos) {
+    let { args } = this.props;
+    let choices = this.verbChoices(pos);
+
+    if (!choices.length) return null;
+
+    if (choices.length == 1) return this.renderInput(choices[0], pos);
+
+    return <Selector defaultValue={ arg } 
+      key={pos}
+      showNone='disabled' 
+      values={ choices }
+      onChange={ this.setNewArguments.bind(this,pos) } />
+  }
+
+  renderVerbInputs() {
+    let { verbs, args } = this.props;
+
+    if (!args) return null;
 
     return <div className="verbs">
       {
-        args.map(
-          (arg,i) =>
-            <Selector defaultValue={ arg } 
-              key={i}
-              showNone='disabled' 
-              values={ this.verbChoices(args,i) }
-              onChange={ (new_arg) => this.setNewArguments(new_arg,i) } />
-        )
+        args.map(this.verbInput.bind(this))
       }
       {
-        newChoices.length ? 
-            <Selector 
-              showNone='disabled' 
-              values={ newChoices }
-              onChange={ (new_arg) => this.setNewArguments(new_arg,args.length) }/>
-          : null
+        this.verbInput(null, args.length)
       }
     </div>
   }
@@ -63,7 +74,7 @@ export default class Predicate extends Component {
         children
       }
       {
-        this.renderVerbChoices()
+        this.renderVerbInputs()
       }
     </div>
   }
