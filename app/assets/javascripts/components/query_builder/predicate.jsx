@@ -36,6 +36,11 @@ export default class Predicate extends Component {
           inputType='float'
           defaultValue={ arg }
           placeholder='Number' />;
+      case 'String':
+        return <SlowTextInput 
+          placeholder={ 'String' }
+          defaultValue={ arg }
+          update={ this.setNewArguments.bind(this, pos) } />;
       default:
         return type;
     }
