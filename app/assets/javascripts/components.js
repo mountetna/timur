@@ -16,7 +16,6 @@ window.AttributeHelpers = require('./components/attributes/attribute_helpers.js'
 window.Attribute = require('./components/attributes/attribute.jsx')
 window.AttributeViewer = require('./components/attributes/attribute_viewer.jsx')
 window.LinkAttribute = require('./components/attributes/link_attribute.jsx')
-window.CollectionAttribute = require('./components/attributes/collection_attribute.jsx')
 
 window.TableAttribute = require('./components/attributes/table_attribute.js.jsx')
 window.DateTimeAttribute = require('./components/attributes/date_time_attribute.js.jsx')

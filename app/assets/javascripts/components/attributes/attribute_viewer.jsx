@@ -3,6 +3,7 @@ import BarGraphAttribute from './bar_graph_attribute';
 import HistogramAttribute from './histogram_attribute';
 import SwarmAttribute from './swarm_attribute';
 import NumericAttribute from './numeric_attribute';
+import CollectionAttribute from './collection_attribute';
 
 var AttributeViewer = React.createClass({
   render: function(){

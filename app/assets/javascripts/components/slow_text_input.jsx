@@ -14,12 +14,13 @@ var SlowTextInput = React.createClass({
     return <input type='text' 
       ref={ function(input) { self.text_input = input } }
       className={ this.props.textClassName }
-      onChange={ 
+      onChange={
         function(e) {
           self.setState({ input_value: e.target.value })
           self.update()
         }
       }
+      onBlur={ this.props.onBlur }
       onKeyPress={ this.props.onKeyPress }
       value={ this.state.input_value == undefined ? this.props.defaultValue : this.state.input_value }
       placeholder={ this.props.placeholder }/>

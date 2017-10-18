@@ -6,7 +6,7 @@ class IntegerAttribute extends Component {
   render() {
     let { mode, value } = this.props;
 
-    return <div className="value">
+    return <div className='value'>
       {
         mode == 'edit' ? this.renderInput() : value
       }
@@ -27,7 +27,7 @@ class IntegerAttribute extends Component {
     return <NumericInput 
         update={ this.update.bind(this) }
         inputType={ inputType }
-        className="full_text"
+        className='full_text'
         placeholder={attribute.placeholder}
         defaultValue={ revision } />
   }
