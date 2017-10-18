@@ -7,6 +7,9 @@
 		font-family: $value_font;
 
 		.delete_link {
+                  &.empty {
+                    color: red;
+                  }
 			&:hover {
 				text-decoration: line-through;
 				color: gray;
