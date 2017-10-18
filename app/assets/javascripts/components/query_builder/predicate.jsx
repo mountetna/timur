@@ -1,11 +1,12 @@
 import { Component } from 'react';
 import NumericInput from '../numeric_input';
+import ListInput from '../list_input';
 
 export default class Predicate extends Component {
   setNewArguments(pos, new_arg) {
     let { position, args, verbs, update } = this.props;
 
-    let new_args = args.slice(0,pos).concat(new_arg);
+    let new_args = args.slice(0,pos).concat([new_arg]);
     let completed = this.completed(verbs, new_args);
     let child = completed ? this.props.child(completed, new_args) : null;
 
@@ -41,6 +42,12 @@ export default class Predicate extends Component {
           placeholder={ 'String' }
           defaultValue={ arg }
           update={ this.setNewArguments.bind(this, pos) } />;
+      case 'Array':
+        return <ListInput
+          values={ arg || [''] } 
+          placeholder='Value'
+          inputType={ this.props.inputType }
+          onChange={ this.setNewArguments.bind(this, pos) } />;
       default:
         return type;
     }
