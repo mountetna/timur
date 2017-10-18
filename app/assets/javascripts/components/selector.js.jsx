@@ -17,7 +17,7 @@ var Selector = React.createClass({
       { none_opt }
       {
         this.props.values.map(function(v) {
-          if ($.isPlainObject(v))
+          if (Object.keys(v).includes('key', 'value', 'text'))
             return <option key={v.key} value={v.value}>{ v.text }</option>;
           else
             return <option key={v} value={v}>{ v }</option>;
