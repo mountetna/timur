@@ -49,6 +49,8 @@ class Verb {
 
     if (my_arg == 'String') return typeof other_arg == 'string';
 
+    if (my_arg == 'Numeric') return typeof other_arg == 'number';
+
     if (Array.isArray(my_arg)) return my_arg.includes(other_arg);
 
     if (my_arg.match(/^::/)) return my_arg == other_arg;
