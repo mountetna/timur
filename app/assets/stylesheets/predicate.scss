@@ -20,6 +20,45 @@
       display: inline;
     }
 
+    .list_input {
+      display: inline;
+      &:before {
+        content: "[";
+      }
+      &:after {
+        content: "]";
+      }
+      .list_item {
+        display: inline;
+        color: forestgreen;
+
+        &:nth-last-child(n+3) {
+          &:after {
+            content: ", "
+          }
+        }
+
+        .add_item {
+          display: inline;
+          cursor: pointer;
+          padding-left: 4px;
+          color: black;
+          font-weight: bold;
+        }
+
+        .delete_link {
+          &.empty {
+            color: red;
+          }
+          &:hover {
+            text-decoration: line-through;
+            color: gray;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
     input {
       @include text_defaults;
       background: none;

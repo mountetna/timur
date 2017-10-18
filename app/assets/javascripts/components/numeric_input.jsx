@@ -32,13 +32,15 @@ export default class NumericInput extends Component {
   }
 
   render() {
-    let { inputType, placeholder, defaultValue, className } = this.props;
+    let { waitTime, onBlur, inputType, placeholder, defaultValue, className } = this.props;
     let filter = inputType == 'int' ? this.intFilter : this.floatFilter;
 
     return <SlowTextInput 
+                waitTime={ waitTime }
                 textClassName={ className }
                 placeholder={ placeholder }
                 onKeyPress={ filter }
+                onBlur={ onBlur }
                 defaultValue={ defaultValue }
                 update={ this.update.bind(this) } />
   }

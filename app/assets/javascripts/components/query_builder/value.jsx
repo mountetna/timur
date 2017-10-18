@@ -12,13 +12,14 @@ class ValuePredicate extends Component {
 
   render() {
     // the model predicate has three terms, model, filters, and action
-    let { attribute_name, update, position, terms, verbs } = this.props;
+    let { attribute_name, update, position, type, terms, verbs } = this.props;
     let { args } = terms;
     let special = () => [];
     let child = this.getChild.bind(this);
+    let inputType = type == 'number' ? 'float' : null;
 
     return <Predicate
-      { ...{position, terms, update, verbs, special, args, child } }
+      { ...{position, terms, update, inputType, verbs, special, args, child } }
     />;
   }
 }

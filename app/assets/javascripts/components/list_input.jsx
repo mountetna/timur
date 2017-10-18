@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import NumericInput from './numeric_input';
 
 export default class ListInput extends Component {
   constructor() {
@@ -62,14 +63,17 @@ export default class ListInput extends Component {
   renderEdit(value) {
     let { inputType, placeholder } = this.props;
     let input;
+    let blur = () => this.setState({ editNewValue: false });
 
     switch(inputType) {
       case 'int':
       case 'float':
         input = <NumericInput 
           update={ this.editValue.bind(this) }
+          waitTime={200}
           inputType={ inputType }
           className='link_text'
+          onBlur={ blur }
           placeholder={placeholder}
           defaultValue={ value } />
         break;
@@ -80,17 +84,17 @@ export default class ListInput extends Component {
           placeholder={ placeholder }
           update={ this.editValue.bind(this) }
           defaultValue={ value }
-          onBlur={ () => this.setState({ editNewValue: false }) }
+          onBlur={ blur }
         />;
     }
 
-    return <div className='collection_item'>
+    return <div className='list_item'>
       { input }
     </div>;
   }
 
   renderAdd() {
-    return <div className='collection_item'>
+    return <div className='list_item'>
       <span className='add_item' onClick={ this.addListItem.bind(this) }>+</span>
     </div>
   }
