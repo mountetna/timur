@@ -4,28 +4,43 @@
   margin-top: 10px;
   .predicate {
     display: inline;
-    border-radius: 5px;
     padding: 4px;
     margin-right: 4px;
+    font-family: $value_font;
+    font-weight: bold;
+    font-size: 1.2em;
+
+    border-radius: 5px;
     background: rgba(red,0.2);
     &.completed {
       background: rgba(green,0.2);
     }
+
     .verbs {
       display: inline;
     }
+
+    input {
+      @include text_defaults;
+      background: none;
+      font-weight: bold;
+      font-size: 1em;
+    }
     select {
       display: inline;
+      text-align: center;
+
       font-family: $value_font;
+      font-weight: bold;
+      font-size: 1em;
+      color: forestgreen;
+
       border: none;
+      background: none;
       -moz-appearance: none;
       -webkit-appearance: none;
       appearance: none;
-      background: none;
-      color: forestgreen;
-      font-weight: bold;
-      font-size: 1.2em;
-      text-align: center;
+
       &:hover {
         text-decoration: underline;
       }

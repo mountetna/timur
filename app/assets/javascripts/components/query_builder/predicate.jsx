@@ -1,4 +1,5 @@
-import { Component } from 'react'
+import { Component } from 'react';
+import NumericInput from '../numeric_input';
 
 export default class Predicate extends Component {
   setNewArguments(pos, new_arg) {
@@ -27,8 +28,17 @@ export default class Predicate extends Component {
     return choices;
   }
 
-  renderInput(type, pos) {
-    return type;
+  renderInput(type, arg, pos) {
+    switch(type) {
+      case 'Numeric':
+        return <NumericInput 
+          update={ this.setNewArguments.bind(this, pos) }
+          inputType='float'
+          defaultValue={ arg }
+          placeholder='Number' />;
+      default:
+        return type;
+    }
   }
 
   verbInput(arg,pos) {
@@ -37,7 +47,7 @@ export default class Predicate extends Component {
 
     if (!choices.length) return null;
 
-    if (choices.length == 1) return this.renderInput(choices[0], pos);
+    if (choices.length == 1) return this.renderInput(choices[0], args[pos], pos);
 
     return <Selector defaultValue={ arg } 
       key={pos}
@@ -51,7 +61,7 @@ export default class Predicate extends Component {
 
     if (!args) return null;
 
-    return <div className="verbs">
+    return <div className='verbs'>
       {
         args.map(this.verbInput.bind(this))
       }
