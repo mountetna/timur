@@ -7,7 +7,7 @@ import { PlotFactory, Plot as PlotMaker } from '../../selectors/plot'
 import { getPlotForm } from '../../selectors/plot_form'
 
 
-class ScatterPlotForm extends Component {
+class PlotForm extends Component {
   constructor(props) {
     super(props);
 
@@ -224,7 +224,7 @@ class ScatterPlotForm extends Component {
           <legend>{plotForm.plotTypeLabel}</legend>
           {this.formFields(plotForm, consignment)}
         </fieldset>
-        <SeriesForm
+        <DataRefForm
           dataRefs={this.state.data}
           addDataRef={this.addDataRef.bind(this)}
           removeDataRef={this.removeDataRef.bind(this)}
@@ -244,7 +244,7 @@ class ScatterPlotForm extends Component {
   }
 }
 
-class SeriesForm extends Component {
+class DataRefForm extends Component {
   constructor(props) {
     super(props);
 
@@ -303,4 +303,4 @@ class SeriesForm extends Component {
   }
 }
 
-export default ScatterPlotForm;
+export default PlotForm;

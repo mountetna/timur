@@ -9,7 +9,7 @@ import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest';
 import ListSelector from '../list_selector';
 import ButtonBar from '../button_bar';
-import ScatterPlotForm from './scatter_plot_form';
+import PlotForm from './plot_form';
 import Plotly from './plotly';
 import MatrixResult from '../manifest/matrix_result'
 
@@ -146,7 +146,7 @@ class Plotter extends Component {
           items={ plots }/>
         </div>
           {isEditing ? (
-            <ScatterPlotForm className='plot-form'
+            <PlotForm className='plot-form'
               consignment={consignment}
               selectedManifest={selectedManifest}
               selectManifest={selectManifest}
