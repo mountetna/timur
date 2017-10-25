@@ -1,6 +1,6 @@
 import { reviseDocument } from '../../actions/magma_actions';
 import { Component } from 'react';
-import NumericInput from '../numeric_input';
+import NumericInput from '../inputs/numeric_input';
 
 class IntegerAttribute extends Component {
   render() {

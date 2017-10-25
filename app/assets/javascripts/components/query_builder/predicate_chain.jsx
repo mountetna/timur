@@ -24,6 +24,7 @@ export default class PredicateChain extends Component {
   }
 
   renderPredicate(terms, position) {
+    let { terminal_type } = this.props;
     let { type } = terms;
 
     let props = {
@@ -44,7 +45,7 @@ export default class PredicateChain extends Component {
       case 'date-time':
         return <ValuePredicate { ...props }/>
       case 'terminal':
-        return <TerminalPredicate { ...props }/>
+        return <TerminalPredicate terminal_type={ terminal_type } { ...props }/>
     }
   }
 

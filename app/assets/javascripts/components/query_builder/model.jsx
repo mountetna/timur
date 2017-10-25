@@ -3,6 +3,7 @@ import Predicate from './predicate';
 import PredicateChainSet from './predicate_chain_set';
 import { selectModelNames } from '../../selectors/magma';
 import { selectVerbs } from '../../selectors/predicate';
+import SelectInput from '../inputs/select_input';
 
 class ModelPredicate extends Component {
   updateFilters(filters) {
@@ -26,6 +27,7 @@ class ModelPredicate extends Component {
     return <div className='filters'>
       <PredicateChainSet
         chains={ filters }
+        terminal_type='TrueClass'
         update={ this.updateFilters.bind(this) }/>
       <span onClick={ this.addFilter.bind(this) }
         title='New filter'
@@ -42,7 +44,7 @@ class ModelPredicate extends Component {
 
   renderModelSelect(model_name) {
     let { model_names, update } = this.props;
-    return <Selector defaultValue={ model_name } 
+    return <SelectInput defaultValue={ model_name } 
       showNone='disabled' 
       values={ model_names }
       onChange={ (model_name) => update({ model_name, filters: [], args: [] }) }/>

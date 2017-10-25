@@ -1,6 +1,8 @@
 import { Component } from 'react';
-import NumericInput from '../numeric_input';
-import ListInput from '../list_input';
+import NumericInput from '../inputs/numeric_input';
+import SlowTextInput from '../inputs/slow_text_input';
+import ListInput from '../inputs/list_input';
+import SelectInput from '../inputs/select_input';
 
 export default class Predicate extends Component {
   setNewArguments(pos, new_arg) {
@@ -10,7 +12,7 @@ export default class Predicate extends Component {
     let completed = this.completed(verbs, new_args);
     let child = completed ? this.props.child(completed, new_args) : null;
 
-    update({ args: new_args }, child);
+    update({ args: new_args, completed: !!completed }, child);
   }
 
   completed(verbs, args) {
@@ -26,7 +28,7 @@ export default class Predicate extends Component {
       verb => verb.choices(pos, special)
     ).flatten().sort();
 
-    return choices;
+    return Array.from(new Set(choices));
   }
 
   renderInput(type, arg, pos) {
@@ -56,14 +58,20 @@ export default class Predicate extends Component {
   verbInput(arg,pos) {
     let { args } = this.props;
     let choices = this.verbChoices(pos);
+    let showNone = 'disabled';
 
     if (!choices.length) return null;
 
     if (choices.length == 1) return this.renderInput(choices[0], args[pos], pos);
 
-    return <Selector defaultValue={ arg } 
+
+    if (choices.some(choice => choice==null)) showNone='enabled';
+
+    choices = choices.filter(_=>_);
+
+    return <SelectInput defaultValue={ arg } 
       key={pos}
-      showNone='disabled' 
+      showNone={ showNone }
       values={ choices }
       onChange={ this.setNewArguments.bind(this,pos) } />
   }

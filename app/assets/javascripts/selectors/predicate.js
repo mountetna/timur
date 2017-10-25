@@ -8,7 +8,7 @@ class Verb {
 
   matches(other_args, special) {
     // the null match is a special case
-    if (other_args.length == 0 && this.args[0] == null) return true;
+    //if (other_args.length == 0 && this.args[0] == null) return true;
 
     // verify our length
     if (other_args.length > this.args.length) return false;
@@ -28,7 +28,9 @@ class Verb {
   choices(pos, special) {
     let my_arg = this.args[pos];
 
-    if (!my_arg) return [];
+    if (pos >= this.args.length) return [];
+
+    if (my_arg == null) return [ null ];
 
     if (Array.isArray(my_arg)) return my_arg;
 
@@ -43,7 +45,7 @@ class Verb {
   }
 
   matchArg(other_arg, my_arg, special) {
-    if (!my_arg) return other_arg == undefined;
+    if (my_arg == null) return other_arg == null || other_arg == undefined;
 
     if (my_arg == 'Array') return Array.isArray(other_arg);
 

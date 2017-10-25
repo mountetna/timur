@@ -1,6 +1,6 @@
 import { reviseDocument } from '../../actions/magma_actions';
 import { Component } from 'react';
-import ListInput from '../list_input';
+import ListInput from '../inputs/list_input';
 
 class CollectionAttribute extends Component {
   update(new_links) {

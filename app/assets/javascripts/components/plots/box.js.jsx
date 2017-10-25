@@ -1,3 +1,5 @@
+import SelectInput from '../inputs/select_input';
+
 var BoxPlot = React.createClass({
   render: function() {
     var self = this;
@@ -22,11 +24,11 @@ var BoxPlotConfigure = React.createClass({
     if (this.props.mode == 'plot') return null;
 
     return <div className="configure">
-        <Selector showNone="disabled" name="series" 
+        <SelectInput showNone="disabled" name="series" 
           values={ this.props.saved_series }/>
         Mappings:
         
-        <Selector showNone="disabled" name="x" 
+        <SelectInput showNone="disabled" name="x" 
           values={ this.props.saved_mappings }/>
       </div>
   }
