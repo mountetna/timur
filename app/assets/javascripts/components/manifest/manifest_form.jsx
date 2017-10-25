@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import InputField from './input_field';
+import InputField from '../form_inputs/input_field';
 import ButtonBar from '../button_bar';
-import TextField from './text_field';
+import TextField from '../form_inputs/text_field';
 import ManifestAccess from './manifest_access';
 import ManifestElementForm from './manifest_element_form';
 import { v4 } from 'node-uuid';

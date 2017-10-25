@@ -1,6 +1,6 @@
 import React from 'react'
 
-const InputField = ({ type, placeholder, label, onChange, value }) => {
+const InputField = ({ type, placeholder, label, onChange, value, checked }) => {
   const id = label.split(' ').join('_') + '_' + type
 
   return (
@@ -12,7 +12,9 @@ const InputField = ({ type, placeholder, label, onChange, value }) => {
         <input id={id} type={type}
           value={value}
           placeholder={placeholder}
-          onChange={(e) => onChange(e.target.value)} />
+          onChange={(e) => onChange(e.target.value)}
+          checked={checked}
+        />
       </div>
     </div>
   )
