@@ -48,22 +48,10 @@ class PlotForm extends Component {
 
   handleSave() {
     if (this.props.plot) {
-      this.props.savePlot(
-        {...this.state},
-        (plot) => {
-          this.props.toggleEditing();
-          this.props.selectPlot(plot.id);
-        }
-      );
+      this.props.savePlot({ ...this.state });
     }
-    else { // create a new plot
-      this.props.saveNewPlot(
-        {...this.state},
-        (plot) => {
-          this.props.toggleEditing();
-          this.props.selectPlot(plot.id);
-        }
-      );
+    else {
+      this.props.saveNewPlot({ ...this.state });
     }
   }
 

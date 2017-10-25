@@ -93,10 +93,7 @@ class Plotter extends Component {
   }
 
   handleDelete() {
-    this.props.deletePlot(
-      this.props.selectedPlot,
-      () => this.props.selectPlot(null)
-    );
+    this.props.deletePlot(this.props.selectedPlot);
   }
 
   onSelected({ points }) {
@@ -152,7 +149,6 @@ class Plotter extends Component {
               saveNewPlot={saveNewPlot}
               manifests={plotableManifests}
               toggleEditing={toggleEditing}
-              selectPlot={this.selectPlot.bind(this)}
               plot={selectedPlot}
               savePlot={savePlot}
             />

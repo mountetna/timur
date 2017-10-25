@@ -1,19 +1,22 @@
 import { showMessages } from './message_actions'
 import { createPlot, destroyPlot, updatePlot } from '../api/plots'
+import { getSelectedPlotId } from '../selectors/plot'
 
 // remove a plot from the store
-const removePlot = (id, manifestId) => ({
+const removePlot = (id) => ({
   type: 'REMOVE_PLOT',
   id
 });
 
 // Delete a plot from the database and the store
-export const deletePlot = (plot, callback = () => {}) =>
-  (dispatch) => {
+export const deletePlot = (plot) =>
+  (dispatch, getState) => {
     destroyPlot(plot)
       .then(() => {
         dispatch(removePlot(plot.id));
-        callback(plot);
+        if (getSelectedPlotId(getState()) == plot.id) {
+          dispatch(selectPlot(null))
+        }
       })
   }
 
@@ -32,22 +35,25 @@ export const addPlot = (plot) => ({
   plot
 })
 
-export const savePlot = (plot, callback = () => {}) =>
+export const savePlot = (plot) =>
   (dispatch) => {
     updatePlot(plot)
       .then(plot => {
         dispatch(addPlot(plot));
-        callback(plot);
+        dispatch(toggleEditing(false));
+        dispatch(toggleEditing(false));
+        dispatch(selectPlot(plot.id));
       })
   }
 
 // Post to create new plot and save in the store
-export const saveNewPlot = (plot, callback = () => {}) =>
+export const saveNewPlot = (plot) =>
   (dispatch) => {
     createPlot(plot)
       .then(plot => {
         dispatch(addPlot(plot));
-        callback(plot);
+        dispatch(toggleEditing(false));
+        dispatch(selectPlot(plot.id));
       })
       .catch(e => {
         e.response.json()
