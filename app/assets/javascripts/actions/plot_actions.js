@@ -44,19 +44,9 @@ export const loadPlot = (plot) =>
     dispatch(addPlot(plotWithEditFlag));
   }
 
-const plotToPayload = (plot) => {
-  const { layout: { title }, plotType } = plot;
-  return {
-    name: title,
-    plot_type: plotType,
-    configuration: plot
-  };
-};
-
-export const savePlot = (manifest_id, id, plot, callback = () => {}) =>
+export const savePlot = (manifestId, plotId, plot, callback = () => {}) =>
   (dispatch) => {
-    const payload = plotToPayload(plot);
-    updatePlot(manifest_id, id, payload)
+    updatePlot(manifestId, plotId, plot)
       .then(plot => {
         dispatch(loadPlot(plot));
         callback(plot);
@@ -66,8 +56,7 @@ export const savePlot = (manifest_id, id, plot, callback = () => {}) =>
 // Post to create new plot and save in the store
 export const saveNewPlot = (manifestId, plot, callback = () => {}) =>
   (dispatch) => {
-    const payload = plotToPayload(plot)
-    createPlot(manifestId, payload)
+    createPlot(manifestId, plot)
       .then(plot => {
         dispatch(addPlot({ ...plot, is_editable: true }));
         callback(plot);

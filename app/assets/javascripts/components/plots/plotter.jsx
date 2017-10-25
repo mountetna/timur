@@ -147,7 +147,7 @@ class Plotter extends Component {
         </div>
           {isEditing ? (
             <ScatterPlotForm className='plot-form'
-              consignment={consignment || {}}
+              consignment={consignment}
               selectedManifest={selectedManifest}
               selectManifest={selectManifest}
               saveNewPlot={saveNewPlot}
@@ -162,7 +162,7 @@ class Plotter extends Component {
               {selectedPlot &&
                 <div>
                   {
-                    selectedPlot.is_editable && <ButtonBar className='actions' buttons={ buttons }/>
+                    selectedPlot.editable && <ButtonBar className='actions' buttons={ buttons }/>
                   }
                   <Plotly plot={selectedPlot} consignment={consignment} onSelected={this.onSelected.bind(this)} />
                   {consignment && selectedPlot.selectedReferenceTable &&
