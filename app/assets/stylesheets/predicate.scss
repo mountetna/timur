@@ -2,6 +2,12 @@
 
 #query { 
   margin-top: 10px;
+  .chainset {
+    display: inline;
+    .chain {
+      display: inline;
+    }
+  }
   .predicate {
     display: inline;
     padding: 4px;
@@ -11,9 +17,25 @@
     font-size: 1.2em;
 
     border-radius: 5px;
-    background: rgba(red,0.2);
+    background: mix(red,white,20%);
     &.completed {
-      background: rgba(green,0.2);
+      background: mix(green,white,20%);
+    }
+
+    .filters {
+      display: inline;
+      .chainset {
+        font-size: 0.667em;
+      }
+      .new {
+        cursor: pointer;
+      }
+      &:before {
+        content: "[";
+      }
+      &:after {
+        content: "]";
+      }
     }
 
     .verbs {

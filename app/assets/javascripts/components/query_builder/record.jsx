@@ -23,7 +23,7 @@ class RecordPredicate extends Component {
     switch(attribute_class) {
       case 'Magma::ChildAttribute':
       case 'Magma::ForeignKeyAttribute':
-        return { type: 'record', model_name };
+        return { type: 'record', model_name, args: [] };
       case 'Magma::TableAttribute':
       case 'Magma::CollectionAttribute':
         return { type: 'model', filters: [], model_name, args: [] };
@@ -49,13 +49,13 @@ class RecordPredicate extends Component {
   }
 
   render() {
-    let { attribute_names, update, position, terms, verbs } = this.props;
+    let { attribute_names, update, terms, verbs } = this.props;
     let { args } = terms;
     let special = (arg) => arg == 'attribute_name' ? attribute_names : [];
     let child = this.getChild.bind(this);
 
     return <Predicate
-      { ...{position, terms, update, verbs, special, args, child } }
+      { ...{terms, update, verbs, special, args, child } }
     />;
   }
 }

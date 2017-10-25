@@ -9,17 +9,22 @@ class ValuePredicate extends Component {
 
     if (return_type) return { type: 'terminal', return_type };
   }
+  getInputType(type) {
+    if (type == 'number') return 'float';
+
+    return null;
+  }
 
   render() {
     // the model predicate has three terms, model, filters, and action
-    let { attribute_name, update, position, type, terms, verbs } = this.props;
+    let { attribute_name, update, type, terms, verbs } = this.props;
     let { args } = terms;
     let special = () => [];
     let child = this.getChild.bind(this);
-    let inputType = type == 'number' ? 'float' : null;
+    let inputType = this.getInputType(type);
 
     return <Predicate
-      { ...{position, terms, update, inputType, verbs, special, args, child } }
+      { ...{terms, update, inputType, verbs, special, args, child } }
     />;
   }
 }
