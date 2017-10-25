@@ -4,13 +4,13 @@ import ListInput from '../list_input';
 
 export default class Predicate extends Component {
   setNewArguments(pos, new_arg) {
-    let { position, args, verbs, update } = this.props;
+    let { args, verbs, update } = this.props;
 
     let new_args = args.slice(0,pos).concat([new_arg]);
     let completed = this.completed(verbs, new_args);
     let child = completed ? this.props.child(completed, new_args) : null;
 
-    update(position, { args: new_args }, child);
+    update({ args: new_args }, child);
   }
 
   completed(verbs, args) {
