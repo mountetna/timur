@@ -1,21 +1,19 @@
 import { showMessages } from './message_actions'
 import { createPlot, destroyPlot, updatePlot } from '../api/plots'
-import { manifestById } from '../selectors/manifest'
 
 // remove a plot from the store
 const removePlot = (id, manifestId) => ({
   type: 'REMOVE_PLOT',
-  id,
-  manifestId
+  id
 });
 
 // Delete a plot from the database and the store
-export const deletePlot = (manifestId, plotId, callback = () => {}) =>
+export const deletePlot = (plot, callback = () => {}) =>
   (dispatch) => {
-    destroyPlot(manifestId, plotId)
+    destroyPlot(plot)
       .then(() => {
-        dispatch(removePlot(plotId, manifestId));
-        callback(plotId);
+        dispatch(removePlot(plot.id));
+        callback(plot);
       })
   }
 
@@ -29,36 +27,26 @@ export const toggleEditing = (isEditing) => ({
   isEditing
 })
 
-const addPlot = (plot) => ({
+export const addPlot = (plot) => ({
   type: 'ADD_PLOT',
   plot
 })
 
-// Add a plot to the store
-export const loadPlot = (plot) =>
-  (dispatch, getState) => {
-    // is_editable flag equals the manifest is_editable flag
-    const { is_editable } = manifestById(getState(), plot.manifest_id);
-    const plotWithEditFlag =  { ...plot, is_editable };
-
-    dispatch(addPlot(plotWithEditFlag));
-  }
-
-export const savePlot = (manifestId, plotId, plot, callback = () => {}) =>
+export const savePlot = (plot, callback = () => {}) =>
   (dispatch) => {
-    updatePlot(manifestId, plotId, plot)
+    updatePlot(plot)
       .then(plot => {
-        dispatch(loadPlot(plot));
+        dispatch(addPlot(plot));
         callback(plot);
       })
   }
 
 // Post to create new plot and save in the store
-export const saveNewPlot = (manifestId, plot, callback = () => {}) =>
+export const saveNewPlot = (plot, callback = () => {}) =>
   (dispatch) => {
-    createPlot(manifestId, plot)
+    createPlot(plot)
       .then(plot => {
-        dispatch(addPlot({ ...plot, is_editable: true }));
+        dispatch(addPlot(plot));
         callback(plot);
       })
       .catch(e => {
@@ -66,5 +54,4 @@ export const saveNewPlot = (manifestId, plot, callback = () => {}) =>
           .then(json => dispatch(showMessages(json.errors)))
       })
   }
-
 

@@ -94,8 +94,7 @@ class Plotter extends Component {
 
   handleDelete() {
     this.props.deletePlot(
-      this.props.selectedManifest.id,
-      this.props.selectedPlot.id,
+      this.props.selectedPlot,
       () => this.props.selectPlot(null)
     );
   }

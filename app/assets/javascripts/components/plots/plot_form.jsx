@@ -49,9 +49,7 @@ class PlotForm extends Component {
   handleSave() {
     if (this.props.plot) {
       this.props.savePlot(
-        this.state.manifestId,
-        this.state.id,
-        this.props.plot.serialize(this.state),
+        {...this.state},
         (plot) => {
           this.props.toggleEditing();
           this.props.selectPlot(plot.id);
@@ -60,8 +58,7 @@ class PlotForm extends Component {
     }
     else { // create a new plot
       this.props.saveNewPlot(
-        this.state.manifestId,
-        (new PlotMaker({plot_type: this.state.plotType})).serialize(this.state),
+        {...this.state},
         (plot) => {
           this.props.toggleEditing();
           this.props.selectPlot(plot.id);

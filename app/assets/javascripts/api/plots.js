@@ -21,18 +21,19 @@ export const plotIndexUrl = (queryParams) => {
   return path;
 };
 
-export const createPlot = (manifestId, plot) =>
-  fetch(Routes.manifests_plots_create_path(PROJECT_NAME, manifestId), {
+export const createPlot = (plot) =>
+  fetch(Routes.manifests_plots_create_path(PROJECT_NAME, plot.manifestId), {
     credentials: 'same-origin',
     method: 'POST',
     headers: headers('json', 'csrf'),
-    body: JSON.stringify(plot)
+    body: JSON.stringify(plotToJson(plot))
   })
     .then(checkStatus)
     .then(parseJSON)
+    .then(plotFromJson)
 
-export const destroyPlot = (manifestId, plotId) =>
-  fetch(Routes.manifests_plots_destroy_path(PROJECT_NAME, manifestId, plotId), {
+export const destroyPlot = (plot) =>
+  fetch(Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.manifestId, plot.id), {
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     method: 'DELETE'
@@ -40,12 +41,61 @@ export const destroyPlot = (manifestId, plotId) =>
     .then(checkStatus)
     .then(parseJSON)
 
-export const updatePlot = (manifestId, plotId, plot) =>
-  fetch(Routes.manifests_plots_update_path(PROJECT_NAME, manifestId, plotId), {
+export const updatePlot = (plot) =>
+  fetch(Routes.manifests_plots_update_path(PROJECT_NAME, plot.manifestId, plot.id), {
     credentials: 'same-origin',
     method: 'PUT',
     headers: headers('json', 'csrf'),
-    body: JSON.stringify(plot)
+    body: JSON.stringify(plotToJson(plot))
   })
     .then(checkStatus)
     .then(parseJSON)
+    .then(plotFromJson)
+
+
+
+// data transformation of api JSON plot object for the data store
+export const plotFromJson = (plotJSON, editable = true) => {
+  const transformedPlot = {
+    plotType: plotJSON.plot_type,
+    id: plotJSON.id,
+    editable,
+    manifestId: plotJSON.manifest_id,
+    name: plotJSON.name
+  };
+
+  // add all fields in configuration to the top level object
+  if (plotJSON.configuration) {
+    Object.entries(plotJSON.configuration).map(([ key, value ]) => {
+      transformedPlot[key] = value;
+    });
+  }
+
+  return transformedPlot;
+}
+
+// transform data store plot object to plot JSON for creating and updating plots
+const plotToJson = (plot) => {
+
+  // data fields for all plot types
+  const plotFields = ['id', 'name', 'plotType']
+
+  // configurable plot data
+  const configuration = Object.entries(plot).reduce((config, [ key, value ]) => {
+    if (plotFields.includes(key)) {
+      return config;
+    }
+    return {
+      ...config,
+      [key]: value
+    };
+  }, {});
+
+  return {
+    id: plot.id,
+    name: plot.name,
+    plot_type: plot.plotType,
+    configuration
+  };
+}
+
