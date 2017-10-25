@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const InputField = ({ type, placeholder, label, onChange, value, checked }) => {
-  const id = label.split(' ').join('_') + '_' + type
+  const id = label.split(' ').join('_') + '_' + type;
 
   return (
     <div className='input-container'>
@@ -18,6 +18,6 @@ const InputField = ({ type, placeholder, label, onChange, value, checked }) => {
       </div>
     </div>
   )
-}
+};
 
-export default InputField
+export default InputField;

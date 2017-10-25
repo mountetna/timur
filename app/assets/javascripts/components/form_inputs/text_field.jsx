@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const TextField = ({ label, onChange, value }) => {
-  const id = label.split(' ').join('_') + '_' + 'text'
+  const id = label.split(' ').join('_') + '_' + 'text';
 
   return (
     <div className='input-container'>
@@ -15,7 +15,7 @@ const TextField = ({ label, onChange, value }) => {
         </textarea>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TextField
+export default TextField;
