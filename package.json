@@ -42,6 +42,7 @@
     "redux-logger": "^2.8.1"
   },
   "scripts": {
-    "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./app/assets/javascripts/** "
+    "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./app/assets/javascripts/** ",
+    "lintfile": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js "
   }
 }
