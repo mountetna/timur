@@ -4,6 +4,10 @@ import SlowTextInput from '../inputs/slow_text_input';
 import ListInput from '../inputs/list_input';
 import SelectInput from '../inputs/select_input';
 
+// This is the base Predicate class which renders a predicate, used by
+// specific-predicate types. Mostly this is responsible for figuring out
+// what input components (selectors, lists, etc.) to draw for the given verb
+// and argument sets
 export default class Predicate extends Component {
   setInputArgument(pos, new_arg) {
     switch(new_arg) {

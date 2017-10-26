@@ -3,6 +3,7 @@ import { selectVerbs } from '../../selectors/predicate';
 import { selectTemplate } from '../../selectors/magma';
 import Predicate from './predicate';
 
+// A Value predicate, mostly sets the terminal type 
 class ValuePredicate extends Component {
   getChildren(verb, new_args) {
     let { return_type, args } = verb;
