@@ -3,6 +3,11 @@
 #query { 
   margin-top: 10px;
   line-height: 250%;
+  .query {
+    font-family: $value_font;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
   .chainset {
     display: inline;
     .chain {

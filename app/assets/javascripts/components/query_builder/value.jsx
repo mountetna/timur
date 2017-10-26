@@ -4,11 +4,14 @@ import { selectTemplate } from '../../selectors/magma';
 import Predicate from './predicate';
 
 class ValuePredicate extends Component {
-  getChild(verb, new_args) {
+  getChildren(verb, new_args) {
     let { return_type, args } = verb;
 
-    if (return_type) return { type: 'terminal', return_type };
+    if (return_type) return [ { type: 'terminal', return_type } ];
+
+    return [];
   }
+
   getInputType(type) {
     if (type == 'number') return 'float';
 
@@ -20,11 +23,11 @@ class ValuePredicate extends Component {
     let { attribute_name, update, type, terms, verbs } = this.props;
     let { args } = terms;
     let special = () => [];
-    let child = this.getChild.bind(this);
+    let getChildren = this.getChildren.bind(this);
     let inputType = this.getInputType(type);
 
     return <Predicate
-      { ...{terms, update, inputType, verbs, special, args, child } }
+      { ...{terms, update, inputType, verbs, special, args, getChildren } }
     />;
   }
 }

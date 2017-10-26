@@ -5,14 +5,18 @@ import { Animate } from 'react-move';
 import PredicateChainSet from './query_builder/predicate_chain_set';
 
 const predicateArray = (predicate) => {
-  let { type, filters, model_name, args } = predicate;
+  let { type, filters, model_name, args, start } = predicate;
   switch(type) {
     case 'model':
-      let ary = [ model_name ]
+      let ary = [];
+      if (start) ary.push(model_name);
       if (filters.length) ary = ary.concat( filters.map(chainArray) )
       return ary.concat(args);
     case 'terminal':
       return [];
+    case 'record':
+      if (Array.isArray(args[0])) return [ args[0].map(chainArray) ];
+      // let this continue through to default
     default:
       return args.filter(x=>x!=null);
   }
@@ -89,6 +93,7 @@ class QueryBuilder extends Component {
 
   render() {
     let { query, shown } = this.state;
+    console.log(query);
     return <div id='query'>
       <div className='visibility'>
         <button onClick={ this.toggleShown.bind(this) }>

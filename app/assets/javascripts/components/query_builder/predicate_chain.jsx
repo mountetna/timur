@@ -5,7 +5,7 @@ import ValuePredicate from './value';
 import TerminalPredicate from './terminal';
 
 export default class PredicateChain extends Component {
-  updatePredicate(position, predicate_update, child=null) {
+  updatePredicate(position, predicate_update, ...children) {
     let { predicates, update } = this.props;
 
     let new_predicates = [ ...predicates ];
@@ -15,9 +15,8 @@ export default class PredicateChain extends Component {
       ...predicate_update
     };
 
-    if (child) {
-      new_predicates = new_predicates.slice(0,position+1);
-      new_predicates.push(child);
+    if (children.length) {
+      new_predicates = new_predicates.slice(0,position+1).concat(children)
     }
 
     update(new_predicates);
