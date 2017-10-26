@@ -7,7 +7,6 @@ import rootReducer from '../reducers'
 import Manifests from './manifest/manifests'
 import TimurNav from './timur_nav'
 import ModelMap from './model_map'
-import QueryBuilder from './query_builder'
 import Search from './search/search'
 import Plotter from './plots/plotter'
 
@@ -55,7 +54,7 @@ var Timur = React.createClass({
         component = <Browser {...browser_props} />;
         break;
       case 'map':
-        component = <QueryBuilder />;
+        component = <ModelMap />;
         break;
       case 'plots':
         component = <Plotter {...plots_props}/>;

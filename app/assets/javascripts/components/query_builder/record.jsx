@@ -23,20 +23,20 @@ class RecordPredicate extends Component {
     switch(attribute_class) {
       case 'Magma::ChildAttribute':
       case 'Magma::ForeignKeyAttribute':
-        return { type: 'record', model_name, args: [] };
+        return { type: 'record', model_name, args: [ null] };
       case 'Magma::TableAttribute':
       case 'Magma::CollectionAttribute':
         return { type: 'model', filters: [], model_name, args: [] };
       case 'Magma::DocumentAttribute':
       case 'Magma::ImageAttribute':
-        return { type: 'file', attribute_name, model_name: terms.model_name, args: [] };
+        return { type: 'file', attribute_name, model_name: terms.model_name, args: [ null] };
       case 'Magma::Attribute':
         return this.getAttributeChild2(type, attribute_name, terms.model_name);
     }
   }
 
   getAttributeChild2(type, attribute_name, model_name) {
-    let terms = { model_name, attribute_name, args: [] };
+    let terms = { model_name, attribute_name, args: [ null ] };
     switch(type) {
       case 'String':
         return { ...terms, type: 'string' };
