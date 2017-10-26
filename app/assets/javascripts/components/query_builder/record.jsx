@@ -56,11 +56,11 @@ class RecordPredicate extends Component {
     return [
       { type: TYPE_PREDICATES[type], model_name, attribute_name, args: [ null ], completed: true },
       { type: 'terminal', return_type: type }
-    ]
+    ];
   }
 
   updateVectors(vectors) {
-    this.props.update({ args: [ vectors ] })
+    this.props.update({ args: [ vectors ] });
   }
 
   addVector() {
@@ -101,6 +101,6 @@ export default connect(
     let verbs =  selectVerbs(state,'record');
     let { attributes, identifier } = selectTemplate(state, props.terms.model_name);
     let attribute_names = Object.keys(attributes).sort();
-    return { verbs, attributes, attribute_names, identifier }
+    return { verbs, attributes, attribute_names, identifier };
   }
 )(RecordPredicate);

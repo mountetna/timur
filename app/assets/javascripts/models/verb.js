@@ -11,7 +11,7 @@ export default class Verb {
     // verify our length
     if (other_args.length > this.args.length) return false;
 
-    return other_args.every((other_arg, i) => this.matchArg(other_arg, this.args[i], special))
+    return other_args.every((other_arg, i) => this.matchArg(other_arg, this.args[i], special));
   }
 
   complete(other_args, special) {

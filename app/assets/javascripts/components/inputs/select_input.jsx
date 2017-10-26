@@ -12,6 +12,7 @@ const Option = (v) => (
   : <option key={v} value={v}>{ v }</option>
 );
 
+// This is an input to select one from a list of options
 export default class SelectInput extends Component {
   onChange(evt) {
     let { value } = evt.target;
@@ -26,6 +27,6 @@ export default class SelectInput extends Component {
       { children }
       { NoneOption(showNone) }
       { values.map(Option) }
-    </select>
+    </select>;
   }
 }

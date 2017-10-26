@@ -1,10 +1,15 @@
 import { Component } from 'react';
+import SlowTextInput from '../inputs/slow_text_input';
 
+// this is an input to edit numbers - it applies some filters
+// to prevent non-numerical characters.
+// it has a prop 'inputType' with values float, int to filter
+// for either floats or ints
 export default class NumericInput extends Component {
   floatFilter(e) {
     if (Keycode.is_ctrl(e)) return true;
     if (Keycode.is_number(e)) return true;
-    if (Keycode.match(e,/^[\.e\-]$/)) return true
+    if (Keycode.match(e,/^[\.e\-]$/)) return true;
     if (Keycode.is_printable(e)) {
       e.preventDefault();
       return true;
@@ -42,6 +47,6 @@ export default class NumericInput extends Component {
                 onKeyPress={ filter }
                 onBlur={ onBlur }
                 defaultValue={ defaultValue }
-                update={ this.update.bind(this) } />
+                update={ this.update.bind(this) } />;
   }
 }

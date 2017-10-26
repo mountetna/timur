@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import NumericInput from './numeric_input';
+import SlowTextInput from '../inputs/slow_text_input';
 
+// This is an input to create and edit a list of items
 export default class ListInput extends Component {
   constructor() {
     super();
@@ -8,7 +10,7 @@ export default class ListInput extends Component {
   }
 
   listItem(list_item, pos) {
-    let className = 'delete_link'
+    let className = 'delete_link';
       
     if (list_item == null || list_item == '') {
       list_item = 'null';
@@ -75,7 +77,7 @@ export default class ListInput extends Component {
           className='link_text'
           onBlur={ blur }
           placeholder={placeholder}
-          defaultValue={ value } />
+          defaultValue={ value } />;
         break;
       default:
         input = <SlowTextInput
@@ -96,7 +98,7 @@ export default class ListInput extends Component {
   renderAdd() {
     return <div className='list_item'>
       <span className='add_item' onClick={ this.addListItem.bind(this) }>+</span>
-    </div>
+    </div>;
   }
 
   render() {

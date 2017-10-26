@@ -1,4 +1,5 @@
 import { reviseDocument } from '../../actions/magma_actions'
+import SlowTextInput from '../inputs/slow_text_input';
 
 var LinkAttribute = React.createClass({
   render: function() {
