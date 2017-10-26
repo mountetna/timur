@@ -4,6 +4,7 @@ import Magma from '../magma';
 import { Animate } from 'react-move';
 import PredicateChainSet from './query_builder/predicate_chain_set';
 
+// helper to format the predicate state into an actual query
 const predicateArray = (predicate) => {
   let { type, filters, model_name, args, start } = predicate;
   switch(type) {
@@ -22,13 +23,16 @@ const predicateArray = (predicate) => {
   }
 }
 
+// helper to format a series of predicates
 const chainArray = (chain) => chain.map(predicateArray).reduce(
   (predArray,pred) => predArray.concat(pred),
   []
 );
 
+// test whether the predicate is 'done' and we should calculate a query string to display
 const predicateComplete = (predicate) => predicate.completed || predicate.type == 'terminal';
 
+// generate an actual string from a predicate array
 const formatChainArray = (terms) => {
   return `[ ${
     terms.map(term => {
@@ -39,10 +43,10 @@ const formatChainArray = (terms) => {
     } ]`;
 }
 
+// initially there is an empty model_list predicate
 const defaultQuery = () => (
   [
     [
-      // initially there is an empty model_list predicate
       {
         type: 'model',
         start: true
@@ -51,6 +55,7 @@ const defaultQuery = () => (
   ]
 );
 
+// The root component that renders the query builder - this holds the state of the current query
 class QueryBuilder extends Component {
   constructor() {
     super()

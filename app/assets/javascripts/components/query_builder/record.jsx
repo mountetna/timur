@@ -13,6 +13,9 @@ const TYPE_PREDICATES = {
   DateTime: 'date-time'
 };
 
+// A Record Predicate, this maps attributes from the record to the appropriate
+// child predicate It also holds what on Magma would be a 'Vector' predicate as
+// an Array argument.
 class RecordPredicate extends Component {
   getChildren(verb, new_args) {
     let { return_type, args } = verb;

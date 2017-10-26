@@ -1,5 +1,7 @@
 import { Component } from 'react'
 
+// A terminal predicate component, mostly this shows approval if the
+// predicate chain is 'done' correctly (mostly useful in filters)
 export default class TerminalPredicate extends Component {
   render() {
     let { terminal_type, terms: { return_type } } = this.props

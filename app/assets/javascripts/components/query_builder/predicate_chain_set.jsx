@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import PredicateChain from './predicate_chain';
 
+// This is a component to render a list of predicate chains, where each chain
+// is a list of predicates.
 export default class PredicateChainSet extends Component {
   updateChain(chain_position, chain_update) {
     let { chains, update } = this.props;

@@ -4,6 +4,8 @@ import RecordPredicate from './record';
 import ValuePredicate from './value';
 import TerminalPredicate from './terminal';
 
+// This is a predicate chain, it renders a list of predicates, determining the
+// correct predicate component for the given type
 export default class PredicateChain extends Component {
   updatePredicate(position, predicate_update, ...children) {
     let { predicates, update } = this.props;
