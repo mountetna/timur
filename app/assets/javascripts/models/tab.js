@@ -59,8 +59,7 @@ class Pane{
       this.display = config.display.map((display_item)=>{
 
         let template_attribute = template && template.attributes[display_item.name];
-        let display_item = new DisplayItem(template_attribute, display_item.attribute);
-        return display_item;
+        return new DisplayItem(template_attribute, display_item.attribute);
       });
     }
     else if(template){

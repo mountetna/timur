@@ -1,7 +1,7 @@
 import { Component } from 'react';
 
 // this is an input that debounces text input of some sort
-export default class SlowTextInput {
+export default class SlowTextInput extends Component {
   constructor() {
     super();
     this.state = {};
