@@ -1,30 +1,36 @@
-var SlowTextInput = React.createClass({
-  // this is a simple wrapper that debounces text input of some sort
-  getInitialState: function() {
-    return { }
-  },
-  update: function() {
-    this.props.update(this.text_input.value)
-  },
-  componentWillMount: function() {
-    this.update = $.debounce(this.props.waitTime || 500,this.update);
-  },
-  render: function() {
-    var self = this
+import { Component } from 'react';
+
+// this is an input that debounces text input of some sort
+export default class SlowTextInput {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  update() {
+    this.props.update(this.text_input.value);
+  }
+
+  componentWillMount() {
+    this.update = $.debounce(this.props.waitTime || 500, this.update);
+  }
+
+  render() {
+    let { textClassName, defaultValue, placeholder, onBlur, onKeyPress } = this.props;
+    let { input_value } = this.state;
+
     return <input type='text' 
-      ref={ function(input) { self.text_input = input } }
-      className={ this.props.textClassName }
+      ref={ (input) => this.text_input = input }
+      className={ textClassName }
       onChange={
-        function(e) {
-          self.setState({ input_value: e.target.value })
-          self.update()
+        (e) => {
+          this.setState({ input_value: e.target.value });
+          this.update();
         }
       }
-      onBlur={ this.props.onBlur }
-      onKeyPress={ this.props.onKeyPress }
-      value={ this.state.input_value == undefined ? this.props.defaultValue : this.state.input_value }
-      placeholder={ this.props.placeholder }/>
+      onBlur={ onBlur }
+      onKeyPress={ onKeyPress }
+      value={ input_value == undefined ? defaultValue : input_value }
+      placeholder={ placeholder }/>;
   }
-})
-
-module.exports = SlowTextInput
+}

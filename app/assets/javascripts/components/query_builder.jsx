@@ -11,7 +11,7 @@ const predicateArray = (predicate) => {
     case 'model':
       let ary = [];
       if (start) ary.push(model_name);
-      if (filters.length) ary = ary.concat( filters.map(chainArray) )
+      if (filters.length) ary = ary.concat( filters.map(chainArray) );
       return ary.concat(args);
     case 'terminal':
       return [];
@@ -21,7 +21,7 @@ const predicateArray = (predicate) => {
     default:
       return args.filter(x=>x!=null);
   }
-}
+};
 
 // helper to format a series of predicates
 const chainArray = (chain) => chain.map(predicateArray).reduce(
@@ -41,7 +41,7 @@ const formatChainArray = (terms) => {
       return term;
     }).join(', ')
     } ]`;
-}
+};
 
 // initially there is an empty model_list predicate
 const defaultQuery = () => (
@@ -58,10 +58,10 @@ const defaultQuery = () => (
 // The root component that renders the query builder - this holds the state of the current query
 class QueryBuilder extends Component {
   constructor() {
-    super()
+    super();
     this.state = { 
       shown: false
-    }
+    };
   }
 
   updateQuery(query) {
@@ -84,7 +84,7 @@ class QueryBuilder extends Component {
 
     return <div className='query'>
       { queryString }
-    </div>
+    </div>;
   }
 
   toggleShown() {
@@ -93,6 +93,7 @@ class QueryBuilder extends Component {
 
     if (shown) query = defaultQuery();
     else query = null;
+
     this.setState({ shown, query });
   }
 
@@ -111,7 +112,7 @@ class QueryBuilder extends Component {
       {
         shown && this.renderQuery()
       }
-    </div>
+    </div>;
   }
 }
 
@@ -121,4 +122,4 @@ export default connect(
     requestModels,
     requestPredicates
   }
-)(QueryBuilder)
+)(QueryBuilder);

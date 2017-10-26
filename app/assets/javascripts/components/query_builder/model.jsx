@@ -7,7 +7,7 @@ import SelectInput from '../inputs/select_input';
 
 class ModelPredicate extends Component {
   updateFilters(filters) {
-    this.props.update({ filters })
+    this.props.update({ filters });
   }
 
   addFilter() {
@@ -41,7 +41,7 @@ class ModelPredicate extends Component {
 
     return [
       return_type ? { type: 'terminal', return_type } : { type: 'record', model_name, args: [] }
-    ]
+    ];
   }
 
   renderModelSelect(model_name) {
@@ -49,7 +49,7 @@ class ModelPredicate extends Component {
     return <SelectInput defaultValue={ model_name } 
       showNone='disabled' 
       values={ model_names }
-      onChange={ (model_name) => update({ model_name, filters: [], args: [] }) }/>
+      onChange={ (model_name) => update({ model_name, filters: [], args: [] }) }/>;
   }
 
   render() {
@@ -67,7 +67,7 @@ class ModelPredicate extends Component {
       { 
         model_name ? this.renderFilters() : null
       }
-    </Predicate>
+    </Predicate>;
   }
 }
 
@@ -76,4 +76,4 @@ export default connect(
     model_names: selectModelNames(state),
     verbs: selectVerbs(state,'model')
   })
-)(ModelPredicate)
+)(ModelPredicate);

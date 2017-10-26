@@ -18,7 +18,7 @@ export default class PredicateChain extends Component {
     };
 
     if (children.length) {
-      new_predicates = new_predicates.slice(0,position+1).concat(children)
+      new_predicates = new_predicates.slice(0,position+1).concat(children);
     }
 
     update(new_predicates);
@@ -37,16 +37,16 @@ export default class PredicateChain extends Component {
 
     switch(type) {
       case 'model':
-        return <ModelPredicate { ...props }/>
+        return <ModelPredicate { ...props }/>;
       case 'record':
-        return <RecordPredicate { ...props }/>
+        return <RecordPredicate { ...props }/>;
       case 'file':
       case 'string':
       case 'number':
       case 'date-time':
-        return <ValuePredicate { ...props }/>
+        return <ValuePredicate { ...props }/>;
       case 'terminal':
-        return <TerminalPredicate terminal_type={ terminal_type } { ...props }/>
+        return <TerminalPredicate terminal_type={ terminal_type } { ...props }/>;
     }
   }
 
@@ -57,6 +57,6 @@ export default class PredicateChain extends Component {
       {
         predicates.map(this.renderPredicate.bind(this))
       }
-    </div>
+    </div>;
   }
 }

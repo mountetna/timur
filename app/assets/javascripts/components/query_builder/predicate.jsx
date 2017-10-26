@@ -98,7 +98,7 @@ export default class Predicate extends Component {
       key={pos}
       showNone={ showNone }
       values={ choices }
-      onChange={ this.setInputArgument.bind(this,pos) } />
+      onChange={ this.setInputArgument.bind(this,pos) } />;
   }
 
   renderVerbInputs() {
@@ -113,7 +113,7 @@ export default class Predicate extends Component {
       {
         this.verbInput(null, args.length)
       }
-    </div>
+    </div>;
   }
 
   render() {
@@ -122,7 +122,7 @@ export default class Predicate extends Component {
     let classNames = [
       'predicate',
       completed && 'completed'
-    ].filter(_=>_).join(' ')
+    ].filter(_=>_).join(' ');
 
     return <div className={ classNames }>
       {
@@ -131,6 +131,6 @@ export default class Predicate extends Component {
       {
         this.renderVerbInputs()
       }
-    </div>
+    </div>;
   }
 }

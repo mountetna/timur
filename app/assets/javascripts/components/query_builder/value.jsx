@@ -38,6 +38,6 @@ export default connect(
     let verbs =  selectVerbs(state,props.type);
     let { attributes } = selectTemplate(state, props.terms.model_name);
     let attribute = attributes[props.attribute_name];
-    return { verbs, attribute }
+    return { verbs, attribute };
   }
 )(ValuePredicate);
