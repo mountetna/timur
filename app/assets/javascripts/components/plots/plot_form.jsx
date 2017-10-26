@@ -3,7 +3,6 @@ import Plot from './plotly'
 import ButtonBar from '../button_bar'
 import InputField from '../form_inputs/input_field'
 import Select from '../form_inputs/select'
-import { PlotFactory, Plot as PlotMaker } from '../../selectors/plot'
 import { getPlotForm } from '../../selectors/plot_form'
 
 
@@ -11,15 +10,17 @@ class PlotForm extends Component {
   constructor(props) {
     super(props);
 
+    // set the state if a new plot is being created
     if (!props.plot) {
       let manifestId;
+
+      // select the first manifest if no manifest is selected
       if (props.selectedManifest) {
         manifestId = props.selectedManifest.id;
       } else if (props.manifest[0]) {
         manifestId = props.manifests[0].id;
         props.selectManifest(manifestId);
       }
-
 
       this.state = {
         manifestId,
@@ -29,12 +30,6 @@ class PlotForm extends Component {
         },
         data: []
       };
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedManifest != this.props.selectedManifest) {
-      this.setState({ manifestId: nextProps.selectedManifest.id });
     }
   }
 
@@ -76,7 +71,7 @@ class PlotForm extends Component {
 
   selectManifest(manifestId) {
     this.setState(
-      prevState => ({ ...prevState, manifestId }),
+      prevState => ({ manifestId }),
       () => this.props.selectManifest(manifestId)
     )
   }
@@ -186,7 +181,7 @@ class PlotForm extends Component {
       )
     }
 
-    const { toggleEditing, selectedManifest, selectManifest, manifests, consignment, plot} = this.props;
+    const { toggleEditing, selectedManifest, consignment, plot} = this.props;
 
     return (
       <div className='plot-form-container'>
@@ -198,7 +193,7 @@ class PlotForm extends Component {
               icon: 'floppy-o',
               label: 'save'
             }, {
-              click: () => this.props.toggleEditing(false),
+              click: () => toggleEditing(false),
               icon: 'ban',
               label: 'cancel'
             }
