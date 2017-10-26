@@ -35,26 +35,28 @@ const formatChainArray = (terms) => {
     } ]`;
 }
 
+const defaultQuery = () => (
+  [
+    [
+      // initially there is an empty model_list predicate
+      {
+        type: 'model',
+        start: true
+      }
+    ]
+  ]
+);
+
 class QueryBuilder extends Component {
   constructor() {
     super()
     this.state = { 
-      query: [
-        [
-          // initially there is an empty model_list predicate
-          {
-            type: 'model',
-            start: true
-          }
-        ]
-      ]
+      shown: false
     }
   }
 
   updateQuery(query) {
     this.setState({ query });
-    console.log('Query');
-    console.log(query);
   }
 
   componentDidMount() {
@@ -66,12 +68,9 @@ class QueryBuilder extends Component {
     let { query } = this.state;
     let predicates = query[0];
 
-    if (!predicates.every(predicateComplete)) {
-      return <div className='query'> Incomplete query </div>;
-    }
+    if (!predicates.every(predicateComplete)) return <div className='query'/>;
 
     let queryArray = chainArray(predicates);
-    console.log(queryArray);
     let queryString = formatChainArray(queryArray);
 
     return <div className='query'>
@@ -79,15 +78,28 @@ class QueryBuilder extends Component {
     </div>
   }
 
-  render() {
-    let { query } = this.state;
-    return <div id='query'>
-      <PredicateChainSet chains={ query }
-        update={ this.updateQuery.bind(this) }
-      />
+  toggleShown() {
+    let { shown, query } = this.state;
+    shown = !shown;
 
+    if (shown) query = defaultQuery();
+    else query = null;
+    this.setState({ shown, query });
+  }
+
+  render() {
+    let { query, shown } = this.state;
+    return <div id='query'>
+      <div className='visibility'>
+        <button onClick={ this.toggleShown.bind(this) }>
+          { shown ? 'Hide Query' : 'Build Query' }
+        </button>
+      </div>
       {
-        this.renderQuery()
+        shown && <PredicateChainSet chains={ query } update={ this.updateQuery.bind(this) } />
+      }
+      {
+        shown && this.renderQuery()
       }
     </div>
   }
