@@ -21,11 +21,9 @@
 #= require react-classnames
 
 #= require libs
-#= require tree
 #= require reducers
 #= require actions
 #= require components
-#= require model
 #= require keycode
 #= require jquery-mask
 #= require jquery.ba-throttle-debounce.min
