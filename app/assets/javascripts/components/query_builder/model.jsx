@@ -35,11 +35,13 @@ class ModelPredicate extends Component {
     </div>;
   }
 
-  getChild(verb, new_args) {
+  getChildren(verb, new_args) {
     let { terms: { model_name } } = this.props;
     let { return_type } = verb;
 
-    return return_type ? { type: 'terminal', return_type } : { type: 'record', model_name, args: [] };
+    return [
+      return_type ? { type: 'terminal', return_type } : { type: 'record', model_name, args: [] }
+    ]
   }
 
   renderModelSelect(model_name) {
@@ -54,10 +56,10 @@ class ModelPredicate extends Component {
     // the model predicate has three terms, model_name, filters, and args
     let { verbs, terms, update } = this.props;
     let { model_name, args, start } = terms;
-    let child = this.getChild.bind(this);
+    let getChildren = this.getChildren.bind(this);
 
     return <Predicate
-      { ...{ verbs, args, terms, update, child } }
+      { ...{ verbs, args, terms, update, getChildren } }
     >
       {
         start ? this.renderModelSelect(model_name) : null

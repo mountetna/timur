@@ -5,25 +5,41 @@ import ListInput from '../inputs/list_input';
 import SelectInput from '../inputs/select_input';
 
 export default class Predicate extends Component {
+  setInputArgument(pos, new_arg) {
+    switch(new_arg) {
+      case 'String':
+        this.setNewArguments(pos,'');
+        break;
+      case 'Numeric':
+        this.setNewArguments(pos,'');
+        break;
+      case 'Array':
+        this.setNewArguments(pos,[]);
+        break;
+      default:
+        this.setNewArguments(pos,new_arg);
+        break;
+    }
+  }
+
   setNewArguments(pos, new_arg) {
-    let { args, verbs, update } = this.props;
+    let { args, verbs, update, getChildren } = this.props;
 
     let new_args = args.slice(0,pos).concat([new_arg]);
     let completed = this.completed(verbs, new_args);
-    let child = completed ? this.props.child(completed, new_args) : null;
+    let children = completed ? getChildren(completed, new_args) : [];
 
-    update({ args: new_args, completed: !!completed }, child);
+    update({ args: new_args, completed: !!completed }, ...children);
   }
 
   completed(verbs, args) {
     return verbs && args && verbs.find(verb => verb.complete(args, this.props.special));
   }
 
-  verbChoices(pos) {
-    let { args, special, verbs } = this.props;
-    let previous = args.slice(0,pos);
+  verbChoices(pos, args) {
+    let { special, verbs } = this.props;
     let choices = verbs.filter(
-      verb => verb.matches(previous, special)
+      verb => verb.matches(args, special)
     ).map(
       verb => verb.choices(pos, special)
     ).flatten().sort();
@@ -32,6 +48,7 @@ export default class Predicate extends Component {
   }
 
   renderInput(type, arg, pos) {
+    let { inputType, vector } = this.props;
     switch(type) {
       case 'Numeric':
         return <NumericInput 
@@ -45,10 +62,11 @@ export default class Predicate extends Component {
           defaultValue={ arg }
           update={ this.setNewArguments.bind(this, pos) } />;
       case 'Array':
+        if (vector) return vector(arg);
         return <ListInput
-          values={ arg || [''] } 
+          values={ arg || [] } 
           placeholder='Value'
-          inputType={ this.props.inputType }
+          inputType={ inputType }
           onChange={ this.setNewArguments.bind(this, pos) } />;
       default:
         return type;
@@ -57,13 +75,16 @@ export default class Predicate extends Component {
 
   verbInput(arg,pos) {
     let { args } = this.props;
-    let choices = this.verbChoices(pos);
+    let previous = args.slice(0,pos);
+    let choices = this.verbChoices(pos, previous);
+    let matches = this.verbChoices(pos, args);
     let showNone = 'disabled';
+
+    if (arg != null && matches.length == 1 && ['Numeric', 'String', 'Array'].includes(matches[0])) return this.renderInput(matches[0], args[pos], pos);
 
     if (!choices.length) return null;
 
     if (choices.length == 1) return this.renderInput(choices[0], args[pos], pos);
-
 
     if (choices.some(choice => choice==null)) showNone='enabled';
 
@@ -73,7 +94,7 @@ export default class Predicate extends Component {
       key={pos}
       showNone={ showNone }
       values={ choices }
-      onChange={ this.setNewArguments.bind(this,pos) } />
+      onChange={ this.setInputArgument.bind(this,pos) } />
   }
 
   renderVerbInputs() {
