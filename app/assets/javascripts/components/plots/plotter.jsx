@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { selectManifest } from '../../actions/manifest_actions';
 import { requestConsignments } from '../../actions/consignment_actions';
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions';
-import { selectPoints } from '../../actions/plot_actions';
 import { selectConsignment } from '../../selectors/consignment';
 import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions';
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
@@ -29,9 +28,6 @@ class Plotter extends Component {
     if (isEmptyManifests) {
       // request manifests during initial page load
       requestManifests();
-    } else if (!selectedManifest) {
-      // select a manifest if not already selected
-      this.selectDefaultManifest(plotableManifests);
     }
 
     // get consignment for manifest
@@ -43,11 +39,6 @@ class Plotter extends Component {
   componentWillReceiveProps(nextProps) {
     const { selectedManifest, consignment, plotableManifests, isEmptyManifests } = nextProps;
 
-    if (!selectedManifest && !isEmptyManifests) {
-      // select a manifest if not already selected
-      this.selectDefaultManifest(plotableManifests);
-    }
-
     // get consignment for manifest if needed
     if (!consignment && selectedManifest && !this.state.requestedConsignments.has(selectedManifest.name)) {
       this.requestConsignment(selectedManifest);
@@ -57,11 +48,6 @@ class Plotter extends Component {
       updatedSet.delete(selectedManifest.name);
       this.setState({ requestedConsignments: updatedSet });
     }
-  }
-
-  // select the first manifest
-  selectDefaultManifest(manifests) {
-    this.props.selectManifest(manifests[0] ? manifests[0].id : null);
   }
 
   // request consignment for manifest and add to requestedConsignments
