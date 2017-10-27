@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Scatter from './scatter';
+import Heatmap from './heatmap';
 import PlotMatrixResult from './plot_matrix_result';
 
 class Plot extends Component {
@@ -22,6 +23,8 @@ class Plot extends Component {
             <PlotMatrixResult plot={plot} consignment={consignment} />
           </div>
         );
+      case 'heatmap':
+        return <Heatmap plot={plot} consignment={consignment} />
       default:
         return <div></div>;
     }

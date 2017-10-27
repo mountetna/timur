@@ -12,18 +12,9 @@ class PlotForm extends Component {
 
     // set the state if a new plot is being created
     if (!props.plot) {
-      let manifestId;
-
-      // select the first manifest if no manifest is selected
-      if (props.selectedManifest) {
-        manifestId = props.selectedManifest.id;
-      } else if (props.manifest[0]) {
-        manifestId = props.manifests[0].id;
-        props.selectManifest(manifestId);
-      }
-
       this.state = {
-        manifestId,
+        plotType: null,
+        manifestId: null,
         layout: {
           xaxis: {},
           yaxis: {}
@@ -55,6 +46,10 @@ class PlotForm extends Component {
       {
         value: 'scatter',
         label: '2d scatter'
+      },
+      {
+        value: 'heatmap',
+        label: 'heatmap'
       }
     ]
 
@@ -159,14 +154,20 @@ class PlotForm extends Component {
 
   addDataRef(dataRef) {
     this.setState(
-      prevState => ({ data: [...prevState.data, {id: Math.random(), ...dataRef}] })
+      prevState => {
+        return {
+          data: getPlotForm(prevState).addDataRef(prevState, dataRef)
+        };
+      }
     );
   }
 
   removeDataRef(dataId) {
     this.setState(
       prevState => {
-        return { data: prevState.data.filter(ref => ref.id != dataId) }
+        return {
+          data: getPlotForm(prevState).removeDataRef(prevState, dataId)
+        };
       }
     );
   }
@@ -212,8 +213,6 @@ class PlotForm extends Component {
           handleFieldUpdate={this.handleFieldUpdate}
           fieldValue={this.fieldValue}
           fieldToInputField={this.fieldToInputField}
-          consignment={consignment}
-          plot={plot}
         />
         <Plot
           plot={{...this.state}}
@@ -248,7 +247,7 @@ class DataRefForm extends Component {
 
   dataRefList() {
     return (
-      <ol>
+      <ul>
         {this.props.dataRefs.map(({ name, id }) => (
           <li key={id}>
             {name + ' '}
@@ -257,7 +256,7 @@ class DataRefForm extends Component {
             </i>
           </li>
         ))}
-      </ol>
+      </ul>
     );
   }
 

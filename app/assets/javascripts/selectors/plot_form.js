@@ -5,6 +5,8 @@ export const getPlotForm = plot => {
   switch(plot.plotType) {
     case 'scatter':
       return ScatterPlotForm;
+    case 'heatmap':
+      return HeatmapForm;
     default:
       return null;
   }
@@ -16,16 +18,6 @@ const plotFields = [
     type: 'text',
     name: 'name',
     ref: (plot) => plot
-  }, {
-    label: 'X Axis',
-    type: 'text',
-    name: 'title',
-    ref: (plot) => plot.layout.xaxis
-  }, {
-    label: 'Y Axis',
-    type: 'text',
-    name: 'title',
-    ref: (plot) => plot.layout.yaxis
   }, {
     label: 'Height',
     type: 'text',
@@ -60,6 +52,16 @@ const ScatterPlotForm = {
       name: 'selectedReferenceTable',
       ref: (plot) => plot,
       options: (consignment) => consignmentKeysByType(consignment, Matrix)
+    }, {
+      label: 'X Axis Label',
+      type: 'text',
+      name: 'title',
+      ref: (plot) => plot.layout.xaxis
+    }, {
+      label: 'Y Axis Label',
+      type: 'text',
+      name: 'title',
+      ref: (plot) => plot.layout.yaxis
     }
   ],
 
@@ -91,6 +93,50 @@ const ScatterPlotForm = {
         options: consignmentKeysByType(consignment, Vector)
       }
     ];
+  },
+
+  addDataRef: (plot, dataRef) => {
+    return [
+      ...plot.data,
+      { id: Math.random(), ...dataRef }
+    ];
+  },
+
+  removeDataRef: (plot, dataId) => {
+    return plot.data.filter(ref => ref.id != dataId)
+  }
+};
+
+const HeatmapForm = {
+  plotTypeLabel: 'Heatmap',
+
+  fields: [
+    ...plotFields
+  ],
+
+  dataRefFields: (consignment) => {
+    return [
+      {
+        label: 'Matrix',
+        type: 'select',
+        name: 'matrix',
+        options: consignmentKeysByType(consignment, Matrix)
+      }
+    ];
+  },
+
+  addDataRef: (plot, dataRef) => {
+    return [
+      {
+        id: Math.random(),
+        name: dataRef.matrix,
+        ...dataRef
+      }
+    ];
+  },
+
+  removeDataRef: (plot, dataId) => {
+    return plot.data.filter(ref => ref.id != dataId)
   }
 };
 
