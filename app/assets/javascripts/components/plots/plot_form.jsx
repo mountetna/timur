@@ -14,7 +14,7 @@ class PlotForm extends Component {
     if (!props.plot) {
       this.state = {
         plotType: null,
-        manifestId: null,
+        manifestId: props.selectedManifest ? props.selectedManifest.id : null,
         layout: {
           xaxis: {},
           yaxis: {}
