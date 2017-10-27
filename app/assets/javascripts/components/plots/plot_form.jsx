@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Plot from './plotly'
+import Plot from './plot'
 import ButtonBar from '../button_bar'
 import InputField from '../form_inputs/input_field'
 import Select from '../form_inputs/select'

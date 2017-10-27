@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { selectManifest } from '../../actions/manifest_actions';
 import { requestConsignments } from '../../actions/consignment_actions';
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions';
+import { selectPoints } from '../../actions/plot_actions';
 import { selectConsignment } from '../../selectors/consignment';
 import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions';
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
@@ -10,8 +11,7 @@ import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../
 import ListSelector from '../list_selector';
 import ButtonBar from '../button_bar';
 import PlotForm from './plot_form';
-import Plotly from './plotly';
-import MatrixResult from '../manifest/matrix_result'
+import Plot from './plot';
 
 class Plotter extends Component {
   constructor() {
@@ -20,7 +20,6 @@ class Plotter extends Component {
     this.state = {
       // track requested consignments so that another request is not made for the same consignment
       requestedConsignments: new Set(),
-      selectedPoints: []
     };
   }
 
@@ -58,10 +57,6 @@ class Plotter extends Component {
       updatedSet.delete(selectedManifest.name);
       this.setState({ requestedConsignments: updatedSet });
     }
-
-    if (this.props.selectedPlot != nextProps.selectedPlot) {
-      this.setState({ selectedPoints: [] })
-    }
   }
 
   // select the first manifest
@@ -94,15 +89,6 @@ class Plotter extends Component {
 
   handleDelete() {
     this.props.deletePlot(this.props.selectedPlot);
-  }
-
-  onSelected({ points }) {
-    this.setState({ selectedPoints: points.map(p => p.id) });
-  }
-
-  filterMatrix(consignment, selectedPlot) {
-    return consignment[selectedPlot.selectedReferenceTable]
-      .filter('row', (row, i, rowName) => this.state.selectedPoints.includes(rowName));
   }
 
   render() {
@@ -156,16 +142,8 @@ class Plotter extends Component {
             <div>
               {selectedPlot &&
                 <div>
-                  {
-                    selectedPlot.editable && <ButtonBar className='actions' buttons={ buttons }/>
-                  }
-                  <Plotly plot={selectedPlot} consignment={consignment} onSelected={this.onSelected.bind(this)} />
-                  {consignment && selectedPlot.selectedReferenceTable &&
-                    <MatrixResult
-                      matrix={this.filterMatrix(consignment, selectedPlot)}
-                      name={selectedPlot.selectedReferenceTable}
-                    />
-                  }
+                  {selectedPlot.editable && <ButtonBar className='actions' buttons={ buttons }/>}
+                  <Plot plot={selectedPlot} consignment={consignment} />
                 </div>
               }
             </div>

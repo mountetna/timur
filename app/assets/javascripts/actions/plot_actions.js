@@ -15,25 +15,30 @@ export const deletePlot = (plot) =>
       .then(() => {
         dispatch(removePlot(plot.id));
         if (getSelectedPlotId(getState()) == plot.id) {
-          dispatch(selectPlot(null))
+          dispatch(selectPlot(null));
         }
-      })
-  }
+      });
+  };
 
 export const selectPlot = (id) => ({
   type: 'SELECT_PLOT',
   id
-})
+});
 
 export const toggleEditing = (isEditing) => ({
   type: 'TOGGLE_PLOT_EDITING',
   isEditing
-})
+});
 
 export const addPlot = (plot) => ({
   type: 'ADD_PLOT',
   plot
-})
+});
+
+export const selectPoints = (pointIds) => ({
+  type: 'SELECT_POINTS',
+  ids: pointIds
+});
 
 export const savePlot = (plot) =>
   (dispatch) => {
@@ -43,8 +48,8 @@ export const savePlot = (plot) =>
         dispatch(toggleEditing(false));
         dispatch(toggleEditing(false));
         dispatch(selectPlot(plot.id));
-      })
-  }
+      });
+  };
 
 // Post to create new plot and save in the store
 export const saveNewPlot = (plot) =>
@@ -58,6 +63,6 @@ export const saveNewPlot = (plot) =>
       .catch(e => {
         e.response.json()
           .then(json => dispatch(showMessages(json.errors)))
-      })
-  }
+      });
+  };
 
