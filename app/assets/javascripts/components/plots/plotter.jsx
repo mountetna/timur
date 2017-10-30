@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { selectManifest } from '../../actions/manifest_actions';
 import { requestConsignments } from '../../actions/consignment_actions';
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions';
-import { selectConsignment } from '../../selectors/consignment';
 import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions';
+import { selectConsignment } from '../../selectors/consignment';
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest';
 import ListSelector from '../list_selector';
@@ -13,17 +13,8 @@ import PlotForm from './plot_form';
 import Plot from './plot';
 
 class Plotter extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      // track requested consignments so that another request is not made for the same consignment
-      requestedConsignments: new Set(),
-    };
-  }
-
   componentDidMount() {
-    const { isEmptyManifests, plotableManifests, selectedManifest, requestManifests, consignment } =  this.props;
+    const { isEmptyManifests, selectedManifest, requestManifests, consignment, sentManifestReqs } =  this.props;
 
     if (isEmptyManifests) {
       // request manifests during initial page load
@@ -31,34 +22,25 @@ class Plotter extends Component {
     }
 
     // get consignment for manifest
-    if (!consignment && selectedManifest && !this.state.requestedConsignments.has(selectedManifest.name)) {
+    if (!consignment && selectedManifest && !sentManifestReqs.includes(selectedManifest.name)) {
       this.requestConsignment(selectedManifest);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedManifest, consignment, plotableManifests, isEmptyManifests } = nextProps;
+    const { selectedManifest, consignment, sentManifestReqs } = nextProps;
+    const sentManifests = [ ...sentManifestReqs, ...this.props.sentManifestReqs]
 
     // get consignment for manifest if needed
-    if (!consignment && selectedManifest && !this.state.requestedConsignments.has(selectedManifest.name)) {
+    if (!consignment && selectedManifest && !sentManifests.includes(`consignment list ${selectedManifest.name}`)) {
       this.requestConsignment(selectedManifest);
-    } else if (consignment && selectedManifest) {
-      // remove from requestedConsignments if exists
-      let updatedSet = new Set(this.state.requestedConsignments);
-      updatedSet.delete(selectedManifest.name);
-      this.setState({ requestedConsignments: updatedSet });
     }
   }
 
-  // request consignment for manifest and add to requestedConsignments
+  // request consignment for manifest
   requestConsignment(manifest) {
-    this.setState(
-      { requestedConsignments: (new Set(this.state.requestedConsignments)).add(manifest.name) },
-      () => {
-        const reqPayload = manifestToReqPayload(manifest);
-        this.props.requestConsignments([reqPayload]);
-      }
-    );
+    const reqPayload = manifestToReqPayload(manifest);
+    this.props.requestConsignments([reqPayload]);
   }
 
   newPlot() {
@@ -155,6 +137,7 @@ const mapStateToProps = (state) => {
     plots: getAllPlots(state),
     selectedPlot: getSelectedPlot(state),
     isEditing: state.plots.isEditing,
+    sentManifestReqs: Object.keys(state.exchanges)
   };
 };
 
