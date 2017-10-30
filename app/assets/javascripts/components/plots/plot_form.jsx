@@ -25,18 +25,13 @@ class PlotForm extends Component {
   }
 
   componentWillMount() {
-    this.setPlot();
-  }
-
-  setPlot() {
     this.setState({ ...this.props.plot });
   }
 
   handleSave() {
     if (this.props.plot) {
       this.props.savePlot({ ...this.state });
-    }
-    else {
+    } else {
       this.props.saveNewPlot({ ...this.state });
     }
   }
@@ -214,10 +209,7 @@ class PlotForm extends Component {
           fieldValue={this.fieldValue}
           fieldToInputField={this.fieldToInputField}
         />
-        <Plot
-          plot={{...this.state}}
-          consignment={consignment}
-        />
+        <Plot plot={{...this.state}} consignment={consignment} />
       </div>
     )
   }
@@ -227,6 +219,7 @@ class DataRefForm extends Component {
   constructor(props) {
     super(props);
 
+    // set the default values for the state
     const formState = this.props.fields.reduce((formState, field) => {
       let defaultValue;
       if (field.type === 'select' && field.options[0]) {
