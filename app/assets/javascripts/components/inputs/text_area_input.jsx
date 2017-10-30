@@ -1,7 +1,7 @@
 import { Component } from 'react';
 
 // this is an input that debounces text input of some sort
-export default class SlowTextInput extends Component {
+export default class TextAreaInput extends Component {
   constructor() {
     super();
     this.state = {};
@@ -25,7 +25,7 @@ export default class SlowTextInput extends Component {
     let { onChange, waitTime, defaultValue, ...inputProps } = this.props;
     let { input_value } = this.state;
 
-    return <input type='text' 
+    return <textarea
       ref={ (input) => this.text_input = input }
       onChange={ this.handleChange.bind(this) }
       value={ input_value == undefined ? defaultValue : input_value }
