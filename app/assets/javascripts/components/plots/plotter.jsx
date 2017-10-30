@@ -8,9 +8,8 @@ import { selectConsignment } from '../../selectors/consignment';
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest';
 import ListSelector from '../list_selector';
-import ButtonBar from '../button_bar';
 import PlotForm from './plot_form';
-import Plot from './plot';
+import PlotView from './plot_view'
 
 class Plotter extends Component {
   componentDidMount() {
@@ -73,19 +72,6 @@ class Plotter extends Component {
       savePlot
     } = this.props;
 
-    let buttons = [
-      {
-        label: 'edit',
-        click: toggleEditing.bind(this),
-        icon: 'pencil-square-o'
-      },
-      {
-        click: this.handleDelete.bind(this),
-        icon: 'trash-o',
-        label: 'delete'
-      }
-    ];
-
     return (
       <div className='plot-container'>
         <div>
@@ -107,14 +93,12 @@ class Plotter extends Component {
               savePlot={savePlot}
             />
           ) : (
-            <div>
-              {selectedPlot &&
-                <div>
-                  {selectedPlot.editable && <ButtonBar className='actions' buttons={ buttons }/>}
-                  <Plot plot={selectedPlot} consignment={consignment} />
-                </div>
-              }
-            </div>
+            <PlotView
+              selectedPlot={selectedPlot}
+              consignment={consignment}
+              toggleEditing={toggleEditing}
+              handleDelete={this.handleDelete.bind(this)}
+            />
           )}
       </div>
     );
