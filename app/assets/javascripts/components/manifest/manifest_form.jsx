@@ -152,13 +152,13 @@ class ManifestForm extends Component {
     })
 
     let buttons = [
-      this.props.manifest && {
+      !this.props.manifest && {
         click: this.create.bind(this),
         icon: 'floppy-o',
         label: 'save new'
       },
 
-      !this.props.manifest && {
+      this.props.manifest && {
         click: this.update.bind(this),
         icon: 'floppy-o',
         label: 'save'
