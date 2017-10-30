@@ -1,66 +1,88 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { requestManifests, toggleEdit, selectManifest} from '../../actions/manifest_actions';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
+
+// Class imports.
 import ListSelector from '../list_selector';
-import Manifest from './manifest';
-import { getSelectedManifest, getAllManifests } from '../../selectors/manifest';
+import ManifestForm from './manifest_form';
+import ManifestView from './manifest_view';
 
-// Main component for viewing/editing manifests
-class Manifests extends Component {
-  componentDidMount() {
-    this.props.requestManifests()
+// Module imports.
+import {requestManifests, toggleEdit, selectManifest} from '../../actions/manifest_actions';
+import {getSelectedManifest, getAllManifests} from '../../selectors/manifest';
+
+// Main component for viewing/editing manifests.
+export class Manifests extends React.Component{
+  componentDidMount(){
+    this.props.requestManifests();
   }
 
-  create() {
+  create(){
     this.props.selectManifest(null);
-    this.props.toggleEdit()
+    this.props.toggleEdit();
   }
 
-  render() {
-    const { sections, selectedManifest } = this.props
+  renderManifests(){
+
+    let {is_admin, is_editing, selected_manifest} = this.props;
+    let manifest_props = {isAdmin: is_admin, manifest: selected_manifest};
+
+    if(selected_manifest || is_editing){
+      return(
+        <div className='manifest-container'>
+
+          {(is_editing) ? <ManifestForm {...manifest_props}/> : <ManifestView {...manifest_props} />}
+        </div>
+      );
+    }
+    else{
+      return null;
+    }
+  }
+
+  render(){
+    let {sections, selected_manifest, is_admin, is_editing} = this.props;
+    let list_selector_props = {
+      name: 'Manifest',
+      create: this.create.bind(this),
+      select: this.props.selectManifest,
+      sections: sections
+    };
 
     return (
-      <div className='manifests-container'>
-        <ListSelector
-          name='Manifest'
-          create={ this.create.bind(this) }
-          select={ this.props.selectManifest }
-          sections={ sections }/>
+      <div className='manifests-group'>
+
+        <ListSelector {...list_selector_props} />
         <div className='manifest-view'>
-        { (selectedManifest || this.props.isEditing) ?
-          <Manifest
-            isAdmin={this.props.isAdmin}
-            editing={this.props.isEditing}
-            manifest={this.props.selectedManifest}
-            />
-            : null
-        }
+
+          {this.renderManifests()}
         </div>
       </div>
-    )
+    );
   }
 }
 
-const accessFilter = (access, manifests) =>
-  manifests.filter(m => m.access == access)
-    .sort((a,b) => a > b);
+const accessFilter = (access, manifests)=>{
+  return manifests.filter(m => m.access == access).sort((a,b) => a > b);
+};
 
-const mapStateToProps = (state) => {
-  const { manifestsUI: { isEditing } } = state
+const mapStateToProps = (state = {}, own_props)=>{
+  let {manifestsUI: {isEditing}} = state;
   let manifests = getAllManifests(state);
 
   let sections = {
     Public: accessFilter('public', manifests),
     Private: accessFilter('private', manifests)
-  }
+  };
 
   return {
     sections,
-    selectedManifest: getSelectedManifest(state),
-    isEditing
+    selected_manifest: getSelectedManifest(state),
+    is_editing: isEditing
   }
 }
 
-export default connect(mapStateToProps, {
-  requestManifests, toggleEdit, selectManifest
-})(Manifests)
+export default ReactRedux.connect(
+  mapStateToProps,
+  {requestManifests, toggleEdit, selectManifest}
+)(Manifests);
