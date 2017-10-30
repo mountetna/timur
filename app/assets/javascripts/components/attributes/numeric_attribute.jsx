@@ -1,8 +1,8 @@
 import { reviseDocument } from '../../actions/magma_actions';
 import { Component } from 'react';
-import NumericInput from '../inputs/numeric_input';
+import { IntegerInput, FloatInput } from '../inputs/numeric_input';
 
-class IntegerAttribute extends Component {
+class NumericAttribute extends Component {
   render() {
     let { mode, value } = this.props;
 
@@ -13,7 +13,7 @@ class IntegerAttribute extends Component {
     </div>;
   }
 
-  update(value) {
+  onChange(value) {
     let { document, template, attribute, reviseDocument } = this.props;
 
     reviseDocument(
@@ -22,18 +22,20 @@ class IntegerAttribute extends Component {
   }
 
   renderInput() {
-    let { inputType, revision, attribute } = this.props;
+    let { numericInput, revision, attribute } = this.props;
 
-    return <NumericInput 
-        update={ this.update.bind(this) }
-        inputType={ inputType }
+    return <numericInput 
+        onChange={ this.onChange.bind(this) }
         className='full_text'
         placeholder={attribute.placeholder}
-        defaultValue={ revision } />
+        defaultValue={ revision } />;
   }
 }
 
-export default connect(
+NumericAttribute = connect(
   null,
   { reviseDocument }
-)(IntegerAttribute);
+)(NumericAttribute);
+
+export const IntegerAttribute = (props) => <NumericAttribute {...props } numericInput={ IntegerInput }/>;
+export const FloatAttribute = (props) => <NumericAttribute {...props } numericInput={ FloatInput }/>;

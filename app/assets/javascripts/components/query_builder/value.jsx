@@ -2,6 +2,8 @@ import { Component } from 'react';
 import { selectVerbs } from '../../selectors/predicate';
 import { selectTemplate } from '../../selectors/magma';
 import Predicate from './predicate';
+import { FloatInput } from '../inputs/numeric_input';
+import SlowTextInput from '../inputs/slow_text_input';
 
 // A Value predicate, mostly sets the terminal type 
 class ValuePredicate extends Component {
@@ -13,10 +15,10 @@ class ValuePredicate extends Component {
     return [];
   }
 
-  getInputType(type) {
-    if (type == 'number') return 'float';
+  getItemInput(type) {
+    if (type == 'number') return FloatInput;
 
-    return null;
+    return SlowTextInput;
   }
 
   render() {
@@ -25,10 +27,10 @@ class ValuePredicate extends Component {
     let { args } = terms;
     let special = () => [];
     let getChildren = this.getChildren.bind(this);
-    let inputType = this.getInputType(type);
+    let itemInput = this.getItemInput(type);
 
     return <Predicate
-      { ...{terms, update, inputType, verbs, special, args, getChildren } }
+      { ...{terms, update, itemInput, verbs, special, args, getChildren } }
     />;
   }
 }

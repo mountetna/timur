@@ -1,4 +1,5 @@
 import markdown from '../markdown'
+import { formatDate, formatTime } from '../utils/dates';
 
 var Activity = React.createClass({
   render: function() {
@@ -7,9 +8,9 @@ var Activity = React.createClass({
     {
       this.props.activities.map(function(activity) {
         return <div className="activity">
-          <span className="date">{ dates.format_date(activity.date) }</span>
+          <span className="date">{ formatDate(activity.date) }</span>
           <span className="at">@</span> 
-          <span className="time">{ dates.format_time(activity.date) }</span> 
+          <span className="time">{ formatTime(activity.date) }</span> 
           <span className="user">{ activity.user }</span> 
           <span className="action" dangerouslySetInnerHTML={ { __html: markdown(activity.action) } } /> 
           on 

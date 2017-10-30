@@ -1,5 +1,4 @@
 // Class imports.
-import Vector from 'vector';
 import { getView } from '../api/view';
 import { showMessages } from './message_actions';
 import { requestDocuments } from './magma_actions';

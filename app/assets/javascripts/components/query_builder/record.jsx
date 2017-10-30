@@ -10,7 +10,7 @@ const TYPE_PREDICATES = {
   TrueClass: 'boolean',
   Integer: 'number',
   Float: 'number',
-  DateTime: 'date-time'
+  DateTime: 'date_time'
 };
 
 // A Record Predicate, this maps attributes from the record to the appropriate
