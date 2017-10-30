@@ -38,8 +38,8 @@ var Timur = React.createClass({
     };
 
     var manifest_props = {
-      'currentUser': this.props.user,
-      'isAdmin': this.props.is_admin,
+      'current_user': this.props.user,
+      'is_admin': this.props.is_admin,
     };
 
     var plots_props = {
