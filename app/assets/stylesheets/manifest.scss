@@ -2,7 +2,11 @@
 
 $secondary-color: teal;
 
-.manifests-container {
+.manifest-query-button{
+  cursor: pointer;
+}
+
+.manifests-group{
   color: #333;
   font-family: $body_font;
   padding-left: 5px;
