@@ -24,7 +24,6 @@
 #= require reducers
 #= require actions
 #= require components
-#= require keycode
 #= require jquery-mask
 #= require jquery.ba-throttle-debounce.min
 #= require spectrum

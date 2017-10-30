@@ -24,7 +24,6 @@ window.CheckboxAttribute = require('./components/attributes/checkbox_attribute.j
 window.DocumentAttribute = require('./components/attributes/document_attribute.js.jsx')
 window.ImageAttribute = require('./components/attributes/image_attribute.js.jsx')
 window.SelectAttribute = require('./components/attributes/select_attribute.js.jsx')
-window.TextAttribute = require('./components/attributes/text_attribute.js.jsx')
 window.MarkdownAttribute = require('./components/attributes/markdown_attribute.jsx')
 window.MetricsAttribute = require('./components/attributes/metrics_attribute.jsx')
 

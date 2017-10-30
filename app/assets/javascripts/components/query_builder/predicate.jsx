@@ -1,6 +1,7 @@
 import { Component } from 'react';
-import NumericInput from '../inputs/numeric_input';
+import { FloatInput } from '../inputs/numeric_input';
 import SlowTextInput from '../inputs/slow_text_input';
+import DateTimeInput from '../inputs/date_time_input';
 import ListInput from '../inputs/list_input';
 import SelectInput from '../inputs/select_input';
 
@@ -12,10 +13,10 @@ export default class Predicate extends Component {
   setInputArgument(pos, new_arg) {
     switch(new_arg) {
       case 'String':
+      case 'Numeric':
+      case 'DateTime':
         this.setNewArguments(pos,'');
         break;
-      case 'Numeric':
-        this.setNewArguments(pos,'');
         break;
       case 'Array':
         this.setNewArguments(pos,[]);
@@ -52,25 +53,29 @@ export default class Predicate extends Component {
   }
 
   renderInput(type, arg, pos) {
-    let { inputType, vector } = this.props;
+    let { itemInput, vector } = this.props;
     switch(type) {
+      case 'DateTime':
+        return <DateTimeInput
+          onChange={ (newDate) => this.setNewArguments(pos, newDate && newDate.toISOString()) }
+          defaultValue={ arg }
+          placeholder='Number' />;
       case 'Numeric':
-        return <NumericInput 
-          update={ this.setNewArguments.bind(this, pos) }
-          inputType='float'
+        return <FloatInput 
+          onChange={ this.setNewArguments.bind(this, pos) }
           defaultValue={ arg }
           placeholder='Number' />;
       case 'String':
         return <SlowTextInput 
           placeholder={ 'String' }
           defaultValue={ arg }
-          update={ this.setNewArguments.bind(this, pos) } />;
+          onChange={ this.setNewArguments.bind(this, pos) } />;
       case 'Array':
         if (vector) return vector(arg);
         return <ListInput
           values={ arg || [] } 
           placeholder='Value'
-          inputType={ inputType }
+          itemInput={ itemInput }
           onChange={ this.setNewArguments.bind(this, pos) } />;
       default:
         return type;

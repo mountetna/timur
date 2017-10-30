@@ -6,7 +6,7 @@ import ManifestAccess from './manifest_access';
 import ManifestElementForm from './manifest_element_form';
 import QueryBuilder from './../query_builder'
 import { v4 } from 'node-uuid';
-import { requestConsignments } from '../../actions/consignment_actions';
+import { requestConsignments } from '../../actions/manifest_actions';
 import { selectConsignment } from '../../selectors/consignment';
 import { manifestToReqPayload, saveNewManifest, saveManifest, toggleEdit } from '../../actions/manifest_actions';
 

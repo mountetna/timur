@@ -1,6 +1,7 @@
 import { reviseDocument } from '../../actions/magma_actions';
 import { Component } from 'react';
 import ListInput from '../inputs/list_input';
+import SlowTextInput from '../inputs/slow_text_input';
 
 class CollectionAttribute extends Component {
   update(new_links) {
@@ -13,10 +14,10 @@ class CollectionAttribute extends Component {
     let { value, attribute } = this.props;
     let links = value || [];
 
-    return <div className="collection">
+    return <div className='collection'>
       {
         links.map( link => 
-          <div key={ link } className="collection_item">
+          <div key={ link } className='collection_item'>
             <MagmaLink link={ link } model={ attribute.model_name }/>
           </div>
         )
@@ -27,12 +28,14 @@ class CollectionAttribute extends Component {
   render() {
     let { revision, mode, reviseDocument } = this.props;
 
-    return <div className="value">
+    return <div className='value'>
       {
-        mode == "edit"
+        mode == 'edit'
           ?  <ListInput
-            values={ revision || [] } 
             placeholder='New or existing ID'
+            className='link_text'
+            values={ revision || [] } 
+            itemInput={ SlowTextInput }
             onChange={ this.update.bind(this) } />
           : this.renderLinks()
       }

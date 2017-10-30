@@ -43,7 +43,7 @@ export default class PredicateChain extends Component {
       case 'file':
       case 'string':
       case 'number':
-      case 'date-time':
+      case 'date_time':
         return <ValuePredicate { ...props }/>;
       case 'terminal':
         return <TerminalPredicate terminal_type={ terminal_type } { ...props }/>;

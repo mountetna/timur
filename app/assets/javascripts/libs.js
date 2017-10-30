@@ -6,8 +6,6 @@ window.connect = require('react-redux').connect
 window.thunk = require('redux-thunk')
 window.chroma = require('chroma-js')
 
-window.dates = require('dates')
-
 window.classNames = function(nameset) {
   return Object.keys(nameset).filter(function(name) {
     return name != undefined && name != null && nameset[name]

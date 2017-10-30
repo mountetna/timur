@@ -2,8 +2,9 @@ import StackedBarPlotAttribute from './stacked_bar_plot_attribute';
 import BarGraphAttribute from './bar_graph_attribute';
 import HistogramAttribute from './histogram_attribute';
 import SwarmAttribute from './swarm_attribute';
-import NumericAttribute from './numeric_attribute';
+import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
+import TextAttribute from './text_attribute';
 
 var AttributeViewer = React.createClass({
   render: function(){
@@ -56,13 +57,13 @@ var AttributeViewer = React.createClass({
           case 'TrueClass':
             return <CheckboxAttribute {...attr_props} />;
           case 'Integer':
-            return <NumericAttribute inputType='int' {...attr_props} />;
+            return <IntegerAttribute {...attr_props} />;
           case 'Float':
-            return <NumericAttribute inputType='float' {...attr_props} />;
+            return <FloatAttribute {...attr_props} />;
           case 'DateTime':
             return <DateTimeAttribute {...attr_props} />;
           default:
-           return <Attribute {...attr_props} />;
+            return <Attribute {...attr_props} />;
         }
 
       default:

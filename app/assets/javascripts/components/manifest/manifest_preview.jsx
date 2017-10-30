@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Dates from '../../dates'
+import { formatDate, formatTime } from '../../utils/dates'
 import HideableText from './hideable_text'
 
 const ManifestInfo = (name, info) =>
@@ -15,7 +15,7 @@ const ManifestPreview = ({ name, project, updated_at, description, is_editable, 
       {ManifestInfo('Author',user.name)}
       {ManifestInfo('Access',access)}
       {ManifestInfo('Last updated',
-        Dates.format_date(updated_at) + ', '+ Dates.format_time(updated_at)
+        formatDate(updated_at) + ', '+ formatTime(updated_at)
       )}
       <span className='description'>{description}</span>
     </div>
