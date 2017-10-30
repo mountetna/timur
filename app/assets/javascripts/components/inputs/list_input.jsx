@@ -62,36 +62,16 @@ export default class ListInput extends Component {
     this.setState({ editNewValue: true });
   }
 
-  renderEdit(value) {
-    let { inputType, placeholder } = this.props;
-    let input;
+  renderEdit(value, ItemInput, inputProps) {
     let blur = () => this.setState({ editNewValue: false });
 
-    switch(inputType) {
-      case 'int':
-      case 'float':
-        input = <NumericInput 
-          update={ this.editValue.bind(this) }
-          waitTime={200}
-          inputType={ inputType }
-          className='link_text'
-          onBlur={ blur }
-          placeholder={placeholder}
-          defaultValue={ value } />;
-        break;
-      default:
-        input = <SlowTextInput
-          waitTime={200}
-          textClassName='link_text' 
-          placeholder={ placeholder }
-          update={ this.editValue.bind(this) }
-          defaultValue={ value }
-          onBlur={ blur }
-        />;
-    }
-
     return <div className='list_item'>
-      { input }
+      <ItemInput 
+        onChange={ this.editValue.bind(this) }
+        onBlur={ blur }
+        defaultValue={ value }
+        { ...inputProps }
+      />
     </div>;
   }
 
@@ -102,7 +82,7 @@ export default class ListInput extends Component {
   }
 
   render() {
-    let { values } = this.props;
+    let { values, itemInput, onChange, ...inputProps } = this.props;
     let { editNewValue } = this.state;
     let new_value;
 
@@ -117,7 +97,7 @@ export default class ListInput extends Component {
       }
       {
         editNewValue
-          ? this.renderEdit(new_value)
+          ? this.renderEdit(new_value, itemInput, inputProps)
           : null
       }
       {
