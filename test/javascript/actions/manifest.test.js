@@ -1,322 +1,42 @@
-import 'isomorphic-fetch'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import nock from 'nock'
-import * as actions from '../../../app/assets/javascripts/actions/manifest_actions'
+import 'isomorphic-fetch';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import nock from 'nock';
+import * as actions from '../../../app/assets/javascripts/actions/manifest_actions';
+import allManifestsResp, { plot } from '../fixtures/all_manifests_response';
+import manifestStore, { manifest } from '../fixtures/manifests_store';
+import manifestResp from '../fixtures/manifest_response';
 
-const middlewares = [thunk]
-const mockStore = configureMockStore(middlewares)
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 describe('async actions', () => {
   afterEach(() => {
     nock.cleanAll()
-  })
+  });
 
-  global.PROJECT_NAME = 'ipi'
+  global.PROJECT_NAME = 'ipi';
   global.Routes = {
     manifests_fetch_path: (projectName) => `http://www.fake.com/${projectName}/manifests`,
     manifests_destroy_path: (projectName, manifestId) => `http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`,
     manifests_create_path: (projectName) => `http://www.fake.com/${projectName}/manifests/create`,
     manifests_update_path: (projectName, manifestId)=> `http://www.fake.com/${projectName}/manifests/update/${manifestId}`
-  }
-  global.fetch = fetch
-  const currentDate = new Date()
-  global.Date = jest.fn(() => currentDate)
+  };
+  global.fetch = fetch;
+  const currentDate = new Date();
+  global.Date = jest.fn(() => currentDate);
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, LOAD_MANIFESTS, and ADD_PLOT when fetching user manifests has been done', () => {
     nock('http://www.fake.com')
       .post('/ipi/manifests')
       .reply(
         200,
-        {
-          "manifests":[
-            {
-              "id":8,
-              "name":"manifest1",
-              "description":"private manifest",
-              "project":"ipi",
-              "access":"private",
-              "data":{
-                "elements":[
-                  {
-                    "name":"var1",
-                    "description":"",
-                    "script":"[1,2,3,4]"
-                  },
-                  {
-                    "name":"var2",
-                    "description":"",
-                    "script":"'abc'"
-                  }
-                ]
-              },
-              "created_at":"2017-09-18T23:58:11.048Z",
-              "updated_at":"2017-09-18T23:58:11.048Z",
-              "user":{
-                "name":"Darrell Abrau"
-              },
-              "plots":[
-
-              ],
-              "is_editable":true
-            },
-            {
-              "id":9,
-              "name":"manifest2",
-              "description":"public manifest",
-              "project":"ipi",
-              "access":"public",
-              "data":{
-                "elements":[
-                  {
-                    "name":"var1",
-                    "description":"",
-                    "script":"'xyz'"
-                  },
-                  {
-                    "name":"var2",
-                    "description":"",
-                    "script":"['1', 'abc', '4']"
-                  }
-                ]
-              },
-              "created_at":"2017-09-18T23:58:50.495Z",
-              "updated_at":"2017-09-18T23:58:50.495Z",
-              "user":{
-                "name":"Darrell Abrau"
-              },
-              "plots":[
-
-              ],
-              "is_editable":true
-            },
-            {
-              "id":10,
-              "name":"new_manifest",
-              "description":"new new",
-              "project":"ipi",
-              "access":"private",
-              "data":{
-                "elements":[
-                  {
-                    "name":"var",
-                    "description":"",
-                    "script":"'var'"
-                  }
-                ]
-              },
-              "created_at":"2017-09-19T00:11:12.260Z",
-              "updated_at":"2017-09-19T00:11:12.260Z",
-              "user":{
-                "name":"Darrell Abrau"
-              },
-              "plots":[
-
-              ],
-              "is_editable":true
-            },
-            {
-              "id":11,
-              "name":"manifest_for_plot",
-              "description":"for plot",
-              "project":"ipi",
-              "access":"private",
-              "data":{
-                "elements":[
-                  {
-                    "name":"var1",
-                    "description":"",
-                    "script":"[1,2,3,4]"
-                  },
-                  {
-                    "name":"var2",
-                    "description":"",
-                    "script":"[1,2,3,4]"
-                  }
-                ]
-              },
-              "created_at":"2017-09-19T21:05:13.224Z",
-              "updated_at":"2017-09-19T21:05:13.224Z",
-              "user":{
-                "name":"Darrell Abrau"
-              },
-              "plots":[
-                {
-                  "manifest_id":11,
-                  "id":3,
-                  "name":"test",
-                  "plot_type":"scatter",
-                  "configuration":{
-                    "data":[
-                      {
-                        "type":"scatter",
-                        "mode":"markers",
-                        "name":"series1",
-                        "id":0.9668614107081013,
-                        "manifestSeriesX":"var1",
-                        "manifestSeriesY":"var2",
-                        "uid":"4f8972"
-                      }
-                    ],
-                    "layout":{
-                      "width":1600,
-                      "height":900,
-                      "title":"test",
-                      "xaxis":{
-                        "title":"test x axis",
-                        "showline":true,
-                        "showgrid":true,
-                        "gridcolor":"#bdbdbd"
-                      },
-                      "yaxis":{
-                        "title":"test y axis",
-                        "showline":true,
-                        "showgrid":true,
-                        "gridcolor":"#bdbdbd"
-                      }
-                    },
-                    "config":{
-                      "showLink":false,
-                      "displayModeBar":true,
-                      "modeBarButtonsToRemove":[
-                        "sendDataToCloud",
-                        "lasso2d",
-                        "toggleSpikelines"
-                      ]
-                    },
-                    "plotType":"scatter"
-                  },
-                  "created_at":"2017-09-19T21:06:30.430Z",
-                  "updated_at":"2017-09-19T21:06:30.430Z"
-                }
-              ],
-              "is_editable":true
-            }
-          ]
-        },
+        allManifestsResp,
         {
           'Access-Control-Allow-Origin': '*',
           'Content-type': 'application/json'
         }
-      )
-
-    const storedManifests = {
-      "8":{
-        "id":8,
-        "name":"manifest1",
-        "description":"private manifest",
-        "project":"ipi",
-        "access":"private",
-        "data":{
-          "elements":[
-            {
-              "name":"var1",
-              "description":"",
-              "script":"[1,2,3,4]"
-            },
-            {
-              "name":"var2",
-              "description":"",
-              "script":"'abc'"
-            }
-          ]
-        },
-        "created_at":"2017-09-18T23:58:11.048Z",
-        "updated_at":"2017-09-18T23:58:11.048Z",
-        "user":{
-          "name":"Darrell Abrau"
-        },
-        "is_editable":true,
-        "plotIds":[
-
-        ]
-      },
-      "9":{
-        "id":9,
-        "name":"manifest2",
-        "description":"public manifest",
-        "project":"ipi",
-        "access":"public",
-        "data":{
-          "elements":[
-            {
-              "name":"var1",
-              "description":"",
-              "script":"'xyz'"
-            },
-            {
-              "name":"var2",
-              "description":"",
-              "script":"['1', 'abc', '4']"
-            }
-          ]
-        },
-        "created_at":"2017-09-18T23:58:50.495Z",
-        "updated_at":"2017-09-18T23:58:50.495Z",
-        "user":{
-          "name":"Darrell Abrau"
-        },
-        "is_editable":true,
-        "plotIds":[
-
-        ]
-      },
-      "10":{
-        "id":10,
-        "name":"new_manifest",
-        "description":"new new",
-        "project":"ipi",
-        "access":"private",
-        "data":{
-          "elements":[
-            {
-              "name":"var",
-              "description":"",
-              "script":"'var'"
-            }
-          ]
-        },
-        "created_at":"2017-09-19T00:11:12.260Z",
-        "updated_at":"2017-09-19T00:11:12.260Z",
-        "user":{
-          "name":"Darrell Abrau"
-        },
-        "is_editable":true,
-        "plotIds":[
-
-        ]
-      },
-      "11":{
-        "id":11,
-        "name":"manifest_for_plot",
-        "description":"for plot",
-        "project":"ipi",
-        "access":"private",
-        "data":{
-          "elements":[
-            {
-              "name":"var1",
-              "description":"",
-              "script":"[1,2,3,4]"
-            },
-            {
-              "name":"var2",
-              "description":"",
-              "script":"[1,2,3,4]"
-            }
-          ]
-        },
-        "created_at":"2017-09-19T21:05:13.224Z",
-        "updated_at":"2017-09-19T21:05:13.224Z",
-        "user":{
-          "name":"Darrell Abrau"
-        },
-        "is_editable":true,
-        "plotIds":[
-          3
-        ]
-      }
-    }
+      );
 
     const expectedActions = [
       {
@@ -334,72 +54,26 @@ describe('async actions', () => {
       },
       {
         type: 'LOAD_MANIFESTS',
-        manifestsById: storedManifests
+        manifestsById: manifestStore
       },
       {
-        plot:{
-          "configuration":{
-            "config":{
-              "displayModeBar":true,
-              "modeBarButtonsToRemove":[
-                "sendDataToCloud",
-                "lasso2d",
-                "toggleSpikelines"
-              ],
-              "showLink":false
-            },
-            "data":[
-              {
-                "id":0.9668614107081013,
-                "manifestSeriesX":"var1",
-                "manifestSeriesY":"var2",
-                "mode":"markers",
-                "name":"series1",
-                "type":"scatter",
-                "uid":"4f8972"
-              }
-            ],
-            "layout":{
-              "height":900,
-              "title":"test",
-              "width":1600,
-              "xaxis":{
-                "gridcolor":"#bdbdbd",
-                "showgrid":true,
-                "showline":true,
-                "title":"test x axis"
-              },
-              "yaxis":{
-                "gridcolor":"#bdbdbd",
-                "showgrid":true,
-                "showline":true,
-                "title":"test y axis"
-              }
-            },
-            "plotType":"scatter"
-          },
-          "created_at":"2017-09-19T21:06:30.430Z",
-          "id":3,
-          "is_editable":true,
-          "manifest_id":11,
-          "name":"test",
-          "plot_type":"scatter",
-          "updated_at":"2017-09-19T21:06:30.430Z"
-        },
+        plot: { ...plot },
         type:"ADD_PLOT"
       }
-    ]
+    ];
 
-    const store = mockStore({ manifests: storedManifests })
+    const store = mockStore({ manifests: manifestStore });
 
     return store.dispatch(actions.requestManifests()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
-    })
-  })
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, SELECT_MANIFEST, and REMOVE_MANIFEST when deleting a user manifest has been done', () => {
+    const manifestId = 1;
+
     nock('http://www.fake.com')
-      .post('/ipi/manifests/destroy/1')
+      .post(`/ipi/manifests/destroy/${manifestId}`)
       .reply(
         200,
         {"success":true},
@@ -407,13 +81,13 @@ describe('async actions', () => {
           'Access-Control-Allow-Origin': '*',
           'Content-type': 'application/json'
         }
-      )
+      );
 
     const expectedActions = [
       {
         exchange:{
           exchange_name:"delete-manifest",
-          exchange_path:"http://www.fake.com/ipi/manifests/destroy/1",
+          exchange_path:`http://www.fake.com/ipi/manifests/destroy/${manifestId}`,
           start_time: currentDate
         },
         exchange_name:"delete-manifest",
@@ -429,97 +103,28 @@ describe('async actions', () => {
       },
       {
         type: 'REMOVE_MANIFEST',
-        id: 1
+        id: manifestId
       }
-    ]
+    ];
 
-    const store = mockStore({})
+    const store = mockStore({});
 
-    return store.dispatch(actions.deleteManifest(1)).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
-    })
-  })
+    return store.dispatch(actions.deleteManifest(manifestId)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, TOGGLE_IS_EDITING_MANIFEST, and SELECT_MANIFEST when creating a new user manifest has been done', () => {
-    const savedManifest = {
-      "id":12,
-      "name":"NEW MANIFEST",
-      "description":"newest ",
-      "project":"ipi",
-      "access":"private",
-      "data":{
-        "elements":[
-          {
-            "name":"var",
-            "description":"",
-            "script":"123"
-          },
-          {
-            "name":"var2",
-            "description":"",
-            "script":"'abc'"
-          }
-        ]
-      },
-      "created_at": "2017-09-19T21:06:30.430Z",
-      "updated_at": "2017-09-19T21:06:30.430Z",
-      "user":{
-        "name":"Darrell Abrau"
-      },
-      "plots":[
-
-      ],
-      "is_editable":true
-    }
-
     nock('http://www.fake.com')
       .post('/ipi/manifests/create')
       .reply(
         200,
-        { manifest: savedManifest },
+        manifestResp,
         {
           'Access-Control-Allow-Origin': '*',
           'Content-type': 'application/json'
         }
-      )
-
-
-    const newManifest = {
-      name: "NEW MANIFEST",
-      access: "private",
-      elementKeys: [
-        "cf21b242-6748-473c-8254-a3b67014ae43",
-        "db84f89b-29e2-4285-a2f4-9b24682a41d4"
-      ],
-      elementsByKey: {
-        "cf21b242-6748-473c-8254-a3b67014ae43": {
-          "name": "var",
-          "description": "",
-          "script": "123"
-        },
-        "db84f89b-29e2-4285-a2f4-9b24682a41d4": {
-          "name": "var2",
-          "description": "",
-          "script": "'abc'"
-        }
-      },
-      hasConsignment: false,
-      description: "newest ",
-      data: {
-        "elements": [
-          {
-            "name": "var",
-            "description": "",
-            "script": "123"
-          },
-          {
-            "name": "var2",
-            "description": "",
-            "script": "'abc'"
-          }
-        ]
-      }
-    }
+      );
 
     const expectedActions = [
       {
@@ -537,7 +142,7 @@ describe('async actions', () => {
       },
       {
         type:"ADD_MANIFEST",
-        manifest: savedManifest
+        ...manifestResp
       },
       {
         type: "TOGGLE_IS_EDITING_MANIFEST"
@@ -546,58 +151,22 @@ describe('async actions', () => {
         type: 'SELECT_MANIFEST',
         id: 12
       }
-    ]
+    ];
 
-    const store = mockStore({})
+    const store = mockStore({});
 
-    return store.dispatch(actions.saveNewManifest(newManifest)).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
-    })
+    return store.dispatch(actions.saveNewManifest(manifest)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
 
-  })
+  });
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, UPDATE_USER_MANIFEST, and TOGGLE_IS_EDITING_MANIFEST when updating user manifest has been done', () => {
-    const updatedManifest = {
-      "id":12,
-      "name":"updated MANIFEST",
-      "description":"updated",
-      "project":"ipi",
-      "access":"private",
-      "data":{
-        "elements":[
-          {
-            "name":"var",
-            "description":"",
-            "script":"1234"
-          },
-          {
-            "name":"var2",
-            "description":"",
-            "script":"'abcd'"
-          },
-          {
-            "name":"var2",
-            "description":"",
-            "script":"random broken stuff that gets saved"
-          }
-        ]
-      },
-      "created_at":"2017-09-22T00:20:40.451Z",
-      "updated_at":"2017-09-22T17:09:09.544Z",
-      "user":{
-        "name":"Darrell Abrau"
-      },
-      "plots":[
-
-      ],
-      "is_editable":true
-    }
-
     nock('http://www.fake.com')
-      .post('/ipi/manifests/update/12')
+      .post(`/ipi/manifests/update/${manifestResp.manifest.id}`)
       .reply(
         200,
-        { manifest: updatedManifest },
+        manifestResp,
         {
           'Access-Control-Allow-Origin': '*',
           'Content-type': 'application/json'
@@ -608,7 +177,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"save-manifest",
-          exchange_path:"http://www.fake.com/ipi/manifests/update/12",
+          exchange_path:`http://www.fake.com/ipi/manifests/update/${manifestResp.manifest.id}`,
           start_time: currentDate
         },
         exchange_name:"save-manifest",
@@ -620,86 +189,40 @@ describe('async actions', () => {
       },
       {
         type:"UPDATE_USER_MANIFEST",
-        manifest: updatedManifest
+        ...manifestResp
       },
       {
         type: "TOGGLE_IS_EDITING_MANIFEST"
       }
-    ]
+    ];
 
-    const store = mockStore({})
+    const store = mockStore({});
 
-    return store.dispatch(actions.saveManifest(updatedManifest)).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
-    })
+    return store.dispatch(actions.saveManifest({ ...manifestResp.manifest })).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
 
-  })
+  });
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, SELECT_MANIFEST, and TOGGLE_IS_EDITING_MANIFEST when copying a user manifest has been done', () => {
-    const originalManifest = {
-      id:14,
-      name:"original",
-      description:"original",
-      project:"ipi",
-      access:"private",
-      data:{
-        "elements":[
-          {
-            "name":"var1",
-            "description":"",
-            "script":"'abc 123'"
-          }
-        ]
-      },
-      created_at:"2017-09-22T18:25:09.648Z",
-      updated_at:"2017-09-22T18:25:09.648Z",
-      user:{
-        "name":"Darrell Abrau"
-      },
-      plots:[
+    const newManifestId =  manifestResp.manifest.id + 1;
 
-      ],
-      is_editable:true
-    }
-
-    const copiedManifest = {
-      "id":15,
-      "name":"original(copy)",
-      "description":"original",
-      "project":"ipi",
-      "access":"private",
-      "data":{
-        "elements":[
-          {
-            "name":"var1",
-            "description":"",
-            "script":"'abc 123'"
-          }
-        ]
-      },
-      "created_at":"2017-09-22T18:25:14.146Z",
-      "updated_at":"2017-09-22T18:25:14.146Z",
-      "user":{
-        "name":"Darrell Abrau"
-      },
-      "plots":[
-
-      ],
-      "is_editable":true
-    }
+    const copiedManifestResp = {
+      ...manifestResp.manifest,
+      name: `${manifestResp.manifest.name}(copy)`,
+      id: newManifestId
+    };
 
     nock('http://www.fake.com')
       .post('/ipi/manifests/create')
       .reply(
         200,
-        {
-          "manifest": copiedManifest
-        },
+        { "manifest": copiedManifestResp },
         {
           'Access-Control-Allow-Origin': '*',
           'Content-type': 'application/json'
         }
-      )
+      );
 
     const expectedActions = [
       {
@@ -717,72 +240,41 @@ describe('async actions', () => {
       },
       {
         type:"ADD_MANIFEST",
-        manifest: copiedManifest
+        manifest: copiedManifestResp
       },
       {
         type: 'SELECT_MANIFEST',
-        id: 15
+        id: newManifestId
       },
       {
         type: "TOGGLE_IS_EDITING_MANIFEST"
       }
-    ]
+    ];
 
-    const store = mockStore({})
+    const store = mockStore({});
 
-    return store.dispatch(actions.copyManifest(originalManifest)).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
-    })
-  })
-})
+    return store.dispatch(actions.copyManifest(manifestResp.manifest)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});
 
 describe('actions', () => {
   it('transforms the serialized manifest form to the manifest form for the query payload', () => {
-    const serializedManifest = {
-      "id":11,
-      "name":"manifest_for_plot",
-      "description":"for plot",
-      "project":"ipi",
-      "access":"private",
-      "data":{
-        "elements":[
-          {
-            "name":"var1",
-            "description":"",
-            "script":"[1,2,3,4]"
-          },
-          {
-            "name":"var2",
-            "description":"",
-            "script":"[1,2,3,4]"
-          }
-        ]
-      },
-      "created_at":"2017-09-19T21:05:13.224Z",
-      "updated_at":"2017-09-19T21:05:13.224Z",
-      "user":{
-        "name":"Darrell Abrau"
-      },
-      "is_editable":true,
-      "plotIds":[
-        3
-      ]
-    }
-
     const queryPayload = {
-      "manifest":[
+      "manifest": [
         [
-          "var1",
-          "[1,2,3,4]"
+          "var",
+          "123"
         ],
         [
           "var2",
-          "[1,2,3,4]"
+          "'abc'"
         ]
       ],
-      "name":"manifest_for_plot"
-    }
+      "name": 'NEW MANIFEST'
+    };
 
-    expect(actions.manifestToReqPayload(serializedManifest)).toEqual(queryPayload)
-  })
-})
+    expect(actions.manifestToReqPayload(manifest)).toEqual(queryPayload);
+  });
+});
