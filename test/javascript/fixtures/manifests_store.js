@@ -111,6 +111,7 @@ export default {
 };
 
 export const manifest = {
+  id:16,
   name: "NEW MANIFEST",
   access: "private",
   elementKeys: [
