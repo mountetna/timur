@@ -1,14 +1,14 @@
-import 'babel-polyfill'
-import 'promise-polyfill'
-import 'whatwg-fetch'
+import 'babel-polyfill';
+import 'promise-polyfill';
+import 'whatwg-fetch';
 
-import createLogger from 'redux-logger'
-import rootReducer from '../reducers'
-import Manifests from './manifest/manifests'
-import TimurNav from './timur_nav'
-import ModelMap from './model_map'
-import Search from './search/search'
-import Plotter from './plots/plotter'
+import createLogger from 'redux-logger';
+import rootReducer from '../reducers';
+import Manifests from './manifest/manifests';
+import TimurNav from './timur_nav';
+import ModelMap from './model_map';
+import Search from './search/search';
+import Plotter from './plots/plotter';
 
 const createStore = (initialState)=>{
   let middleWares = [thunk];
