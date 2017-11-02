@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Selector from '../selector';
+import SelectInput from '../inputs/select_input';
 
 export default class SearchQuery extends Component{
 
@@ -46,7 +46,7 @@ export default class SearchQuery extends Component{
 
           {'Show table'}
         </span>
-        <Selector {...selector_props} />
+        <SelectInput {...selector_props} />
         <input {...filter_input_props} />
         <input {...button_input_props} />
       </div>

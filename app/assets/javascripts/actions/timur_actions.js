@@ -1,10 +1,9 @@
 // Class imports.
-import Vector from 'vector';
-import { getTSVForm, getView } from '../api/timur';
+import { getView } from '../api/view';
 import { showMessages } from './message_actions';
 import { requestDocuments } from './magma_actions';
 import { Exchange } from './exchange_actions';
-import { requestConsignments } from './consignment_actions';
+import { requestConsignments } from './manifest_actions';
 import Tab from '../models/tab';
 
 // Flip a config variable.
@@ -82,10 +81,3 @@ export const requestView = (model_name, record_name, tab_name, success, error)=>
       .catch(localError);
   };
 };
-
-// download a TSV from magma via Timur
-
-export const requestTSV = (model_name,filter) =>
-  (dispatch) => {
-    getTSVForm({ model_name, filter, record_names: 'all' })
-  }

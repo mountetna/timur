@@ -1,4 +1,4 @@
-var format_date = function(date) {
+export const formatDate = (date) => {
   if (!date) return null
 
   if (!(date instanceof Date)) date = new Date(date)
@@ -6,18 +6,13 @@ var format_date = function(date) {
   return $.datepicker.formatDate( 'yy-mm-dd', date )
 }
 
-var format_time = function(date) {
+export const formatTime = (date) => {
   if (!date) return null
 
   if (!(date instanceof Date)) date = new Date(date)
 
 
-  var hours = ('00' + date.getHours()).slice(-2);
-  var minutes = ('00' + date.getMinutes()).slice(-2);
+  let hours = ('00' + date.getHours()).slice(-2);
+  let minutes = ('00' + date.getMinutes()).slice(-2);
   return hours + ':' + minutes;
-}
-
-module.exports = {
-  format_date: format_date,
-  format_time: format_time
 }

@@ -11,10 +11,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import Magma from 'magma';
-import { requestModels, requestDocuments } from '../../actions/magma_actions';
-import { requestTSV } from '../../actions/timur_actions';
+import SelectInput from '../inputs/select_input';
+import { requestTSV, requestModels, requestDocuments } from '../../actions/magma_actions';
 import { selectSearchCache } from '../../selectors/search_cache';
-import { requestConsignments } from '../../actions/consignment_actions';
 import { cacheSearchPage, setSearchPageSize, setSearchPage } from '../../actions/search_actions';
 
 import SearchQuery from './search_query';
@@ -69,13 +68,13 @@ class Search extends Component {
   renderQuery() {
     return <div className='query'>
       <span className='label'>Show table</span>
-      <Selector name='model'
+      <SelectInput name='model'
         values={ this.props.model_names }
         onChange={ (model_name) => this.setState({ selected_model: model_name }) }
         showNone='enabled'/>
 
       <span className='label'>Page size</span>
-      <Selector 
+      <SelectInput 
         values={ [ 10, 25, 50, 200 ] }
         defaultValue={ this.state.page_size }
         onChange={ (page_size) => this.setState({ page_size }) }

@@ -1,8 +1,8 @@
 import React from 'react'
 import VectorResult from './vector_result'
 import MatrixResult from './matrix_result'
-import Vector from '../../vector'
-import Matrix from '../../matrix'
+import Vector from '../../models/vector'
+import Matrix from '../../models/matrix'
 
 const isPrimitiveType = (value) => typeof value === 'string' || typeof value === 'number' || value === null || typeof value === 'undefined'
 

@@ -2,6 +2,9 @@ import StackedBarPlotAttribute from './stacked_bar_plot_attribute';
 import BarGraphAttribute from './bar_graph_attribute';
 import HistogramAttribute from './histogram_attribute';
 import SwarmAttribute from './swarm_attribute';
+import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
+import CollectionAttribute from './collection_attribute';
+import TextAttribute from './text_attribute';
 
 var AttributeViewer = React.createClass({
   render: function(){
@@ -60,7 +63,7 @@ var AttributeViewer = React.createClass({
           case 'DateTime':
             return <DateTimeAttribute {...attr_props} />;
           default:
-           return <Attribute {...attr_props} />;
+            return <Attribute {...attr_props} />;
         }
 
       default:

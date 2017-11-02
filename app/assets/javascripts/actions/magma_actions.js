@@ -1,5 +1,5 @@
 import { showMessages } from './message_actions';
-import { getDocuments, postRevisions } from '../api/timur';
+import { getAnswer, getTSVForm, getDocuments, postRevisions } from '../api/magma';
 import { Exchange } from './exchange_actions';
 
 export const addTemplate = (template)=>(
@@ -99,7 +99,7 @@ export const requestDocuments = ({ model_name, record_names, attribute_names, fi
   getDocuments(...get_doc_args)
     .then(localSuccess)
     .catch(localError);
-}
+};
 
 export const requestModels = ()=>{
   let reqOpts = {
@@ -150,7 +150,7 @@ const setFormData = (revisions, model_name)=>{
   }
 
   return form;
-}
+};
 
 export const sendRevisions = (model_name, revisions, success, error)=>{
   return (dispatch)=>{
@@ -185,54 +185,28 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
       .then(localSuccess)
       .catch(localError);
   }
-}
+};
 
-/*
-export const sendRevisions = (model_name, revisions, success, error) => (dispatch) => {
-  var data = new FormData()
+// download a TSV from magma via Timur
 
-  for (var record_name in revisions) {
-    var revision = revisions[record_name]
-    for (var attribute_name in revision) {
-      if (Array.isArray(revision[attribute_name])) {
-        revision[attribute_name].forEach(
-          (value) => data.append(
-            revision_name(
-              model_name,record_name,attribute_name
-            )+'[]', value
-          )
-        )
-      }
-      else
-        data.append(
-          revision_name(model_name,record_name,attribute_name),
-          revision[attribute_name]
-        )
-    }
-  }
+export const requestTSV = (model_name,filter) =>
+  (dispatch) => {
+    getTSVForm({ model_name, filter, record_names: 'all' })
+  };
 
-  postRevisions(data, new Exchange(dispatch, `revisions-${model_name}`))
-    .then((response) => {
-      consumePayload(dispatch,response)
-      dispatch(
-        discardRevision(
-          record_name,
-          model_name
-        )
-      )
-      if (success != undefined) success()
-    })
-    .catch((e) => {
-       e.response.json().then((response) =>
-         dispatch(
-           showMessages([
-`### The change we sought did not occur.
 
-${response.errors.map((error) => `* ${error}`)}`
-           ])
-         )
-       )
-       if (error != undefined) error()
-      })
-  }
-*/
+export const requestAnswer = (question, callback) =>
+  (dispatch) => {
+    let question_name = Array.isArray(question) ? [].concat.apply([], question).join('-') : question;
+    let exchange = new Exchange(dispatch, question_name);
+
+    getAnswer(question, exchange).then(callback)
+  };
+
+const addPredicates = (predicates) => ({ type: 'ADD_PREDICATES', predicates });
+
+export const requestPredicates = () =>
+  (dispatch) =>
+    dispatch(requestAnswer('::predicates', (response) => {
+      dispatch(addPredicates(response.predicates));
+    }));
