@@ -13,6 +13,9 @@
 /db/schema.rb
 
 /public/assets
+/public/js
+
+package-lock.json
 
 # Ignore all logfiles and tempfiles.
 /log/*
