@@ -10,7 +10,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import Magma from 'magma';
+import Magma from '../../magma';
 import SelectInput from '../inputs/select_input';
 import { requestTSV, requestModels, requestDocuments } from '../../actions/magma_actions';
 import { selectSearchCache } from '../../selectors/search_cache';

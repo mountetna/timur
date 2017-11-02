@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Magma from 'magma';
+import Magma from '../../magma';
 import SearchTableColumnHeader from './search_table_column_header';
 import SearchTableRow from './search_table_row';
 
