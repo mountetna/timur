@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import { reviseDocument } from '../../actions/magma_actions';
 import { Component } from 'react';
 import SlowTextInput from '../inputs/slow_text_input';

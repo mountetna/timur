@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 /*
  * The Browser presents views of a record/model. The views are organized into
  * tabs/panes.

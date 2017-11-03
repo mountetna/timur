@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import markdown from '../markdown'
 
 var Messages = React.createClass({

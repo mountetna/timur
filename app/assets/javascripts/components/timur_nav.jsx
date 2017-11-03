@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import { toggleConfig } from '../actions/timur_actions'
 import { Component } from 'react'
 

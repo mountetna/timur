@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import { requestIdentifiers } from '../actions/magma_actions';
 
 var IdentifierSearch = React.createClass({

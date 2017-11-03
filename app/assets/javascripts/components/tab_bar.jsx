@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 var TabBar = React.createClass({
   format_name: function(name){
     return name.replace(/_/, ' ').replace(/\w\S*/g, function(txt) {

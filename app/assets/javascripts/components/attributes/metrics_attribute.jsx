@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import { selectConsignment } from '../../selectors/consignment'
 
 var CategoryControl = React.createClass({

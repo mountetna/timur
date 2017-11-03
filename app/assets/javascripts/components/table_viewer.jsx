@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import React from 'react'
 import Magma from 'magma'
 import { requestTSV } from '../actions/magma_actions'

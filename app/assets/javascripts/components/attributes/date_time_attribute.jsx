@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import { reviseDocument } from '../../actions/magma_actions';
 import { Component } from 'react';
 import DateTimeInput from '../inputs/date_time_input';

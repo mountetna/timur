@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 var Noauth = React.createClass({
   componentDidMount: function () {
     this.props.message([

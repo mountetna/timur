@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 var help_nodes = {
   edit: [
     "Click the pencil to edit this record.  \n"+

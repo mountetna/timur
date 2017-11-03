@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import { Component } from 'react';
 import { requestPredicates, requestModels } from '../actions/magma_actions';
 import Magma from '../magma';

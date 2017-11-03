@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import { Component } from 'react';
 import ManifestElement from './manifest_element';
 import ManifestPreview from './manifest_preview';

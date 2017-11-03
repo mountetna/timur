@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import React from 'react'
 import BarGraph from '../plots/bar_graph'
 import { selectConsignment } from '../../selectors/consignment'

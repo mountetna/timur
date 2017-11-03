@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import { Component } from 'react';
 import { selectVerbs } from '../../selectors/predicate';
 import { selectTemplate } from '../../selectors/magma';
