@@ -1,3 +1,4 @@
+import DensityPlot from './density_plot';
 import React, { Component } from 'react';
 
 var DensityPlotContainer = React.createClass({

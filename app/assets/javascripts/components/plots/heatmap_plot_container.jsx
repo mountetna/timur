@@ -1,3 +1,4 @@
+import HeatmapPlot from './heatmap_plot';
 import React, { Component } from 'react';
 
 var HeatmapPlotContainer = React.createClass({

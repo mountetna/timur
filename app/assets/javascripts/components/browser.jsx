@@ -1,3 +1,6 @@
+import Header from './header';
+import TabBar from './tab_bar';
+import Help from './help';
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
@@ -14,7 +17,7 @@ import { connect } from 'react-redux';
  */
 
 // Class imports.
-import Magma from 'magma';
+import Magma from '../magma';
 import BrowserTab from './browser_tab';
 import Tab from '../models/tab';
 

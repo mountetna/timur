@@ -1,3 +1,4 @@
+import Legend from './legend';
 import React, { Component } from 'react';
 
 import XAxis from './xaxis'

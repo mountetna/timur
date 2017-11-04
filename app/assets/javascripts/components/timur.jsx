@@ -1,3 +1,7 @@
+import Activity from './activity';
+import Browser from './browser';
+import Messages from './messages';
+import Noauth from './noauth';
 import React, { Component } from 'react';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';

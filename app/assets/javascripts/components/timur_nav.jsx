@@ -1,3 +1,5 @@
+import IdentifierSearch from './identifier_search';
+import Help from './help';
 import { connect } from 'react-redux';
 
 import { toggleConfig } from '../actions/timur_actions'

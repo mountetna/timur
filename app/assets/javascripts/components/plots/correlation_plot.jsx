@@ -1,3 +1,4 @@
+import Tooltip from '../tooltip';
 import React, { Component } from 'react';
 
 var CorrelationPlot = React.createClass({

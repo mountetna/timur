@@ -1,3 +1,4 @@
+import CorrelationPlot from './correlation_plot';
 import React, { Component } from 'react';
 
 var CorrelationPlotContainer = React.createClass({

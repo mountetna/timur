@@ -1,3 +1,4 @@
+import MagmaLink from '../magma_link';
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';

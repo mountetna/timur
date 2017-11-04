@@ -1,3 +1,4 @@
+import Pager from '../pager';
 /*
  * TODO! The <Header /> component has been disabled here. The <Header />
  * component is used to render the bulk edit buttons and events. Editing is

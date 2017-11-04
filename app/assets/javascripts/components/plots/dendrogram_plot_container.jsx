@@ -1,3 +1,4 @@
+import DendrogramPlot from './dendrogram_plot';
 import React, { Component } from 'react';
 
 var DendrogramPlotContainer = React.createClass({

@@ -1,3 +1,4 @@
+import AttributeViewer from './attributes/attribute_viewer';
 import React, { Component } from 'react';
 
 var BrowserPane = React.createClass({

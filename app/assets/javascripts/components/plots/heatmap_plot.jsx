@@ -1,3 +1,5 @@
+import Tooltip from '../tooltip';
+import Dendrogram from './dendrogram';
 import React, { Component } from 'react';
 
 var HeatmapPlot = React.createClass({

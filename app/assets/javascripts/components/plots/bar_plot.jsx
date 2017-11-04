@@ -1,3 +1,4 @@
+import Legend from './legend';
 import React, { Component } from 'react';
 
 import { createScale } from '../../utils/d3_scale'

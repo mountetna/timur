@@ -1,3 +1,4 @@
+import Header from '../header';
 import React, { Component } from 'react';
 
 var PlotHeader = React.createClass({

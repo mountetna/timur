@@ -1,3 +1,4 @@
+import MagmaLink from '../magma_link';
 import { connect } from 'react-redux';
 
 import { reviseDocument } from '../../actions/magma_actions';

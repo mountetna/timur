@@ -1,3 +1,14 @@
+import MetricsAttribute from './metrics_attribute';
+import MarkdownAttribute from './markdown_attribute';
+import SelectAttribute from './select_attribute';
+import ImageAttribute from './image_attribute';
+import DocumentAttribute from './document_attribute';
+import CheckboxAttribute from './checkbox_attribute';
+import LinePlotAttribute from './line_plot_attribute';
+import BoxPlotAttribute from './box_plot_attribute';
+import DateTimeAttribute from './date_time_attribute';
+import TableAttribute from './table_attribute';
+import LinkAttribute from './link_attribute';
 import React, { Component } from 'react';
 
 import StackedBarPlotAttribute from './stacked_bar_plot_attribute';

@@ -1,3 +1,4 @@
+import ScatterPlot from './scatter_plot';
 import React, { Component } from 'react';
 
 var ScatterPlotContainer = React.createClass({
