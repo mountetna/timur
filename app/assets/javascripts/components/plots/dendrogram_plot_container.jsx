@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 var DendrogramPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }

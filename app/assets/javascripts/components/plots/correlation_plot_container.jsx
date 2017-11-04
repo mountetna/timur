@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 var CorrelationPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }

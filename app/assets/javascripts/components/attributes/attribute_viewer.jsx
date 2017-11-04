@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 import StackedBarPlotAttribute from './stacked_bar_plot_attribute';
 import BarGraphAttribute from './bar_graph_attribute';
 import HistogramAttribute from './histogram_attribute';

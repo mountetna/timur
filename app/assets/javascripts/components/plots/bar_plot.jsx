@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 import { createScale } from '../../utils/d3_scale'
 import YAxis from './yaxis'
 

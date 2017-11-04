@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 import { reviseDocument } from '../../actions/magma_actions'
 import SelectInput from '../inputs/select_input';
 

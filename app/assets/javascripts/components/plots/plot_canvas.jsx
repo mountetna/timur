@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 // Requires:
 //   x = pixel coordinate for left edge
 //   y = pixel coordinate for top edge

@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 var CorrelationPlot = React.createClass({
   getInitialState: function() {
     return { highlight_cell: null }

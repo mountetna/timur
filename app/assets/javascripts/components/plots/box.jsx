@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 import SelectInput from '../inputs/select_input';
 
 var BoxPlot = React.createClass({

@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 var HeatmapPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }

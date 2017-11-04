@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 var PlotHeader = React.createClass({
   render: function() {
     return <Header mode={ this.props.mode } 

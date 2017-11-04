@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 // expects x, y, and a 'series' array of objects with
 // name, color properties
 var Legend = React.createClass({
