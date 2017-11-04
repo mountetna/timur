@@ -1,11 +1,3 @@
-window.React    = require('react')
-window.ReactDOM = require('react-dom')
-window.Redux = require('redux')
-window.Provider = require('react-redux').Provider
-window.connect = require('react-redux').connect
-window.thunk = require('redux-thunk')
-window.chroma = require('chroma-js')
-
 window.classNames = function(nameset) {
   return Object.keys(nameset).filter(function(name) {
     return name != undefined && name != null && nameset[name]

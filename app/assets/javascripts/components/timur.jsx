@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 
 import 'babel-polyfill';
 import 'promise-polyfill';
@@ -12,10 +15,10 @@ import ModelMap from './model_map';
 import Search from './search/search';
 import Plotter from './plots/plotter';
 
-const createStore = (initialState)=>{
+const store = (initialState)=>{
   let middleWares = [thunk];
   if(process.env.NODE_ENV != 'production') middleWares.push(createLogger());
-  return Redux.applyMiddleware(...middleWares)(Redux.createStore)(rootReducer, initialState);
+  return applyMiddleware(...middleWares)(createStore)(rootReducer, initialState);
 }
 
 var Timur = React.createClass({
@@ -87,7 +90,7 @@ var Timur = React.createClass({
 
 // Initializes the render.
 export default (props)=>(
-  <Provider store={createStore(props)}>
+  <Provider store={store(props)}>
 
     <Timur {...props}/>
   </Provider>
