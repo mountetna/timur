@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Predicate from './predicate';
 import PredicateChainSet from './predicate_chain_set';
 import { selectModelNames } from '../../selectors/magma';

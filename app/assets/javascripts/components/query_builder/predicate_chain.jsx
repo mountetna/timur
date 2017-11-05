@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import ModelPredicate from './model';
 import RecordPredicate from './record';
 import ValuePredicate from './value';

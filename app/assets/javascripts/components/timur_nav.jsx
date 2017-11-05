@@ -3,7 +3,7 @@ import Help from './help';
 import { connect } from 'react-redux';
 
 import { toggleConfig } from '../actions/timur_actions'
-import { Component } from 'react'
+import React, { Component } from 'react'
 
 class TimurNav extends Component {
   renderHalo() {

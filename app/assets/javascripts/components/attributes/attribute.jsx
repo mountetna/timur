@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { reviseDocument } from '../../actions/magma_actions';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import SlowTextInput from '../inputs/slow_text_input';
 
 class Attribute extends Component {

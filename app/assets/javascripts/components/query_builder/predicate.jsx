@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { FloatInput } from '../inputs/numeric_input';
 import SlowTextInput from '../inputs/slow_text_input';
 import DateTimeInput from '../inputs/date_time_input';

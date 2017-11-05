@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import debounce from '../../utils/debounce';
 
 // this is an input that debounces text input of some sort

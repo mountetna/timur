@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { reviseDocument } from '../../actions/magma_actions'
-import { Component } from 'react';
+import React, { Component } from 'react';
 import TextAreaInput from '../inputs/text_area_input';
 
 class TextAttribute extends Component {
