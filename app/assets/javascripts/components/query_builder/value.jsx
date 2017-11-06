@@ -29,9 +29,12 @@ class ValuePredicate extends Component {
     let getChildren = this.getChildren.bind(this);
     let itemInput = this.getItemInput(type);
 
-    return <Predicate
-      { ...{terms, update, itemInput, verbs, special, args, getChildren } }
-    />;
+    return(
+      <Predicate
+        { ...{terms, update, itemInput, verbs, special, args, getChildren } }
+      />
+    );
+
   }
 }
 

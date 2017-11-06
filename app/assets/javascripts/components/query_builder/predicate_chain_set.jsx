@@ -17,17 +17,19 @@ export default class PredicateChainSet extends Component {
   render() {
     let { chains, terminal_type } = this.props;
 
-    return <div className='chainset'>
-      {
-        chains.map( (predicates, position) => 
-          <PredicateChain 
-            update={ this.updateChain.bind(this, position) }
-            terminal_type={ terminal_type }
-            predicates={ predicates }
-            key={ position }
-          />
-        )
-      }
-    </div>;
+    return(
+      <div className='chainset'>
+        {
+          chains.map( (predicates, position) => 
+            <PredicateChain 
+              update={ this.updateChain.bind(this, position) }
+              terminal_type={ terminal_type }
+              predicates={ predicates }
+              key={ position }
+            />
+          )
+        }
+      </div>
+    );
   }
 }

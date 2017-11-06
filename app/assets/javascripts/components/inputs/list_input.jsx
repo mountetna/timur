@@ -17,11 +17,13 @@ export default class ListInput extends Component {
       className = 'delete_link empty';
     }
 
-    return <div key={ pos } className='list_item'>
-      <span className={ className } onClick={ () => this.removeValue(pos) } >
-        { list_item  }
-      </span>
-    </div>;
+    return(
+      <div key={ pos } className='list_item'>
+        <span className={ className } onClick={ () => this.removeValue(pos) } >
+          { list_item  }
+        </span>
+      </div>
+    );
   }
 
   removeValue(pos) {
@@ -65,20 +67,24 @@ export default class ListInput extends Component {
   renderEdit(value, ItemInput, inputProps) {
     let blur = () => this.setState({ editNewValue: false });
 
-    return <div className='list_item'>
-      <ItemInput 
-        onChange={ this.editValue.bind(this) }
-        onBlur={ blur }
-        defaultValue={ value }
-        { ...inputProps }
-      />
-    </div>;
+    return(
+      <div className='list_item'>
+        <ItemInput 
+          onChange={ this.editValue.bind(this) }
+          onBlur={ blur }
+          defaultValue={ value }
+          { ...inputProps }
+        />
+      </div>
+    );
   }
 
   renderAdd() {
-    return <div className='list_item'>
-      <span className='add_item' onClick={ this.addListItem.bind(this) }>+</span>
-    </div>;
+    return(
+      <div className='list_item'>
+        <span className='add_item' onClick={ this.addListItem.bind(this) }>+</span>
+      </div>
+    );
   }
 
   render() {
@@ -91,18 +97,20 @@ export default class ListInput extends Component {
       values = values.slice(0,-1);
     }
 
-    return <div className='list_input'>
-      {
-        values.map(this.listItem.bind(this))
-      }
-      {
-        editNewValue
-          ? this.renderEdit(new_value, itemInput, inputProps)
-          : null
-      }
-      {
-        this.renderAdd()
-      }
-    </div>;
+    return(
+      <div className='list_input'>
+        {
+          values.map(this.listItem.bind(this))
+        }
+        {
+          editNewValue
+            ? this.renderEdit(new_value, itemInput, inputProps)
+            : null
+        }
+        {
+          this.renderAdd()
+        }
+      </div>
+    );
   }
 }

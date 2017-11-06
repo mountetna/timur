@@ -17,8 +17,10 @@ export default class TerminalPredicate extends Component {
       predicateClass = 'predicate';
     }
 
-    return <div className={ predicateClass }>
-      <span className={ terminalClass } aria-hidden='true'/>
-      </div>;
+    return(
+      <div className={ predicateClass }>
+        <span className={ terminalClass } aria-hidden='true'/>
+      </div>
+    );
   }
 }

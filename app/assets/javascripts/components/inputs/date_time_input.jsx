@@ -51,22 +51,24 @@ export default class DateTimeInput extends Component {
     let { defaultValue } = this.props;
     let defaultDate = formatDate(defaultValue);
     let defaultTime = formatTime(defaultValue);
-    return <div className='date_input'>
-      <input placeholder='YYYY-MM-DD'
+    return(
+      <div className='date_input'>
+        <input placeholder='YYYY-MM-DD'
+            type='text'
+            className='date_text' 
+            ref={ (input) => this.dateInput = input }
+            defaultValue={ defaultDate }/>
+        <span className='at_spacer'>@</span>
+        <input 
+          placeholder='00:00'
           type='text'
-          className='date_text' 
-          ref={ (input) => this.dateInput = input }
-          defaultValue={ defaultDate }/>
-      <span className='at_spacer'>@</span>
-      <input 
-        placeholder='00:00'
-        type='text'
-        ref={ (input) => this.timeInput = input }
-        className='time_text'
-        onKeyPress={ maskFilter(/\d\d:\d\d/) }
-        defaultValue={ defaultTime }
-        onChange={ this.changeDateTime.bind(this,'time') }
-        />
-    </div>
+          ref={ (input) => this.timeInput = input }
+          className='time_text'
+          onKeyPress={ maskFilter(/\d\d:\d\d/) }
+          defaultValue={ defaultTime }
+          onChange={ this.changeDateTime.bind(this,'time') }
+          />
+      </div>
+    );
   }
 }

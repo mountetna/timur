@@ -25,11 +25,13 @@ export default class SlowTextInput extends Component {
     let { onChange, waitTime, defaultValue, ...inputProps } = this.props;
     let { input_value } = this.state;
 
-    return <input type='text' 
-      ref={ (input) => this.text_input = input }
-      onChange={ this.handleChange.bind(this) }
-      value={ input_value == undefined ? defaultValue : input_value }
-      { ...inputProps }
-    />;
+    return(
+      <input type='text' 
+        ref={ (input) => this.text_input = input }
+        onChange={ this.handleChange.bind(this) }
+        value={ input_value == undefined ? defaultValue : input_value }
+        { ...inputProps }
+      />
+    );
   }
 }

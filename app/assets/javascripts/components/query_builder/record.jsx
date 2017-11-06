@@ -73,14 +73,16 @@ class RecordPredicate extends Component {
   }
 
   renderVectors(vectors) {
-    return <div className='filters'>
-      <PredicateChainSet
-        chains={ vectors }
-        update={ this.updateVectors.bind(this) }/>
-      <span onClick={ this.addVector.bind(this) }
-        title='New vector'
-        className='new fa fa-plus' aria-hidden='true' />
-    </div>;
+    return(
+      <div className='filters'>
+        <PredicateChainSet
+          chains={ vectors }
+          update={ this.updateVectors.bind(this) }/>
+        <span onClick={ this.addVector.bind(this) }
+          title='New vector'
+          className='new fa fa-plus' aria-hidden='true' />
+      </div>
+    );
   }
 
   render() {
@@ -90,9 +92,11 @@ class RecordPredicate extends Component {
     let getChildren = this.getChildren.bind(this);
     let vector = this.renderVectors.bind(this);
 
-    return <Predicate
-      { ...{terms, update, verbs, special, args, vector, getChildren } }
-    />;
+    return(
+      <Predicate
+        { ...{terms, update, verbs, special, args, vector, getChildren } }
+      />
+    );
   }
 }
 

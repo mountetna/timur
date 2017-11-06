@@ -53,10 +53,12 @@ export default class PredicateChain extends Component {
   render() {
     let { predicates } = this.props;
 
-    return <div className='chain'>
-      {
-        predicates.map(this.renderPredicate.bind(this))
-      }
-    </div>;
+    return(
+      <div className='chain'>
+        {
+          predicates.map(this.renderPredicate.bind(this))
+        }
+      </div>
+    );
   }
 }
