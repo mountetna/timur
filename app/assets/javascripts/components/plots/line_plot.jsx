@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { createScale } from '../../utils/d3_scale'
 import XAxis from './xaxis'
 import YAxis from './yaxis'
+import * as d3 from "d3"
 
 var LinePlot = React.createClass({
   render: function() {
@@ -25,11 +26,11 @@ var LinePlot = React.createClass({
       []
     )
 
-    var xmin = x_values.min()
-    var xmax = x_values.max()
+    var xmin = d3.min(x_values);
+    var xmax = d3.max(x_values);
 
-    var ymin = y_values.min()
-    var ymax = y_values.max()
+    var ymin = d3.min(y_values);
+    var ymax = d3.max(y_values);
 
 
     var xScale = createScale(
