@@ -31,7 +31,7 @@ export default class SearchTableCell extends Component{
       'onClick': ()=>{
         props.focusCell(record_name, att_name)
       },
-      'className': Object.keys(class_set).filter(name=>class_set[name])
+      'className': Object.keys(class_set).filter(name=>class_set[name]).join(' ')
     };
 
     var attr_viewer = null;
