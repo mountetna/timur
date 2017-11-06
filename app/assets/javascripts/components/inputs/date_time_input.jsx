@@ -7,7 +7,7 @@ import { maskFilter } from '../../utils/keycode';
 export default class DateTimeInput extends Component {
   constructor() {
     super();
-    this.state = {}
+    this.state = {};
   }
 
   componentDidMount() {
