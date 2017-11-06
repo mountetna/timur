@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-
+import BoxPlot from '../plots/box_plot';
 import { autoColors } from '../../utils/colors'
 import { selectConsignment } from '../../selectors/consignment'
 

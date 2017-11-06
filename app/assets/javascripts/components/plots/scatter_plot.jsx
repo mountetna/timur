@@ -1,4 +1,5 @@
 import Legend from './legend';
+import PlotCanvas from './plot_canvas';
 import React, { Component } from 'react';
 
 import XAxis from './xaxis'

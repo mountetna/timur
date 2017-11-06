@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PlotCanvas from './plot_canvas'
+import Legend from './legend'
 import YAxis from './yaxis'
 import XAxis from './xaxis'
 import * as d3 from "d3"

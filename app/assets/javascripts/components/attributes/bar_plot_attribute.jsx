@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import { selectConsignment } from '../../selectors/consignment'
+import BarPlot from '../plots/bar_plot';
+import { selectConsignment } from '../../selectors/consignment';
 
 var BarPlotAttribute = React.createClass({
   render: function() {

@@ -64,7 +64,7 @@ var BrowserPane = React.createClass({
      * The 'display' array should already be compacted. We are being a bit
      * redundant here for safety.
      */
-    return display.compact();
+    return display.filter(_=>_);
   },
 
   render: function(){

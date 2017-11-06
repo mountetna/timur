@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PlotCanvas from './plot_canvas'
 import YAxis from './yaxis'
 import XAxis from './xaxis'
+import PlotCanvas from './plot_canvas';
 import Legend from './legend'
 import { createScale } from '../../utils/d3_scale'
 

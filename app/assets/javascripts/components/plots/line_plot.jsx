@@ -1,4 +1,5 @@
 import Legend from './legend';
+import PlotCanvas from './plot_canvas';
 import React, { Component } from 'react';
 
 import { createScale } from '../../utils/d3_scale'
@@ -14,13 +15,15 @@ var LinePlot = React.createClass({
         height = plot.height - margin.top - margin.bottom
     var lines = this.props.lines
 
-    var x_values = lines.map(
-      (line) => line.points.map( (point) => point.x ) 
-    ).flatten()
+    var x_values = lines.reduce(
+      (values, line) => values.concat(line.points.map( (point) => point.x )),
+      []
+    )
 
-    var y_values = lines.map(
-      (line) => line.points.map( (point) => point.y ) 
-    ).flatten()
+    var y_values = lines.reduce(
+      (values, line) => values.concat(line.points.map( (point) => point.y )),
+      []
+    )
 
     var xmin = x_values.min()
     var xmax = x_values.max()

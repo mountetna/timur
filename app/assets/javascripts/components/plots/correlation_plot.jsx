@@ -1,4 +1,5 @@
 import Tooltip from '../tooltip';
+import PlotCanvas from './plot_canvas';
 import React, { Component } from 'react';
 
 var CorrelationPlot = React.createClass({
