@@ -4,8 +4,9 @@ import ButtonBar from '../button_bar';
 import TextField from './text_field';
 import ManifestAccess from './manifest_access';
 import ManifestElementForm from './manifest_element_form';
+import QueryBuilder from './../query_builder'
 import { v4 } from 'node-uuid';
-import { requestConsignments } from '../../actions/consignment_actions';
+import { requestConsignments } from '../../actions/manifest_actions';
 import { selectConsignment } from '../../selectors/consignment';
 import { manifestToReqPayload, saveNewManifest, saveManifest, toggleEdit } from '../../actions/manifest_actions';
 
@@ -151,13 +152,13 @@ class ManifestForm extends Component {
     })
 
     let buttons = [
-      this.props.manifest && {
+      !this.props.manifest && {
         click: this.create.bind(this),
         icon: 'floppy-o',
         label: 'save new'
       },
 
-      !this.props.manifest && {
+      this.props.manifest && {
         click: this.update.bind(this),
         icon: 'floppy-o',
         label: 'save'
@@ -195,6 +196,7 @@ class ManifestForm extends Component {
             <i className='fa fa-play' aria-hidden="true"></i>
             test
           </button>
+          <QueryBuilder />
         </div>
         <div className='element-form-container'>
           <ol>

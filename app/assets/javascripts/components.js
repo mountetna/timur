@@ -7,8 +7,6 @@ window.BrowserPane = require('./components/browser_pane.jsx')
 window.Header = require('./components/header.js.jsx')
 window.Browser = require('./components/browser.js.jsx')
 window.Activity = require('./components/activity.jsx')
-window.Selector = require('./components/selector.js.jsx')
-window.SlowTextInput = require('./components/slow_text_input.jsx')
 window.MagmaLink = require('./components/magma_link.jsx')
 window.Pager = require('./components/pager.jsx')
 
@@ -16,7 +14,6 @@ window.AttributeHelpers = require('./components/attributes/attribute_helpers.js'
 window.Attribute = require('./components/attributes/attribute.jsx')
 window.AttributeViewer = require('./components/attributes/attribute_viewer.jsx')
 window.LinkAttribute = require('./components/attributes/link_attribute.jsx')
-window.CollectionAttribute = require('./components/attributes/collection_attribute.jsx')
 
 window.TableAttribute = require('./components/attributes/table_attribute.js.jsx')
 window.DateTimeAttribute = require('./components/attributes/date_time_attribute.js.jsx')
@@ -25,11 +22,8 @@ window.BoxPlotAttribute = require('./components/attributes/box_plot_attribute.js
 window.LinePlotAttribute = require('./components/attributes/line_plot_attribute.js.jsx')
 window.CheckboxAttribute = require('./components/attributes/checkbox_attribute.js.jsx')
 window.DocumentAttribute = require('./components/attributes/document_attribute.js.jsx')
-window.FloatAttribute = require('./components/attributes/float_attribute.js.jsx')
 window.ImageAttribute = require('./components/attributes/image_attribute.js.jsx')
-window.IntegerAttribute = require('./components/attributes/integer_attribute.js.jsx')
 window.SelectAttribute = require('./components/attributes/select_attribute.js.jsx')
-window.TextAttribute = require('./components/attributes/text_attribute.js.jsx')
 window.MarkdownAttribute = require('./components/attributes/markdown_attribute.jsx')
 window.MetricsAttribute = require('./components/attributes/metrics_attribute.jsx')
 

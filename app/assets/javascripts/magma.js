@@ -1,3 +1,5 @@
+import { formatDate, formatTime } from './utils/dates';
+
 class DocumentFilter {
   constructor(template, documents, filter) {
     this.documents = documents
@@ -28,7 +30,7 @@ class DocumentFilter {
       case 'Magma::Attribute':
         switch(att_type) {
           case 'DateTime':
-            return dates.format_date(value) + '@' + dates.format_time(value)
+            return formatDate(value) + '@' + formatTime(value)
           case 'Integer':
           case 'Float':
             return value || 0;

@@ -24,7 +24,7 @@ export default class Tab{
     this.record_name = record_name;
 
     this.panes = Object.keys(config.panes).map((pane_name) =>{
-      var pane = new Pane(pane_name, config.panes[pane_name], template);
+      let pane = new Pane(pane_name, config.panes[pane_name], template);
       return pane;
     });
   }
@@ -32,7 +32,7 @@ export default class Tab{
   requiredAttributes(){
     if (this.panes.some((pane)=>!pane.display.length)) return 'all';
 
-    var panes = this.panes.map((pane)=>{
+    let panes = this.panes.map((pane)=>{
       return pane.display.map((item)=>{
         return item.attribute.name;
       });
@@ -42,7 +42,7 @@ export default class Tab{
   }
 
   requiredManifests(){
-    var panes = this.panes.map((pane)=>{
+    let panes = this.panes.map((pane)=>{
       return pane.manifests(this.record_name);
     });
 
@@ -58,9 +58,8 @@ class Pane{
     if(config.display.length){
       this.display = config.display.map((display_item)=>{
 
-        var template_attribute = template && template.attributes[display_item.name];
-        var display_item = new DisplayItem(template_attribute, display_item.attribute);
-        return display_item;
+        let template_attribute = template && template.attributes[display_item.name];
+        return new DisplayItem(template_attribute, display_item.attribute);
       });
     }
     else if(template){
@@ -78,7 +77,7 @@ class Pane{
   }
 
   manifests(record_name){
-    var manifest = this.display.map((display_item)=>{
+    let manifest = this.display.map((display_item)=>{
       return display_item.manifest(record_name);
     });
 
@@ -103,12 +102,14 @@ class DisplayItem{
   }
 
   manifest(record_name) {
-    if (this.plot) return {
+    if (!this.plot) return null;
+
+    return {
       name: this.plot.name,
       manifest: [
         [ 'record_name', `'${ record_name }'` ],
         ...this.plot.manifest
       ]
-    }
+    };
   }
 }

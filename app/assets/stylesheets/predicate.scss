@@ -1,0 +1,124 @@
+@import "globals";
+
+#query { 
+  margin-top: 10px;
+  line-height: 250%;
+  .query {
+    font-family: $value_font;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  .chainset {
+    display: inline;
+    .chain {
+      display: inline;
+    }
+  }
+  .predicate {
+    display: inline;
+    padding: 4px;
+    margin-right: 4px;
+    font-family: $value_font;
+    font-weight: bold;
+    font-size: 1.2em;
+
+    border-radius: 5px;
+    background: mix(red,white,20%);
+    &.completed {
+      background: mix(green,white,20%);
+    }
+
+    .filters {
+      display: inline;
+      .chainset {
+        font-size: 0.667em;
+        .chain {
+          &:before {
+            content: "[";
+          }
+          &:after {
+            content: "]";
+          }
+        }
+      }
+      .new {
+        cursor: pointer;
+      }
+    }
+
+    .verbs {
+      display: inline;
+    }
+
+    .list_input {
+      display: inline;
+      &:before {
+        content: "[";
+      }
+      &:after {
+        content: "]";
+      }
+      .list_item {
+        display: inline;
+        color: forestgreen;
+
+        &:nth-last-child(n+3) {
+          &:after {
+            content: ", "
+          }
+        }
+
+        .add_item {
+          display: inline;
+          cursor: pointer;
+          padding-left: 4px;
+          color: black;
+          font-weight: bold;
+        }
+
+        .delete_link {
+          &.empty {
+            color: red;
+          }
+          &:hover {
+            text-decoration: line-through;
+            color: gray;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    input {
+      @include text_defaults;
+      background: none;
+      font-weight: bold;
+      font-size: 1em;
+    }
+    select {
+      display: inline;
+      text-align: center;
+
+      font-family: $value_font;
+      font-weight: bold;
+      font-size: 1em;
+      color: forestgreen;
+
+      border: none;
+      background: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .filter {
+      display: inline;
+    }
+    .arguments {
+      display: inline;
+    }
+  }
+}

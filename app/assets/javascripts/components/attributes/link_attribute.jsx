@@ -1,4 +1,5 @@
 import { reviseDocument } from '../../actions/magma_actions'
+import SlowTextInput from '../inputs/slow_text_input';
 
 var LinkAttribute = React.createClass({
   render: function() {
@@ -6,11 +7,11 @@ var LinkAttribute = React.createClass({
     var self = this
     var store = this.context.store
 
-    if (this.props.mode == "edit") {
-      link = this.props.revision
+    if (this.props.mode == 'edit') {
+      link = this.props.revision;
       if (link && link == this.props.value) {
-        return <div className="value">
-          <span className="delete_link"
+        return <div className='value'>
+          <span className='delete_link'
           onClick={
             function(e) {
               store.dispatch(reviseDocument(
@@ -21,14 +22,14 @@ var LinkAttribute = React.createClass({
             }
           }
           >{ link }</span>
-          </div>
+          </div>;
       }
-      return <div className="value">
+      return <div className='value'>
                 <SlowTextInput 
-                  textClassName="link_text" 
+                  className='link_text' 
                   waitTime={500}
-                  update={
-                    function(value) {
+                  onChange={
+                    (value) => {
                       store.dispatch(reviseDocument(
                         self.props.document,
                         self.props.template,
@@ -37,19 +38,19 @@ var LinkAttribute = React.createClass({
                       )
                     }
                   }
-                  placeholder="New or existing ID"/>
-             </div>
+                  placeholder='New or existing ID'/>
+             </div>;
     }
     if (link) {
-      return <div className="value">
+      return <div className='value'>
               <MagmaLink link={link} model={ this.props.attribute.model_name } />
-             </div>
+             </div>;
     }
-    return <div className="value"/>
+    return <div className='value'/>;
   }
-})
+});
 LinkAttribute.contextTypes = {
   store: React.PropTypes.object
-}
+};
 
-module.exports = LinkAttribute
+module.exports = LinkAttribute;

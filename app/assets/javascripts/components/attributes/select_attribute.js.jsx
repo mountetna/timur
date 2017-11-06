@@ -1,4 +1,5 @@
 import { reviseDocument } from '../../actions/magma_actions'
+import SelectInput from '../inputs/select_input';
 
 var SelectAttribute = React.createClass({
   render: function() {
@@ -6,7 +7,7 @@ var SelectAttribute = React.createClass({
     var store = this.context.store
     if (this.props.mode == "edit") {
       return <div className="value">
-              <Selector 
+              <SelectInput 
                 className="selection"
                 onChange={
                   function(value) {

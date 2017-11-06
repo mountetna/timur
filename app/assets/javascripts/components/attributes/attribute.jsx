@@ -1,35 +1,27 @@
-import { reviseDocument } from '../../actions/magma_actions'
+import { reviseDocument } from '../../actions/magma_actions';
+import { Component } from 'react';
+import SlowTextInput from '../inputs/slow_text_input';
 
-var Attribute = React.createClass({
-  render: function() {
-    var self = this
-    var store = this.context.store
-    if (this.props.mode == "edit") {
-      return <div className="value">
-              <SlowTextInput textClassName="full_text" 
-                waitTime={500}
-                placeholder={ this.props.attribute.placeholder }
-                update={
-                  function(value) {
-                    store.dispatch(reviseDocument(
-                      self.props.document,
-                      self.props.template,
-                      self.props.attribute,
-                      value)
-                    )
-                  }
-                }
-                defaultValue={ this.props.revision } />
-             </div>
-    }
-
-    return <div className="value">
-            { this.props.value }
-           </div>
+class Attribute extends Component {
+  renderEdit() {
+    let { document, template, attribute, revision, reviseDocument } = this.props;
+    return <SlowTextInput 
+      className='full_text' 
+      placeholder={ attribute.placeholder }
+      onChange={ (value) => { reviseDocument( document, template, attribute, value) } }
+      defaultValue={ revision } />;
   }
-})
-Attribute.contextTypes = {
-  store: React.PropTypes.object
+
+  render() {
+    let { mode, value } = this.props;
+
+    return <div className='value'>
+      { mode == 'edit' ? this.renderEdit() : value }
+    </div>;
+  }
 }
 
-module.exports = Attribute;
+export default connect(
+  null,
+  {reviseDocument}
+)(Attribute);

@@ -1,4 +1,4 @@
-import { headers, generateDownload, parseJSON, makeBlob, checkStatus } from './fetch_utils'
+import { headers, parseJSON, generateDownload, makeBlob, checkStatus } from './fetch_utils'
 
 const create = (name, attributes) => {
   let element = document.createElement(name)
@@ -51,21 +51,6 @@ export const getTSV = (model_name, record_names, exchange) =>
     .then(makeBlob)
     .then(generateDownload(`${model_name}.tsv`));
 
-export const getView = (model_name, tab_name, exchange)=>{
-  var routeOpts = {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: headers('json', 'csrf'),
-    body: JSON.stringify({ model_name, tab_name })
-  };
-
-  var exchangePromise = exchange.fetch(Routes.view_json_path(PROJECT_NAME), routeOpts)
-    .then(checkStatus)
-    .then(parseJSON);
-
-  return exchangePromise;
-};
-
 export const getDocuments = ({ model_name, record_names, attribute_names, filter, page, page_size, collapse_tables }, exchange) =>
   exchange.fetch(
     Routes.records_json_path(PROJECT_NAME),
@@ -102,20 +87,15 @@ export const postRevisions = (revision_data, exchange)=>{
   return exchangePromise;
 };
 
-export const getConsignments = (manifests, exchange)=>{
-
-  var routeOpts = {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: headers('json', 'csrf'),
-    body: JSON.stringify({
-      queries: manifests
-    })
-  };
-
-  var exchangePromise = exchange.fetch(Routes.query_json_path(PROJECT_NAME), routeOpts)
+export const getAnswer = (question, exchange) =>
+  exchange.fetch(
+    Routes.question_json_path(PROJECT_NAME), 
+    { 
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: headers('csrf', 'json'),
+      body: JSON.stringify({ question })
+    }
+  )
     .then(checkStatus)
     .then(parseJSON)
-
-  return exchangePromise;
-};
