@@ -16,7 +16,7 @@ const loadManifests = (manifestsById)=>({
 })
 
 // Retrieve all user-visible manifests and send to store
-export const requestManifests = (project_name) => {
+export const requestManifests = () => {
   return (dispatch) => {
     let localSuccess = ({manifests}) => {
       // Bail out if there are no manifests.
@@ -46,7 +46,7 @@ export const requestManifests = (project_name) => {
       showErrors(err, dispatch);
     };
 
-    fetchManifests(new Exchange(dispatch, 'request-manifest'))
+    return fetchManifests(new Exchange(dispatch, 'request-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -98,7 +98,7 @@ export const deleteManifest = (manifestId)=>{
       showErrors(err, dispatch);
     };
 
-    destroyManifest(manifestId, new Exchange(dispatch, 'delete-manifest'))
+   return destroyManifest(manifestId, new Exchange(dispatch, 'delete-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -118,7 +118,7 @@ export const saveNewManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
+    return createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -136,7 +136,7 @@ export const saveManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
+    return updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -155,7 +155,7 @@ export const copyManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
+    return createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
