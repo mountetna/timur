@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
+import { showMessages } from '../actions/message_actions';
 
 var Noauth = React.createClass({
   componentDidMount: function () {
@@ -22,7 +23,7 @@ Noauth = connect(
   function(dispatch,props) {
     return {
       message: function(message) {
-        dispatch(messageActions.showMessages([message]))
+        dispatch(showMessages([message]))
       }
     }
   }

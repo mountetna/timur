@@ -1,7 +1,7 @@
 import OneDScatterPlot from './one_d_scatter_plot';
 import React, { Component } from 'react';
 
-let { cancelPlotConfig, requestPlotData, closePlot } = plotActions
+import { cancelPlotConfig, requestPlotData, closePlot } from '../../actions/plot_actions';
 
 
 var OneDScatterPlotContainer = React.createClass({

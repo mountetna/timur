@@ -1,5 +1,6 @@
 import Header from '../header';
 import React, { Component } from 'react';
+import { cancelPlotConfig, requestPlotData, closePlot } from '../../actions/plot_actions';
 
 var PlotHeader = React.createClass({
   render: function() {
@@ -17,7 +18,7 @@ var PlotHeader = React.createClass({
         var store = this.context.store;
 
         this.props.newMode('plot');
-        store.dispatch(plotActions.cancelPlotConfig(this.props.plot.plot_id));
+        store.dispatch(cancelPlotConfig(this.props.plot.plot_id));
         break;
       case 'approve':
         // allow approval checking by each plot
@@ -26,7 +27,7 @@ var PlotHeader = React.createClass({
         if (this.props.onApprove && !this.props.onApprove()) break;
 
         this.props.newMode('submit');
-        store.dispatch(plotActions.requestPlotData(this.props.plot, function(plot_json) {
+        store.dispatch(requestPlotData(this.props.plot, function(plot_json) {
           self.props.newMode('plot');
         }));
         break;
@@ -35,7 +36,7 @@ var PlotHeader = React.createClass({
         break;
       case 'close':
         var store = this.context.store;
-        store.dispatch(plotActions.closePlot(this.props.plot.plot_id));
+        store.dispatch(closePlot(this.props.plot.plot_id));
         break;
     }
   }

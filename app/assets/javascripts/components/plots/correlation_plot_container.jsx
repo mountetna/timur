@@ -1,5 +1,6 @@
 import CorrelationPlot from './correlation_plot';
 import React, { Component } from 'react';
+import { updateRequestedMappings } from '../../actions/plot_actions';
 
 var CorrelationPlotContainer = React.createClass({
   getInitialState: function() {
@@ -8,7 +9,7 @@ var CorrelationPlotContainer = React.createClass({
   componentWillMount: function() {
     var store = this.context.store;
     store.dispatch(
-      plotActions.updateRequestedMappings(
+      updateRequestedMappings(
         this.props.plot.plot_id, Object.keys(this.props.default_mappings)
       )
     );
