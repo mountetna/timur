@@ -16,14 +16,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'haml-rails', '>= 0.3.4'
 
-gem 'react-rails', '~> 1.5.0'
-
-gem 'browserify-rails'
-
-gem 'js-routes'
-
-gem 'font-awesome-sass'
-
 gem 'rltk'
 
 gem 'magma'
