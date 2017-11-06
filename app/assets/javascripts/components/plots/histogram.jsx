@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PlotCanvas from './plot_canvas';
 
 import PlotCanvas from './plot_canvas'
 import YAxis from './yaxis'
