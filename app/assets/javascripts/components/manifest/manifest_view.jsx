@@ -4,30 +4,13 @@ import * as ReactRedux from 'react-redux';
 
 // Class imports.
 import ButtonBar from '../button_bar';
-<<<<<<< HEAD
 
 // Module imports.
-<<<<<<< Updated upstream
-=======
-import ToggleSwitch from '../toggle_switch';
->>>>>>> master
-import { selectConsignment } from '../../selectors/consignment';
-import { requestConsignments, manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions';
-import { getPlotsByIds } from '../../selectors/plot';
-import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions';
-import { plotIndexUrl } from '../../api/plots';
-
-// Shows a single manifest - it has two states, 'script', which
-// shows the manufest script, and 'output', which shows the
-// resulting data. Sends a request for a consignment when 'output'
-// is clicked if none exists.
-=======
 import {manifestScript} from './manifest_script';
 import {manifestResult} from './manifest_result';
 import {selectConsignment} from '../../selectors/consignment';
 import * as ManifestActions from '../../actions/manifest_actions';
 
->>>>>>> Stashed changes
 export class ManifestView extends React.Component{
   constructor(props){
     super(props);
