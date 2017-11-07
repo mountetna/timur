@@ -78,9 +78,15 @@ class SearchController <  ApplicationController
     begin
       result = Hash[
         params[:queries].map do |query|
-          manifest = DataManifest.new(token, params[:project_name], query[:manifest])
+
+          manifest = DataManifest.new(
+            token,
+            params[:project_name],
+            query[:manifest]
+          )
+
           manifest.fill
-          [query[:name], manifest.payload]
+          [query[:id], manifest.payload]
         end
       ]
       render(json: result)
@@ -91,4 +97,3 @@ class SearchController <  ApplicationController
     end
   end
 end
-
