@@ -24,15 +24,23 @@ class ModelPredicate extends Component {
     let { terms } = this.props;
     let { filters } = terms;
 
-    return <div className='filters'>
-      <PredicateChainSet
-        chains={ filters }
-        terminal_type='TrueClass'
-        update={ this.updateFilters.bind(this) }/>
-      <span onClick={ this.addFilter.bind(this) }
-        title='New filter'
-        className='new fa fa-plus' aria-hidden='true' />
-    </div>;
+    let chain_props = {
+      chains: filters,
+      terminal_type: 'TrueClass',
+      update: this.updateFilters.bind(this)
+    };
+    let span_props = {
+      onClick: this.addFilter.bind(this),
+      title: 'New filter',
+      className: 'new fa fa-plus'
+    };
+
+    return(
+      <div className='filters'>
+        <PredicateChainSet {...chain_props} />
+        <span  {...span_props} />
+      </div>
+    );
   }
 
   getChildren(verb, new_args) {
@@ -46,28 +54,29 @@ class ModelPredicate extends Component {
 
   renderModelSelect(model_name) {
     let { model_names, update } = this.props;
-    return <SelectInput defaultValue={ model_name } 
-      showNone='disabled' 
-      values={ model_names }
-      onChange={ (model_name) => update({ model_name, filters: [], args: [] }) }/>;
+
+    return(
+      <SelectInput defaultValue={ model_name } 
+        showNone='disabled' 
+        values={ model_names }
+        onChange={ (model_name) => update({ model_name, filters: [], args: [] }) }
+      />
+    );
   }
 
   render() {
     // the model predicate has three terms, model_name, filters, and args
-    let { verbs, terms, update } = this.props;
-    let { model_name, args, start } = terms;
+    let {verbs, terms, update } = this.props;
+    let {model_name, args, start } = terms;
     let getChildren = this.getChildren.bind(this);
 
-    return <Predicate
-      { ...{ verbs, args, terms, update, getChildren } }
-    >
-      {
-        start ? this.renderModelSelect(model_name) : null
-      }
-      { 
-        model_name ? this.renderFilters() : null
-      }
-    </Predicate>;
+    return(
+      <Predicate { ...{ verbs, args, terms, update, getChildren } } >
+
+        {start ? this.renderModelSelect(model_name) : null}
+        {model_name ? this.renderFilters() : null}
+      </Predicate>
+    );
   }
 }
 

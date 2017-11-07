@@ -23,10 +23,12 @@ export default class SelectInput extends Component {
     let { children, values, showNone, defaultValue } = this.props;
     defaultValue = defaultValue || (showNone ? '' : null);
 
-    return <select defaultValue={ defaultValue } onChange={ this.onChange.bind(this) } >
-      { children }
-      { NoneOption(showNone) }
-      { values.map(Option) }
-    </select>;
+    return(
+      <select defaultValue={ defaultValue } onChange={ this.onChange.bind(this) } >
+        { children }
+        { NoneOption(showNone) }
+        { values.map(Option) }
+      </select>
+    );
   }
 }

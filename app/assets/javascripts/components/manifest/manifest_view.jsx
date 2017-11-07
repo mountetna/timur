@@ -6,8 +6,12 @@ import * as ReactRedux from 'react-redux';
 import ManifestElement from './manifest_element';
 import ManifestPreview from './manifest_preview';
 import ButtonBar from '../button_bar';
+<<<<<<< HEAD
 
 // Module imports.
+=======
+import ToggleSwitch from '../toggle_switch';
+>>>>>>> master
 import { selectConsignment } from '../../selectors/consignment';
 import { requestConsignments, manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions';
 import { getPlotsByIds } from '../../selectors/plot';

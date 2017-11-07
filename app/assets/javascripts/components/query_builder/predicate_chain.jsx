@@ -4,8 +4,10 @@ import RecordPredicate from './record';
 import ValuePredicate from './value';
 import TerminalPredicate from './terminal';
 
-// This is a predicate chain, it renders a list of predicates, determining the
-// correct predicate component for the given type
+/*
+ * This is a predicate chain, it renders a list of predicates, determining the
+ * correct predicate component for the given type.
+ */
 export default class PredicateChain extends Component {
   updatePredicate(position, predicate_update, ...children) {
     let { predicates, update } = this.props;
@@ -46,17 +48,18 @@ export default class PredicateChain extends Component {
       case 'date_time':
         return <ValuePredicate { ...props }/>;
       case 'terminal':
-        return <TerminalPredicate terminal_type={ terminal_type } { ...props }/>;
+        return <TerminalPredicate terminal_type={terminal_type} {...props}/>;
     }
   }
 
   render() {
     let { predicates } = this.props;
 
-    return <div className='chain'>
-      {
-        predicates.map(this.renderPredicate.bind(this))
-      }
-    </div>;
+    return(
+      <div className='chain'>
+
+        {predicates.map(this.renderPredicate.bind(this))}
+      </div>
+    );
   }
 }
