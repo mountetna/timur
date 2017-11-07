@@ -6,7 +6,7 @@ import Matrix from '../../models/matrix'
 
 const isPrimitiveType = (value) => typeof value === 'string' || typeof value === 'number' || value === null || typeof value === 'undefined'
 
-export const Result = (name, data, nestLevel = 0) => {
+export const manifestResult = (name, data, nestLevel = 0) => {
   if (isPrimitiveType(data)) {
     //display primitive type result
     return (
