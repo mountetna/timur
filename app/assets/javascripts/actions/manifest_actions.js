@@ -1,57 +1,14 @@
-import { showMessages } from './message_actions'
-import { loadPlot } from './plot_actions'
-import { Exchange } from './exchange_actions';
-import { getConsignments, fetchManifests, destroyManifest, createManifest, updateManifest} from '../api/manifests';
-
-const showErrors = (e, dispatch)=>{
-  let localError = (json)=>dispatch(showMessages(json.errors));
-  e.response.json()
-    .then(localError);
-}
+// Module imports.
+import {showMessages} from './message_actions';
+import {loadPlot} from './plot_actions';
+import {Exchange} from './exchange_actions';
+import * as ManifestAPI from '../api/manifests';
 
 // Add retrieved manifests to the store.
 const loadManifests = (manifestsById)=>({
   'type': 'LOAD_MANIFESTS',
   manifestsById
-})
-
-// Retrieve all user-visible manifests and send to store
-export const requestManifests = () => {
-  return (dispatch) => {
-    let localSuccess = ({manifests}) => {
-      // Bail out if there are no manifests.
-      if (manifests == null) return;
-
-      // transform manifests for store
-      const manifestsById = manifests.reduce((acc, manifestJSON) => {
-        let manifest = {
-          ...manifestJSON,
-          // create reference to plots that belong to the manifest
-          plotIds: manifestJSON.plots.map(p => p.id)
-        };
-        delete manifest.plots;
-        return {...acc, [manifestJSON.id]: manifest};
-      }, {});
-
-      dispatch(loadManifests(manifestsById));
-
-      //load plots to store
-      const plots = manifests.reduce((acc, manifestJSON) => {
-        return [...acc, ...manifestJSON.plots]
-      }, []);
-      plots.forEach(plot => dispatch(loadPlot(plot)));
-    };
-
-    let localError = (err) => {
-      showErrors(err, dispatch);
-    };
-
-    return fetchManifests(new Exchange(dispatch, 'request-manifest'))
-      .then(localSuccess)
-      .catch(localError);
-  };
-};
-
+});
 
 // Remove a manifest from the store.
 const removeManifest = (id)=>({
@@ -85,20 +42,65 @@ export const selectManifest = (id)=>({
   id
 });
 
+export const addConsignment = (id, consignment)=>{
+  return {
+    type: 'ADD_CONSIGNMENT',
+    manifest_id: id,
+    consignment: consignment
+  };
+};
+
+// Retrieve all user-visible manifests and send to store
+export const requestManifests = () => {
+  return (dispatch) => {
+    let localSuccess = ({manifests}) => {
+      // Bail out if there are no manifests.
+      if (manifests == null) return;
+
+      // transform manifests for store
+      const manifestsById = manifests.reduce((acc, manifestJSON) => {
+        let manifest = {
+          ...manifestJSON,
+          // create reference to plots that belong to the manifest
+          plotIds: manifestJSON.plots.map(p => p.id)
+        };
+        delete manifest.plots;
+        return {...acc, [manifestJSON.id]: manifest};
+      }, {});
+
+      dispatch(loadManifests(manifestsById));
+
+      //load plots to store
+      const plots = manifests.reduce((acc, manifestJSON) => {
+        return [...acc, ...manifestJSON.plots]
+      }, []);
+      plots.forEach(plot => dispatch(loadPlot(plot)));
+    };
+
+    let localError = (err) => {
+      showErrors(err, dispatch);
+    };
+
+    return ManifestAPI.fetchManifests(new Exchange(dispatch, 'request-manifest'))
+      .then(localSuccess)
+      .catch(localError);
+  };
+};
+
 // Delete a manifest from the database and the store.
-export const deleteManifest = (manifestId)=>{
+export const deleteManifest = (manifest_id)=>{
   return (dispatch)=>{
 
     let localSuccess = (data)=>{
       dispatch(selectManifest(null));
-      dispatch(removeManifest(manifestId));
+      dispatch(removeManifest(manifest_id));
     };
 
     let localError = (err)=>{
       showErrors(err, dispatch);
     };
 
-   return destroyManifest(manifestId, new Exchange(dispatch, 'delete-manifest'))
+   return ManifestAPI.destroyManifest(manifest_id, new Exchange(dispatch, 'delete-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -118,7 +120,7 @@ export const saveNewManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    return createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
+    return ManifestAPI.createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -136,7 +138,7 @@ export const saveManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    return updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
+    return ManifestAPI.updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -155,30 +157,9 @@ export const copyManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    return createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
+    return ManifestAPI.createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
       .then(localSuccess)
       .catch(localError);
-  };
-};
-
-// Convert a manifest to its JSON representation for query endpoint.
-export const manifestToReqPayload = (manifest)=>{
-  const {name, 'data': {elements}} = manifest;
-  const manifestElements = elements.reduce((acc, {name, script})=>{
-    if(name !== '' && script !== ''){
-      return [...acc, [name, script]];
-    }
-    return acc;
-  }, []);
-
-  return {'manifest': manifestElements, 'name': name};
-};
-
-export const addConsignment = (name, consignment)=>{
-  return {
-    'type': 'ADD_CONSIGNMENT',
-    'manifest_name': name,
-    'consignment': consignment
   };
 };
 
@@ -224,12 +205,29 @@ export const requestConsignments = (manifests, success, error)=>{
     };
 
     var localError = (e) => e.response.json().then(localErrorResponse);
+    var exchng = new Exchange(dispatch, 'consignment list');
 
-    var manifest_names = manifests.map(m=>m.name).join(', ');
-    var exchng = new Exchange(dispatch, `consignment list ${manifest_names}`);
-
-    getConsignments(manifests, exchng)
+    ManifestAPI.getConsignments(manifests, exchng)
       .then(localSuccess)
       .catch(localError);
   };
+};
+
+// Convert a manifest to its JSON representation for query endpoint.
+export const manifestToReqPayload = (manifest)=>{
+  let {id, name, 'data': {elements}} = manifest;
+  let manifest_elements = elements.reduce((acc, {name, script})=>{
+    if(name !== '' && script !== ''){
+      return [...acc, [name, script]];
+    }
+    return acc;
+  }, []);
+
+  return {id, name, manifest: manifest_elements};
+};
+
+const showErrors = (e, dispatch)=>{
+  let localError = (json)=>dispatch(showMessages(json.errors));
+  e.response.json()
+    .then(localError);
 };
