@@ -4,7 +4,7 @@ import 'whatwg-fetch'
 
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
-import Manifests from './manifest/manifests'
+import {ManifestsContainer as Manifests} from './manifest/manifests'
 import TimurNav from './timur_nav'
 import ModelMap from './model_map'
 import Search from './search/search'
