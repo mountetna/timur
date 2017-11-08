@@ -1,142 +1,97 @@
-class InfixLexer < RLTK::Lexer
-  rule(/\s/)
-  rule(/#.*$/)
+module Archimedes
+  class InfixParser < RLTK::Parser
+    left :QUESTION
+    left :MOD
 
-  rule(/\{(.*)\}/m) { |t| [ :MACRO, t[1..-2] ] }
-  rule(/[0-9]+\.?[0-9]*/) { |t| [ :NUM, t.to_f ] }
-  rule(/[A-Za-z]\w*/) { |t| [ :IDENT, t ] }
-  rule(/'(?:[^']|'')*'/) { |t| [ :STRING, t[1..-2].gsub(/''/, "'") ] }
+    left :GT, :GTE, :LT, :LTE, :EQ, :MATCH
+    left :SUB, :ADD
+    left :DIV, :MUL
+    left :EXP
 
-  rule(/\^/) { :EXP }
-  rule(/\//) { :DIV }
-  rule(/\*/) { :MUL }
-  rule(/\+/) { :ADD }
-  rule(/\-/) { :SUB }
-  rule(/>/) { :GT }
-  rule(/>=/) { :GTE }
-  rule(/</) { :LT }
-  rule(/<=/) { :LTE }
-  rule(/\%/) { :MOD }
-  rule(/\@/) { :VAR }
-  rule(/\|\|/) { :OR }
-  rule(/&&/) { :AND }
-  rule(/==/) { :EQ }
-  rule(/\$/) { :DOLLAR }
-  rule(/\?/) { :QUESTION }
-  rule(/=\~/) { :MATCH }
+    left :DOLLAR
+    left :VAR
 
-  rule(/\)/) { :RPAREN }
-  rule(/\(/) { :LPAREN }
-  rule(/\]/) { :RBRACKET }
-  rule(/\[/) { :LBRACKET }
-  rule(/\,/) { :COMMA }
-  rule(/\:/) { :COLON }
-end
+    production(:e) do
 
-class InfixParser < RLTK::Parser
+      # these are the basic types
+      clause('NUM') { |n| n }
+      clause('STRING') { |s| s }
+      clause('vector') { |v| v }
 
-  left :QUESTION
-  left :MOD
+      # A macro definition, in the form of a template string, e.g. "{'time', %1, %2}"
+      clause('MACRO') { |m| Macro.new(m) }
 
-  left :GT, :GTE, :LT, :LTE, :EQ, :MATCH
+      # A variable reference
+      clause('VAR IDENT') { |v,i| @vars[i] }
 
-  left :SUB, :ADD
+      # Basic math operations, including the ternary operator
+      clause('LPAREN .e RPAREN') { |e| e }
+      clause('.e ADD .e') { |e0, e1| e0 + e1 }
+      clause('.e EXP .e') { |e0, e1| e0 ** e1 }
+      clause('.e SUB .e') { |e0, e1| e0 - e1 }
+      clause('.e QUESTION .e COLON .e') { |e0, e1, e2| e0.is_a?(Vector) ? e0.ternary(e1,e2) : (e0 ? e1 : e2) }
 
-  left :DIV, :MUL
+      # indexing, used by Vectors and Matrices
+      clause('.e LBRACKET .e RBRACKET') { |e0, e1| e0[e1] }
 
-  left :EXP
+      # Comparison operators
+      clause('.e GT .e') { |e0, e1| e0 > e1 }
+      clause('.e GTE .e') { |e0, e1| e0 >= e1 }
+      clause('.e LT .e') { |e0, e1| e0 < e1 }
+      clause('.e LTE .e') { |e0, e1| e0 <= e1 }
 
-  left :DOLLAR
-  left :VAR
+      # Matrix column reference notation
+      clause('.e DOLLAR .IDENT') { |table, column| table[column] }
 
-  production(:e) do
+      # Arithmetic operations
+      clause('SUB .e') { |e| -e }
+      clause('.e DIV .e') { |e0, e1| e0 / e1 }
+      clause('.e MUL .e') { |e0, e1| e0 * e1 }
+      clause('.e OR .e') { |e0, e1| e0 || e1 }
+      clause('.e AND .e') { |e0, e1| e0 && e1 }
+      clause('.e EQ .e') { |e0, e1| e0 == e1 }
+      clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
 
-    clause('NUM') { |n| n }
-    clause('STRING') { |n| n }
-    clause('list') { |l| l }
+      # Macro dereferencing
+      clause('VAR .IDENT LPAREN .args RPAREN') { |i, args| macro(@vars[i], args) }
 
-    clause('MACRO') { |m| Macro.new(m) }
-
-    clause('VAR IDENT') { |v,i| vars[i] }
-    clause('LPAREN .e RPAREN') { |e| e }
-    clause('.e ADD .e') { |e0, e1| e0 + e1 }
-    clause('.e EXP .e') { |e0, e1| e0 ** e1 }
-    clause('.e SUB .e') { |e0, e1| e0 - e1 }
-    clause('.e QUESTION .e COLON .e') { |e0, e1, e2| e0.is_a?(Vector) ? e0.ternary(e1,e2) : (e0 ? e1 : e2) }
-
-    clause('.e LBRACKET .e RBRACKET') { |e0, e1| e0[e1] }
-
-    clause('.e GT .e') { |e0, e1| e0 > e1 }
-    clause('.e GTE .e') { |e0, e1| e0 >= e1 }
-    clause('.e LT .e') { |e0, e1| e0 < e1 }
-    clause('.e LTE .e') { |e0, e1| e0 <= e1 }
-
-    clause('.e DOLLAR .IDENT') { |table, column| table[column] }
-    clause('SUB .e') { |e| -e }
-    clause('.e DIV .e') { |e0, e1| e0 / e1 }
-    clause('.e MUL .e') { |e0, e1| e0 * e1 }
-    clause('.e OR .e') { |e0, e1| e0 || e1 }
-    clause('.e AND .e') { |e0, e1| e0 && e1 }
-    clause('.e EQ .e') { |e0, e1| e0 == e1 }
-    clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
-
-    clause('VAR .IDENT LPAREN .args RPAREN') { |i, args| macro(vars[i], args) }
-    clause('.IDENT LPAREN .args RPAREN') { |ident, args| 
-
-      # The user token, which was set much earlier in the auth cycle, gets
-      # passed into our collection of 'timur functions'.
-      func = TimurFunction.new(token, project_name, ident, args)
-      func.call()
-    }
-  end
-
-  production(:list) do
-    clause('LBRACKET .list_args RBRACKET') { |args| Vector.new(args) }
-  end
-
-  production(:list_args) do
-    clause('')         { || []       }
-    clause('list_items') { |items| items }
-  end
-
-  production(:list_items) do
-    clause('.list_item')                { |e| [e]                 }
-    clause('.list_item COMMA .list_items') { |e, args| [e] + args }
-  end
-
-  production(:list_item) do
-    clause('e') {|e| [ nil, e ] }
-    clause('.IDENT COLON .e') {|i,e| [ i,e ]}
-  end
-
-  production(:args) do
-    clause('')         { || []       }
-    clause('arg_list') { |args| args }
-  end
-
-  production(:arg_list) do
-    clause('e')                { |e| [e]                 }
-    clause('e COMMA arg_list') { |e, _, args| [e] + args }
-  end
-
-  finalize
-
-  class Environment < RLTK::Parser::Environment
-    attr_accessor :token, :project_name, :vars
-
-    class << self
-      def create(token, project_name, vars)
-        env = self.new
-        env.token = token
-        env.project_name = project_name
-        env.vars = vars
-        env
-      end
+      # Function calling
+      clause('.IDENT LPAREN .args RPAREN') { |ident, args| 
+        # The user token, which was set much earlier in the auth cycle, gets
+        # passed into our collection of 'timur functions'.
+        func = Archimedes::Function.call(@token, @project_name, ident, args)
+      }
     end
 
-    def macro(mac, args)
-      raise TypeError('Variable is not a macro') unless mac.is_a?(Macro)
-      InfixParser::parse(InfixLexer::lex(mac.substitute(args)), {env: self})
+    production(:vector) do
+      clause('LBRACKET .vector_args RBRACKET') { |args| Vector.new(args) }
     end
+
+    production(:vector_args) do
+      clause('')         { [] }
+      clause('vector_items') { |items| items }
+    end
+
+    production(:vector_items) do
+      clause('.vector_item')                { |e| [e]                 }
+      clause('.vector_item COMMA .vector_items') { |e, args| [e] + args }
+    end
+
+    production(:vector_item) do
+      clause('e') {|e| [ nil, e ] }
+      clause('.IDENT COLON .e') {|i,e| [ i,e ]}
+    end
+
+    production(:args) do
+      clause('')         { || []       }
+      clause('arg_list') { |args| args }
+    end
+
+    production(:arg_list) do
+      clause('e')                { |e| [e]                 }
+      clause('e COMMA arg_list') { |e, _, args| [e] + args }
+    end
+
+    finalize
   end
 end
