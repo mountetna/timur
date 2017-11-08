@@ -43,6 +43,4 @@ Rails.application.configure do
   config.pythia_url = "http://localhost:5000/pythia/"
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  
-  config.react.variant = :development
 end
