@@ -1,3 +1,8 @@
+import React, { Component } from 'react';
+
+import { connect } from 'react-redux';
+import { showMessages } from '../actions/message_actions';
+
 var help_nodes = {
   edit: [
     "Click the pencil to edit this record.  \n"+
@@ -48,7 +53,7 @@ var HelpButton = React.createClass({
     return <div className="help"
       onClick={
         function() {
-          self.props.dispatch(messageActions.showMessages(help_nodes[self.props.info]))
+          self.props.dispatch(showMessages(help_nodes[self.props.info]))
         }
       } >
         <span className="fa-stack">

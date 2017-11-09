@@ -5,20 +5,18 @@
   :plain
     var PROJECT_NAME = '#{@project_name}';
 
-    $(function() {
-      ReactDOM.render(
-        React.createElement(Timur, {
-          user: "#{current_user ? current_user.name : 'null'}",
-          mode: 'plots',
-          environment: '#{Rails.env.development? ? 'development' : 'production'}',
-          manifestsUI: {
-            selected: '#{@manifest_id}' ? parseInt('#{@manifest_id}') : null
-          },
-          plots: {
-            selected: '#{@id}' ? parseInt('#{@id}') : null,
-            isEditing: '#{@is_editing}' === 'true'
-          }
-        }),
-        $('#root')[0]
-      );
-    })
+    const timur = new TimurApp(
+      {
+        user: "#{current_user ? current_user.name : 'null'}",
+        mode: 'plots',
+        environment: '#{Rails.env.development? ? 'development' : 'production'}',
+        manifestsUI: {
+          selected: '#{@manifest_id}' ? parseInt('#{@manifest_id}') : null
+        },
+        plots: {
+          selected: '#{@id}' ? parseInt('#{@id}') : null,
+          isEditing: '#{@is_editing}' === 'true'
+        }
+      },
+      'root'
+    );

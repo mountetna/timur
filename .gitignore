@@ -13,13 +13,19 @@
 /db/schema.rb
 
 /public/assets
+/public/js
+/public/uploads
+/public/fonts
+/public/css
+/public/images
+
+package-lock.json
 
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
 tmp
 /config/magma.yml
-/public/uploads
 *.swp
 *.tsv
 /node_modules

@@ -17,36 +17,35 @@
  * 'notes' uses the UI 'Attribute' 'TextAttribute'.
  */
 
-export default class Tab{
-  constructor(model_name, record_name, tab_name, config, template){
-    this.name = tab_name;
-    this.model_name = model_name;
-    this.record_name = record_name;
+const createPanes = (config, template) =>
+  Object.keys(config.panes).map(
+    pane_name => new Pane(pane_name, config.panes[pane_name], template)
+  );
 
-    this.panes = Object.keys(config.panes).map((pane_name) =>{
-      var pane = new Pane(pane_name, config.panes[pane_name], template);
-      return pane;
+export default class Tab{
+  constructor(model_name, record_name, tab_name, config, template) {
+    Object.assign(this, { 
+      name: tab_name, 
+      model_name,
+      record_name,
+      panes: createPanes(config, template)
     });
   }
 
   requiredAttributes(){
     if (this.panes.some((pane)=>!pane.display.length)) return 'all';
 
-    var panes = this.panes.map((pane)=>{
-      return pane.display.map((item)=>{
-        return item.attribute.name;
-      });
-    });
-
-    return panes.flatten();
+    return this.panes.reduce(
+      (values, pane)=> values.concat(pane.display.map((item)=> item.attribute.name )),
+      []
+    );
   }
 
   requiredManifests(){
-    var panes = this.panes.map((pane)=>{
-      return pane.manifests(this.record_name);
-    });
-
-    return panes.compact().flatten();
+    return this.panes.reduce(
+      (values, pane) => values.concat(pane.manifests(this.record_name)),
+      []
+    ).filter(_=>_);
   }
 }
 
@@ -58,9 +57,8 @@ class Pane{
     if(config.display.length){
       this.display = config.display.map((display_item)=>{
 
-        var template_attribute = template && template.attributes[display_item.name];
-        var display_item = new DisplayItem(template_attribute, display_item.attribute);
-        return display_item;
+        let template_attribute = template && template.attributes[display_item.name];
+        return new DisplayItem(template_attribute, display_item.attribute);
       });
     }
     else if(template){
@@ -70,7 +68,7 @@ class Pane{
         return template_attribute;
       });
 
-      this.display = this.display.compact();
+      this.display = this.display.filter(_=>_);
     }
     else{
       this.display = [];
@@ -78,24 +76,25 @@ class Pane{
   }
 
   manifests(record_name){
-    var manifest = this.display.map((display_item)=>{
-      return display_item.manifest(record_name);
-    });
-
-    return manifest.compact().flatten();
+    return this.display.reduce(
+      (values, display_item) => values.concat(display_item.manifest(record_name)),
+      []
+    ).filter(_=>_);
   }
 }
 
 class DisplayItem{
   constructor(template_attribute, display_attribute){
 
-    this.template_attribute = template_attribute;
-    this.display_attribute = display_attribute;
-    this.plot = display_attribute && display_attribute.plot;
-    this.attribute = {
-       ...this.template_attribute,
-       ...this.display_attribute
-    };
+    Object.assign(this, { 
+      template_attribute, 
+      display_attribute,
+      plot: display_attribute && display_attribute.plot,
+      attribute: {
+       ...template_attribute,
+       ...display_attribute
+      }
+    });
   }
 
   editable(){
@@ -103,12 +102,14 @@ class DisplayItem{
   }
 
   manifest(record_name) {
-    if (this.plot) return {
+    if (!this.plot) return null;
+
+    return {
       name: this.plot.name,
       manifest: [
         [ 'record_name', `'${ record_name }'` ],
         ...this.plot.manifest
       ]
-    }
+    };
   }
 }

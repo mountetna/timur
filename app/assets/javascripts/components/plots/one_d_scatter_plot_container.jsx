@@ -1,4 +1,7 @@
-let { cancelPlotConfig, requestPlotData, closePlot } = plotActions
+import OneDScatterPlot from './one_d_scatter_plot';
+import React, { Component } from 'react';
+
+import { cancelPlotConfig, requestPlotData, closePlot } from '../../actions/plot_actions';
 
 
 var OneDScatterPlotContainer = React.createClass({
@@ -51,7 +54,7 @@ var OneDScatterPlotContainer = React.createClass({
           series_limits="any"
           mappings_limits={ [ "Mapping" ] }
           series={ this.props.saves.series }
-          mappings={ $.extend(this.props.saves.mappings, this.props.default_mappings) }/>
+          mappings={ { ...this.props.saves.mappings, ...this.props.default_mappings } }/>
         :
         null
       }

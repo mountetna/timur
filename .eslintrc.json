@@ -29,6 +29,7 @@
     "chroma": false,
     "Tree": false,
     "Redux": false,
+    "Set": false,
     "thunk": false,
     "TableSet": false,
     "TableColumn": false
@@ -41,7 +42,7 @@
     "quotes": ["error", "single", {"avoidEscape": true}],
     "semi": "warn",
     "no-var": "warn",
-    "curly": "warn",
+    "curly": [ "warn", "multi-line" ],
     "brace-style": ["warn", "stroustrup", {"allowSingleLine": true}]
   }
 }

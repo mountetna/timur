@@ -1,4 +1,9 @@
-import markdown from '../markdown'
+import React, { Component } from 'react';
+
+import { connect } from 'react-redux';
+
+import { dismissMessages } from '../actions/message_actions';
+import markdown from '../markdown';
 
 var Messages = React.createClass({
   getInitialState: function() {
@@ -52,7 +57,7 @@ var Messages = React.createClass({
             <div id="dismiss"
                onClick={ function() { 
                  self.setState({ current_message: 0 });
-                 self.props.dispatch(messageActions.dismissMessages())
+                 self.props.dispatch(dismissMessages())
                } }>
               <span className="fa fa-check"> </span>
             </div>

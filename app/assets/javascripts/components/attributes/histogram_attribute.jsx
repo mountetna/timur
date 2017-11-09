@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import React from 'react'
 import Histogram from '../plots/histogram'
 import { selectConsignment } from '../../selectors/consignment'

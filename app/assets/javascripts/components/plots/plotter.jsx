@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { selectManifest } from '../../actions/manifest_actions';
 import { requestConsignments } from '../../actions/consignment_actions';
 import { requestManifests, manifestToReqPayload } from '../../actions/manifest_actions';
+import { selectConsignment } from '../../selectors/consignment';
 import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions';
 import { selectConsignment } from '../../selectors/consignment';
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot';

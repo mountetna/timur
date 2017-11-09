@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 /*
  * A component that displays a set of buttons with Font Awesome icon and a label

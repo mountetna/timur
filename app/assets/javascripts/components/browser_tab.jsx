@@ -1,3 +1,4 @@
+import BrowserPane from './browser_pane';
 // Class imports.
 import * as React from 'react';
 

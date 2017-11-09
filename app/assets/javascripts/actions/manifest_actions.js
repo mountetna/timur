@@ -3,6 +3,8 @@ import {Exchange} from './exchange_actions';
 import {fetchManifests, destroyManifest, createManifest, updateManifest} from '../api/manifests';
 import {plotFromJson} from '../api/plots';
 import { addPlot } from './plot_actions';
+import { Exchange } from './exchange_actions';
+import { getConsignments, fetchManifests, destroyManifest, createManifest, updateManifest} from '../api/manifests';
 
 const showErrors = (e, dispatch)=>{
   let localError = (json)=>dispatch(showMessages(json.errors));
@@ -46,7 +48,7 @@ export const requestManifests = () => {
       showErrors(err, dispatch);
     };
 
-    fetchManifests(new Exchange(dispatch, 'request-manifest'))
+    return fetchManifests(new Exchange(dispatch, 'request-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -98,7 +100,7 @@ export const deleteManifest = (manifestId)=>{
       showErrors(err, dispatch);
     };
 
-    destroyManifest(manifestId, new Exchange(dispatch, 'delete-manifest'))
+   return destroyManifest(manifestId, new Exchange(dispatch, 'delete-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -118,7 +120,7 @@ export const saveNewManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
+    return createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -136,7 +138,7 @@ export const saveManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
+    return updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -155,7 +157,7 @@ export const copyManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
+    return createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
@@ -172,4 +174,64 @@ export const manifestToReqPayload = (manifest)=>{
   }, []);
 
   return {'manifest': manifestElements, 'name': name};
+};
+
+export const addConsignment = (name, consignment)=>{
+  return {
+    'type': 'ADD_CONSIGNMENT',
+    'manifest_name': name,
+    'consignment': consignment
+  };
+};
+
+/*
+ * Post a manifest to the query api and send the returned consignment to the
+ * store. If things go wrong, show a message with the error.
+ */
+export const requestConsignments = (manifests, success, error)=>{
+
+  return (dispatch)=>{
+    var localSuccess = (response)=>{
+      for(var name in response){
+        dispatch(addConsignment(name, response[name]));
+      }
+
+      if(success != undefined) success(response);
+    };
+
+    var localErrorResponse = (response)=>{
+
+      if(response.query){
+
+        var msg = `### For our inquiry:\n\n`;
+        msg +=    `\`${JSON.stringify(response.query)}\`\n\n`;
+        msg +=    `## this bitter response:\n\n`;
+        msg +=    `    ${response.errors}`;
+        dispatch(showMessages([msg]));
+      }
+      else if(response.errors && response.errors.length == 1){
+
+        var msg = `### Our inquest has failed, for this fault:\n\n`;
+        msg +=    `    ${response.errors[0]}`;
+        dispatch(showMessages([msg]));
+      }
+      else if(response.errors && response.errors.length > 1){
+
+        var msg = `### Our inquest has failed, for these faults:\n\n`;
+        msg +=    `${response.errors.map((error) => `* ${error}`).join('\n')}`;
+        dispatch(showMessages([msg]));
+      }
+
+      if(error != undefined) error(response);
+    };
+
+    var localError = (e) => e.response.json().then(localErrorResponse);
+
+    var manifest_names = manifests.map(m=>m.name).join(', ');
+    var exchng = new Exchange(dispatch, `consignment list ${manifest_names}`);
+
+    getConsignments(manifests, exchng)
+      .then(localSuccess)
+      .catch(localError);
+  };
 };

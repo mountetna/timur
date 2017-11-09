@@ -1,7 +1,25 @@
+import MetricsAttribute from './metrics_attribute';
+import MarkdownAttribute from './markdown_attribute';
+import SelectAttribute from './select_attribute';
+import ImageAttribute from './image_attribute';
+import DocumentAttribute from './document_attribute';
+import CheckboxAttribute from './checkbox_attribute';
+import LinePlotAttribute from './line_plot_attribute';
+import BoxPlotAttribute from './box_plot_attribute';
+import DateTimeAttribute from './date_time_attribute';
+import TableAttribute from './table_attribute';
+import LinkAttribute from './link_attribute';
+import React, { Component } from 'react';
+
 import StackedBarPlotAttribute from './stacked_bar_plot_attribute';
+import BarPlotAttribute from './bar_plot_attribute';
 import BarGraphAttribute from './bar_graph_attribute';
 import HistogramAttribute from './histogram_attribute';
 import SwarmAttribute from './swarm_attribute';
+import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
+import CollectionAttribute from './collection_attribute';
+import TextAttribute from './text_attribute';
+import Attribute from './attribute';
 
 var AttributeViewer = React.createClass({
   render: function(){
@@ -60,7 +78,7 @@ var AttributeViewer = React.createClass({
           case 'DateTime':
             return <DateTimeAttribute {...attr_props} />;
           default:
-           return <Attribute {...attr_props} />;
+            return <Attribute {...attr_props} />;
         }
 
       default:

@@ -1,12 +1,18 @@
-import { Component } from 'react';
+import { connect } from 'react-redux';
+
+import React, { Component } from 'react';
 import ManifestElement from './manifest_element';
 import ManifestPreview from './manifest_preview';
 import ButtonBar from '../button_bar';
 import ToggleSwitch from '../toggle_switch';
-import { requestConsignments } from '../../actions/consignment_actions';
 import { selectConsignment } from '../../selectors/consignment';
+<<<<<<< HEAD
 import { manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions';
 import { getPlotsByManifestId } from '../../selectors/plot';
+=======
+import { requestConsignments, manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions';
+import { getPlotsByIds } from '../../selectors/plot';
+>>>>>>> master
 import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions';
 import { plotIndexUrl } from '../../api/plots';
 
