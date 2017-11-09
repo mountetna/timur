@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import React from 'react'
 import StackedBarPlot from '../plots/stacked_bar_plot'
 import { selectConsignment } from '../../selectors/consignment'

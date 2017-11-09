@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PredicateChain from './predicate_chain';
 
 // This is a component to render a list of predicate chains, where each chain

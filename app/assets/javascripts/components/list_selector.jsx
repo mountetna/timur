@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 /*
  * This component presents a list of items to select, possibly divided into

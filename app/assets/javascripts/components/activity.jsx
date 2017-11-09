@@ -1,3 +1,6 @@
+import MagmaLink from './magma_link';
+import React, { Component } from 'react';
+
 import markdown from '../markdown'
 import { formatDate, formatTime } from '../utils/dates';
 

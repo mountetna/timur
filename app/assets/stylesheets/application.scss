@@ -32,7 +32,7 @@
 @import "list_selector";
 @import "predicate";
 
-@import "prismjs/themes/prism";
+@import "~prism/prism";
 
 /* prism-coy.css
 prism.css
@@ -44,8 +44,8 @@ prism-tomorrow.css
 prism-twilight.css */
 
 @import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen:400,700);
-@import "font-awesome-sprockets";
-@import "font-awesome";
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
 
 #main {
 	padding-left: 40px;

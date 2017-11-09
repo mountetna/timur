@@ -1,5 +1,10 @@
+import AttributeViewer from './attributes/attribute_viewer';
+import Pager from './pager';
+import Help from './help';
+import { connect } from 'react-redux';
+
 import React from 'react'
-import Magma from 'magma'
+import Magma from '../magma'
 import { requestTSV } from '../actions/magma_actions'
 
 class TableViewer extends React.Component {

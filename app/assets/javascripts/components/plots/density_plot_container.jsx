@@ -1,3 +1,6 @@
+import DensityPlot from './density_plot';
+import React, { Component } from 'react';
+
 var DensityPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
@@ -48,7 +51,7 @@ var DensityPlotContainer = React.createClass({
           series_limits={ [ "Series" ] }
           mappings_limits={ [ "Mapping" ] }
           series={ this.props.saves.series }
-          mappings={ $.extend({}, this.props.saves.mappings, this.props.default_mappings) }/>
+          mappings={ { ...this.props.saves.mappings, ...this.props.default_mappings } }/>
         :
         null
       }

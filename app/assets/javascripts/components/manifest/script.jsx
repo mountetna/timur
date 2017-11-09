@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 import Prism from 'prismjs'
 
 const Script = (code) => {

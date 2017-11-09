@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import SlowTextInput from '../inputs/slow_text_input';
 import { intFilter, floatFilter } from '../../utils/keycode';
 

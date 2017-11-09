@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import React, { Component } from 'react';
 import InputField from './input_field';
 import ButtonBar from '../button_bar';

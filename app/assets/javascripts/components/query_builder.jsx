@@ -1,4 +1,6 @@
-import { Component } from 'react';
+import { connect } from 'react-redux';
+
+import React, { Component } from 'react';
 import { requestPredicates, requestModels } from '../actions/magma_actions';
 import Magma from '../magma';
 import { Animate } from 'react-move';
