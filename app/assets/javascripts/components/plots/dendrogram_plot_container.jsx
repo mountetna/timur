@@ -1,3 +1,7 @@
+import DendrogramPlot from './dendrogram_plot';
+import React, { Component } from 'react';
+import { updateRequestedMappings } from '../../actions/plot_actions';
+
 var DendrogramPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
@@ -5,7 +9,7 @@ var DendrogramPlotContainer = React.createClass({
   componentDidMount: function() {
     var store = this.context.store;
     store.dispatch(
-      plotActions.updateRequestedMappings(
+      updateRequestedMappings(
         this.props.plot.plot_id, Object.keys(this.props.default_mappings)
       )
     );

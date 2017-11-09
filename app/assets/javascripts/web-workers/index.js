@@ -1,4 +1,4 @@
-import work from 'webworkify'
+import work from 'webworkify-webpack'
 
 
 /*

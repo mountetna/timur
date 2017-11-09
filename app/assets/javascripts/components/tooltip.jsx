@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 var Tooltip = React.createClass({
   render: function() {
     var self = this;

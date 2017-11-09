@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 var HeaderApprove = React.createClass({
   render: function() {
     return <div className="inline">

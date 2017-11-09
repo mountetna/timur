@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { formatDate, formatTime } from '../../utils/dates';
 import { maskFilter } from '../../utils/keycode';
 

@@ -1,3 +1,7 @@
+import Legend from './legend';
+import PlotCanvas from './plot_canvas';
+import React, { Component } from 'react';
+
 import { createScale } from '../../utils/d3_scale'
 import YAxis from './yaxis'
 
@@ -126,38 +130,37 @@ var BarPlotBar = React.createClass({
 var Dot = React.createClass({
   getInitialState: () => ({ highlighted: false }),
   render: function() {
-    var props = this.props
-    var classes = classNames({
-      dot: true,
-      highlighted: props.highlighted,
-      [props.category]: true,
-      similar: props.similar
-    })
+    let { highlighted, category, similar, name, highlight_name, mouse_handler, x, y } = this.props;
+    var classes = [
+      'dot',
+      category,
+      highlighted && 'highlighted',
+      similar && 'similar'
+    ].filter(_=>_).join(' ');
 
-
-    return <a xlinkHref={ Routes.browse_model_path('sample', props.name) }>
+    return <a xlinkHref={ Routes.browse_model_path('sample', name) }>
         <circle className={classes}
           onMouseOver={
             (event) => {
               this.setState({ highlighted: true })
-              props.mouse_handler(props.highlight_name) 
+              mouse_handler(highlight_name) 
             }
           }
           onMouseOut={
             (event) => {
               this.setState({highlighted: false})
-              props.mouse_handler(null)
+              mouse_handler(null)
             }
           }
           r="2.5"
-          cx={ props.x }
-          cy={ props.y }
+          cx={ x }
+          cy={ y }
           />
         {
           this.state.highlighted ?
           <text className="tooltip" textAnchor="start" 
-            transform={ 'translate(' + (props.x + 5) + ',' + props.y + ')' }>
-            { props.name }
+            transform={ 'translate(' + (x + 5) + ',' + y + ')' }>
+            { name }
           </text> : null
         }
       </a>

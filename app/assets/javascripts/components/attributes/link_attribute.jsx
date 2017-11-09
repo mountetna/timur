@@ -1,3 +1,6 @@
+import MagmaLink from '../magma_link';
+import React, { Component } from 'react';
+
 import { reviseDocument } from '../../actions/magma_actions'
 import SlowTextInput from '../inputs/slow_text_input';
 

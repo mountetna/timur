@@ -1,3 +1,8 @@
+import React, { Component } from 'react';
+
+import { connect } from 'react-redux';
+
+import LinePlot from '../plots/line_plot';
 import { autoColors } from '../../utils/colors'
 import { selectConsignment } from '../../selectors/consignment'
 

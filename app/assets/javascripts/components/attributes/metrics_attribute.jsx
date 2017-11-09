@@ -1,4 +1,10 @@
-import { selectConsignment } from '../../selectors/consignment'
+import MagmaLink from '../magma_link';
+import React, { Component } from 'react';
+
+import { connect } from 'react-redux';
+
+import { selectConsignment } from '../../selectors/consignment';
+import { showMessages } from '../../actions/message_actions';
 
 var CategoryControl = React.createClass({
   render: function() {
@@ -83,7 +89,7 @@ Metric = connect(
       showDetails: function() {
         if (details.length) {
           dispatch(
-            messageActions.showMessages([
+            showMessages([
 `# The test ${metric.name} on ${props.record_name} failed.
 ${
   metric.details.map((detail) =>

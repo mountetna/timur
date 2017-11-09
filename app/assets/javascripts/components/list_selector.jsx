@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 // Framework libraries.
 import * as React from 'react';
+=======
+import React, { Component } from 'react';
+>>>>>>> master
 
 /*
  * This component presents a list of items to select, possibly divided into

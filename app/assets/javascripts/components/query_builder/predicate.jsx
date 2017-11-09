@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { FloatInput } from '../inputs/numeric_input';
 import SlowTextInput from '../inputs/slow_text_input';
 import DateTimeInput from '../inputs/date_time_input';
@@ -45,9 +45,10 @@ export default class Predicate extends Component {
     let { special, verbs } = this.props;
     let choices = verbs.filter(
       verb => verb.matches(args, special)
-    ).map(
-      verb => verb.choices(pos, special)
-    ).flatten().sort();
+    ).reduce(
+      (values,verb) => values.concat(verb.choices(pos, special)),
+      []
+    ).sort();
 
     return Array.from(new Set(choices));
   }

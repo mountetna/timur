@@ -1,5 +1,7 @@
+import { connect } from 'react-redux';
+
 import { reviseDocument } from '../../actions/magma_actions';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { IntegerInput, FloatInput } from '../inputs/numeric_input';
 
 class NumericAttribute extends Component {

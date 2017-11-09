@@ -77,6 +77,4 @@ Rails.application.configure do
   config.pythia_url = "https://pythia.ucsf-immunoprofiler.org/"
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  config.react.variant = :production
 end

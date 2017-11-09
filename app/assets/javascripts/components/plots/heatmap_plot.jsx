@@ -1,3 +1,8 @@
+import Tooltip from '../tooltip';
+import Dendrogram from './dendrogram';
+import React, { Component } from 'react';
+import PlotCanvas from './plot_canvas';
+
 var HeatmapPlot = React.createClass({
   getInitialState: function() {
     return { highlight_cell: null }

@@ -1,3 +1,6 @@
+import ScatterPlot from './scatter_plot';
+import React, { Component } from 'react';
+
 var ScatterPlotContainer = React.createClass({
   getInitialState: function() {
     return { mode: 'plot' }
@@ -48,7 +51,7 @@ var ScatterPlotContainer = React.createClass({
           series_limits="any"
           mappings_limits={ [ "X", "Y" ] }
           series={ this.props.saves.series }
-          mappings={ $.extend({}, this.props.saves.mappings, this.props.default_mappings) }/>
+          mappings={ { ...this.props.saves.mappings, ...this.props.default_mappings } }/>
         :
         null
       }

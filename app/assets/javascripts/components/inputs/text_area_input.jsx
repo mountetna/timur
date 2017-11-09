@@ -1,4 +1,5 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+import debounce from '../../utils/debounce';
 
 // this is an input that debounces text input of some sort
 export default class TextAreaInput extends Component {
@@ -18,7 +19,7 @@ export default class TextAreaInput extends Component {
   }
 
   componentWillMount() {
-    this.onChange = $.debounce(this.props.waitTime || 500, this.onChange);
+    this.onChange = debounce(this.onChange, this.props.waitTime || 500);
   }
 
   render() {

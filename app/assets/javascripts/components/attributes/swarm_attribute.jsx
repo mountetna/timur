@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import React from 'react'
 import Swarm from '../plots/swarm'
 import { selectConsignment } from '../../selectors/consignment'

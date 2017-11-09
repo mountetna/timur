@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 // A terminal predicate component, mostly this shows approval if the
 // predicate chain is 'done' correctly (mostly useful in filters)

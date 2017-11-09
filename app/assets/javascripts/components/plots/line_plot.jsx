@@ -1,6 +1,11 @@
+import Legend from './legend';
+import PlotCanvas from './plot_canvas';
+import React, { Component } from 'react';
+
 import { createScale } from '../../utils/d3_scale'
 import XAxis from './xaxis'
 import YAxis from './yaxis'
+import * as d3 from "d3"
 
 var LinePlot = React.createClass({
   render: function() {
@@ -11,19 +16,21 @@ var LinePlot = React.createClass({
         height = plot.height - margin.top - margin.bottom
     var lines = this.props.lines
 
-    var x_values = lines.map(
-      (line) => line.points.map( (point) => point.x ) 
-    ).flatten()
+    var x_values = lines.reduce(
+      (values, line) => values.concat(line.points.map( (point) => point.x )),
+      []
+    )
 
-    var y_values = lines.map(
-      (line) => line.points.map( (point) => point.y ) 
-    ).flatten()
+    var y_values = lines.reduce(
+      (values, line) => values.concat(line.points.map( (point) => point.y )),
+      []
+    )
 
-    var xmin = x_values.min()
-    var xmax = x_values.max()
+    var xmin = d3.min(x_values);
+    var xmax = d3.max(x_values);
 
-    var ymin = y_values.min()
-    var ymax = y_values.max()
+    var ymin = d3.min(y_values);
+    var ymax = d3.max(y_values);
 
 
     var xScale = createScale(

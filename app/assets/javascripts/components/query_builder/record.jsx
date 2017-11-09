@@ -1,4 +1,6 @@
-import { Component } from 'react';
+import { connect } from 'react-redux';
+
+import React, { Component } from 'react';
 import { selectTemplate } from '../../selectors/magma';
 import { selectVerbs } from '../../selectors/predicate';
 import Predicate from './predicate';
