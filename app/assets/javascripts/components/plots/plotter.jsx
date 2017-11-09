@@ -8,7 +8,7 @@ import { selectConsignment } from '../../selectors/consignment';
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest';
 import ListSelector from '../list_selector';
-import PlotForm from './plot_form';
+import PlotForm from './plot_editor';
 import PlotView from './plot_view'
 
 class Plotter extends Component {
@@ -75,11 +75,11 @@ class Plotter extends Component {
     return (
       <div className='plot-container'>
         <div>
-        <ListSelector
-          name='Plot'
-          create={ this.newPlot.bind(this) }
-          select={ this.selectPlot.bind(this) }
-          items={ plots }/>
+          <ListSelector
+            name='Plot'
+            create={ this.newPlot.bind(this) }
+            select={ this.selectPlot.bind(this) }
+            items={ plots }/>
         </div>
           {isEditing ? (
             <PlotForm className='plot-form'
