@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Plot from '../plot';
 import ButtonBar from '../../button_bar';
-import Select from '../../form_inputs/select';
-import InputField from '../../form_inputs/input_field';
+import Select from '../../inputs/select';
+import InputField from '../../inputs/input_field';
 import Matrix from '../../../models/matrix';
 import Vector from '../../../models/vector';
 

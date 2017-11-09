@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PlotForm, { subscribePlotInputField, commonfields, matrixConsignmentKeyFilter, vectorConsignmentKeyFilter } from './plot_form';
-import InputField from '../../form_inputs/input_field';
-import Select from '../../form_inputs/select';
+import InputField from '../../inputs/input_field';
+import Select from '../../inputs/select';
 
 const scatterPlotFields = [
   subscribePlotInputField('checkbox', 'Y grid: ', ['layout', 'yaxis', 'showgrid'], undefined, (val) => !val)(InputField),

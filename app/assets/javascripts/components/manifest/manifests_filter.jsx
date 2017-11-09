@@ -1,5 +1,5 @@
 import React from 'react'
-import CheckBoxes from '../form_inputs/checkboxes'
+import CheckBoxes from '../inputs/checkboxes'
 
 const ManifestFilter = ({ handleChange, selected }) => (
   <div className='filter'>

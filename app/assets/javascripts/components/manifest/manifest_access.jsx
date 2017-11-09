@@ -1,5 +1,5 @@
 import React from 'react'
-import RadioSelector from '../form_inputs/radio_selector'
+import RadioSelector from '../inputs/radio_selector'
 
 const ManifestAccess = ({ selectedDefault = null, handleSelect, label = 'Access' }) => {
   const props = {
