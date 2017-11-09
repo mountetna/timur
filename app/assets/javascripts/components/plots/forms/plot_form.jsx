@@ -3,8 +3,8 @@ import Plot from '../plot';
 import ButtonBar from '../../button_bar';
 import Select from '../../form_inputs/select';
 import InputField from '../../form_inputs/input_field';
-import Matrix from '../../../matrix';
-import Vector from '../../../vector';
+import Matrix from '../../../models/matrix';
+import Vector from '../../../models/vector';
 
 export default (
   plotTypeLabel,

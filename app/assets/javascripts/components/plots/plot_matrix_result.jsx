@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import MatrixResult from '../manifest/matrix_result';
-import Matrix from '../../matrix'
+import Matrix from '../../models/matrix'
 
 let PlotMatrixResult = ({ plot, consignment, selectedPoints }) => {
   const matrix = consignment[plot.selectedReferenceTable];

@@ -1,9 +1,7 @@
 import { showMessages } from './message_actions'
 import {Exchange} from './exchange_actions';
-import {fetchManifests, destroyManifest, createManifest, updateManifest} from '../api/manifests';
 import {plotFromJson} from '../api/plots';
 import { addPlot } from './plot_actions';
-import { Exchange } from './exchange_actions';
 import { getConsignments, fetchManifests, destroyManifest, createManifest, updateManifest} from '../api/manifests';
 
 const showErrors = (e, dispatch)=>{
