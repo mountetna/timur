@@ -10,12 +10,13 @@ import { intFilter, floatFilter } from '../../utils/keycode';
 const floatTransform = (value) => parseFloat(value);
 const intTransform = (value) => parseInt(value.replace(/_/, ''));
 
-const NumericInput = (filter,transform) => ({onChange, ...otherProps}) =>
+const NumericInput = (filter,transform) => ({onChange, ...otherProps}) => (
   <SlowTextInput 
     onKeyPress={ filter }
     onChange={ (value) => onChange(transform(value)) }
     {...otherProps}
-  />;
+  />
+);
 
 export const IntegerInput = NumericInput(intFilter, intTransform);
 export const FloatInput = NumericInput(floatFilter, floatTransform);
