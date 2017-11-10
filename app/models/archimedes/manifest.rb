@@ -90,8 +90,8 @@ module Archimedes
     def fill_manifest
       @manifest.each do |variable, query|
         begin
-          @vars[variable] = resolve(query)
-        rescue RLTK::NotInLanguage => e
+          @vars[variable.to_s] = resolve(query)
+        rescue RLTK::NotInLanguage
           raise LanguageError, "Could not resolve @#{variable} = #{query}"
         end
       end

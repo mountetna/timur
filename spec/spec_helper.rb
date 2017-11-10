@@ -1,6 +1,9 @@
 require 'bundler'
 Bundler.require(:default, :test)
 
+require 'simplecov'
+SimpleCov.start
+
 RSpec.configure do |config|
   #config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
@@ -36,7 +39,7 @@ RSpec.configure do |config|
 
   # This setting enables warnings. It's recommended, but in some cases may
   # be too noisy due to issues in dependencies.
-  config.warnings = true
+  #config.warnings = true
 
   # Print the 10 slowest examples and example groups at the
   # end of the spec run, to help surface which specs are running
@@ -55,3 +58,19 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   #Kernel.srand config.seed
 end
+
+def make_manifest script
+  Archimedes::Manifest.create(
+    'xyzzy',
+    'timur',
+    script.to_a
+  )
+end
+
+def run_script script
+  manifest = make_manifest(script)
+  manifest.payload
+  manifest.instance_variable_get("@vars")
+end
+
+

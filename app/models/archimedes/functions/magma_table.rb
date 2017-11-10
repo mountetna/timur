@@ -1,25 +1,12 @@
 module Archimedes
-  class Table < Archimedes::Function
+  class MagmaTable < Archimedes::Function
     # This retrieves a matrix of data from Magma. Now it should use the new-and-improved Vector predicate
    
     def initialize *args
       super
 
-      row_query, column_queries, opts = @args
-      @row_query = row_query.to_values
-      @column_queries = Hash[
-        column_queries.map do |column_name, column_query|
-          [
-            column_name,
-              [
-                @row_query.first, 
-                [ '::identifier', '::in', row_names ],
-                '::all'
-              ] + column_query.to_values
-          ]
-        end
-      ]
-
+      query, opts = @args
+      @query = query.to_values
       @columns = {}
       @types = {}
       @order = opts['order']
@@ -96,4 +83,5 @@ module Archimedes
       Magma::Client.instance
     end
   end
+end
 end

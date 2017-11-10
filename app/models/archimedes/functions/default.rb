@@ -1,15 +1,7 @@
 module Archimedes
   # A general grab-bag class for functions that don't merit their own
   # class
-  class Default < Archimedes::Function
-    def self.is_func? function_name
-      method_defined?(function_name.to_sym)
-    end
-
-    def call
-      self.send(@function_name.to_sym, *@args)
-    end
-
+  class Default < Archimedes::FunctionCollection
     def length(vector)
       vector.length
     end
@@ -22,10 +14,34 @@ module Archimedes
       vector.min
     end
 
-    def log(vector, base)
-      vector.op {|v| Math.log(v,base) }
-      Vector.new(vector.map{|k,v| [ k, Math.log(v, base) ]})
+    def which(vector)
+      Vector.new(vector.map.with_index do |(label,value), i|
+        [ label, value ? i : nil ]
+      end.select do |label, value| 
+        value 
+      end)
     end
 
+    def order(vector, dir='asc')
+      # the index-ordering of the given vector
+      ordered = vector.to_values.map.with_index do |v,i|
+        [ v, i ]
+      end.sort_by(&:first)
+      Vector.new(
+        dir == 'asc' ? ordered : ordered.reverse
+      )
+    end
+
+    def column(vector)
+      vector.is_a?(ColumnVector) ? vector : ColumnVector.new(vector.to_a)
+    end
+
+    def row(vector)
+      vector.is_a?(ColumnVector) ? Vector.new(vector.to_a) : vector
+    end
+
+    def log(value, base=nil)
+      Vector.op(value) {|v| Math.log(v,base) }
+    end
   end
 end

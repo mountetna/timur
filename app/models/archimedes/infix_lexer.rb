@@ -22,6 +22,7 @@ module Archimedes
     rule(/\|\|/) { :OR }
     rule(/&&/) { :AND }
     rule(/==/) { :EQ }
+    rule(/!=/) { :NEQ }
     rule(/\$/) { :DOLLAR }
     rule(/\?/) { :QUESTION }
     rule(/=\~/) { :MATCH }

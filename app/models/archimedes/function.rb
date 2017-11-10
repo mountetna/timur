@@ -6,6 +6,8 @@ module Archimedes
           f.is_func?(function_name)
         end
 
+        raise ArgumentError, "No such function #{function_name}!" unless function
+
         function.new(token,project_name,function_name,args).call
       end
 
@@ -25,6 +27,15 @@ module Archimedes
       @args = args
     end
   end
+  class FunctionCollection < Function
+    def self.is_func? function_name
+      method_defined?(function_name.to_sym)
+    end
+
+    def call
+      self.send(@function_name.to_sym, *@args)
+    end
+  end
 end
 
 require_relative 'functions/default'
@@ -32,3 +43,4 @@ require_relative 'functions/diff_exp'
 require_relative 'functions/question'
 require_relative 'functions/spread'
 require_relative 'functions/table'
+require_relative 'functions/matrix'

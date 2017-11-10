@@ -19,7 +19,7 @@ module Archimedes
       clause('vector') { |v| v }
 
       # A macro definition, in the form of a template string, e.g. "{'time', %1, %2}"
-      clause('MACRO') { |m| Macro.new(m) }
+      clause('MACRO') { |m| Archimedes::Macro.new(m) }
 
       # A variable reference
       clause('VAR IDENT') { |v,i| @vars[i] }
@@ -33,6 +33,9 @@ module Archimedes
 
       # indexing, used by Vectors and Matrices
       clause('.e LBRACKET .e RBRACKET') { |e0, e1| e0[e1] }
+
+      # matrix slicing
+      clause('.e LBRACKET .slice COMMA .slice RBRACKET') { |matrix, rows, cols| matrix.slice(rows, cols) }
 
       # Comparison operators
       clause('.e GT .e') { |e0, e1| e0 > e1 }
@@ -50,6 +53,7 @@ module Archimedes
       clause('.e OR .e') { |e0, e1| e0 || e1 }
       clause('.e AND .e') { |e0, e1| e0 && e1 }
       clause('.e EQ .e') { |e0, e1| e0 == e1 }
+      clause('.e NEQ .e') { |e0, e1| e0 != e1 }
       clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
 
       # Macro dereferencing
@@ -59,7 +63,7 @@ module Archimedes
       clause('.IDENT LPAREN .args RPAREN') { |ident, args| 
         # The user token, which was set much earlier in the auth cycle, gets
         # passed into our collection of 'timur functions'.
-        func = Archimedes::Function.call(@token, @project_name, ident, args)
+        Archimedes::Function.call(@token, @project_name, ident, args)
       }
     end
 
@@ -90,6 +94,11 @@ module Archimedes
     production(:arg_list) do
       clause('e')                { |e| [e]                 }
       clause('e COMMA arg_list') { |e, _, args| [e] + args }
+    end
+
+    production(:slice) do
+      clause('e')                { |e| e }
+      clause('')                { nil }
     end
 
     finalize

@@ -18,6 +18,7 @@
 /public/fonts
 /public/css
 /public/images
+/public/coverage
 
 package-lock.json
 
