@@ -7,21 +7,25 @@ import Matrix from '../../../models/matrix';
 import Vector from '../../../models/vector';
 import { withIntegerFilter } from '../../inputs/numeric_input';
 
+/*
+This is the component to create a plot form for plot types.
+ */
+
 export default (
-  plotTypeLabel,
-  defaultPlotConfig,
-  clearedManifestFields = [],
-  plotFormFields = [],
-  dataFormFields = [],
-  defaultData,
-  addSeriesData = (newSeries, seriesData) => [...seriesData, newSeries]
+  plotTypeLabel, //Label for the plot type
+  defaultPlotConfig, //the default plot configuration - form state
+  clearedManifestFields = [], //fields that return to the default plot config values when the manifest changes
+  plotFormFields = [], //input fields for the plot
+  dataFormFields = [], //input fields for the data series
+  defaultData, //default form state for data series
+  addSeriesData = (newSeries, seriesData) => [...seriesData, newSeries] //function to add the data series
 ) => {
   return class extends Component {
     constructor() {
       super();
       this.state = {
-        data: defaultData,
-        manifestIdUpdated: false
+        data: defaultData, //data series that gets edited and added to the state.plot.data array
+        manifestIdUpdated: false //bit to check if the manifestId changed
       };
     }
 
@@ -47,6 +51,7 @@ export default (
       }
     }
 
+    //some fields are dependent on the selected manifest so they have to be cleared when the manifest is changed
     clearManifestFields() {
       let updatedPlot = { ...this.props.plot };
 
@@ -71,6 +76,7 @@ export default (
       this.props.updatePlot(updatedPlot);
     }
 
+    //copy the values with the same field names when the plot type is changed
     copyPreviousPlotFieldValues() {
       const merge = (template, source, key) => {
         if (!source) {
@@ -151,6 +157,7 @@ export default (
       return plotFormFields.map((Field, i) => <Field key={i} {...injectedProps} />);
     }
 
+    //when a new series is added to the data array add an id to the series and update plot configuration
     addDataRef() {
       const newSeries = {
         ...this.state.data,
@@ -161,12 +168,14 @@ export default (
       this.props.updatePlot(updatedPlot);
     }
 
+    //delete a series from the data array by id
     removePlotRefData(id) {
       let updatedPlot = { ...this.props.plot };
       updatedPlot.data = updatedPlot.data.filter(series => series.id != id);
       this.props.updatePlot(updatedPlot);
     }
 
+    //form fields are injected with props
     dataFormFields() {
       const injectedProps = {
         updatePlot: (data) => this.setState({ data }),
@@ -241,6 +250,11 @@ export default (
   };
 };
 
+/*
+input components subscribe to a property from the plot configuration state.
+eg. subscribePlotInputField(['layout', 'height'])(IntegerField('Height: '))
+the nested value for { layout: { height: value } } is injected into the input component
+*/
 export const subscribePlotInputField = (plotProperty = []) => (WrappedInput) => (props) => {
   let { value, plot, consignment, updatePlot, ...passThroughProps } = props;
 
