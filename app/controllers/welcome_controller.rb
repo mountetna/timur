@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  layout 'application'
+  layout 'timur'
   before_filter :authenticate, except: :no_auth
 
   def index
