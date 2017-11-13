@@ -2,6 +2,26 @@ module Archimedes
   # A general grab-bag class for functions that don't merit their own
   # class
   class MatrixFunctions < Archimedes::FunctionCollection
+    def rowsums(matrix)
+      return Archimedes::Vector.new(
+        matrix.row_names.zip(
+          matrix.rows.map do |row|
+            row.to_values.inject(&:+)
+          end
+        )
+      )
+    end
+
+    def colsums(matrix)
+      return Archimedes::Vector.new(
+        matrix.col_names.zip(
+          matrix.col_names.map.with_index do |col_name,j|
+            matrix.rows.map{|r| r[j]}.inject(&:+)
+          end
+        )
+      )
+    end
+
     def bind(dim, inputs)
       raise ArgumentError, 'inputs must be a vector' unless inputs.is_a?(Archimedes::Vector)
       use_rows = dim == 'rows'

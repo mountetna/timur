@@ -41,7 +41,11 @@ module Archimedes
     end
 
     def log(value, base=nil)
-      Vector.op(value) {|v| Math.log(v,base) }
+      if value.is_a?(Archimedes::Matrix)
+        Rtemis.instance.call(:log, value)
+      else
+        Vector.op(value) {|v| Math.log(v,base) }
+      end
     end
   end
 end

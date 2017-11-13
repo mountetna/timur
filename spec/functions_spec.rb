@@ -29,9 +29,8 @@ describe Archimedes::Default do
         log: 'log(@vec,10)'
       )
       vector = payload['log']
-      binding.pry
       expect(vector).to be_a(Archimedes::Vector)
-      expect(vector.to_values).to eq([1,2,3])
+      expect(vector.to_values.map{|v| v.round(4)}).to eq([1,2,3])
     end
     it 'computes log of a number' do
       payload = run_script(

@@ -39,7 +39,7 @@ module Archimedes
 end
 
 require_relative 'functions/default'
-require_relative 'functions/diff_exp'
+require_relative 'functions/rtemis'
 require_relative 'functions/question'
 require_relative 'functions/spread'
 require_relative 'functions/table'

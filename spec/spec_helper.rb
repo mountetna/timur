@@ -1,8 +1,13 @@
 require 'bundler'
 Bundler.require(:default, :test)
 
+require 'webmock/rspec'
+
 require 'simplecov'
 SimpleCov.start
+
+require 'yaml'
+Magma.instance.configure(YAML.load(File.read('config/magma.yml')))
 
 RSpec.configure do |config|
   #config.expect_with :rspec do |expectations|

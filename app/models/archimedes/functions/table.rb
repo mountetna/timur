@@ -1,32 +1,31 @@
 module Archimedes
   class Table < Archimedes::Function
-    # This retrieves a matrix of data from Magma. Now it should use the new-and-improved Vector predicate
+    # This retrieves a matrix of data from Magma. Now it should use
+    # the new-and-improved Vector predicate
    
     def initialize *args
       super
+      query, @opts = @args
+      @opts ||= {}
 
-      row_query, column_queries, opts = @args
-      @row_query = row_query.to_values
-      @column_queries = Hash[
-        column_queries.map do |column_name, column_query|
-          [
-            column_name,
-              [
-                @row_query.first, 
-                [ '::identifier', '::in', row_names ],
-                '::all'
-              ] + column_query.to_values
-          ]
-        end
-      ]
+      # 
+      if query[1].is_a?(Archimedes::Vector)
+        @column_queries = query[3]
+      else
+        @column_queries = query[2]
+      end
+      @query = query.to_values
+      @order = @opts['order']
 
-      @columns = {}
-      @types = {}
-      @order = opts['order']
+      raise ArgumentError, "table requires a Vector query" unless @column_queries.is_a?(Archimedes::Vector)
+      raise ArgumentError, "column names must be unique" unless col_names.uniq == col_names
+
     end
 
     def call
-      Matrix.new(ordered(row_names), col_names, ordered(rows), col_types)
+      Archimedes::Matrix.new(
+        ordered(row_names), col_names, ordered(rows)
+      )
     end
 
     private
@@ -40,56 +39,38 @@ module Archimedes
     end
 
     def ordering
-      return nil unless @order && column(@order)
-      @ordering ||= row_names.map.with_index do |row_name, i|
-        [ column(@order)[row_name], i ]
+      return nil unless @order && column = col_names.index(@order)
+      @ordering ||= rows.map.with_index do |row, i|
+        [ row[column], i ]
       end.sort do |a,b|
         (a.first && b.first) ? (a.first <=> b.first) : (a.first ? -1 : 1 )
       end.map(&:last)
     end
 
-    def row_names
-      @row_names ||= answer(row_question)['answer'].map(&:last)
-    end
-
-    def row_question
-      @row_question ||= @row_query + [ '::all', '::identifier']
-    end
-
     def rows
-      row_names.map do |row_name|
-        Vector.new( 
-          col_names.map do |column_name|
-            [ column_name, column(column_name)[row_name] ]
-          end
-        )
+      answer.map do |(row_name, row)|
+        Vector.new(col_names.zip(row))
       end
     end
 
+    def row_names
+      @row_names ||= answer.map(&:first)
+    end
+
     def col_names
-      @column_queries.keys
+      @column_queries.to_labels
     end
 
-    def col_types
-      col_names.map do |name| @types[name] end
-    end
-
-    def column(name)
-      return @columns[name] if @columns[name]
-      return nil unless @column_queries[name]
-
-      query_answer = answer(@column_queries[name])
-      @types[name] = query_answer['type']
-
-      @columns[name] = Hash[query_answer['answer'] || []]
-    end
-
-    def answer(question)
-      response = client.query(
-        @token, @project_name,
-        question
-      )
-      return JSON.parse(response.body)
+    def answer
+      @answer ||= 
+        begin
+          response = client.query(
+            @token, @project_name,
+            @query
+          )
+          json = JSON.parse(response.body, symbolize_names: true)
+          json[:answer]
+        end
     end
 
     def client

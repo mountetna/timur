@@ -7,3 +7,6 @@ require_relative 'archimedes/language_error'
 
 require_relative 'archimedes/matrix'
 require_relative 'archimedes/vector'
+
+module Archimedes;
+end

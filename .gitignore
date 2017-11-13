@@ -33,3 +33,4 @@ tmp
 .DS_Store
 ._*
 /coverage
+/spec/examples.txt
