@@ -24,9 +24,8 @@ class NumericAttribute extends Component {
   }
 
   renderInput() {
-    let { numericInput, revision, attribute } = this.props;
-
-    return <numericInput 
+    let { NumericInput, revision, attribute } = this.props;
+    return <NumericInput
         onChange={ this.onChange.bind(this) }
         className='full_text'
         placeholder={attribute.placeholder}
@@ -39,5 +38,5 @@ NumericAttribute = connect(
   { reviseDocument }
 )(NumericAttribute);
 
-export const IntegerAttribute = (props) => <NumericAttribute {...props } numericInput={ IntegerInput }/>;
-export const FloatAttribute = (props) => <NumericAttribute {...props } numericInput={ FloatInput }/>;
+export const IntegerAttribute = (props) => <NumericAttribute {...props } NumericInput={ IntegerInput }/>;
+export const FloatAttribute = (props) => <NumericAttribute {...props } NumericInput={ FloatInput }/>;
