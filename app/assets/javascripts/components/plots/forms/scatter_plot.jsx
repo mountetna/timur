@@ -1,19 +1,13 @@
-import React, { Component } from 'react';
-import PlotForm, { subscribePlotInputField, commonfields, matrixConsignmentKeyFilter, vectorConsignmentKeyFilter } from './plot_form';
-import InputField from '../../inputs/input_field';
-import Select from '../../inputs/select';
+import PlotForm, {
+  subscribePlotInputField, TextField, CheckBox, Selector, commonfields, VectorSelector, MatrixSelector
+} from './plot_form';
 
 const scatterPlotFields = [
-  subscribePlotInputField('checkbox', 'Y grid: ', ['layout', 'yaxis', 'showgrid'], undefined, (val) => !val)(InputField),
-  subscribePlotInputField('checkbox', 'X grid: ', ['layout', 'xaxis', 'showgrid'], undefined, (val) => !val)(InputField),
-  subscribePlotInputField(
-    undefined,
-    'Reference Table',
-    ['selectedReferenceTable'],
-    matrixConsignmentKeyFilter
-  )((props) => <Select {...props} hasNull={true} />),
-  subscribePlotInputField('text', 'X Axis Label: ', ['layout', 'yaxis', 'title'])(InputField),
-  subscribePlotInputField('text', 'Y Axis Label: ', ['layout', 'xaxis', 'title'])(InputField)
+  subscribePlotInputField(['layout', 'xaxis', 'showgrid'])(CheckBox('X grid: ')),
+  subscribePlotInputField(['layout', 'xaxis', 'title'])(TextField('X Axis Label: ')),
+  subscribePlotInputField(['layout', 'yaxis', 'showgrid'])(CheckBox('Y grid: ')),
+  subscribePlotInputField(['layout', 'yaxis', 'title'])(TextField('Y Axis Label: ')),
+  subscribePlotInputField(['selectedReferenceTable'])(MatrixSelector('Reference Table'))
 ];
 
 const defaultScatterPlot = {
@@ -39,32 +33,16 @@ const defaultScatterPlot = {
 const clearedManifestFields = ['data', 'selectedReferenceTable'];
 
 const scatterDataFields = [
-  subscribePlotInputField('text','Name: ', ['name'])(InputField),
-  subscribePlotInputField(
-    undefined,
-    'mode',
-    ['mode'],
-  )((props) => <Select
-    {...props}
-    hasNull={false}
-    options={[
+  subscribePlotInputField(['name'])(TextField('Name: ')),
+  subscribePlotInputField(['mode'])(
+    Selector('Mode',[
       { label: 'Markers', value: 'markers' },
       { label: 'Lines', value: 'lines' },
       { label: 'Lines and Markers', value: 'lines+markers' }
-    ]}
-  />),
-  subscribePlotInputField(
-    undefined,
-    'X',
-    ['x'],
-    vectorConsignmentKeyFilter
-  )((props) => <Select {...props} hasNull={true} />),
-  subscribePlotInputField(
-    undefined,
-    'Y',
-    ['y'],
-    vectorConsignmentKeyFilter
-  )((props) => <Select {...props} hasNull={true} />)
+    ])
+  ),
+  subscribePlotInputField(['x'])(VectorSelector('X')),
+  subscribePlotInputField(['y'])(VectorSelector('Y'))
 ];
 
 let defaultDataFields = {
@@ -74,4 +52,11 @@ let defaultDataFields = {
   y: undefined
 };
 
-export default PlotForm('Scatter Plot', defaultScatterPlot, clearedManifestFields, [...commonfields, ...scatterPlotFields], scatterDataFields, defaultDataFields);
+export default PlotForm(
+  'Scatter Plot',
+  defaultScatterPlot,
+  clearedManifestFields,
+  [...commonfields, ...scatterPlotFields],
+  scatterDataFields,
+  defaultDataFields
+);

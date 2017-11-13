@@ -5,6 +5,7 @@ import Select from '../../inputs/select';
 import InputField from '../../inputs/input_field';
 import Matrix from '../../../models/matrix';
 import Vector from '../../../models/vector';
+import { withIntegerFilter } from '../../inputs/numeric_input';
 
 export default (
   plotTypeLabel,
@@ -240,16 +241,20 @@ export default (
   };
 };
 
-export const subscribePlotInputField = (type, label, plotProperty = [], optionsFilter, valueUpdater) => (WrappedInput) => (props) => {
-  let { value, options, plot, consignment, updatePlot, ...passThroughProps } = props;
+export const subscribePlotInputField = (plotProperty = []) => (WrappedInput) => (props) => {
+  let { value, plot, consignment, updatePlot, ...passThroughProps } = props;
 
-  const currentValue = plotProperty.reduce((currVal, currProperty) => {
+  let currentValue = plotProperty.reduce((currVal, currProperty) => {
     try {
       return currVal[currProperty];
     } catch (e) {
       return null;
     }
   }, plot);
+
+  if (typeof currentValue !== 'string' && isNaN(currentValue)) {
+    currentValue = '';
+  }
 
   const update = (value) => {
     let updatedPlot = { ...plot };
@@ -260,11 +265,7 @@ export const subscribePlotInputField = (type, label, plotProperty = [], optionsF
       ref = ref[plotProperty[i]];
     }
 
-    if (valueUpdater) {
-      ref[plotProperty[finalPropertyIndex]] = valueUpdater(currentValue);
-    } else {
-      ref[plotProperty[finalPropertyIndex]] = value;
-    }
+    ref[plotProperty[finalPropertyIndex]] = value;
 
     updatePlot(updatedPlot);
   };
@@ -272,12 +273,9 @@ export const subscribePlotInputField = (type, label, plotProperty = [], optionsF
   return (
     <WrappedInput
       {...passThroughProps}
-      type={type}
-      label={label}
-      checked={currentValue || false}
+      consignment={consignment}
       value={currentValue}
       onChange={update}
-      options={optionsFilter ? optionsFilter(consignment) : options}
     />
   );
 };
@@ -286,11 +284,51 @@ const consignmentKeysByType = (type) => (consignment) => {
   return Object.keys(consignment || {}).filter(k => consignment[k] instanceof type);
 };
 
-export const matrixConsignmentKeyFilter = consignmentKeysByType(Matrix);
-export const vectorConsignmentKeyFilter = consignmentKeysByType(Vector);
+const matrixConsignmentKeyFilter = consignmentKeysByType(Matrix);
+const vectorConsignmentKeyFilter = consignmentKeysByType(Vector);
+
+const ConsignmentKeySelector = (label, filter) => ({ consignment, ...passThroughProps }) => (
+  <Select
+    label={label}
+    options={filter(consignment)}
+    hasNull={true}
+    {...passThroughProps}
+  />
+);
+
+export const MatrixSelector = (label) => ConsignmentKeySelector(label, matrixConsignmentKeyFilter);
+export const VectorSelector = (label) => ConsignmentKeySelector(label, vectorConsignmentKeyFilter);
+export const Selector = (label, options) => (props) => (
+  <Select
+    {...props}
+    label={label}
+    options={options}
+    hasNull={false}
+  />
+);
+
+export const TextField = (label) => ({ type, ...passThroughProps }) => (
+  <InputField
+    type='text'
+    label={label}
+    {...passThroughProps}
+  />
+);
+
+const IntegerField = (label) => withIntegerFilter(TextField(label));
+
+export const CheckBox = (label) => ({ type, value, onChange, ...passThroughProps }) => (
+  <InputField
+    type='checkbox'
+    label={label}
+    checked={value}
+    onChange={() => onChange(!value)}
+    {...passThroughProps}
+  />
+);
 
 export const commonfields = [
-  subscribePlotInputField('text', 'Title: ', ['name'])(InputField),
-  subscribePlotInputField('text', 'Height: ', ['layout', 'height'])(InputField),
-  subscribePlotInputField('text', 'Width: ', ['layout', 'width'])(InputField)
+  subscribePlotInputField(['name'])(TextField('Title: ')),
+  subscribePlotInputField(['layout', 'height'])(IntegerField('Height: ')),
+  subscribePlotInputField(['layout', 'width'])(IntegerField('Width: '))
 ];

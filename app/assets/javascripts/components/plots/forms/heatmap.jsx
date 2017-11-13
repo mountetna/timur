@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PlotForm, { subscribePlotInputField, commonfields, matrixConsignmentKeyFilter } from './plot_form';
-import Select from '../../inputs/select';
-import InputField from '../../inputs/input_field';
+import PlotForm, { subscribePlotInputField, TextField, MatrixSelector, commonfields } from './plot_form';
 
 const defaultHeatmapPlot = {
   name: '',
@@ -20,13 +18,8 @@ const defaultHeatmapData = {
 };
 
 const dataFields = [
-  subscribePlotInputField('text','Name: ', ['name'])(InputField),
-  subscribePlotInputField(
-    undefined,
-    'Matrix',
-    ['matrix'],
-    matrixConsignmentKeyFilter
-  )((props) => <Select {...props} hasNull={true} />),
+  subscribePlotInputField(['name'])(TextField('Name: ')),
+  subscribePlotInputField(['matrix'])(MatrixSelector('Matrix'))
 ];
 
 const addSeriesData = (newSeries) => [newSeries];
