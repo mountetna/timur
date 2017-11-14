@@ -61,8 +61,8 @@ module Archimedes
 
       # Function calling
       clause('.IDENT LPAREN .args RPAREN') { |ident, args| 
-        # The user token, which was set much earlier in the auth cycle, gets
-        # passed into our collection of 'timur functions'.
+        # User token and project_name are required if the function needs to
+        # call Magma
         Archimedes::Function.call(@token, @project_name, ident, args)
       }
     end

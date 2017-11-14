@@ -1,2 +1,4 @@
-class LanguageError < StandardError
+module Archimedes
+  class LanguageError < StandardError
+  end
 end

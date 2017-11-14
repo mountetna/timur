@@ -2,13 +2,26 @@ module Archimedes
   class Table < Archimedes::Function
     # This retrieves a matrix of data from Magma. Now it should use
     # the new-and-improved Vector predicate
+    #
+    def from_row_query(row_query, column_queries)
+      row_query.concat(Vector.new([[ nil, '::all'], [ nil, column_queries ]]))
+    end
    
     def initialize *args
       super
-      query, @opts = @args
+      query, @opts, opts2 = @args
       @opts ||= {}
 
-      # 
+      # hack for the old table format
+      if @opts.all?{|label,value| value.is_a?(Archimedes::Vector)}
+        query = from_row_query(query,@opts)
+        if opts2 && opts2['order']
+          @opts = opts2
+        else
+          @opts = {}
+        end
+      end
+
       if query[1].is_a?(Archimedes::Vector)
         @column_queries = query[3]
       else

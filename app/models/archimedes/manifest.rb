@@ -92,7 +92,7 @@ module Archimedes
         begin
           @vars[variable.to_s] = resolve(query)
         rescue RLTK::NotInLanguage
-          raise LanguageError, "Could not resolve @#{variable} = #{query}"
+          raise Archimedes::LanguageError, "Could not resolve @#{variable} = #{query}"
         end
       end
     end

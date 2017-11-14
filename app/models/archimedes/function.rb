@@ -12,7 +12,7 @@ module Archimedes
       end
 
       def all_functions
-        @all_functions ||= ObjectSpace.each_object(::Class).select {|k| k < self }
+        ObjectSpace.each_object(::Class).select {|k| k < self }
       end
 
       def is_func? function_name

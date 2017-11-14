@@ -68,6 +68,10 @@ module Archimedes
 
     operations :/, :+, :*, :-
 
+    def concat other
+      return self.class.new(to_a + other.to_a)
+    end
+
     def length
       @vector.length
     end
