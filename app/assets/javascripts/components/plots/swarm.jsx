@@ -70,7 +70,7 @@ class SwarmPlot extends Component {
     this.killWorker()
 
     // set worker
-    this.worker = createWorker(require('./../../web-workers/swarm_plot.js'), this.handleSwarmWorkerMessage.bind(this))
+    this.worker = createWorker(require.resolve('./../../web-workers/swarm_plot.js'), this.handleSwarmWorkerMessage.bind(this))
 
     // group data for the y axis - Map (groupKey -> data series)
     const dataSeriesMap = groupBy(props.data, item => item[props.groupByKey])
