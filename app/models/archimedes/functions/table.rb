@@ -13,7 +13,7 @@ module Archimedes
       @opts ||= {}
 
       # hack for the old table format
-      if @opts.all?{|label,value| value.is_a?(Archimedes::Vector)}
+      if !@opts.empty? && @opts.all?{|label,value| value.is_a?(Archimedes::Vector)}
         query = from_row_query(query,@opts)
         if opts2 && opts2['order']
           @opts = opts2
@@ -22,17 +22,15 @@ module Archimedes
         end
       end
 
-      if query[1].is_a?(Archimedes::Vector)
-        @column_queries = query[3]
-      else
-        @column_queries = query[2]
+      # skip filters
+      _, @column_queries = query.find.with_index do |(label, value), i|
+        i > 1 && !query[i-1].is_a?(Archimedes::Vector)
       end
       @query = query.to_values
       @order = @opts['order']
 
-      raise ArgumentError, "table requires a Vector query" unless @column_queries.is_a?(Archimedes::Vector)
-      raise ArgumentError, "column names must be unique" unless col_names.uniq == col_names
-
+      raise ArgumentError, "table() requires a Vector query argument." unless @column_queries.is_a?(Archimedes::Vector)
+      raise ArgumentError, "Column names must be unique." unless col_names.uniq == col_names
     end
 
     def call
