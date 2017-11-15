@@ -223,7 +223,10 @@ export const requestConsignments = (manifests, success, error)=>{
       if(error != undefined) error(response);
     };
 
-    var localError = (e) => e.response.json().then(localErrorResponse);
+    var localError = (e) => {
+      if (e.response) e.response.json().then(localErrorResponse);
+      else throw e;
+    };
 
     var manifest_names = manifests.map(m=>m.name).join(', ');
     var exchng = new Exchange(dispatch, `consignment list ${manifest_names}`);
