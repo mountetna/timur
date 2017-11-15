@@ -80,7 +80,6 @@ describe('manifests reducer', () => {
       ...initialState,
       [manifestId]: {
         ...initialState[manifestId],
-        plotIds: initialState[manifestId].plotIds.filter(id => id !== plotId)
       }
     };
 
