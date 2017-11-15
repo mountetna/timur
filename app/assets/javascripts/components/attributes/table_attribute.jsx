@@ -14,9 +14,9 @@ export default class TableAttribute extends React.Component {
       <TableViewer 
         page_size={ 10 }
         current_page={ this.state.current_page }
-        set_page={ (page) => this.setState({ current_page: page-1 }) }
+        setPage={ (page) => this.setState({ current_page: page-1 }) }
         filter={ this.state.filter }
-        set_filter={ (evt) => this.setState({ current_page: 0, filter: evt.target.value }) }
+        onFilter={ (filter) => this.setState({ current_page: 0, filter }) }
         model_name={ this.props.attribute.model_name }
         record_names={ this.props.value }/>
     </div>
