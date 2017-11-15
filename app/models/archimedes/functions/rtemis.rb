@@ -1,6 +1,6 @@
 module Archimedes
   class RtemisFunctions < Archimedes::Function
-    FUNCTIONS = [ :diff_exp, :pca, :center, :scale, :transpose, :sd ]
+    FUNCTIONS = [ :diff_exp, :pca, :center, :scale, :transpose, :sd, :correlation ]
 
     def self.is_func? function_name
       FUNCTIONS.include?(function_name.to_sym)
