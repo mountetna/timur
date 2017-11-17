@@ -13,7 +13,7 @@ module Archimedes
       @opts ||= {}
 
       # hack for the old table format
-      if !@opts.empty? && @opts.all?{|label,value| value.is_a?(Archimedes::Vector)}
+      if @opts.length > 0 && @opts.all?{|label,value| value.is_a?(Archimedes::Vector)}
         query = from_row_query(query,@opts)
         if opts2 && opts2['order']
           @opts = opts2

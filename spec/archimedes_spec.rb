@@ -16,7 +16,7 @@ describe Archimedes::Manifest do
       run_script(
         var1: "invalid syntax"
       )
-    }.to raise_error(LanguageError)
+    }.to raise_error(Archimedes::LanguageError)
   end
 
   it 'supports math operations' do

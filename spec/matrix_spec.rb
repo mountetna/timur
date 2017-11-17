@@ -113,6 +113,6 @@ describe Archimedes::Matrix do
       [[1, 3, 4], [2, 1, 3], [2, 3, 9]]
     )
     expect(payload['matrix2'].row_names).to eq(['lacedaemonians', 'athenians', 'thracians'])
-    expect(payload['matrix2'].col_names).to eq(['shot put', 'long jump', 'pankraton'])
+    expect(payload['matrix2'].col_names).to eq(['shot put', 'long jump', 'pankration'])
   end
 end
