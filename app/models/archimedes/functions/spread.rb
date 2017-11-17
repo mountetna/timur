@@ -8,15 +8,13 @@ module Archimedes
       matrix, *_ = @args
 
       # row names are in the first column
-      row_names = matrix.rows.map {|r| r[0] }.uniq
+      row_names = matrix.rows.map { |r| r[0] }.uniq
 
       # col names are in the second column
       col_names = matrix.rows.map { |r| r[1] }.uniq
 
       # group rows by value in the first column
-      row_groups = matrix.rows.group_by do |r|
-        r[0]
-      end
+      row_groups = matrix.rows.group_by { |r| r[0] }
 
       # values to the new columns are in the third column - value
       new_rows = row_groups.map do |row_name, values|

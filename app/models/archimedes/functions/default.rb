@@ -40,6 +40,10 @@ module Archimedes
       vector.is_a?(ColumnVector) ? Vector.new(vector.to_a) : vector
     end
 
+    def label(vector, labels)
+      Vector.new(labels.to_values.zip(vector.to_values))
+    end
+
     def log(value, base=nil)
       if value.is_a?(Archimedes::Matrix)
         Rtemis.instance.call(:log, value)

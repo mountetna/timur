@@ -101,9 +101,9 @@ describe Archimedes::Matrix do
                 'thracians', 'thracians', 'thracians'
               ], 
         event: [ 
-        'shot put', 'long jump', 'pankraton',
-        'shot put', 'long jump', 'pankraton',
-        'shot put', 'long jump', 'pankraton'
+        'shot put', 'long jump', 'pankration',
+        'shot put', 'long jump', 'pankration',
+        'shot put', 'long jump', 'pankration'
         ],
         score: [ 1, 3, 4, 2, 1, 3, 2, 3, 9 ] ])",
       matrix2: "spread(@matrix)"

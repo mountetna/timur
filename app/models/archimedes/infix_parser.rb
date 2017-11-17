@@ -84,6 +84,7 @@ module Archimedes
     production(:vector_item) do
       clause('e') {|e| [ nil, e ] }
       clause('.IDENT COLON .e') {|i,e| [ i,e ]}
+      clause('.STRING COLON .e') {|s,e| [ s,e ]}
     end
 
     production(:args) do

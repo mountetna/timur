@@ -63,7 +63,6 @@ describe Archimedes::Vector do
     expect(o4.to_values).to eq([false,true,true])
     expect(o5.to_values).to eq([false,false,true])
   end
-
   it "supports arbitrary operations across vectors" do
     v1 = vector([10,100,1000])
 
