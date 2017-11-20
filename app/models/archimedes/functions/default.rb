@@ -44,7 +44,7 @@ module Archimedes
       Vector.new(labels.to_values.zip(vector.to_values))
     end
 
-    def log(value, base=nil)
+    def log(value, base=10)
       if value.is_a?(Archimedes::Matrix)
         Rtemis.instance.call(:log, value)
       else

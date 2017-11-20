@@ -64,6 +64,10 @@ module Archimedes
       end
     end
 
+    def -@
+      op {|v| -v }
+    end
+
     comparisons :!=, :==, :>, :<, :=~, :>=, :<=
 
     operations :/, :+, :*, :-

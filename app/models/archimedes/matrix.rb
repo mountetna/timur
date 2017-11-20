@@ -106,6 +106,14 @@ module Archimedes
 
     public
 
+    def -@
+      return Matrix.new(
+        row_names,
+        col_names,
+        rows.map { |row| -row }
+      )
+    end
+
     operation :*, :/, :+, :-
 
 
