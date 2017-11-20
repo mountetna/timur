@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import 'isomorphic-fetch';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
