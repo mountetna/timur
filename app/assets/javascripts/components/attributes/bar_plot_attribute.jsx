@@ -1,59 +1,65 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { connect } from 'react-redux';
+// Module imports.
+import {selectConsignment} from '../../selectors/consignment';
 
-import BarPlot from '../plots/bar_plot';
-import { selectConsignment } from '../../selectors/consignment';
-
-var BarPlotAttribute = React.createClass({
-  render: function() {
-    return <div className="value">
-              <BarPlot
-                ymin={ 0 }
-                ymax={ 1 }
-                legend={ this.props.legend }
-                plot={ 
-                  this.props.plot || {
-                    width: 900,
-                    height: 200,
-                    margin: {
-                      left: 0,
-                      right: 0,
-                      top: 0,
-                      bottom: 40
-                    }
-                  }
-                }
-                bars={ this.props.bars } />
-           </div>
-  },
-})
-
-BarPlotAttribute = connect(
-  function(state,props) {
-    var consignment = selectConsignment(state,props.attribute.plot.name)
-
-    var bars = []
-
-    if (consignment && consignment.bars) {
-      bars = consignment.bars.map((_, bar, i) => ({
-          name: bar("name"),
-          color: bar("color"),
-          heights: bar("height"),
-          category: bar("category"),
-          highlight_names: bar("highlight_names") ? bar("highlight_names").values : bar("height").labels,
-          select: bar("select").which((value) => value)[0],
-          similar: bar("similar") ? bar("similar").values : undefined
-        })
-      )
-    }
-
-    return {
-      bars: bars,
-      legend: props.attribute.plot.legend,
-      plot: props.attribute.plot.dimensions
-    }
+class BarPlotAttribute extends React.Component{
+  constructor(props){
+    super(props);
+    this.props.initialized(this.constructor.name);
   }
-)(BarPlotAttribute)
 
-module.exports = BarPlotAttribute
+  render(){
+    return(
+      <div>
+
+        {'BarPlotAttribute Temp'}
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state = {}, own_props)=>{
+
+  let consignment = selectConsignment(state, own_props.attribute.manifest_id);
+  let bars = [];
+
+  if (consignment && consignment.bars) {
+    bars = consignment.bars.map((_, bar, i) => ({
+        name: bar('name'),
+        color: bar('color'),
+        heights: bar('height'),
+        category: bar('category'),
+        highlight_names: bar('highlight_names') ? bar('highlight_names').values : bar('height').labels,
+        select: bar('select').which((value) => value)[0],
+        similar: bar('similar') ? bar('similar').values : undefined
+      })
+    )
+  }
+
+  return {
+    bars: bars,
+    legend: null,//props.attribute.legend,
+    plot: null //props.attribute.dimensions
+  };
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    initialized: (component)=>{
+      dispatch({
+        type: 'INITIALIZED',
+        component
+      });
+    }
+  };
+};
+
+const BarPlotAttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BarPlotAttribute);
+
+export default BarPlotAttributeContainer;

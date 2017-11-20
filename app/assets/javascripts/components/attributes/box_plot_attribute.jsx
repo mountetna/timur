@@ -36,7 +36,7 @@ var BoxPlotAttribute = React.createClass({
 
 BoxPlotAttribute = connect(
   function(state,props) {
-    var consignment = selectConsignment(state,props.attribute.plot.name)
+    var consignment = selectConsignment(state, props.attribute.manifest_id)
 
     var groups = []
 

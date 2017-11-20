@@ -1,60 +1,78 @@
-import { connect } from 'react-redux';
+// Framework Libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import React from 'react'
-import BarGraph from '../plots/bar_graph'
-import { selectConsignment } from '../../selectors/consignment'
+// Class imports.
+import BarGraph from '../plots/bar_graph';
 
-let BarGraphAttribute = ({
-  data,
-  datumKey,
-  ymin,
-  ymax,
-  attribute: {
-    plot: {
-      name,
-      dimensions: {
-        height,
-        width,
-        margin
-      }
-    }
+// Module imports.
+import {selectConsignment} from '../../selectors/consignment';
+
+class BarGraphAttribute extends React.Component{
+  constructor(props){
+    super(props);
+    this.props.initialized(this.constructor.name);
   }
 
-}) => (
-  <div className="value">
-    {data[0] &&
-      <BarGraph
-        ymin={ymin}
-        ymax={ymax}
-        plot={{name, width, height}}
-        margin={margin}
-        data={data}
-      />
-    }
-  </div>
-)
+  render(){
 
-BarGraphAttribute = connect(
-  (state, props) => {
-    const { name } = props.attribute.plot
-    const consignment = selectConsignment(state, name)
-    if (consignment) {
-      const data = consignment.data.map((label, value,) => {
-        return value.map((label, value) => ({ label, value })).reduce((acc, curr) => {
-          return {
-            ...acc,
-            [curr.label]: curr.value
-          }
-        }, {})
-      })
+    let {attribute, data} = this.props;
+    let bar_graph_props = {
+      plot: {name: attribute.title, width: 500, height: 300},
+      margin: {top: 10, right: 20, bottom: 90, left: 50},
+      data
+    };
 
-      return { data }
-    }
+    return(
+      <div className='value'>
 
-      return {
-        data: []
-      }
+        {data[0] && <BarGraph {...bar_graph_props} />}
+      </div>
+    );
   }
-)(BarGraphAttribute)
+}
 
-export default BarGraphAttribute
+const mapStateToProps = (state = {}, own_props)=>{
+
+  let consignment = selectConsignment(state, own_props.attribute.manifest_id);
+
+  if(consignment){
+    let data = consignment.data.map((label, value)=>{
+
+      value = value.map((label, value)=>{
+        return {label, value};
+      });
+
+      value = value.reduce((acc, curr)=>{
+        return {
+          ...acc,
+          [curr.label]: curr.value
+        };
+      }, {});
+
+      return value;
+    });
+
+    return {data};
+  }
+  
+  return {data: []};
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    initialized: (component)=>{
+      dispatch({
+        type: 'INITIALIZED',
+        component
+      });
+    }
+  };
+};
+
+const BarGraphAttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BarGraphAttribute);
+
+export default BarGraphAttributeContainer;
