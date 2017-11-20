@@ -8,7 +8,7 @@ import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '..
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest';
 import ListSelector from '../list_selector';
-import PlotForm from './plot_editor';
+import PlotEditor from './plot_editor';
 import PlotView from './plot_view'
 
 class Plotter extends Component {
@@ -82,7 +82,7 @@ class Plotter extends Component {
             items={ plots }/>
         </div>
           {isEditing ? (
-            <PlotForm className='plot-form'
+            <PlotEditor className='plot-form'
               consignment={consignment}
               selectedManifest={selectedManifest}
               selectManifest={selectManifest}
