@@ -40,21 +40,9 @@ export const selectPoints = (pointIds) => ({
   ids: pointIds
 });
 
-export const savePlot = (plot) =>
+const addEditedPlot = (apiAction) => (plot) =>
   (dispatch) => {
-    updatePlot(plot)
-      .then(plot => {
-        dispatch(addPlot(plot));
-        dispatch(toggleEditing(false));
-        dispatch(toggleEditing(false));
-        dispatch(selectPlot(plot.id));
-      });
-  };
-
-// Post to create new plot and save in the store
-export const saveNewPlot = (plot) =>
-  (dispatch) => {
-    createPlot(plot)
+    apiAction(plot)
       .then(plot => {
         dispatch(addPlot(plot));
         dispatch(toggleEditing(false));
@@ -65,4 +53,10 @@ export const saveNewPlot = (plot) =>
           .then(json => dispatch(showMessages(json.errors)))
       });
   };
+
+// Put to update plot and update in store
+export const savePlot = addEditedPlot(updatePlot);
+
+// Post to create new plot and save in the store
+export const saveNewPlot = addEditedPlot(createPlot);
 
