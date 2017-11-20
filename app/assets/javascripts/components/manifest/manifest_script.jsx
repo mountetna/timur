@@ -1,4 +1,5 @@
 // Framework libraries.
+import * as React from 'react';
 import Prism from 'prismjs';
 
 export const manifestScript = (code, props)=>{
