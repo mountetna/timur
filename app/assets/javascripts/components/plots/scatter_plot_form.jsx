@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Plot from './plotly'
 import ButtonBar from '../button_bar'
-import  InputField from '../input_field'
+import  InputField from './input_field'
 import Vector from '../../models/vector'
 
 class ScatterPlotForm extends Component {
