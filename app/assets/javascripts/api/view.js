@@ -15,3 +15,15 @@ export const getView = (model_name, tab_name, exchange)=>{
   return exchangePromise;
 };
 
+export const getUser = ()=>{
+
+  let route_opts = {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf')
+  };
+
+  return fetch('/user_json', route_opts)
+    .then(checkStatus)
+    .then(parseJSON);
+};
