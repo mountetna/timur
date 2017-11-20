@@ -6,7 +6,7 @@ import { selectConsignment } from '../../selectors/consignment';
 import { saveNewPlot, deletePlot, savePlot, selectPlot, toggleEditing } from '../../actions/plot_actions';
 import { getAllPlots, getSelectedPlot } from '../../selectors/plot';
 import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../../selectors/manifest';
-import ListSelector from '../list_selector';
+import ListMenu from '../list_menu';
 import ButtonBar from '../button_bar';
 import ScatterPlotForm from './scatter_plot_form';
 import Plot from './plotly';
@@ -123,7 +123,7 @@ class Plotter extends Component {
     return (
       <div className='plot-container'>
         <div>
-        <ListSelector
+        <ListMenu
           name='Plot'
           create={ this.newPlot.bind(this) }
           select={ this.selectPlot.bind(this) }

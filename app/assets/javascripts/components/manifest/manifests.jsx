@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Class imports.
-import ListSelector from '../list_selector';
+import ListMenu from '../list_menu';
 import ManifestView from './manifest_view';
 
 // Module imports.
@@ -37,7 +37,7 @@ export class Manifests extends React.Component{
       component_name
     } = this.props;
 
-    let list_selector_props = {
+    let list_menu_props = {
       name: 'Manifest',
       create: this.create.bind(this),
       select: this.props.selectManifest,
@@ -55,7 +55,7 @@ export class Manifests extends React.Component{
 
         <div className='left-column-group'>
 
-          <ListSelector {...list_selector_props} />
+          <ListMenu {...list_menu_props} />
         </div>
         <div className='right-column-group'>
 

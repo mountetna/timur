@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 // Framework libraries.
 import * as React from 'react';
-=======
-import React, { Component } from 'react';
->>>>>>> master
 
 /*
  * This component presents a list of items to select, possibly divided into
@@ -19,7 +15,7 @@ import React, { Component } from 'react';
  * If there is a 'sections', 'items' is ignored.
  */
 
-export default class ListSelector extends React.Component{
+export default class ListMenu extends React.Component{
 
   listSelection({id, title, name}, index){
       var btn_props = {
