@@ -39,7 +39,12 @@ class ManifestsController < ApplicationController
   def destroy
     return unless find_manifest(params[:id])
     return unless authorize
-    delete(@manifest)
+
+    begin
+      delete(@manifest)
+    rescue ActiveRecord::InvalidForeignKey
+      render(json: { errors: ['This manifest is attached to the view and cannot be deleted.'] }, status: 409)
+    end
   end
 
   private
