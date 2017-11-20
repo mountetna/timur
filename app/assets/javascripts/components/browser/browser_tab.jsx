@@ -1,20 +1,24 @@
-import BrowserPane from './browser_pane';
-// Class imports.
+// Framework libraries.
 import * as React from 'react';
+
+// Class imports.
+import BrowserPane from './browser_pane';
 
 export default class BrowserTab extends React.Component{
   renderPanes(){
-    let panes = this.props.tab.panes.map((pane)=>{
+    let {tab, mode, revision, template, doc} = this.props;
+
+    let panes = Object.keys(tab.panes).map((pane_name, index)=>{
 
       let browser_pane_props = {
-        'mode': this.props.mode,
-        'pane': pane,
-        'name': pane.name,
-        'revision': this.props.revision,
-        'template': this.props.template,
-        'document': this.props.document,
-        'key': pane.name
+        template,
+        doc,
+        revision,
+        mode,
+        pane: tab.panes[pane_name],
+        key: `${pane_name}-${index}`
       };
+
       return <BrowserPane {...browser_pane_props} />
     });
 

@@ -1,4 +1,4 @@
-import AttributeViewer from './attributes/attribute_viewer';
+import AttributeViewer from '../attributes/attribute_viewer';
 import React, { Component } from 'react';
 
 var BrowserPane = React.createClass({
@@ -20,6 +20,10 @@ var BrowserPane = React.createClass({
     var props = this.props;
     var display = props.pane.display;
 
+    /*
+     * If in edit mode then hide the non editable items...this is wrong. We
+     * should let them be viewed but indicate that they are not editable.
+     */
     display = display.filter((display_item)=>{
       return props.mode != 'edit' || display_item.editable();
     });

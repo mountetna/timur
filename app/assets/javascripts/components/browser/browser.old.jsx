@@ -19,11 +19,12 @@ import { connect } from 'react-redux';
 // Class imports.
 import Magma from '../magma';
 import BrowserTab from './browser_tab';
-import Tab from '../models/tab';
+
 
 // Module imports.
 import {discardRevision, sendRevisions} from '../actions/magma_actions';
 import {requestView} from '../actions/timur_actions';
+import Tab from '../selectors/tab';
 
 var Browser = React.createClass({
   componentDidMount: function(){
