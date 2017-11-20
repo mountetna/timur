@@ -74,7 +74,7 @@ export const requestManifests = () => {
       const plots = manifests.reduce((acc, manifestJSON) => {
         return [...acc, ...manifestJSON.plots]
       }, []);
-      plots.forEach(plot => dispatch(loadPlot(plot)));
+      //plots.forEach(plot => dispatch(loadPlot(plot)));
     };
 
     let localError = (err) => {
@@ -213,6 +213,27 @@ export const requestConsignments = (manifests, success, error)=>{
   };
 };
 
+export const requestConsignmentsByManifestId = (manifest_ids, record_name)=>{
+
+  return (dispatch)=>{
+
+    let localSuccess = (response)=>{
+      for(let id in response) dispatch(addConsignment(id, response[id]));
+    };
+
+    let localError = (response)=>{
+      console.log(response);
+    };
+
+    let exchng = new Exchange(dispatch, 'consignment list');
+
+    ManifestAPI.getConsignmentsByManifestId(manifest_ids, record_name, exchng)
+      .then(localSuccess)
+      .catch(localError);
+  }
+};
+
+
 // Convert a manifest to its JSON representation for query endpoint.
 export const manifestToReqPayload = (manifest)=>{
   let {id, name, 'data': {elements}} = manifest;
@@ -223,7 +244,7 @@ export const manifestToReqPayload = (manifest)=>{
     return acc;
   }, []);
 
-  return {id, name, manifest: manifest_elements};
+  return {id, name, manifest_elements};
 };
 
 const showErrors = (e, dispatch)=>{

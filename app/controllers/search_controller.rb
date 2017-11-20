@@ -75,25 +75,61 @@ class SearchController <  ApplicationController
   end
 
   def consignment_json
+    render(fetch_consignments(params[:queries]))
+  end
+
+  def consignment_by_manifest_id_json
+
+    # Pull the manifests by their ids.
+    manifests = params[:manifest_ids].map do |manifest_id|
+      manifest = Manifest.find_by_id(manifest_id)
+
+      # Append the record name to the manifest as it needs it for processing.
+      manifest_elements = [
+        ['record_name', "'#{params[:record_name]}'"]
+      ]
+
+      # Translate the manifests into a form usable by DataManifest.
+      manifest[:data]['elements'].each do |manifest_element|
+        manifest_elements.push([
+          manifest_element['name'],
+          manifest_element['script']
+        ])
+      end
+
+      {
+        id: manifest[:id],
+        name: manifest[:name],
+        manifest_elements: manifest_elements
+      }
+    end
+
+    # We return the consignments with the manifest ids as the key.
+    render(fetch_consignments(manifests))
+  end
+
+  private
+
+  def fetch_consignments(queries)
     begin
       result = Hash[
-        params[:queries].map do |query|
+        queries.map do |query|
 
           manifest = DataManifest.new(
             token,
             params[:project_name],
-            query[:manifest]
+            query[:manifest_elements]
           )
 
           manifest.fill
           [query[:id], manifest.payload]
         end
       ]
-      render(json: result)
+      return {json: result}
     rescue Magma::ClientError => e
-      render(json: e.body, status: e.status)
+      return {json: e.body, status: e.status}
     rescue LanguageError => e
-      render(json: { errors: [e.message] }, status: 422)
+      return {json: { errors: [e.message] }, status: 422}
     end
   end
 end
