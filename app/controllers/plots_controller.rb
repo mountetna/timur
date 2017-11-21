@@ -32,7 +32,14 @@ class PlotsController < ApplicationController
   private
 
   def plot_auth
-    return unless find_manifest(params[:manifest_id])
+    if params[:id]
+      return unless find_plot(params[:id])
+    end
+
+    if !@manifest
+      return unless find_manifest(params[:manifest_id])
+    end
+
     return unless authorize
   end
 
@@ -40,6 +47,8 @@ class PlotsController < ApplicationController
     @plot = Plot.find_by_id(id)
     if @plot.nil?
       render :json => { :errors => ["Plot with id: #{id} does not exist."] }, :status => 404
+    else
+      @manifest = @plot.manifest
     end
     @plot
   end

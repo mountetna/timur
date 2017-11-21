@@ -22,7 +22,7 @@ export const plotIndexUrl = (queryParams) => {
 };
 
 export const createPlot = (plot) =>
-  fetch(Routes.manifests_plots_create_path(PROJECT_NAME, plot.manifestId), {
+  fetch(Routes.manifests_plots_create_path(PROJECT_NAME), {
     credentials: 'same-origin',
     method: 'POST',
     headers: headers('json', 'csrf'),
@@ -33,7 +33,7 @@ export const createPlot = (plot) =>
     .then(plotFromJson)
 
 export const destroyPlot = (plot) =>
-  fetch(Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.manifestId, plot.id), {
+  fetch(Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.id), {
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     method: 'DELETE'
@@ -42,7 +42,7 @@ export const destroyPlot = (plot) =>
     .then(parseJSON)
 
 export const updatePlot = (plot) =>
-  fetch(Routes.manifests_plots_update_path(PROJECT_NAME, plot.manifestId, plot.id), {
+  fetch(Routes.manifests_plots_update_path(PROJECT_NAME, plot.id), {
     credentials: 'same-origin',
     method: 'PUT',
     headers: headers('json', 'csrf'),
@@ -95,6 +95,7 @@ const plotToJson = (plot) => {
     id: plot.id,
     name: plot.name,
     plot_type: plot.plotType,
+    manifest_id: plot.manifestId,
     configuration
   };
 }
