@@ -3,8 +3,6 @@ import Plot from '../plot';
 import ButtonBar from '../../button_bar';
 import Select from '../../inputs/select';
 import InputField from '../../inputs/input_field';
-import Matrix from '../../../models/matrix';
-import Vector from '../../../models/vector';
 import { withIntegerFilter } from '../../inputs/numeric_input';
 
 /*
@@ -294,24 +292,24 @@ export const subscribePlotInputField = (plotProperty = []) => (WrappedInput) => 
   );
 };
 
-const consignmentKeysByType = (type) => (consignment) => {
-  return Object.keys(consignment || {}).filter(k => consignment[k] instanceof type);
-};
-
-const matrixConsignmentKeyFilter = consignmentKeysByType(Matrix);
-const vectorConsignmentKeyFilter = consignmentKeysByType(Vector);
-
-const ConsignmentKeySelector = (label, filter) => ({ consignment, ...passThroughProps }) => (
+export const MatrixSelector = (label) => ({ consignment, ...passThroughProps }) => (
   <Select
     label={label}
-    options={filter(consignment)}
+    options={consignment ? consignment.matrixKeys() : []}
     hasNull={true}
     {...passThroughProps}
   />
 );
 
-export const MatrixSelector = (label) => ConsignmentKeySelector(label, matrixConsignmentKeyFilter);
-export const VectorSelector = (label) => ConsignmentKeySelector(label, vectorConsignmentKeyFilter);
+export const VectorSelector = (label) => ({ consignment, ...passThroughProps }) => (
+  <Select
+    label={label}
+    options={consignment ? consignment.vectorKeys() : []}
+    hasNull={true}
+    {...passThroughProps}
+  />
+);
+
 export const Selector = (label, options) => (props) => (
   <Select
     {...props}

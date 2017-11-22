@@ -34,4 +34,16 @@ export default class Consignment {
       this[name] = parsed[name];
     }
   }
+
+  matrixKeys() {
+    return this.consignmentKeysByType(Matrix)
+  }
+
+  vectorKeys() {
+    return this.consignmentKeysByType(Vector)
+  }
+
+  consignmentKeysByType(type) {
+    return Object.keys(this || {}).filter(k => this[k] instanceof type);
+  };
 }
