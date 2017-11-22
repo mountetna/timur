@@ -36,11 +36,11 @@ export default class Consignment {
   }
 
   matrixKeys() {
-    return this.consignmentKeysByType(Matrix)
+    return this.consignmentKeysByType(Matrix);
   }
 
   vectorKeys() {
-    return this.consignmentKeysByType(Vector)
+    return this.consignmentKeysByType(Vector);
   }
 
   consignmentKeysByType(type) {
