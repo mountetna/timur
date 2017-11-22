@@ -26,11 +26,10 @@ export const createPlot = (plot) =>
     credentials: 'same-origin',
     method: 'POST',
     headers: headers('json', 'csrf'),
-    body: JSON.stringify(plotToJson(plot))
+    body: JSON.stringify(plot)
   })
     .then(checkStatus)
     .then(parseJSON)
-    .then(plotFromJson)
 
 export const destroyPlot = (plot) =>
   fetch(Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.id), {
@@ -46,57 +45,7 @@ export const updatePlot = (plot) =>
     credentials: 'same-origin',
     method: 'PUT',
     headers: headers('json', 'csrf'),
-    body: JSON.stringify(plotToJson(plot))
+    body: JSON.stringify(plot)
   })
     .then(checkStatus)
     .then(parseJSON)
-    .then(plotFromJson)
-
-
-
-// data transformation of api JSON plot object for the data store
-export const plotFromJson = (plotJSON, editable = true) => {
-  const transformedPlot = {
-    plotType: plotJSON.plot_type,
-    id: plotJSON.id,
-    editable,
-    manifestId: plotJSON.manifest_id,
-    name: plotJSON.name
-  };
-
-  // add all fields in configuration to the top level object
-  if (plotJSON.configuration) {
-    Object.entries(plotJSON.configuration).map(([ key, value ]) => {
-      transformedPlot[key] = value;
-    });
-  }
-
-  return transformedPlot;
-}
-
-// transform data store plot object to plot JSON for creating and updating plots
-const plotToJson = (plot) => {
-
-  // data fields for all plot types
-  const plotFields = ['id', 'name', 'plotType']
-
-  // configurable plot data
-  const configuration = Object.entries(plot).reduce((config, [ key, value ]) => {
-    if (plotFields.includes(key)) {
-      return config;
-    }
-    return {
-      ...config,
-      [key]: value
-    };
-  }, {});
-
-  return {
-    id: plot.id,
-    name: plot.name,
-    plot_type: plot.plotType,
-    manifest_id: plot.manifestId,
-    configuration
-  };
-}
-

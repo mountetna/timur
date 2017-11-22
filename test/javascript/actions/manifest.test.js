@@ -4,7 +4,6 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import nock from 'nock';
 import * as actions from '../../../app/assets/javascripts/actions/manifest_actions';
-import { plotFromJson } from '../../../app/assets/javascripts/api/plots';
 import allManifestsResp, { plot } from '../fixtures/all_manifests_response';
 import manifestStore, { manifest } from '../fixtures/manifests_store';
 import manifestResp from '../fixtures/manifest_response';
@@ -59,7 +58,7 @@ describe('async actions', () => {
         manifestsById: manifestStore
       },
       {
-        plot: plotFromJson(plot),
+        plot: plot,
         type:"ADD_PLOT"
       }
     ];

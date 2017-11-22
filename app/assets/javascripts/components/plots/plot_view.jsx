@@ -22,7 +22,7 @@ const PlotView = ({ selectedPlot, consignment, toggleEditing, handleDelete }) =>
 
   return (
     <div>
-      {selectedPlot.editable && <ButtonBar className='actions' buttons={ buttons } />}
+      {selectedPlot.is_editable && <ButtonBar className='actions' buttons={ buttons } />}
       <Plot plot={selectedPlot} consignment={consignment} />
     </div>
   );

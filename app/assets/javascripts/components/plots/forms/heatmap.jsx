@@ -3,8 +3,8 @@ import PlotForm, { subscribePlotInputField, TextField, MatrixSelector, commonfie
 
 const defaultHeatmapPlot = {
   name: '',
-  plotType: 'heatmap',
-  manifestId: undefined,
+  plot_type: 'heatmap',
+  manifest_id: undefined,
   layout: {
     height: undefined,
     width: undefined

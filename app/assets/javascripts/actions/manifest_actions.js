@@ -1,6 +1,5 @@
 import { showMessages } from './message_actions'
 import {Exchange} from './exchange_actions';
-import {plotFromJson} from '../api/plots';
 import { addPlot } from './plot_actions';
 import { getConsignments, fetchManifests, destroyManifest, createManifest, updateManifest} from '../api/manifests';
 
@@ -34,8 +33,8 @@ export const requestManifests = () => {
 
       // collect all the plots from the manifests
       const plots = manifests.reduce((allPlots, manifestJSON) => {
-        const manifestPlots = manifestJSON.plots.map(plotJSON => plotFromJson(plotJSON, manifestJSON.is_editable));
-        return [ ...allPlots, ...manifestPlots ];
+        // const manifestPlots = manifestJSON.plots.map(plotJSON => plotFromJson(plotJSON, manifestJSON.is_editable));
+        return [ ...allPlots, ...manifestJSON.plots ];
       }, []);
 
       // load the plots to the store

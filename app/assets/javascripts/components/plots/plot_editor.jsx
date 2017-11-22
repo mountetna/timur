@@ -10,8 +10,8 @@ export default class PlotEditor extends Component {
       const manifestId = this.defaultManifestId();
       this.state = {
         plot: {
-          plotType: 'scatter',
-          manifestId
+          plot_type: 'scatter',
+          manifest_id: manifestId
         }
       };
     } else {
@@ -26,7 +26,7 @@ export default class PlotEditor extends Component {
 
   componentDidMount() {
     if (this.isNewPlot()) {
-      this.props.selectManifest(this.state.plot.manifestId);
+      this.props.selectManifest(this.state.plot.manifest_id);
     }
   }
 
@@ -46,11 +46,11 @@ export default class PlotEditor extends Component {
     return !this.props.plot;
   }
 
-  updateManifestId(manifestId) {
+  updateManifestId(manifest_id) {
     this.setState(prevSate => ({
       plot: {
         ...prevSate.plot,
-        manifestId
+        manifest_id
       }
     }));
   }
@@ -65,24 +65,24 @@ export default class PlotEditor extends Component {
     }
   }
 
-  changePlotType(plotType) {
+  changePlotType(plot_type) {
     this.setState(prevState => ({
       plot: {
         ...prevState.plot,
-        plotType
+        plot_type
       }
     }));
   }
 
-  selectManifest(manifestId) {
+  selectManifest(manifest_id) {
     this.setState(
       prevState => ({
         plot: {
           ...prevState.plot,
-          manifestId
+          manifest_id
         }
       }),
-      () => this.props.selectManifest(manifestId)
+      () => this.props.selectManifest(manifest_id)
     );
   }
 
@@ -114,7 +114,7 @@ export default class PlotEditor extends Component {
 
     };
 
-    switch(this.state.plot.plotType) {
+    switch(this.state.plot.plot_type) {
       case 'heatmap':
         return <HeatmapForm {...props} />;
       default:

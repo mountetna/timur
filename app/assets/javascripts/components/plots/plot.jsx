@@ -15,7 +15,7 @@ class Plot extends Component {
       return <div></div>;
     }
 
-    switch (plot.plotType) {
+    switch (plot.plot_type) {
       case 'scatter':
         return (
           <div>

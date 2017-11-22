@@ -12,8 +12,8 @@ const scatterPlotFields = [
 
 const defaultScatterPlot = {
   name: '',
-  plotType: 'scatter',
-  manifestId: undefined,
+  plot_type: 'scatter',
+  manifest_id: undefined,
   selectedReferenceTable: undefined,
   layout: {
     height: undefined,

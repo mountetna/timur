@@ -49,7 +49,7 @@ class Plotter extends Component {
 
   selectPlot(plotId) {
     const plot = this.props.plots.find(p => p.id == plotId);
-    this.props.selectManifest(plot.manifestId);
+    this.props.selectManifest(plot.manifest_id);
     this.props.selectPlot(plot.id);
     this.props.toggleEditing(false);
   }
