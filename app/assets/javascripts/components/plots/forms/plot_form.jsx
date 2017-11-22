@@ -103,48 +103,6 @@ export default (
       return merge(defaultPlotConfig, this.props.plot);
     }
 
-    plotTypeSelector() {
-      const options = [
-        {
-          value: 'scatter',
-          label: '2d scatter'
-        },
-        {
-          value: 'heatmap',
-          label: 'heatmap'
-        }
-      ];
-
-      return (
-        <Select
-          hasNull={false}
-          label={'Plot Type'}
-          onChange={this.props.changePlotType}
-          options={options}
-          value={this.props.plot.plotType}
-        />
-      );
-    }
-
-    manifestSelector() {
-      const options = this.props.manifests.map(({ id, name }) => {
-        return {
-          value: id,
-          label: name
-        };
-      });
-
-      return (
-        <Select
-          hasNull={false}
-          label={'Manifest'}
-          onChange={(id) => this.props.selectManifest(id)}
-          options={options}
-          value={this.props.plot.manifestId}
-        />
-      );
-    }
-
     formFields() {
       const injectedProps = {
         updatePlot: this.props.updatePlot,
@@ -202,7 +160,9 @@ export default (
     }
 
     render () {
-      const { toggleEditing, selectedManifest, handleSave, isNewPlot, plot, consignment } = this.props;
+      const {
+        toggleEditing, selectedManifest, handleSave, isNewPlot, plot, consignment, changePlotType, manifests, selectManifest
+      } = this.props;
 
       return (
         <div className='plot-form-container'>
@@ -220,17 +180,19 @@ export default (
               }
             ]}
           />
-          {isNewPlot ? (
-            <div>
-              {this.plotTypeSelector()}
-              {this.manifestSelector()}
-            </div>
-          ) : (
-            <div>
-              <div>{`Plot Type: ${plotTypeLabel}`}</div>
-              <div>{`Manifest: ${selectedManifest.name}`}</div>
-            </div>
-          )}
+          <PlotSelector
+            isNewPlot={isNewPlot}
+            changePlotType={changePlotType}
+            plot={plot}
+            plotTypeLabel={plotTypeLabel}
+          />
+          <ManifestSelector
+            isNewPlot={isNewPlot}
+            manifests={manifests}
+            selectManifest={selectManifest}
+            plot={plot}
+            selectedManifest={selectedManifest}
+          />
           <fieldset>
             <legend>{plotTypeLabel}</legend>
             {this.formFields()}
@@ -246,6 +208,56 @@ export default (
       );
     }
   };
+};
+
+const PlotSelector = ({ isNewPlot, changePlotType, plot, plotTypeLabel }) => {
+  if (!isNewPlot) {
+    return <div>{`Plot Type: ${plotTypeLabel}`}</div>;
+  }
+
+  const options = [
+    {
+      value: 'scatter',
+      label: '2d scatter'
+    },
+    {
+      value: 'heatmap',
+      label: 'heatmap'
+    }
+  ];
+
+  return (
+    <Select
+      hasNull={false}
+      label={'Plot Type'}
+      onChange={changePlotType}
+      options={options}
+      value={plot.plot_type}
+    />
+  );
+};
+
+const ManifestSelector = ({ isNewPlot, manifests, selectManifest, plot, selectedManifest }) => {
+  if (!isNewPlot) {
+    return <div>{`Manifest: ${selectedManifest.name}`}</div>;
+  }
+
+  const options = manifests.map(({ id, name }) => {
+    return {
+      value: id,
+      label: name
+    };
+  });
+
+  return (
+    <Select
+      hasNull={false}
+      label={'Manifest'}
+      onChange={(id) => selectManifest(id)}
+      options={options}
+      value={plot.manifest_id}
+    />
+  );
 };
 
 /*
