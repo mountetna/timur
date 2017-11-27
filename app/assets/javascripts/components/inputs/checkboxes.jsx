@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const CheckBoxes = ({selected, options, onChange}) => (
   <span>
@@ -11,6 +11,6 @@ const CheckBoxes = ({selected, options, onChange}) => (
       </span>
     ))}
   </span>
-)
+);
 
-export default CheckBoxes
+export default CheckBoxes;

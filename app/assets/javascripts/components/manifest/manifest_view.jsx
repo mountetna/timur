@@ -6,8 +6,8 @@ import ManifestPreview from './manifest_preview';
 import ButtonBar from '../button_bar';
 import ToggleSwitch from '../toggle_switch';
 import { selectConsignment } from '../../selectors/consignment';
+import { getPlotsByManifestId } from '../../selectors/plot';
 import { requestConsignments, manifestToReqPayload, deleteManifest, toggleEdit, copyManifest } from '../../actions/manifest_actions';
-import { getPlotsByIds } from '../../selectors/plot';
 import { selectPlot, toggleEditing as plotEdit } from '../../actions/plot_actions';
 import { plotIndexUrl } from '../../api/plots';
 
@@ -115,7 +115,7 @@ class ManifestView extends Component {
 export default connect(
   (state, props) => ({
     consignment: selectConsignment(state, props.manifest.name),
-    plots: getPlotsByIds(state, props.manifest.plotIds || [])
+    plots: getPlotsByManifestId(state, props.manifest.id)
   }),
   {
     deleteManifest,

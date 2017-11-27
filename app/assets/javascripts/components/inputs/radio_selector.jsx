@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const RadioSelector = ({options, selected, handleSelect, label}) => {
   const radios = options.map(option => (
@@ -8,7 +8,7 @@ const RadioSelector = ({options, selected, handleSelect, label}) => {
         checked={selected === option} />
       {option}
     </span>
-  ))
+  ));
 
   return (
     <div className='selector input-container'>
@@ -16,6 +16,6 @@ const RadioSelector = ({options, selected, handleSelect, label}) => {
       {radios}
     </div>
   )
-}
+};
 
-export default RadioSelector
+export default RadioSelector;

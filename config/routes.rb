@@ -30,9 +30,9 @@ Rails.application.routes.draw do
 
   # plot_controller.rb
   get ':project_name/plots'=> 'plots#index', as: :plots
-  post ':project_name/manifests/:manifest_id/plots/create'=> 'plots#create', as: :manifests_plots_create
-  put ':project_name/manifests/:manifest_id/plots/update/:id'=> 'plots#update', as: :manifests_plots_update
-  delete ':project_name/manifests/:manifest_id/plots/destroy/:id'=> 'plots#destroy', as: :manifests_plots_destroy
+  post ':project_name/plots/create'=> 'plots#create', as: :manifests_plots_create
+  put ':project_name/plots/update/:id'=> 'plots#update', as: :manifests_plots_update
+  delete ':project_name/plots/destroy/:id'=> 'plots#destroy', as: :manifests_plots_destroy
 
   # manifest_controller.rb
   get ':project_name/manifests'=> 'manifests#index', as: :manifests

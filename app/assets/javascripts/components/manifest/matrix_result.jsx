@@ -50,7 +50,7 @@ class MatrixResult extends Component {
   render() {
     const { matrix } = this.props
     return (
-      <div className='matrix'>
+      <div className='result matrix'>
         <i className="fa fa-table" aria-hidden="true"></i>
         <i className="fa fa-download" aria-hidden="true" onClick={this.downloadMatrix.bind(this)}></i>
         {`${matrix.num_rows} rows x ${matrix.num_cols} cols`}

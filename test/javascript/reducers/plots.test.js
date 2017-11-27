@@ -5,7 +5,8 @@ describe('plots reducer', () => {
   const initialState = {
     plotsMap: {},
     selected: null,
-    isEditing: false
+    isEditing: false,
+    selectedPoints: []
   };
 
   it('should return the initial state', () => {
@@ -21,7 +22,8 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: {},
       selected: 3,
-      isEditing: false
+      isEditing: false,
+      selectedPoints: []
     });
   });
 
@@ -33,7 +35,8 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: {},
       selected: null,
-      isEditing: true
+      isEditing: true,
+      selectedPoints: []
     });
   });
 
@@ -46,7 +49,8 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: {},
       selected: null,
-      isEditing: true
+      isEditing: true,
+      selectedPoints: []
     });
   });
 
@@ -59,7 +63,8 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: { [testPlot.id]: testPlot },
       selected: null,
-      isEditing: false
+      isEditing: false,
+      selectedPoints: []
     });
   });
 
@@ -72,7 +77,8 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: {},
       selected: null,
-      isEditing: false
+      isEditing: false,
+      selectedPoints: []
     });
   });
 
@@ -91,7 +97,8 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: { 3: updatedPlot },
       selected: null,
-      isEditing: false
+      isEditing: false,
+      selectedPoints: []
     });
   });
 });

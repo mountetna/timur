@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 
 import React, { Component } from 'react';
-import InputField from './input_field';
+import InputField from '../inputs/input_field';
 import ButtonBar from '../button_bar';
-import TextField from './text_field';
+import TextField from '../inputs/text_field';
 import ManifestAccess from './manifest_access';
 import ManifestElementForm from './manifest_element_form';
 import QueryBuilder from './../query_builder'

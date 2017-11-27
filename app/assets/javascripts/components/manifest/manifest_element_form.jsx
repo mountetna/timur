@@ -1,6 +1,6 @@
 import React from 'react'
-import InputField from './input_field'
-import TextField from './text_field'
+import InputField from '../inputs/input_field'
+import TextField from '../inputs/text_field'
 import { Result } from './manifest_results'
 
 // Edit component for a single variable/expression from a manifest
