@@ -93,6 +93,20 @@ module Archimedes
           @vars[variable.to_s] = resolve(query)
         rescue RLTK::NotInLanguage
           raise Archimedes::LanguageError, "Could not resolve @#{variable} = #{query}"
+        rescue Magma::ClientError => e
+          raise Archimedes::LanguageError.new("Magma Client error", e.body)
+        rescue ArgumentError => e
+          raise Archimedes::LanguageError, "In @#{variable}, #{e.message}"
+        rescue TypeError => e
+          if e.message =~ /nil/
+            raise Archimedes::LanguageError, "Nil value error in @#{variable}"
+          else
+            raise Archimedes::LanguageError, "Type error in @#{variable}"
+          end
+        rescue ZeroDivisionError
+          raise Archimedes::LanguageError, "Divided by zero in @#{variable}"
+        rescue
+          raise Archimedes::LanguageError, "Unspecified error in @#{variable}"
         end
       end
     end

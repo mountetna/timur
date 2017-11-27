@@ -89,12 +89,8 @@ class SearchController <  ApplicationController
         end
       ]
       render(json: consignment)
-    rescue ArgumentError => e
-      render(json: { errors: [e.message] }, status: 422)
-    rescue Magma::ClientError => e
-      render(json: e.body, status: e.status)
     rescue Archimedes::LanguageError => e
-      render(json: { errors: [e.message] }, status: 422)
+      render(json: e.body, status: 422)
     end
   end
 end
