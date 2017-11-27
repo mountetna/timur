@@ -1,20 +1,43 @@
 import { createSelector } from 'reselect';
 
-const getSelectedManifestId = state => state.manifestsUI.selected;
+export const getSelectedManifest = (state)=>{
+  // Return the selected manifest.
+  if(state.manifests && state.manifestsUI.selected > 0){
+    return state.manifests[state.manifestsUI.selected];
+  }
 
-const getManifests = state => state.manifests;
+  // If the selected id is equal to 0 return a new manifest.
+  if(state.manifestsUI.selected == 0){
+    let date = new Date;
+    return {
+      id: 0,
+      access: 'public',
+      name: '',
+      description: '',
+      project: '',
+      data:{
+        elements: []
+      },
+      created_at: date.toString(),
+      updated_at: date.toString(),
+      user: {
+        name: ''
+      },
+      is_editable: true,
+      plots_id: ''
+    };
+  }
+
+  // Lastly return null for an empty page.
+  return null;
+};
+
+export const getAllManifests = (state)=>{
+  if(state.manifests) return Object.values(state.manifests);
+  return [];
+};
 
 export const manifestById = (state, id) => getManifests(state)[id];
-
-export const getSelectedManifest = createSelector(
-  [ getManifests, getSelectedManifestId ],
-  (manifests, id) => manifests[id]
-);
-
-export const getAllManifests = createSelector(
-  getManifests,
-  manifests => Object.values(manifests)
-);
 
 export const isEmptyManifests = createSelector(
   getAllManifests,

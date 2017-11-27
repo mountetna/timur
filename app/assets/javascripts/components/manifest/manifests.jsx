@@ -1,66 +1,113 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { requestManifests, toggleEdit, selectManifest} from '../../actions/manifest_actions';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
+
+// Class imports.
 import ListSelector from '../list_selector';
-import Manifest from './manifest';
-import { getSelectedManifest, getAllManifests } from '../../selectors/manifest';
+import ManifestView from './manifest_view';
 
-// Main component for viewing/editing manifests
-class Manifests extends Component {
-  componentDidMount() {
-    this.props.requestManifests()
+// Module imports.
+import {requestManifests} from '../../actions/manifest_actions';
+import {getSelectedManifest, getAllManifests} from '../../selectors/manifest';
+
+// Main component for viewing/editing manifests.
+export class Manifests extends React.Component{
+  constructor(props){
+    super(props);
   }
 
-  create() {
-    this.props.selectManifest(null);
-    this.props.toggleEdit()
+  componentDidMount(){
+    this.props.requestManifests();
   }
 
-  render() {
-    const { sections, selectedManifest } = this.props
+  create(){
+    // A manifest with an id of '0' is a new manifest.
+    this.props.selectManifest(0);
 
-    return (
-      <div className='manifests-container'>
-        <ListSelector
-          name='Manifest'
-          create={ this.create.bind(this) }
-          select={ this.props.selectManifest }
-          sections={ sections }/>
-        <div className='manifest-view'>
-        { (selectedManifest || this.props.isEditing) ?
-          <Manifest
-            isAdmin={this.props.isAdmin}
-            editing={this.props.isEditing}
-            manifest={this.props.selectedManifest}
-            />
-            : null
-        }
+    if(this.props.is_editing) return;
+    this.props.toggleEdit();
+  }
+
+  render(){
+    let {
+      sections,
+      selected_manifest,
+      is_admin,
+      is_editing,
+      component_name
+    } = this.props;
+
+    let list_selector_props = {
+      name: 'Manifest',
+      create: this.create.bind(this),
+      select: this.props.selectManifest,
+      sections: sections
+    };
+
+    let manifest_props = {
+      manifest: selected_manifest,
+      is_admin: is_admin,
+      is_editing: is_editing
+    };
+
+    return(
+      <div className='manifest-group'>
+
+        <div className='left-column-group'>
+
+          <ListSelector {...list_selector_props} />
+        </div>
+        <div className='right-column-group'>
+
+          {(selected_manifest || is_editing) ? <ManifestView {...manifest_props} /> : ''}
         </div>
       </div>
-    )
+    );
   }
 }
 
-const accessFilter = (access, manifests) =>
-  manifests.filter(m => m.access == access)
-    .sort((a,b) => a > b);
+const accessFilter = (access, manifests)=>{
+  return manifests.filter(m => m.access == access).sort((a,b) => a > b);
+};
 
-const mapStateToProps = (state) => {
-  const { manifestsUI: { isEditing } } = state
+const mapStateToProps = (state = {}, own_props)=>{
+  let {manifestsUI: {isEditing}} = state;
   let manifests = getAllManifests(state);
 
   let sections = {
     Public: accessFilter('public', manifests),
     Private: accessFilter('private', manifests)
-  }
+  };
 
   return {
     sections,
-    selectedManifest: getSelectedManifest(state),
-    isEditing
+    selected_manifest: getSelectedManifest(state),
+    is_editing: isEditing
   }
 }
 
-export default connect(mapStateToProps, {
-  requestManifests, toggleEdit, selectManifest
-})(Manifests)
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    requestManifests: ()=>{
+      dispatch(requestManifests());
+    },
+
+    selectManifest: (id)=>{
+      dispatch({
+        type: 'SELECT_MANIFEST',
+        id
+      });
+    },
+
+    toggleEdit: ()=>{
+      dispatch({
+        type: 'TOGGLE_IS_EDITING_MANIFEST'
+      });
+    },
+  };
+};
+
+export const ManifestsContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Manifests);

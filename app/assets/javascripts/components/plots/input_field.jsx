@@ -1,3 +1,5 @@
+/* NOT USED BY MANIFEST */
+
 import React from 'react'
 
 const InputField = ({ type, placeholder, label, onChange, value }) => {

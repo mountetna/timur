@@ -3,7 +3,7 @@ const consignments = (state = {}, action) => {
     case 'ADD_CONSIGNMENT':
       return {
         ...state,
-        [action.manifest_name]: action.consignment
+        [action.manifest_id]: action.consignment
       }
     default:
       return state

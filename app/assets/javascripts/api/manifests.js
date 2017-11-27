@@ -29,7 +29,7 @@ export const createManifest = (manifest, exchange)=>{
   return exchangePromise;
 };
 
-export const updateManifest = (manifestUpdates, manifestId, exchange)=>{
+export const updateManifest = (manifestUpdates, manifest_id, exchange)=>{
   let routeOpts = {
     credentials: 'same-origin',
     method: 'POST',
@@ -37,21 +37,21 @@ export const updateManifest = (manifestUpdates, manifestId, exchange)=>{
     body: JSON.stringify(manifestUpdates)
   };
 
-  var exchangePromise = exchange.fetch(Routes.manifests_update_path(PROJECT_NAME, manifestId), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.manifests_update_path(PROJECT_NAME, manifest_id), routeOpts)
     .then(checkStatus)
     .then(parseJSON);
 
   return exchangePromise;
 };
 
-export const destroyManifest = (manifestId, exchange)=>{
+export const destroyManifest = (manifest_id, exchange)=>{
   let routeOpts = {
     credentials: 'same-origin',
     method: 'POST',
     headers: headers('json', 'csrf')
   };
 
-  var exchangePromise = exchange.fetch(Routes.manifests_destroy_path(PROJECT_NAME, manifestId), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.manifests_destroy_path(PROJECT_NAME, manifest_id), routeOpts)
     .then(checkStatus)
     .then(parseJSON);
 
