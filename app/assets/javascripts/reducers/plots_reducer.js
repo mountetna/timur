@@ -39,8 +39,20 @@ const isEditing = (state = false, action) => {
   }
 };
 
+const selectedPoints = (state = [], action) => {
+  switch (action.type) {
+    case 'SELECT_POINTS':
+      return action.ids;
+    case 'SELECT_PLOT':
+      return [];
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   plotsMap,
   selected,
-  isEditing
+  isEditing,
+  selectedPoints
 })

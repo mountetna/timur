@@ -1,8 +1,15 @@
+
 // Module imports.
 import {showMessages} from './message_actions';
-import {loadPlot} from './plot_actions';
+import { addPlot } from './plot_actions';
 import {Exchange} from './exchange_actions';
 import * as ManifestAPI from '../api/manifests';
+
+const showErrors = (e, dispatch)=>{
+  let localError = (json)=>dispatch(showMessages(json.errors));
+  e.response.json()
+    .then(localError);
+}
 
 // Add retrieved manifests to the store.
 const loadManifests = (manifestsById)=>({
@@ -59,22 +66,21 @@ export const requestManifests = () => {
 
       // transform manifests for store
       const manifestsById = manifests.reduce((acc, manifestJSON) => {
-        let manifest = {
-          ...manifestJSON,
-          // create reference to plots that belong to the manifest
-          plotIds: manifestJSON.plots.map(p => p.id)
-        };
+        let manifest = { ...manifestJSON }
         delete manifest.plots;
-        return {...acc, [manifestJSON.id]: manifest};
+        return { ...acc, [manifestJSON.id]: manifest };
       }, {});
 
       dispatch(loadManifests(manifestsById));
 
-      //load plots to store
-      const plots = manifests.reduce((acc, manifestJSON) => {
-        return [...acc, ...manifestJSON.plots]
+      // collect all the plots from the manifests
+      const plots = manifests.reduce((allPlots, manifestJSON) => {
+        // const manifestPlots = manifestJSON.plots.map(plotJSON => plotFromJson(plotJSON, manifestJSON.is_editable));
+        return [ ...allPlots, ...manifestJSON.plots ];
       }, []);
-      plots.forEach(plot => dispatch(loadPlot(plot)));
+
+      // load the plots to the store
+      plots.forEach(plot => dispatch(addPlot(plot)));
     };
 
     let localError = (err) => {
