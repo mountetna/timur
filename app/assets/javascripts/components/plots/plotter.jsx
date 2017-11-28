@@ -10,7 +10,6 @@ import { getSelectedManifest, isEmptyManifests, getEditableManifests } from '../
 
 import ListMenu from '../list_menu';
 import ButtonBar from '../button_bar';
-import ScatterPlotForm from './scatter_plot_form';
 import Plot from './plotly';
 import PlotEditor from './plot_editor';
 import PlotView from './plot_view'
