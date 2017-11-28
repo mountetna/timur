@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import 'isomorphic-fetch';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -57,7 +58,7 @@ describe('async actions', () => {
         manifestsById: manifestStore
       },
       {
-        plot: { ...plot },
+        plot: plot,
         type:"ADD_PLOT"
       }
     ];

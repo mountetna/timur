@@ -1,81 +1,62 @@
 import { showMessages } from './message_actions'
 import { createPlot, destroyPlot, updatePlot } from '../api/plots'
-import { manifestById } from '../selectors/manifest'
+import { getSelectedPlotId } from '../selectors/plot'
 
 // remove a plot from the store
-const removePlot = (id, manifestId) => ({
+const removePlot = (id) => ({
   type: 'REMOVE_PLOT',
-  id,
-  manifestId
+  id
 });
 
 // Delete a plot from the database and the store
-export const deletePlot = (manifestId, plotId, callback = () => {}) =>
-  (dispatch) => {
-    destroyPlot(manifestId, plotId)
+export const deletePlot = (plot) =>
+  (dispatch, getState) => {
+    destroyPlot(plot)
       .then(() => {
-        dispatch(removePlot(plotId, manifestId));
-        callback(plotId);
-      })
-  }
+        dispatch(removePlot(plot.id));
+        if (getSelectedPlotId(getState()) == plot.id) {
+          dispatch(selectPlot(null));
+        }
+      });
+  };
 
 export const selectPlot = (id) => ({
   type: 'SELECT_PLOT',
   id
-})
+});
 
 export const toggleEditing = (isEditing) => ({
   type: 'TOGGLE_PLOT_EDITING',
   isEditing
-})
+});
 
-const addPlot = (plot) => ({
+export const addPlot = (plot) => ({
   type: 'ADD_PLOT',
   plot
-})
+});
 
-// Add a plot to the store
-export const loadPlot = (plot) =>
-  (dispatch, getState) => {
-    // is_editable flag equals the manifest is_editable flag
-    const { is_editable } = manifestById(getState(), plot.manifest_id);
-    const plotWithEditFlag =  { ...plot, is_editable };
+export const selectPoints = (pointIds) => ({
+  type: 'SELECT_POINTS',
+  ids: pointIds
+});
 
-    dispatch(addPlot(plotWithEditFlag));
-  }
-
-const plotToPayload = (plot) => {
-  const { layout: { title }, plotType } = plot;
-  return {
-    name: title,
-    plot_type: plotType,
-    configuration: plot
-  };
-};
-
-export const savePlot = (manifest_id, id, plot, callback = () => {}) =>
+const addEditedPlot = (apiAction) => (plot) =>
   (dispatch) => {
-    const payload = plotToPayload(plot);
-    updatePlot(manifest_id, id, payload)
+    apiAction(plot)
       .then(plot => {
-        dispatch(loadPlot(plot));
-        callback(plot);
-      })
-  }
-
-// Post to create new plot and save in the store
-export const saveNewPlot = (manifestId, plot, callback = () => {}) =>
-  (dispatch) => {
-    const payload = plotToPayload(plot)
-    createPlot(manifestId, payload)
-      .then(plot => {
-        dispatch(addPlot({ ...plot, is_editable: true }));
-        callback(plot);
+        dispatch(addPlot(plot));
+        dispatch(toggleEditing(false));
+        dispatch(selectPlot(plot.id));
       })
       .catch(e => {
         e.response.json()
           .then(json => dispatch(showMessages(json.errors)))
-      })
-  }
+      });
+  };
 
+// Put to update plot and update in store
+export const savePlot = addEditedPlot(updatePlot);
+
+// Post to create new plot and save in the store
+export const saveNewPlot = addEditedPlot(createPlot);
 

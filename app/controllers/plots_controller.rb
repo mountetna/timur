@@ -15,12 +15,14 @@ class PlotsController < ApplicationController
 
   def create
     @plot = @manifest.plots.new(plot_params)
+    @plot.configuration = plot_configuration
     save_plot
   end
 
   def update
     return unless find_plot(params[:id])
     @plot.assign_attributes(plot_params)
+    @plot.configuration = plot_configuration
     save_plot
   end
 
@@ -32,7 +34,14 @@ class PlotsController < ApplicationController
   private
 
   def plot_auth
-    return unless find_manifest(params[:manifest_id])
+    if params[:id]
+      return unless find_plot(params[:id])
+    end
+
+    if !@manifest
+      return unless find_manifest(params[:manifest_id])
+    end
+
     return unless authorize
   end
 
@@ -40,22 +49,26 @@ class PlotsController < ApplicationController
     @plot = Plot.find_by_id(id)
     if @plot.nil?
       render :json => { :errors => ["Plot with id: #{id} does not exist."] }, :status => 404
+    else
+      @manifest = @plot.manifest
     end
     @plot
   end
 
   def save_plot
     if @plot.save
-      render json: @plot.as_json
+      render json: @plot.as_json(current_user, params[:project_name])
     else
       render :json => { :errors => @plot.errors.full_messages }, :status => 422
     end
   end
 
+  def plot_configuration
+    params.except(:name, :plot_type, :manifest_id, :id, :action, :controller, :project_name)
+  end
+
   def plot_params
-    params.permit(:name, :plot_type).tap do |whitelisted|
-      whitelisted[:configuration] = params[:configuration]
-    end
+    params.permit(:name, :plot_type)
   end
 
 end

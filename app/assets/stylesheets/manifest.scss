@@ -177,3 +177,45 @@
   cursor: default;
   border: 1px solid #ccc;
 }
+
+.result {
+  font-weight: bolder;
+  .toggle {
+    margin-left: 3px;
+    font-weight: lighter;
+    cursor: pointer;
+    color: blue;
+  }
+  .fa-list {
+    color: goldenrod;
+  }
+  .fa-table {
+    color: salmon;
+  }
+  .fa-download {
+    color: blue;
+    cursor: pointer;
+    &:hover {
+      color: dodgerblue;
+    }
+  }
+}
+
+.vector, .matrix {
+  table {
+    border: 2px solid forestgreen;
+    border-collapse: collapse;
+    th {
+      background-color: rgba(#0cf, 0.5);
+      padding: 2px;
+      text-align: center;
+      border-bottom: 1px solid rgba(forestgreen, 0.2);
+      border-left: 1px solid forestgreen;
+    }
+    td {
+      padding: 2px 8px;
+      border-bottom: 1px solid rgba(forestgreen, 0.2);
+      border-left: 1px solid forestgreen;
+    }
+  }
+}
