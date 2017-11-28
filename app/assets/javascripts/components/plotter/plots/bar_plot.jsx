@@ -1,9 +1,9 @@
-import Legend from './legend';
-import PlotCanvas from './plot_canvas';
+import Legend from '../legend';
+import PlotCanvas from '../plot_canvas';
 import React, { Component } from 'react';
 
-import { createScale } from '../../utils/d3_scale'
-import YAxis from './yaxis'
+import { createScale } from '../../../utils/d3_scale'
+import YAxis from '../yaxis'
 
 var BarPlot = React.createClass({
   getInitialState: function() {

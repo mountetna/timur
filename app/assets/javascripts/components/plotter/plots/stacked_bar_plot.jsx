@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import YAxis from './yaxis'
-import XAxis from './xaxis'
-import PlotCanvas from './plot_canvas';
-import Legend from './legend'
-import { createScale } from '../../utils/d3_scale'
+import YAxis from '../yaxis'
+import XAxis from '../xaxis'
+import PlotCanvas from '../plot_canvas';
+import Legend from '../legend'
+import { createScale } from '../../../utils/d3_scale'
 
 const StackedBar = ({ plotHeight, legend, datum, xScale, yScale, datumKey }) => {
   const bars = legend.map(({ category, color }, i, arr) => {

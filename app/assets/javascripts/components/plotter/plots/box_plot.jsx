@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { createScale } from '../../utils/d3_scale';
-import PlotCanvas from './plot_canvas';
+import { createScale } from '../../../utils/d3_scale';
+import PlotCanvas from '../plot_canvas';
 
 var BoxPlot = React.createClass({
   render: function() {

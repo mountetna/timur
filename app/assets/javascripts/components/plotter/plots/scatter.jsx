@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PlotlyComponent from './plotly';
-import { selectPoints } from '../../actions/plot_actions';
+import PlotlyComponent from '../plotly';
+import { selectPoints } from '../../../actions/plot_actions';
 
 let Scatter = ({ plot, consignment, selectPoints }) => {
   const config =  {

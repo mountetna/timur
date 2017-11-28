@@ -1,5 +1,5 @@
 import React from 'react';
-import PlotlyComponent from './plotly';
+import PlotlyComponent from '../plotly';
 
 const Heatmap = ({ plot, consignment }) => {
   const config =  {
