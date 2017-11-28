@@ -1,7 +1,6 @@
-
 // Module imports.
 import {showMessages} from './message_actions';
-import { addPlot } from './plot_actions';
+import {addPlot} from './plot_actions';
 import {Exchange} from './exchange_actions';
 import * as ManifestAPI from '../api/manifests';
 
@@ -51,36 +50,38 @@ export const addConsignment = (id, consignment)=>{
   };
 };
 
-// Retrieve all user-visible manifests and send to store
-export const requestManifests = () => {
-  return (dispatch) => {
-    let localSuccess = ({manifests}) => {
+// Retrieve all user-visible manifests and send to store.
+export const requestManifests = ()=>{
+  return (dispatch)=>{
+
+    let localSuccess = ({manifests})=>{
+
       // Bail out if there are no manifests.
       if (manifests == null) return;
 
-      // transform manifests for store
-      const manifestsById = manifests.reduce((acc, manifestJSON) => {
-        let manifest = { ...manifestJSON }
+      // Transform manifests for store.
+      let manifests_by_id = manifests.reduce((acc, manifestJSON)=>{
+        let manifest = {...manifestJSON};
         delete manifest.plots;
-        return { ...acc, [manifestJSON.id]: manifest };
+        return {...acc, [manifestJSON.id]: manifest};
       }, {});
 
-      dispatch(loadManifests(manifestsById));
+      dispatch(loadManifests(manifests_by_id));
 
-      // collect all the plots from the manifests
-      const plots = manifests.reduce((allPlots, manifestJSON) => {
-        // const manifestPlots = manifestJSON.plots.map(plotJSON => plotFromJson(plotJSON, manifestJSON.is_editable));
-        return [ ...allPlots, ...manifestJSON.plots ];
+      // Collect all the plots from the manifests.
+      let plots = manifests.reduce((all_plots, manifestJSON)=>{
+        return [...all_plots, ...manifestJSON.plots];
       }, []);
 
-      //plots.forEach(plot => dispatch(loadPlot(plot)));
+      // Add the plots to the store.
+      plots.forEach(plot => dispatch(addPlot(plot)));
     };
 
-    let localError = (err) => {
+    let localError = (err)=>{
       showErrors(err, dispatch);
     };
 
-    return ManifestAPI.fetchManifests(new Exchange(dispatch, 'request-manifest'))
+    return ManifestAPI.fetchManifests(new Exchange(dispatch,'request-manifest'))
       .then(localSuccess)
       .catch(localError);
   };
