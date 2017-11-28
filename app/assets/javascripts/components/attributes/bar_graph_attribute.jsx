@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Class imports.
-import BarGraph from '../plots/bar_graph';
+import BarGraph from '../plotter/plots/bar_graph';
 
 // Module imports.
 import {selectConsignment} from '../../selectors/consignment';

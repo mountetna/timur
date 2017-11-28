@@ -15,8 +15,8 @@ import LinkAttribute from './link_attribute';
 import StackedBarPlotAttribute from './stacked_bar_plot_attribute';
 import BarPlotAttribute from './bar_plot_attribute';
 import BarGraphAttribute from './bar_graph_attribute';
-import HistogramAttribute from './histogram_attribute';
-import SwarmAttribute from './swarm_attribute';
+//import HistogramAttribute from './histogram_attribute';
+//import SwarmAttribute from './swarm_attribute';
 import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
 import TextAttribute from './text_attribute';
@@ -32,10 +32,10 @@ export default class AttributeViewer extends Component {
         return <StackedBarPlotAttribute {...this.props} />;
       case 'BarGraphAttribute':
         return <BarGraphAttribute {...this.props} />;
-      case 'HistogramAttribute':
-        return <HistogramAttribute {...this.props} />;
-      case 'SwarmAttribute':
-        return <SwarmAttribute {...this.props} />;
+//      case 'HistogramAttribute':
+//        return <HistogramAttribute {...this.props} />;
+//      case 'SwarmAttribute':
+//        return <SwarmAttribute {...this.props} />;
       case 'BoxPlotAttribute':
         return <BoxPlotAttribute {...this.props} />;
       case 'TextAttribute':

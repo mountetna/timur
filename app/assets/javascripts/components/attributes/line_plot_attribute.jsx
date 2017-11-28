@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Class imports.
-import LinePlot from '../plots/line_plot';
+import LinePlot from '../plotter/plots/line_plot';
 
 // Module imports.
 import {autoColors} from '../../utils/colors';
