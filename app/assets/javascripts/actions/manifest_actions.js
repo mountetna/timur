@@ -5,12 +5,6 @@ import { addPlot } from './plot_actions';
 import {Exchange} from './exchange_actions';
 import * as ManifestAPI from '../api/manifests';
 
-const showErrors = (e, dispatch)=>{
-  let localError = (json)=>dispatch(showMessages(json.errors));
-  e.response.json()
-    .then(localError);
-}
-
 // Add retrieved manifests to the store.
 const loadManifests = (manifestsById)=>({
   'type': 'LOAD_MANIFESTS',
@@ -176,8 +170,8 @@ export const requestConsignments = (manifests, success, error)=>{
 
   return (dispatch)=>{
     var localSuccess = (response)=>{
-      for(var name in response){
-        dispatch(addConsignment(name, response[name]));
+      for(var id in response){
+        dispatch(addConsignment(id, response[id]));
       }
 
       if(success != undefined) success(response);
