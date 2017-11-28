@@ -6,39 +6,39 @@ import * as ManifestAPI from '../api/manifests';
 
 // Add retrieved manifests to the store.
 const loadManifests = (manifestsById)=>({
-  'type': 'LOAD_MANIFESTS',
+  type: 'LOAD_MANIFESTS',
   manifestsById
 });
 
 // Remove a manifest from the store.
 const removeManifest = (id)=>({
-  'type': 'REMOVE_MANIFEST',
+  type: 'REMOVE_MANIFEST',
   id
 });
 
 // Add a manifest to the store.
 const addManifest = (manifest)=>({
-  'type': 'ADD_MANIFEST',
+  type: 'ADD_MANIFEST',
   manifest
 });
 
 const editManifest = (manifest) =>({
-  'type': 'UPDATE_USER_MANIFEST',
+  type: 'UPDATE_USER_MANIFEST',
   manifest
 });
 
 // Manifest ui editing flag.
 export const toggleEdit = ()=>({
-  'type': 'TOGGLE_IS_EDITING_MANIFEST'
+  type: 'TOGGLE_IS_EDITING_MANIFEST'
 });
 
 export const toggleManifestsFilter = (filter)=>({
-  'type': 'TOGGLE_MANIFESTS_FILTER',
+  type: 'TOGGLE_MANIFESTS_FILTER',
   filter
 });
 
 export const selectManifest = (id)=>({
-  'type': 'SELECT_MANIFEST',
+  type: 'SELECT_MANIFEST',
   id
 });
 
