@@ -19,14 +19,6 @@ describe Archimedes::Manifest do
     }.to raise_error(Archimedes::LanguageError)
   end
 
-  it 'raises errors for math problems' do
-    expect {
-      run_script(
-        var1: "1/0"
-      )
-    }.to raise_error(Archimedes::LanguageError)
-  end
-
   it 'supports math operations' do
     payload = run_script(
       mul: "4 * 4",

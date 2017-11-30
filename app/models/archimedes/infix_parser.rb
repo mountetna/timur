@@ -24,6 +24,8 @@ module Archimedes
       # A variable reference
       clause('VAR IDENT') { |v,i| @vars[i] }
 
+      clause('EXC .e') { |e| !e }
+
       # Basic math operations, including the ternary operator
       clause('LPAREN .e RPAREN') { |e| e }
       clause('.e ADD .e') { |e0, e1| e0 + e1 }

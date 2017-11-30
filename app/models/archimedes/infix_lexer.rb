@@ -26,6 +26,7 @@ module Archimedes
     rule(/\$/) { :DOLLAR }
     rule(/\?/) { :QUESTION }
     rule(/=\~/) { :MATCH }
+    rule(/!/) { :EXC }
 
     rule(/\)/) { :RPAREN }
     rule(/\(/) { :LPAREN }

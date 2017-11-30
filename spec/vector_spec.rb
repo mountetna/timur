@@ -70,4 +70,19 @@ describe Archimedes::Vector do
     expect(o).to be_a(Archimedes::Vector)
     expect(o.to_values.map{|v| v.round(4)}).to eq([1,2,3])
   end
+  it "supports vector concatenation" do
+    v1 = vector([1,2,3])
+    v2 = vector([4,5,6])
+
+    o = v1.concat(v2)
+    expect(o).to be_a(Archimedes::Vector)
+    expect(o.to_values).to eq([1,2,3,4,5,6])
+  end
+  it "supports logical inversion" do
+    v1 = vector([true,false,true])
+    v2 = !v1
+
+    expect(v2).to be_a(Archimedes::Vector)
+    expect(v2.to_values).to eq([false,true,false])
+  end
 end
