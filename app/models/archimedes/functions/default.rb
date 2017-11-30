@@ -32,6 +32,14 @@ module Archimedes
       )
     end
 
+    def any(vector)
+      vector.any? { |label, value| value }
+    end
+
+    def all(vector)
+      vector.all? { |label, value| value }
+    end
+
     def column(vector)
       vector.is_a?(ColumnVector) ? vector : ColumnVector.new(vector.to_a)
     end
@@ -42,6 +50,12 @@ module Archimedes
 
     def label(vector, labels)
       Vector.new(labels.to_values.zip(vector.to_values))
+    end
+
+    def concat(*vectors)
+      vectors.reduce do |summ, vec|
+        summ = summ ? summ.concat(vec) : vec
+      end
     end
 
     def log(value, base=10)

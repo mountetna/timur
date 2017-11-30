@@ -52,4 +52,37 @@ describe Archimedes::Default do
     values = [ 'a', 'b', 'c' ].map{|l| payload['labeled'][l]}
     expect(values).to eq([1,2,3])
   end
+  it 'concats two vectors' do
+    payload = run_script(
+      vec1: '[ 1, 2, 3 ]',
+      vec2: '[ 4, 5, 6 ]',
+      vec3: 'concat(@vec1, @vec2)'
+    )
+    expect(payload['vec3'].to_values).to eq([1,2,3,4,5,6])
+  end
+  it 'checks if any value in a vector is true' do
+    payload = run_script(
+      vec1: '[ 1, 2, 3 ]',
+      vec2: '[ 1, 5, 6 ]',
+      vec3: '[ 4, 5, 6 ]',
+      any1: 'any(@vec1 == @vec2)',
+      any2: 'any(@vec1 == @vec3)'
+    )
+    expect(payload['any1']).to be_truthy
+    expect(payload['any2']).to be_falsy
+  end
+  it 'checks if all values in a vector are true' do
+    payload = run_script(
+      vec1: '[ 1, 2, 3 ]',
+      vec2: '[ 1, 2, 3 ]',
+      vec3: '[ 1, 0, 0 ]',
+      vec4: '[ 4, 5, 6 ]',
+      any1: 'any(@vec1 == @vec2)',
+      any2: 'any(@vec1 == @vec3)',
+      any2: 'any(@vec1 == @vec4)'
+    )
+    expect(payload['any1']).to be_truthy
+    expect(payload['any2']).to be_falsy
+    expect(payload['any3']).to be_falsy
+  end
 end
