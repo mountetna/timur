@@ -60,7 +60,7 @@ module Archimedes
 
     def rows
       answer.map do |(row_name, row)|
-        Vector.new(col_names.zip(row))
+        Vector.new(col_names.zip(row.map{|l| l.is_a?(Numeric) ? l.to_f : l}))
       end
     end
 
