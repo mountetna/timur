@@ -7,8 +7,8 @@ import {applyMiddleware, createStore} from 'redux';
 // Class imports.
 import {ManifestsContainer as Manifests} from './manifest/manifests';
 import {BrowserContainer as Browser} from './browser/browser';
+import {PlotterContainer as Plotter} from './plotter/plotter';
 import ModelMap from './model_map';
-import Plotter from './plots/plotter';
 import Search from './search/search';
 import Activity from './activity';
 import Noauth from './noauth';
