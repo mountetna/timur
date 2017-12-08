@@ -112,42 +112,23 @@ class SearchController <  ApplicationController
 
   def fetch_consignments(queries)
     begin
-#<<<<<<< HEAD
-#      result = Hash[
-#        queries.map do |query|
-#
-#          manifest = DataManifest.new(
-#            token,
-#            params[:project_name],
-#            query[:manifest_elements]
-#          )
-#
-#          manifest.fill
-#          [query[:id], manifest.payload]
-#        end
-#      ]
-#      return {json: result}
-#    rescue Magma::ClientError => e
-#      return {json: e.body, status: e.status}
-#    rescue LanguageError => e
-#      return {json: { errors: [e.message] }, status: 422}
-#=======
       consignment = Hash[
-        params[:queries].map do |query|
+        queries.map do |query|
           [
             query[:id],
             Archimedes::Manifest.create(
               token,
               params[:project_name],
-              query[:manifest]
+              query[:manifest_elements]
             ).payload
           ]
         end
       ]
-      render(json: consignment)
+      return {json: consignment}
+    rescue Magma::ClientError => e
+      return {json: e.body, status: e.status}
     rescue Archimedes::LanguageError => e
-      render(json: e.body, status: 422)
-#>>>>>>> graft-connect-rtemis
+      return {json: { errors: [e.message] }, status: 422}
     end
   end
 end
