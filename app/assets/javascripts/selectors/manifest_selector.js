@@ -32,12 +32,29 @@ export const getSelectedManifest = (state)=>{
   return null;
 };
 
+export const cloneManifest = (props)=>{
+  let manifest = Object.assign({}, props.manifest);
+  manifest.data = Object.assign({}, props.manifest.data);
+
+   /*
+   * Sometimes a user can save a manifest without any elements. In this case
+   * the elements here will be null and we need to set the data elements to
+   * an empty array.
+   */
+  if(props.manifest.data.elements == null){
+    manifest.data.elements = [];
+  }
+  else{
+    manifest.data.elements = props.manifest.data.elements.slice();
+  }
+
+  return manifest;
+}
+
 export const getAllManifests = (state)=>{
   if(state.manifests) return Object.values(state.manifests);
   return [];
 };
-
-export const manifestById = (state, id) => getManifests(state)[id];
 
 export const isEmptyManifests = createSelector(
   getAllManifests,
