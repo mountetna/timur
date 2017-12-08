@@ -18,6 +18,7 @@
 /public/fonts
 /public/css
 /public/images
+/public/coverage
 
 package-lock.json
 
@@ -37,3 +38,4 @@ tmp
 
 # Ignore jest reporting files
 /coverage
+/spec/examples.txt

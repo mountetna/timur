@@ -170,19 +170,19 @@ export const copyManifest = (manifest)=>{
 export const requestConsignments = (manifests, success, error)=>{
 
   return (dispatch)=>{
-    var localSuccess = (response)=>{
-      for(var id in response){
+    let localSuccess = (response)=>{
+      for(let id in response){
         dispatch(addConsignment(id, response[id]));
       }
 
       if(success != undefined) success(response);
     };
 
-    var localErrorResponse = (response)=>{
+    let localErrorResponse = (response)=>{
 
       if(response.query){
 
-        var msg = `### For our inquiry:\n\n`;
+        let msg = `### For our inquiry:\n\n`;
         msg +=    `\`${JSON.stringify(response.query)}\`\n\n`;
         msg +=    `## this bitter response:\n\n`;
         msg +=    `    ${response.errors}`;
@@ -190,13 +190,13 @@ export const requestConsignments = (manifests, success, error)=>{
       }
       else if(response.errors && response.errors.length == 1){
 
-        var msg = `### Our inquest has failed, for this fault:\n\n`;
+        let msg = `### Our inquest has failed, for this fault:\n\n`;
         msg +=    `    ${response.errors[0]}`;
         dispatch(showMessages([msg]));
       }
       else if(response.errors && response.errors.length > 1){
 
-        var msg = `### Our inquest has failed, for these faults:\n\n`;
+        let msg = `### Our inquest has failed, for these faults:\n\n`;
         msg +=    `${response.errors.map((error) => `* ${error}`).join('\n')}`;
         dispatch(showMessages([msg]));
       }
@@ -204,9 +204,12 @@ export const requestConsignments = (manifests, success, error)=>{
       if(error != undefined) error(response);
     };
 
-    var localError = (e) => e.response.json().then(localErrorResponse);
-    var exchng = new Exchange(dispatch, 'consignment list');
+    let localError = (e) => {
+      if (e.response) e.response.json().then(localErrorResponse);
+      else throw e;
+    };
 
+    let exchng = new Exchange(dispatch, 'consignment list');
     ManifestAPI.getConsignments(manifests, exchng)
       .then(localSuccess)
       .catch(localError);
