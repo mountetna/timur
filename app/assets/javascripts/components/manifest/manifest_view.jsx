@@ -10,6 +10,7 @@ import {manifestScript} from './manifest_script';
 import {manifestResult} from './manifest_result';
 import {selectConsignment} from '../../selectors/consignment';
 import * as ManifestActions from '../../actions/manifest_actions';
+import * as ManifestSelector from '../../selectors/manifest_selector';
 
 export class ManifestView extends React.Component{
   constructor(props){
@@ -17,7 +18,7 @@ export class ManifestView extends React.Component{
 
     if(props.manifest){
       this.state = {
-        manifest: this.cloneManifest(props),
+        manifest: ManifestSelector.cloneManifest(props),
         view_mode: 'script'
       };
     }
@@ -29,6 +30,10 @@ export class ManifestView extends React.Component{
     }
   }
 
+  /*
+   * When a new manifest is selected it is set on the 'props'. However, to
+   * redraw the new manifest we then need to map it to the 'state'.
+   */
   componentDidUpdate(){
 
     /*
@@ -40,27 +45,7 @@ export class ManifestView extends React.Component{
       return;
     }
 
-    this.setState({manifest: this.cloneManifest(this.props)});
-  }
-
-
-  cloneManifest(props){
-    let manifest = Object.assign({}, props.manifest);
-    manifest.data = Object.assign({}, props.manifest.data);
-
-    /*
-     * Sometimes a user can save a manifest without any elements. In this case
-     * the elements here will be null and we need to set the data elements to
-     * an empty array.
-     */
-    if(props.manifest.data.elements == null){
-      manifest.data.elements = [];
-    }
-    else{
-      manifest.data.elements = props.manifest.data.elements.slice();
-    }
-
-    return manifest;
+    this.setState({manifest: ManifestSelector.cloneManifest(this.props)});
   }
 
   updateField(field_name){
@@ -102,9 +87,7 @@ export class ManifestView extends React.Component{
      * Here the manifest has a normal id. We don't need to check it but being
      * explicit is good. Just in case the id ends up in a werid state.
      */
-    if(manifest.id > 0){
-      this.props.saveManifest(manifest);
-    }
+    if(manifest.id > 0) this.props.saveManifest(manifest);
   }
 
   cancelEdit(){
@@ -115,7 +98,7 @@ export class ManifestView extends React.Component{
     }
 
     // Reset the manifest
-    this.setState({manifest: this.cloneManifest(this.props)});
+    this.setState({manifest: ManifestSelector.cloneManifest(this.props)});
 
     // Turn of the editing mode.
     this.toggleEdit();
