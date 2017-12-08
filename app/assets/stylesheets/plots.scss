@@ -1,4 +1,4 @@
-@import "globals";
+@import 'globals';
 
 .plot-container {
   display: flex;
@@ -9,199 +9,199 @@
 }
 
 .plot-form-container {
-	flex: 1;
+  flex: 1;
 }
 
 svg {
-	&.box_plot {
-		font-family: $value_font;
-		font-size: 10px;
+  &.box_plot {
+    font-family: $value_font;
+    font-size: 10px;
 
-		.whisker_box {
-			line,
-			rect,
-			circle {
-				fill: #fff;
-				stroke: #000;
-				stroke-width: 1.5px;
-			}
+    .whisker_box {
+      line,
+      rect,
+      circle {
+        fill: #fff;
+        stroke: #000;
+        stroke-width: 1.5px;
+      }
 
-			.center {
-				stroke-dasharray: 3,3;
-			}
+      .center {
+        stroke-dasharray: 3,3;
+      }
 
-			.outlier {
-				fill: #ccc;
-				stroke: #ccc;
-			}
-		}
-	}
-	&.line_plot {
-		font-family: $value_font;
-		font-size: 12px;
-		.axis path,
-		.axis line {
-			fill: none;
-			stroke: black;
-			shape-rendering: crispEdges;
-		}
-	}
-	&.bar_plot {
-		font-family: $value_font;
-		font-size: 12px;
-		.plot_canvas {
-			rect {
-				fill: white;
-			}
-		}
-		.axis {
-			path, line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-		}
-		.y {
-			cursor: pointer;
-		}
-		.bar { 
-			rect {
-				fill: none;
-				stroke: #000;
-				stroke-width: 1.5px;
-			}
-			text {
-				font-size: 10px;
-			}
-			circle.dot {
-				cursor: pointer;
-				stroke-width: 1px;
-				&:hover {
-					stroke-width: 5px;
-					stroke: gold;
-				}
-			}
-			circle.tumor {
-				fill: #888;
-			}
-			circle.normal {
-				fill: #ccc;
-			}
-			circle.highlighted {
-				stroke-width: 2px;
-				&.normal {
-					fill: blue;
-				}
-				&.tumor {
-					fill: red;
-				}
-			}
-			circle.similar {
-				stroke-width: 1px;
-				&.normal {
-					fill: darkblue;
-				}
-				&.tumor {
-					fill: darkred;
-				}
-			}
-		}
-	}
-	&.scatter_plot {
-		font-family: $value_font;
-		font-size: 12px;
-		.plot_canvas {
-			rect {
-				fill: white;
-				stroke: gray;
-				stroke-width: 0.2px;
-			}
-		}
-		.axis {
-			path, line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-		}
-		circle.dot {
-			cursor: pointer;
-			stroke-width: 1px;
-			&:hover {
-				stroke-width: 4px;
-				stroke: gold;
-			}
-		}
-	}
-	&.heatmap_plot {
-		font-family: $value_font;
-		font-size: 12px;
-		.plot_canvas {
-			rect {
-				fill: white;
-				stroke: gray;
-				stroke-width: 0.2px;
-			}
-		}
-		.axis {
-			path, line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-		}
-	}
-	&.correlation_plot {
-		font-family: $value_font;
-		font-size: 12px;
-		.plot_canvas {
-			rect {
-				fill: white;
-				stroke: gray;
-				stroke-width: 0.2px;
-			}
-		}
-		.axis {
-			path, line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-		}
-	}
-	&.density_plot {
-		font-family: $value_font;
-		font-size: 12px;
-		.plot_canvas {
-			rect {
-				fill: white;
-				stroke: gray;
-				stroke-width: 1px;
-			}
-		}
-		.axis {
-			path, line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-		}
-		.density_line {
-                	stroke: purple;
-                	stroke-width: 2;
-                	fill: none;
-		}
-		.density_shape {
-			stroke: none;
-			fill: rgba(purple,0.2);
-		}
-	}
-	&.dendrogram_plot {
-		font-family: $value_font;
-		font-size: 10px;
-		line {
-			stroke: black;
-			stroke-width: 1px;
-		}
-	}
+      .outlier {
+        fill: #ccc;
+        stroke: #ccc;
+      }
+    }
+  }
+  &.line_plot {
+    font-family: $value_font;
+    font-size: 12px;
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+  }
+  &.bar_plot {
+    font-family: $value_font;
+    font-size: 12px;
+    .plot_canvas {
+      rect {
+        fill: white;
+      }
+    }
+    .axis {
+      path, line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+    }
+    .y {
+      cursor: pointer;
+    }
+    .bar { 
+      rect {
+        fill: none;
+        stroke: #000;
+        stroke-width: 1.5px;
+      }
+      text {
+        font-size: 10px;
+      }
+      circle.dot {
+        cursor: pointer;
+        stroke-width: 1px;
+        &:hover {
+          stroke-width: 5px;
+          stroke: gold;
+        }
+      }
+      circle.tumor {
+        fill: #888;
+      }
+      circle.normal {
+        fill: #ccc;
+      }
+      circle.highlighted {
+        stroke-width: 2px;
+        &.normal {
+          fill: blue;
+        }
+        &.tumor {
+          fill: red;
+        }
+      }
+      circle.similar {
+        stroke-width: 1px;
+        &.normal {
+          fill: darkblue;
+        }
+        &.tumor {
+          fill: darkred;
+        }
+      }
+    }
+  }
+  &.scatter_plot {
+    font-family: $value_font;
+    font-size: 12px;
+    .plot_canvas {
+      rect {
+        fill: white;
+        stroke: gray;
+        stroke-width: 0.2px;
+      }
+    }
+    .axis {
+      path, line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+    }
+    circle.dot {
+      cursor: pointer;
+      stroke-width: 1px;
+      &:hover {
+        stroke-width: 4px;
+        stroke: gold;
+      }
+    }
+  }
+  &.heatmap_plot {
+    font-family: $value_font;
+    font-size: 12px;
+    .plot_canvas {
+      rect {
+        fill: white;
+        stroke: gray;
+        stroke-width: 0.2px;
+      }
+    }
+    .axis {
+      path, line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+    }
+  }
+  &.correlation_plot {
+    font-family: $value_font;
+    font-size: 12px;
+    .plot_canvas {
+      rect {
+        fill: white;
+        stroke: gray;
+        stroke-width: 0.2px;
+      }
+    }
+    .axis {
+      path, line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+    }
+  }
+  &.density_plot {
+    font-family: $value_font;
+    font-size: 12px;
+    .plot_canvas {
+      rect {
+        fill: white;
+        stroke: gray;
+        stroke-width: 1px;
+      }
+    }
+    .axis {
+      path, line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+    }
+    .density_line {
+                  stroke: purple;
+                  stroke-width: 2;
+                  fill: none;
+    }
+    .density_shape {
+      stroke: none;
+      fill: rgba(purple,0.2);
+    }
+  }
+  &.dendrogram_plot {
+    font-family: $value_font;
+    font-size: 10px;
+    line {
+      stroke: black;
+      stroke-width: 1px;
+    }
+  }
 }

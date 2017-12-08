@@ -80,3 +80,7 @@ $quote_font: 'Crimson Text', serif;
   background: none;
   outline: none;
 }
+
+input:focus{
+  outline-offset: 0px;
+}
