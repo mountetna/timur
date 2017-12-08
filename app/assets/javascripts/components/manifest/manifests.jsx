@@ -8,7 +8,8 @@ import ManifestView from './manifest_view';
 
 // Module imports.
 import {requestManifests} from '../../actions/manifest_actions';
-import {getSelectedManifest, getAllManifests} from '../../selectors/manifest';
+//import {getSelectedManifest, getAllManifests} from '../../selectors/manifest_selector';
+import * as ManifestSelector from '../../selectors/manifest_selector';
 
 // Main component for viewing/editing manifests.
 export class Manifests extends React.Component{
@@ -72,7 +73,7 @@ const accessFilter = (access, manifests)=>{
 
 const mapStateToProps = (state = {}, own_props)=>{
   let {manifestsUI: {isEditing}} = state;
-  let manifests = getAllManifests(state);
+  let manifests = ManifestSelector.getAllManifests(state);
 
   let sections = {
     Public: accessFilter('public', manifests),
@@ -81,7 +82,7 @@ const mapStateToProps = (state = {}, own_props)=>{
 
   return {
     sections,
-    selected_manifest: getSelectedManifest(state),
+    selected_manifest: ManifestSelector.getSelectedManifest(state),
     is_editing: isEditing
   }
 }
