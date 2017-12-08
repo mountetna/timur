@@ -1,4 +1,5 @@
-import { combineReducers } from 'redux'
+// Module imports.
+import {combineReducers} from 'redux';
 
 const plotsMap = (state = {}, action) => {
   switch (action.type) {
@@ -21,8 +22,8 @@ const plotsMap = (state = {}, action) => {
   }
 };
 
-const selected = (state = null, action) => {
-  switch (action.type) {
+const selected = (state = null, action)=>{
+  switch (action.type){
     case 'SELECT_PLOT':
       return action.id;
     default:
@@ -30,16 +31,16 @@ const selected = (state = null, action) => {
   }
 };
 
-const isEditing = (state = false, action) => {
-  switch (action.type) {
+const isEditing = (state = false, action)=>{
+  switch (action.type){
     case 'TOGGLE_PLOT_EDITING':
-      return typeof action.isEditing == "undefined" ? !state : action.isEditing;
+      return typeof action.is_editing == 'undefined' ? !state : action.is_editing;
     default:
       return state;
   }
 };
 
-const selectedPoints = (state = [], action) => {
+const selectedPoints = (state = [], action)=>{
   switch (action.type) {
     case 'SELECT_POINTS':
       return action.ids;

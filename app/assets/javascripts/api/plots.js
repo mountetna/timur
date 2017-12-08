@@ -1,12 +1,13 @@
-import { headers, parseJSON, checkStatus } from './fetch_utils'
+// Module imports.
+import {headers, parseJSON, checkStatus} from './fetch_utils';
 
 export const plotIndexUrl = (queryParams) => {
   let path = Routes.plots_path(PROJECT_NAME);
 
-  // list of params
+  // List of params.
   const params = Object.keys(queryParams);
 
-  // append params and values to path
+  // Append params and values to path.
   if (params[0]) {
     path = path + '?';
     params.forEach((param, i) => {
@@ -21,31 +22,43 @@ export const plotIndexUrl = (queryParams) => {
   return path;
 };
 
-export const createPlot = (plot) =>
-  fetch(Routes.manifests_plots_create_path(PROJECT_NAME), {
+export const createPlot = (plot)=>{
+  let route_opts = {
     credentials: 'same-origin',
     method: 'POST',
     headers: headers('json', 'csrf'),
     body: JSON.stringify(plot)
-  })
-    .then(checkStatus)
-    .then(parseJSON)
+  };
+  let route = Routes.manifests_plots_create_path(PROJECT_NAME);
 
-export const destroyPlot = (plot) =>
-  fetch(Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.id), {
+  return fetch(route, route_opts)
+    .then(checkStatus)
+    .then(parseJSON);
+};
+
+export const destroyPlot = (plot)=>{
+  let route_opts = {
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     method: 'DELETE'
-  })
-    .then(checkStatus)
-    .then(parseJSON)
+  };
+  let route = Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.id);
 
-export const updatePlot = (plot) =>
-  fetch(Routes.manifests_plots_update_path(PROJECT_NAME, plot.id), {
+  return fetch(route, route_opts)
+    .then(checkStatus)
+    .then(parseJSON);
+};
+
+export const updatePlot = (plot)=>{
+  let route_opts = {
     credentials: 'same-origin',
     method: 'PUT',
     headers: headers('json', 'csrf'),
     body: JSON.stringify(plot)
-  })
+  };
+  let route = Routes.manifests_plots_update_path(PROJECT_NAME, plot.id);
+
+  return fetch(route, route_opts)
     .then(checkStatus)
-    .then(parseJSON)
+    .then(parseJSON);
+};

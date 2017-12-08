@@ -1,33 +1,22 @@
-import { showMessages } from './message_actions'
-import { createPlot, destroyPlot, updatePlot } from '../api/plots'
-import { getSelectedPlotId } from '../selectors/plot'
+// Module imports.
+import {showMessages} from './message_actions';
+import {createPlot, destroyPlot, updatePlot} from '../api/plots';
+import * as ManifestSelector from '../selectors/plot_selector';
 
-// remove a plot from the store
+// Remove a plot from the store.
 const removePlot = (id) => ({
   type: 'REMOVE_PLOT',
   id
 });
-
-// Delete a plot from the database and the store
-export const deletePlot = (plot) =>
-  (dispatch, getState) => {
-    destroyPlot(plot)
-      .then(() => {
-        dispatch(removePlot(plot.id));
-        if (getSelectedPlotId(getState()) == plot.id) {
-          dispatch(selectPlot(null));
-        }
-      });
-  };
 
 export const selectPlot = (id) => ({
   type: 'SELECT_PLOT',
   id
 });
 
-export const toggleEditing = (isEditing) => ({
+export const toggleEditing = (is_editing)=>({
   type: 'TOGGLE_PLOT_EDITING',
-  isEditing
+  is_editing
 });
 
 export const addPlot = (plot) => ({
@@ -35,17 +24,28 @@ export const addPlot = (plot) => ({
   plot
 });
 
-export const selectPoints = (pointIds) => ({
+export const selectPoints = (point_ids) => ({
   type: 'SELECT_POINTS',
-  ids: pointIds
+  ids: point_ids
 });
+
+// Delete a plot from the database and the store.
+export const deletePlot = (plot) =>
+  (dispatch, getState) => {
+    destroyPlot(plot)
+      .then(() => {
+        dispatch(removePlot(plot.id));
+        if (ManifestSelector.getSelectedPlotId(getState()) == plot.id) {
+          dispatch(selectPlot(null));
+        }
+      });
+  };
 
 const addEditedPlot = (apiAction) => (plot) =>
   (dispatch) => {
     apiAction(plot)
       .then(plot => {
         dispatch(addPlot(plot));
-        dispatch(toggleEditing(false));
         dispatch(selectPlot(plot.id));
       })
       .catch(e => {
@@ -54,9 +54,8 @@ const addEditedPlot = (apiAction) => (plot) =>
       });
   };
 
-// Put to update plot and update in store
+// Put to update plot and update in store.
 export const savePlot = addEditedPlot(updatePlot);
 
-// Post to create new plot and save in the store
+// Post to create new plot and save in the store.
 export const saveNewPlot = addEditedPlot(createPlot);
-
