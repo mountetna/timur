@@ -1,7 +1,7 @@
 import React from 'react';
 import PlotlyComponent from '../plotly';
 
-const Heatmap = ({ plot, consignment }) => {
+const HeatMapPlot = ({ plot, consignment }) => {
   const config =  {
     showLink: false,
     displayModeBar: true,
@@ -27,7 +27,7 @@ const Heatmap = ({ plot, consignment }) => {
       }
     };
   } catch (e) {
-    console.log(e);
+    //console.log(e);
   }
 
   let data;
@@ -43,10 +43,10 @@ const Heatmap = ({ plot, consignment }) => {
       };
     });
   } catch (e) {
-    console.log(e);
+    //console.log(e);
   }
 
   return <PlotlyComponent data={data} layout={layout} config={config} />;
 };
 
-export default Heatmap;
+export default HeatMapPlot;

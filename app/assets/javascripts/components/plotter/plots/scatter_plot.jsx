@@ -39,7 +39,7 @@ let Scatter = ({ plot, consignment, selectPoints }) => {
       const x = series.x || series.manifestSeriesX;
       const y = series.y || series.manifestSeriesY;
 
-      // add ids from y or x labels
+      // Add ids from y or x labels.
       let ids = [];
       if (consignment[y]) {
         ids = consignment[y].labels;
@@ -51,14 +51,14 @@ let Scatter = ({ plot, consignment, selectPoints }) => {
         type: 'scatter',
         mode: series.mode || 'markers',
         name: series.name || '',
-        // insert x and y data from the consignment
+        // Insert x and y data from the consignment.
         x: consignment[x] ? consignment[x].values : [],
         y: consignment[y] ? consignment[y].values : [],
         ids,
       };
     });
   } catch (e) {
-    console.log(e);
+    //console.log(e);
   }
 
   const onSelected = (selectedData) => selectPoints(selectedData.points.map(point => point.id));
