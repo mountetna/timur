@@ -18,6 +18,7 @@
 /public/fonts
 /public/css
 /public/images
+/public/coverage
 
 package-lock.json
 
@@ -32,3 +33,4 @@ tmp
 .DS_Store
 ._*
 /coverage
+/spec/examples.txt

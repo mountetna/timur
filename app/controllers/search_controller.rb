@@ -76,18 +76,21 @@ class SearchController <  ApplicationController
 
   def consignment_json
     begin
-      result = Hash[
+      consignment = Hash[
         params[:queries].map do |query|
-          manifest = DataManifest.new(token, params[:project_name], query[:manifest])
-          manifest.fill
-          [query[:name], manifest.payload]
+          [
+            query[:name],
+            Archimedes::Manifest.new(
+              token,
+              params[:project_name],
+              query[:manifest]
+            ).payload
+          ]
         end
       ]
-      render(json: result)
-    rescue Magma::ClientError => e
-      render(json: e.body, status: e.status)
-    rescue LanguageError => e
-      render(json: { errors: [e.message] }, status: 422)
+      render(json: consignment)
+    rescue Archimedes::LanguageError => e
+      render(json: e.body, status: 422)
     end
   end
 end

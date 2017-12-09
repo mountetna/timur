@@ -14,7 +14,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-gem 'haml-rails', '>= 0.3.4'
+gem 'haml-rails', '>= 1.0.0'
 
 gem 'rltk'
 
@@ -27,14 +27,15 @@ gem 'magma'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  #gem 'web-console', '~> 2.0'
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem 'rspec'
+
+  gem 'simplecov'
+
+  gem 'pry'
+  
+  gem 'webmock'
 end
 
 #gem 'devise'
