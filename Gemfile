@@ -8,6 +8,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'haml-rails', '>= 1.0.0'
 gem 'rltk'
 gem 'magma'
+gem 'etna'
+gem 'sequel', '4.49.0'
 
 group :development, :test do
   gem 'spring'
@@ -15,6 +17,9 @@ group :development, :test do
   gem 'simplecov'
   gem 'pry'
   gem 'webmock'
+  gem 'factory_bot'
+  gem 'database_cleaner'
+  gem 'rack-test', require: "rack/test"
 end
 
 group :test, :production do

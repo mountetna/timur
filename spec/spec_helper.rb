@@ -1,13 +1,27 @@
 require 'bundler'
 Bundler.require(:default, :test)
 
+ENV["TIMUR_ENV"] = "test"
+
 require 'webmock/rspec'
 
 require 'simplecov'
 SimpleCov.start
 
 require 'yaml'
-Magma.instance.configure(YAML.load(File.read('config/magma.yml')))
+require 'factory_bot'
+require 'database_cleaner'
+require 'rack/test'
+
+require_relative '../lib/server'
+require_relative '../lib/timur'
+OUTER_APP = Rack::Builder.new do
+  use Etna::ParseBody
+  use Etna::SymbolizeParams
+
+  run Timur::Server.new(YAML.load(File.read('config.yml')))
+end
+Magma.instance.configure(Timur.instance.config(:magma))
 
 RSpec.configure do |config|
   #config.expect_with :rspec do |expectations|
@@ -62,6 +76,19 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   #Kernel.srand config.seed
+  config.include FactoryBot::Syntax::Methods
+
+  config.before(:suite) do
+    FactoryBot.find_definitions
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
 end
 
 def make_manifest script
@@ -78,4 +105,16 @@ def run_script script
   manifest.instance_variable_get("@vars")
 end
 
+def json_body(body)
+  JSON.parse(body, symbolize_names: true)
+end
 
+FactoryBot.define do
+  factory :view_pane do
+    to_create(&:save)
+  end
+
+  factory :view_attribute do
+    to_create(&:save)
+  end
+end
