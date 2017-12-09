@@ -65,7 +65,7 @@ RSpec.configure do |config|
 end
 
 def make_manifest script
-  Archimedes::Manifest.create(
+  Archimedes::Manifest.new(
     'xyzzy',
     'timur',
     script.to_a

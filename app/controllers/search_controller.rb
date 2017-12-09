@@ -80,7 +80,7 @@ class SearchController <  ApplicationController
         params[:queries].map do |query|
           [
             query[:name],
-            Archimedes::Manifest.create(
+            Archimedes::Manifest.new(
               token,
               params[:project_name],
               query[:manifest]
