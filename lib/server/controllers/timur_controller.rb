@@ -24,7 +24,7 @@ class Timur
     end
 
     def token
-      @token ||= cookies[:JANUS_TOKEN]
+      @token ||= @request.cookies[:JANUS_TOKEN]
     end
 
     def janus_login_path(refer)

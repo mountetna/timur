@@ -1,10 +1,20 @@
 class BrowseController < Timur::Controller
   def index
     response = Magma::Client.instance.query(
-      token, params[:project_name], [ :project, '::first', '::identifier' ]
+      token, @params[:project_name], 
+      [ :project, '::first', '::identifier' ]
     )
-    id = JSON.parse(response.body, symbolize_names: true)
-    redirect_to browse_model_path(params[:project_name], :project, id[:answer])
+
+    binding.pry
+    query = JSON.parse(
+      response.body,
+      symbolize_names: true
+    )
+    redirect_to browse_model_path(
+      @params[:project_name],
+      :project,
+      query[:answer]
+    )
   end
 
   def model

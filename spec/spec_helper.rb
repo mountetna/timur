@@ -112,9 +112,13 @@ end
 FactoryBot.define do
   factory :view_pane do
     to_create(&:save)
+    created_at { Time.now }
+    updated_at { Time.now }
   end
 
   factory :view_attribute do
     to_create(&:save)
+    created_at { Time.now }
+    updated_at { Time.now }
   end
 end
