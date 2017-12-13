@@ -4,7 +4,7 @@ import * as ReactRedux from 'react-redux';
 
 // Class imports.
 import ButtonBar from '../button_bar';
-import ScatterPlot from './plots/scatter_plot';
+import {ScatterPlotContainer as ScatterPlot} from './plots/scatter_plot';
 import HeatMapPlot from './plots/heat_map_plot';
 import {GenericPlotForm} from './forms/generic_plot_form';
 
@@ -235,14 +235,15 @@ export class PlotView extends React.Component{
   }
 
   editableButtons(){
+
+    let {toggleEditing, handleDelete} = this.props;
     return [
       {
-        click: ()=>{},
-        icon: 'files-o',
-        label: ' COPY'
-      },
-      {
-        click: ()=>{},
+        click: (selected_plot)=>{
+          if(confirm('Are you sure you want to remove this plot?')){
+            this.props.handleDelete(selected_plot);
+          }
+        },
         icon: 'trash-o',
         label: ' DELETE'
       },
@@ -402,7 +403,6 @@ export class PlotView extends React.Component{
 
   render(){
     let {selected_plot, is_editing} = this.state;
-    let {toggleEditing, handleDelete} = this.props;
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let input_props = {
