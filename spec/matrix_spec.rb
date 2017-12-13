@@ -115,4 +115,16 @@ describe Archimedes::Matrix do
     expect(payload['matrix2'].row_names).to eq(['lacedaemonians', 'athenians', 'thracians'])
     expect(payload['matrix2'].col_names).to eq(['shot put', 'long jump', 'pankration'])
   end
+
+  it "computes rowsums and colsums" do
+    payload = run_script(
+      matrix: "bind('cols', [
+          [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ], [ 10, 11, 12 ]
+        ])",
+      rowsum: "rowsums(@matrix)",
+      colsum: "colsums(@matrix)"
+    )
+    expect(payload['rowsum'].to_values).to eq([22,26,30])
+    expect(payload['colsum'].to_values).to eq([6,15,24,33])
+  end
 end

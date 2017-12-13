@@ -55,15 +55,7 @@
 
 module Archimedes
   class Manifest < RLTK::Parser::Environment
-    class << self
-      def create(*args)
-        manifest = self.new
-        manifest.init(*args)
-        manifest
-      end
-    end
-
-    def init(token, project_name, manifest)
+    def initialize(token, project_name, manifest)
       @token = token
       @project_name = project_name
       @manifest = manifest

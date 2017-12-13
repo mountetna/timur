@@ -116,7 +116,7 @@ class SearchController <  ApplicationController
         queries.map do |query|
           [
             query[:id],
-            Archimedes::Manifest.create(
+            Archimedes::Manifest.new(
               token,
               params[:project_name],
               query[:manifest_elements]
