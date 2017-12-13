@@ -1,18 +1,74 @@
-import React from 'react';
-import { connect } from 'react-redux';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
+
+// Class imports.
 import PlotlyComponent from '../plotly';
-import { selectPoints } from '../../../actions/plot_actions';
 
-let Scatter = ({ plot, consignment, selectPoints }) => {
-  const config =  {
-    showLink: false,
-    displayModeBar: true,
-    modeBarButtonsToRemove: ['sendDataToCloud', 'toggleSpikelines']
-  };
+// Module imports.
+import * as PlotActions from '../../../actions/plot_actions';
 
-  let layout;
+export class ScatterPlot extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  onDataSelection(selected_data){
+    if(selected_data == undefined) return;
+
+    this.props.selectPoints(
+      selected_data.points.map((point)=>{return point.id})
+    );
+  }
+
+  render(){
+    let {data, layout, config} = this.props;
+
+    let plot_props = {
+      data,
+      layout,
+      config,
+      onSelected: this.onDataSelection.bind(this)
+    };
+
+    return <PlotlyComponent {...plot_props} />;
+  }
+}
+
+const processData = (data, consignment)=>{
+  try{
+    return data.map((series)=>{
+      let x = series.x || series.manifestSeriesX;
+      let y = series.y || series.manifestSeriesY;
+
+      // Add ids from y or x labels.
+      let ids = [];
+      if(consignment[y]){
+        ids = consignment[y].labels;
+      }
+      else if(consignment[x]){
+        ids = consignment[x].labels;
+      }
+
+      return {
+        type: 'scatter',
+        mode: series.mode || 'markers',
+        name: series.name || '',
+        x: consignment[x] ? consignment[x].values : [],
+        y: consignment[y] ? consignment[y].values : [],
+        ids,
+      };
+    });
+  }
+  catch(error){
+    //console.log(error);
+    return [];
+  }
+};
+
+const processLayout = (plot)=>{
   try {
-    layout = {
+    return {
       width: plot.layout.width || 1600,
       height: plot.layout.height || 900,
       title: plot.name || '',
@@ -29,41 +85,38 @@ let Scatter = ({ plot, consignment, selectPoints }) => {
         gridcolor: '#bdbdbd'
       }
     };
-  } catch (e) {
-    console.log(e);
   }
-
-  let data;
-  try {
-    data = plot.data.map(series => {
-      const x = series.x || series.manifestSeriesX;
-      const y = series.y || series.manifestSeriesY;
-
-      // Add ids from y or x labels.
-      let ids = [];
-      if (consignment[y]) {
-        ids = consignment[y].labels;
-      } else if (consignment[x]) {
-        ids = consignment[x].labels;
-      }
-
-      return {
-        type: 'scatter',
-        mode: series.mode || 'markers',
-        name: series.name || '',
-        // Insert x and y data from the consignment.
-        x: consignment[x] ? consignment[x].values : [],
-        y: consignment[y] ? consignment[y].values : [],
-        ids,
-      };
-    });
-  } catch (e) {
-    //console.log(e);
+  catch(error){
+    //console.log(error);
+    return {};
   }
-
-  const onSelected = (selectedData) => selectPoints(selectedData.points.map(point => point.id));
-
-  return <PlotlyComponent data={data} layout={layout} config={config} onSelected={onSelected} />;
 };
 
-export default connect(null, { selectPoints })(Scatter);
+const processConfig = ()=>{
+  return {
+    showLink: false,
+    displayModeBar: true,
+    modeBarButtonsToRemove: ['sendDataToCloud', 'toggleSpikelines']
+  };
+}
+
+const mapStateToProps = (state = {}, own_props)=>{
+  return {
+    data: processData(own_props.plot.data, own_props.consignment),
+    layout: processLayout(own_props.plot),
+    config: processConfig()
+  };
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    selectPoints: (point_ids)=>{
+      dispatch(PlotActions.selectPoints(point_ids));
+    }
+  };
+};
+
+export const ScatterPlotContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ScatterPlot);

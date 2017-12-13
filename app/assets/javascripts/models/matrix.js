@@ -65,18 +65,19 @@ export default class Matrix {
       );
     }
   }
-  filter(dim, callback) {
-    if (dim == 'row') {
+  filter(dim, callback){
+    if (dim == 'row'){
       let new_rows = [];
       let new_names = [];
-      this.rows.forEach((row,i) => {
-        if (callback(row,i,this.row_names[i])) {
-            new_rows.push(row);
-            new_names.push(this.row_names[i]);
-        }        
+      this.rows.forEach((row, index)=>{
+        if(callback(row, index, this.row_names[index])){
+          new_rows.push(row);
+          new_names.push(this.row_names[index]);
+        }
       });
-      return new Matrix(new_rows,new_names,this.col_names);
+      return new Matrix(new_rows, new_names, this.col_names);
     }
+
     if (dim == 'col') {
       let selected_cols = [];
       let new_colnames = [];
