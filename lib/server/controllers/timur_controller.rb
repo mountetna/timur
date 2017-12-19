@@ -1,7 +1,13 @@
 class Timur
   class Controller < Etna::Controller
+    VIEW_PATH=File.expand_path('../views', __dir__)
 
     private
+
+    def redirect_to path
+      @response.redirect(path,302)
+      @response.finish
+    end
 
     def authenticate
       # If they do NOT have a cookie, they must go to Janus

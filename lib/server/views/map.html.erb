@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      <%= Rails.env.development? ? :'Dev Timur' : :Timur %>
+      - Map
+    </title>
+    <link rel='stylesheet' media='sceen' href='/css/timur.bundle.css'/>
+    <script src='/js/routes.js'></script>
+    <script src='/js/timur.bundle.js'></script>
+  </head>
+  <body>
+    <div id='root'></div>
+    <script type='text/javascript'>
+      var PROJECT_NAME = '<%= @project_name %>';
+      const timur = new TimurApp(
+        {
+          user: "#{current_user ? current_user.name : 'null'}",
+          mode: 'map',
+          environment: '#{Rails.env.development? ? 'development' : 'production'}'
+        },
+        'root'
+      );
+    </script>
+  </body>
+</html>

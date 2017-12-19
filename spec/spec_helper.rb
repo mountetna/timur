@@ -122,3 +122,11 @@ FactoryBot.define do
     updated_at { Time.now }
   end
 end
+
+def json_body(body)
+  JSON.parse(body, symbolize_names: true)
+end
+
+def json_post(endpoint, hash)
+  post("/#{endpoint}", hash.to_json, {'CONTENT_TYPE'=> 'application/json'})
+end

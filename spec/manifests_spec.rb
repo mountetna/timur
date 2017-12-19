@@ -1,42 +1,45 @@
 describe "ManifestsController" do
-  test "must be logged in" do
-    get(:index, project_name: 'Ipi')
-    assert_response :redirect
+  it "must be logged in" do
+    get('/manifests/index', project_name: 'Ipi')
+    expect(last_response.status).to eq(302)
+  end
+end
 
-    get(:fetch, project_name: 'Ipi')
-    assert_response :unauthorized
 
-    new_manifest = {
-      name: "test@test.com",
-      description: "foobar",
-      project: "proj",
-      access: "public",
-      data: {"x": "y"},
-      project_name: 'Ipi'
-    }
+def do_nothing
+  get(:fetch, project_name: 'Ipi')
+  assert_response :unauthorized
 
-    old_manifest_size = Manifest.all.size
-    post :create, new_manifest
-    assert_equal Manifest.all.size, old_manifest_size
-    assert_response :unauthorized
+  new_manifest = {
+    name: "test@test.com",
+    description: "foobar",
+    project: "proj",
+    access: "public",
+    data: {"x": "y"},
+    project_name: 'Ipi'
+  }
 
-    manifest_public = manifests(:adminPublic)
-    manifest_private = manifests(:adminPrivate)
+  old_manifest_size = Manifest.all.size
+  post :create, new_manifest
+  assert_equal Manifest.all.size, old_manifest_size
+  assert_response :unauthorized
 
-    old_manifest_size = Manifest.all.size
-    post(:destroy, project_name: 'Ipi', id: manifest_public.id)
-    post(:destroy, project_name: 'Ipi', id: manifest_private.id)
-    assert_equal Manifest.all.size, old_manifest_size
-    assert_response :unauthorized
+  manifest_public = manifests(:adminPublic)
+  manifest_private = manifests(:adminPrivate)
 
-    post :update, :project_name => 'Ipi', id: manifest_public.id, :format => :json, :params => new_manifest
-    assert_equal Manifest.find(manifest_public.id).description, manifest_public.description
-    assert_response :unauthorized
+  old_manifest_size = Manifest.all.size
+  post(:destroy, project_name: 'Ipi', id: manifest_public.id)
+  post(:destroy, project_name: 'Ipi', id: manifest_private.id)
+  assert_equal Manifest.all.size, old_manifest_size
+  assert_response :unauthorized
 
-    log_in_as(users(:viewer)) do
-      get :index, project_name: 'Ipi'
-      assert_response :success
-    end
+  post :update, :project_name => 'Ipi', id: manifest_public.id, :format => :json, :params => new_manifest
+  assert_equal Manifest.find(manifest_public.id).description, manifest_public.description
+  assert_response :unauthorized
+
+  log_in_as(users(:viewer)) do
+    get :index, project_name: 'Ipi'
+    assert_response :success
   end
 
   test "get list of your manifests and public manifests from project" do

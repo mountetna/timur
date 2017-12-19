@@ -5,7 +5,6 @@ describe Archimedes::Table do
     stub_request(:post, 'https://magma-dev.ucsf-immunoprofiler.org//query')
       .with(
         body: {
-          token:'xyzzy', 
           project_name:'timur', 
           query: ['match', ['games', 'patron', 'name', '::equals', 'Zeus'], '::all', [['contestant', 'city'], ['event'], ['score']]]
         }.to_json

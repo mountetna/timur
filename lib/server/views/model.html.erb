@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      <%= Rails.env.development? ? :'Dev Timur' : :Timur %>
+      - Browse - 
+      <%= @record_name %>
+    </title>
+    <link rel='stylesheet' media='sceen' href='/css/timur.bundle.css'/>
+    <script src='/js/routes.js'></script>
+    <script src='/js/timur.bundle.js'></script>
+  </head>
+  <body>
+    <div id='root'></div>
+    <script type='text/javascript'>
+      var PROJECT_NAME = '<%= @project_name %>';
+      const timur = new TimurApp(
+        {
+           user: <%= @user ? "'#{@user.first} #{@user.last}'" : 'null'%>,
+           mode: 'browse',
+           environment: '<%= ENV['TIMUR_ENV'] %>',
+           model_name: '<%= @model_name.underscore %>',
+           record_name: '<%= @record_name %>',
+           can_edit: <%=  @user && @user.can_edit?(@project_name) ? :true : :false  %>,
+           is_admin: <%=  @user && @user.is_admin?(@project_name) ? :true : :false  %>
+        },
+        'root'
+      );
+    </script>
+  </body>
+</html>

@@ -5,26 +5,31 @@ class BrowseController < Timur::Controller
       [ :project, '::first', '::identifier' ]
     )
 
-    binding.pry
     query = JSON.parse(
       response.body,
       symbolize_names: true
     )
-    redirect_to browse_model_path(
-      @params[:project_name],
-      :project,
-      query[:answer]
+    return redirect_to(
+      route_path( :browse_model,
+        project_name: @params[:project_name],
+        model_name: :project,
+        record_name: query[:answer]
+      )
     )
   end
 
   def model
-    @project_name = params[:project_name]
-    @model_name = params[:model_name]
-    @record_name = params[:record_name]
+    @project_name, @model_name, @record_name = @params.values_at(
+        :project_name,:model_name,:record_name
+    )
+
+    return erb_view(:model)
   end
 
   def map
-    @project_name = params[:project_name]
+    @project_name = @params[:project_name]
+
+    return erb_view(:map)
   end
 
   def activity
@@ -44,19 +49,19 @@ class BrowseController < Timur::Controller
     view = ViewPane.build_view(@params[:model_name],
                                @params[:project_name],
                                tab_name)
-    success('application/json', view.to_json)
+    success(view.to_json, 'application/json')
   end
 
   def update
     begin
       response = Magma::Client.instance.update(
         token,
-        params[:project_name],
-        params[:revisions]
+        @params[:project_name],
+        @params[:revisions]
       )
-      render json: response.body
+      return success(response.body, 'application/json')
     rescue Magma::ClientError => e
-      render json: e.body, status: e.status
+      failure(e.status, e.body)
     end
   end
 end
