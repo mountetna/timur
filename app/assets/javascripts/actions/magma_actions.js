@@ -59,46 +59,61 @@ export const consumePayload = (dispatch, response)=>{
   }
 };
 
-export const requestDocuments = ({ model_name, record_names, attribute_names, filter, page, page_size, collapse_tables, exchange_name, success, error }) => (dispatch) => {
-  let localSuccess = (response)=> {
-    consumePayload(dispatch, response);
-    if (success != undefined) success(response);
-  };
+export const requestDocuments = (args)=>{
+  let {
+    model_name,
+    record_names,
+    attribute_names,
+    filter,
+    page,
+    page_size,
+    collapse_tables,
+    exchange_name,
+    success,
+    error
+  } = args;
 
-  let localError = (e) => {
-    if (!e.response) {
-      dispatch(showMessages([`Something is amiss. ${e}`]));
-      return;
+  return (dispatch)=>{
+    let localSuccess = (response)=> {
+      consumePayload(dispatch, response);
+      if (success != undefined) success(response);
+    };
+  
+    let localError = (e) => {
+      if (!e.response) {
+        dispatch(showMessages([`Something is amiss. ${e}`]));
+        return;
+      }
+  
+      e.response.json().then((response)=>{
+        let errStr = response.errors.map((error)=> `* ${error}`);
+        errStr = [`### Our request was refused.\n\n${errStr}`];
+        dispatch(showMessages(errStr));
+      });
+  
+      if(error != undefined){
+        let message = JSON.parse(error.response);
+        error(message);
+      }
+    };
+  
+    let get_doc_args = [
+      {
+        model_name,
+        record_names,
+        attribute_names,
+        filter,
+        page,
+        page_size,
+        collapse_tables
+      },
+      new Exchange(dispatch, exchange_name)
+    ];
+  
+    getDocuments(...get_doc_args)
+      .then(localSuccess)
+      .catch(localError);
     }
-
-    e.response.json().then((response)=>{
-      let errStr = response.errors.map((error)=> `* ${error}`);
-      errStr = [`### Our request was refused.\n\n${errStr}`];
-      dispatch(showMessages(errStr));
-    });
-
-    if(error != undefined){
-      let message = JSON.parse(error.response);
-      error(message);
-    }
-  };
-
-  let get_doc_args = [
-    {
-      model_name,
-      record_names,
-      attribute_names,
-      filter,
-      page,
-      page_size,
-      collapse_tables
-    },
-    new Exchange(dispatch, exchange_name)
-  ];
-
-  getDocuments(...get_doc_args)
-    .then(localSuccess)
-    .catch(localError);
 };
 
 export const requestModels = ()=>{

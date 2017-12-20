@@ -8,8 +8,12 @@ const ISO_FORMAT = /[+-]?\d{4}(-[01]\d(-[0-3]\d(T[0-2]\d:[0-5]\d:?([0-5]\d(.\d+)
  * and Vector values instead of JSON.
  */
 export default class Consignment{
-  constructor(consignment) {
-    let parsed = JSON.parse(JSON.stringify(consignment), this.reviver.bind(this));
+  constructor(consignment){
+    let parsed = JSON.parse(
+      JSON.stringify(consignment),
+      this.reviver.bind(this)
+    );
+
     for(let name in parsed) this[name] = parsed[name];
   }
 
@@ -21,7 +25,11 @@ export default class Consignment{
       if('matrix' in value && 'rows' in value.matrix){
         return new Matrix(value.matrix);
       }
-      else if('vector' in value && Array.isArray(value.vector) && value.vector.every(this.everyCheck.bind(this))){
+      else if(
+        'vector' in value &&
+        Array.isArray(value.vector) &&
+        value.vector.every(this.everyCheck.bind(this))
+      ){
         return new Vector(value.vector);
       }
       else{
