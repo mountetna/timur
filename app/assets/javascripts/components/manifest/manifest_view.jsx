@@ -8,7 +8,7 @@ import ButtonBar from '../button_bar';
 // Module imports.
 import {manifestScript} from './manifest_script';
 import {manifestResult} from './manifest_result';
-import {selectConsignment} from '../../selectors/consignment';
+import {selectConsignment} from '../../selectors/consignment_selector';
 import * as ManifestActions from '../../actions/manifest_actions';
 import * as ManifestSelector from '../../selectors/manifest_selector';
 

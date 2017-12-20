@@ -14,7 +14,7 @@ import {heatMapFormData} from './forms/heat_map_form_data';
 
 import * as ManifestActions from '../../actions/manifest_actions';
 import * as PlotSelector from '../../selectors/plot_selector';
-import * as ConsignmentSelector from '../../selectors/consignment';
+import * as ConsignmentSelector from '../../selectors/consignment_selector';
 import * as ManifestSelector from '../../selectors/manifest_selector';
 
 export class PlotView extends React.Component{
