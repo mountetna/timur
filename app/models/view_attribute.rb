@@ -36,7 +36,7 @@ class ViewAttribute < ActiveRecord::Base
             description: attribute[:description],
             attribute_class: attribute[:attribute_class],
             index_order: attribute[:index_order],
-            manifest_id: attribute[:manifest_id]
+            plot_id: attribute[:plot_id]
           }
         ]
       end
