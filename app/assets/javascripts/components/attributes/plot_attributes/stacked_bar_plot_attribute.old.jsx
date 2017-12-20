@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import React from 'react'
 import StackedBarPlot from '../plotter/plots/stacked_bar_plot';
-import { selectConsignment } from '../../selectors/consignment'
+import { selectConsignment } from '../../selectors/consignment_selector'
 
 let StackedBarPlotAttribute = ({
   data,
