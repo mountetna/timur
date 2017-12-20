@@ -17,8 +17,10 @@ export default class BrowserPane extends React.Component{
 
   renderAttributes(){
     let {template, doc, revision, pane, mode} = this.props;
-
     let display = Object.keys(pane.attributes).map((attr_name, index)=>{
+
+      // Return null if we are not to show the attribute.
+      if(pane.attributes[attr_name].shown === false) return null;
 
       // The Timur view attribute.
       let attr = pane.attributes[attr_name];
@@ -49,6 +51,11 @@ export default class BrowserPane extends React.Component{
           <AttributeViewer {...attr_viewer_props} />
         </div>
       );
+    });
+
+    // Compact.
+    display = display.filter((item)=>{
+      return (item == undefined || item == null) ? false : true;
     });
 
     return display;
