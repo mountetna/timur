@@ -22,6 +22,19 @@ export const plotIndexUrl = (queryParams) => {
   return path;
 };
 
+export const fetchPlots = ()=>{
+  let route_opts = {
+    credentials: 'same-origin',
+    method: 'POST',
+    headers: headers('json', 'csrf')
+  };
+  let route = Routes.plots_fetch_path(PROJECT_NAME);
+
+  return fetch(route, route_opts)
+    .then(checkStatus)
+    .then(parseJSON);
+}
+
 export const createPlot = (plot)=>{
   let route_opts = {
     credentials: 'same-origin',
