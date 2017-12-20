@@ -1,6 +1,5 @@
 // Module imports.
 import {showMessages} from './message_actions';
-import {addPlot} from './plot_actions';
 import {Exchange} from './exchange_actions';
 import * as ManifestAPI from '../api/manifests';
 
@@ -67,14 +66,6 @@ export const requestManifests = ()=>{
       }, {});
 
       dispatch(loadManifests(manifests_by_id));
-
-      // Collect all the plots from the manifests.
-      let plots = manifests.reduce((all_plots, manifestJSON)=>{
-        return [...all_plots, ...manifestJSON.plots];
-      }, []);
-
-      // Add the plots to the store.
-      plots.forEach(plot => dispatch(addPlot(plot)));
     };
 
     let localError = (err)=>{

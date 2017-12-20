@@ -4,7 +4,7 @@ import {showMessages} from './message_actions';
 import {requestDocuments} from './magma_actions';
 import {Exchange} from './exchange_actions';
 import * as ManifestActions from './manifest_actions';
-import * as TabSelector from '../selectors/tab';
+import * as TabSelector from '../selectors/tab_selector';
 
 // Flip a config variable.
 export const toggleConfig = (key)=>{
@@ -58,18 +58,6 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
           response.views[model_nm].tabs[tab_name]
         );
         dispatch(action);
-      }
-
-     /*
-      * Request the consignments (see README.md under manifests/consignments) 
-      * needed to populate the tabs.
-      */
-      let manifest_ids = TabSelector.getManifestIds(tab);
-      if(manifest_ids.length > 0){
-        dispatch(ManifestActions.requestConsignmentsByManifestId(
-          manifest_ids,
-          rec_nm
-        ));
       }
 
       if(success != undefined) success();
