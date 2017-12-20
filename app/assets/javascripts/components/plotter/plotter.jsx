@@ -11,7 +11,7 @@ import * as ManifestActions from '../../actions/manifest_actions';
 import * as PlotActions from '../../actions/plot_actions';
 
 import * as PlotSelector from '../../selectors/plot_selector';
-import * as ConsignmentSelector from '../../selectors/consignment';
+import * as ConsignmentSelector from '../../selectors/consignment_selector';
 import * as ManifestSelector from '../../selectors/manifest_selector';
 
 export class Plotter extends React.Component{
@@ -20,8 +20,8 @@ export class Plotter extends React.Component{
   }
 
   componentDidMount(){
-    // Request manifests during initial page load, if there are none loaded.
-    if(this.props.is_empty_manifests) this.props.requestManifests();
+    this.props.requestManifests();
+    this.props.requestPlots();
   }
 
   newPlot(){
@@ -122,6 +122,10 @@ const mapStateToProps = (state = {}, own_props)=>{
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
+    requestPlots: ()=>{
+      dispatch(PlotActions.requestPlots());
+    },
+
     requestManifests: ()=>{
       dispatch(ManifestActions.requestManifests());
     },
