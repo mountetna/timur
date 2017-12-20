@@ -21,15 +21,21 @@ export const getSelectedPlot = (state)=>{
     return state.plots.plotsMap[state.plots.selected];
   }
 
-  // If the selected id is equal to 0 then retrun a new plot.
+  /*
+   * If the selected id is equal to 0 then retrun a new plot. The access is hard
+   * set to 'private' on the server for now.
+   */
   if(state.plots.selected == 0){
     return {
       id: 0,
       name: null,
+      user_id: null,
       manifest_id: null,
+      project: null,
+      access: 'private', 
+      plot_type: null,
       data: [],
       is_editable: true,
-      plot_type: null,
       layout: {
         height: 0,
         width: 0
