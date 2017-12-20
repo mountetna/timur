@@ -7,10 +7,4 @@ class Plot < ActiveRecord::Base
   def can_edit?(user, project_name)
     self.manifest.can_edit?(user, project_name)
   end
-
-  def as_json(user, project_name)
-    json = super(:except => [:configuration]).merge(self.configuration)
-    json['is_editable'] = can_edit?(user, project_name)
-    json
-  end
 end

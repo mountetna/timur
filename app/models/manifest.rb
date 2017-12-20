@@ -19,10 +19,6 @@ class Manifest < ActiveRecord::Base
   def to_json(user, project_name)
     json = self.as_json(except: [:user_id], include: [{user: {only: :name }}])
     json['is_editable'] =  can_edit?(user, project_name)
-
-    # Add plots to the returned manifests as an array.
-    json['plots'] = self.plots.map { |plot| plot.as_json(user, project_name) }
-
     json
   end
 
