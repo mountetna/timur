@@ -21,9 +21,11 @@ import {TabBarContainer as TabBar} from '../tab_bar';
 import BrowserTab from './browser_tab';
 
 // Module imports.
-import {requestView} from '../../actions/timur_actions';
-import {discardRevision, sendRevisions} from '../../actions/magma_actions';
-import * as TabSelector from '../../selectors/tab';
+import * as ManifestActions from '../../actions/manifest_actions';
+import * as PlotActions from '../../actions/plot_actions';
+import * as TimurActions from '../../actions/timur_actions';
+import * as MagmaActions from '../../actions/magma_actions';
+import * as TabSelector from '../../selectors/tab_selector';
 
 export class Browser extends React.Component{
 
@@ -41,12 +43,9 @@ export class Browser extends React.Component{
     let {model_name, record_name} = this.props;
     let onSuccess = ()=>{this.setState({mode: 'browse'})};
 
-    this.props.requestView(
-      model_name,
-      record_name,
-      'overview',
-      onSuccess
-    );
+    this.props.requestManifests();
+    this.props.requestPlots();
+    this.props.requestView(model_name, record_name, 'overview', onSuccess);
   }
 
   camelize(str){
@@ -134,8 +133,7 @@ export class Browser extends React.Component{
 
           <div className='loader'>
 
-            {'Unfortunatly there is no view for the data you requested. You'}
-            {' can create a new view in the settings.'}
+            {'Loading...'}
           </div>
         </div>
       </div>
@@ -226,16 +224,24 @@ const mapStateToProps = (state = {}, own_props)=>{
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
+    requestPlots: ()=>{
+      dispatch(PlotActions.requestPlots());
+    },
+
+    requestManifests: ()=>{
+      dispatch(ManifestActions.requestManifests());
+    },
+
     requestView: (model_name, record_name, tab_name)=>{
-      dispatch(requestView(model_name, record_name, tab_name));
+      dispatch(TimurActions.requestView(model_name, record_name, tab_name));
     },
 
     discardRevision: ()=>{
-      dispatch(discardRevision());
+      dispatch(MagmaActions.discardRevision());
     },
 
     sendRevisions: ()=>{
-      dispatch(sendRevisions());
+      dispatch(MagmaActions.sendRevisions());
     }
   };
 };
