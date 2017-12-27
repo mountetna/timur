@@ -18,20 +18,6 @@ class BrowseController < Timur::Controller
     )
   end
 
-  def model
-    @project_name, @model_name, @record_name = @params.values_at(
-        :project_name,:model_name,:record_name
-    )
-
-    return erb_view(:model)
-  end
-
-  def map
-    @project_name = @params[:project_name]
-
-    return erb_view(:map)
-  end
-
   def activity
     @activities = Activity.order(created_at: :desc).limit(50).map do |activity|
       {
@@ -44,7 +30,7 @@ class BrowseController < Timur::Controller
     end
   end
 
-  def view_json
+  def view
     tab_name = @params[:tab_name] ? @params[:tab_name].to_sym : nil
     view = ViewPane.build_view(@params[:model_name],
                                @params[:project_name],

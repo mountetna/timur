@@ -5,7 +5,7 @@ describe BrowseController do
     OUTER_APP
   end
 
-  context '#view_json' do
+  context '#view' do
     it 'gets the view json' do
       view_pane = create(:view_pane, project_name: 'labors', view_model_name: 'monster', tab_name: 'stats', name: 'default')
       size = create(:view_attribute, view_pane: view_pane, name: 'size')

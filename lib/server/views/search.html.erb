@@ -2,9 +2,7 @@
 <html>
   <head>
     <title>
-      <%= Timur.instance.environment == :development ? 'Dev Timur' : 'Timur' %> 
-      - Browse - 
-      <%= @params[:record_name] %>
+      <%= Timur.instance.environment == :development ? 'Dev Timur' : 'Timur' %> - Search
     </title>
     <link rel='stylesheet' media='screen' href='/css/timur.bundle.css'/>
     <script src='/js/routes.js'></script>
@@ -17,10 +15,8 @@
       const timur = new TimurApp(
         {
            user: <%= @user ? "'#{@user.first} #{@user.last}'" : 'null'%>,
-           mode: 'browse',
+           mode: 'search',
            environment: '<%= Timur.instance.environment %>',
-           model_name: '<%= @params[:model_name].underscore %>',
-           record_name: '<%= @params[:record_name] %>',
            can_edit: <%=  @user && @user.can_edit?(@params[:project_name]) ? :true : :false  %>,
            is_admin: <%=  @user && @user.is_admin?(@params[:project_name]) ? :true : :false  %>
         },

@@ -1,5 +1,6 @@
 require_relative './server/controllers/timur_controller'
 require_relative './server/controllers/browse_controller'
+require_relative './server/controllers/magma_controller'
 
 class Timur
   class Server < Etna::Server
@@ -19,29 +20,28 @@ class Timur
     # browse_controller.rb
     get ':project_name', action: 'browse#index', as: :project
     get ':project_name/browse', action: 'browse#index', as: :browse
-    get ':project_name/browse/:model_name/*record_name', action: 'browse#model', as: :browse_model
-    get ':project_name/view/:model_name', action: 'browse#view_json', as: :view_json
-
-    # map_controller.rb
-    get ':project_name/map', action: 'browse#map', as: :map
+    get ':project_name/view/:model_name', action: 'browse#view', as: :view
+    get ':project_name/browse/:model_name/*record_name', as: :browse_model do
+      erb_view(:model)
+    end
+    get ':project_name/map', as: :map do
+      erb_view(:map)
+    end
 
     # magma_controller.rb
-    post ':project_name/update', action: 'browse#update', as: :update_model
-    post ':project_name/retrieve', action: 'search#records_json', as: :records_json
-    post ':project_name/query', action: 'search#question_json', as: :question_json
-
-    # search_controller.rb
-    get ':project_name/search', action: 'search#index', as: :search
-    post ':project_name/search/tsv', action: 'search#table_tsv', as: :table_tsv
+    post ':project_name/update', action: 'magma#update'
+    post ':project_name/query', action: 'magma#query'
+    post ':project_name/retrieve', action: 'magma#retrieve'
+    post ':project_name/retrieve/tsv', action: 'magma#retrieve_tsv'
 
     # archimedes_controller.rb
     post ':project_name/json/consignment', action: 'search#consignment_json', as: :consignment_json
 
     # plot_controller.rb
     get ':project_name/plots', action: 'plots#index', as: :plots
-    post ':project_name/manifests/:manifest_id/plots/create', action: 'plots#create', as: :manifests_plots_create
-    put ':project_name/manifests/:manifest_id/plots/update/:id', action: 'plots#update', as: :manifests_plots_update
-    delete ':project_name/manifests/:manifest_id/plots/destroy/:id', action: 'plots#destroy', as: :manifests_plots_destroy
+    post ':project_name/plots/create', action: 'plots#create', as: :manifests_plots_create
+    put ':project_name/plots/update/:id', action: 'plots#update', as: :manifests_plots_update
+    delete ':project_name/plots/destroy/:id', action: 'plots#destroy', as: :manifests_plots_destroy
 
     # manifest_controller.rb
     get ':project_name/manifests', action: 'manifests#index', as: :manifests
