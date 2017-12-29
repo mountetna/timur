@@ -1,30 +1,33 @@
-class Manifest < ActiveRecord::Base
-  belongs_to :user
-  has_many :plots, dependent: :destroy
-  alias_attribute :project_name, :project
-  after_initialize :set_defaults
-  validates :name, presence: true
-  validates :project, presence: true
-  validates :data, presence: true
-  validates :access, inclusion: {in: %w(public private), message: "%{value} is not a valid access"}
+class Manifest < Sequel::Model
+  plugin :validation_helpers
+  many_to_one :user
+  one_to_many :plots
+
+  def validate
+    super
+    validates_presence :name
+    validates_presence :project
+    validates_presence :data
+    validates_includes [ 'public', 'private' ], :access
+  end
+
+  def before_validation
+    self.access ||= 'private'
+    super
+  end
 
   def is_public?
     access == 'public'
   end
 
-  def can_edit?(user, project_name)
-    user.id == self.user_id || user.is_admin?(project_name)
+  def is_editable?(other_user)
+    other_user == user || other_user.is_admin?(project)
   end
 
-  def to_json(user, project_name)
-    json = self.as_json(except: [:user_id], include: [{ user: { only: :name }}, :plots] )
-    json[:is_editable] =  can_edit?(user, project_name)
-    json
-  end
-
-  def set_defaults
-    if self.new_record?
-      self.access ||= 'private'
-    end
+  def to_json(other_user)
+    [ :id, :name, :description, :project, :data ].map {|k| [k,self[k]] }.to_h.merge(
+      user: user.name,
+      is_editable: is_editable?(other_user)
+    )
   end
 end

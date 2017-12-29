@@ -1,15 +1,15 @@
 class User < Sequel::Model
-  one_to_one :whitelist, class_name: 'Whitelist', foreign_key: :email, primary_key: :email
+  one_to_many :manifests
+  one_to_many :plots
 
-  def can_read?(project_name)
-    whitelist && whitelist.can_read?(project_name)
+  def etna_user= user
+    @etna_user = user
   end
 
-  def can_edit?(project_name)
-    whitelist && whitelist.can_edit?(project_name)
-  end
-
-  def is_admin?(project_name)
-    whitelist && whitelist.is_admin?(project_name)
+  [ :is_superuser?, :can_edit?, :can_view?, :can_see_restricted?,
+    :is_admin? ].each do |test|
+    define_method test do |project|
+      @etna_user.send(test, project)
+    end
   end
 end

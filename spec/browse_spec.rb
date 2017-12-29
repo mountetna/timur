@@ -5,6 +5,11 @@ describe BrowseController do
     OUTER_APP
   end
 
+  def get_browse(endpoint, user=:viewer)
+    auth_header(user)
+    get("/labors/#{endpoint}")
+  end
+
   context '#view' do
     it 'gets the view json' do
       view_pane = create(:view_pane, project_name: 'labors', view_model_name: 'monster', tab_name: 'stats', name: 'default')
@@ -12,7 +17,7 @@ describe BrowseController do
       weight = create(:view_attribute, view_pane: view_pane, name: 'weight')
       odor = create(:view_attribute, view_pane: view_pane, name: 'odor')
 
-      get('/labors/view/monster?stats')
+      get_browse('view/monster?stats')
 
       expect(last_response.status).to eq(200)
       json = json_body(last_response.body)
@@ -27,7 +32,7 @@ describe BrowseController do
 
   context '#model' do
     it 'returns the model view html' do
-      get('/labors/browse/monster/Lernean%20Hydra')
+      get_browse('browse/monster/Lernean%20Hydra')
 
       expect(last_response.status).to eq(200)
       expect(last_response.body).to match(/var PROJECT_NAME = 'labors';/)
@@ -37,7 +42,7 @@ describe BrowseController do
 
   context '#map' do
     it 'returns the map view html' do
-      get('/labors/map')
+      get_browse('map')
 
       expect(last_response.status).to eq(200)
       expect(last_response.body).to match(/var PROJECT_NAME = 'labors';/)
@@ -53,6 +58,7 @@ describe BrowseController do
       ).with do |req|
         expect(req.body.lines[1]).to eq(%Q{Content-Disposition: form-data; name="revisions[monster][Lernean Hydra][heads]"\r\n})
       end
+      auth_header(:editor)
       json_post('labors/update',
         {
           revisions: {
@@ -86,7 +92,7 @@ describe BrowseController do
         headers: {}
       )
 
-      get('/labors/browse')
+      get_browse('browse')
       expect(last_response.status).to eq(302)
       expect(last_response.headers['Location']).to eq(
         'http://example.org/labors/browse/project/The Twelve Labors of Hercules'

@@ -1,222 +1,187 @@
-describe "ManifestsController" do
-  it "must be logged in" do
-    get('/manifests/index', project_name: 'Ipi')
-    expect(last_response.status).to eq(302)
-  end
-end
+describe 'ManifestsController' do
+  include Rack::Test::Methods
 
-
-def do_nothing
-  get(:fetch, project_name: 'Ipi')
-  assert_response :unauthorized
-
-  new_manifest = {
-    name: "test@test.com",
-    description: "foobar",
-    project: "proj",
-    access: "public",
-    data: {"x": "y"},
-    project_name: 'Ipi'
-  }
-
-  old_manifest_size = Manifest.all.size
-  post :create, new_manifest
-  assert_equal Manifest.all.size, old_manifest_size
-  assert_response :unauthorized
-
-  manifest_public = manifests(:adminPublic)
-  manifest_private = manifests(:adminPrivate)
-
-  old_manifest_size = Manifest.all.size
-  post(:destroy, project_name: 'Ipi', id: manifest_public.id)
-  post(:destroy, project_name: 'Ipi', id: manifest_private.id)
-  assert_equal Manifest.all.size, old_manifest_size
-  assert_response :unauthorized
-
-  post :update, :project_name => 'Ipi', id: manifest_public.id, :format => :json, :params => new_manifest
-  assert_equal Manifest.find(manifest_public.id).description, manifest_public.description
-  assert_response :unauthorized
-
-  log_in_as(users(:viewer)) do
-    get :index, project_name: 'Ipi'
-    assert_response :success
+  def app
+    OUTER_APP
   end
 
-  test "get list of your manifests and public manifests from project" do
-    log_in_as(users(:admin)) do
-      get :index, project_name: 'Ipi'
-      assert_response 200
+  def get_manifest endpoint, user
+    auth_header(user)
+    get("/labors/manifests/#{endpoint}")
+  end
 
-      get :fetch, project_name: 'Ipi'
-      assert_response 200
+  def post_manifest endpoint, user, hash={}
+    auth_header(user)
+    json_post("labors/manifests/#{endpoint}", hash)
+  end
 
-      manifest_public = manifests(:adminPublic)
-      manifest_private = manifests(:adminPrivate)
+  def delete_manifest manifest_id, user
+    auth_header(user)
+    delete("/labors/manifests/destroy/#{manifest_id}")
+  end
 
-      manifest_response_ids = JSON.parse(response.body)["manifests"].map{ |manifest| manifest["id"] }
-      admin_manifests = [manifest_public.id, manifest_private.id]
-      assert_equal manifest_response_ids.sort, admin_manifests.sort
+  context '#index' do
+    it 'must be a project viewer' do
+      get_manifest(nil, :non_user)
+      expect(last_response.status).to eq(401)
     end
-
-    log_in_as(users(:viewer)) do
-      get :index, project_name: 'Ipi'
-      assert_response 200
-
-      get :fetch, project_name: 'Ipi'
-      assert_response 200
-
-      manifest_public = manifests(:adminPublic)
-      manifest_private = manifests(:viewerPrivate)
-      manifest_other_project = manifests(:viewerPrivateDiffProject)
-
-      assert_equal users(:viewer).manifests.map{ |m| m.id }.to_set, Set.new([manifest_private.id, manifest_other_project.id])
-
-      manifest_response_ids = JSON.parse(response.body)["manifests"].map{ |manifest| manifest["id"] }
-      admin_manifests = [manifest_public.id, manifest_private.id]
-      assert !manifest_response_ids.include?(manifest_other_project.id)
-      assert_equal manifest_response_ids.sort, admin_manifests.sort
+    it 'returns the manifest view' do
+      get_manifest(nil, :viewer)
+      expect(last_response.status).to eq(200)
+      expect(last_response.body).to match(/mode: 'manifests'/)
     end
   end
 
-  test "non admins cannot create public manifests" do
-    viewer = users(:viewer)
-    new_manifest = {
-        :name => "test@test.com",
-        :description => "foobar",
-        :access => "public",
-        :project => "proj",
-        :data => {"a"=> "b"},
-        :project_name => 'Ipi'
-    }
+  context '#fetch' do
+    it 'must be a project viewer' do
+      get_manifest(:fetch, :non_user)
+      expect(last_response.status).to eq(401)
+    end
 
-    log_in_as(viewer) do
-      old_manifest_count = viewer.manifests.size
-      post :create, new_manifest
+    it 'retrieves a list of manifests' do
+      admin = create(:user, :admin)
+      friend = create(:user, :editor)
+      viewer = create(:user, :viewer)
 
-      assert_response 200
-      assert_equal viewer.manifests.size, old_manifest_count + 1
-      assert !viewer.manifests.all.map{ |manifest| manifest.access }.include?('public')
+      public_manifests = create_list(:manifest, 3, :public, :script, user: admin)
+      friend_private_manifests = create_list(:manifest, 3, :private, :script, user: friend)
+      user_private_manifests = create_list(:manifest, 3, :private, :script, user: viewer)
+
+      get_manifest(:fetch, :viewer)
+      json = json_body(last_response.body)
+      manifest_names = json[:manifests].map{|manifest| manifest[:name]}
+
+      expect(manifest_names).to include(*public_manifests.map(&:name))
+      expect(manifest_names).to include(*user_private_manifests.map(&:name))
+      expect(manifest_names).not_to include(*friend_private_manifests.map(&:name))
     end
   end
 
-  test "admins can create public manifests" do
-    admin = users(:admin)
-    new_manifest = {
-        :name => "test@test.com",
-        :description => "foobar",
-        :access => "public",
-        :project => "proj",
-        :data => {"a"=> "b"},
-        :project_name => 'Ipi'
-    }
+  context '#create' do
+    before(:each) do
+      @manifest = {
+        name: 'test manifest',
+        description: 'Description',
+        access: 'public',
+        data: { elements: [ { name: 'value', script: '1+1'} ] }
+      }
+    end
 
-    log_in_as(admin) do
-      old_public_manifest_count = admin.manifests.where(:access => "public").size
-      post :create, new_manifest
-      assert_response 200
-      new_public_manifest_count = admin.manifests.where(:access => "public").size
-      assert_equal new_public_manifest_count, old_public_manifest_count + 1
+    it 'must be a project viewer' do
+      post_manifest(:create, :non_user, @manifest)
+      expect(last_response.status).to eq(401)
+    end
+
+    it 'keeps non admins from creating public manifests' do
+      post_manifest(:create, :viewer, @manifest)
+      expect(last_response.status).to eq(200)
+      expect(Manifest.first.access).to eq('private')
+    end
+
+    it 'lets admins create public manifests' do
+      post_manifest(:create, :admin, @manifest)
+      manifest = Manifest.first
+
+      expect(last_response.status).to eq(200)
+      expect(manifest.name).to  eq('test manifest')
+    end
+
+    it 'creates a manifest' do
+      post_manifest(:create, :viewer, @manifest.merge(access: 'private'))
+
+      expect(last_response.status).to eq(200)
+
+      manifest = Manifest.first
+      expect(manifest.name).to  eq('test manifest')
     end
   end
 
-  test "viewers can only destroy manifests they created" do
-    viewer = users(:viewer)
-    admin = users(:admin)
+  context '#destroy' do
+    it 'must be a project user' do
+      delete_manifest(1, :non_user)
+      expect(last_response.status).to eq(401)
+    end
 
-    log_in_as(viewer) do
-      admin_manifest = admin.manifests.first
+    it 'prevents manifest destruction by non-owners' do
+      viewer = create(:user, :viewer)
+      admin = create(:user, :admin)
 
-      delete :destroy, :id => admin_manifest.id, :project_name => 'Ipi'
-      assert_response 403
-      assert Manifest.find(admin_manifest.id)
+      manifest_public = create(:manifest, :private, :script, user: admin)
+      manifest_private = create(:manifest, :public, :script, user: admin)
 
-      viewer_manifest = viewer.manifests.first
-      old_manifest_count = viewer.manifests.all.size
-      delete :destroy, :id => viewer_manifest.id, :project_name => 'Ipi'
-      assert_response 200
-      assert !viewer.manifests.all.include?(viewer_manifest)
-      new_manifest_count = viewer.manifests.all.size
-      assert_equal new_manifest_count, old_manifest_count - 1
+      delete_manifest(manifest_public.id, :viewer)
+      expect(last_response.status).to eq(403)
+
+      delete_manifest(manifest_private.id, :viewer)
+      expect(last_response.status).to eq(403)
+
+      expect(Manifest.count).to eq(2)
+    end
+
+    it 'allows admins to destroy public manifests' do
+      viewer = create(:user, :viewer)
+      admin = create(:user, :admin)
+      manifest = create(:manifest, :public, :script, user: viewer)
+
+      delete_manifest(manifest.id, :admin)
+      expect(last_response.status).to eq(200)
+      expect(Manifest.count).to eq(0)
+    end
+
+    it 'destroys the manifest if allowed' do
+      viewer = create(:user, :viewer)
+      manifest = create(:manifest, :private, :script, user: viewer)
+
+      delete_manifest(manifest.id, :viewer)
+
+      expect(Manifest.count).to eq(0)
     end
   end
 
-  test "admins can destroy public manifests" do
-    admin2 = users(:admin2)
-    admin = users(:admin)
-    admin_public_manifest = admin.manifests.where(:access => "public").first
+  context "#update" do
+    it "requires permission" do
+      viewer = create(:user, :viewer)
+      admin = create(:user, :admin)
 
-    log_in_as(admin2) do
-      delete :destroy, :id => admin_public_manifest.id, :project_name => 'Ipi'
-      assert_response 200
-      assert !admin.manifests.all.include?(admin_public_manifest)
+      manifest_public = create(:manifest, :private, :script, user: admin, description: 'original')
+      manifest_private = create(:manifest, :public, :script, user: admin, description: 'original')
+
+      post_manifest( "update/#{manifest_public.id}", :viewer, description: 'changed')
+      expect(last_response.status).to eq(403)
+
+      post_manifest( "update/#{manifest_private.id}", :viewer, description: 'changed')
+      expect(last_response.status).to eq(403)
+
+      manifest_public.refresh
+      manifest_private.refresh
+
+      expect(manifest_public.description).to eq('original')
+      expect(manifest_private.description).to eq('original')
+    end
+
+    it 'allows the owner to change the manifest' do
+      viewer = create(:user, :viewer)
+      manifest = create(:manifest, :private, :script, user: viewer, description: 'original')
+
+      post_manifest("update/#{manifest.id}", :viewer, description: 'changed')
+      manifest.refresh
+
+      expect(manifest.description).to eq('changed')
+    end
+
+    it 'allows admins to update public manifests' do
+      viewer = create(:user, :viewer)
+      editor = create(:user, :editor)
+      admin = create(:user, :admin)
+      manifest = create(:manifest, :public, :script, user: viewer, description: 'original')
+
+      post_manifest("update/#{manifest.id}", :editor, description: 'changed')
+      manifest.refresh
+      expect(manifest.description).to eq('original')
+
+      post_manifest("update/#{manifest.id}", :admin, description: 'changed')
+      manifest.refresh
+      expect(manifest.description).to eq('changed')
     end
   end
-
-  test "viewers can update manifests they created" do
-    viewer = users(:viewer)
-    manifest = viewer.manifests.first
-    update_manifest = {
-        :name => "test@test.com",
-        :description => "test",
-        :data => { "a" => "b" },
-        :project_name => 'Ipi'
-    }
-    update_manifest[:id] = manifest.id
-
-    log_in_as(viewer) do
-      put :update, update_manifest
-      assert_response 200
-      manifest = Manifest.find(manifest.id)
-      assert_equal manifest.name, update_manifest[:name]
-      assert_equal manifest.description, update_manifest[:description]
-      assert_equal manifest.project, update_manifest[:project_name]
-      assert_equal manifest.data, update_manifest[:data]
-    end
-  end
-
-  test "only admins can update public manifests" do
-    viewer = users(:viewer)
-    admin = users(:admin)
-    admin2 = users(:admin2)
-    manifest = admin.manifests.first
-    update_manifest = {
-        :name => "test@test.com",
-        :description => "test",
-        :data => { "a" => "b" },
-        :access => "private",
-        :project_name => "Ipi"
-    }
-    update_manifest[:id] = manifest.id
-
-    log_in_as(viewer) do
-      put :update, update_manifest
-      assert_response 403
-      manifest = Manifest.find(manifest.id)
-      assert_not_equal manifest.name, update_manifest[:name]
-      assert_not_equal manifest.description, update_manifest[:description]
-      assert_not_equal manifest.data, update_manifest[:data]
-      assert_not_equal manifest.access, update_manifest[:access]
-    end
-
-    log_in_as(admin2) do
-      put :update, update_manifest
-      assert_response 200
-      manifest = Manifest.find(manifest.id)
-      assert_equal manifest.name, update_manifest[:name]
-      assert_equal manifest.description, update_manifest[:description]
-      assert_equal manifest.project, update_manifest[:project_name]
-      assert_equal manifest.data, update_manifest[:data]
-      assert_equal manifest.access, update_manifest[:access]
-    end
-  end
-
-  #TODO unique by name
-  private
-    def log_in_as(user)
-      @controller.stub(:current_user, user) do
-        @controller.instance_variable_set(:@current_user, user)
-        @controller.instance_variable_set(:@token, true)
-        yield
-      end
-    end
 end

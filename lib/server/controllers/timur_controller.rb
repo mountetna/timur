@@ -9,6 +9,10 @@ class Timur
       @response.finish
     end
 
+    def success_json(hash)
+      success(hash.to_json, 'application/json')
+    end
+
     def authenticate
       # If they do NOT have a cookie, they must go to Janus
       # and get one.
@@ -50,15 +54,11 @@ class Timur
     end
 
     def current_user
-      @current_user ||= 
-        begin
-          # get the whitelist - if for any reason you
-          # can't, this will be nil
-          whitelist = Whitelist.for_token(token)
-
-          # if the whitelist exists, it has a user
-          whitelist ? whitelist.user : nil
-        end
+      @current_user ||= User.find_or_create(email: @user.email) do |user|
+        user.name = "#{@user.first} #{@user.last}"
+      end.tap do |cuser|
+        cuser.etna_user = @user
+      end
     end
 
     def create_developer_user

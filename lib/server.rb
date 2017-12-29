@@ -1,6 +1,7 @@
 require_relative './server/controllers/timur_controller'
 require_relative './server/controllers/browse_controller'
 require_relative './server/controllers/magma_controller'
+require_relative './server/controllers/manifests_controller'
 
 class Timur
   class Server < Etna::Server
@@ -35,20 +36,22 @@ class Timur
     post ':project_name/retrieve/tsv', action: 'magma#retrieve_tsv'
 
     # archimedes_controller.rb
-    post ':project_name/json/consignment', action: 'search#consignment_json', as: :consignment_json
+    post ':project_name/consignment', action: 'archimedes#consignment', as: :consignment
 
     # plot_controller.rb
     get ':project_name/plots', action: 'plots#index', as: :plots
-    post ':project_name/plots/create', action: 'plots#create', as: :manifests_plots_create
-    put ':project_name/plots/update/:id', action: 'plots#update', as: :manifests_plots_update
-    delete ':project_name/plots/destroy/:id', action: 'plots#destroy', as: :manifests_plots_destroy
+    post ':project_name/plots/create', action: 'plots#create'
+    put ':project_name/plots/update/:id', action: 'plots#update'
+    delete ':project_name/plots/destroy/:id', action: 'plots#destroy'
 
     # manifest_controller.rb
-    get ':project_name/manifests', action: 'manifests#index', as: :manifests
-    post ':project_name/manifests/fetch', action: 'manifests#fetch', as: :manifests_fetch
-    post ':project_name/manifests/create', action: 'manifests#create', as: :manifests_create
-    post ':project_name/manifests/update/:id', action: 'manifests#update', as: :manifests_update
-    post ':project_name/manifests/destroy/:id', action: 'manifests#destroy', as: :manifests_destroy
+    get ':project_name/manifests', as: :manifests, auth: [ :project_name, :can_view? ] do
+      erb_view(:manifests)
+    end
+    get ':project_name/manifests/fetch', action: 'manifests#fetch', auth: [ :project_name, :can_view? ]
+    post ':project_name/manifests/create', action: 'manifests#create', auth: [ :project_name, :can_view? ]
+    post ':project_name/manifests/update/:id', action: 'manifests#update', auth: [ :project_name, :can_view? ]
+    delete ':project_name/manifests/destroy/:id', action: 'manifests#destroy', auth: [ :project_name, :can_view? ]
 
     def initialize(config)
       super
