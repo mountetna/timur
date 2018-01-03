@@ -31,11 +31,14 @@ export default class BrowserPane extends React.Component{
       // Setting the edit mode and revision of the attribute.
       let revised_value = doc[attr_name];
       if(attr_name in revision) revised_value = revision[attr_name];
+
+      // Set a boolean as to whether this document is currently under revision.
       let revised = (mode == 'edit' && value != revised_value);
 
       let attr_viewer_props = {
         template,
         value,
+        mode,
         attribute: attr,
         document: doc,
         revision: revised_value
