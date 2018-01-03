@@ -1,41 +1,41 @@
-import { showMessages } from './message_actions';
-import { getAnswer, getTSVForm, getDocuments, postRevisions } from '../api/magma';
-import { Exchange } from './exchange_actions';
+import {showMessages} from './message_actions';
+import {getAnswer, getTSVForm, getDocuments, postRevisions} from '../api/magma';
+import {Exchange} from './exchange_actions';
 
-export const addTemplate = (template)=>(
-  {
+export const addTemplate = (template)=>{
+  return {
     type: 'ADD_TEMPLATE',
     model_name: template.name,
     template: template
-  }
-);
+  };
+};
 
-export const addDocumentsForTemplate = (model_name, documents)=>(
-  {
+export const addDocumentsForTemplate = (model_name, documents)=>{
+  return {
     type: 'ADD_DOCUMENTS',
     model_name: model_name,
     documents: documents
-  }
-);
+  };
+};
 
-export const reviseDocument = (document, template, attribute, revised_value)=>(
-  {
+export const reviseDocument = (document, template, attribute, revised_value)=>{
+  return {
     type: 'REVISE_DOCUMENT',
     model_name: template.name,
     record_name: document[template.identifier],
     revision: {
-      [ attribute.name ]: revised_value
+      [attribute.name]: revised_value
     }
   }
-);
+};
 
-export const discardRevision = (record_name, model_name)=>(
-  {
+export const discardRevision = (record_name, model_name)=>{
+  return {
     type: 'DISCARD_REVISION',
     model_name: model_name,
     record_name: record_name
-  }
-);
+  };
+};
 
 /*
  * Here we add the models and documents to the store. At the same time we strip
