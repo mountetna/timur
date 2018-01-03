@@ -66,7 +66,7 @@ export class Browser extends React.Component{
         return;
       case 'approve':
 
-        if(this.props.hasRevisions){
+        if(this.props.has_revisions){
 
           this.setState({mode: 'submit'});
           this.props.sendRevisions(
@@ -151,7 +151,7 @@ export class Browser extends React.Component{
     let header_props = {
       mode,
       can_edit,
-      handler: this.headerHandler
+      handler: this.headerHandler.bind(this)
     };
 
     let tab_bar_props = {
@@ -240,8 +240,8 @@ const mapDispatchToProps = (dispatch, own_props)=>{
       dispatch(MagmaActions.discardRevision());
     },
 
-    sendRevisions: ()=>{
-      dispatch(MagmaActions.sendRevisions());
+    sendRevisions: (model_name, revisions, success, error)=>{
+      dispatch(MagmaActions.sendRevisions(model_name,revisions,success,error));
     }
   };
 };
