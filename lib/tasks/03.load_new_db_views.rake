@@ -57,7 +57,7 @@ namespace :timur do
 
       attribute_array.push({
         view_pane_id: pane[:id],
-        manifest_id: nil,
+        plot_id: nil,
         name: attribute[:name],
         title: attribute[:title],
         description: attribute[:description],
