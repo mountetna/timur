@@ -14,8 +14,8 @@ namespace :timur do
 
 
     # Load each of the manifest json files in turn.
-    Dir.glob('./lib/assets/manifest*.json') do |json_file|
-      manifest_json = JSON.parse(File.read(json_file))
+    Dir.glob('./lib/assets/manifest*.json') do |json_file_name|
+      manifest_json = JSON.parse(File.read(json_file_name))
 
       manifest_hash = {
         user_id: user.id,
@@ -40,12 +40,24 @@ namespace :timur do
         name: manifest_json['pane']
       ).first
 
-      attribute = pane.view_attributes.where(
-        name: manifest_json['attribute']
-      ).first
+      # If an accompanying plot file exists then we can add it to the DB.
+      if File.exists?(json_file_name.sub!('manifest', 'plot').sub!('assets', 'assets/plots'))
 
-      # Make the manifest to attribute association.
-      attribute.update(manifest_id: manifest.id)
+        # Create the plot object in the DB.
+        plot_data = JSON.parse(File.read(json_file_name))
+        plot_data['manifest_id'] = manifest.id
+        plot_data['name'] = json_file_name.sub('./lib/assets/plots/plot-ipi-', '').sub('.json', '')
+        plot_data['user_id'] = user.id
+        plot = Plot.create(plot_data)
+
+        # Add the associated plot data to the attribute.
+        attribute = pane.view_attributes.where(
+          name: manifest_json['attribute']
+        ).first
+
+        # Make the manifest to attribute association.
+        attribute.update(plot_id: plot.id)
+      end
     end
   end
 end
