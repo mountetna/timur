@@ -47,7 +47,7 @@ end
 def write_view_files(tabs, panes, attributes, file_name_tabs, file_name_panes, file_name_attributes)
 
   begin
-    file = File.open(file_name_tabs, 'w')
+    file_tabs = File.open(file_name_tabs, 'w')
 
     tab_header = [
       'id',
@@ -59,18 +59,18 @@ def write_view_files(tabs, panes, attributes, file_name_tabs, file_name_panes, f
       'index_order'
     ]
 
-    file.write(tab_header.join(','))
-    file.write("\n")
+    file_tabs.write(tab_header.join(','))
+    file_tabs.write("\n")
     tabs.each do |tab|
-      file.write(tab.join(','))
-      file.write("\n")
+      file_tabs.write(tab.join(','))
+      file_tabs.write("\n")
     end
   ensure
-    file.close
+    file_tabs.close
   end
 
   begin
-    file = File.open(file_name_panes, 'w')
+    file_panes = File.open(file_name_panes, 'w')
 
     pane_header = [
       'id',
@@ -84,18 +84,18 @@ def write_view_files(tabs, panes, attributes, file_name_tabs, file_name_panes, f
       'tab'
     ]
 
-    file.write(pane_header.join(','))
-    file.write("\n")
+    file_panes.write(pane_header.join(','))
+    file_panes.write("\n")
     panes.each do |pane|
-      file.write(pane.join(','))
-      file.write("\n")
+      file_panes.write(pane.join(','))
+      file_panes.write("\n")
     end
   ensure
-    file.close
+    file_panes.close
   end
 
   begin
-    file = File.open(file_name_attributes, 'w')
+    file_attrs = File.open(file_name_attributes, 'w')
 
     attributes_header = [
       'id',
@@ -112,14 +112,14 @@ def write_view_files(tabs, panes, attributes, file_name_tabs, file_name_panes, f
       'pane'
     ]
 
-    file.write(attributes_header.join(','))
-    file.write("\n")
+    file_attrs.write(attributes_header.join(','))
+    file_attrs.write("\n")
     attributes.each do |attribute|
-      file.write(attribute.join(','))
-      file.write("\n")
+      file_attrs.write(attribute.join(','))
+      file_attrs.write("\n")
     end
   ensure
-    file.close
+    file_attrs.close
   end
 end
 
@@ -316,8 +316,6 @@ def generate_manifest_json(plot, project_name, model_name, tab_name, pane_name, 
         end
       }
     }
-
-    #s.gsub(/\\n/, "\n")
 
     # Capture any other data attached to the manifest. We may need it in the
     # future.
