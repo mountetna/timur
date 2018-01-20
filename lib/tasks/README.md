@@ -39,10 +39,10 @@ postgres=# GRANT CREATE, USAGE ON SCHEMA public TO developer;
 Now point the current Timur database configuration to the `timur_old` db.
 
 Extract the current view data from the DB.
-`$ bundle exec rake timur:extract_old_db_views`
+`$ RAILS_ENV=[ENVIRONMENT] bundle exec rake timur:extract_old_db_views`
 
 Extract any plots that are being used.
-`$ bundle exec rake timur:extract_old_db_plots`
+`$ RAILS_ENV=[ENVIRONMENT] bundle exec rake timur:extract_old_db_plots`
 
 Migrate the database.
 `$ bundle exec rake db:migrate`
