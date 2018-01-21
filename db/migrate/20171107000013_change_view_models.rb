@@ -3,6 +3,18 @@ class ChangeViewModels < ActiveRecord::Migration
 
     drop_table :view_attributes
     drop_table :view_panes
+    drop_table :plots
+
+    create_table :plots do |t|
+      t.belongs_to :manifest, index: true, null: false
+      t.belongs_to :user, index: true, null: false
+      t.string :name, null: false
+      t.string :plot_type, null: false
+      t.string :access, null: false
+      t.string :project, null: false
+      t.json :configuration, null: false
+      t.timestamps null: false
+    end
 
     create_table :view_tabs do |t|
       t.string :name
@@ -33,7 +45,7 @@ class ChangeViewModels < ActiveRecord::Migration
 
     create_table :view_attributes do |t|
       t.integer :view_pane_id
-      t.integer :manifest_id
+      t.integer :plot_id
       t.string :name
       t.string :title
       t.string :description
@@ -42,7 +54,7 @@ class ChangeViewModels < ActiveRecord::Migration
       t.timestamps
     end
     add_foreign_key :view_attributes, :view_panes
-    add_foreign_key :view_attributes, :manifests
+    add_foreign_key :view_attributes, :plots
     change_column_null :view_attributes, :name, false
     change_column_null :view_attributes, :view_pane_id, false
     change_column_null :view_attributes, :index_order, false
