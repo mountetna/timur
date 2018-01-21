@@ -1,0 +1,30 @@
+{
+  "name": null,
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "public",
+  "plot_type": "lineplot",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 600,
+      "height": 200,
+      "margin": {
+        "left": 60,
+        "right": 90,
+        "top": 10,
+        "bottom": 40
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    }
+  }
+}

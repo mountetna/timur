@@ -1,0 +1,48 @@
+{
+  "name": null,
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "public",
+  "plot_type": "barplot",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 300,
+      "height": 200,
+      "margin": {
+        "top": 10,
+        "right": 20,
+        "bottom": 60,
+        "left": 50
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    },
+    "legend": [
+      {
+        "name": "treg",
+        "color": "greenyellow"
+      },
+      {
+        "name": "nktb",
+        "color": "coral"
+      },
+      {
+        "name": "sort",
+        "color": "khaki"
+      },
+      {
+        "name": "dc",
+        "color": "seagreen"
+      }
+    ]
+  }
+}

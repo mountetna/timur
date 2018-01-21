@@ -1,0 +1,30 @@
+{
+  "name": null,
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "public",
+  "plot_type": "boxplot",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 900,
+      "height": 200,
+      "margin": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 40
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    }
+  }
+}

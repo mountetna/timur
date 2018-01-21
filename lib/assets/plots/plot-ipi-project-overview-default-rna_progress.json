@@ -1,0 +1,30 @@
+{
+  "name": null,
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "public",
+  "plot_type": "bargraph",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 500,
+      "height": 300,
+      "margin": {
+        "top": 10,
+        "right": 20,
+        "bottom": 90,
+        "left": 50
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    }
+  }
+}
