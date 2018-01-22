@@ -41,7 +41,7 @@ AUTH_USERS = {
 }
 
 def auth_header(user_type)
-  header(*Etna::TestAuth.header(AUTH_USERS[user_type]))
+  header(*Etna::TestAuth.token_header(AUTH_USERS[user_type]))
 end
 
 RSpec.configure do |config|

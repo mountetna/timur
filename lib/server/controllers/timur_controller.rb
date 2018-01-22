@@ -13,26 +13,6 @@ class Timur
       success(hash.to_json, 'application/json')
     end
 
-    def authenticate
-      # If they do NOT have a cookie, they must go to Janus
-      # and get one.
-      if !token
-        redirect_to(janus_login_path(request.original_url))
-        return
-      end
-
-      # they do have a cookie, try to load a user 
-      redirect_to(:no_auth) unless current_user
-    end
-
-    def readable_check
-      redirect_to(:no_auth) unless can_read?
-    end
-
-    def editable_check
-      redirect_to(:no_auth) unless can_edit?
-    end
-
     def token
       @token ||= @request.cookies[:JANUS_TOKEN]
     end
@@ -45,43 +25,11 @@ class Timur
       return uri.to_s
     end
 
-    def can_read?
-      current_user && current_user.can_read?(params[:project_name])
-    end
-
-    def can_edit?
-      current_user && current_user.can_edit?(params[:project_name])
-    end
-
     def current_user
       @current_user ||= User.find_or_create(email: @user.email) do |user|
         user.name = "#{@user.first} #{@user.last}"
       end.tap do |cuser|
         cuser.etna_user = @user
-      end
-    end
-
-    def create_developer_user
-      user_data = {email: 'developer@localhost', name: 'Timothy Developer'}
-      user = User.where(email: auth['email']).first_or_create.update(user_data)
-    end
-
-
-    def ajax_req_authenticate
-      if !current_user
-        render :json => { :errors => ["You must be logged in."] }, :status => 401 and return
-      end
-    end
-
-    def error_response(resource)
-      render :json => { :errors => resource.errors.full_messages }, :status => 422
-    end
-
-    def delete(resource)
-      if resource.destroy
-        render json: { :success => true }
-      else
-        error_response(resource)
       end
     end
   end

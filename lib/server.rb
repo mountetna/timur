@@ -39,19 +39,21 @@ class Timur
     post ':project_name/consignment', action: 'archimedes#consignment', as: :consignment
 
     # plot_controller.rb
-    get ':project_name/plots', action: 'plots#index', as: :plots
+    get ':project_name/plots', as: :plots, auth: { user: { can_view?: :project_name } } do
+      erb_view(:plots)
+    end
     post ':project_name/plots/create', action: 'plots#create'
     put ':project_name/plots/update/:id', action: 'plots#update'
     delete ':project_name/plots/destroy/:id', action: 'plots#destroy'
 
     # manifest_controller.rb
-    get ':project_name/manifests', as: :manifests, auth: [ :project_name, :can_view? ] do
+    get ':project_name/manifests', as: :manifests, auth: { user: { can_view?: :project_name } } do
       erb_view(:manifests)
     end
-    get ':project_name/manifests/fetch', action: 'manifests#fetch', auth: [ :project_name, :can_view? ]
-    post ':project_name/manifests/create', action: 'manifests#create', auth: [ :project_name, :can_view? ]
-    post ':project_name/manifests/update/:id', action: 'manifests#update', auth: [ :project_name, :can_view? ]
-    delete ':project_name/manifests/destroy/:id', action: 'manifests#destroy', auth: [ :project_name, :can_view? ]
+    get ':project_name/manifests/fetch', action: 'manifests#fetch', auth: { user: { can_view?: :project_name } }
+    post ':project_name/manifests/create', action: 'manifests#create', auth: { user: { can_view?: :project_name } }
+    post ':project_name/manifests/update/:id', action: 'manifests#update', auth: { user: { can_view?: :project_name } }
+    delete ':project_name/manifests/destroy/:id', action: 'manifests#destroy', auth: { user: { can_view?: :project_name } }
 
     def initialize(config)
       super
