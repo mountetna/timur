@@ -45,7 +45,7 @@ export class Browser extends React.Component{
 
     this.props.requestManifests();
     this.props.requestPlots();
-    this.props.requestView(model_name, record_name, 'overview', onSuccess);
+    this.props.requestView(model_name, record_name, 'overview', onSuccess.bind(this));
   }
 
   camelize(str){
@@ -179,8 +179,12 @@ export class Browser extends React.Component{
       tab
     };
 
+    // Set at 'skin' on the browser styling.
+    let skin = 'browser';
+    if(this.state.mode == 'browse') skin = 'browser '+this.props.model_name;
+
     return(
-      <div className='browser'>
+      <div className={skin}>
 
         <Header {...header_props}>
 
@@ -232,8 +236,13 @@ const mapDispatchToProps = (dispatch, own_props)=>{
       dispatch(ManifestActions.requestManifests());
     },
 
-    requestView: (model_name, record_name, tab_name)=>{
-      dispatch(TimurActions.requestView(model_name, record_name, tab_name));
+    requestView: (model_name, record_name, tab_name, onSuccess)=>{
+      dispatch(TimurActions.requestView(
+        model_name,
+        record_name,
+        tab_name,
+        onSuccess
+      ));
     },
 
     discardRevision: ()=>{
