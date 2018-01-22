@@ -31,15 +31,6 @@ const selected = (state = null, action)=>{
   }
 };
 
-const isEditing = (state = false, action)=>{
-  switch (action.type){
-    case 'TOGGLE_PLOT_EDITING':
-      return typeof action.is_editing == 'undefined' ? !state : action.is_editing;
-    default:
-      return state;
-  }
-};
-
 const selectedPoints = (state = [], action)=>{
   switch (action.type) {
     case 'SELECT_POINTS':
@@ -54,6 +45,5 @@ const selectedPoints = (state = [], action)=>{
 export default combineReducers({
   plotsMap,
   selected,
-  isEditing,
   selectedPoints
 })

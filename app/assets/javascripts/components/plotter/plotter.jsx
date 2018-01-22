@@ -57,7 +57,6 @@ export class Plotter extends React.Component{
     let {
       all_plots,
       plot_types,
-      is_editing,
       selected_plot,
       plotable_manifests,
       loaded_consignments
@@ -97,7 +96,7 @@ export class Plotter extends React.Component{
         </div>
         <div className='right-column-group'>
 
-          {(selected_plot || is_editing) ? <PlotView {...plot_view_props} /> : ''}
+          {(selected_plot) ? <PlotView {...plot_view_props} /> : ''}
         </div>
       </div>
     );
@@ -113,7 +112,6 @@ const mapStateToProps = (state = {}, own_props)=>{
     plot_types,
     selected_plot: PlotSelector.getSelectedPlot(state),
     all_plots: PlotSelector.getAllPlots(state),
-    is_editing: state.plots.isEditing,
     is_empty_manifests: ManifestSelector.isEmptyManifests(state),
     plotable_manifests: ManifestSelector.getEditableManifests(state),
     loaded_consignments: ConsignmentSelector.getLoadedConsignmentIds(state)

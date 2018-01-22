@@ -5,7 +5,6 @@ describe('plots reducer', () => {
   const initialState = {
     plotsMap: {},
     selected: null,
-    isEditing: false,
     selectedPoints: []
   };
 
@@ -22,34 +21,6 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: {},
       selected: 3,
-      isEditing: false,
-      selectedPoints: []
-    });
-  });
-
-  it('should handle TOGGLE_PLOT_EDITING without isEditing boolean', () => {
-    expect(
-      reducer(initialState, {
-        type: 'TOGGLE_PLOT_EDITING'
-      })
-    ).toEqual({
-      plotsMap: {},
-      selected: null,
-      isEditing: true,
-      selectedPoints: []
-    });
-  });
-
-  it('should handle TOGGLE_PLOT_EDITING with isEditing boolean', () => {
-    expect(
-      reducer({isEditing: false}, {
-        type: 'TOGGLE_PLOT_EDITING',
-        isEditing: true
-      })
-    ).toEqual({
-      plotsMap: {},
-      selected: null,
-      isEditing: true,
       selectedPoints: []
     });
   });
@@ -63,7 +34,6 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: { [testPlot.id]: testPlot },
       selected: null,
-      isEditing: false,
       selectedPoints: []
     });
   });
@@ -77,7 +47,6 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: {},
       selected: null,
-      isEditing: false,
       selectedPoints: []
     });
   });
@@ -97,7 +66,6 @@ describe('plots reducer', () => {
     ).toEqual({
       plotsMap: { 3: updatedPlot },
       selected: null,
-      isEditing: false,
       selectedPoints: []
     });
   });
