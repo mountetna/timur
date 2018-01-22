@@ -26,11 +26,6 @@ const editManifest = (manifest) =>({
   manifest
 });
 
-// Manifest ui editing flag.
-export const toggleEdit = ()=>({
-  type: 'TOGGLE_IS_EDITING_MANIFEST'
-});
-
 export const toggleManifestsFilter = (filter)=>({
   type: 'TOGGLE_MANIFESTS_FILTER',
   filter

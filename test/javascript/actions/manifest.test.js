@@ -115,7 +115,7 @@ describe('async actions', () => {
     });
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, TOGGLE_IS_EDITING_MANIFEST, and SELECT_MANIFEST when creating a new user manifest has been done', () => {
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, and SELECT_MANIFEST when creating a new user manifest has been done', () => {
     nock('http://www.fake.com')
       .post('/ipi/manifests/create')
       .reply(
@@ -146,9 +146,6 @@ describe('async actions', () => {
         ...manifestResp
       },
       {
-        type: "TOGGLE_IS_EDITING_MANIFEST"
-      },
-      {
         type: 'SELECT_MANIFEST',
         id: 12
       }
@@ -162,7 +159,7 @@ describe('async actions', () => {
 
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, UPDATE_USER_MANIFEST, and TOGGLE_IS_EDITING_MANIFEST when updating user manifest has been done', () => {
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, and UPDATE_USER_MANIFEST when updating user manifest has been done', () => {
     nock('http://www.fake.com')
       .post(`/ipi/manifests/update/${manifestResp.manifest.id}`)
       .reply(
@@ -191,9 +188,6 @@ describe('async actions', () => {
       {
         type:"UPDATE_USER_MANIFEST",
         ...manifestResp
-      },
-      {
-        type: "TOGGLE_IS_EDITING_MANIFEST"
       }
     ];
 
@@ -205,7 +199,7 @@ describe('async actions', () => {
 
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, SELECT_MANIFEST, and TOGGLE_IS_EDITING_MANIFEST when copying a user manifest has been done', () => {
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, and SELECT_MANIFEST when copying a user manifest has been done', () => {
     const newManifestId =  manifestResp.manifest.id + 1;
 
     const copiedManifestResp = {
@@ -246,9 +240,6 @@ describe('async actions', () => {
       {
         type: 'SELECT_MANIFEST',
         id: newManifestId
-      },
-      {
-        type: "TOGGLE_IS_EDITING_MANIFEST"
       }
     ];
 
