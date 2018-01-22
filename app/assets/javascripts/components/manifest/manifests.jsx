@@ -24,9 +24,6 @@ export class Manifests extends React.Component{
   create(){
     // A manifest with an id of '0' is a new manifest.
     this.props.selectManifest(0);
-
-    if(this.props.is_editing) return;
-    this.props.toggleEdit();
   }
 
   render(){
@@ -34,7 +31,6 @@ export class Manifests extends React.Component{
       sections,
       selected_manifest,
       is_admin,
-      is_editing,
       component_name
     } = this.props;
 
@@ -47,8 +43,7 @@ export class Manifests extends React.Component{
 
     let manifest_props = {
       manifest: selected_manifest,
-      is_admin: is_admin,
-      is_editing: is_editing
+      is_admin: is_admin
     };
 
     return(
@@ -60,7 +55,7 @@ export class Manifests extends React.Component{
         </div>
         <div className='right-column-group'>
 
-          {(selected_manifest || is_editing) ? <ManifestView {...manifest_props} /> : ''}
+          {(selected_manifest) ? <ManifestView {...manifest_props} /> : ''}
         </div>
       </div>
     );
@@ -82,10 +77,9 @@ const mapStateToProps = (state = {}, own_props)=>{
 
   return {
     sections,
-    selected_manifest: ManifestSelector.getSelectedManifest(state),
-    is_editing: isEditing
-  }
-}
+    selected_manifest: ManifestSelector.getSelectedManifest(state)
+  };
+};
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
@@ -98,13 +92,7 @@ const mapDispatchToProps = (dispatch, own_props)=>{
         type: 'SELECT_MANIFEST',
         id
       });
-    },
-
-    toggleEdit: ()=>{
-      dispatch({
-        type: 'TOGGLE_IS_EDITING_MANIFEST'
-      });
-    },
+    }
   };
 };
 

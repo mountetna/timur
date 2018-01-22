@@ -19,13 +19,15 @@ export class ManifestView extends React.Component{
     if(props.manifest){
       this.state = {
         manifest: ManifestSelector.cloneManifest(props),
-        view_mode: 'script'
+        view_mode: 'script',
+        is_editing: false
       };
     }
     else{
       this.state = {
         manifest: {},
-        view_mode: 'script'
+        view_mode: 'script',
+        is_editing: false
       };
     }
   }
@@ -105,8 +107,7 @@ export class ManifestView extends React.Component{
   }
 
   toggleEdit(){
-    this.setState({view_mode: 'script'});
-    this.props.toggleEdit();
+    this.setState({view_mode: 'script', is_editing: (!this.state.is_editing)});
   }
 
   addElement(){
@@ -118,7 +119,7 @@ export class ManifestView extends React.Component{
   editableButtons(){
     let {manifest} = this.state;
     let {deleteManifest, copyManifest} = this.props;
-    let {is_editable} = manifest;
+    let {is_editable} = this.state.manifest;
 
     return [
       is_editable && this.state.view_mode == 'output' && {
@@ -132,7 +133,7 @@ export class ManifestView extends React.Component{
         label: ' PLOT'
       },
       {
-        click: ()=>{copyManifest(manifest)},
+        click: ()=>{copyManifest(manifest);},
         icon: 'files-o',
         label: ' COPY'
       },
@@ -169,8 +170,8 @@ export class ManifestView extends React.Component{
   }
 
   renderElementButtons(){
-    let {manifest, view_mode} = this.state;
-    let {consignment, requestConsignments, is_editing} = this.props;
+    let {manifest, view_mode, is_editing} = this.state;
+    let {consignment, requestConsignments} = this.props;
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let query_btn_props = {
@@ -221,8 +222,8 @@ export class ManifestView extends React.Component{
   }
 
   renderManifestElements(){
-    let {manifest, view_mode} = this.state;
-    let {consignment, is_editing} = this.props;
+    let {manifest, view_mode, is_editing} = this.state;
+    let {consignment} = this.props;
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let manifest_elements = manifest.data.elements || [];
@@ -309,7 +310,7 @@ export class ManifestView extends React.Component{
     if(this.props.manifest == null) return null;
 
     let {name, user, updated_at, description, access} = this.state.manifest;
-    let {is_editing} = this.props;
+    let {is_editing} = this.state;
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let input_props = {
@@ -437,12 +438,6 @@ const mapDispatchToProps = (dispatch, own_props)=>{
 
     saveManifest: (manifest)=>{
       dispatch(ManifestActions.saveManifest(manifest));
-    },
-
-    toggleEdit: ()=>{
-      dispatch({
-        type: 'TOGGLE_IS_EDITING_MANIFEST'
-      });
     },
 
     selectManifest: (id)=>{

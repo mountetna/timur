@@ -22,17 +22,7 @@ const selected = (state = null, action)=>{
   }
 };
 
-const isEditing = (state = false, action)=>{
-  switch (action.type){
-    case 'TOGGLE_IS_EDITING_MANIFEST':
-      return !state;
-    default:
-      return state;
-  }
-};
-
 export default combineReducers({
   filter,
   selected,
-  isEditing
 });
