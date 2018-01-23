@@ -71,22 +71,34 @@ export const interleaveAttributes = (tab, template)=>{
      * If there are no attributes from the view/pane data then set the defaut
      * attributes from the Magma model.
      */
-    if(Object.keys(tab.panes[pane_name].attributes).length == 0){
-      tab.panes[pane_name].attributes = Object.assign({}, template.attributes);
+    let pane = tab.panes[pane_name];
+    if(Object.keys(pane.attributes).length == 0){
+      pane.attributes = Object.assign({}, template.attributes);
     }
     else{
-      Object.keys(tab.panes[pane_name].attributes).forEach((attr_name, index)=>{
+      Object.keys(pane.attributes).forEach((attr_name, index)=>{
         /*
          * If there is an attribute in the Magma model that matches an attribute
          * in the Timur view pane...
          */
         if(attr_name in template.attributes){
+          let view_attribute = pane.attributes[attr_name];
+          let template_attribute = template.attributes[attr_name];
+
+          /*
+           * First we need to manually set the 'attribute_class' of the
+           * view attribute since we don't want it to be over written in the
+           * object interleave.
+           */
+          if(view_attribute.attribute_class == null){
+            view_attribute.attribute_class = template_attribute.attribute_class;
+          }
 
           // Interleave the attribute properties.
-          tab.panes[pane_name].attributes[attr_name] = Object.assign(
+          view_attribute = Object.assign(
             {},
-            tab.panes[pane_name].attributes[attr_name],
-            template.attributes[attr_name]
+            template_attribute,
+            view_attribute
           );
         }
       });
