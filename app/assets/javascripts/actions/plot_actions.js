@@ -14,11 +14,6 @@ export const selectPlot = (id)=>({
   id
 });
 
-export const toggleEditing = (is_editing)=>({
-  type: 'TOGGLE_PLOT_EDITING',
-  is_editing
-});
-
 export const addPlot = (plot)=>({
   type: 'ADD_PLOT',
   plot

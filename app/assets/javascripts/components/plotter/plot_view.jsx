@@ -25,7 +25,7 @@ export class PlotView extends React.Component{
       this.state = {
         selected_plot: this.clonePlot(props.selected_plot),
         selected_manifest: props.selected_manifest,
-        is_editing: props.is_editing
+        is_editing: false
       }
     }
     else{
@@ -236,7 +236,7 @@ export class PlotView extends React.Component{
 
   editableButtons(){
 
-    let {toggleEditing, handleDelete} = this.props;
+    let {handleDelete} = this.props;
     return [
       {
         click: (selected_plot)=>{
