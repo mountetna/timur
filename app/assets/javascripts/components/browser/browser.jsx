@@ -94,7 +94,7 @@ export class Browser extends React.Component{
 
   tabSelectionHandler(index_order){
 
-    let {requestView, model_name, record_name, view, doc} = this.props;
+    let {requestDocuments, model_name, record_name, view, doc} = this.props;
 
     // Set the new requested tab state.
     this.setState({current_tab_index: index_order});
@@ -119,7 +119,7 @@ export class Browser extends React.Component{
          * If the attributes required from the tab are NOT present in the
          * model's document then we need to request that data.
          */
-        requestView(model_name, record_name, tab_name);
+        requestDocuments(model_name, record_name, tab_attr);
         break tab_check_loop;
       }
     }
@@ -243,6 +243,16 @@ const mapDispatchToProps = (dispatch, own_props)=>{
         tab_name,
         onSuccess
       ));
+    },
+
+    requestDocuments: (model_name, record_name, attribute_names)=>{
+      let exchange_name = `${model_name} ${record_name}`;
+      dispatch(MagmaActions.requestDocuments({
+        model_name,
+        exchange_name,
+        record_names: [record_name],
+        attribute_names
+      }));
     },
 
     discardRevision: ()=>{
