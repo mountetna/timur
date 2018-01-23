@@ -164,8 +164,12 @@ export default class Magma {
     return {}
   }
 
-  template(model_name) {
-    if (model_name && this.models[model_name]) return this.models[model_name].template
-    return null
+  template(model_name){
+    if(model_name && this.models[model_name]){
+      return this.models[model_name].template;
+    }
+    else{
+      return null;
+    }
   }
 }
