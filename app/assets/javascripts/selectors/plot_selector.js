@@ -51,4 +51,10 @@ export const getSelectedPlot = (state)=>{
       }
     }
   }
+
+  /*
+   * If there is no specified plot and we are not requesting a new 
+   * plot (id == 0) then return null, and clear the screen.
+   */
+  return null;
 }

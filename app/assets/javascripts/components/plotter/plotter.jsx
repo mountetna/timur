@@ -65,6 +65,7 @@ export class Plotter extends React.Component{
     // Functions.
     let {
       selectManifest,
+      selectPlot,
       saveNewPlot,
       savePlot
     } = this.props;
@@ -82,6 +83,7 @@ export class Plotter extends React.Component{
       loaded_consignments,
       selected_plot,
       selectManifest,
+      selectPlot,
       savePlot,
       saveNewPlot,
       handleDelete: this.deletePlot.bind(this)

@@ -25,7 +25,9 @@ export class PlotView extends React.Component{
       this.state = {
         selected_plot: this.clonePlot(props.selected_plot),
         selected_manifest: props.selected_manifest,
-        is_editing: false
+
+        // If we have a new plot (id == 0), then we turn on editing.
+        is_editing: (props.selected_plot.id == 0) ? true : false
       }
     }
     else{
@@ -42,6 +44,7 @@ export class PlotView extends React.Component{
    * the new plot we then need to map it to the 'state'.
    */
   componentDidUpdate(){
+    let {selected_plot} = this.props;
 
     /*
      * If the plot doesn't exist or if the current plot prop equals the current 
@@ -49,15 +52,18 @@ export class PlotView extends React.Component{
      * update loop.
      */
     if(
-      !this.props.selected_plot ||
-      (this.props.selected_plot.id == this.state.selected_plot.id)
+      !selected_plot ||
+      (selected_plot.id == this.state.selected_plot.id)
     ){
       return;
     }
 
     this.setState({
       selected_manifest: this.props.selected_manifest,
-      selected_plot: this.clonePlot(this.props.selected_plot)
+      selected_plot: this.clonePlot(this.props.selected_plot),
+
+      // If we have a new plot (id == 0), then we turn on editing.
+      is_editing: (selected_plot.id == 0) ? true : false
     });
   }
 
@@ -76,6 +82,19 @@ export class PlotView extends React.Component{
     if(selected_plot.id > 0) this.props.savePlot(selected_plot);
 
     if(selected_plot.id == 0){
+
+      // Check that there is minimum data.
+      if(
+        selected_plot.manifest_id == null ||
+        selected_plot.name == null ||
+        selected_plot.name == '' ||
+        selected_plot.plot_type == null ||
+        selected_plot.plot_type == ''
+      ){
+        alert('You must enter a name, select a manifest, and select a plot');
+        return;
+      }
+
       // The '0' id must be removed before a a new plot can be created.
       delete selected_plot.id;
       this.props.saveNewPlot(selected_plot);
@@ -94,12 +113,18 @@ export class PlotView extends React.Component{
 
   cancelEdit(){
 
+    // Turn off the editing mode.
+    this.toggleEdit();
+
+    // If this is a new plot (id == 0) then reset the page with a null id.
+    if(this.props.selected_plot.id == 0){
+      this.props.selectPlot(null);
+      return;
+    }
+
     // Reset the plot.
     let selected_plot = this.clonePlot(this.props.selected_plot);
     this.setState({selected_plot});
-
-    // Turn of the editing mode.
-    this.toggleEdit();
 
     /*
      * Set the manifest selected in the store. This will refresh the consignment
