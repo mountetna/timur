@@ -6,7 +6,7 @@ class Manifest < ActiveRecord::Base
   validates :name, presence: true
   validates :project, presence: true
   validates :data, presence: true
-  validates :access, inclusion: {in: %w(public private), message: "%{value} is not a valid access"}
+  validates :access, inclusion: {in: %w(public private view), message: "%{value} is not a valid access"}
 
   def is_public?
     access == 'public'
