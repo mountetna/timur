@@ -309,6 +309,7 @@ def generate_manifest_json(plot, project_name, model_name, tab_name, pane_name, 
       attribute: attribute_name,
       name: plot['name'],
       description: '',
+      access: 'view',
       
       data: {
         elements: plot['manifest'].map do |elem|
