@@ -22,7 +22,7 @@ namespace :timur do
         name: manifest_json['name'],
         description: manifest_json['description'],
         project: manifest_json['project'],
-        access: 'public',
+        access: manifest_json['access'],
         data: manifest_json['data']
       }
 
@@ -42,7 +42,6 @@ namespace :timur do
 
       # If an accompanying plot file exists then we can add it to the DB.
       if File.exists?(json_file_name.sub!('manifest', 'plot').sub!('assets', 'assets/plots'))
-
         # Create the plot object in the DB.
         plot_data = JSON.parse(File.read(json_file_name))
         plot_data['manifest_id'] = manifest.id
