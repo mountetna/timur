@@ -1,20 +1,18 @@
 import { createSelector } from 'reselect';
 
-const getPlots = state => state.plots.plotsMap;
+export const getSelectedPlotId = (state)=>{
+  return state.plots.selected;
+}
 
-export const getSelectedPlotId = state => state.plots.selected;
+export const getAllPlots= (state)=>{
+  return Object.values(state.plots.plotsMap);
+}
 
-export const getAllPlots = state => Object.values(getPlots(state));
-
-export const getPlotsByManifestId = (state, manifestId) =>
-  getAllPlots(state).filter(plot => plot.manifestId === manifestId);
-
-/*
-export const getSelectedPlot = createSelector(
-  [ getPlots, getSelectedPlotId ],
-  (plots, id) => plots[id]
-);
-*/
+export const getPlotsByManifestId = (state, manifestId)=>{
+  return getAllPlots(state).filter((plot)=>{
+    return plot.manifestId === manifestId
+  });
+}
 
 export const getSelectedPlot = (state)=>{
   if(state.plots.selected > 0){

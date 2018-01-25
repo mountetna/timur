@@ -12,12 +12,24 @@ class ManifestsController < ApplicationController
   def fetch
 
     # Pull the manifests from the database.
-    manifests = Manifest.where('(user_id = ? OR access = ?) AND project = ?', current_user.id, 'public', params[:project_name]).all
+    manifests = Manifest.where(
+      '(user_id = ? OR access = ?) AND project = ?',
+      current_user.id,
+      'public',
+      params[:project_name]
+    ).all
 
     # Extract the mainfests that: match the user, is public, or where the user
     # is an admin.
     manifest_json = manifests.map do |manifest|
-      next unless current_user.id == manifest.user_id || manifest.is_public? || @current_user.is_admin?(params[:project_name])
+      #next unless current_user.id == manifest.user_id || manifest.is_public? || @current_user.is_admin?(params[:project_name])
+
+      next unless(
+        current_user.id == manifest.user_id ||
+        manifest.is_public? ||
+        @current_user.is_admin?(params[:project_name])
+      )
+
       manifest.to_json(current_user, params[:project_name])
     end
 
