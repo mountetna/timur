@@ -3,7 +3,7 @@
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",
-  "access": "public",
+  "access": "view",
   "plot_type": "lineplot",
   "configuration": {
     "data": [],
