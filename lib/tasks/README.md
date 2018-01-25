@@ -45,15 +45,15 @@ Extract any plots that are being used.
 `$ RAILS_ENV=[ENVIRONMENT] bundle exec rake timur:extract_old_db_plots`
 
 Migrate the database.
-`$ bundle exec rake db:migrate`
+`$ RAILS_ENV=[ENVIRONMENT] bundle exec rake db:migrate`
 
 Load the view data from their cache files into the DB. Make sure you load the views before the manfiests so the rake task can make the DB associations. Make sure that the user id is of someone who is a project administrator.
-`$ bundle exec rake timur:load_new_db_views`
-`$ bundle exec rake timur:load_view_manifests[USER ID]`
+`$ RAILS_ENV=[ENVIRONMENT] bundle exec rake timur:load_new_db_views`
+`$ RAILS_ENV=[ENVIRONMENT] bundle exec rake timur:load_view_manifests[USER ID]`
 
 Now load the previously exported plots that are not associated with any view.
-`$ bundler exec rake timur:load_plots`
-
+`$ RAILS_ENV=[ENVIRONMENT] bundler exec rake timur:load_plots`
+  
 On the following code release Timur should automatically point back to the `timur` database with it's new view schema. And the Timur code that deals with this new view schema will be updated at the same time as well.
 
 ## How do you know if this is done or not?
