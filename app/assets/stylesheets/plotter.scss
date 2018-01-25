@@ -5,6 +5,11 @@
   font-family: $body_font;
 }
 
+.plotter-view-group{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 .plotter-action-btn-group{
   float: right;
 }
@@ -41,7 +46,6 @@
 
 .plotter-form-details,
 .plotter-specific-form-group{
-  font-size: 0.8em;
   margin-top: -6px;
   margin-bottom: 15px;
   line-height: 25px;
@@ -50,11 +54,11 @@
 
 .plotter-form-details{
   border-bottom: 1px solid #666666;
+  font-size: 0.8em;
 }
 
 .plotter-form-input{
   border: 0px;
-  font-size: 1em;
   margin-left: 10px;
   outline: 1px solid #333;
 }
@@ -63,8 +67,8 @@
   margin-bottom: 10px;
 }
 
-.plotter-series-data-title{
-  font-size: 1.2em;
+.plotter-series-text{
+  font-size: 0.8em;
 }
 
 .series-name{
@@ -76,7 +80,6 @@
 }
 
 .plotter-series-entry{
-  font-size: 1em;
   margin-bottom: 15px;
 }
 

@@ -90,7 +90,7 @@ export class GenericPlotForm extends React.Component{
 
       // Add the selection to option array.
       options.push([
-        `${key} :`,
+        <span className='plotter-series-text'>{`${key} :`}</span>,
         <select {...selector_props}>{this.renderSeriesOptions(series_arguments)}</select>
       ]);
     });
@@ -122,7 +122,10 @@ export class GenericPlotForm extends React.Component{
       return(
         <div key={`series-${series_index}`} className='plotter-series-entry'>
 
-          {'Name : '}
+          <span className='plotter-series-text'>
+
+            {'Name : '}
+          </span>
           <input {...input_props} value={series_item.name} onChange={this.updateSeriesHandler(series_index, 'name')} />
           <button {...button_props} onClick={this.removeSeriesHandler(series_index)}>
 
@@ -171,8 +174,9 @@ export class GenericPlotForm extends React.Component{
       }
 
       // Add the field title, field input, and a break to the header array.
+      let title = `${form_data.form_headers[key].title}: `;
       headers.push([
-        `${form_data.form_headers[key].title}: `,
+        <span className='plotter-series-text'>{title}</span>,
         <input {...input_props} />,
         <br />
       ]);
@@ -213,7 +217,10 @@ export class GenericPlotForm extends React.Component{
 
             <div className='plotter-series-data-title'>
 
-              {'Series Data : '}
+              <span className='plotter-series-text'>
+
+                {'Series Data : '}
+              </span>
               <button {...button_props}>
 
                 <i className='fa fa-plus' aria-hidden='true'></i>
