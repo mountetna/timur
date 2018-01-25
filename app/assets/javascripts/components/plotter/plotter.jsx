@@ -56,6 +56,7 @@ export class Plotter extends React.Component{
     // Variables.
     let {
       all_plots,
+      sections,
       plot_types,
       selected_plot,
       plotable_manifests,
@@ -74,7 +75,8 @@ export class Plotter extends React.Component{
       name: 'Plot',
       create: this.newPlot.bind(this),
       select: this.selectPlot.bind(this),
-      items: all_plots
+      sections
+      //items: all_plots
     };
 
     let plot_view_props = {
@@ -105,15 +107,25 @@ export class Plotter extends React.Component{
   }
 }
 
+const accessFilter = (access, manifests)=>{
+  return manifests.filter(m => m.access == access).sort((a,b) => a > b);
+};
+
 const mapStateToProps = (state = {}, own_props)=>{
 
   // The types of plots offered is a static value. We need to externalize this.
   let plot_types = ['scatter', 'heatmap'];
+  let all_plots = PlotSelector.getAllPlots(state);
+  let sections = {
+    Public: accessFilter('public', all_plots),
+    Private: accessFilter('private', all_plots)
+  };
 
   return {
     plot_types,
+    sections,
+    all_plots,
     selected_plot: PlotSelector.getSelectedPlot(state),
-    all_plots: PlotSelector.getAllPlots(state),
     is_empty_manifests: ManifestSelector.isEmptyManifests(state),
     plotable_manifests: ManifestSelector.getEditableManifests(state),
     loaded_consignments: ConsignmentSelector.getLoadedConsignmentIds(state)
