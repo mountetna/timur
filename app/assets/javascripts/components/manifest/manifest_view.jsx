@@ -20,14 +20,16 @@ export class ManifestView extends React.Component{
       this.state = {
         manifest: ManifestSelector.cloneManifest(props),
         view_mode: 'script',
-        is_editing: false
+        is_editing: (props.manifest.id == 0) ? true : false,
+        page_status: ''
       };
     }
     else{
       this.state = {
         manifest: {},
         view_mode: 'script',
-        is_editing: false
+        is_editing: false,
+        page_status: ''
       };
     }
   }
@@ -43,11 +45,59 @@ export class ManifestView extends React.Component{
      * the current manifest state, then bail. This check MUST happen or else you
      * get a state update loop.
      */
-    if(!this.props.manifest||(this.props.manifest.id==this.state.manifest.id)){
-      return;
+    if(!this.props.manifest) return;
+    if(this.props.manifest.md5sum == this.state.manifest.md5sum) return;
+
+    /*
+     * If the manifest is new (id == 0) or the manifest is editable and we are
+     * in edit mode then turn on editing.
+     */
+    let is_editing = false;
+    if(
+      (this.props.manifest.id == 0) ||
+      (this.props.manifest.is_editable && this.state.is_editing)
+    ){
+      is_editing = true;
     }
 
-    this.setState({manifest: ManifestSelector.cloneManifest(this.props)});
+    /*
+     * At this point we want to clone the manifest so any cancelled changes can
+     * be reversed.
+     */
+    let new_state = {
+      manifest: ManifestSelector.cloneManifest(this.props),
+      is_editing
+    };
+
+    new_state = this.toggleSavedNotice(new_state);
+    this.setState(new_state);
+  }
+
+  /*
+   * This will toggle the 'SAVED' notice 'on' or 'off'. We check that the
+   * manifest is the same (by id) and that the update stamps are different
+   * (which indicates a successful save).
+   */
+  toggleSavedNotice(new_state){
+    if(
+      (this.props.manifest.id == this.state.manifest.id) ||
+      (this.props.manifest.id > 0 && this.state.manifest.id == 0)
+    ){
+      if(
+        new Date(this.props.manifest.updated_at).getTime() >
+        new Date(this.state.manifest.updated_at).getTime()
+      ){
+        new_state['page_status'] = 'SAVED';
+        let status = ()=>{
+          this.setState({
+            'page_status': (this.state.is_editing) ? 'EDITING': ''
+          });
+        }
+        setTimeout(status.bind(this), 1500);
+      }
+    }
+
+    return new_state;
   }
 
   updateField(field_name){
@@ -78,6 +128,7 @@ export class ManifestView extends React.Component{
 
   updateManifest(){
     let manifest = this.state.manifest;
+    this.setState({page_status: 'SAVING...'});
 
     // A new manifest should have an id set to 0.
     if(manifest.id <= 0){
@@ -100,14 +151,21 @@ export class ManifestView extends React.Component{
     }
 
     // Reset the manifest
-    this.setState({manifest: ManifestSelector.cloneManifest(this.props)});
+    this.setState({
+      manifest: ManifestSelector.cloneManifest(this.props),
+      page_status: ''
+    });
 
     // Turn of the editing mode.
     this.toggleEdit();
   }
 
   toggleEdit(){
-    this.setState({view_mode: 'script', is_editing: (!this.state.is_editing)});
+    this.setState({
+      view_mode: 'script',
+      is_editing: (!this.state.is_editing),
+      page_status: (!this.state.is_editing) ? 'EDITING' : ''
+    });
   }
 
   addElement(){
@@ -310,7 +368,7 @@ export class ManifestView extends React.Component{
     if(this.props.manifest == null) return null;
 
     let {name, user, updated_at, description, access} = this.state.manifest;
-    let {is_editing} = this.state;
+    let {is_editing, page_status} = this.state;
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let input_props = {
@@ -372,7 +430,7 @@ export class ManifestView extends React.Component{
               <ButtonBar className='manifest-action-btn-group' buttons={buttons} />
               <span style={{float: 'right'}}>
 
-                {(is_editing) ? 'EDIT MODE' : ''}
+                {page_status}
               </span>
             </div>
             <br />
