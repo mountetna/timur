@@ -8,7 +8,6 @@ import ManifestView from './manifest_view';
 
 // Module imports.
 import {requestManifests} from '../../actions/manifest_actions';
-//import {getSelectedManifest, getAllManifests} from '../../selectors/manifest_selector';
 import * as ManifestSelector from '../../selectors/manifest_selector';
 
 // Main component for viewing/editing manifests.
