@@ -11,7 +11,7 @@ export const getSelectedManifest = (state)=>{
     let date = new Date;
     return {
       id: 0,
-      access: 'public',
+      access: 'private',
       name: '',
       description: '',
       project: '',
