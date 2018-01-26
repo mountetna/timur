@@ -1,4 +1,4 @@
-import { headers, parseJSON, checkStatus } from './fetch_utils'
+import {headers, parseJSON, checkStatus} from './fetch_utils';
 
 export const fetchManifests = (exchange)=>{
   let route_opts = {
@@ -90,4 +90,3 @@ export const getConsignmentsByManifestId = (manifest_ids, record_name, exchange)
 
   return exchangePromise;
 };
-
