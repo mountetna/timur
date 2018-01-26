@@ -66,6 +66,7 @@ export class ManifestView extends React.Component{
      */
     let new_state = {
       manifest: ManifestSelector.cloneManifest(this.props),
+      view_mode: 'script',
       is_editing
     };
 
