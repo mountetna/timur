@@ -470,7 +470,7 @@ const mapStateToProps = (state = {}, own_props)=>{
    */
   let consignment = null;
   if(!own_props.is_editing){
-    consignment = selectConsignment(state, own_props.manifest.id);
+    consignment = selectConsignment(state, own_props.manifest.md5sum_data);
   }
 
   return {...own_props, consignment};
@@ -479,7 +479,6 @@ const mapStateToProps = (state = {}, own_props)=>{
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
     requestConsignments: (manifest)=>{
-      manifest = ManifestActions.manifestToReqPayload(manifest);
       dispatch(ManifestActions.requestConsignments([manifest]));
     },
 

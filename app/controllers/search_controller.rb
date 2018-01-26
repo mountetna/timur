@@ -1,4 +1,5 @@
 require 'csv'
+require 'digest'
 
 class SearchController <  ApplicationController
   include ActionController::Live
@@ -75,47 +76,54 @@ class SearchController <  ApplicationController
   end
 
   def consignment_json
-    render(fetch_consignments(params[:queries]))
+    manifests = params[:queries].map do |manifest|
+      process_manifest(manifest)
+    end
+
+    # We return the consignments with the md5 of the manifest data as the key.
+    render(fetch_consignments(manifests))
   end
 
   def consignment_by_manifest_id_json
 
     # Pull the manifests by their ids.
     manifests = params[:manifest_ids].map do |manifest_id|
-      manifest = Manifest.find_by_id(manifest_id)
-
-      # Append the record name to the manifest as it needs it for processing.
-      manifest_elements = [
-        ['record_name', "'#{params[:record_name]}'"]
-      ]
-
-      # Translate the manifests into a form usable by DataManifest.
-      manifest[:data]['elements'].each do |manifest_element|
-        manifest_elements.push([
-          manifest_element['name'],
-          manifest_element['script']
-        ])
-      end
-
-      {
-        id: manifest[:id],
-        name: manifest[:name],
-        manifest_elements: manifest_elements
-      }
+      process_manifest(Manifest.find_by_id(manifest_id))
     end
 
-    # We return the consignments with the manifest ids as the key.
+    # We return the consignments with the md5 of the manifest data as the key.
     render(fetch_consignments(manifests))
   end
 
   private
+
+  def process_manifest(manifest)
+    # Append the record name to the manifest as it needs it for processing.
+    manifest_elements = [
+      ['record_name', "'#{params[:record_name]}'"]
+    ]
+
+    # Translate the manifests into a form usable by DataManifest.
+    manifest[:data]['elements'].each do |manifest_element|
+      manifest_elements.push([
+        manifest_element['name'],
+        manifest_element['script']
+      ])
+    end
+
+    {
+      md5sum_data: Digest::MD5.hexdigest(manifest['data'].to_json),
+      name: manifest[:name],
+      manifest_elements: manifest_elements
+    }
+  end
 
   def fetch_consignments(queries)
     begin
       consignment = Hash[
         queries.map do |query|
           [
-            query[:id],
+            query[:md5sum_data],
             Archimedes::Manifest.new(
               token,
               params[:project_name],

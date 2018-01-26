@@ -41,7 +41,7 @@ const mapStateToProps = (state = {}, own_props)=>{
     selected_manifest = state.manifests[selected_plot.manifest_id];
   }
   if(selected_manifest != undefined){
-    selected_consignment = state.consignments[selected_plot.manifest_id];
+    selected_consignment = state.consignments[selected_manifest.md5sum_data];
   }
   if(selected_consignment != undefined){
     selected_consignment = new Consignment(selected_consignment);

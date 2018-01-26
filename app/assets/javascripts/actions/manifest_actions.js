@@ -1,7 +1,7 @@
 // Module imports.
 import {showMessages} from './message_actions';
 import {Exchange} from './exchange_actions';
-import * as ManifestAPI from '../api/manifests';
+import * as ManifestAPI from '../api/manifests_api';
 
 // Add retrieved manifests to the store.
 const loadManifests = (manifestsById)=>({
@@ -36,10 +36,14 @@ export const selectManifest = (id)=>({
   id
 });
 
-export const addConsignment = (id, consignment)=>{
+/*
+ * The md5sum is of the json stringified manifest data, which is used as an id
+ * for the consignment.
+ */
+export const addConsignment = (md5sum, consignment)=>{
   return {
     type: 'ADD_CONSIGNMENT',
-    manifest_id: id,
+    manifest_data_md5sum: md5sum,
     consignment: consignment
   };
 };
@@ -154,8 +158,12 @@ export const requestConsignments = (manifests, success, error)=>{
 
   return (dispatch)=>{
     let localSuccess = (response)=>{
-      for(let id in response){
-        dispatch(addConsignment(id, response[id]));
+      /*
+       * The md5sum is of the json stringified manifest data, which is used as
+       * an id for the consignment.
+       */
+      for(let md5sum in response){
+        dispatch(addConsignment(md5sum, response[md5sum]));
       }
 
       if(success != undefined) success(response);
@@ -204,7 +212,13 @@ export const requestConsignmentsByManifestId = (manifest_ids, record_name)=>{
   return (dispatch)=>{
 
     let localSuccess = (response)=>{
-      for(let id in response) dispatch(addConsignment(id, response[id]));
+      /*
+       * The md5sum is of the json stringified manifest data, which is used as
+       * an id for the consignment.
+       */
+      for(let md5sum in response){
+        dispatch(addConsignment(md5sum, response[md5sum]));
+      }
     };
 
     let localError = (response)=>{
@@ -219,7 +233,7 @@ export const requestConsignmentsByManifestId = (manifest_ids, record_name)=>{
   }
 };
 
-
+/*
 // Convert a manifest to its JSON representation for query endpoint.
 export const manifestToReqPayload = (manifest)=>{
   let {id, name, 'data': {elements}} = manifest;
@@ -232,6 +246,7 @@ export const manifestToReqPayload = (manifest)=>{
 
   return {id, name, manifest_elements};
 };
+*/
 
 const showErrors = (e, dispatch)=>{
   let localError = (json)=>dispatch(showMessages(json.errors));
