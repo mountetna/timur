@@ -98,7 +98,6 @@ export const saveNewManifest = (manifest)=>{
 
     let localSuccess = (response)=>{
       dispatch(addManifest(response.manifest));
-      dispatch(toggleEdit());
       dispatch(selectManifest(response.manifest.id));
     };
 
@@ -115,9 +114,8 @@ export const saveNewManifest = (manifest)=>{
 export const saveManifest = (manifest)=>{
   return (dispatch)=>{
 
-    let localSuccess = (data)=>{
-      dispatch(editManifest(manifest));
-      dispatch(toggleEdit());
+    let localSuccess = (response)=>{
+      dispatch(editManifest(response.manifest));
     };
 
     let localError = (err)=>{
@@ -136,7 +134,6 @@ export const copyManifest = (manifest)=>{
     let localSuccess = (response)=>{
       dispatch(addManifest(response.manifest));
       dispatch(selectManifest(response.manifest.id));
-      dispatch(toggleEdit());
     };
 
     let localError = (err)=>{
