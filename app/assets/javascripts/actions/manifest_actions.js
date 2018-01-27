@@ -233,21 +233,6 @@ export const requestConsignmentsByManifestId = (manifest_ids, record_name)=>{
   }
 };
 
-/*
-// Convert a manifest to its JSON representation for query endpoint.
-export const manifestToReqPayload = (manifest)=>{
-  let {id, name, 'data': {elements}} = manifest;
-  let manifest_elements = elements.reduce((acc, {name, script})=>{
-    if(name !== '' && script !== ''){
-      return [...acc, [name, script]];
-    }
-    return acc;
-  }, []);
-
-  return {id, name, manifest_elements};
-};
-*/
-
 const showErrors = (e, dispatch)=>{
   let localError = (json)=>dispatch(showMessages(json.errors));
   e.response.json()
