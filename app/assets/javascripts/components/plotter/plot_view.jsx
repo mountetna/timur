@@ -490,10 +490,7 @@ const mapStateToProps = (state = {}, own_props)=>{
   let selected_consignment = null;
 
   if(own_props.selected_plot){
-    selected_consignment = ConsignmentSelector.selectConsignment(
-      state,
-      state.manifestsUI.selected
-    );
+    selected_consignment = state.consignments[selected_manifest.md5sum_data];
   }
 
   return {
