@@ -23,8 +23,7 @@ export const getSelectedManifest = (state)=>{
       user: {
         name: ''
       },
-      is_editable: true,
-      plots_id: ''
+      is_editable: true
     };
   }
 
