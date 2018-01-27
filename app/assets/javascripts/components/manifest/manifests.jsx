@@ -7,7 +7,7 @@ import ListMenu from '../list_menu';
 import ManifestView from './manifest_view';
 
 // Module imports.
-import {requestManifests} from '../../actions/manifest_actions';
+import * as ManifestActions from '../../actions/manifest_actions';
 import * as ManifestSelector from '../../selectors/manifest_selector';
 
 // Main component for viewing/editing manifests.
@@ -66,9 +66,7 @@ const accessFilter = (access, manifests)=>{
 };
 
 const mapStateToProps = (state = {}, own_props)=>{
-  let {manifestsUI: {isEditing}} = state;
   let manifests = ManifestSelector.getAllManifests(state);
-
   let sections = {
     Public: accessFilter('public', manifests),
     Private: accessFilter('private', manifests)
@@ -83,7 +81,7 @@ const mapStateToProps = (state = {}, own_props)=>{
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
     requestManifests: ()=>{
-      dispatch(requestManifests());
+      dispatch(ManifestActions.requestManifests());
     },
 
     selectManifest: (id)=>{
