@@ -4,11 +4,11 @@ import * as ReactRedux from 'react-redux';
 
 // Class imports.
 import ButtonBar from '../button_bar';
+import Consignment from '../../models/consignment';
 
 // Module imports.
 import {manifestScript} from './manifest_script';
 import {manifestResult} from './manifest_result';
-import {selectConsignment} from '../../selectors/consignment_selector';
 import * as ManifestActions from '../../actions/manifest_actions';
 import * as ManifestSelector from '../../selectors/manifest_selector';
 
@@ -464,13 +464,11 @@ export class ManifestView extends React.Component{
 
 const mapStateToProps = (state = {}, own_props)=>{
 
-  /*
-   * Only return a possible consignment (there won't be one if we havent yet run
-   * the query) if we are not in an edit mode.
-   */
   let consignment = null;
-  if(!own_props.is_editing){
-    consignment = selectConsignment(state, own_props.manifest.md5sum_data);
+  if(state.consignments[own_props.manifest.md5sum_data]){
+    consignment = new Consignment(
+      state.consignments[own_props.manifest.md5sum_data]
+    );
   }
 
   return {...own_props, consignment};
