@@ -1,3 +1,21 @@
+// Framework libraries.
+import * as Reselect from 'reselect';
+
+// Class imports.
+import Consignment from '../models/consignment';
+
+const selectConsignmentData = (state, manifest_md5sum_data)=>{
+  return state.consignments[manifest_md5sum_data];
+};
+
+// A cached construction of a Consignment object from a given consignment JSON.
+export const selectConsignment = Reselect.createSelector(
+  selectConsignmentData,
+  (consignment_data)=>{
+    return (consignment_data ? new Consignment(consignment_data) : null);
+  }
+);
+
 /*
  * Get the consignment id's (which should be the same as the manifest ids). We 
  * can use this to tell which consignments have been loaded. This way we don't

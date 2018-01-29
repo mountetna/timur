@@ -5,11 +5,12 @@ import * as ReactRedux from 'react-redux';
 // Class imports.
 import {GenericPlotAttribute} from './generic_plot_attribute';
 import BarPlot from '../../plotter/plots/bar_plot';
+import Consignment from '../../../models/consignment';
 
 // Module imports.
 import * as ManifestActions from '../../../actions/manifest_actions';
 import * as Colors from '../../../utils/colors';
-import Consignment from '../../../models/consignment';
+import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 
 export class BarPlotAttribute extends GenericPlotAttribute{
   render(){
@@ -41,10 +42,10 @@ const mapStateToProps = (state = {}, own_props)=>{
     selected_manifest = state.manifests[selected_plot.manifest_id];
   }
   if(selected_manifest != undefined){
-    selected_consignment = state.consignments[selected_manifest.md5sum_data];
-  }
-  if(selected_consignment != undefined){
-    selected_consignment = new Consignment(selected_consignment);
+    selected_consignment = ConsignmentSelector.selectConsignment(
+      state,
+      selected_manifest.md5sum_data
+    );
   }
 
   /*

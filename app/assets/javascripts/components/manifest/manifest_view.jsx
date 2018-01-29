@@ -11,6 +11,7 @@ import {manifestScript} from './manifest_script';
 import {manifestResult} from './manifest_result';
 import * as ManifestActions from '../../actions/manifest_actions';
 import * as ManifestSelector from '../../selectors/manifest_selector';
+import * as ConsignmentSelector from '../../selectors/consignment_selector';
 
 export class ManifestView extends React.Component{
   constructor(props){
@@ -463,13 +464,10 @@ export class ManifestView extends React.Component{
 }
 
 const mapStateToProps = (state = {}, own_props)=>{
-
-  let consignment = null;
-  if(state.consignments[own_props.manifest.md5sum_data]){
-    consignment = new Consignment(
-      state.consignments[own_props.manifest.md5sum_data]
-    );
-  }
+  let consignment = ConsignmentSelector.selectConsignment(
+    state,
+    own_props.manifest.md5sum_data
+  );
 
   return {...own_props, consignment};
 };
