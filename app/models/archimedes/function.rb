@@ -18,7 +18,7 @@ module Archimedes
       end
 
       def is_func?(function_name)
-        self.name.split(/::/).last.underscore == function_name.to_s
+        self.name.split(/::/).last.snake_case == function_name.to_s
       end
     end
 
