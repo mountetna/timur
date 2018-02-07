@@ -39,3 +39,13 @@ tmp
 # Ignore jest reporting files
 /coverage
 /spec/examples.txt
+
+#Ignore files 
+*.json
+*.csv
+*.sql 
+*.yml
+
+config/secrets.yml
+
+

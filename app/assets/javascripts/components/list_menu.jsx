@@ -17,9 +17,9 @@ import * as React from 'react';
 
 export default class ListMenu extends React.Component{
 
-  listSelection({id, title, name}, index){
+  listSelection({id, title, name, class_name}, index){
       var btn_props = {
-        'className': 'list-selection',
+        'className': class_name || 'list-selection',
         'title': title,
         'key': 'list-'+id,
         'onClick': ()=>{
