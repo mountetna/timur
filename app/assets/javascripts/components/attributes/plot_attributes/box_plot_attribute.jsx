@@ -14,6 +14,7 @@ import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 
 export class BoxPlotAttribute extends GenericPlotAttribute{
   render(){
+    if(this.props.selected_plot == undefined) return null;
 
     let box_plot_props = {
       ymin: 0,

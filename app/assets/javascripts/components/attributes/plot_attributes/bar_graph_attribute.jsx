@@ -19,6 +19,7 @@ export class BarGraphAttribute extends GenericPlotAttribute{
   }
 
   render(){
+    if(this.props.selected_plot == undefined) return null;
 
     /*
      * When I rebuilt this component 'ymin', 'ymax', 'datumKey' were undefined.
