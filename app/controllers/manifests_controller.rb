@@ -13,9 +13,10 @@ class ManifestsController < ApplicationController
 
     # Pull the manifests from the database.
     manifests = Manifest.where(
-      '(user_id = ? OR access = ?) AND project = ?',
+      '(user_id = ? OR access IN (?, ?)) AND project = ?',
       current_user.id,
       'public',
+      'view',
       params[:project_name]
     ).all
 
