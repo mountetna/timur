@@ -123,6 +123,27 @@
 .consignment-table{
   border: 1px solid #333;
   margin-top: 10px;
+  font-family: monospace;
+  font-size: 1.1em;
+  border-spacing: 0px;
+  font-weight: 100;
+}
+
+.consignment-table thead{
+  border-bottom: 1px solid #666;
+}
+
+.consignment-table td{
+  /*border-right: 1px solid #666;*/
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.consignment-table th{
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .consignment-btn{
@@ -130,7 +151,8 @@
   cursor: pointer;
 }
 
-.consignment-matrix{
+.consignment-matrix,
+.consignment-vector{
   margin-top: 10px;
 }
 
