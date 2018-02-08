@@ -19,10 +19,7 @@ export class GenericPlotAttribute extends React.Component{
       selected_consignment,
       selected_manifest,
       fetchConsignment
-    } = this.props;
-
-    // When the consignment resolves we should set it on the properties.
-    selected_consignment = next_props.selected_consignment;
+    } = next_props;
 
     /*
      * If we don't have the consignment (data) we need for the plot but we do
