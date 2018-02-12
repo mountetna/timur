@@ -14,10 +14,13 @@ class PlotsController < ApplicationController
   end
 
   def fetch
+
+    # Pull the plots from the database.
     plots = Plot.where(
-      '(user_id = ? OR access = ?) AND project = ?',
+      '(user_id = ? OR access IN (?, ?)) AND project = ?',
       current_user.id,
       'public',
+      'view',
       params[:project_name]
     ).all
 

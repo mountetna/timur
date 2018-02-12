@@ -14,6 +14,8 @@ import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 
 export class LinePlotAttribute extends GenericPlotAttribute{
   render(){
+    if(this.props.selected_plot == undefined) return null;
+
     let line_plot_props = {
       ylabel: 'sample count',
       xlabel: '',

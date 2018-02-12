@@ -13,12 +13,8 @@ import * as Colors from '../../../utils/colors';
 import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 
 export class BarGraphAttribute extends GenericPlotAttribute{
-  constructor(props){
-    super(props);
-    this.props.initialized(this.constructor.name);
-  }
-
   render(){
+    if(this.props.selected_plot == undefined) return null;
 
     /*
      * When I rebuilt this component 'ymin', 'ymax', 'datumKey' were undefined.

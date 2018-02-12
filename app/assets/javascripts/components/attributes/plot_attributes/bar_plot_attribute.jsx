@@ -14,6 +14,8 @@ import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 
 export class BarPlotAttribute extends GenericPlotAttribute{
   render(){
+    if(this.props.selected_plot == undefined) return null;
+
     let {selected_plot, bars} = this.props;
     let bar_plot_props = {
       ymin: 0,
