@@ -32,12 +32,13 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
     // Handle success from 'getView'.
     var localSuccess = (response)=>{
 
+      let tab;
       if(response.views[model_nm].tabs[tab_nm] == null){
-        localError('There was no matching view for the tab you requested.');
-        return;
+        tab = response.views[model_nm].tabs['default'];
       }
-
-      let tab = response.views[model_nm].tabs[tab_nm];
+      else{
+        tab = response.views[model_nm].tabs[tab_nm];
+      }
 
       // Request the documents needed to populate this 'tab'.
       let exchange_name = `tab ${tab_nm} for ${model_nm} ${rec_nm}`;
