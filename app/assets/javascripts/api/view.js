@@ -29,3 +29,18 @@ export const getUser = (exchange)=>{
 
   return exchangePromise;
 };
+
+export const updateView = (model_name, model_obj, exchange)=>{
+  let route_opts = {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf'),
+    body: JSON.stringify(model_obj)
+  };
+
+  let exchangePromise = exchange.fetch(Routes.update_view_json_path(PROJECT_NAME), route_opts)
+    .then(checkStatus)
+    .then(parseJSON);
+
+  return exchangePromise;
+};

@@ -20,4 +20,12 @@ class SettingsController < ApplicationController
       )
     })
   end
+
+  def update_view_json
+    if params.nil? 
+      render :json => { :errors => ["View data does not exist."] }, :status => 404
+    else
+      render :json => { :message => ["View data available."]}, status => 200
+    end
+  end
 end

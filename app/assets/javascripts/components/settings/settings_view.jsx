@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 import ListMenu from '../list_menu';
 import ButtonBar from '../button_bar';
-import {requestViewSettings} from '../../actions/timur_actions';
+import {requestViewSettings, updateViewSettings} from '../../actions/timur_actions';
 import { selectConsignment } from '../../selectors/consignment_selector';
 
 export class SettingsView extends React.Component{
@@ -11,10 +11,12 @@ export class SettingsView extends React.Component{
     super(props);
 
     this.state = {
+      str_selected_view_settings_tab: '',
       selected_model: null,
       selected_view_settings: '',
       is_editing: false,
-      page_status: ''
+      page_status: '', 
+      props_views_key: ''
     };
   }
   
@@ -27,21 +29,22 @@ export class SettingsView extends React.Component{
     return JSON.parse(JSON.stringify(this.props.views.views[selected_model]));
   }
 
+  stringifyViewTab(selected_model){
+
+    return JSON.stringify(this.props.views.views[selected_model].tabs, null, 2);
+  }
+
   updateField(property){
     return (event)=>{
 
-      let views = this.state.selected_view_settings;
+      let {str_selected_view_settings_tab} = this.state;
       switch(property) {
         case 'tabs': 
-          views[property] = JSON.parse(event.target.value);
-          break;
-        case 'model_name': 
-          views[property] = event.target.value;
+          this.setState({str_selected_view_settings_tab: event.target.value});
           break;
         default:
           return;
       }
-      this.setState({selected_view_settings: views});
     };
   }
 
@@ -65,7 +68,7 @@ export class SettingsView extends React.Component{
   editingButtons(){
     return [
       {
-        click: () => {},
+        click: this.saveEdit.bind(this),
         icon: 'floppy-o',
         label: ' SAVE'
       },
@@ -77,11 +80,27 @@ export class SettingsView extends React.Component{
     ].filter(button=>button);
   }
 
+  saveEdit() {
+    let {selected_view_settings, str_selected_view_settings_tab, selected_model} = this.state;
+
+    try {
+      selected_view_settings.tabs = JSON.parse(str_selected_view_settings_tab);
+      this.setState({selected_view_settings});
+    } 
+    catch(e) {
+      alert(e); // error in the above string (in this case, yes)!
+      return;
+    }
+    
+    this.props.updateEditViewSettings(selected_model, selected_view_settings);
+  }
+
   cancelEdit(){
 
     // Reset the vuew
     this.setState({
       selected_view_settings: this.cloneView(this.state.selected_model),
+      str_selected_view_settings_tab: this.stringifyViewTab(this.state.selected_model),
       page_status: ''
     });
 
@@ -97,14 +116,14 @@ export class SettingsView extends React.Component{
   }
 
   // This is the main panel in which we inspect view code.
-  renderViewInspector(){
+  renderViewTab(){
 
     let disabled = (!this.state.is_editing) ? 'disabled' : '';
-    let tabs_code = this.state.selected_view_settings.tabs;
+    let tab_code = this.state.str_selected_view_settings_tab;
     let tabs_attributes = {
 
       className: `${disabled} settings-view-tab-group`,
-      value: JSON.stringify(tabs_code, null, 2),
+      value: tab_code,
       onChange: this.updateField('tabs'),
       disabled
     };
@@ -122,11 +141,10 @@ export class SettingsView extends React.Component{
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let input_props = {
-      className: `${disabled} settings-view-model-title-input`,
-      onChange: this.updateField('model_name'),
+      className: 'disabled settings-view-model-title-input',
       value: selected_view_settings.model_name,
       type: 'text',
-      disabled
+      readOnly: 'readOnly'
     };
 
     let buttons;
@@ -154,7 +172,7 @@ export class SettingsView extends React.Component{
           </div>
           <br />
         </div>
-        { this.renderViewInspector() }
+        { this.renderViewTab() }
       </div>
     );
   }
@@ -167,7 +185,7 @@ export class SettingsView extends React.Component{
 
       let {views} = this.props.views;
       let view_items = Object.keys(views).map((key, index) => ({ 
-        name: key, 
+        name: views[key].model_name, 
         id: index,  
         class_name: 'left-column-selection-btn' 
       }));
@@ -178,7 +196,8 @@ export class SettingsView extends React.Component{
         select: (id)=>{ 
           this.setState({
             selected_model: view_items[id].name,
-            selected_view_settings: this.cloneView(view_items[id].name)
+            selected_view_settings: this.cloneView(view_items[id].name),
+            str_selected_view_settings_tab: this.stringifyViewTab(view_items[id].name)
           });
         },
         items: view_items,
@@ -210,7 +229,11 @@ const mapDispatchToProps = (dispatch, own_props)=>{
   return {
     fetchViewSettings: ()=>{
       dispatch(requestViewSettings());
-    }
+    },
+    
+    updateEditViewSettings: (model_name, model_obj)=>{
+      dispatch(updateViewSettings(model_name, model_obj));
+    },
   };
 };
 

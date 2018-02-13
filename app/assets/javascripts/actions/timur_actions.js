@@ -1,5 +1,5 @@
 // Class imports.
-import {getView, getUser} from '../api/view';
+import {getView, getUser, updateView} from '../api/view';
 import {showMessages} from './message_actions';
 import {requestDocuments} from './magma_actions';
 import {Exchange} from './exchange_actions';
@@ -107,4 +107,24 @@ export const requestViewSettings = ()=>{
       .then(localSuccess)
       .catch(localError);     
   };
+};
+
+export const updateViewSettings = (model_name, model_obj) => {
+  return (dispatch)=> {
+
+    let localSuccess = (response)=>{
+      console.log('local success from updateViewSettings!');
+      console.log(response);
+    };
+
+    let localError = (err)=>{
+      console.log(err);
+    };
+
+    let exchange = new Exchange(dispatch,'updating view settings'); 
+    updateView(model_name, model_obj, exchange)
+      .then(localSuccess)
+      .catch(localError);     
+  };
+
 };

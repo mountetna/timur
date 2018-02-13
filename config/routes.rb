@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   # post ':project_name/settings/update/:id' => 'settings#update', as: :settings_view_update
   # post ':project_name/settings/user_json'=> 'settings#user_json', as: :settings_user_json
   get ':project_name/settings/' => 'settings#index'
-  # post ':project_name/settings/view_json' => 'setting#view_json', as: :settings_view_json
+  post ':project_name/settings/update_view_json'  => 'settings#update_view_json', as: :update_view_json
   get ':project_name/settings/:settings_page' => 'settings#index'
 
   # browse_controller.rb
