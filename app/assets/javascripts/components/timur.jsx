@@ -8,6 +8,7 @@ import {applyMiddleware, createStore} from 'redux';
 import {ManifestsContainer as Manifests} from './manifest/manifests';
 import {BrowserContainer as Browser} from './browser/browser';
 import {PlotterContainer as Plotter} from './plotter/plotter';
+import {Settings} from './settings/settings';
 import ModelMap from './model_map';
 import Search from './search/search';
 import Activity from './activity';
@@ -51,9 +52,16 @@ var Timur = React.createClass({
       'is_admin': this.props.is_admin,
     };
 
+    let settings_props = {
+      'current_user': this.props.user,
+      'is_admin': this.props.is_admin,
+      'mode': this.props.mode,
+      'settings_page': this.props.settings_page
+    };
+
     var plots_props = {
       'project_name': this.props.project_name,
-    }
+    };
 
     switch(this.props.mode){
       case 'manifests':
@@ -71,9 +79,12 @@ var Timur = React.createClass({
       case 'search':
         component = <Search  {...search_props} />; 
         break;
+      case 'settings':
+        component = <Settings {...settings_props}/>; 
+        break;
       case 'activity':
         component = <Activity activities={this.props.activities} />;
-        break;
+        break;      
       case 'noauth':
         component = <Noauth user={this.props.user} />;
         break;

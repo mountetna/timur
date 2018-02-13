@@ -41,8 +41,13 @@ class BrowseController < ApplicationController
 
   # Get the tab view data. The tab view data is a json representation of a
   # front-end layout.
-  def view_json
-    view = ViewTab.retrieve_view(params[:project_name], params[:model_name])
+  def view_json]
+    if(params[:model_name] == 'all')
+      view = pull_all_views
+    else
+      view = ViewTab.retrieve_view(params[:project_name], params[:model_name])
+    end
+
     render(json: view)
   end
 
@@ -57,5 +62,20 @@ class BrowseController < ApplicationController
     rescue Magma::ClientError => e
       render json: e.body, status: e.status
     end
+  end
+ 
+  private
+
+  def pull_all_views
+    views = Hash[
+      :views,
+      {}
+    ]
+
+    ViewTab.where(project: params[:project_name]).all.each do |tab|
+      view_tab = ViewTab.retrieve_view(tab.project, tab.model)
+      views[:views][tab.model] = view_tab[:views][tab.model]
+    end
+    return views
   end
 end
