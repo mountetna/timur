@@ -12,8 +12,6 @@ Rails.application.routes.draw do
   get 'auth_error'=> 'welcome#auth_error', as: :auth_error
 
   # setting_controller.rb
-  # post ':project_name/settings/update/:id' => 'settings#update', as: :settings_view_update
-  # post ':project_name/settings/user_json'=> 'settings#user_json', as: :settings_user_json
   get ':project_name/settings/' => 'settings#index'
   post ':project_name/settings/update_view_json'  => 'settings#update_view_json', as: :update_view_json
   get ':project_name/settings/:settings_page' => 'settings#index'
