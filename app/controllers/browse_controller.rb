@@ -41,13 +41,13 @@ class BrowseController < ApplicationController
 
   # Get the tab view data. The tab view data is a json representation of a
   # front-end layout.
-  def view_json]
+
+  def view_json
     if(params[:model_name] == 'all')
       view = pull_all_views
     else
       view = ViewTab.retrieve_view(params[:project_name], params[:model_name])
     end
-
     render(json: view)
   end
 
