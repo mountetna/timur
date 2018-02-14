@@ -11,12 +11,11 @@ export class SettingsView extends React.Component{
     super(props);
 
     this.state = {
-      str_selected_view_settings_tab: '',
-      selected_model: null,
-      selected_view_settings: '',
+      view_settings_string: '',
+      view_settings_object: null,
+      selected_model_name: null,
       is_editing: false,
-      page_status: '', 
-      props_views_key: ''
+      page_status: ''
     };
   }
   
@@ -24,23 +23,23 @@ export class SettingsView extends React.Component{
     this.props.fetchViewSettings();
   }
 
-  cloneView(selected_model){
+  cloneView(selected_model_name){
     
-    return JSON.parse(JSON.stringify(this.props.views.views[selected_model]));
+    return JSON.parse(JSON.stringify(this.props.views.views[selected_model_name]));
   }
 
-  stringifyViewTab(selected_model){
+  stringifyViewTab(selected_model_name){
 
-    return JSON.stringify(this.props.views.views[selected_model].tabs, null, 2);
+    return JSON.stringify(this.props.views.views[selected_model_name].tabs, null, 2);
   }
 
   updateField(property){
     return (event)=>{
 
-      let {str_selected_view_settings_tab} = this.state;
+      let {view_settings_string} = this.state;
       switch(property) {
-        case 'tabs': 
-          this.setState({str_selected_view_settings_tab: event.target.value});
+        case 'tabs':
+          this.setState({view_settings_string: event.target.value});
           break;
         default:
           return;
@@ -81,30 +80,34 @@ export class SettingsView extends React.Component{
   }
 
   saveEdit() {
-    let {selected_view_settings, str_selected_view_settings_tab, selected_model} = this.state;
+    let {
+      view_settings_object, 
+      view_settings_string, 
+      selected_model_name
+    } = this.state;
 
     try {
-      selected_view_settings.tabs = JSON.parse(str_selected_view_settings_tab);
-      this.setState({selected_view_settings});
+      view_settings_object.tabs = JSON.parse(view_settings_string);
+      this.setState({view_settings_object});
     } 
     catch(e) {
-      alert(e); // error in the above string (in this case, yes)!
+      alert(e); // Alert JSON parse error.
       return;
     }
     
-    this.props.updateEditViewSettings(selected_model, selected_view_settings);
+    this.props.updateEditViewSettings(selected_model_name, view_settings_object);
   }
 
   cancelEdit(){
 
-    // Reset the vuew
+    // Reset the view.
     this.setState({
-      selected_view_settings: this.cloneView(this.state.selected_model),
-      str_selected_view_settings_tab: this.stringifyViewTab(this.state.selected_model),
+      view_settings_object: this.cloneView(this.state.selected_model_name),
+      view_settings_string: this.stringifyViewTab(this.state.selected_model_name),
       page_status: ''
     });
 
-    // Turn of the editing mode.
+    // Turn off the editing mode.
     this.toggleEdit();
   }
 
@@ -119,7 +122,7 @@ export class SettingsView extends React.Component{
   renderViewTab(){
 
     let disabled = (!this.state.is_editing) ? 'disabled' : '';
-    let tab_code = this.state.str_selected_view_settings_tab;
+    let tab_code = this.state.view_settings_string;
     let tabs_attributes = {
 
       className: `${disabled} settings-view-tab-group`,
@@ -137,12 +140,12 @@ export class SettingsView extends React.Component{
 
   rendeRightColumnGroup() {
 
-    let { selected_view_settings, is_editing, page_status } = this.state;
+    let {view_settings_object, is_editing, page_status} = this.state;
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let input_props = {
       className: 'disabled settings-view-model-title-input',
-      value: selected_view_settings.model_name,
+      value: view_settings_object.model_name,
       type: 'text',
       readOnly: 'readOnly'
     };
@@ -172,22 +175,21 @@ export class SettingsView extends React.Component{
           </div>
           <br />
         </div>
-        { this.renderViewTab() }
+        {this.renderViewTab()}
       </div>
     );
   }
 
   render(){
     let list_menu_props;
-    let { selected_model } = this.state;
+    let {selected_model_name} = this.state;
   
     if(this.props.views) {
 
       let {views} = this.props.views;
-      let view_items = Object.keys(views).map((key, index) => ({ 
-        name: views[key].model_name, 
-        id: index,  
-        class_name: 'left-column-selection-btn' 
+      let view_items = Object.keys(views).map((key, index) => ({
+        name: views[key].model_name,
+        id: index,
       }));
 
       list_menu_props = {
@@ -195,9 +197,9 @@ export class SettingsView extends React.Component{
         create: function() {},
         select: (id)=>{ 
           this.setState({
-            selected_model: view_items[id].name,
-            selected_view_settings: this.cloneView(view_items[id].name),
-            str_selected_view_settings_tab: this.stringifyViewTab(view_items[id].name)
+            selected_model_name: view_items[id].name,
+            view_settings_object: this.cloneView(view_items[id].name),
+            view_settings_string: this.stringifyViewTab(view_items[id].name)
           });
         },
         items: view_items,
@@ -209,11 +211,11 @@ export class SettingsView extends React.Component{
 
         <div className='left-column-group'>
 
-          { list_menu_props && <ListMenu {...list_menu_props} /> }
+          {list_menu_props && <ListMenu {...list_menu_props} /> }
         </div>
         <div className='right-column-group'>
 
-          { selected_model && this.rendeRightColumnGroup()}
+          {selected_model_name && this.rendeRightColumnGroup()}
         </div>
       </div>
     );
