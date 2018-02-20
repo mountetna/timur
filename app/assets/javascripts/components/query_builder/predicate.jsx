@@ -100,29 +100,25 @@ export default class Predicate extends Component {
 
     choices = choices.filter(_=>_);
 
-    return(
-      <SelectInput defaultValue={ arg } 
-        key={pos}
-        showNone={ showNone }
-        values={ choices }
-        onChange={ this.setInputArgument.bind(this,pos) }
-      />
-    );
+    let input_props = {
+      defaultValue: arg,
+      key: pos,
+      showNone: showNone,
+      values: choices,
+      onChange: this.setInputArgument.bind(this, pos)
+    };
+    return <SelectInput {...} />;
   }
 
   renderVerbInputs() {
     let { verbs, args } = this.props;
-
     if (!args) return null;
 
     return(
       <div className='verbs'>
-        {
-          args.map(this.verbInput.bind(this))
-        }
-        {
-          this.verbInput(null, args.length)
-        }
+
+        {args.map(this.verbInput.bind(this))}
+        {this.verbInput(null, args.length)}
       </div>
     );
   }
@@ -137,12 +133,9 @@ export default class Predicate extends Component {
 
     return(
       <div className={ classNames }>
-        {
-          children
-        }
-        {
-          this.renderVerbInputs()
-        }
+
+        {children}
+        {this.renderVerbInputs()}
       </div>
     );
   }

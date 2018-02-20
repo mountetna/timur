@@ -11,6 +11,11 @@ Rails.application.routes.draw do
   get 'no_auth'=> 'welcome#no_auth', as: :no_auth
   get 'auth_error'=> 'welcome#auth_error', as: :auth_error
 
+  # setting_controller.rb
+  get ':project_name/settings/' => 'settings#index'
+  post ':project_name/settings/update_view_json'  => 'settings#update_view_json', as: :update_view_json
+  get ':project_name/settings/:settings_page' => 'settings#index'
+
   # browse_controller.rb
   get ':project_name'=> 'browse#index', as: :project
   get ':project_name/browse'=> 'browse#index', as: :browse
@@ -24,15 +29,17 @@ Rails.application.routes.draw do
   get ':project_name/search'=> 'search#index', as: :search
   post ':project_name/json/records'=> 'search#records_json', as: :records_json
   post ':project_name/json/consignment'=> 'search#consignment_json', as: :consignment_json
+  post ':project_name/json/consignment_by_manifest_id_json'=> 'search#consignment_by_manifest_id_json', as: :consignment_by_manifest_id_json
   post ':project_name/json/question'=> 'search#question_json', as: :question_json
   post ':project_name/search/table'=> 'search#table_json', as: :table_json
   post ':project_name/search/tsv'=> 'search#table_tsv', as: :table_tsv
 
   # plot_controller.rb
   get ':project_name/plots'=> 'plots#index', as: :plots
-  post ':project_name/manifests/:manifest_id/plots/create'=> 'plots#create', as: :manifests_plots_create
-  put ':project_name/manifests/:manifest_id/plots/update/:id'=> 'plots#update', as: :manifests_plots_update
-  delete ':project_name/manifests/:manifest_id/plots/destroy/:id'=> 'plots#destroy', as: :manifests_plots_destroy
+  post ':project_name/plots/fetch'=> 'plots#fetch', as: :plots_fetch
+  post ':project_name/plots/create'=> 'plots#create', as: :manifests_plots_create
+  put ':project_name/plots/update/:id'=> 'plots#update', as: :manifests_plots_update
+  delete ':project_name/plots/destroy/:id'=> 'plots#destroy', as: :manifests_plots_destroy
 
   # manifest_controller.rb
   get ':project_name/manifests'=> 'manifests#index', as: :manifests

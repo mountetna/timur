@@ -9,15 +9,6 @@ const manifests = (state = {}, action) => {
     case 'ADD_MANIFEST':
     case 'UPDATE_USER_MANIFEST':
       return { ...state, [action.manifest.id]: action.manifest };
-    case 'REMOVE_PLOT':
-      const { manifestId, id } = action;
-      return {
-        ...state,
-        [manifestId]: {
-          ...state[manifestId],
-          plotIds: state[manifestId].plotIds.filter(plotId => id != plotId)
-        }
-      };
     default:
       return state;
   }

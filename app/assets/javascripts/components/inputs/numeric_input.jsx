@@ -10,12 +10,14 @@ import { intFilter, floatFilter } from '../../utils/keycode';
 const floatTransform = (value) => parseFloat(value);
 const intTransform = (value) => parseInt(value.replace(/_/, ''));
 
-const NumericInput = (filter,transform) => ({onChange, ...otherProps}) =>
-  <SlowTextInput 
+const numericInput = (filter,transform) => (WrappedInput) => ({onChange, ...otherProps}) =>
+  <WrappedInput
     onKeyPress={ filter }
     onChange={ (value) => onChange(transform(value)) }
     {...otherProps}
   />;
 
-export const IntegerInput = NumericInput(intFilter, intTransform);
-export const FloatInput = NumericInput(floatFilter, floatTransform);
+export const withIntegerFilter = numericInput(intFilter, intTransform);
+
+export const IntegerInput = withIntegerFilter(SlowTextInput);
+export const FloatInput = numericInput(floatFilter, floatTransform)(SlowTextInput);
