@@ -26,7 +26,7 @@
 
 .manifest-form-title-input{
   border: none;
-  font-size: 1em;
+  font-size: .9em;
   margin-left: 10px;
   width: 300px;
   outline: 1px solid #333;
@@ -90,6 +90,7 @@
 
 .manifest-form-body{
   margin-top: 20px;
+  white-space: pre-line;
 }
 
 .manifest-form-element{
@@ -155,17 +156,25 @@
 .consignment-vector{
   margin-top: 10px;
 }
+.manifest-form-element-pre {
+  word-break: break-all;
+  white-space: pre-wrap;
+  border: 1px solid rgba(158, 158, 158, .9);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: .8em;
+}
 
 .manifest-form-element-textarea{
   width: 100%;
   margin-top: 10px;
-  min-height: 200px;
+  height: 80vw;
+  background: #F9F9FA;
   resize: vertical;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1em;
+  font-size: .8em;
 }
 
 /* Button Styling, as opposed to positioning/layout ***************************/
