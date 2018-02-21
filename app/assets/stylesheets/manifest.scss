@@ -206,6 +206,15 @@
   border: 1px solid #ccc;
 }
 
+.parse-error-message {
+  background: #ffe1e6;
+  float: right;
+  border: none;
+  outline: none;
+  padding:5px;
+  font-size: 0.6em;
+}
+
 /******************************************************************************/
 
 .result {

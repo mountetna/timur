@@ -22,7 +22,8 @@ export class ManifestView extends React.Component{
         manifest: ManifestSelector.cloneManifest(props),
         view_mode: 'script',
         is_editing: (props.manifest.id == 0) ? true : false,
-        page_status: ''
+        page_status: '',
+        parse_error_msg: ''
       };
     }
     else{
@@ -30,7 +31,8 @@ export class ManifestView extends React.Component{
         manifest: {},
         view_mode: 'script',
         is_editing: false,
-        page_status: ''
+        page_status: '',
+        parse_error_msg: ''
       };
     }
   }
@@ -123,10 +125,10 @@ export class ManifestView extends React.Component{
       let manifest = this.state.manifest;
       try {
         manifest.data.elements = JSON.parse(event.target.value);
-        this.setState({manifest});
+        this.setState({manifest, parse_error_msg: ''});
       } 
       catch(e) {
-        alert(e); // Alert JSON parse error.
+        this.setState({parse_error_msg: e.message})
         return;
       }
     };
@@ -238,7 +240,7 @@ export class ManifestView extends React.Component{
   }
 
   renderElementButtons(){
-    let {manifest, view_mode, is_editing} = this.state;
+    let {manifest, view_mode, is_editing, parse_error_msg} = this.state;
     let {consignment, requestConsignments} = this.props;
     let disabled = (!is_editing) ? 'disabled' : '';
 
@@ -274,6 +276,11 @@ export class ManifestView extends React.Component{
           <i className='fa fa-file-code-o' aria-hidden='true'></i>
           {' SHOW SCRIPT'}
         </button>
+        {parse_error_msg && 
+            <span className ='parse-error-message'>
+              {parse_error_msg}
+            </span>
+        }
       </div>
     );
   }
