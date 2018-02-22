@@ -131,8 +131,7 @@ export class ManifestView extends React.Component{
         this.setState({parse_error_msg: ''});
       }
       catch(e) {
-        this.setState({parse_error_msg: e.message})
-
+        this.setState({parse_error_msg: e.message});
         return;
       }
     };
