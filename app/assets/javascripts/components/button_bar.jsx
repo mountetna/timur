@@ -23,7 +23,7 @@ export default class ButtonBar extends React.Component{
  */
 const BarButton = (button)=>{
   return(
-    <button key={button.label} onClick={button.click}>
+    <button key={button.label} onClick={button.click} disabled={button.disabled}>
 
       <i className={`fa fa-${ button.icon }`} aria-hidden='true'></i>
       {button.label}

@@ -123,34 +123,36 @@ export class ManifestView extends React.Component{
   updateElementsArray(){
     return (event)=>{
       let manifest = this.state.manifest;
+      manifest.data.elements = event.target.value;
+      this.setState({manifest});
+
       try {
-        manifest.data.elements = JSON.parse(event.target.value);
-        this.setState({manifest, parse_error_msg: ''});
-      } 
+        JSON.parse(manifest.data.elements)
+        this.setState({parse_error_msg: ''});
+      }
       catch(e) {
         this.setState({parse_error_msg: e.message})
+
         return;
       }
     };
   }
 
-  removeElement(index){
-    let manifest = this.state.manifest;
-
-    // Check that the index is within bounds.
-    if(index > (manifest.data.elements.length-1) || index < 0) return;
-
-    manifest.data.elements.splice(index, 1);
-    this.setState({manifest});
+  cloneManifest() {
+    let {manifest} = this.state;
+    let manifest_elems = JSON.parse(manifest.data.elements);
+    let cloneManifestObject =  JSON.parse(JSON.stringify(manifest));
+    cloneManifestObject.data.elements = manifest_elems;
+    return cloneManifestObject;
   }
 
   updateManifest(){
-    let manifest = this.state.manifest;
+    let {manifest} = this.state;
     this.setState({page_status: 'SAVING...'});
 
     // A new manifest should have an id set to 0.
     if(manifest.id <= 0){
-      this.props.saveNewManifest(manifest);
+      this.props.saveNewManifest(this.cloneManifest());
       return;
     }
 
@@ -158,7 +160,7 @@ export class ManifestView extends React.Component{
      * Here the manifest has a normal id. We don't need to check it but being
      * explicit is good. Just in case the id ends up in a werid state.
      */
-    if(manifest.id > 0) this.props.saveManifest(manifest);
+    if(manifest.id > 0) this.props.saveManifest(this.cloneManifest());
   }
 
   cancelEdit(){
@@ -171,7 +173,8 @@ export class ManifestView extends React.Component{
     // Reset the manifest
     this.setState({
       manifest: ManifestSelector.cloneManifest(this.props),
-      page_status: ''
+      page_status: '',
+      parse_error_msg: ''
     });
 
     // Turn off the editing mode.
@@ -203,7 +206,7 @@ export class ManifestView extends React.Component{
         label: ' PLOT'
       },
       {
-        click: ()=>{copyManifest(manifest);},
+        click: ()=>{copyManifest(this.cloneManifest());},
         icon: 'files-o',
         label: ' COPY'
       },
@@ -225,16 +228,19 @@ export class ManifestView extends React.Component{
   }
 
   editingButtons(){
+    let {manifest, parse_error_msg} = this.state;
     return [
       this.state.manifest && {
         click: this.updateManifest.bind(this),
         icon: 'floppy-o',
-        label: ' SAVE'
+        label: ' SAVE',
+        disabled: parse_error_msg ? 'disabled' : ''
       },
       {
         click: this.cancelEdit.bind(this),
         icon: 'ban',
-        label: ' CANCEL'
+        label: ' CANCEL',
+        disabled: ''
       }
     ].filter(button=>button);
   }
@@ -277,9 +283,9 @@ export class ManifestView extends React.Component{
           {' SHOW SCRIPT'}
         </button>
         {parse_error_msg && 
-            <span className ='parse-error-message'>
-              {parse_error_msg}
-            </span>
+          <span className ='parse-error-message'>
+            {parse_error_msg}
+          </span>
         }
       </div>
     );
@@ -289,20 +295,18 @@ export class ManifestView extends React.Component{
     let {manifest, view_mode, is_editing} = this.state;
     let {consignment} = this.props;
     let disabled = (!is_editing) ? 'disabled' : '';
-    let manifest_elements = manifest.data.elements || [];
-    let elem_str = JSON.stringify(manifest_elements, null, 2);
-    let pretty_elem_str = elem_str.split('\\t').join('\t').split('\\n').join('\n');
+    let manifest_elements = manifest.data.elements || '';
    
     let textarea_props = {
       className: `${disabled} manifest-form-element-textarea`,
       onChange: this.updateElementsArray(),
-      value: elem_str,
+      value: manifest_elements,
       disabled
     };
 
     if(view_mode == 'script' && !is_editing){
       return (
-        <pre className='manifest-form-element-pre'>{pretty_elem_str}</pre>
+        <pre className='manifest-form-element-pre'>{manifest_elements}</pre>
       );
     }
     

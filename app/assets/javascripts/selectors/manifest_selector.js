@@ -44,8 +44,11 @@ export const cloneManifest = (props)=>{
     manifest.data.elements = [];
   }
   else{
+    // Use slice to clone the array.
     manifest.data.elements = props.manifest.data.elements.slice();
   }
+
+  manifest.data.elements = JSON.stringify(manifest.data.elements, null, 2);
 
   return manifest;
 }

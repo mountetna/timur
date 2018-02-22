@@ -167,14 +167,14 @@
 .manifest-form-element-textarea{
   width: 100%;
   margin-top: 10px;
-  height: 80vw;
-  background: #F9F9FA;
+  height: 400px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: .8em;
+  border: solid 2px #22a778;
   resize: vertical;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: .8em;
 }
 
 /* Button Styling, as opposed to positioning/layout ***************************/
