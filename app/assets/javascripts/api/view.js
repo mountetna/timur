@@ -1,17 +1,46 @@
-import { headers, parseJSON, checkStatus } from './fetch_utils'
+import { headers, parseJSON, checkStatus } from './fetch_utils';
 
 export const getView = (model_name, tab_name, exchange)=>{
-  var routeOpts = {
+  let route_opts = {
     method: 'POST',
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
     body: JSON.stringify({ model_name, tab_name })
   };
 
-  var exchangePromise = exchange.fetch(Routes.view_json_path(PROJECT_NAME), routeOpts)
+  let exchangePromise = exchange.fetch(Routes.view_json_path(PROJECT_NAME), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
   return exchangePromise;
 };
 
+export const getUser = (exchange)=>{
+
+  let route_opts = {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf')
+  };
+
+  let exchangePromise = exchange.fetch(Routes.settings_user_json_path(), route_opts)
+    .then(checkStatus)
+    .then(parseJSON);
+
+  return exchangePromise;
+};
+
+export const updateView = (model_name, model_obj, exchange)=>{
+  let route_opts = {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf'),
+    body: JSON.stringify(model_obj)
+  };
+
+  let exchangePromise = exchange.fetch(Routes.update_view_json_path(PROJECT_NAME), route_opts)
+    .then(checkStatus)
+    .then(parseJSON);
+
+  return exchangePromise;
+};

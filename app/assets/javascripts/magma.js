@@ -114,12 +114,15 @@ export default class Magma {
   }
 
   document(model_name, record_name) {
-    if (model_name && this.models[model_name] 
-      && this.models[model_name].documents
-      && this.models[model_name].documents[record_name]) {
-      return this.models[model_name].documents[record_name]
+    if(
+      model_name &&
+      this.models[model_name] &&
+      this.models[model_name].documents &&
+      this.models[model_name].documents[record_name]
+    ){
+      return this.models[model_name].documents[record_name];
     }
-    return null
+    return null;
   }
 
   documents(model_name, record_names, filter) {
@@ -161,8 +164,12 @@ export default class Magma {
     return {}
   }
 
-  template(model_name) {
-    if (model_name && this.models[model_name]) return this.models[model_name].template
-    return null
+  template(model_name){
+    if(model_name && this.models[model_name]){
+      return this.models[model_name].template;
+    }
+    else{
+      return null;
+    }
   }
 }

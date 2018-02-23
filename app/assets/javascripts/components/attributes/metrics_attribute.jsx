@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import { selectConsignment } from '../../selectors/consignment';
+import { selectConsignment } from '../../selectors/consignment_selector';
 import { showMessages } from '../../actions/message_actions';
 
 var CategoryControl = React.createClass({

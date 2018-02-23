@@ -38,9 +38,11 @@ Rails.application.configure do
 
   config.log_level = :debug
 
-  config.serve_static_files = false
+  config.serve_static_files = true
 
   config.pythia_url = "http://localhost:5000/pythia/"
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  config.serve_static_files = true
 end

@@ -75,6 +75,7 @@ class RecordPredicate extends Component {
   }
 
   renderVectors(vectors) {
+
     return(
       <div className='filters'>
         <PredicateChainSet
@@ -94,11 +95,17 @@ class RecordPredicate extends Component {
     let getChildren = this.getChildren.bind(this);
     let vector = this.renderVectors.bind(this);
 
-    return(
-      <Predicate
-        { ...{terms, update, verbs, special, args, vector, getChildren } }
-      />
-    );
+    let pred_props = {
+      terms,
+      update,
+      verbs,
+      special,
+      args,
+      vector,
+      getChildren
+    };
+
+    return <Predicate {...pred_props} />;
   }
 }
 

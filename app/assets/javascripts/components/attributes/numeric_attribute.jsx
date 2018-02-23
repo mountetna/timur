@@ -25,6 +25,7 @@ class NumericAttribute extends Component {
 
   renderInput() {
     let { NumericInput, revision, attribute } = this.props;
+
     return <NumericInput
         onChange={ this.onChange.bind(this) }
         className='full_text'

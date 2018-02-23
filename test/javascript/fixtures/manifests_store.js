@@ -24,8 +24,7 @@ export default {
    user:{
      name:"Darrell Abrau"
     },
-   is_editable:true,
-   plotIds:[]
+   is_editable:true
   },
  9:{
    id:9,
@@ -52,8 +51,7 @@ export default {
    user:{
      name:"Darrell Abrau"
     },
-   is_editable:true,
-   plotIds:[]
+   is_editable:true
   },
  10:{
    id:10,
@@ -75,8 +73,7 @@ export default {
    user:{
      name:"Darrell Abrau"
     },
-   is_editable:true,
-   plotIds:[]
+   is_editable:true
   },
  11:{
    id:11,
@@ -103,10 +100,7 @@ export default {
    user:{
      name:"Darrell Abrau"
     },
-   is_editable:true,
-   plotIds:[
-      3
-    ]
+   is_editable:true
   }
 };
 

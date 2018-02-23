@@ -1,115 +1,119 @@
 @import "globals";
 @import "attribute";
 
+.loader{
+  font-family: $body_font;
+}
+
 .browser {
-	position: relative;
-	padding-top: 30px;
-	.header {
-		font-family: $body_font;
-		position: relative;
-		padding-left: 5%;
-		@keyframes fade {
-			0% { color: forestgreen; }
-			50% { color: midnightblue; }
-			100% { color: forestgreen; }
-		}
-		.edit, .approve, .cancel, .submit {
-			@include header_button;
-			display: inline-block;
-			font-size: 25px;
-			padding-left: 5px;
-		}
-		.submit {
-			animation-name: fade;
-			animation-duration: 1s;
-			animation-iteration-count: infinite;
-		}
-		.inline {
-			display: inline-block;
-		}
-		.model_name {
-			display: inline-block;
-			padding: 0px 5px;
-			color: deeppink;
-		}
-		.record_name {
-			display: inline-block;
-			font-size: 25px;
-		}
-	}
-	.tabbar {
-		font-family: $body_font;
-		display: flex;
-		margin-bottom: 3px;
-		.spacer1 {
-			padding: 5px;
-			border-bottom: 1px solid forestgreen;
-		}
-		.spacer2 {
-			flex-grow: 1;
-			border-bottom: 1px solid forestgreen;
-		}
-		.tab {
-			color: mediumvioletred;
-			background-color: rgba(skyblue,0.2);
-			border: 1px solid forestgreen;
-			display: inline-block;
-			margin-right: -1px;
-			padding: 5px 20px;
-			cursor: pointer;
-		}
-		.revised {
-			background-color: rgba(pink,0.3);
-		}
-		.selected {
-			color: sienna;
-			background-color: rgba(wheat,0.3);
-			cursor: default;
-			border-bottom: none;
-		}
-	}
-	#tab {
-		.pane {
-			margin-bottom: 1px;
-			.title {
-				font-family: $body_font;
-				background-color: rgba(tan,0.3);
-				border: 1px solid tan;
-				border-bottom: none;
-				color: indianred;
-				width: 15%;
-				padding-right: 7px;
-				text-align: right;
-			}
-			.attribute {
-				display: flex;
-				@include default_attribute;
-				.name {
-					border-bottom: 1px solid rgba(forestgreen,0.1);
-					border-right: 1px solid forestgreen;
-					display: inline-block;
-					width: 15%;
-					padding-right: 8px;
-					text-align: right;
-					font-family: $body_font;
-					color: midnightblue;
-				}
-				> .value {
-					border-bottom: 1px solid rgba(forestgreen,0.1);
-					flex-grow: 1;
-					display: inline-block;
-					border-left: 1px solid forestgreen;
-					padding-left: 9px;
-					margin-left: 2px;
-					padding-top: 3px;
-					width: 85%;
-				}
-				&:first-of-type {
-					.name, > .value {
-						border-top: 2px solid forestgreen;
-					}
-				}
-			}
-		}
-	}
+  position: relative;
+  padding-top: 30px;
+  .header {
+    font-family: $body_font;
+    position: relative;
+    padding-left: 5%;
+    @keyframes fade {
+      0% { color: forestgreen; }
+      50% { color: midnightblue; }
+      100% { color: forestgreen; }
+    }
+    .edit, .approve, .cancel, .submit {
+      @include header_button;
+      display: inline-block;
+      font-size: 25px;
+      padding-left: 5px;
+    }
+    .submit {
+      animation-name: fade;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+    }
+    .inline {
+      display: inline-block;
+    }
+    .model-name {
+      display: inline-block;
+      padding: 0px 5px;
+      color: deeppink;
+    }
+    .record-name {
+      display: inline-block;
+      font-size: 25px;
+    }
+  }
+  .tabbar {
+    font-family: $body_font;
+    display: flex;
+    margin-bottom: 3px;
+    .spacer1 {
+      padding: 5px;
+      border-bottom: 1px solid forestgreen;
+    }
+    .spacer2 {
+      flex-grow: 1;
+      border-bottom: 1px solid forestgreen;
+    }
+    .tab {
+      color: mediumvioletred;
+      background-color: rgba(skyblue,0.2);
+      border: 1px solid forestgreen;
+      display: inline-block;
+      margin-right: -1px;
+      padding: 5px 20px;
+      cursor: pointer;
+    }
+    .revised {
+      background-color: rgba(pink,0.3);
+    }
+    .selected {
+      color: sienna;
+      background-color: rgba(wheat,0.3);
+      cursor: default;
+      border-bottom: none;
+    }
+  }
+  #tab {
+    .pane {
+      margin-bottom: 1px;
+      .title {
+        font-family: $body_font;
+        background-color: rgba(tan,0.3);
+        border: 1px solid tan;
+        border-bottom: none;
+        color: indianred;
+        width: 15%;
+        padding-right: 7px;
+        text-align: right;
+      }
+      .attribute {
+        display: flex;
+        @include default_attribute;
+        .name {
+          border-bottom: 1px solid rgba(forestgreen,0.1);
+          border-right: 1px solid forestgreen;
+          display: inline-block;
+          width: 15%;
+          padding-right: 8px;
+          text-align: right;
+          font-family: $body_font;
+          color: midnightblue;
+        }
+        > .value {
+          border-bottom: 1px solid rgba(forestgreen,0.1);
+          flex-grow: 1;
+          display: inline-block;
+          border-left: 1px solid forestgreen;
+          padding-left: 9px;
+          margin-left: 2px;
+          padding-top: 3px;
+          width: 85%;
+        }
+        &:first-of-type {
+          .name, > .value {
+            border-top: 2px solid forestgreen;
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,23 +1,23 @@
-import Activity from './activity';
-import Browser from './browser';
-import Messages from './messages';
-import Noauth from './noauth';
-import React, { Component } from 'react';
-import { applyMiddleware, createStore } from 'redux';
+// Framework libraries.
+import React, {Component} from 'react';
 import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
+import {applyMiddleware, createStore} from 'redux';
 
-import 'babel-polyfill';
-import 'promise-polyfill';
-import 'whatwg-fetch';
-
-import createLogger from 'redux-logger';
-import rootReducer from '../reducers';
-import Manifests from './manifest/manifests';
-import TimurNav from './timur_nav';
+// Class imports.
+import {ManifestsContainer as Manifests} from './manifest/manifests';
+import {BrowserContainer as Browser} from './browser/browser';
+import {PlotterContainer as Plotter} from './plotter/plotter';
+import {Settings} from './settings/settings';
 import ModelMap from './model_map';
 import Search from './search/search';
-import Plotter from './plots/plotter';
+import Activity from './activity';
+import Noauth from './noauth';
+import TimurNav from './timur_nav';
+
+import Messages from './messages';
+import createLogger from 'redux-logger';
+import rootReducer from '../reducers';
 
 const store = (initialState)=>{
   let middleWares = [thunk];
@@ -27,6 +27,7 @@ const store = (initialState)=>{
 
 var Timur = React.createClass({
   render: function(){
+
     var component = null;
 
     var browser_props = {
@@ -47,13 +48,20 @@ var Timur = React.createClass({
     };
 
     var manifest_props = {
-      'currentUser': this.props.user,
-      'isAdmin': this.props.is_admin,
+      'current_user': this.props.user,
+      'is_admin': this.props.is_admin,
+    };
+
+    let settings_props = {
+      'current_user': this.props.user,
+      'is_admin': this.props.is_admin,
+      'mode': this.props.mode,
+      'settings_page': this.props.settings_page
     };
 
     var plots_props = {
       'project_name': this.props.project_name,
-    }
+    };
 
     switch(this.props.mode){
       case 'manifests':
@@ -71,9 +79,12 @@ var Timur = React.createClass({
       case 'search':
         component = <Search  {...search_props} />; 
         break;
+      case 'settings':
+        component = <Settings {...settings_props}/>; 
+        break;
       case 'activity':
         component = <Activity activities={this.props.activities} />;
-        break;
+        break;      
       case 'noauth':
         component = <Noauth user={this.props.user} />;
         break;

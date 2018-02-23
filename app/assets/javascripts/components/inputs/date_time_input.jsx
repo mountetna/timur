@@ -51,6 +51,7 @@ export default class DateTimeInput extends Component {
     let { defaultValue } = this.props;
     let defaultDate = formatDate(defaultValue);
     let defaultTime = formatTime(defaultValue);
+
     return(
       <div className='date_input'>
         <input placeholder='YYYY-MM-DD'
