@@ -15,7 +15,8 @@ export class SettingsView extends React.Component{
       view_settings_object: null,
       selected_model_name: null,
       is_editing: false,
-      page_status: ''
+      page_status: '',
+      parse_error_message: ''
     };
   }
   
@@ -37,12 +38,16 @@ export class SettingsView extends React.Component{
     return (event)=>{
 
       let {view_settings_string} = this.state;
-      switch(property) {
-        case 'tabs':
-          this.setState({view_settings_string: event.target.value});
-          break;
-        default:
-          return;
+      this.setState({view_settings_string: event.target.value});
+
+      try {
+        JSON.parse(event.target.value);
+        this.setState({parse_error_message: ''});
+      }
+      catch(e) 
+      {
+        this.setState({parse_error_message: e.message});
+       return;
       }
     };
   }
@@ -69,7 +74,8 @@ export class SettingsView extends React.Component{
       {
         click: this.saveEdit.bind(this),
         icon: 'floppy-o',
-        label: ' SAVE'
+        label: ' SAVE',
+        disabled: this.state.parse_error_message ? 'disabled' : ''
       },
       {
         click: this.cancelEdit.bind(this),
@@ -86,15 +92,8 @@ export class SettingsView extends React.Component{
       selected_model_name
     } = this.state;
 
-    try {
-      view_settings_object.tabs = JSON.parse(view_settings_string);
-      this.setState({view_settings_object});
-    } 
-    catch(e) {
-      alert(e); // Alert JSON parse error.
-      return;
-    }
-    
+    view_settings_object.tabs = JSON.parse(view_settings_string);
+    this.setState({view_settings_object}); 
     this.props.updateEditViewSettings(selected_model_name, view_settings_object);
   }
 
@@ -104,7 +103,8 @@ export class SettingsView extends React.Component{
     this.setState({
       view_settings_object: this.cloneView(this.state.selected_model_name),
       view_settings_string: this.stringifyViewTab(this.state.selected_model_name),
-      page_status: ''
+      page_status: '',
+      parse_error_message: ''
     });
 
     // Turn off the editing mode.
@@ -127,7 +127,7 @@ export class SettingsView extends React.Component{
 
       className: `${disabled} settings-view-tab-group`,
       value: tab_code,
-      onChange: this.updateField('tabs'),
+      onChange: this.updateField(),
       disabled
     };
     return(
@@ -140,7 +140,12 @@ export class SettingsView extends React.Component{
 
   rendeRightColumnGroup() {
 
-    let {view_settings_object, is_editing, page_status} = this.state;
+    let {
+      view_settings_object, 
+      is_editing, 
+      page_status,
+      parse_error_message
+    } = this.state;
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let input_props = {
@@ -172,6 +177,12 @@ export class SettingsView extends React.Component{
 
               {page_status}
             </span>
+            {
+              parse_error_message &&
+                <span className='parse-error-message'>
+                  Invalid JSON: {parse_error_message}
+                </span>
+            }
           </div>
           <br />
         </div>
