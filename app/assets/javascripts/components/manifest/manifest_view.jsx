@@ -248,6 +248,7 @@ export class ManifestView extends React.Component{
     let {manifest, view_mode, is_editing, parse_error_msg} = this.state;
     let {consignment, requestConsignments} = this.props;
     let disabled = (!is_editing) ? 'disabled' : '';
+    let manifest_object = this.cloneManifest();
 
     let query_btn_props = {
       className: 'manifest-query-btn',
@@ -255,7 +256,7 @@ export class ManifestView extends React.Component{
       onClick: (event)=>{
         if(is_editing) this.toggleEdit();
         this.setState({view_mode: 'consignment'});
-        if(!consignment) requestConsignments(manifest);
+        if(!consignment) requestConsignments(manifest_object);
       }
     };
 
@@ -264,7 +265,7 @@ export class ManifestView extends React.Component{
       disabled: (view_mode == 'script' || is_editing) ? 'disabled' : '',
       onClick: (event)=>{
         this.setState({view_mode: 'script'});
-        if(!consignment) requestConsignments(manifest);
+        if(!consignment) requestConsignments(manifest_object);
       }
     };
 
@@ -295,6 +296,7 @@ export class ManifestView extends React.Component{
     let {consignment} = this.props;
     let disabled = (!is_editing) ? 'disabled' : '';
     let manifest_elements = manifest.data.elements || '';
+    let elements_object;
    
     let textarea_props = {
       className: `${disabled} manifest-form-element-textarea`,
@@ -314,7 +316,11 @@ export class ManifestView extends React.Component{
      }
 
     // Setup consignment selection.
-    manifest_elements = manifest_elements.map((element, index)=>{
+    if (manifest_elements) {
+      elements_object = this.cloneManifest().data.elements;
+    }
+   
+    elements_object = elements_object.map((element, index)=>{
 
       // Pull the data for this element.
       let {name, script, description} = element;
@@ -353,7 +359,7 @@ export class ManifestView extends React.Component{
       }
     });
 
-    return manifest_elements;
+    return elements_object;
   }
 
   render(){
