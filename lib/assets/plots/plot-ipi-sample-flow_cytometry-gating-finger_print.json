@@ -1,10 +1,14 @@
 {
-  "name": null,
+  "name": "sample-flow_cytometry-gating-finger_print",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",
   "access": "view",
   "plot_type": "barplot",
+  "view_name": "sample",
+  "tab_name": "flow_cytometry",
+  "pane_name": "gating",
+  "attribute_name": "finger_print",
   "configuration": {
     "data": [],
     "layout": {

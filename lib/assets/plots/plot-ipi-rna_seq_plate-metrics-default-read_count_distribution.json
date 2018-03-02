@@ -1,10 +1,14 @@
 {
-  "name": null,
+  "name": "rna_seq_plate-metrics-default-read_count_distribution",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",
   "access": "view",
   "plot_type": "histogram",
+  "view_name": "rna_seq_plate",
+  "tab_name": "metrics",
+  "pane_name": "default",
+  "attribute_name": "read_count_distribution",
   "configuration": {
     "data": [],
     "layout": {

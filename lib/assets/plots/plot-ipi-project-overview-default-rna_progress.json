@@ -1,10 +1,14 @@
 {
-  "name": null,
+  "name": "project-overview-rna_progress",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",
   "access": "view",
   "plot_type": "bargraph",
+  "view_name": "project",
+  "tab_name": "overview",
+  "pane_name": "default",
+  "attribute_name": "rna_progress",
   "configuration": {
     "data": [],
     "layout": {
