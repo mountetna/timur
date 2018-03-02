@@ -1,21 +1,10 @@
+# See ./lib/tasks/migrate_ivew.rake for more information related to this
+# migration.
 class ChangeViewModels < ActiveRecord::Migration
   def change
 
-    drop_table :view_attributes
-    drop_table :view_panes
-    drop_table :plots
-
-    create_table :plots do |t|
-      t.belongs_to :manifest, index: true, null: false
-      t.belongs_to :user, index: true, null: false
-      t.string :name, null: false
-      t.string :plot_type, null: false
-      t.string :access, null: false
-      t.string :project, null: false
-      t.json :configuration, null: false
-      t.timestamps null: false
-    end
-
+# First let's add all the tables columns we need.
+    # Create the top level view tabs.
     create_table :view_tabs do |t|
       t.string :name
       t.string :title
@@ -30,33 +19,34 @@ class ChangeViewModels < ActiveRecord::Migration
     change_column_null :view_tabs, :model, false
     change_column_null :view_tabs, :index_order, false
 
-    create_table :view_panes do |t|
-      t.integer :view_tab_id
-      t.string :name
-      t.string :title
-      t.string :description
-      t.integer :index_order
-      t.timestamps
-    end
-    add_foreign_key :view_panes, :view_tabs
-    change_column_null :view_panes, :name, false
-    change_column_null :view_panes, :view_tab_id, false
-    change_column_null :view_panes, :index_order, false
+    # Add required columns to view panes.
+    add_column :view_panes, :view_tab_id, :integer
+    add_column :view_panes, :index_order, :integer
 
-    create_table :view_attributes do |t|
-      t.integer :view_pane_id
-      t.integer :plot_id
-      t.string :name
-      t.string :title
-      t.string :description
-      t.string :attribute_class
-      t.integer :index_order
-      t.timestamps
-    end
-    add_foreign_key :view_attributes, :view_panes
+    # Add required columns to view attributes.
+    add_column :view_attributes, :plot_id, :integer
+    add_column :view_attributes, :index_order, :integer
+
+    # Add required columns to plots.
+    add_column :plots, :user_id, :integer
+    add_column :plots, :access, :string
+    add_column :plots, :project, :string
+
+# Run the script to modify data in the DB.
+    Rake::Task['timur:migrate_views'].invoke
+
+# Remove all the old columns.
+    remove_column :view_panes, :tab_name
+    remove_column :view_panes, :view_model_name
+    remove_column :view_panes, :project_name
+
+    remove_column :view_attributes, :display_name
+    remove_column :view_attributes, :plot
+    remove_column :view_attributes, :placeholder
+
+    add_foreign_key :view_panes, :view_tabs
+    add_index :view_panes, :view_tab_id
     add_foreign_key :view_attributes, :plots
-    change_column_null :view_attributes, :name, false
-    change_column_null :view_attributes, :view_pane_id, false
-    change_column_null :view_attributes, :index_order, false
+    add_index :view_attributes, :plot_id
   end
 end

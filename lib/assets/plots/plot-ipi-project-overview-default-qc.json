@@ -1,10 +1,14 @@
 {
-  "name": null,
+  "name": "project-overview-default-qc",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",
   "access": "view",
   "plot_type": "boxplot",
+  "view_name": "project",
+  "tab_name": "overview",
+  "pane_name": "default",
+  "attribute_name": "qc",
   "configuration": {
     "data": [],
     "layout": {

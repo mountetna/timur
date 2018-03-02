@@ -1,10 +1,14 @@
 {
-  "name": null,
+  "name": "rna_seq_plate-metrics-default-eisenberg_genes",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",
   "access": "view",
   "plot_type": "swarm",
+  "view_name": "rna_seq_plate",
+  "tab_name": "metrics",
+  "pane_name": "default",
+  "attribute_name": "eisenberg_genes",
   "configuration": {
     "data": [],
     "layout": {

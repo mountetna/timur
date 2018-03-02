@@ -1,10 +1,14 @@
 {
-  "name": null,
+  "name": "rna_seq_plate-metrics-default-composition_metric",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",
   "access": "view",
   "plot_type": "stackedbar",
+  "view_name": "rna_seq_plate",
+  "tab_name": "metrics",
+  "pane_name": "default",
+  "attribute_name": "composition_metric",
   "configuration": {
     "data": [],
     "layout": {
