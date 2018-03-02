@@ -9,10 +9,8 @@ import manifests from './manifests_reducer'
 import consignments from './consignments_reducer'
 import exchanges from './exchanges_reducer'
 import predicates from './predicates_reducer'
-import tokenUser from './token_user_reducer'
 
 export default combineReducers({
-  tokenUser,
   timur,
   search,
   magma,

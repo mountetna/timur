@@ -1,7 +1,9 @@
 // Framework libraries.
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
-import {addTokenUser} from '../../actions/token_user_actions';
+
+// Module imports.
+import * as TimurActions from '../../actions/timur_actions';
 
 export class SettingsUser extends React.Component{
   constructor(props){
@@ -14,21 +16,24 @@ export class SettingsUser extends React.Component{
   }
   
   render(){
-
-    return (this.props.tokenUser &&
-      <pre>{JSON.stringify(this.props.tokenUser, null, 2)}</pre>);
+    if(this.props.token_user){
+      return <pre>{JSON.stringify(this.props.token_user, null, 2)}</pre>;
+    }
+    else{
+      return null;
+    }
   }
 }
 
 const mapStateToProps = (state = {}, own_props)=>{
-  if(state.tokenUser === undefined) return {};
-  return {tokenUser: state.tokenUser};
+  if(state.timur.user === undefined) return {};
+  return {token_user: state.timur.user};
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
     fetchUserSettings: ()=>{
-      dispatch(addTokenUser());
+      dispatch(TimurActions.addTokenUser());
     }
   };
 };

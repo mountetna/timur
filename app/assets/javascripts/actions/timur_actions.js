@@ -3,9 +3,11 @@ import {getView, getUser, updateView} from '../api/view';
 import {showMessages} from './message_actions';
 import {requestDocuments} from './magma_actions';
 import {Exchange} from './exchange_actions';
+
+// Module imports.
 import * as ManifestActions from './manifest_actions';
 import * as TabSelector from '../selectors/tab_selector';
-import index from '../reducers/index';
+import * as Cookies from '../utils/cookies';
 
 // Flip a config variable.
 export const toggleConfig = (key)=>{
@@ -21,6 +23,21 @@ export const addTab = (view_name, tab_name, tab)=>{
     view_name, // The view name also references a Magma Model.
     tab_name,
     tab
+  };
+};
+
+export const addView = (view_name, view)=>{
+  return {
+    type: 'ADD_VIEW',
+    view_name, // The view name also references a Magma Model.
+    view
+  };
+};
+
+export const addTokenUser = (user)=>{
+  return {
+    type: 'ADD_TOKEN_USER',
+    token: Cookies.getItem('JANUS_TOKEN')
   };
 };
 
@@ -82,17 +99,8 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
   };
 };
 
-export const addView = (view_name, view)=>{
-  return {
-    type: 'ADD_VIEW',
-    view_name, // The view name also references a Magma Model.
-    view
-  };
-};
-
 export const requestViewSettings = ()=>{
-  return (dispatch)=>{   
-    //at request view settings
+  return (dispatch)=>{
     let localSuccess = (response)=>{
       Object.keys(response).forEach((key)=>{
         dispatch(addView(key, response[key]));
@@ -103,15 +111,15 @@ export const requestViewSettings = ()=>{
       console.log(err);
     };
 
-    let exchange = new Exchange(dispatch,'view for settings'); 
+    let exchange = new Exchange(dispatch,'view for settings');
     getView('all', 'all', exchange)
       .then(localSuccess)
-      .catch(localError);     
+      .catch(localError);
   };
 };
 
-export const updateViewSettings = (model_name, model_obj) => {
-  return (dispatch)=> {
+export const updateViewSettings = (model_name, model_obj)=>{
+  return (dispatch)=>{
 
     let localSuccess = (response)=>{
       console.log('local success from updateViewSettings!');
@@ -122,10 +130,9 @@ export const updateViewSettings = (model_name, model_obj) => {
       console.log(err);
     };
 
-    let exchange = new Exchange(dispatch,'updating view settings'); 
+    let exchange = new Exchange(dispatch,'updating view settings');
     updateView(model_name, model_obj, exchange)
       .then(localSuccess)
-      .catch(localError);     
+      .catch(localError);
   };
-
 };
