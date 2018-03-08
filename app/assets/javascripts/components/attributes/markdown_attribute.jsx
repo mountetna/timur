@@ -1,42 +1,44 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
 
-import { reviseDocument } from '../../actions/magma_actions'
-import markdown from '../../markdown'
+// Module imports.
+import * as MagmaActions from '../../actions/magma_actions';
+import markdown from '../../markdown';
 
-var MarkdownAttribute = React.createClass({
-  render: function() {
-    var store = this.context.store
-    var self = this
-    if (this.props.mode == "edit") {
-      return <div className="value">
-              <textarea className="text_box" 
-                onChange={
-                  function(e) {
-                    store.dispatch(
-                      reviseDocument(
-                        self.props.document,
-                        self.props.template,
-                        self.props.attribute,
-                        e.target.value
-                      )
-                    )
-                  }
-                }
-                defaultValue={ this.props.revision } />
-             </div>
-    }
+export default class MarkdownAttribute extends React.Component{
+  renderEdit(){
+    let store = this.context.store;
+    let self = this;
+    let textarea_props = {
+      className: 'text_box',
+      onChange: function(e){
+        store.dispatch(
+          MagmaActions.reviseDocument(
+            self.props.document,
+            self.props.template,
+            self.props.attribute,
+            e.target.value
+          )
+        );
+      },
+      defaultValue: this.props.revision
+    };
 
-    if (!this.props.value)
-      return <div className="value"/>
+    return(
+      <div className='value'>
 
-    var content = markdown(this.props.value)
-    return <div className="value"
-        dangerouslySetInnerHTML={ { __html: content } }/>
+        <textarea {...textarea_props} />
+      </div>
+    );
   }
-})
 
-MarkdownAttribute.contextTypes = {
-  store: React.PropTypes.object
+  render(){
+    let store = this.context.store;
+    let self = this;
+    if(this.props.mode == 'edit') return renderEdit();
+    if(!this.props.value) return <div className='value' />
+
+    let content = markdown(this.props.value)
+    return <div className='value' dangerouslySetInnerHTML={{__html: content}} />
+  }
 }
-
-module.exports = MarkdownAttribute

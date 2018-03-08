@@ -1,38 +1,41 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions'
+import * as MagmaActions from '../../actions/magma_actions';
 import SelectInput from '../inputs/select_input';
 
-var SelectAttribute = React.createClass({
-  render: function() {
-    var self = this
-    var store = this.context.store
-    if (this.props.mode == "edit") {
-      return <div className="value">
-              <SelectInput 
-                className="selection"
-                onChange={
-                  function(value) {
-                    store.dispatch(reviseDocument(
-                      self.props.document,
-                      self.props.template,
-                      self.props.attribute,
-                      value)
-                    )
-                  }
-                }
-                defaultValue={ this.props.value }
-                showNone="disabled"
-                values={ this.props.attribute.options } />
-             </div>
+export default class SelectAttribute extends React.Component{
+  renderEdit(){
+    let store = this.context.store;
+    let self = this;
+    let input_props = {
+      className:"selection",
+      onChange: function(value) {
+         store.dispatch(MagmaActions.reviseDocument(
+           self.props.document,
+           self.props.template,
+           self.props.attribute,
+           value)
+         )
+       },
+      defaultValue: this.props.value,
+      showNone:"disabled",
+      values: this.props.attribute.options
     }
-    return <div className="value">
-            { this.props.value }
-           </div>
-  }
-})
-SelectAttribute.contextTypes = {
-  store: React.PropTypes.object
-}
 
-module.exports = SelectAttribute
+    return(
+      <div className="value">
+
+        <SelectInput {...input_props} />
+      </div>
+    )
+  }
+
+  render(){
+    let self = this;
+    let store = this.context.store;
+    if (this.props.mode == "edit") return renderEdit();
+    return <div className="value">{ this.props.value }</div>;
+  }
+}

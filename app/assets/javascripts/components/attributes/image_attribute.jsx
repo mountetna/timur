@@ -1,40 +1,50 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions'
+import * as MagmaActions from '../../actions/magma_actions';
 
-var ImageAttribute = React.createClass({
-  render: function() {
-    var self = this
-    var store = this.context.store
-    if (this.props.mode == "edit") {
-      return <div className="value">
-               <input
-                 onChange={
-                   function(e) {
-                     store.dispatch(reviseDocument(
-                       self.props.document,
-                       self.props.template,
-                       self.props.attribute,
-                       e.target.files[0]))
-                   }
-                 } 
-                 type="file"/>
-             </div>
+export default class ImageAttribute extends React.Component{
+  renderEdit(){
+    let store = this.context.store;
+    let self = this;
+    let input_props = {
+      onChange:function(e) {
+        store.dispatch(reviseDocument(
+          self.props.document,
+          self.props.template,
+          self.props.attribute,
+          e.target.files[0]))
+      },
+      type:"file"
+    };
+
+    return(
+      <div className="value">
+        <input {...input_props} />
+      </div>
+    );
+  }
+
+  render(){
+    let self = this;
+    let store = this.context.store
+    if (this.props.mode == "edit") return renderEdit();
+    
+    if (this.props.value){
+      return(
+        <div className="value">
+          <a href={ this.props.value.url } >
+            <img src={ this.props.value.thumb }/>
+          </a>
+        </div>
+      );
     }
 
-    if (this.props.value)
-      return <div className="value">
-              <a href={ this.props.value.url } >
-                <img src={ this.props.value.thumb }/></a>
-             </div>
-    else
-      return <div className="value">
-              <div className="document_empty">No file.</div>
-             </div>
+    return(
+      <div className="value">
+        <div className="document_empty">No file.</div>
+      </div>
+    );
   }
-})
-ImageAttribute.contextTypes = {
-  store: React.PropTypes.object
 }
-
-module.exports = ImageAttribute

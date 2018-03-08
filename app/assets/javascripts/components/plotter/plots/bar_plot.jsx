@@ -1,15 +1,15 @@
+import * as React from 'react';
+
+import * as D3Scale from '../../../utils/d3_scale';
 import Legend from '../legend';
 import PlotCanvas from '../plot_canvas';
-import React, { Component } from 'react';
+import YAxis from '../yaxis';
 
-import { createScale } from '../../../utils/d3_scale'
-import YAxis from '../yaxis'
-
-var BarPlot = React.createClass({
-  getInitialState: function() {
+export default class BarPlot extends React.Component{
+  getInitialState() {
     return { zoom: 1 }
-  },
-  onWheel: function(event) {
+  }
+  onWheel(event) {
     var zoom = this.state.zoom
     event.preventDefault()
 
@@ -22,8 +22,8 @@ var BarPlot = React.createClass({
     if (zoom > 1)
       zoom = 1
     this.setState({ zoom: zoom })
-  },
-  render: function() {
+  }
+  render() {
     var plot = this.props.plot
     var margin = plot.margin,
         width = plot.width - margin.left - margin.right,
@@ -31,7 +31,7 @@ var BarPlot = React.createClass({
 
     var zoom_ymax = this.state.zoom * this.props.ymax
 
-    var yScale = createScale(
+    var yScale = D3Scale.createScale(
       [ this.props.ymin, zoom_ymax ],
       [ height, 0 ]
     )
@@ -83,12 +83,10 @@ var BarPlot = React.createClass({
       </PlotCanvas>
     </svg>
   }
-})
+}
 
-module.exports = BarPlot
-
-var BarPlotBar = React.createClass({
-  render: function() {
+export class BarPlotBar extends React.Component{
+  render() {
     var props = this.props
 
     return <g className="bar">
@@ -125,11 +123,13 @@ var BarPlotBar = React.createClass({
       </text>
     </g>
   }
-})
+}
 
-var Dot = React.createClass({
-  getInitialState: () => ({ highlighted: false }),
-  render: function() {
+export class Dot extends React.Component{
+  getInitialState(){
+    return { highlighted: false }
+  }
+  render() {
     let { highlighted, category, similar, name, highlight_name, mouse_handler, x, y } = this.props;
     var classes = [
       'dot',
@@ -165,4 +165,4 @@ var Dot = React.createClass({
         }
       </a>
   }
-})
+}
