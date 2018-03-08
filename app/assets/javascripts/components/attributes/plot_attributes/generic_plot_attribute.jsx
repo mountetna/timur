@@ -12,14 +12,14 @@ export class GenericPlotAttribute extends React.Component{
     props.initialized(this.constructor.name);
   }
 
-  shouldComponentUpdate(next_props, next_state){
+  componentDidMount(){
     let {
       document,
       template,
       selected_consignment,
       selected_manifest,
       fetchConsignment
-    } = next_props;
+    } = this.props;
 
     /*
      * If we don't have the consignment (data) we need for the plot but we do
@@ -27,14 +27,12 @@ export class GenericPlotAttribute extends React.Component{
      */
     if(selected_consignment == undefined){
       if(selected_manifest != undefined){
-        if(!next_state.fetched_consignment){
+        if(!this.state.fetched_consignment){
           fetchConsignment(selected_manifest.id, document[template.identifier]);
-          next_state.fetched_consignment = true;
+          this.setState({fetched_consignment: true});
         }
       }
     }
-
-    return true;
   }
 
   render(){
