@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Attribute from './attribute';
-import MetricsAttribute from './metrics_attribute';
 import MarkdownAttribute from './markdown_attribute';
 import SelectAttribute from './select_attribute';
 import ImageAttribute from './image_attribute';
@@ -13,6 +12,7 @@ import LinkAttribute from './link_attribute';
 import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
 import TextAttribute from './text_attribute';
+import {MetricsAttributeContainer as MetricsAttribute} from './metrics_attribute';
 
 // The plots.
 import {LinePlotAttributeContainer as LinePlotAttribute} from './plot_attributes/line_plot_attribute';
@@ -52,7 +52,6 @@ export default class AttributeViewer extends Component{
         return <MarkdownAttribute {...this.props} />;
       case 'MetricsAttribute':
         return <MetricsAttribute {...this.props} />;
-
       case 'Magma::CollectionAttribute':
         return <CollectionAttribute {...this.props} />;
       case 'Magma::ForeignKeyAttribute':
