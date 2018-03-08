@@ -8,8 +8,7 @@ export class GenericPlotAttribute extends React.Component{
 
     this.state = {
       fetched_consignment: false
-    }
-    props.initialized(this.constructor.name);
+    };
   }
 
   componentDidMount(){
