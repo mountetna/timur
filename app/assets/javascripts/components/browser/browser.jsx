@@ -16,7 +16,7 @@ import * as ReactRedux from 'react-redux';
 // Class imports.
 import Magma from '../../magma';
 import Header from '../header';
-import Help from '../help';
+import {HelpContainer as Help} from '../help';
 import {TabBarContainer as TabBar} from '../tab_bar';
 import BrowserTab from './browser_tab';
 
