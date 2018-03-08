@@ -19,8 +19,7 @@ import {LinePlotAttributeContainer as LinePlotAttribute} from './plot_attributes
 import {BoxPlotAttributeContainer as BoxPlotAttribute} from './plot_attributes/box_plot_attribute';
 import {BarGraphAttributeContainer as BarGraphAttribute} from './plot_attributes/bar_graph_attribute';
 import {BarPlotAttributeContainer as BarPlotAttribute} from './plot_attributes/bar_plot_attribute';
-
-import {StackedBarAttributeContainer as StackedBarAttribute} from './plot_attributes/stacked_bar_attribute';
+import {StackedBarPlotAttributeContainer} from './plot_attributes/stacked_bar_attribute';
 import {SwarmPlotAttributeContainer as SwarmPlotAttribute} from './plot_attributes/swarm_plot_attribute';
 import {HistogramAttributeContainer as HistogramAttribute} from './plot_attributes/histogram_attribute';
 
@@ -37,10 +36,10 @@ export default class AttributeViewer extends Component{
         return <BarGraphAttribute {...this.props} />;
       case 'BarPlotAttribute':
         return <BarPlotAttribute {...this.props} />;
-      case 'StackedBarAttribute':
-        return null;//<StackedBarAttribute {...this.props} />;
-      case 'SwarmPlotAttribute':
-        return null;//<SwarmPlotAttribute {...this.props} />;
+      case 'StackedBarPlotAttribute':
+        return <StackedBarPlotAttributeContainer {...this.props} />;
+      case 'SwarmAttribute':
+        return <SwarmPlotAttribute {...this.props} />;
       case 'HistogramAttribute':
         return null;//<HistogramAttribute {...this.props} />;
 

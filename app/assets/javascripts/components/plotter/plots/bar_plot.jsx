@@ -6,9 +6,11 @@ import PlotCanvas from '../plot_canvas';
 import YAxis from '../yaxis';
 
 export default class BarPlot extends React.Component{
-  getInitialState() {
-    return { zoom: 1 }
+  constructor(props){
+    super(props);
+    this.state = { zoom: 1 };
   }
+
   onWheel(event) {
     var zoom = this.state.zoom
     event.preventDefault()
