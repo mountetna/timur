@@ -10,6 +10,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.10",
     "d3": "^3.5.17",
     "downloadjs": "^1.4.7",
@@ -31,9 +32,7 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
     "sass-loader": "^6.0.7",
-    "webpack": "^3.11.0"
-  },
-  "devDependencies": {
-    "babel-preset-env": "^1.6.1"
+    "webpack": "^3.11.0",
+    "webworkify-webpack": "^2.1.1"
   }
 }
