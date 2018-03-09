@@ -1,0 +1,47 @@
+@import "globals";
+@import "attribute";
+
+.demographic-select{
+  font-family: $body_font;
+  border: 1px solid gray;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 30px;
+  min-width: 225px;
+}
+
+.demographic-input{
+  font-family: $body_font;
+  border: 1px solid gray;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 15px;
+  min-width: 210px;
+}
+
+.demographic-input.hide{
+  visibility: hidden;
+}
+
+.demographic-button{
+  padding: 5px;
+  border: 1px solid #333;
+  outline: none;
+  background: #eee;
+  font-size: 0.6em;
+  margin: 5px;
+}
+
+.demographic-button:hover {
+  color: #fff;
+  background: #22a778;
+  border: 1px solid #22a778;
+}
