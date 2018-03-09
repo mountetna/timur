@@ -27,6 +27,7 @@ class ChangeViewModels < ActiveRecord::Migration
     add_column :view_attributes, :plot_id, :integer
     add_column :view_attributes, :manifest_id, :integer
     add_column :view_attributes, :index_order, :integer
+    add_column :view_attributes, :title, :string
 
     # Add required columns to plots.
     add_column :plots, :user_id, :integer

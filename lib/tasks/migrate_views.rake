@@ -115,12 +115,15 @@ namespace :timur do
 
       if !view_plot.nil?
 
+        # Add the name of the plot to the attribute.
+        view_attribute.title = view_plot['title']
+
         # Associate the manifest id to the plot.
         view_plot['manifest_id'] = manifest.id
         view_plot['user_id'] = 51
 
         # Remove the keys not required for the plot.
-        ['view_name', 'tab_name', 'pane_name', 'attribute_name'].each do |key|
+        ['title', 'view_name', 'tab_name', 'pane_name', 'attribute_name'].each do |key|
           view_plot.delete(key)
         end
 
