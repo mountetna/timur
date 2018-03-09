@@ -41,7 +41,7 @@ export default class AttributeViewer extends Component{
       case 'SwarmAttribute':
         return <SwarmPlotAttribute {...this.props} />;
       case 'HistogramAttribute':
-        return null;//<HistogramAttribute {...this.props} />;
+        return <HistogramAttribute {...this.props} />;
 
       case 'BoxPlotAttribute':
         return <BoxPlotAttribute {...this.props} />;
