@@ -93,7 +93,7 @@ const mapStateToProps = (state = {}, own_props)=>{
       }
 
       //add calculated_columns as attributes
-      const calculatedColumns = calculated_columns.reduce((acc, curr) => {
+      const calculatedColumns = selected_plot.calculated_columns.reduce((acc, curr) => {
         return {
           ...acc,
           [curr]: selected_consignment[curr].values[i]
