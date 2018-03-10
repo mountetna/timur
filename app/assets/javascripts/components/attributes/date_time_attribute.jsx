@@ -14,15 +14,12 @@ class DateTimeAttribute extends Component {
     </div>
   }
 
-  renderValue(value) {
-    return <div className="value">
-      { formatDate(value) || '?' }
-      <span className="at_spacer">@</span>
-      { formatTime(value) || '?' }
-    </div>
+  renderValue(value){
+    return <div className='value'>{formatDate(value)}</div>;
   }
 
   updateDate(new_date) {
+    console.log(new_date);
     let { document, template, attribute, reviseDocument } = this.props;
     reviseDocument( document, template, attribute, new_date && new_date.toISOString());
   }

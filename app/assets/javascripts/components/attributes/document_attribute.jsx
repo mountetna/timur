@@ -32,7 +32,7 @@ export default class DocumentAttribute extends React.Component{
     let store = this.context.store
     let link = this.props.value
 
-    if (this.props.mode == "edit") return renderEdit();
+    if (this.props.mode == "edit") return this.renderEdit();
 
     if (link){
       return(

@@ -35,7 +35,7 @@ export default class SelectAttribute extends React.Component{
   render(){
     let self = this;
     let store = this.context.store;
-    if (this.props.mode == "edit") return renderEdit();
+    if (this.props.mode == "edit") return this.renderEdit();
     return <div className="value">{ this.props.value }</div>;
   }
 }

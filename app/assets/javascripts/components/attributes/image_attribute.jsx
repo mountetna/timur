@@ -29,7 +29,7 @@ export default class ImageAttribute extends React.Component{
   render(){
     let self = this;
     let store = this.context.store
-    if (this.props.mode == "edit") return renderEdit();
+    if (this.props.mode == "edit") return this.renderEdit();
     
     if (this.props.value){
       return(

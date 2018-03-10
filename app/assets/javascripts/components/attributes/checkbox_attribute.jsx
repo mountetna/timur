@@ -34,7 +34,7 @@ export default class CheckboxAttribute extends React.Component{
     let self = this;
     let store = this.context.store;
 
-    if (this.props.mode == "edit") return renderEdit();
+    if (this.props.mode == "edit") return this.renderEdit();
     return <div className="value"> { this.props.value ? "yes" : "no" } </div>
   }
 }

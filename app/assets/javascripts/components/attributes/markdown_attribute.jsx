@@ -35,7 +35,7 @@ export default class MarkdownAttribute extends React.Component{
   render(){
     let store = this.context.store;
     let self = this;
-    if(this.props.mode == 'edit') return renderEdit();
+    if(this.props.mode == 'edit') return this.renderEdit();
     if(!this.props.value) return <div className='value' />
 
     let content = markdown(this.props.value)

@@ -60,7 +60,7 @@ export default class LinkAttribute extends React.Component{
     let self = this;
     let store = this.context.store;
     
-    if (this.props.mode == 'edit') return renderEdit();
+    if (this.props.mode == 'edit') return this.renderEdit();
 
     if(link){
       return(
