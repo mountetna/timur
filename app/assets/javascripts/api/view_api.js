@@ -30,15 +30,30 @@ export const getUser = (exchange)=>{
   return exchangePromise;
 };
 
-export const updateView = (model_name, model_obj, exchange)=>{
+export const updateView = (view_obj, exchange)=>{
   let route_opts = {
     method: 'POST',
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
-    body: JSON.stringify(model_obj)
+    body: JSON.stringify(view_obj)
   };
 
   let exchangePromise = exchange.fetch(Routes.update_view_json_path(PROJECT_NAME), route_opts)
+    .then(checkStatus)
+    .then(parseJSON);
+
+  return exchangePromise;
+};
+
+export const deleteView = (view_obj, exchange)=>{
+    let route_opts = {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers('json', 'csrf'),
+    body: JSON.stringify(view_obj)
+  };
+
+  let exchangePromise = exchange.fetch(Routes.delete_view_json_path(PROJECT_NAME), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
