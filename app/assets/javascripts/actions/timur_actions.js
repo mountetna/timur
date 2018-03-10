@@ -100,7 +100,7 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
      */
     let exchange = new Exchange(dispatch,`view for ${model_nm} ${rec_nm}`);
 
-    getView(model_nm, tab_nm, exchange)
+    ViewAPI.getView(model_nm, tab_nm, exchange)
       .then(localSuccess)
       .catch(localError);
   };
