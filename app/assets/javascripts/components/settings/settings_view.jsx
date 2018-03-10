@@ -31,30 +31,63 @@ export class SettingsView extends React.Component{
     return JSON.stringify(this.props.views[selected_model_name].tabs, null, 2);
   }
 
-  updateField(property){
-    return (event)=>{
+  updateModelName(event){
+    let view_settings_object = this.state.view_settings_object;
+    view_settings_object.model_name = event.target.value;
 
-      let {view_settings_string} = this.state;
-      this.setState({view_settings_string: event.target.value});
+    this.setState({
+      selected_model_name: view_settings_object.model_name,
+      view_settings_object,
+      view_settings_string: JSON.stringify(
+        view_settings_object.tabs,
+        null,
+        2
+      )
+    });
+  }
 
-      try {
-        JSON.parse(event.target.value);
-        this.setState({parse_error_message: ''});
-      }
-      catch(e) 
-      {
-        this.setState({parse_error_message: e.message});
-       return;
-      }
-    };
+  updateTabData(event){
+    let {view_settings_string} = this.state;
+    this.setState({view_settings_string: event.target.value});
+
+    try {
+      JSON.parse(event.target.value);
+      this.setState({parse_error_message: ''});
+    }
+    catch(e) 
+    {
+      this.setState({parse_error_message: e.message});
+     return;
+    }
+  }
+
+  selectViewSetting(id){
+    if(id == null){
+      this.setState({
+        view_settings_string: '',
+        view_settings_object: null,
+        selected_model_name: null,
+        is_editing: false
+      });
+      return;
+    }
+
+    let view_items = Object.keys(this.props.views).map((key, index)=>({
+      name: this.props.views[key].model_name,
+      id: index,
+    }));
+
+    this.setState({
+      selected_model_name: view_items[id].name,
+      view_settings_object: this.cloneView(view_items[id].name),
+      view_settings_string: this.stringifyViewTab(view_items[id].name)
+    });
   }
 
   editableButtons(){
-
-    let {} = this.props;
     return [
       {
-        click: () => {},
+        click: ()=>{},
         icon: 'trash-o',
         label: ' DELETE'
       },
@@ -82,19 +115,30 @@ export class SettingsView extends React.Component{
     ].filter(button=>button);
   }
 
-  saveEdit() {
-    let {
-      view_settings_object, 
-      view_settings_string, 
-      selected_model_name
-    } = this.state;
+  deleteView(){
+    this.props.deleteViewSettings(
+      this.state.view_settings_object
+    );
+  }
 
-    view_settings_object.tabs = JSON.parse(view_settings_string);
-    this.setState({view_settings_object}); 
-    this.props.updateEditViewSettings(selected_model_name, view_settings_object);
+  saveEdit(){
+    this.props.updateEditViewSettings(
+      this.state.view_settings_object.model_name,
+      this.state.view_settings_object
+    );
+    this.toggleEdit();
   }
 
   cancelEdit(){
+
+    // Turn off the editing mode.
+    this.toggleEdit();
+
+    // If we are cancelling a new view.
+    //if(this.state.view_settings_object.id == undefined){
+    //  this.selectViewSetting(null);
+    //  return;
+    //}
 
     // Reset the view.
     this.setState({
@@ -103,9 +147,6 @@ export class SettingsView extends React.Component{
       page_status: '',
       parse_error_message: ''
     });
-
-    // Turn off the editing mode.
-    this.toggleEdit();
   }
 
   toggleEdit(){
@@ -121,10 +162,9 @@ export class SettingsView extends React.Component{
     let disabled = (!this.state.is_editing) ? 'disabled' : '';
     let tab_code = this.state.view_settings_string;
     let tabs_attributes = {
-
       className: `${disabled} settings-view-tab-group`,
       value: tab_code,
-      onChange: this.updateField(),
+      onChange: this.updateTabData.bind(this),
       disabled
     };
     return(
@@ -135,22 +175,32 @@ export class SettingsView extends React.Component{
     );
   }
 
-  rendeRightColumnGroup() {
+  renderRightColumnGroup(){
+
+    if(this.state.view_settings_object == null) return null;
 
     let {
-      view_settings_object, 
+      view_settings_object,
       is_editing, 
       page_status,
       parse_error_message
     } = this.state;
+
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let input_props = {
       className: 'disabled settings-view-model-title-input',
       value: view_settings_object.model_name,
       type: 'text',
-      readOnly: 'readOnly'
+      readOnly: 'readOnly',
+      onChange: this.updateModelName.bind(this)
     };
+
+    // Enable the model name input if it's new.
+    if(view_settings_object.model_name == '' || is_editing){
+      delete input_props['readOnly'];
+      input_props['className'] = 'settings-view-model-title-input';
+    }
 
     let buttons;
     if(is_editing){
@@ -188,28 +238,46 @@ export class SettingsView extends React.Component{
     );
   }
 
+  createNewView(){
+    let view_settings_object = {
+      model_name: '',
+      project_name: PROJECT_NAME,
+      tabs:{
+        default:{
+          description: '',
+          name: 'default',
+          index_order: 0,
+          title: ''
+        }
+      }
+    };
+
+    this.setState({
+      selected_model_name:'',
+      view_settings_object,
+      view_settings_string: JSON.stringify(
+        view_settings_object.tabs,
+        null,
+        2
+      )
+    });
+
+    this.toggleEdit();
+  }
+
   render(){
     if(!this.props.views) return null;
 
-    let {selected_model_name} = this.state;
-    let {views} = this.props;
-
-    let view_items = Object.keys(views).map((key, index)=>({
-      name: views[key].model_name,
+    let view_items = Object.keys(this.props.views).map((key, index)=>({
+      name: this.props.views[key].model_name,
       id: index,
     }));
 
     let list_menu_props = {
       name: 'Settings',
-      create: function() {},
-      select: (id)=>{ 
-        this.setState({
-          selected_model_name: view_items[id].name,
-          view_settings_object: this.cloneView(view_items[id].name),
-          view_settings_string: this.stringifyViewTab(view_items[id].name)
-        });
-      },
-      items: view_items,
+      create: this.createNewView.bind(this),
+      select: this.selectViewSetting.bind(this),
+      items: view_items
     };
 
     return(
@@ -221,7 +289,7 @@ export class SettingsView extends React.Component{
         </div>
         <div className='right-column-group'>
 
-          {selected_model_name && this.rendeRightColumnGroup()}
+          {this.renderRightColumnGroup()}
         </div>
       </div>
     );
