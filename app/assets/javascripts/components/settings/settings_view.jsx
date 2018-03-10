@@ -3,8 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 import ListMenu from '../list_menu';
 import ButtonBar from '../button_bar';
-import {requestViewSettings, updateViewSettings} from '../../actions/timur_actions';
-import { selectConsignment } from '../../selectors/consignment_selector';
+import * as TimurActions from '../../actions/timur_actions';
 
 export class SettingsView extends React.Component{
   constructor(props){
@@ -25,13 +24,11 @@ export class SettingsView extends React.Component{
   }
 
   cloneView(selected_model_name){
-    
-    return JSON.parse(JSON.stringify(this.props.views.views[selected_model_name]));
+    return JSON.parse(JSON.stringify(this.props.views[selected_model_name]));
   }
 
   stringifyViewTab(selected_model_name){
-
-    return JSON.stringify(this.props.views.views[selected_model_name].tabs, null, 2);
+    return JSON.stringify(this.props.views[selected_model_name].tabs, null, 2);
   }
 
   updateField(property){
@@ -192,37 +189,35 @@ export class SettingsView extends React.Component{
   }
 
   render(){
-    let list_menu_props;
+    if(!this.props.views) return null;
+
     let {selected_model_name} = this.state;
-  
-    if(this.props.views) {
+    let {views} = this.props;
 
-      let {views} = this.props.views;
-      let view_items = Object.keys(views).map((key, index) => ({
-        name: views[key].model_name,
-        id: index,
-      }));
+    let view_items = Object.keys(views).map((key, index)=>({
+      name: views[key].model_name,
+      id: index,
+    }));
 
-      list_menu_props = {
-        name: 'Settings',
-        create: function() {},
-        select: (id)=>{ 
-          this.setState({
-            selected_model_name: view_items[id].name,
-            view_settings_object: this.cloneView(view_items[id].name),
-            view_settings_string: this.stringifyViewTab(view_items[id].name)
-          });
-        },
-        items: view_items,
-      };
-    }
+    let list_menu_props = {
+      name: 'Settings',
+      create: function() {},
+      select: (id)=>{ 
+        this.setState({
+          selected_model_name: view_items[id].name,
+          view_settings_object: this.cloneView(view_items[id].name),
+          view_settings_string: this.stringifyViewTab(view_items[id].name)
+        });
+      },
+      items: view_items,
+    };
 
     return(
       <div className='settings-view-group'>
 
         <div className='left-column-group'>
 
-          {list_menu_props && <ListMenu {...list_menu_props} /> }
+          {list_menu_props && <ListMenu {...list_menu_props} />}
         </div>
         <div className='right-column-group'>
 
@@ -241,11 +236,11 @@ const mapStateToProps = (state = {}, own_props)=>{
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
     fetchViewSettings: ()=>{
-      dispatch(requestViewSettings());
+      dispatch(TimurActions.requestViewSettings());
     },
     
     updateEditViewSettings: (model_name, model_obj)=>{
-      dispatch(updateViewSettings(model_name, model_obj));
+      dispatch(TimurActions.updateViewSettings(model_name, model_obj));
     },
   };
 };

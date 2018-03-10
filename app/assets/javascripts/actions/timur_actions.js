@@ -102,8 +102,8 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
 export const requestViewSettings = ()=>{
   return (dispatch)=>{
     let localSuccess = (response)=>{
-      Object.keys(response).forEach((key)=>{
-        dispatch(addView(key, response[key]));
+      Object.keys(response.views).forEach((key)=>{
+        dispatch(addView(key, response.views[key]));
       });
     };
 
@@ -122,8 +122,9 @@ export const updateViewSettings = (model_name, model_obj)=>{
   return (dispatch)=>{
 
     let localSuccess = (response)=>{
-      console.log('local success from updateViewSettings!');
-      console.log(response);
+      Object.keys(response.views).forEach((key)=>{
+        dispatch(addView(key, response.views[key]));
+      });
     };
 
     let localError = (err)=>{
