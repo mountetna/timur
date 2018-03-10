@@ -1,5 +1,6 @@
 {
   "name": "rna_seq_plate-metrics-default-read_count_distribution",
+  "title": "Read Count Distrobution",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",

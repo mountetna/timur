@@ -1,70 +1,38 @@
 {
-  "name": "timur",
+  "name": "Timur",
+  "version": "1.0.0",
+  "description": "Front end to the Mt. Etna system.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mountetna/timur.git"
+  },
   "dependencies": {
-    "chroma-js": "^0.7.8",
-    "css-loader": "^0.28.7",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "css-loader": "^0.28.10",
     "d3": "^3.5.17",
-    "d3-force": "^1.0.6",
     "downloadjs": "^1.4.7",
-    "font-awesome": "^4.7.0",
-    "json2csv": "^3.7.3",
-    "marked": "^0.3.5",
-    "node-uuid": "^1.4.8",
-    "package.json": "^2.0.1",
-    "plotly.js": "^1.28.1",
-    "prismjs": "^1.6.0",
-    "react": "^0.14.7",
-    "react-dom": "^0.14.7",
-    "react-move": "^1.5.2",
-    "react-plotlyjs": "^0.4.1",
-    "react-redux": "^4.2.1",
-    "redux": "^3.6.0",
-    "redux-thunk": "^0.1.0",
-    "reselect": "^3.0.1",
-    "webworkify-webpack": "^2.1.0",
-    "whatwg-fetch": "^2.0.3"
-  },
-  "engines": {
-    "node": ">= 0.10"
-  },
-  "devDependencies": {
-    "babel-eslint": "^7.1.1",
-    "babel-jest": "^21.0.2",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-polyfill": "^6.3.14",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babel-preset-stage-0": "^6.3.13",
-    "babelify": "^7.2.0",
-    "browserify": "^10.2.4",
-    "browserify-incremental": "^3.0.1",
-    "envify": "^4.0.0",
-    "eslint": "^3.15.0",
-    "eslint-plugin-react": "^6.9.0",
     "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^1.1.5",
-    "isomorphic-fetch": "^2.2.1",
-    "jest": "^21.1.0",
-    "nock": "^9.0.16",
-    "node-sass": "^4.6.0",
-    "promise-polyfill": "^6.0.2",
-    "redux-logger": "^2.8.1",
-    "redux-mock-store": "^1.3.0",
-    "sass-loader": "^6.0.6",
-    "webpack": "^3.8.1"
-  },
-  "jest": {
-    "testMatch": [
-      "**/test/javascript/**/?(*.)(spec|test).js?(x)"
-    ],
-    "collectCoverageFrom": [
-      "app/assets/javascripts/**/*.js?(x)"
-    ]
-  },
-  "scripts": {
-    "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./app/assets/javascripts/** ",
-    "lintfile": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ",
-    "test": "jest --coverage"
+    "file-loader": "^1.1.11",
+    "font-awesome": "^4.7.0",
+    "json2csv": "^4.0.1",
+    "marked": "^0.3.17",
+    "node-sass": "^4.7.2",
+    "plotly.js": "^1.35.0",
+    "prismjs": "^1.12.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-move": "^2.7.0",
+    "react-plotlyjs": "^0.4.4",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1",
+    "sass-loader": "^6.0.7",
+    "webpack": "^3.11.0",
+    "webworkify-webpack": "^2.1.1"
   }
 }

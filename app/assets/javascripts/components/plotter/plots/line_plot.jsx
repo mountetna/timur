@@ -1,14 +1,15 @@
+// Framework libraries.
+import * as React from 'react';
+import * as d3 from 'd3';
+
+import * as D3Scale from '../../../utils/d3_scale';
 import Legend from '../legend';
 import PlotCanvas from '../plot_canvas';
-import React, { Component } from 'react';
+import XAxis from '../xaxis';
+import YAxis from '../yaxis';
 
-import { createScale } from '../../../utils/d3_scale'
-import XAxis from '../xaxis'
-import YAxis from '../yaxis'
-import * as d3 from "d3"
-
-var LinePlot = React.createClass({
-  render: function() {
+export default class LinePlot extends React.Component{
+  render() {
     var self = this
     var plot = this.props.plot
     var margin = plot.margin,
@@ -33,11 +34,11 @@ var LinePlot = React.createClass({
     var ymax = d3.max(y_values);
 
 
-    var xScale = createScale(
+    var xScale = D3Scale.createScale(
       [ xmin, xmax ],
       [ 0, width ]
     )
-    var yScale = createScale(
+    var yScale = D3Scale.createScale(
       [ ymin, ymax ],
       [ height, 0 ]
     )
@@ -89,6 +90,4 @@ var LinePlot = React.createClass({
         </PlotCanvas>
     </svg>
   }
-})
-
-module.exports = LinePlot
+}

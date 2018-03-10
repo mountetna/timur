@@ -2,7 +2,10 @@
 # task should be a one off script run as part of the migration. The data for
 # plots used by the view are/were spread across the view models and in the plot
 # components themselves. I've extracted the view plot data, from it's various
-# sources, and placed them into files located at `./lib/assets/plots`. 
+# sources, and placed them into files located at `./lib/assets/plots`.
+#
+# Not all attributes that need manifest/consignment data have plots. We need to
+# associate them as well.
 #
 # The following are the list of steps required for the data migration to be
 # complete:
@@ -91,10 +94,9 @@ namespace :timur do
         )
       end.first
 
-      # Here the view_attribute should have manifest data attached to it old
-      # plot. We need to make sure we have both the old plot/manifest AND a
-      # matching new plot file for the attribute.
-      next if !view_attribute.plot.key?('manifest') || view_plot.nil?
+      # Here the view_attribute should have manifest data attached to it's old
+      # plot. We need to make sure we have a manifest before proceeding.
+      next if !view_attribute.plot.key?('manifest')
 
       # Extract the manifests from the plots on the view_attributes table.
       elements = view_attribute.plot['manifest'].map do |elem|
@@ -111,20 +113,29 @@ namespace :timur do
         data: {elements: elements}
       })
 
-      # Associate the manifest id to the plot.
-      view_plot['manifest_id'] = manifest.id
-      view_plot['user_id'] = 51
+      if !view_plot.nil?
 
-      # Remove the keys not required for the plot.
-      ['view_name', 'tab_name', 'pane_name', 'attribute_name'].each do |key|
-        view_plot.delete(key)
+        # Add the name of the plot to the attribute.
+        view_attribute.title = view_plot['title']
+
+        # Associate the manifest id to the plot.
+        view_plot['manifest_id'] = manifest.id
+        view_plot['user_id'] = 51
+
+        # Remove the keys not required for the plot.
+        ['title', 'view_name', 'tab_name', 'pane_name', 'attribute_name'].each do |key|
+          view_plot.delete(key)
+        end
+
+        # Save the plot.
+        view_plot = Plot.create(view_plot)
+
+        # Associate the plot with it's attribute by id.
+        view_attribute.plot_id = view_plot.id
       end
 
-      # Save the plot.
-      view_plot = Plot.create(view_plot)
-
-      # Associate the plot with it's attribute by id.
-      view_attribute.plot_id = view_plot.id
+      # Add the manifest id to the attribute.
+      view_attribute.manifest_id = manifest.id
       view_attribute.save!
     end
 
