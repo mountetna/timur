@@ -97,22 +97,16 @@ class TimurApplication{
     switch(props.mode){
       case 'manifests':
         return <Manifests {...props} />;
-        break;
       case 'browse':
         return <Browser {...props} />;
-        break;
       case 'map':
         return <ModelMap />;
-        break;
       case 'plots':
         return <Plotter {...props}/>;
-        break;
       case 'search':
         return <Search  {...props} />; 
-        break;
       case 'activity':
         return <Activity {...props} />;
-        break;
       case 'noauth':
         return <Noauth {...props} />;
       default:
