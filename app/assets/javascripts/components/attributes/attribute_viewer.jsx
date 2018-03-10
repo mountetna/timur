@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Attribute from './attribute';
-import MetricsAttribute from './metrics_attribute';
 import MarkdownAttribute from './markdown_attribute';
 import SelectAttribute from './select_attribute';
 import ImageAttribute from './image_attribute';
@@ -13,14 +12,14 @@ import LinkAttribute from './link_attribute';
 import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
 import TextAttribute from './text_attribute';
+import {MetricsAttributeContainer as MetricsAttribute} from './metrics_attribute';
 
 // The plots.
 import {LinePlotAttributeContainer as LinePlotAttribute} from './plot_attributes/line_plot_attribute';
 import {BoxPlotAttributeContainer as BoxPlotAttribute} from './plot_attributes/box_plot_attribute';
 import {BarGraphAttributeContainer as BarGraphAttribute} from './plot_attributes/bar_graph_attribute';
 import {BarPlotAttributeContainer as BarPlotAttribute} from './plot_attributes/bar_plot_attribute';
-
-import {StackedBarAttributeContainer as StackedBarAttribute} from './plot_attributes/stacked_bar_attribute';
+import {StackedBarPlotAttributeContainer} from './plot_attributes/stacked_bar_attribute';
 import {SwarmPlotAttributeContainer as SwarmPlotAttribute} from './plot_attributes/swarm_plot_attribute';
 import {HistogramAttributeContainer as HistogramAttribute} from './plot_attributes/histogram_attribute';
 
@@ -37,12 +36,12 @@ export default class AttributeViewer extends Component{
         return <BarGraphAttribute {...this.props} />;
       case 'BarPlotAttribute':
         return <BarPlotAttribute {...this.props} />;
-      case 'StackedBarAttribute':
-        return null;//<StackedBarAttribute {...this.props} />;
-      case 'SwarmPlotAttribute':
-        return null;//<SwarmPlotAttribute {...this.props} />;
+      case 'StackedBarPlotAttribute':
+        return <StackedBarPlotAttributeContainer {...this.props} />;
+      case 'SwarmAttribute':
+        return <SwarmPlotAttribute {...this.props} />;
       case 'HistogramAttribute':
-        return null;//<HistogramAttribute {...this.props} />;
+        return <HistogramAttribute {...this.props} />;
 
       case 'BoxPlotAttribute':
         return <BoxPlotAttribute {...this.props} />;
@@ -52,7 +51,6 @@ export default class AttributeViewer extends Component{
         return <MarkdownAttribute {...this.props} />;
       case 'MetricsAttribute':
         return <MetricsAttribute {...this.props} />;
-
       case 'Magma::CollectionAttribute':
         return <CollectionAttribute {...this.props} />;
       case 'Magma::ForeignKeyAttribute':

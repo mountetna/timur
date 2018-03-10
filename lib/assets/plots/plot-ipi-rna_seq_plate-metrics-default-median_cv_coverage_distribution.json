@@ -1,5 +1,6 @@
 {
   "name": "rna_seq_plate-metrics-default-median_cv_coverage_distribution",
+  "title": "Median CV Coverage Distrobution",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",

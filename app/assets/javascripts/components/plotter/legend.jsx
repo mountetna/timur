@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
 
-// expects x, y, and a 'series' array of objects with
-// name, color properties
-var Legend = React.createClass({
-  render: function() {
+export default class Legend extends React.Component{
+  render(){
     return <g className="legend" height="100" width="100" 
        transform={ 'translate(' + this.props.x + ',' + this.props.y + ')' }>
       {
@@ -22,6 +21,4 @@ var Legend = React.createClass({
       }
     </g>
   }
-});
-
-module.exports = Legend;
+}

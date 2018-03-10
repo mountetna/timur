@@ -1,5 +1,6 @@
 {
   "name": "rna_seq_plate-metrics-default-composition_metric",
+  "title": "Composition Metrics",
   "user_id": null,
   "manifest_id": null,
   "project": "ipi",

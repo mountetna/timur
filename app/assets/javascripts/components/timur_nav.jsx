@@ -1,11 +1,13 @@
-import IdentifierSearch from './identifier_search';
-import Help from './help';
-import { connect } from 'react-redux';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { toggleConfig } from '../actions/timur_actions'
-import React, { Component } from 'react'
+import * as TimurActions from '../actions/timur_actions';
 
-class TimurNav extends Component {
+import {IdentifierSearchContainer as IdentifierSearch} from './identifier_search';
+import {HelpContainer as Help} from './help';
+
+export class TimurNav extends React.Component{
   renderHalo() {
     return <div className='halo'>
       <svg>
@@ -101,12 +103,22 @@ class TimurNav extends Component {
   }
 }
 
-export default connect(
-  (state) => ({
+const mapStateToProps = (state = {}, own_props)=>{
+  return {
     helpShown: state.timur.help_shown,
     exchanges: state.exchanges
-  }),
-  {
-    toggleConfig
-  }
-)(TimurNav)
+  };
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    toggleConfig: (text)=>{
+      dispatch(TimurActions.toggleConfig(text));
+    }
+  };
+};
+
+export const TimurNavContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TimurNav);

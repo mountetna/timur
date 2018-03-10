@@ -1,190 +1,332 @@
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
+
 import MagmaLink from '../magma_link';
-import React, { Component } from 'react';
+import * as MessageActions from '../../actions/message_actions';
+import * as ManifestActions from '../../actions/manifest_actions';
+import * as ConsignmentSelector from '../../selectors/consignment_selector';
 
-import { connect } from 'react-redux';
+export class CategoryControl extends React.Component{
 
-import { selectConsignment } from '../../selectors/consignment_selector';
-import { showMessages } from '../../actions/message_actions';
+  renderCategories(){
+    let categories = Object.keys(this.props.metric_names);
+    return categories.map((category)=>{
+      let category_props = {
+        key: category,
+        className: this.props.hidden[category] ? 'category_label hidden' : 'category_label',
+        onClick: ()=>{
+          this.props.toggleHidden(category);
+        }
+      };
 
-var CategoryControl = React.createClass({
-  render: function() {
-    var props = this.props
-    var categories = Object.keys(props.metric_names)
-    return <div className="categories">
-      {
-        categories.map((category) =>
-          <div key={ category }
-            className={ props.hidden[category] ?  "category_label hidden" : "category_label" }
-            onClick={ () => props.toggleHidden(category) }>
-            { category }
-          </div>
-        )
-      }
-      <div className="metrics_names">
-      {
-        categories.map((category) => {
-          var metric_names = props.metric_names[category]
-          if (props.hidden[category])
-            return null
-          else
-            return <div className="category" key={ category }>
-              {
-                metric_names.map((metric_name) =>
-                  <div key={ metric_name } className="metric">
-                    { metric_name }
-                  </div>
-                )
-              }
-            </div>
-        })
-      }
+      return <div {...category_props}>{category}</div>;
+    });
+  }
+
+  renderMetricNames(){
+    let categories = Object.keys(this.props.metric_names);
+    return categories.map((category)=>{
+
+      if(this.props.hidden[category]) return null;
+
+      let metric_names = this.props.metric_names[category].map((metric_name)=>{
+        return <div key={metric_name} className='metric'>{metric_name}</div>
+      });
+
+      return(
+        <div className='category' key={category}>
+
+          {metric_names}
+        </div>
+      );
+    });
+  }
+
+  render(){
+    return(
+      <div className='categories'>
+
+        {this.renderCategories()}
+        <div className='metrics_names'>
+
+          {this.renderMetricNames()}
+        </div>
       </div>
-    </div>
+    );
   }
-})
+}
 
-var RecordMetrics = React.createClass({
-  render: function() {
-    var categories = Object.keys(this.props.metric_names)
-    return <div className="metrics">
-      <div className="record_name"><MagmaLink link={this.props.record_name} model={this.props.model_name}/></div>
-      {
-        categories.map((category) =>
-          this.props.hidden[category] ?
-            null
-          :
-          <CategoryMetrics
-            record_name={ this.props.record_name }
-            key={ category }
-            metrics={ this.props.metric_names[category].map(
-              (metric_name) => this.props.metrics[metric_name]
-            ) }/>
-        )
-      }
-    </div>
+export class RecordMetrics extends React.Component{
+  renderCategoryMetrics(){
+    let categories = Object.keys(this.props.metric_names);
+    return categories.map((category)=>{
+
+      let {
+        hidden,
+        record_name,
+        metric_names,
+        metrics
+      } = this.props;
+
+      if(hidden[category]) return null;
+
+      metrics = metric_names[category].map((metric_name)=>{
+        return metrics[metric_name];
+      });
+
+      let category_props = {
+        record_name,
+        key: category,
+        metrics
+      };
+
+      return <CategoryMetrics {...category_props} />;
+    });
   }
-})
 
-var Metric = React.createClass({
-  render: function() {
-    var metric = this.props.metric
-    return <div
-      className="metric_box"
-      onClick={ () => this.props.showDetails() }>
-      <div title={
-        metric.details.length ? metric.message + " [ Click for details ]" : metric.message
-      } className={ metric.score + " metric" }>
-      &nbsp;
+  render(){
+    let {
+      metric_names,
+      record_name,
+      model_name
+    } = this.props;
+
+    return(
+      <div className='metrics'>
+
+        <div className='record_name'>
+
+          <MagmaLink link={record_name} model={model_name} />
+        </div>
+        {this.renderCategoryMetrics()}
       </div>
-    </div>
+    );
   }
-})
+}
 
-Metric = connect(
-  null,
-  function(dispatch,props) {
-    var metric = props.metric
-    var details = metric.details
-    return {
-      showDetails: function() {
-        if (details.length) {
-          dispatch(
-            showMessages([
-`# The test ${metric.name} on ${props.record_name} failed.
-${
-  metric.details.map((detail) =>
-`## ${detail.title}
-${
-    detail.entries.map((entry) => `- ${entry}`).join("\n")
-}`).join("\n")
-}`
-            ])
-          )
+export class Metric extends React.Component{
+  render(){
+    let {
+      metric,
+      showDetails
+    } = this.props;
+
+    let metric_props = {
+      className: 'metric_box',
+      onClick: ()=>{
+        this.props.showDetails();
+      }
+    };
+
+    let title_props = {
+      className: metric.score + ' metric',
+      title: metric.details.length ? metric.message + " [ Click for details ]" : metric.message
+    };
+
+    return(
+      <div {...metric_props}>
+
+        <div {...title_props}>&nbsp;</div>
+      </div>
+    );
+  }
+}
+
+const metricMapStateToProps = (state = {}, own_props)=>{
+  return state;
+};
+
+const metricMapDispatchToProps = (dispatch, own_props)=>{
+  let metric = own_props.metric;
+  let details = metric.details;
+
+  let detail_messages = metric.details.map((detail)=>{
+
+    let details = detail.entries.map((entry)=>{
+      return `- ${entry}`
+    });
+    details = details.join('\n');
+
+    return `## ${detail.title} ${details}`;
+  });
+
+  detail_messages = detail_messages.join('\n');
+
+  let messages = `# The test ${metric.name} on ${props.record_name} failed. ${detail_messages}`;
+
+  return {
+    showDetails: function(){
+      if(details.length) dispatch(MessageActions.showMessages(messages));
+    }
+  };
+};
+
+export const MetricContainer = ReactRedux.connect(
+  metricMapStateToProps,
+  metricMapDispatchToProps
+)(Metric);
+
+
+export class CategoryMetrics extends React.Component{
+  render(){
+
+    let categories = this.props.metrics.map((metric)=>{
+      let metric_props = {
+        key: metric.name,
+        record_name: this.props.record_name,
+        metric
+      };
+
+      return <Metric {...metric_props} />;
+    });
+
+    return(
+      <div className='category'>
+
+        {categories}
+      </div>
+    );
+  }
+}
+
+export class MetricsAttribute extends React.Component{
+  constructor(props){
+    super(props);
+
+    this.state = {
+      category_hidden: {},
+      fetched_consignment: false
+    };
+  }
+
+  componentDidMount(){
+    let {
+      document,
+      template,
+      selected_consignment,
+      selected_manifest,
+      fetchConsignment
+    } = this.props;
+
+    /*
+     * If we don't have the consignment (data) we need for the plot but we do
+     * have the manifest (data request), then go ahead and make the request.
+     */
+    if(selected_consignment == undefined){
+      if(selected_manifest != undefined){
+        if(!this.state.fetched_consignment){
+          fetchConsignment(selected_manifest.id, document[template.identifier]);
+          this.setState({fetched_consignment: true});
         }
       }
     }
   }
-)(Metric)
 
-var CategoryMetrics = React.createClass({
-  render: function() {
-    return <div className="category">
-    {
-      this.props.metrics.map(
-        (metric) => <Metric key={ metric.name } record_name={ this.props.record_name } metric={ metric }/>
-      )
-    }
-    </div>
+  renderMetrics(){
+    let {
+      model_name,
+      metric_names,
+      metrics
+    } = this.props;
+
+    return metrics.map((identifier, metric_set)=>{
+
+      let record_props = {
+        model_name,
+        metric_names,
+        hidden: this.state.category_hidden,
+        record_name: identifier,
+        key: identifier,
+        metrics: metric_set
+      };
+
+      return <RecordMetrics {...record_props} />;
+    });
   }
-})
 
-var MetricsAttribute = React.createClass({
-  getInitialState: function() {
-    return { category_hidden: {} }
-  },
-  render: function() {
-    var props = this.props
-    var categories = props.categories
-    return <div className="value">
-      <CategoryControl
-        hidden={ this.state.category_hidden }
-        metric_names={ props.metric_names }
-        toggleHidden={
-          (category) => {
-            this.setState({
-              category_hidden: {
-                ...this.state.category_hidden,
-                [category]: !this.state.category_hidden[category]
-              }
-            })
+  render(){
+    let category_props = {
+      hidden: this.state.category_hidden,
+      metric_names: this.props.metric_names,
+      toggleHidden: (category)=>{
+        this.setState({
+          category_hidden: {
+            ...this.state.category_hidden,
+            [category]: !this.state.category_hidden[category]
           }
-        }
-      />
-      <div className="metrics_view">
-      {
-        props.metrics.map((identifier,metric_set) => <RecordMetrics
-             model_name={ props.model_name }
-             record_name={ identifier }
-             metric_names={ props.metric_names }
-             hidden={ this.state.category_hidden }
-             key={ identifier }
-             metrics={ metric_set }/>
-        )
+        });
       }
+    };
+
+    return(
+      <div className='value'>
+
+        <CategoryControl {...category_props} />
+        <div className='metrics_view'>
+
+          {this.renderMetrics()}
+        </div>
       </div>
-    </div>
-  },
-})
-
-MetricsAttribute = connect(
-  function(state,props) {
-    var consignment = selectConsignment(state,props.attribute.plot.name)
-
-    var metric_names = {}
-    var metrics = []
-    var model_name
-
-    if (consignment && consignment.metrics) {
-      for (var metric_name in consignment.metrics.values[0]) {
-        var metric = consignment.metrics.values[0][metric_name]
-        metric_names = {
-          ...metric_names,
-          [metric.category]: [
-            metric_name,
-            ...(metric_names[metric.category] || [])
-          ]
-        }
-      }
-
-      metrics = consignment.metrics
-      model_name = consignment.model_name
-    }
-    return {
-      metrics: metrics,
-      metric_names: metric_names,
-      model_name: model_name
-    }
+    );
   }
-)(MetricsAttribute)
+}
 
-module.exports = MetricsAttribute
+const metricAttrStateToProps = (state = {}, own_props)=>{
+
+  /*
+   * Pull the data required for this attribute.
+   */
+  let selected_manifest, selected_consignment = undefined;
+  selected_manifest = state.manifests[own_props.attribute.manifest_id];
+  if(selected_manifest != undefined){
+    selected_consignment = ConsignmentSelector.selectConsignment(
+      state,
+      selected_manifest.md5sum_data
+    );
+  }
+
+  let metric_names = {};
+  let metrics = [];
+  let model_name;
+
+  if(selected_consignment && selected_consignment.metrics){
+    for(let metric_name in selected_consignment.metrics.values[0]){
+      let metric = selected_consignment.metrics.values[0][metric_name];
+      metric_names = {
+        ...metric_names,
+        [metric.category]: [
+          metric_name,
+          ...(metric_names[metric.category] || [])
+        ]
+      };
+    }
+
+    metrics = selected_consignment.metrics;
+    model_name = selected_consignment.model_name;
+  }
+
+  return {
+    metrics,
+    metric_names,
+    model_name,
+    selected_manifest,
+    selected_consignment
+  };
+};
+
+const metricAttrDispatchToProps = (dispatch, own_props)=>{
+  return {
+    fetchConsignment: (manifest_id, record_name)=>{
+      dispatch(ManifestActions.requestConsignmentsByManifestId(
+        [manifest_id],
+        record_name
+      ));
+    }
+  };
+};
+
+export const MetricsAttributeContainer = ReactRedux.connect(
+  metricAttrStateToProps,
+  metricAttrDispatchToProps
+)(MetricsAttribute);

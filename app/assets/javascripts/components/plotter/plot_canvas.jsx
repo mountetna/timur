@@ -1,13 +1,8 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
 
-// Requires:
-//   x = pixel coordinate for left edge
-//   y = pixel coordinate for top edge
-//   width = width of plot
-//   height = height of plot
-
-var PlotCanvas = React.createClass({
-  render: function() {
+export default class PlotCanvas extends React.Component{
+  render() {
     return <g className="plot_canvas" 
             onWheel={ this.props.onWheel }
             transform={ 'translate(' + this.props.x + ',' + this.props.y + ')' }>
@@ -19,6 +14,4 @@ var PlotCanvas = React.createClass({
       }
     </g>
   }
-});
-
-module.exports = PlotCanvas;
+}

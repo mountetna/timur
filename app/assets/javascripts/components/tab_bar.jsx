@@ -22,7 +22,12 @@ export class TabBar extends React.Component{
 
       // Render a selected tab.
       if(current_tab_index == view.tabs[tab_name].index_order){
-        return <div className='selected tab'>{self.formatName(tab_name)}</div>;
+        return(
+          <div className='selected tab' key={index}>
+
+            {self.formatName(tab_name)}
+          </div>
+        );
       }
 
       // Render a non selected tab.
