@@ -15,7 +15,6 @@ export default class DemographicInput extends React.Component {
             onChange={this.props.inputChange}
             type='text' />
         );
-        break;
       case 'number':
         return inputElement = (
           <input
@@ -26,7 +25,6 @@ export default class DemographicInput extends React.Component {
             onChange={this.props.inputChange}
             type='number' />
         );
-        break;
       case 'date':
         return inputElement = (
           <input 
@@ -36,7 +34,6 @@ export default class DemographicInput extends React.Component {
             onChange={this.props.inputChange}
             type='date' />
         );
-        break;
       case 'regex':
         return inputElement = (
           <select
@@ -48,7 +45,6 @@ export default class DemographicInput extends React.Component {
             {this.props.selectOptions}
           </select>
         );
-        break;
       default:
         return inputElement = (<div>Input Type Error</div>);
     }
