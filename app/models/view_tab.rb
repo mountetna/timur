@@ -113,5 +113,7 @@ class ViewTab < ActiveRecord::Base
         ViewPane.update(tab.id, pane_name, pane_data)
       end
     end
+
+    
   end
 end

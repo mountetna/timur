@@ -8,13 +8,9 @@ import {SettingsUserContainer as SettingsUser} from './settings_user';
 
 // Main component for viewing/editing settings.
 export class Settings extends React.Component{
-  constructor(props){
-    super(props);
-  }
-
   render(){
     switch(this.props.settings_page){
-      case 'view': 
+      case 'view':
         return <SettingsView />;
       case 'user':
         return <SettingsUser />;
