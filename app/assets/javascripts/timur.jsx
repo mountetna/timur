@@ -84,7 +84,7 @@ class TimurApplication{
     ];
 
     // Apply the logging if we are not in production.
-    //if(process.env.NODE_ENV != 'production') middlewares.push(createLogger());
+    if(process.env.NODE_ENV != 'production') middlewares.push(createLogger());
 
     this.store = Redux.createStore(
       reducers,
