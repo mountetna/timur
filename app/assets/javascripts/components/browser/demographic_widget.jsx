@@ -70,7 +70,7 @@ class DemographicWidget extends React.Component {
           }
         }
 
-        return (<div key={i}>
+        return (<div className='demographic-group' key={i}>
 
           <select {...select_props}>
 
@@ -83,16 +83,11 @@ class DemographicWidget extends React.Component {
               <DemographicInput {...demographics_input_props}/>
           }
 
-          {
-            !this.state.values[i].selectValue && 
-              <input className='demographic-input hide'/>
-          }
-
           <button
             className='demographic-button remove'
             onClick={this.removeClick.bind(this, i)}>
             
-            <i className='fa fa-times' aria-hidden='true'></i> REMOVE
+            &#10006;
           </button>
         </div>)
       }
@@ -150,7 +145,7 @@ class DemographicWidget extends React.Component {
         className='demographic-button'
         onClick={this.addClick.bind(this)}> 
   
-        <i className='fa fa-plus' aria-hidden='true'></i> ADD 
+        &#10010; ADD 
       </button>
       <input className='demographic-button' type="submit" value="SAVE"/>
     </form>

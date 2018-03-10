@@ -27,10 +27,6 @@
   min-width: 210px;
 }
 
-.demographic-input.hide{
-  visibility: hidden;
-}
-
 .demographic-button{
   padding: 5px;
   border: 1px solid #333;
@@ -40,8 +36,37 @@
   margin: 5px;
 }
 
-.demographic-button:hover {
+.demographic-button:hover{
   color: #fff;
-  background: #22a778;
-  border: 1px solid #22a778;
+  background: #4CAF50;
+  border: 1px solid #4CAF50;
+}
+
+.remove {
+  border: 1px solid white;
+  background: none;
+  color: black;
+  padding: 5px 10px 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: .8em;
+  border-radius: 3px;
+}
+
+.remove:hover{
+  color: #fff;
+  background: #4CAF50;
+  border: #4CAF50;
+}
+
+.demographic-group > .remove {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.demographic-group:hover > .remove{
+  visibility: visible;
+  opacity: 1;
 }
