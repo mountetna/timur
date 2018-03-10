@@ -1,5 +1,5 @@
 // Class imports.
-import {getView, getUser, updateView} from '../api/view';
+import * as ViewAPI from '../api/view_api';
 import {showMessages} from './message_actions';
 import {requestDocuments} from './magma_actions';
 import {Exchange} from './exchange_actions';
@@ -31,6 +31,13 @@ export const addView = (view_name, view)=>{
     type: 'ADD_VIEW',
     view_name, // The view name also references a Magma Model.
     view
+  };
+};
+
+export const refreshViews = (views)=>{
+  return {
+    type: 'REFRESH_VIEWS',
+    views
   };
 };
 
@@ -112,19 +119,16 @@ export const requestViewSettings = ()=>{
     };
 
     let exchange = new Exchange(dispatch,'view for settings');
-    getView('all', 'all', exchange)
+    ViewAPI.getView('all', 'all', exchange)
       .then(localSuccess)
       .catch(localError);
   };
 };
 
-export const updateViewSettings = (model_name, model_obj)=>{
+export const updateViewSettings = (view_obj)=>{
   return (dispatch)=>{
-
     let localSuccess = (response)=>{
-      Object.keys(response.views).forEach((key)=>{
-        dispatch(addView(key, response.views[key]));
-      });
+      dispatch(refreshViews(response.views));
     };
 
     let localError = (err)=>{
@@ -132,8 +136,25 @@ export const updateViewSettings = (model_name, model_obj)=>{
     };
 
     let exchange = new Exchange(dispatch,'updating view settings');
-    updateView(model_name, model_obj, exchange)
+    ViewAPI.updateView(view_obj, exchange)
       .then(localSuccess)
       .catch(localError);
   };
 };
+
+export const deleteViewSettings = (view_obj)=>{
+  return (dispatch)=>{
+    let localSuccess = (response)=>{
+      dispatch(refreshViews(response.views));
+    };
+
+    let localError = (err)=>{
+      console.log(err);
+    };
+
+    let exchange = new Exchange(dispatch,'delete view settings');
+    ViewAPI.deleteView(view_obj, exchange)
+      .then(localSuccess)
+      .catch(localError);
+  };
+}

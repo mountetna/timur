@@ -87,7 +87,7 @@ export class SettingsView extends React.Component{
   editableButtons(){
     return [
       {
-        click: ()=>{},
+        click: this.deleteView.bind(this),
         icon: 'trash-o',
         label: ' DELETE'
       },
@@ -116,6 +116,8 @@ export class SettingsView extends React.Component{
   }
 
   deleteView(){
+    if(!confirm('Are you sure you want to delete this view?')) return;
+
     this.props.deleteViewSettings(
       this.state.view_settings_object
     );
@@ -123,7 +125,6 @@ export class SettingsView extends React.Component{
 
   saveEdit(){
     this.props.updateEditViewSettings(
-      this.state.view_settings_object.model_name,
       this.state.view_settings_object
     );
     this.toggleEdit();
@@ -307,8 +308,12 @@ const mapDispatchToProps = (dispatch, own_props)=>{
       dispatch(TimurActions.requestViewSettings());
     },
     
-    updateEditViewSettings: (model_name, model_obj)=>{
-      dispatch(TimurActions.updateViewSettings(model_name, model_obj));
+    updateEditViewSettings: (model_obj)=>{
+      dispatch(TimurActions.updateViewSettings(model_obj));
+    },
+
+    deleteViewSettings: (model_obj)=>{
+      dispatch(TimurActions.deleteViewSettings(model_obj));
     },
   };
 };

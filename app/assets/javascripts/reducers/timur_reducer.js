@@ -54,6 +54,8 @@ const views = (old_views = {}, action)=>{
         ...old_views,
         [action.view_name]: action.view
       };
+    case 'REFRESH_VIEWS':
+      return {...action.views};
     default:
       return old_views;
   }
@@ -64,6 +66,7 @@ const timurReducer = function(timur, action) {
   switch(action.type) {
     case 'ADD_TAB':
     case 'ADD_VIEW':
+    case 'REFRESH_VIEWS':
       return {
         ...timur,
         views: views(timur.views, action)
