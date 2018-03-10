@@ -5,7 +5,7 @@ import Magma from '../magma';
 import { requestTSV } from '../actions/magma_actions';
 
 import Pager from './pager';
-import Help from './help';
+import {HelpContainer as Help} from './help';
 import AttributeViewer from './attributes/attribute_viewer';
 
 const TableColumn = (template, document) => (att_name) => (
