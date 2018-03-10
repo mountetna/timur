@@ -22,10 +22,47 @@ class SettingsController < ApplicationController
   end
 
   def update_view_json
-    if params.nil? 
-      render :json => { :errors => ["View data does not exist."] }, :status => 404
-    else
-      render :json => { :message => ["View data available."]}, :status => 200
+
+    # Pull the permissions for the current user.
+    admin_user = current_user.whitelist.permissions.select do |permission|
+      permission.project_name == params['project_name'] && 
+      permission.role == 'administrator'
+    end.first
+
+    # Check the current user for admin permissions.
+    if admin_user.nil?
+      render(
+        json: {
+          errors: ['You do not have the permissions to edit this data.']
+        },
+        status: 401
+      )
+      return
     end
+
+    if params.key?('tabs')
+      params['tabs'].each do |tab_name, tab_datum|
+        ViewTab.update(
+          params['project_name'],
+          params['model_name'],
+          tab_name,
+          tab_datum
+        )
+      end
+    else
+      render(
+        json: {
+          errors: ['There is no tab data to save.']
+        },
+        status: 400
+      )
+      return
+    end
+
+    # The update went as planned.
+    render(
+      json: ViewTab.retrieve_view(params['project_name'], params['model_name']),
+      status: 200
+    )
   end
 end
