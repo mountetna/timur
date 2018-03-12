@@ -7,19 +7,27 @@ export class GenericPlotAttribute extends React.Component{
     super(props);
 
     this.state = {
-      fetched_consignment: false
-    }
-    props.initialized(this.constructor.name);
+      fetched_consignment: false,
+
+      // Once the new middleware in place these won't necessary.
+      fetch_attempts: 0,
+      max_fetch_attempts: 10
+    };
   }
 
-  shouldComponentUpdate(next_props, next_state){
+  componentDidMount(){
     let {
       document,
       template,
       selected_consignment,
       selected_manifest,
       fetchConsignment
-    } = next_props;
+    } = this.props;
+
+    let {
+      fetch_attempts,
+      max_fetch_attempts
+    } = this.state;
 
     /*
      * If we don't have the consignment (data) we need for the plot but we do
@@ -27,14 +35,25 @@ export class GenericPlotAttribute extends React.Component{
      */
     if(selected_consignment == undefined){
       if(selected_manifest != undefined){
-        if(!next_state.fetched_consignment){
+        if(!this.state.fetched_consignment){
           fetchConsignment(selected_manifest.id, document[template.identifier]);
-          next_state.fetched_consignment = true;
+          this.setState({fetched_consignment: true});
+        }
+      }
+      else{
+
+        /*
+         * We need this block due to the fact that this function may run before
+         * the manifests return from their async call. Once the new middleware
+         * is in place we will have the event of the manifest return trigger the
+         * consignment fetch.
+         */
+        if(fetch_attempts < max_fetch_attempts){
+          setTimeout(this.componentDidMount.bind(this), 300);
+          this.setState({fetch_attempts: fetch_attempts+1});
         }
       }
     }
-
-    return true;
   }
 
   render(){

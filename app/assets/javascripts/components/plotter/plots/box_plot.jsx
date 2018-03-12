@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { createScale } from '../../../utils/d3_scale';
+import * as D3Scale from '../../../utils/d3_scale';
 import PlotCanvas from '../plot_canvas';
 
-var BoxPlot = React.createClass({
-  render: function() {
+export default class BoxPlot extends React.Component{
+  render() {
     var self = this
     var plot = this.props.plot
     var margin = plot.margin,
@@ -19,7 +21,7 @@ var BoxPlot = React.createClass({
       []
     )
 
-    var yScale = createScale(
+    var yScale = D3Scale.createScale(
       [ this.props.ymin, this.props.ymax ],
       [ height, 0 ]
     )
@@ -50,29 +52,31 @@ var BoxPlot = React.createClass({
       </PlotCanvas>
     </svg>
   }
-})
-
-var quantile = function(values, p) {
-  if ( p == 0.0 ) { return values[ 0 ] }
-  if ( p == 1.0 ) { return values[ values.length-1 ] }
-  var id = values.length*p- 1
-  if ( id == Math.floor( id ) ) {
-    return ( values[ id ] + values[ id+1 ] ) / 2.0
-  }
-  id = Math.ceil( id )
-  return values[ id ]
 }
-var WhiskerBox = React.createClass({
-  render: function() {
+
+export class WhiskerBox extends React.Component{
+
+  quantile(values, p) {
+    if ( p == 0.0 ) { return values[ 0 ] }
+    if ( p == 1.0 ) { return values[ values.length-1 ] }
+    var id = values.length*p- 1
+    if ( id == Math.floor( id ) ) {
+      return ( values[ id ] + values[ id+1 ] ) / 2.0
+    }
+    id = Math.ceil( id )
+    return values[ id ]
+  }
+
+  render() {
     // 
     var self = this
 
     var values = this.props.values.sort(function(a,b) { return a-b })
 
     var quartileData = [
-      quantile(values, 0.25),
-      quantile(values, 0.5),
-      quantile(values, 0.75)
+      this.quantile(values, 0.25),
+      this.quantile(values, 0.5),
+      this.quantile(values, 0.75)
     ]
 
     var iqr = (quartileData[2] - quartileData[0]) * 1.5
@@ -156,6 +160,4 @@ var WhiskerBox = React.createClass({
         textAnchor="middle">{ this.props.label }</text>
     </g>
   }
-})
-
-module.exports = BoxPlot
+}
