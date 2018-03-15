@@ -30,7 +30,9 @@ module Archimedes
       @order = @opts['order']
 
       raise ArgumentError, "table() requires a Vector query argument." unless @column_queries.is_a?(Archimedes::Vector)
-      raise ArgumentError, "Column names must be unique." unless col_names.uniq == col_names
+
+      duplicate_col_names = col_names.group_by{ |e| e }.select { |k, v| v.size > 1 }.map(&:first)
+      raise ArgumentError, "Column names '#{duplicate_col_names.join(', ')}' must be unique." unless duplicate_col_names.empty?
     end
 
     def call
@@ -73,7 +75,7 @@ module Archimedes
     end
 
     def answer
-      @answer ||= 
+      @answer ||=
         begin
           response = client.query(
             @token, @project_name,
