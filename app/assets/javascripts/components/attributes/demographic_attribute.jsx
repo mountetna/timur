@@ -1,5 +1,5 @@
 import React from 'react';
-import DemographicWidget from '../browser/demographic_widget';
+import {DemographicWidgetContainer} from '../browser/demographic_widget';
 
 export default class DemographicAttribute extends React.Component{
   constructor(props){
@@ -18,7 +18,7 @@ export default class DemographicAttribute extends React.Component{
     return(
       <div className='value'>
 
-        <DemographicWidget {...demo_props} />
+        <DemographicWidgetContainer {...demo_props} />
       </div>
     );
   }
