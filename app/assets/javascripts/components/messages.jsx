@@ -2,8 +2,10 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
-import * as MessageActions from '../actions/message_actions';
+import { dismissMessages } from '../actions/message_actions';
 import markdown from '../markdown';
+
+const sanitize = (string) => string.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
 export class Messages extends React.Component{
   constructor(props){
@@ -24,34 +26,34 @@ export class Messages extends React.Component{
     if (new_message >= this.props.messages.length) return;
     this.setState({ current_message: new_message });
   }
-  sanitize(string) {
-    return string.replace(/</g,"&lt;").replace(/>/g,"&gt;")
+  dismissMessages() {
+    this.setState({ current_message: 0 });
+
+    this.props.dismissMessages();
   }
   render() {
-    var self = this;
-    if (!this.props.messages.length) return <div></div>;
+    let { messages } = this.props;
+    let { current_message } = this.state;
 
-    var nav;
+    if (!messages.length) return <div></div>;
 
-    if (this.props.messages.length > 1) {
+    let nav;
+
+    if (messages.length > 1) {
       nav = <div id="nav">
         {
-          this.state.current_message ?  <span className="arrow fa fa-chevron-left" onClick={ this.prevMessage }/> : null
+          current_message ?  <span className="arrow fa fa-chevron-left" onClick={ this.prevMessage.bind(this) }/> : null
         }
         <span className="pager">
-          Page { this.state.current_message + 1 } of { this.props.messages.length }
+          Page { current_message + 1 } of { messages.length }
         </span>
         {
-          this.state.current_message < this.props.messages.length-1 ?  <span className="arrow fa fa-chevron-right" onClick={ this.nextMessage }/> : null
+          current_message < messages.length-1 ?  <span className="arrow fa fa-chevron-right" onClick={ this.nextMessage.bind(this) }/> : null
         }
       </div>
     }
 
-    var message = markdown(
-      this.sanitize(
-        this.props.messages[this.state.current_message]
-      )
-    );
+    let message = markdown( sanitize( messages[current_message] ) );
 
     return <div id="messages">
             <div id="quote">
@@ -59,11 +61,7 @@ export class Messages extends React.Component{
                 <path d="M 8,20 0,0 20,20"/>
               </svg>
             </div>
-            <div id="dismiss"
-               onClick={ function() { 
-                 self.setState({ current_message: 0 });
-                 self.props.dispatch(MessageActions.dismissMessages())
-               } }>
+            <div id="dismiss" onClick={ this.dismissMessages.bind(this) }>
               <span className="fa fa-check"> </span>
             </div>
             <div id="message_viewer">
@@ -81,9 +79,7 @@ const mapStateToProps = (state = {}, own_props)=>{
   };
 };
 
-const mapDispatchToProps = (dispatch, own_props)=>{
-  return {};
-};
+const mapDispatchToProps = { dismissMessages };
 
 export const MessagesContainer = ReactRedux.connect(
   mapStateToProps,
