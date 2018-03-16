@@ -1,5 +1,4 @@
 require 'net/http'
-require 'mime/types'
 require 'uri'
 require 'json'
 
