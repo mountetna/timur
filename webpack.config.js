@@ -31,6 +31,7 @@ module.exports = {
         // Options to configure babel with
         query: {
           presets: ['env', 'react'],
+          plugins: ['transform-object-rest-spread']
         }
       },
 
