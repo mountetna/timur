@@ -177,7 +177,6 @@ export class SettingsView extends React.Component{
   }
 
   renderRightColumnGroup(){
-
     if(this.state.view_settings_object == null) return null;
 
     let {
@@ -267,12 +266,13 @@ export class SettingsView extends React.Component{
   }
 
   render(){
-    if(!this.props.views) return null;
-
-    let view_items = Object.keys(this.props.views).map((key, index)=>({
-      name: this.props.views[key].model_name,
-      id: index,
-    }));
+    let view_items = [];
+    if(this.props.views){
+      view_items = Object.keys(this.props.views).map((key, index)=>({
+        name: this.props.views[key].model_name,
+        id: index,
+      }));
+    }
 
     let list_menu_props = {
       name: 'Settings',
