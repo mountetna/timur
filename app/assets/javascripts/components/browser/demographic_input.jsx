@@ -1,57 +1,47 @@
 import React from 'react';
 
-export default class DemographicInput extends React.Component {
+export default class DemographicInput extends React.Component{
+  render(){
 
-  renderElement() {
-    let inputElement = null;
+    let {
+      input_type,
+      input_key,
+      input_value,
+      select_options,
+      inputChange
+    } = this.props;
 
-    switch(this.props.inputType) {
+    let input_props = {
+      className: 'demographic-input',
+      value: input_value,
+      onChange: inputChange
+    };
+
+    switch(input_type){
       case 'string':
-        return inputElement = (
-          <input 
-            key = {'string' + this.props.inputKey}
-            className='demographic-input'
-            value={this.props.inputValue}
-            onChange={this.props.inputChange}
-            type='text' />
-        );
+        input_props['key'] = `string-${input_key}`;
+        input_props['type'] = 'text';
+        return <input {...input_props} />;
       case 'number':
-        return inputElement = (
-          <input
-            key = {'number' + this.props.inputKey} 
-            className='demographic-input'
-            min='0'
-            value={this.props.inputValue}
-            onChange={this.props.inputChange}
-            type='number' />
-        );
+        input_props['key'] = `number-${input_key}`;
+        input_props['type'] = 'number';
+        return <input {...input_props} />;
       case 'date':
-        return inputElement = (
-          <input 
-            key = {'date' + this.props.inputKey}
-            className='demographic-input'
-            value={this.props.inputValue}
-            onChange={this.props.inputChange}
-            type='date' />
-        );
+        input_props['key'] = `date-${input_key}`;
+        input_props['type'] = 'date';
+        return <input {...input_props} />;
       case 'regex':
-        return inputElement = (
-          <select
-            key = {'regex' + this.props.inputKey}
-            className='demographic-select'
-            value={this.props.inputValue}
-            onChange={this.props.inputChange}>
-            <option defaultvalue=''>Make Selection</option>
-            {this.props.selectOptions}
+        input_props['key'] = `regex-${input_key}`;
+        input_props['className'] = 'demographic-select';
+        return(
+          <select {...input_props}>
+
+            <option defaultValue=''>{'Make Selection'}</option>
+            {select_options}
           </select>
         );
       default:
-        return inputElement = (<div>Input Type Error</div>);
+        return <div>{'Input Type Error'}</div>;
     }
   }
-
-  render() {
-    return this.renderElement() 
-  }
 }
-

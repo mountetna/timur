@@ -34,12 +34,13 @@
   background: #eee;
   font-size: 0.6em;
   margin: 5px;
+  cursor: pointer;
 }
 
 .demographic-button:hover{
   color: #fff;
-  background: #4CAF50;
-  border: 1px solid #4CAF50;
+  background: #22a778;
+  border: 1px solid #22a778;
 }
 
 .remove {
@@ -56,8 +57,8 @@
 
 .remove:hover{
   color: #fff;
-  background: #4CAF50;
-  border: #4CAF50;
+  background: #22a778;
+  border: #22a778;
 }
 
 .demographic-group > .remove {
