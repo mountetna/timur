@@ -12,7 +12,7 @@ export class GenericClinicalAttribute extends React.Component{
 
   componentDidMount(){
     if(!this.state.fetched_dictionary){
-      fetchDictionary();
+      this.props.fetchDictionary(this.props.dictionary_names);
       this.setState({fetched_dictionary: true});
     }
   }

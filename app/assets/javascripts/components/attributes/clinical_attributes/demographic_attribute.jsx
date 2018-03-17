@@ -1,4 +1,5 @@
 // Framework libraries.
+import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Class imports.
@@ -6,32 +7,17 @@ import {GenericClinicalAttribute} from './generic_clinical_attribute';
 import DemographicWidget from '../../browser/clinical/demographic_widget';
 import Magma from '../../../magma';
 
-export class DemographicAttribute extends GenericClinicalAttribute{
-  constructor(props){
-    super(props);
-    this.state = {};
-  }
+// Module imports.
+import * as MagmaActions from '../../../actions/magma_actions';
 
+export class DemographicAttribute extends GenericClinicalAttribute{
   render(){
     if(this.props.mode != 'browse') return <div className='value'></div>;
-
-    let demo_props = {
-      model_name: this.props.attribute.model_name,
-      record_names: this.props.value
-    };
-
-/*
-{
-    options,
-    template,
-    documents,
-    record_names
-  };
-*/
 
     return(
       <div className='value'>
 
+        <DemographicWidget {...this.props} />
       </div>
     );
   }
@@ -61,15 +47,14 @@ const processCSVData = ()=>{
   return obj;
 }
 
-const mapStateToProps = (state, props)=>{
+const mapStateToProps = (state, own_props)=>{
   let magma = new Magma(state);
-  let template = magma.template(props.model_name);
-  let dictionary = magma.dictionary(template);
+  let template = magma.template(own_props.attribute.model_name);
 
   let documents = magma.documents(
-    props.model_name,
-    props.record_names,
-    props.filter
+    own_props.attribute.model_name,
+    own_props.value,
+    own_props.filter
   );
 
   let options = processCSVData();
@@ -84,7 +69,11 @@ const mapStateToProps = (state, props)=>{
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{
-  return {};
+  return {
+    fetchDictionary: (dictionary_names)=>{
+      dispatch(MagmaActions.requestDictionaries(dictionary_names));
+    }
+  };
 };
 
 export const DemographicAttributeContainer = ReactRedux.connect(
