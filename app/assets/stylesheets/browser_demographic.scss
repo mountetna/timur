@@ -1,0 +1,73 @@
+@import "globals";
+@import "attribute";
+
+.demographic-select{
+  font-family: $body_font;
+  border: 1px solid gray;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 30px;
+  min-width: 225px;
+}
+
+.demographic-input{
+  font-family: $body_font;
+  border: 1px solid gray;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 15px;
+  min-width: 210px;
+}
+
+.demographic-button{
+  padding: 5px;
+  border: 1px solid #333;
+  outline: none;
+  background: #eee;
+  font-size: 0.6em;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.demographic-button:hover{
+  color: #fff;
+  background: #22a778;
+  border: 1px solid #22a778;
+}
+
+.remove {
+  border: 1px solid white;
+  background: none;
+  color: black;
+  padding: 5px 10px 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: .8em;
+  border-radius: 3px;
+}
+
+.remove:hover{
+  color: #fff;
+  background: #22a778;
+  border: #22a778;
+}
+
+.demographic-group > .remove {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.demographic-group:hover > .remove{
+  visibility: visible;
+  opacity: 1;
+}
