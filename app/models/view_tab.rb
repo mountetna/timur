@@ -34,7 +34,6 @@ class ViewTab < ActiveRecord::Base
               [
                 tab[:name],
                 {
-                  name: tab[:name],
                   title: tab[:title],
                   description: tab[:description],
                   index_order: tab[:index_order],
@@ -58,14 +57,12 @@ class ViewTab < ActiveRecord::Base
           model_name: model_name,
           tabs: {
             default: {
-              name: 'default',
               title: '',
               description: '',
               index_order: 0,
               panes: {
                 default: {
                   id: nil,
-                  name: 'default',
                   title: '',
                   description: '',
                   index_order: 0,
@@ -87,7 +84,7 @@ class ViewTab < ActiveRecord::Base
     find_query = {
       project: project_name,
       model: model_name,
-      name: tab_data['name']
+      name: tab_name
     }
 
     update_query = {

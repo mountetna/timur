@@ -30,7 +30,6 @@ class ViewAttribute < ActiveRecord::Base
         [
           attribute[:name],
           {
-            name: attribute[:name],
             title: attribute[:title],
             attribute_class: attribute[:attribute_class],
             index_order: attribute[:index_order],
