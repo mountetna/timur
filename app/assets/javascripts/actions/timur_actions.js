@@ -1,5 +1,5 @@
 // Class imports.
-import {getView} from '../api/view';
+import {getView} from '../api/view_api';
 import {showMessages} from './message_actions';
 import {requestDocuments} from './magma_actions';
 import {Exchange} from './exchange_actions';
