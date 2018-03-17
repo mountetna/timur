@@ -10,12 +10,14 @@ export class SettingsView extends React.Component{
     super(props);
 
     this.state = {
-      view_settings_string: '',
       view_settings_object: null,
       selected_model_name: null,
       is_editing: false,
       page_status: '',
-      parse_error_message: ''
+      parse_error_message: '',
+
+      // The 'view_settings_string' is the sub object 'tabs'.
+      view_settings_string: '',
     };
   }
   
@@ -46,18 +48,24 @@ export class SettingsView extends React.Component{
     });
   }
 
+  // The JSON.parse here will throw an error if the data is not valid.
   updateTabData(event){
-    let {view_settings_string} = this.state;
-    this.setState({view_settings_string: event.target.value});
+    try{
+      let view_obj = this.state.view_settings_object
+      view_obj.tabs = JSON.parse(event.target.value);
 
-    try {
-      JSON.parse(event.target.value);
-      this.setState({parse_error_message: ''});
+      this.setState({
+        view_settings_object: view_obj,
+        view_settings_string: event.target.value,
+        parse_error_message: ''
+      });
     }
-    catch(e) 
-    {
-      this.setState({parse_error_message: e.message});
-     return;
+    catch(err){
+      this.setState({
+        view_settings_string: event.target.value,
+        parse_error_message: err.message
+      });
+      return;
     }
   }
 
@@ -123,11 +131,19 @@ export class SettingsView extends React.Component{
     );
   }
 
+  // The JSON.parse here will throw an error if the data is not valid.
   saveEdit(){
-    this.props.updateEditViewSettings(
-      this.state.view_settings_object
-    );
-    this.toggleEdit();
+    try{
+      let view_obj = this.state.view_settings_object;
+      view_obj.tabs = JSON.parse(this.state.view_settings_string);
+
+      this.props.updateEditViewSettings(view_obj);
+      this.setState({parse_error_message: ''});
+      this.toggleEdit();
+    }
+    catch(err){
+      this.setState({parse_error_message: err.message});
+    }
   }
 
   cancelEdit(){
