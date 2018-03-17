@@ -26,7 +26,6 @@ Rails.application.routes.draw do
   post ':project_name/json/consignment'=> 'search#consignment_json', as: :consignment_json
   post ':project_name/json/consignment_by_manifest_id_json'=> 'search#consignment_by_manifest_id_json', as: :consignment_by_manifest_id_json
   post ':project_name/json/question'=> 'search#question_json', as: :question_json
-  post ':project_name/search/table'=> 'search#table_json', as: :table_json
   post ':project_name/search/tsv'=> 'search#table_tsv', as: :table_tsv
 
   # plot_controller.rb
