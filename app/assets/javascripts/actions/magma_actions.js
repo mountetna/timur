@@ -37,6 +37,13 @@ export const discardRevision = (record_name, model_name)=>(
   }
 );
 
+export const addPredicates = (predicates)=>{
+  return {
+    type: 'ADD_PREDICATES',
+    predicates
+  };
+};
+
 /*
  * Here we add the models and documents to the store. At the same time we strip
  * off the model namespacing. The server returns the full name of the model. 
@@ -61,6 +68,13 @@ export const consumePayload = (dispatch, response)=>{
 
 export const requestDocuments = ({ model_name, record_names, attribute_names, filter, page, page_size, collapse_tables, exchange_name, success, error }) => (dispatch) => {
   let localSuccess = (response)=> {
+
+    if('error' in response){
+      dispatch(showMessages([`There was a ${response.type} error.`]));
+      console.log(response.error);
+      return;
+    }
+
     consumePayload(dispatch, response);
     if (success != undefined) success(response);
   };
@@ -187,26 +201,48 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
   }
 };
 
-// download a TSV from magma via Timur
-
-export const requestTSV = (model_name,filter) =>
-  (dispatch) => {
-    getTSVForm({ model_name, filter, record_names: 'all' })
+// Download a TSV from magma via Timur.
+export const requestTSV = (model_name,filter)=>{
+  return (dispatch)=>{
+    getTSVForm({model_name, filter, record_names: 'all'});
   };
+};
 
+export const requestAnswer = (question, callback)=>{
+  return (dispatch)=>{
 
-export const requestAnswer = (question, callback) =>
-  (dispatch) => {
-    let question_name = Array.isArray(question) ? [].concat.apply([], question).join('-') : question;
+    let localSuccess = (response)=>{
+      if('error' in response){
+        dispatch(showMessages([`There was a ${response.type} error.`]));
+        console.log(response.error);
+        return;
+      }
+
+      if(callback != undefined) callback(response);
+    };
+
+    let localError = (error)=>{
+      console.log(error)
+    };
+
+    let question_name = question;
+    if(Array.isArray(question)){
+      question_name = [].concat.apply([], question).join('-');
+    }
     let exchange = new Exchange(dispatch, question_name);
-
-    getAnswer(question, exchange).then(callback)
+    getAnswer(question, exchange)
+      .then(localSuccess)
+      .catch(localError);
   };
+}
 
-const addPredicates = (predicates) => ({ type: 'ADD_PREDICATES', predicates });
+export const requestPredicates = ()=>{
+  return (dispatch)=>{
 
-export const requestPredicates = () =>
-  (dispatch) =>
-    dispatch(requestAnswer('::predicates', (response) => {
+    let localCallback = (response)=>{
       dispatch(addPredicates(response.predicates));
-    }));
+    };
+
+    dispatch(requestAnswer('::predicates', localCallback));
+  };
+};
