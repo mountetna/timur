@@ -1,5 +1,5 @@
 // Module imports.
-import {headers, parseJSON, checkStatus} from './fetch_utils';
+import {headers, parseJSON, checkStatus} from '../utils/fetch_utils';
 
 export const plotIndexUrl = (queryParams) => {
   let path = Routes.plots_path(PROJECT_NAME);

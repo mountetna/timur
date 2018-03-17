@@ -1,4 +1,5 @@
-import { headers, parseJSON, checkStatus } from './fetch_utils';
+// Module imports.
+import {headers, parseJSON, checkStatus} from '../utils/fetch_utils';
 
 export const getView = (model_name, tab_name, exchange)=>{
   let route_opts = {

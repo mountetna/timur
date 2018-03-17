@@ -1,6 +1,6 @@
 import {showMessages} from './message_actions';
-import {getAnswer, getTSVForm, getDocuments, postRevisions} from '../api/magma';
 import {Exchange} from './exchange_actions';
+import * as MagmaAPI from '../api/magma_api';
 
 export const addTemplate = (template)=>{
   return {
@@ -124,7 +124,7 @@ export const requestDocuments = (args)=>{
       new Exchange(dispatch, exchange_name)
     ];
   
-    getDocuments(...get_doc_args)
+    MagmaAPI.getDocuments(...get_doc_args)
       .then(localSuccess)
       .catch(localError);
     }
@@ -210,7 +210,7 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
     };
 
     let exchng = new Exchange(dispatch, `revisions-${model_name}`);
-    postRevisions(setFormData(revisions, model_name), exchng)
+    MagmaAPI.postRevisions(setFormData(revisions, model_name), exchng)
       .then(localSuccess)
       .catch(localError);
   }
@@ -219,7 +219,7 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
 // Download a TSV from magma via Timur.
 export const requestTSV = (model_name,filter)=>{
   return (dispatch)=>{
-    getTSVForm({model_name, filter, record_names: 'all'});
+    MagmaAPI.getTSVForm({model_name, filter, record_names: 'all'});
   };
 };
 
@@ -245,7 +245,7 @@ export const requestAnswer = (question, callback)=>{
       question_name = [].concat.apply([], question).join('-');
     }
     let exchange = new Exchange(dispatch, question_name);
-    getAnswer(question, exchange)
+    MagmaAPI.getAnswer(question, exchange)
       .then(localSuccess)
       .catch(localError);
   };
