@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
 
-var MagmaLink = React.createClass({
-  render: function(){
+export default class MagmaLink extends React.Component{
 
-    var route_args = [
+  render(){
+    let route_args = [
       PROJECT_NAME,
       this.props.model,
       encodeURIComponent(this.props.link)
     ];
 
-    var link_props = {
+    let link_props = {
       'className': 'link',
       'href': Routes.browse_model_path(...route_args)
     };
@@ -21,6 +22,4 @@ var MagmaLink = React.createClass({
       </a>
     );
   }
-});
-
-module.exports = MagmaLink;
+}

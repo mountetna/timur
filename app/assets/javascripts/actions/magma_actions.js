@@ -1,41 +1,41 @@
-import { showMessages } from './message_actions';
-import { getAnswer, getTSVForm, getDocuments, postRevisions } from '../api/magma';
-import { Exchange } from './exchange_actions';
+import {showMessages} from './message_actions';
+import {getAnswer, getTSVForm, getDocuments, postRevisions} from '../api/magma';
+import {Exchange} from './exchange_actions';
 
-export const addTemplate = (template)=>(
-  {
+export const addTemplate = (template)=>{
+  return {
     type: 'ADD_TEMPLATE',
     model_name: template.name,
     template: template
-  }
-);
+  };
+};
 
-export const addDocumentsForTemplate = (model_name, documents)=>(
-  {
+export const addDocumentsForTemplate = (model_name, documents)=>{
+  return {
     type: 'ADD_DOCUMENTS',
     model_name: model_name,
     documents: documents
-  }
-);
+  };
+};
 
-export const reviseDocument = (document, template, attribute, revised_value)=>(
-  {
+export const reviseDocument = (document, template, attribute, revised_value)=>{
+  return {
     type: 'REVISE_DOCUMENT',
     model_name: template.name,
     record_name: document[template.identifier],
     revision: {
-      [ attribute.name ]: revised_value
+      [attribute.name]: revised_value
     }
   }
-);
+};
 
-export const discardRevision = (record_name, model_name)=>(
-  {
+export const discardRevision = (record_name, model_name)=>{
+  return {
     type: 'DISCARD_REVISION',
     model_name: model_name,
     record_name: record_name
-  }
-);
+  };
+};
 
 export const addPredicates = (predicates)=>{
   return {
@@ -66,53 +66,68 @@ export const consumePayload = (dispatch, response)=>{
   }
 };
 
-export const requestDocuments = ({ model_name, record_names, attribute_names, filter, page, page_size, collapse_tables, exchange_name, success, error }) => (dispatch) => {
-  let localSuccess = (response)=> {
+export const requestDocuments = (args)=>{
+  let {
+    model_name,
+    record_names,
+    attribute_names,
+    filter,
+    page,
+    page_size,
+    collapse_tables,
+    exchange_name,
+    success,
+    error
+  } = args;
 
-    if('error' in response){
-      dispatch(showMessages([`There was a ${response.type} error.`]));
-      console.log(response.error);
-      return;
+  return (dispatch)=>{
+    let localSuccess = (response)=>{
+
+      if('error' in response){
+        dispatch(showMessages([`There was a ${response.type} error.`]));
+        console.log(response.error);
+        return;
+      }
+
+      consumePayload(dispatch, response);
+      if(success != undefined) success(response);
+    };
+  
+    let localError = (e) => {
+      if (!e.response) {
+        dispatch(showMessages([`Something is amiss. ${e}`]));
+        return;
+      }
+  
+      e.response.json().then((response)=>{
+        let errStr = response.errors.map((error)=> `* ${error}`);
+        errStr = [`### Our request was refused.\n\n${errStr}`];
+        dispatch(showMessages(errStr));
+      });
+  
+      if(error != undefined){
+        let message = JSON.parse(error.response);
+        error(message);
+      }
+    };
+  
+    let get_doc_args = [
+      {
+        model_name,
+        record_names,
+        attribute_names,
+        filter,
+        page,
+        page_size,
+        collapse_tables
+      },
+      new Exchange(dispatch, exchange_name)
+    ];
+  
+    getDocuments(...get_doc_args)
+      .then(localSuccess)
+      .catch(localError);
     }
-
-    consumePayload(dispatch, response);
-    if (success != undefined) success(response);
-  };
-
-  let localError = (e) => {
-    if (!e.response) {
-      dispatch(showMessages([`Something is amiss. ${e}`]));
-      return;
-    }
-
-    e.response.json().then((response)=>{
-      let errStr = response.errors.map((error)=> `* ${error}`);
-      errStr = [`### Our request was refused.\n\n${errStr}`];
-      dispatch(showMessages(errStr));
-    });
-
-    if(error != undefined){
-      let message = JSON.parse(error.response);
-      error(message);
-    }
-  };
-
-  let get_doc_args = [
-    {
-      model_name,
-      record_names,
-      attribute_names,
-      filter,
-      page,
-      page_size,
-      collapse_tables
-    },
-    new Exchange(dispatch, exchange_name)
-  ];
-
-  getDocuments(...get_doc_args)
-    .then(localSuccess)
-    .catch(localError);
 };
 
 export const requestModels = ()=>{
@@ -222,7 +237,7 @@ export const requestAnswer = (question, callback)=>{
     };
 
     let localError = (error)=>{
-      console.log(error)
+      console.log(error);
     };
 
     let question_name = question;

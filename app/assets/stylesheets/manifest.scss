@@ -1,377 +1,242 @@
-@import "globals";
+@import 'globals';
 
-$secondary-color: teal;
-
-.manifests-container {
-  color: #333;
+.manifest-group{
+  position: relative;
   font-family: $body_font;
-  padding-left: 5px;
-  padding-right: 5px;
-  display: flex;
-
-  .script {
-    text, textarea {
-      font-family: $value_font;
-    }
-  }
-
-  a {
-    color: black;
-  }
-
-  .filter {
-    font-size: .9em;
-
-    .checkbox {
-      margin-left: 7px;
-      font-size: .8em;
-    }
-  }
-
-  ol {
-    margin: 0px;
-    margin-top: 5px;
-    list-style-type: none;
-    padding: 0;
-  }
-
-  text {
-    width: 70%;
-    white-space: pre-wrap;
-    word-break: break-all;
-    height: 50px;
-  }
-
-  .label {
-    font-weight: lighter;
-  }
-
-  .result {
-    font-weight: bolder;
-    .toggle {
-      margin-left: 3px;
-      font-weight: lighter;
-      cursor: pointer;
-      color: blue;
-    }
-    .fa-list {
-      color: goldenrod;
-    }
-    .fa-table {
-      color: salmon;
-    }
-    .fa-download {
-      color: blue;
-      cursor: pointer;
-      &:hover {
-        color: dodgerblue;
-      }
-    }
-  }
-  .fa {
-    margin-right: 3px;
-  }
 }
 
-.manifest-view {
-  padding-left: 5px;
-  width: 70%;
+.manifest-elements{
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
-.manifest-preview {
-  margin-bottom: 10px;
-  margin-top: 10px;
-  font-size: .8em;
-  font-weight: lighter;
-
-  .name {
-    color: $secondary-color;
-    font-size: 1.4em;
-    font-weight: bold;
-
-    &:hover {
-      text-decoration: underline
-    }
-  }
-
-  .project {
-    color: $secondary-color;
-    font-size: 1em;
-    font-weight: bold;
-  }
-
-  .description {
-    font-size: 1.3em;
-    color: rebeccapurple;
-  }
-  .manifest-info {
-    border-bottom: 1px solid rgba(#0cf,0.1);
-    .label {
-      color: $secondary-color;
-      display: inline-block;
-      padding-right: 4px;
-      font-weight: bold;
-      text-align: right;
-      width: 15%;
-    }
-    .value {
-      font-size: 1em;
-    }
-  }
+.manifest-action-btn-group{
+  float: right;
 }
 
-.hideable-text {
-  margin-top: 3px;
-
-  .label {
-    text-decoration: underline;
-  }
-
-  .text {
-    margin-left: 7px;
-  }
+.manifest-action-btn-group button{
+  margin-left: 10px;
+  cursor: pointer;
 }
 
-.element {
-  font-family: $value_font;
-  font-size: .9em;
+.manifest-form-title{
+  border-bottom: 1px solid #666666;
   padding-bottom: 10px;
-  border-bottom: 1px solid goldenrod;
-  .name {
-    &:first-letter {
-      color: purple;
-    }
-    color: darkgreen;
-    font-weight: bold;
-    display: inline-block;
-  }
-  .equals {
-    font-weight: bold;
-    display: inline-block;
-  }
-  .script {
-    white-space: pre-wrap;
-    margin-top: 5px;
-    margin-bottom: 0px;
-    margin-left: 5px;
-  }
-  .label {
-    font-size: .9em;
-    font-weight: lighter;
-    text-decoration: none;
-  }
-  .vector, .matrix {
-    table {
-      border: 2px solid forestgreen;
-      border-collapse: collapse;
-      th {
-        background-color: rgba(#0cf, 0.5);
-        padding: 2px;
-        text-align: center;
-        border-bottom: 1px solid rgba(forestgreen, 0.2);
-        border-left: 1px solid forestgreen;
-      }
-      td {
-        padding: 2px 8px;
-        border-bottom: 1px solid rgba(forestgreen, 0.2);
-        border-left: 1px solid forestgreen;
-      }
-    }
-  }
 }
 
-.actions {
-  margin-top: 15px;
-  margin-left: 20%;
-
-  button {
-    font-size: 1em;
-    &:nth-of-type(n+2) {
-      margin-left: 20px;
-    }
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
+.manifest-form-title-input{
+  border: none;
+  font-size: 1em;
+  margin-left: 10px;
+  width: 300px;
+  outline: 1px solid #333;
+  color: #111;
 }
 
-@mixin border {
-  padding: 5px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: lightgrey;
+.manifest-form-group-title{
+  display: block;
+  float: left;
+  height: 100%;
 }
 
-.form-container {
-  padding: 5px;
-  .new {
-    margin-left: 8px;
-    margin-top: 15px;
-    font-size: 1.1em;
-  }
-
+.manifest-form-access-group{
+  width: 100%;
+  height: 35px;
+  margin-bottom: 6px;
+  font-size: 1em;
+  line-height: 25px;
 }
 
-.input-container {
-  margin-top: 7px;
+.manifest-form-access-group input{
+  margin-left: 10px;
+}
+
+.manifest-form-details{
+  font-size: 0.8em;
+  margin-top: -6px;
+  margin-bottom: 10px;
+  line-height: 25px;
+  padding-bottom: 10px;
+}
+
+.manifest-form-description{
+  text-align: justify;
+  font-size: 1.2em;
+  margin-left: 0px;
+  margin-top: 0px;
+  width: 100%;
+  resize: vertical;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.manifest-query-btn-group{
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.manifest-query-btn{
+  vertical-align: top;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.manifest-add-btn{
+  float: right;
+  cursor: pointer;
+  margin-right: 0px
+}
+
+.manifest-form-body{
+  margin-top: 20px;
+}
+
+.manifest-form-element{
+  margin-bottom: 20px;
+}
+
+.manifest-form-element-title{
   display: inline;
-  label {
-    color: $secondary-color;
-    padding-right: 2px;
-    width: 10%;
-    text-align: right;
-  }
-  .input {
-    display: inline;
-  }
-
-  input[type="text"] {
-    @include text_defaults;
-    width: 40%;
-  }
-
-  textarea {
-    @include text_box;
-    width: 90%;
-    font-size: 1em;
-  }
+  color: #22a778;
 }
 
-.element-form-container {
-  margin-top: 15px;
-
-  .title {
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-right: 10px;
-  }
-  .new {
-    @include green_link;
-  }
+.manifest-form-element-title-input{
+  color: #22a778;
+  font-size: 1em;
+  outline: 1px solid #333;
+  border: none;
 }
 
-.element-form {
-  padding: 5px;
-  border-bottom: 1px solid goldenrod;
-
-  .remove {
-    font-size: 1em;
-    color: red;
-    float: right;
-
-    &:hover {
-    cursor: pointer;
-    }
-  }
-  .equals {
-    font-weight: bold;
-    display: inline-block;
-  }
-  .script {
-    textarea {
-      width: 100%;
-      border: 0px none black;
-      border-left: 2px solid forestgreen;
-      padding-left: 5px;
-    }
-  }
+.manifest-form-control-btn{
+  float: right;
 }
 
-$toggle-height: 26px;
-.toggle-switch {
-  .caption {
-    display: inline;
-  }
-  .switchbox {
-    position: relative; width: 97px;
-    user-select:none;
-    display: inline-block;
-    top: 8px;
-    input[type="checkbox"] {
-      display: none;
-      &:checked + .label .left {
-        margin-left: 0;
-      }
-      &:checked + .label .right {
-        margin-left: 100%;
-      }
-      &:checked + .label .switch {
-        right: 0px; 
-      }
-    }
-    .label {
-      display: block; overflow: hidden; cursor: pointer;
-      border: 2px solid #FFFFFF; border-radius: 0px;
-      @mixin toggle-option {
-        display: block; width: 100%; height: $toggle-height; padding: 0; line-height: $toggle-height;
-        font-size: 16px; color: white; 
-        font-weight: bold;
-        box-sizing: border-box;
-      }
-      .left {
-        @include toggle-option;
-        margin-left: -100%; float: left;
-        transition: margin 0.3s ease-in 0s;
-        padding-left: 8px;
-        background-color: #49E845; color: #FFFFFF;
-      }
-      .right {
-        @include toggle-option;
-        margin-left: 0;
-        transition: margin 0.3s ease-in 0s;
-        padding-right: 8px;
-        background-color: #E85151; color: #FFFFFF;
-        text-align: right;
-      }
-      .switch {
-        display: block; width: 24px; margin: 6px;
-        background: #FFFFFF;
-        position: absolute; top: 0; bottom: 0;
-        right: 57px;
-        border: 2px solid #FFFFFF; border-radius: 0px;
-        transition: all 0.3s ease-in 0s; 
-      }
-    }
-  }
+.manifest-script{
+  border: 1px solid #333;
+  padding: 10px;
+  margin-top: 10px;
+  resize: vertical;
+  white-space: pre-wrap;
 }
 
-.manifest-elements {
-  padding: 5px;
-  .toggle-switch {
-    display: inline-block;
-  }
-  .element {
-    margin-top: 10px;
-  }
+.consignment-table{
+  border: 1px solid #333;
+  margin-top: 10px;
+  font-family: monospace;
+  font-size: 1.1em;
+  border-spacing: 0px;
+  font-weight: 100;
 }
 
-.underline-on-hover:hover {
-  text-decoration: underline;
+.consignment-table thead{
+  border-bottom: 1px solid #666;
 }
 
-.blue-on-hover:hover {
-  color: blue;
+.consignment-table td{
+  /*border-right: 1px solid #666;*/
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
-.list {
+.consignment-table th{
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.consignment-btn{
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.consignment-matrix,
+.consignment-vector{
+  margin-top: 10px;
+}
+
+.manifest-form-element-textarea{
+  width: 100%;
+  margin-top: 10px;
+  min-height: 200px;
+  resize: vertical;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1em;
+}
+
+/* Button Styling, as opposed to positioning/layout ***************************/
+.manifest-action-btn-group button,
+.manifest-query-btn,
+.consignment-btn,
+.manifest-form-control-btn{
+  padding:5px;
+  border: 1px solid #333;
+  outline: none;
+  background: #eee;
+  font-size: 0.6em;
+}
+
+.manifest-action-btn-group button:hover:enabled,
+.manifest-query-btn:hover:enabled,
+.consignment-btn:hover:enabled,
+.manifest-form-control-btn:hover:enabled{
+  color: #fff;
+  background: #22a778;
+  border: 1px solid #22a778;
+}
+
+.manifest-action-btn-group button:disabled,
+.manifest-query-btn:disabled,
+.consignment-btn:disabled,
+.manifest-form-control-btn:disabled{
+  cursor: default;
+  border: 1px solid #ccc;
+}
+
+/******************************************************************************/
+
+.result {
+  font-weight: bolder;
   .toggle {
+    margin-left: 3px;
     font-weight: lighter;
+    cursor: pointer;
     color: blue;
   }
-
-  .fa {
-    margin-left: 5px;
-    margin-right: 3px;
+  .fa-list {
+    color: goldenrod;
+  }
+  .fa-table {
+    color: salmon;
+  }
+  .fa-download {
+    color: blue;
+    cursor: pointer;
+    &:hover {
+      color: dodgerblue;
+    }
   }
 }
 
-.plot-form-container {
-  .input-container {
-    display: block;
+.vector, .matrix {
+  table {
+    border: 2px solid forestgreen;
+    border-collapse: collapse;
+    th {
+      background-color: rgba(#0cf, 0.5);
+      padding: 2px;
+      text-align: center;
+      border-bottom: 1px solid rgba(forestgreen, 0.2);
+      border-left: 1px solid forestgreen;
+    }
+    td {
+      padding: 2px 8px;
+      border-bottom: 1px solid rgba(forestgreen, 0.2);
+      border-left: 1px solid forestgreen;
+    }
   }
-}
-
-.plotlyjsicon {
-  display: none;
 }

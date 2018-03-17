@@ -1,28 +1,25 @@
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
+
 import MagmaLink from './magma_link';
-import React, { Component } from 'react';
+import * as MagmaActions from '../actions/magma_actions';
 
-import { connect } from 'react-redux';
+export class IdentifierSearch extends React.Component{
+  constructor(props){
+    super(props);
 
-import { requestIdentifiers } from '../actions/magma_actions';
-
-var IdentifierSearch = React.createClass({
-
-  getInitialState: function(){
-
-    return {
-
-      'match_string': '',
-      'has_focus': false 
+    this.state = {
+      match_string: '',
+      has_focus: false 
     };
-  },
+  }
 
-  componentWillMount: function(){
-
+  componentWillMount(){
     this.props.requestIdentifiers();
-  },
+  }
 
-  find_matches: function(){
-
+  find_matches(){
     var self = this;
     if(!this.state.has_focus) return null;
     if(!this.props.identifiers) return null;
@@ -45,9 +42,9 @@ var IdentifierSearch = React.createClass({
     });
 
     return matches;
-  },
+  }
 
-  renderIdentifiers: function(matches, modelName){
+  renderIdentifiers(matches, modelName){
 
     return matches.map(function(identifier){
 
@@ -70,9 +67,9 @@ var IdentifierSearch = React.createClass({
         </div>
       );
     });
-  },
+  }
 
-  renderMatches: function(matchingIdents){
+  renderMatches(matchingIdents){
 
     var self = this;
     return Object.keys(matchingIdents).map(function(modelName){
@@ -93,9 +90,9 @@ var IdentifierSearch = React.createClass({
         </div>
       );
     });
-  },
+  }
 
-  renderMatchingIdentifiers: function(){
+  renderMatchingIdentifiers(){
 
     var matchingIdents = this.find_matches();
     if(matchingIdents){
@@ -111,9 +108,9 @@ var IdentifierSearch = React.createClass({
 
       return null;
     }
-  },
+  }
 
-  render: function(){
+  render(){
 
     var self = this;
 
@@ -151,30 +148,32 @@ var IdentifierSearch = React.createClass({
       </div>
     );
   }
-});
+}
 
-IdentifierSearch = connect(
+const mapStateToProps = (state = {}, own_props)=>{
+  let idents = {};
+  let models = state.magma.models;
 
-  function(state, props){
+  Object.keys(models).forEach(function(model_name){
+    idents[model_name] = Object.keys(models[model_name].documents);
+  });
 
-    var idents = {};
-    var models = state.magma.models;
+  var data = {
+    'identifiers': Object.keys(idents).length ? idents : null
+  };
 
-    Object.keys(models).forEach(function(model_name){
+  return data;
+};
 
-      idents[model_name] = Object.keys(models[model_name].documents);
-    });
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    requestIdentifiers: ()=>{
+      dispatch(MagmaActions.requestIdentifiers());
+    }
+  };
+};
 
-    var data = {
-
-      'identifiers': Object.keys(idents).length ? idents : null
-    };
-
-    return data;
-  },
-  {
-    requestIdentifiers
-  }
+export const IdentifierSearchContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(IdentifierSearch);
-
-module.exports = IdentifierSearch;

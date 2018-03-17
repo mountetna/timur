@@ -2,13 +2,12 @@ class Whitelist < ActiveRecord::Base
   has_many :permissions, dependent: :destroy
   has_one :user, foreign_key: :email, primary_key: :email
 
-  # How long the whitelist entry is good for, in seconds
+  # How long the whitelist entry is good for, in seconds.
   EXPIRE_TIME=5*60
 
-  # this method creates a whitelist entry
-  # for a given token, by hook or by crook
+  # This method creates a whitelist entry for a given token.
   def self.for_token(token)
-    # find all tokens for this user
+    # Find all tokens for this user.
     whitelist = self.where(token: token).first
 
     if whitelist && whitelist.expired?
@@ -17,10 +16,8 @@ class Whitelist < ActiveRecord::Base
     end
 
     if whitelist.nil?
-      # Ask janus
-      # if the retrieve fails, this will be nil
+      # Ask janus for the user. If the retrieve fails, this will be nil.
       janus_user = JanusUser.retrieve(token)
-
       whitelist = self.for_janus_user(janus_user) if janus_user
     end
 
@@ -34,15 +31,15 @@ class Whitelist < ActiveRecord::Base
   end
 
   def set_from_janus_user(janus_user)
-    # first set the main cheese
+    # First set the main info...
     update(janus_user.to_hash)
 
-    # then make permissions
+    # ...then make permissions...
     janus_user.permissions.each do |perm|
       permissions.create(perm)
     end
 
-    # then make the user
+    # ...then make the user.
     if user.nil?
       create_user(
         name: "#{first_name} #{last_name}"
@@ -72,6 +69,4 @@ class Whitelist < ActiveRecord::Base
   def expired?
     (Time.now.utc - (5*60)) > updated_at ? true : false
   end
-
-  # Link the permissions to the whitelist
 end

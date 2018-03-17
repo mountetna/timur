@@ -99,17 +99,10 @@ export default class ListInput extends Component {
 
     return(
       <div className='list_input'>
-        {
-          values.map(this.listItem.bind(this))
-        }
-        {
-          editNewValue
-            ? this.renderEdit(new_value, itemInput, inputProps)
-            : null
-        }
-        {
-          this.renderAdd()
-        }
+
+        {values.map(this.listItem.bind(this))}
+        {editNewValue ? this.renderEdit(new_value, itemInput, inputProps): null}
+        {this.renderAdd()}
       </div>
     );
   }

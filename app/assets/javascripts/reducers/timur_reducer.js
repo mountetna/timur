@@ -1,37 +1,46 @@
-var view = function(old_view, action) {
-  if (!old_view) old_view = {}
-  switch(action.type) {
+const tabs = (old_tabs = {}, action)=>{
+  switch(action['type']) {
     case 'ADD_TAB':
-      return {
-        ...old_view,
-        [action.tab_name]: old_view[action.tab_name] || action.tab
-      }
-    default:
-      return old_view
-  }
-}
 
-var views = function(old_views, action) {
-  if (!old_views) old_views = {}
-  switch(action.type) {
+      if(old_tabs['tabs']) old_tabs = old_tabs['tabs'];
+
+      return {
+        ...old_tabs,
+        [action.tab_name]: action.tab
+      };
+    default:
+      return old_view;
+  }
+};
+
+const views = (old_views = {}, action)=>{
+  switch(action.type){
     case 'ADD_TAB':
       return {
         ...old_views,
-        [action.model_name]: view(old_views[action.model_name], action)
-      }
+        [action.view_name]: {
+          tabs: tabs(old_views[action.view_name], action)
+        }
+      };
+    case 'ADD_VIEW':
+      return {
+        ...old_views,
+        [action.view_name]: action.view
+      };
     default:
-      return old_views
+      return old_views;
   }
-}
+};
 
-var timurReducer = function(timur, action) {
+const timurReducer = function(timur, action) {
   if (!timur) timur = { }
   switch(action.type) {
     case 'ADD_TAB':
+    case 'ADD_VIEW':
       return {
         ...timur,
-        views: views(timur.views,action),
-      }
+        views: views(timur.views, action)
+      };
     case 'TOGGLE_CONFIG':
       return {
         ...timur,
@@ -42,4 +51,4 @@ var timurReducer = function(timur, action) {
   }
 }
 
-module.exports = timurReducer
+export default timurReducer;

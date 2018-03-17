@@ -7,14 +7,13 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate
-    # If they do NOT have a cookie, they must go to Janus
-    # and get one.
+    # If the user do NOT have a cookie, they must go to Janus and get one.
     if !token
       redirect_to(janus_login_path(request.original_url))
       return
     end
 
-    # they do have a cookie, try to load a user 
+    # The user does not have a cookie, try to load a user.
     redirect_to(:no_auth) unless current_user
   end
 
@@ -49,11 +48,10 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= 
       begin
-        # get the whitelist - if for any reason you
-        # can't, this will be nil
+        # Get the whitelist. If for any reason you cannot this will be nil.
         whitelist = Whitelist.for_token(token)
 
-        # if the whitelist exists, it has a user
+        # If the whitelist exists, it has a user.
         whitelist ? whitelist.user : nil
       end
   end
@@ -66,7 +64,10 @@ class ApplicationController < ActionController::Base
 
   def ajax_req_authenticate
     if !current_user
-      render :json => { :errors => ["You must be logged in."] }, :status => 401 and return
+      render(
+        :json => { :errors => ['You must be logged in.'] },
+        :status => 401
+      ) and return
     end
   end
 

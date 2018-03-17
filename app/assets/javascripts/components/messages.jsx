@@ -1,28 +1,33 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { connect } from 'react-redux';
-
-import { dismissMessages } from '../actions/message_actions';
+import * as MessageActions from '../actions/message_actions';
 import markdown from '../markdown';
 
-var Messages = React.createClass({
-  getInitialState: function() {
-    return { current_message: 0 }
-  },
-  prevMessage: function() {
+export class Messages extends React.Component{
+  constructor(props){
+    super(props);
+
+    this.state = {
+      current_message: 0
+    };
+  }
+
+  prevMessage() {
     var new_message = this.state.current_message - 1;
     if (new_message < 0) return;
     this.setState({ current_message: new_message });
-  },
-  nextMessage: function() {
+  }
+  nextMessage() {
     var new_message = this.state.current_message + 1;
     if (new_message >= this.props.messages.length) return;
     this.setState({ current_message: new_message });
-  },
-  sanitize: function(string) {
+  }
+  sanitize(string) {
     return string.replace(/</g,"&lt;").replace(/>/g,"&gt;")
-  },
-  render: function() {
+  }
+  render() {
     var self = this;
     if (!this.props.messages.length) return <div></div>;
 
@@ -57,7 +62,7 @@ var Messages = React.createClass({
             <div id="dismiss"
                onClick={ function() { 
                  self.setState({ current_message: 0 });
-                 self.props.dispatch(dismissMessages())
+                 self.props.dispatch(MessageActions.dismissMessages())
                } }>
               <span className="fa fa-check"> </span>
             </div>
@@ -68,18 +73,19 @@ var Messages = React.createClass({
             </div>
           </div>;
   }
-})
-
-Messages = connect(
-  function(state) {
-    return {
-      messages: state.messages
-    }
-  }
-)(Messages)
-
-Messages.contextTypes = {
-  store: React.PropTypes.object
 }
 
-module.exports = Messages;
+const mapStateToProps = (state = {}, own_props)=>{
+  return {
+    messages: state.messages
+  };
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {};
+};
+
+export const MessagesContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Messages);

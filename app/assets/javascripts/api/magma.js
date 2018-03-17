@@ -73,14 +73,14 @@ export const getDocuments = ({ model_name, record_names, attribute_names, filter
     .then(parseJSON);
 
 export const postRevisions = (revision_data, exchange)=>{
-  var routeOpts = {
+  var route_opts = {
     method: 'POST',
     credentials: 'same-origin',
     headers: headers('csrf'),
     body: revision_data
   };
 
-  var exchangePromise = exchange.fetch(Routes.update_model_path(PROJECT_NAME), routeOpts)
+  var exchangePromise = exchange.fetch(Routes.update_model_path(PROJECT_NAME), route_opts)
     .then(checkStatus)
     .then(parseJSON)
 

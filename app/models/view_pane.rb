@@ -1,56 +1,56 @@
+# Structure of the view:
+#
+# View
+#   Tabs
+#     Panes
+#       Attributes
+#
+# Each tab has a list of panes.
+# Each pane has a list of attributes.
+
 class ViewPane < ActiveRecord::Base
+  belongs_to :view_tab
   has_many :view_attributes, dependent: :destroy
 
-  def self.build_view(model_name, project_name, load_tab_name)
-    # first collect all of the panes matching this thing
-    panes = self.where(view_model_name: model_name, project_name: project_name).order(:created_at).all
+  # Pull all of the panes for a tab.
+  def self.retrieve_panes(tab_id)
+
+    panes = self.where(view_tab_id: tab_id)
+      .order(:index_order)
+      .all
+
+    # Return an empty pane data object if there are no entries.
     if panes.empty?
       return {
-        tabs: {
-          default: {
-            panes: {
-              default: {
-                title: nil,
-                display: []
-              }
-            }
+        default: {
+          id: nil,
+          name: 'default',
+          title: '',
+          description: '',
+          index_order: 0,
+          attributes: {
           }
-        },
-        tab_name: 'default'
+        }
       }
     end
 
-    load_tab_name ||= panes.first.tab_name
-    tabs = panes.group_by(&:tab_name)
+    # Return the hashed data object.
+    return Hash[
 
-    return {
-      tabs: Hash[
-        tabs.map do |tab_name, panes|
-          if (tab_name != load_tab_name.to_s)
-            next [ tab_name, nil ]
-          end
-          [
-            tab_name, {
-              panes: Hash[
-                panes.map do |pane|
-                  [
-                    pane.name,
-                    pane.to_hash
-                  ]
-                end
-              ]
-            }
-          ]
-        end
-      ],
-      tab_name: load_tab_name
-    }
-  end
+      panes.map do |pane|
+        [
+          pane[:name],
+          {
+            id: pane[:id],
+            name: pane[:name],
+            title: pane[:title],
+            description: pane[:description],
+            index_order: pane[:index_order],
+            attributes: ViewAttribute.retrieve_attributes(pane[:id])
+          }
+        ]
+      end
 
-  def to_hash
-    {
-      title: title,
-      display: view_attributes.map(&:to_hash)
-    }
+    ]
   end
 end

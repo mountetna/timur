@@ -1,55 +1,56 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { connect } from 'react-redux';
+export class TabBar extends React.Component{
+  constructor(props){
+    super(props);
+    this.props.initialized(this.constructor.name);
+  }
 
-var TabBar = React.createClass({
-  format_name: function(name){
+  formatName(name){
     return name.replace(/_/, ' ').replace(/\w\S*/g, function(txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
-  },
+  }
 
-  renderTabs: function(){
-    var view = this.props.view;
-    var self = this;
-    var tabs = Object.keys(view).map(function(tab_name){
+  renderTabs(){
+    let self = this;
+    let {view, current_tab_index, revised, clickTab} = this.props;
 
-      if(self.props.current_tab_name == tab_name){
+    let tabs = Object.keys(view.tabs).map((tab_name, index)=>{
 
+      // Render a selected tab.
+      if(current_tab_index == view.tabs[tab_name].index_order){
         return(
-          <div key={tab_name} className='selected tab'>
+          <div className='selected tab' key={index}>
 
-            {self.format_name(tab_name)}
+            {self.formatName(tab_name)}
           </div>
         );
       }
-      else{
 
-        let tab_props = {
-          'key': tab_name,
-          'className': self.props.revised[tab_name] ? 'revised tab' : 'tab',
-          'onClick': function(e){
-            self.props.clickTab(tab_name);
-          }
-        };
+      // Render a non selected tab.
+      let tab_props = {
+        key: tab_name,
+        className: revised[tab_name] ? 'revised tab' : 'tab',
+        onClick: function(event){
+          clickTab(view.tabs[tab_name].index_order);
+        }
+      };
 
-        return(
-          <div {...tab_props}>
-
-            {self.format_name(tab_name)}
-          </div>
-        );
-      }
+      return <div {...tab_props}>{self.formatName(tab_name)}</div>;
     });
 
     return tabs;
-  },
+  }
 
-  render: function(){
-    var view = this.props.view;
+  render(){
+
+    let {tabs} = this.props.view;
 
     // Don't bother showing only one tab.
-    if (Object.keys(view).length == 1) return <div style={{display:'none'}} />
+    if (Object.keys(tabs).length == 1) return <div style={{display: 'none'}} />
 
     return(
       <div className='tabbar'>
@@ -60,40 +61,31 @@ var TabBar = React.createClass({
       </div>
     );
   }
-});
+}
 
-TabBar = connect(
+const mapStateToProps = (state = {}, own_props)=>{
+  let revised = {};
+  let {view, mode, revision} = own_props;
 
-  // Map state to props.
-  function(state, props){
+  if(mode == 'edit' && revision){
+    //do nothing yet.
+  }
 
-    var revised = {};
-    var view = props.view;
+  return {...own_props, revised};
+};
 
-    if(props.mode == 'edit' && props.revision){
-
-      Object.keys(props.view).forEach((tab_name)=>{
-
-        var tab = props.view[tab_name];
-        if(tab){
-
-          for(var pane_name in tab.panes){
-
-            let bool = tab.panes[pane_name].display.some((display) => display.name in props.revision)
-            if(bool){
-              revised[tab_name] = true;
-              break;
-            }
-          }
-        }
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    initialized: (component)=>{
+      dispatch({
+        type: 'INITIALIZED',
+        component
       });
     }
+  };
+};
 
-    return {
-      ...props,
-      'revised': revised
-    };
-  }
+export const TabBarContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(TabBar);
-
-module.exports = TabBar;

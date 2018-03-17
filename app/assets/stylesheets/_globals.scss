@@ -59,3 +59,27 @@ $quote_font: 'Crimson Text', serif;
   font-size: 20px;
   color: forestgreen;
 }
+
+/* NEW GLOBALS ****************************************************************/
+
+.left-column-group{
+  display: inline-block;
+  width: 175px;
+  overflow: hidden;
+}
+
+.right-column-group{
+  position: absolute;
+  top: 36px;
+  left: 175px;
+  right: 0px;
+}
+
+.disabled{
+  background: none;
+  outline: none;
+}
+
+input:focus{
+  outline-offset: 0px;
+}
