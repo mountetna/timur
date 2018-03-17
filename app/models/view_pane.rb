@@ -39,7 +39,6 @@ class ViewPane < ActiveRecord::Base
         [
           pane[:name],
           {
-            name: pane[:name],
             title: pane[:title],
             index_order: pane[:index_order],
             attributes: ViewAttribute.retrieve_attributes(pane[:id])

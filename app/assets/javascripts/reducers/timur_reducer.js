@@ -55,7 +55,10 @@ const views = (old_views = {}, action)=>{
         [action.view_name]: action.view
       };
     case 'REFRESH_VIEWS':
-      return {...action.views};
+      return {
+        ...old_views,
+        ...action.views
+      };
     default:
       return old_views;
   }
