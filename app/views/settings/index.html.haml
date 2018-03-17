@@ -1,0 +1,17 @@
+= content_for :title, "#{Rails.env.development? ? :"Dev Timur" : :Timur } - View"
+
+#root
+%script{ type: "text/javascript" }
+  :plain
+    var PROJECT_NAME = '#{@project_name}';
+
+    const timur = new TimurApp(
+      {
+        user: "#{current_user ? current_user.name : 'null'}",
+        mode: 'settings',
+        environment: '#{Rails.env.development? ? 'development' : 'production'}',
+        is_admin: #{ current_user && current_user.is_admin?(@project_name) ? :true : :false },
+        settings_page: "#{@settings_page}"
+      },
+      'root'
+    );

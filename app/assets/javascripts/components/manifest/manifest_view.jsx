@@ -158,7 +158,7 @@ export class ManifestView extends React.Component{
       page_status: ''
     });
 
-    // Turn of the editing mode.
+    // Turn off the editing mode.
     this.toggleEdit();
   }
 

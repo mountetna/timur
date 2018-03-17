@@ -41,6 +41,7 @@ class ChangeViewModels < ActiveRecord::Migration
     remove_column :view_panes, :tab_name
     remove_column :view_panes, :view_model_name
     remove_column :view_panes, :project_name
+    remove_column :view_panes, :description
 
     remove_column :view_attributes, :display_name
     remove_column :view_attributes, :plot
