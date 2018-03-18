@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 
+import { easeQuadIn } from 'd3-ease';
 import React, { Component } from 'react'
 import { requestModels } from '../actions/magma_actions'
 import Magma from '../magma'
@@ -33,6 +34,7 @@ class ModelNode extends Component {
     </g>
   }
 }
+
 
 class ModelAttribute extends Component {
   type() {
@@ -167,6 +169,54 @@ class Layout {
   }
 }
 
+class ModelAnimation extends Component {
+  nodeCenter(node, parent_name, layout) {
+    return {
+      size: node.size,
+      center_x: node.center && node.center[0],
+      center_y: node.center && node.center[1],
+      parent_x: parent_name ? layout.nodes[parent_name].center[0] : null,
+      parent_y: parent_name ? layout.nodes[parent_name].center[1] : null
+    };
+  }
+  render() {
+    let { model_name, layout, layout2, onRest, handler, ModelElement } = this.props;
+
+    let node = layout.nodes[model_name];
+    let node2 = layout2.nodes[model_name];
+
+    let center = this.nodeCenter(node,node2.parent_name,layout);
+    let center2 = this.nodeCenter(node2,node2.parent_name,layout2);
+
+    return <Animate
+      start={ center }
+      enter={
+        {
+          size: [ center2.size ],
+          center_x: [ center2.center_x ],
+          center_y: [ center2.center_y ],
+          parent_x: [ center2.parent_x ],
+          parent_y: [ center2.parent_y ],
+          timing: { duration: 400, ease: easeQuadIn },
+          events: onRest ? { end: onRest } : {}
+        }
+      }
+      key={ model_name }>
+      {
+        data => {
+          return <ModelElement
+            handler={handler}
+            key={model_name}
+            size={ data.size }
+            center={ data.center_x ? [ data.center_x, data.center_y ] : null }
+            parent={ data.parent_x ? [ data.parent_x, data.parent_y ] : null }
+            model_name={ model_name }/>
+        }
+      }
+    </Animate>
+  }
+}
+
 class ModelMap extends Component {
   constructor() {
     super()
@@ -178,117 +228,93 @@ class ModelMap extends Component {
   showModel(model_name) {
     this.setState( { new_model: model_name } )
   }
+  renderLinks(model_names, layout, layout2) {
+    return model_names.map(
+      (model_name) => {
+        let node = layout.nodes[model_name];
+        if (layout2) {
+          return <ModelAnimation
+            key={model_name}
+            model_name={ model_name }
+            layout={layout}
+            layout2={layout2}
+            ModelElement={ModelLink}/>;
+        } else
+        return <ModelLink
+          key={model_name}
+          center={ node.center }
+          parent={ node.parent_name ? layout.nodes[node.parent_name].center : null }
+          size={ node.size }
+        />
+      }
+    )
+  }
+  setNewModel(model_name) {
+    let { new_model } = this.state;
+    this.setState({
+      new_model: null,
+      current_model: new_model
+    })
+  }
+  renderModels(new_model, model_names, layout, layout2) {
+    return model_names.map(
+      (model_name) => {
+        let node = layout.nodes[model_name];
+
+        if (layout2) {
+          let node2 = layout2.nodes[model_name];
+          return <ModelAnimation
+            key={model_name}
+            model_name={ model_name }
+            layout={layout}
+            layout2={layout2}
+            ModelElement={ModelNode}
+            onRest={ new_model == model_name ?  this.setNewModel.bind(this) : null }
+            handler={ this.showModel.bind(this) }
+          />;
+        } else
+        return <ModelNode
+          key={model_name}
+          center={ node.center }
+          size={ node.size }
+          handler={ this.showModel.bind(this) }
+          model_name={ model_name }/>
+      }
+    )
+  }
   render() {
-    let [ width, height ] = [ 500, 500 ]
-    let layout = new Layout(this.state.current_model, this.props.templates, width, height)
-    let layout2
+    let [ width, height ] = [ 500, 500 ];
+    let { templates, model_names } = this.props;
+    let { new_model, current_model } = this.state;
+    let layout = new Layout(current_model, templates, width, height);
+    let layout2;
 
-    if (this.state.new_model) {
-      layout2 = new Layout(this.state.new_model, this.props.templates, width, height)
-    }
-
+    if (new_model) layout2 = new Layout(new_model, templates, width, height);
 
     return <div id="map">
       <svg width={width} height={height}>
         {
-          this.props.model_names.map(
-            (model_name) => {
-              let node = layout.nodes[model_name]
-              if (layout2) {
-                let node2 = layout2.nodes[model_name]
-                return <Animate
-                  default={{
-                    center_x: node.center && node.center[0],
-                    center_y: node.center && node.center[1],
-                    parent_x: node.parent_name ? layout.nodes[node.parent_name].center[0] : null,
-                    parent_y: node.parent_name ? layout.nodes[node.parent_name].center[1] : null
-                  }}
-                  data={{
-                    center_x: node2.center && node2.center[0],
-                    center_y: node2.center && node2.center[1],
-                    parent_x: node.parent_name ? layout2.nodes[node.parent_name].center[0] : null,
-                    parent_y: node.parent_name ? layout2.nodes[node.parent_name].center[1] : null
-                  }}
-                  key={ model_name }
-                  duration={400}
-                  easing='easeQuadIn'>
-                  {data => (
-                    <ModelLink
-                      key={model_name}
-                      center={ data.center_x ? [ data.center_x, data.center_y ] : null }
-                      parent={ node.parent_name ? [ data.parent_x, data.parent_y ] : null }
-                      model_name={ model_name }/>
-                  )}
-                </Animate>
-              } else
-              return <ModelLink
-                key={model_name}
-                center={ node.center }
-                parent={ node.parent_name ? layout.nodes[node.parent_name].center : null }
-                size={ node.size }
-                handler={ this.showModel.bind(this) }/>
-            }
-          )
+          this.renderLinks(model_names, layout, layout2)
         }
         {
-          this.props.model_names.map(
-            (model_name) => {
-              let node = layout.nodes[model_name]
-              if (layout2) {
-                let node2 = layout2.nodes[model_name]
-                return <Animate
-                  default={{
-                    size: node.size,
-                    center_x: node.center && node.center[0],
-                    center_y: node.center && node.center[1]
-                  }}
-                  data={{
-                    size: node2.size,
-                    center_x: node2.center && node2.center[0],
-                    center_y: node2.center && node2.center[1]
-                  }}
-                  key={ model_name }
-                  duration={400}
-                  onRest={ () => {
-                      if (model_name == this.state.new_model) this.setState({ new_model: null, current_model: this.state.new_model })
-                    }
-                  }
-                  easing='easeQuadIn'>
-                  {data => (
-                    <ModelNode 
-                      key={model_name}
-                      center={ data.center_x ? [ data.center_x, data.center_y ] : null }
-                      size={ data.size }
-                      handler={ this.showModel.bind(this) }
-                      model_name={ model_name }/>
-                  )}
-                </Animate>
-              } else
-              return <ModelNode 
-                key={model_name}
-                center={ node.center }
-                size={ node.size }
-                handler={ this.showModel.bind(this) }
-                model_name={ model_name }/>
-            }
-          )
+          this.renderModels(new_model, model_names, layout, layout2)
         }
       </svg>
-      <ModelReport model_name={ this.state.current_model }/>
+      <ModelReport model_name={ current_model }/>
     </div>
   }
 }
 
 export default connect(
   (state) => {
-    var magma = new Magma(state)
-    var model_names = magma.model_names()
+    let magma = new Magma(state);
+    let model_names = magma.model_names();
     return {
-      model_names: model_names,
+      model_names,
       templates: model_names.map(model_name => magma.template(model_name))
     }
   },
   {
     requestModels
   }
-)(ModelMap)
+)(ModelMap);
