@@ -22,6 +22,8 @@ export default class BrowserPane extends React.Component{
       // Return null if we are not to show the attribute.
       if(pane.attributes[attr_name].shown === false) return null;
 
+      if (mode == 'edit' && !pane.attributes[attr_name].editable) return null;
+
       // The Timur view attribute.
       let attr = pane.attributes[attr_name];
 
