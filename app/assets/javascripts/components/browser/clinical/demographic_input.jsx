@@ -38,12 +38,15 @@ export default class DemographicInput extends React.Component{
         return(
           <select {...input_props}>
 
-            <option defaultValue=''>{`Make ${selection_label || ''} Selection`}</option>
+            <option defaultValue=''>
+            
+              {`Make ${selection_label || ''} Selection`}
+            </option>
             {select_options}
           </select>
         );
       default:
         return <div>{'Input Type Error'}</div>;
-    }
+    }git
   }
 }
