@@ -158,6 +158,13 @@ export const requestConsignments = (manifests, success, error)=>{
 
   return (dispatch)=>{
     let localSuccess = (response)=>{
+
+      if('error' in response){
+        dispatch(showMessages([`There was a ${response.type} error.`]));
+        console.log(response.error);
+        return;
+      }
+
       /*
        * The md5sum is of the json stringified manifest data, which is used as
        * an id for the consignment.
@@ -212,6 +219,13 @@ export const requestConsignmentsByManifestId = (manifest_ids, record_name)=>{
   return (dispatch)=>{
 
     let localSuccess = (response)=>{
+
+      if('error' in response){
+        dispatch(showMessages([`There was a ${response.type} error.`]));
+        console.log(response.error);
+        return;
+      }
+
       /*
        * The md5sum is of the json stringified manifest data, which is used as
        * an id for the consignment.
