@@ -15,8 +15,7 @@ export default class DemographicInput extends React.Component{
     let input_props = {
       className: 'demographic-input',
       value: input_value,
-      onChange: inputChange,
-      label: selection_label
+      onChange: inputChange
     };
 
     switch(input_type){
@@ -39,7 +38,7 @@ export default class DemographicInput extends React.Component{
         return(
           <select {...input_props}>
 
-            <option defaultValue=''>{`Make ${label || ''} Selection`}</option>
+            <option defaultValue=''>{`Make ${selection_label || ''} Selection`}</option>
             {select_options}
           </select>
         );
