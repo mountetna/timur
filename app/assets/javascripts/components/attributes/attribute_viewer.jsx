@@ -8,7 +8,6 @@ import DocumentAttribute from './document_attribute';
 import CheckboxAttribute from './checkbox_attribute';
 import DateTimeAttribute from './date_time_attribute';
 import TableAttribute from './table_attribute';
-import DemographicAttribute from './demographic_attribute';
 import LinkAttribute from './link_attribute';
 import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
@@ -65,7 +64,7 @@ export default class AttributeViewer extends Component{
         return <LinkAttribute {...this.props} />;
       case 'Magma::TableAttribute':
         // return <TableAttribute {...this.props} />;
-        return <DemographicAttribute {...this.props} />;
+        return <DemographicAttributeContainer {...this.props} />;
       case 'Magma::FileAttribute':
         return <DocumentAttribute {...this.props} />;
       case 'Magma::ImageAttribute':
