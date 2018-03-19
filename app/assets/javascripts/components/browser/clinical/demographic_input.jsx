@@ -8,13 +8,15 @@ export default class DemographicInput extends React.Component{
       input_key,
       input_value,
       select_options,
-      inputChange
+      inputChange,
+      selection_label
     } = this.props;
 
     let input_props = {
       className: 'demographic-input',
       value: input_value,
-      onChange: inputChange
+      onChange: inputChange,
+      label: selection_label
     };
 
     switch(input_type){
@@ -31,12 +33,13 @@ export default class DemographicInput extends React.Component{
         input_props['type'] = 'date';
         return <input {...input_props} />;
       case 'regex':
+      case 'select':
         input_props['key'] = `regex-${input_key}`;
         input_props['className'] = 'demographic-select';
         return(
           <select {...input_props}>
 
-            <option defaultValue=''>{'Make Selection'}</option>
+            <option defaultValue=''>{`Make ${label || ''} Selection`}</option>
             {select_options}
           </select>
         );
