@@ -332,7 +332,8 @@ export class PlotView extends React.Component{
   }
 
   renderPlotSelection(){
-    let {selected_plot} = this.state;
+    let {selected_plot, is_editing} = this.state;
+    if (!is_editing) return null;
     let disabled = (!this.state.is_editing) ? 'disabled' : '';
     let selector_props = {
       className: 'disabled plotter-selector',
@@ -367,6 +368,7 @@ export class PlotView extends React.Component{
   renderPlotSpecificForm(){
     let {selected_plot, selected_manifest, is_editing} = this.state;
 
+    if (!is_editing) return null;
     // This happens if a manifest has not been selected.
     if(selected_manifest == undefined) return null;
 
@@ -426,6 +428,26 @@ export class PlotView extends React.Component{
     }
   }
 
+  renderPlotDetails() {
+    let {selected_plot, is_editing} = this.state;
+    if (!is_editing) return null;
+    let input_props = {
+      className: `plotter-form-title-input`,
+      type: 'text',
+      onChange: this.updateField.bind(this)
+    };
+
+    return <div className='plotter-form-details'>
+      {this.renderManifestSelection()}
+      {this.renderPlotSelection()}
+      {'Height: '}
+      <input {...input_props} value={selected_plot.layout.height} data-field='layout.height' />
+      <br />
+      {'Width: '}
+      <input {...input_props} value={selected_plot.layout.width} data-field='layout.width'/>
+    </div>;
+  }
+
   render(){
     let {selected_plot, is_editing} = this.state;
     let disabled = (!is_editing) ? 'disabled' : '';
@@ -463,16 +485,7 @@ export class PlotView extends React.Component{
               </span>
             </div>
             <br />
-            <div className='plotter-form-details'>
-
-              {this.renderManifestSelection()}
-              {this.renderPlotSelection()}
-              {'Height: '}
-              <input {...input_props} value={selected_plot.layout.height} data-field='layout.height' />
-              <br />
-              {'Width: '}
-              <input {...input_props} value={selected_plot.layout.width} data-field='layout.width'/>
-            </div>
+            {this.renderPlotDetails()}
             {this.renderPlotSpecificForm()}
           </div>
         </div>
@@ -489,8 +502,11 @@ const mapStateToProps = (state = {}, own_props)=>{
   let selected_manifest = state.manifests[state.manifestsUI.selected];
   let selected_consignment = null;
 
-  if(own_props.selected_plot){
-    selected_consignment = state.consignments[selected_manifest.md5sum_data];
+  if(selected_manifest){
+    selected_consignment = ConsignmentSelector.selectConsignment(
+      state,
+      selected_manifest.md5sum_data
+    );
   }
 
   return {
