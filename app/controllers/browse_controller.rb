@@ -12,6 +12,12 @@ class BrowseController < ApplicationController
     response = Magma::Client.instance.query(
       token, params[:project_name], [ :project, '::first', '::identifier' ]
     )
+
+    if response.code != '200'
+      @error = {type: 'Magma', body: response.body}
+      return render('browse/error')
+    end
+
     id = JSON.parse(response.body, symbolize_names: true)
     redirect_to browse_model_path(params[:project_name], :project, id[:answer])
   end
@@ -52,6 +58,12 @@ class BrowseController < ApplicationController
         params[:project_name],
         params[:revisions]
       )
+
+      if response.code != '200'
+        @error = {type: 'Magma', body: response.body}
+        return render('browse/error')
+      end
+
       render json: response.body
     rescue Magma::ClientError => e
       render json: e.body, status: e.status
