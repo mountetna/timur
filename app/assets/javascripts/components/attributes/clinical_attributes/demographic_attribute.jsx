@@ -5,6 +5,7 @@ import * as ReactRedux from 'react-redux';
 // Class imports.
 import {GenericClinicalAttribute} from './generic_clinical_attribute';
 import DemographicWidget from '../../browser/clinical/demographic_widget';
+import AdverseEventsWidget from '../../browser/clinical/adverse_events_widget';
 import Magma from '../../../magma';
 
 // Module imports.
@@ -18,6 +19,7 @@ export class DemographicAttribute extends GenericClinicalAttribute{
       <div className='value'>
 
         <DemographicWidget {...this.props} />
+        <AdverseEventsWidget />
       </div>
     );
   }
