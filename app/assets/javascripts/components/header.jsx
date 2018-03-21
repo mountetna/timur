@@ -1,70 +1,84 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
 
-var HeaderApprove = React.createClass({
-  render: function() {
-    return <div className="inline">
-        <div className='cancel' onClick={ 
-          this.props.handler.bind(null,'cancel')
-        }>
-        <span className="fa fa-close"/>
+class HeaderApprove extends React.Component{
+  render(){
+    let {handler} = this.props;
+    return(
+      <div className='inline' onClick={handler.bind(null, 'cancel')}>
+
+        <div className='cancel' onClick={handler.bind(null,'cancel')}>
+
+          <span className='fa fa-close' />
         </div>
-        <div className='approve' onClick={ 
-          this.props.handler.bind(null,'approve')
-        }>
-        <span className="fa fa-check"/>
+        <div className='approve' onClick={handler.bind(null, 'approve')}>
+
+          <span className='fa fa-check' />
         </div>
       </div>
+    );
   }
-})
+}
 
-var HeaderWaiting = React.createClass({
-  render: function() {
-    return <div className='submit'>
-      <span className="fa fa-spinner fa-pulse"/>
-    </div>
-  }
-})
+class HeaderWaiting extends React.Component{
+  render(){
+    return(
+      <div className='submit'>
 
-
-var HeaderEdit = React.createClass({
-  render: function() {
-    return <div className='edit' 
-      onClick={ this.props.handler.bind(null,'edit') }>
-      <span className="fa fa-pencil"/>
+        <span className='fa fa-spinner fa-pulse' />
       </div>
+    );
   }
-})
+}
 
-var HeaderClose = React.createClass({
-  render: function() {
-    return <div 
-      onClick={ this.props.handler.bind(null,'close') }
-      className="close">
-      <span className="fa fa-times-circle"/>
-    </div>
+class HeaderEdit extends React.Component{
+  render(){
+    let {handler} = this.props;
+    return(
+      <div className='edit' onClick={handler.bind(null, 'edit')}>
+
+        <span className='fa fa-pencil' />
+      </div>
+    );
   }
-})
+}
 
+class HeaderClose extends React.Component{
+  render(){
+    let {handler} = this.props;
+    return(
+      <div className='close' onClick={handler.bind(null, 'close')}>
 
-var Header = React.createClass({
-  render: function() {
-    var component
-    if (this.props.mode == 'edit')
-      component = <HeaderApprove handler={ this.props.handler }/>
-    else if (this.props.mode == 'submit')
-      component = <HeaderWaiting/>
-    else if (this.props.can_edit)
-      component = <HeaderEdit handler = { this.props.handler }/>
-    return <div className="header">
-      { this.props.children }
-      { component }
-      {
-        this.props.can_close ?
-        <HeaderClose handler={ this.props.handler }/>
-        : null
-      }
-    </div>
+        <span className='fa fa-times-circle' />
+      </div>
+    );
   }
-})
+}
 
-module.exports = Header
+class Header extends React.Component{
+  render(){
+    let {mode, handler, can_edit, can_close, children} = this.props;
+    let elem = null;
+
+    if(mode == 'edit'){
+      elem = <HeaderApprove handler={handler} />;
+    }
+    else if(mode == 'submit'){
+      elem = <HeaderWaiting />;
+    }
+    else if(can_edit){
+      elem = <HeaderEdit handler = {handler} />
+    }
+
+    return(
+      <div className='header'>
+
+        {children}
+        {elem}
+        {can_close ? <HeaderClose handler={handler} /> : null}
+      </div>
+    );
+  }
+}
+
+export default Header;

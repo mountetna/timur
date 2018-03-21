@@ -6,7 +6,9 @@ module Archimedes
           f.is_func?(function_name)
         end
 
-        raise ArgumentError, "No such function #{function_name}!" unless function
+        unless function
+          raise ArgumentError, "No such function #{function_name}!" 
+        end
 
         function.new(token,project_name,function_name,args).call
       end
@@ -15,12 +17,12 @@ module Archimedes
         ObjectSpace.each_object(::Class).select {|k| k < self }
       end
 
-      def is_func? function_name
+      def is_func?(function_name)
         self.name.split(/::/).last.snake_case == function_name.to_s
       end
     end
 
-    def initialize token, project_name, function_name, args
+    def initialize(token, project_name, function_name, args)
       @token = token
       @project_name = project_name
       @function_name = function_name
@@ -28,7 +30,7 @@ module Archimedes
     end
   end
   class FunctionCollection < Function
-    def self.is_func? function_name
+    def self.is_func?(function_name)
       method_defined?(function_name.to_sym)
     end
 

@@ -1,0 +1,61 @@
+{
+  "name": "sample-flow_cytometry-gating-finger_print",
+  "title": "Finger Print",
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "view",
+  "plot_type": "barplot",
+  "view_name": "sample",
+  "tab_name": "flow_cytometry",
+  "pane_name": "gating",
+  "attribute_name": "finger_print",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 900,
+      "height": 350,
+      "margin": {
+        "top": 10,
+        "right": 20,
+        "bottom": 160,
+        "left": 40
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    },
+    "legend": [
+      {
+        "name": "overall",
+        "color": "seagreen"
+      },
+      {
+        "name": "immune",
+        "color": "coral"
+      },
+      {
+        "name": "lineage",
+        "color": "dodgerblue"
+      },
+      {
+        "name": "t-cell",
+        "color": "chocolate"
+      },
+      {
+        "name": "cd4/8",
+        "color": "magenta"
+      },
+      {
+        "name": "apcs",
+        "color": "greenyellow"
+      }
+    ]
+  }
+}

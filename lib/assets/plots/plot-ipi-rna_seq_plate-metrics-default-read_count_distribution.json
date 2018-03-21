@@ -1,0 +1,39 @@
+{
+  "name": "rna_seq_plate-metrics-default-read_count_distribution",
+  "title": "Read Count Distrobution",
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "view",
+  "plot_type": "histogram",
+  "view_name": "rna_seq_plate",
+  "tab_name": "metrics",
+  "pane_name": "default",
+  "attribute_name": "read_count_distribution",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 600,
+      "height": 400,
+      "margin": {
+        "top": 10,
+        "right": 0,
+        "bottom": 150,
+        "left": 150
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    },
+    "interval": 50000000,
+    "ymax": 40,
+    "yLabel": "Number of Samples",
+    "xLabel": "Read Count"
+  }
+}

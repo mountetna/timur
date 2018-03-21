@@ -1,0 +1,39 @@
+{
+  "name": "rna_seq_plate-metrics-default-median_cv_coverage_distribution",
+  "title": "Median CV Coverage Distrobution",
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "view",
+  "plot_type": "histogram",
+  "view_name": "rna_seq_plate",
+  "tab_name": "metrics",
+  "pane_name": "default",
+  "attribute_name": "median_cv_coverage_distribution",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 600,
+      "height": 400,
+      "margin": {
+        "top": 10,
+        "right": 0,
+        "bottom": 150,
+        "left": 150
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    },
+    "interval": 0.2,
+    "ymax": 40,
+    "yLabel": "Number of Samples",
+    "xLabel": "Median Cv Coverage"
+  }
+}

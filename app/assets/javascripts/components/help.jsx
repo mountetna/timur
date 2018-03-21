@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-
-import { connect } from 'react-redux';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 import { showMessages } from '../actions/message_actions';
 
 var help_nodes = {
@@ -45,35 +45,36 @@ var help_nodes = {
   ]
 }
 
+export class HelpButton extends React.Component{
+  render(){
+    let { helpShown, showMessages, info } = this.props;
 
-var HelpButton = React.createClass({
-  render: function() {
-    var self = this
-    if (!this.props.helpShown) return <div style={{display: "none"}}></div>
-    return <div className="help"
-      onClick={
-        function() {
-          self.props.dispatch(showMessages(help_nodes[self.props.info]))
-        }
-      } >
+    if (!helpShown) return <div style={{display: "none"}}></div>
+
+    let props = {
+      className: "help",
+      onClick: () => showMessages(help_nodes[info])
+    }
+    return(
+      <div {...props}>
         <span className="fa-stack">
           <span className="circle fa fa-circle fa-stack-1x"/>
           <span className="question fa fa-question fa-stack-1x"/>
         </span>
       </div>
+    );
   }
-})
-
-var Help = connect(
-  function (state) {
-    return {
-      helpShown: state.timur.help_shown
-    }
-  }
-)(HelpButton)
-
-Help.contextTypes = {
-  store: React.PropTypes.object
 }
 
-module.exports = Help
+const mapStateToProps = (state = {}, own_props)=>{
+  return {
+    helpShown: state.timur.help_shown
+  };
+};
+
+const mapDispatchToProps = { showMessages };
+
+export const HelpContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HelpButton);

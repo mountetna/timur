@@ -1,0 +1,35 @@
+{
+  "name": "project-overview-default-progress_plot",
+  "title": "Progress Plot",
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "view",
+  "plot_type": "lineplot",
+  "view_name": "project",
+  "tab_name": "overview",
+  "pane_name": "default",
+  "attribute_name": "progress_plot",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 600,
+      "height": 200,
+      "margin": {
+        "left": 60,
+        "right": 90,
+        "top": 10,
+        "bottom": 40
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    }
+  }
+}

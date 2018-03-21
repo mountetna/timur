@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { connect } from 'react-redux';
-import { showMessages } from '../actions/message_actions';
+import * as MessageActions from '../actions/message_actions';
 
-var Noauth = React.createClass({
-  componentDidMount: function () {
+export class Noauth extends React.Component{
+  componentDidMount() {
     this.props.message([
       "####",
       "Alas,", 
@@ -12,25 +13,25 @@ var Noauth = React.createClass({
       "--",
       "Though you seek to enter, you are *Unauthorized*." 
     ].join(" "))
-  },
-  render: function() {
+  }
+  render() {
     return <div className="noauth"/>
   }
-})
-
-Noauth = connect(
-  null,
-  function(dispatch,props) {
-    return {
-      message: function(message) {
-        dispatch(showMessages([message]))
-      }
-    }
-  }
-)(Noauth)
-
-Noauth.contextTypes = {
-  store: React.PropTypes.object
 }
 
-module.exports = Noauth
+const mapStateToProps = (state = {}, own_props)=>{
+  return state;
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    message: function(message) {
+      dispatch(MessageActions.showMessages([message]))
+    }
+  };
+};
+
+export const NoAuthContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Noauth);

@@ -1,0 +1,73 @@
+{
+  "name": "rna_seq_plate-metrics-default-composition_metric",
+  "title": "Composition Metrics",
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "view",
+  "plot_type": "stackedbar",
+  "view_name": "rna_seq_plate",
+  "tab_name": "metrics",
+  "pane_name": "default",
+  "attribute_name": "composition_metric",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 1400,
+      "height": 400,
+      "margin": {
+        "top": 10,
+        "right": 200,
+        "bottom": 150,
+        "left": 150
+      }
+    },
+    "order_by": "coding_ratio",
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    },
+    "legend": [
+      {
+        "category": "coding_ratio",
+        "label": "coding count",
+        "color": "magenta"
+      },
+      {
+        "category": "intergenic_ratio",
+        "label": "intergenic count",
+        "color": "red"
+      },
+      {
+        "category": "introns_ratio",
+        "label": "introns count",
+        "color": "green"
+      },
+      {
+        "category": "utr_ratio",
+        "label": "utr count",
+        "color": "orange"
+      },
+      {
+        "category": "mt_coding_ratio",
+        "label": "mt coding count",
+        "color": "cyan"
+      },
+      {
+        "category": "rrna_ratio",
+        "label": "rrna count",
+        "color": "lime"
+      },
+      {
+        "category": "mt_rrna_ratio",
+        "label": "mt rrna count",
+        "color": "blue"
+      }
+    ]
+  }
+}

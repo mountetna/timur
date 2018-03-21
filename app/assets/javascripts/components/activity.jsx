@@ -1,19 +1,20 @@
+// Framework libraries.
+import * as React from 'react';
+
+import * as Dates from '../utils/dates';
 import MagmaLink from './magma_link';
-import React, { Component } from 'react';
+import markdown from '../markdown';
 
-import markdown from '../markdown'
-import { formatDate, formatTime } from '../utils/dates';
-
-var Activity = React.createClass({
-  render: function() {
+export default class Activity extends React.Component{
+  render() {
     return <div id="activities">
     Recent Activity
     {
       this.props.activities.map(function(activity) {
         return <div className="activity">
-          <span className="date">{ formatDate(activity.date) }</span>
+          <span className="date">{ Dates.formatDate(activity.date) }</span>
           <span className="at">@</span> 
-          <span className="time">{ formatTime(activity.date) }</span> 
+          <span className="time">{ Dates.formatTime(activity.date) }</span> 
           <span className="user">{ activity.user }</span> 
           <span className="action" dangerouslySetInnerHTML={ { __html: markdown(activity.action) } } /> 
           on 
@@ -23,6 +24,4 @@ var Activity = React.createClass({
     }
     </div>
   }
-})
-
-module.exports = Activity
+}

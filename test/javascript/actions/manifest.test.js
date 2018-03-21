@@ -1,6 +1,6 @@
-import 'isomorphic-fetch';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import fetch from 'isomorphic-fetch';
 import nock from 'nock';
 import * as actions from '../../../app/assets/javascripts/actions/manifest_actions';
 import allManifestsResp, { plot } from '../fixtures/all_manifests_response';
@@ -55,10 +55,6 @@ describe('async actions', () => {
       {
         type: 'LOAD_MANIFESTS',
         manifestsById: manifestStore
-      },
-      {
-        plot: { ...plot },
-        type:"ADD_PLOT"
       }
     ];
 
@@ -114,7 +110,7 @@ describe('async actions', () => {
     });
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, TOGGLE_IS_EDITING_MANIFEST, and SELECT_MANIFEST when creating a new user manifest has been done', () => {
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, and SELECT_MANIFEST when creating a new user manifest has been done', () => {
     nock('http://www.fake.com')
       .post('/ipi/manifests/create')
       .reply(
@@ -145,9 +141,6 @@ describe('async actions', () => {
         ...manifestResp
       },
       {
-        type: "TOGGLE_IS_EDITING_MANIFEST"
-      },
-      {
         type: 'SELECT_MANIFEST',
         id: 12
       }
@@ -161,7 +154,7 @@ describe('async actions', () => {
 
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, UPDATE_USER_MANIFEST, and TOGGLE_IS_EDITING_MANIFEST when updating user manifest has been done', () => {
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, and UPDATE_USER_MANIFEST when updating user manifest has been done', () => {
     nock('http://www.fake.com')
       .post(`/ipi/manifests/update/${manifestResp.manifest.id}`)
       .reply(
@@ -190,9 +183,6 @@ describe('async actions', () => {
       {
         type:"UPDATE_USER_MANIFEST",
         ...manifestResp
-      },
-      {
-        type: "TOGGLE_IS_EDITING_MANIFEST"
       }
     ];
 
@@ -204,7 +194,7 @@ describe('async actions', () => {
 
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, SELECT_MANIFEST, and TOGGLE_IS_EDITING_MANIFEST when copying a user manifest has been done', () => {
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, and SELECT_MANIFEST when copying a user manifest has been done', () => {
     const newManifestId =  manifestResp.manifest.id + 1;
 
     const copiedManifestResp = {
@@ -245,9 +235,6 @@ describe('async actions', () => {
       {
         type: 'SELECT_MANIFEST',
         id: newManifestId
-      },
-      {
-        type: "TOGGLE_IS_EDITING_MANIFEST"
       }
     ];
 
@@ -256,25 +243,5 @@ describe('async actions', () => {
     return store.dispatch(actions.copyManifest(manifestResp.manifest)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
-  });
-});
-
-describe('actions', () => {
-  it('transforms the serialized manifest form to the manifest form for the query payload', () => {
-    const queryPayload = {
-      "manifest": [
-        [
-          "var",
-          "123"
-        ],
-        [
-          "var2",
-          "'abc'"
-        ]
-      ],
-      "name": 'NEW MANIFEST'
-    };
-
-    expect(actions.manifestToReqPayload(manifest)).toEqual(queryPayload);
   });
 });

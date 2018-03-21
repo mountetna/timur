@@ -1,0 +1,35 @@
+{
+  "name": "project-overview-rna_progress",
+  "title": "RNA Progress",
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "view",
+  "plot_type": "bargraph",
+  "view_name": "project",
+  "tab_name": "overview",
+  "pane_name": "default",
+  "attribute_name": "rna_progress",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 500,
+      "height": 300,
+      "margin": {
+        "top": 10,
+        "right": 20,
+        "bottom": 90,
+        "left": 50
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    }
+  }
+}

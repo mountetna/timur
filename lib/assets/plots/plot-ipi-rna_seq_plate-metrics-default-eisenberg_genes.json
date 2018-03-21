@@ -1,0 +1,79 @@
+{
+  "name": "rna_seq_plate-metrics-default-eisenberg_genes",
+  "title": "Eisenberg gGenes",
+  "user_id": null,
+  "manifest_id": null,
+  "project": "ipi",
+  "access": "view",
+  "plot_type": "swarm",
+  "view_name": "rna_seq_plate",
+  "tab_name": "metrics",
+  "pane_name": "default",
+  "attribute_name": "eisenberg_genes",
+  "configuration": {
+    "data": [],
+    "layout": {
+      "width": 900,
+      "height": 500,
+      "margin": {
+        "top": 10,
+        "right": 200,
+        "bottom": 150,
+        "left": 150
+      }
+    },
+    "config": {
+      "displayModeBar": true,
+      "modeBarButtonsToRemove": [
+        "sendDataToCloud",
+        "lasso2d",
+        "toggleSpikelines"
+      ],
+      "showLink": false
+    },
+    "yLabel": "Eisenberg Genes",
+    "xLabel": "Log2(TPM + 0.1)",
+    "xmin": -5,
+    "xmax": 15,
+    "groupByKey": "hugo_name",
+    "datumKey": "tpm_log_2",
+    "legendKey": "indication",
+    "legend": [
+      {
+        "category": "Bladder",
+        "color": "dodgerblue"
+      },
+      {
+        "category": "Colorectal",
+        "color": "forestgreen"
+      },
+      {
+        "category": "Gynecologic",
+        "color": "seagreen"
+      },
+      {
+        "category": "Head and Neck",
+        "color": "khaki"
+      },
+      {
+        "category": "Kidney",
+        "color": "coral"
+      },
+      {
+        "category": "Lung",
+        "color": "gold"
+      },
+      {
+        "category": "Melanoma",
+        "color": "teal"
+      },
+      {
+        "category": "Pancreatic",
+        "color": "indianred"
+      }
+    ],
+    "calculated_columns": [
+      "tpm_log_2"
+    ]
+  }
+}

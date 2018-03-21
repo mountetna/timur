@@ -1,17 +1,17 @@
-const exchanges = (state = {}, action) => {
-  switch (action.type) {
+const exchanges = (state = {}, action)=>{
+  switch(action.type){
     case 'ADD_EXCHANGE':
       return {
         ...state,
         [action.exchange_name]: action.exchange
-      }
+      };
     case 'REMOVE_EXCHANGE':
-      let newState = { ...state }
-      delete newState[action.exchange_name]
-      return newState
+      let newState = {...state};
+      delete newState[action.exchange_name];
+      return newState;
     default:
-      return state
+      return state;
   }
 }
 
-export default exchanges
+export default exchanges;
