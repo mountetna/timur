@@ -47,6 +47,6 @@ export default class DemographicInput extends React.Component{
         );
       default:
         return <div>{'Input Type Error'}</div>;
-    }git
+    }
   }
 }
