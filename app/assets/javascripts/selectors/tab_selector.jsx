@@ -96,7 +96,9 @@ export const interleaveAttributes = (tab, template)=>{
 
           // Interleave the attribute properties and set it back on the pane.
           pane.attributes[attr_name] = Object.assign(
-            {},
+            {
+              editable: template_attribute ? true : false
+            },
             template_attribute,
             view_attribute
           );

@@ -1,7 +1,7 @@
 // Framework libraries.
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
-import * as MessageActions from '../actions/message_actions';
+import { showMessages } from '../actions/message_actions';
 
 var help_nodes = {
   edit: [
@@ -47,14 +47,13 @@ var help_nodes = {
 
 export class HelpButton extends React.Component{
   render(){
-    var self = this;
-    if (!this.props.helpShown) return <div style={{display: "none"}}></div>
+    let { helpShown, showMessages, info } = this.props;
+
+    if (!helpShown) return <div style={{display: "none"}}></div>
 
     let props = {
       className: "help",
-      onClick: function() {
-        self.props.dispatch(MessageActions.showMessages(help_nodes[self.props.info]))
-      }
+      onClick: () => showMessages(help_nodes[info])
     }
     return(
       <div {...props}>
@@ -73,9 +72,7 @@ const mapStateToProps = (state = {}, own_props)=>{
   };
 };
 
-const mapDispatchToProps = (dispatch, own_props)=>{
-  return {};
-};
+const mapDispatchToProps = { showMessages };
 
 export const HelpContainer = ReactRedux.connect(
   mapStateToProps,
