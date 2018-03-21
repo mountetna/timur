@@ -1,7 +1,6 @@
-import 'babel-polyfill'
-import 'isomorphic-fetch';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import fetch from 'isomorphic-fetch';
 import nock from 'nock';
 import * as actions from '../../../app/assets/javascripts/actions/manifest_actions';
 import allManifestsResp, { plot } from '../fixtures/all_manifests_response';
@@ -56,10 +55,6 @@ describe('async actions', () => {
       {
         type: 'LOAD_MANIFESTS',
         manifestsById: manifestStore
-      },
-      {
-        plot: plot,
-        type:"ADD_PLOT"
       }
     ];
 
@@ -248,25 +243,5 @@ describe('async actions', () => {
     return store.dispatch(actions.copyManifest(manifestResp.manifest)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
-  });
-});
-
-describe('actions', () => {
-  it('transforms the serialized manifest form to the manifest form for the query payload', () => {
-    const queryPayload = {
-      "manifest": [
-        [
-          "var",
-          "123"
-        ],
-        [
-          "var2",
-          "'abc'"
-        ]
-      ],
-      "name": 'NEW MANIFEST'
-    };
-
-    expect(actions.manifestToReqPayload(manifest)).toEqual(queryPayload);
   });
 });

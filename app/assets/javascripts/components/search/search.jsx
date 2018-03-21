@@ -139,7 +139,7 @@ export default connect(
     var magma = new Magma(state)
     var cache = selectSearchCache(state)
     return {
-      model_names: magma.model_names(),
+      model_names: magma.modelNames(),
       page_cache: cache,
       current_page: cache.current_page,
       page_size: cache.page_size,
