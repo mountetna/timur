@@ -90,7 +90,7 @@ export default class AdverseEventsWidget extends React.Component {
 
   infoTipShow(event){
     const OFFSET_X = 10;
-    const OFFSET_Y = -200;
+    const OFFSET_Y = -140;
     const SPACE = '\xa0';
     let {location, term_obj} = this.state;
     let current_location = location;
@@ -100,12 +100,12 @@ export default class AdverseEventsWidget extends React.Component {
       def: `DEF: ${SPACE}${term_obj[term]['CTCAE v4.0 AE Term Definition']}`
     }
 
-    let info_height =  Math.ceil(
+    let info_height =  Math.round(
       (info_obj.soc.length + info_obj.def.length) / 1.8
     );
 
-    current_location.x = event.pageX + OFFSET_X;
-    current_location.y = event.pageY + OFFSET_Y - info_height;
+    current_location.x = event.pageX + OFFSET_X + 'px';
+    current_location.y = event.pageY + OFFSET_Y - info_height + 'px';
 
     this.setState({
       info_obj, 

@@ -45,6 +45,12 @@ export default class DemographicInput extends React.Component{
             {select_options}
           </select>
         );
+      case 'search':
+      input_props['key'] = `search-${input_key}`;
+      input_props['className'] = 'search-bar-group';
+      retrun(
+        
+      )
       default:
         return <div>{'Input Type Error'}</div>;
     }

@@ -7,7 +7,8 @@
   display: inline-block;
 }
 
-.search-bar-group input, .render-inputs input {
+.search-bar-group input, 
+.render-inputs input {
   font-family: $body_font;
   border: 1px solid gray;
   outline: 0;
@@ -19,6 +20,20 @@
   height: 15px;
   min-width: 210px;
   max-width: 210px;
+}
+
+.render-inputs select {
+  font-family: $body_font;
+  border: 1px solid gray;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 30px;
+  min-width: 225px;
+  max-width: 225px;
 }
 
 .option-items {
@@ -38,6 +53,7 @@
   background-color: #fff; 
   font-family: $body_font;
   direction:ltr;
+  min-width: 210px;
 }
 
 .option-items .item-container:hover {
