@@ -1,5 +1,6 @@
 @import "globals";
 @import "attribute";
+
 * {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -167,11 +168,6 @@
   font-family: $body_font;
   z-index: 99;
   position: absolute;
-}
-
-.item-container i:hover .info-tip {
-  visibility: visible;
-  opacity: 1;
 }
 
 .render-inputs {
