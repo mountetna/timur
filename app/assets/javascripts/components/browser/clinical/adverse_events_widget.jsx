@@ -1,7 +1,6 @@
 import React from 'react';
 import data from 'json-loader!../../../../data/ctcae_data.json';
-import SearchBar from '../../search_bar';
-import DemographicInput from './demographic_input';
+import ClinicalInput from './clinical_input';
 
 export default class AdverseEventsWidget extends React.Component {
   constructor(props) {
@@ -52,7 +51,7 @@ export default class AdverseEventsWidget extends React.Component {
         }
       });
       values[i].matches = matches;
-      values[i].data_collection_ui = false;
+      values[i].selected = false;
     }
     this.setState({values});
   }
@@ -69,7 +68,7 @@ export default class AdverseEventsWidget extends React.Component {
     values[i].searchValue = selectionVal;
     values[i].matches = [];
     values[i].grade = null;
-    values[i].data_collection_ui = true;
+    values[i].selected = true;
     this.setState({values});    
   }
 
@@ -141,15 +140,14 @@ export default class AdverseEventsWidget extends React.Component {
         let end_date_props = null;
         let renderInputs = null;
         
-        let input_props = {
-          input_type: 'text',
+        let search_props = {
+          input_key: i,
+          input_type: 'search',
           input_placeholder: 'Search',
-          input_class_name: 'adverse-events-search',
+          input_class_name: 'clinical-search',
           inputChange: this.onSearchChange.bind(this, i),
           input_value: values[i].searchValue || '',
-          input_options: values[i].matches || [],
-          info_obj: term_obj,
-          search_bar_index: i,
+          search_options: values[i].matches || [],
           onSelectionChange: this.onTermSelect.bind(this,  i),
           infoTipShow: this.infoTipShow.bind(this),
           infoTipHide: this.infoTipHide.bind(this)
@@ -184,10 +182,10 @@ export default class AdverseEventsWidget extends React.Component {
           )
         }
 
-        if(values[i].data_collection_ui) {
+        if(values[i].selected) {
           grade_input_props = {
             input_key: i + values[i].searchValue,
-            input_class_name: 'adverse-events-grade',
+            input_class_name: 'clinical-grade',
             input_type: 'select',
             input_value: values[i].grade || '',
             inputChange: this.onInputChange.bind(this, i, 'grade'),
@@ -197,7 +195,7 @@ export default class AdverseEventsWidget extends React.Component {
 
           start_date_props = {
             input_key: i + values[i].searchValue,
-            input_class_name: 'adverse-events-date',
+            input_class_name: 'clinical-date',
             input_type: 'date',
             input_value: values[i].start_date || '',
             inputChange: this.onInputChange.bind(this, i, 'start_date'),
@@ -206,7 +204,7 @@ export default class AdverseEventsWidget extends React.Component {
 
           end_date_props = {
             input_key: i + values[i].searchValue,
-            input_class_name: 'adverse-events-date',
+            input_class_name: 'clinical-date',
             input_type: 'date',
             input_value: values[i].end_date || '',
             inputChange: this.onInputChange.bind(this, i, 'end_date'),
@@ -220,25 +218,25 @@ export default class AdverseEventsWidget extends React.Component {
             }
             return (
               <div {...renderInput_props}>
-                <DemographicInput {...grade_input_props}/>
-                <DemographicInput {...start_date_props}/>
-                <DemographicInput {...end_date_props}/>
+                <ClinicalInput {...grade_input_props}/>
+                <ClinicalInput {...start_date_props}/>
+                <ClinicalInput {...end_date_props}/>
               </div>
             )
           }
         }
 
         return (
-          <div className='adverse-event-group' key={i}>
+          <div className='clinical-group' key={i}>
 
-            <SearchBar {...input_props}/>
+            <ClinicalInput {...search_props}/>
 
-            {this.state.info_obj && renderInfoTip()}
+            {info_obj && renderInfoTip()}
 
-            {values[i].data_collection_ui && renderInputs()}
+            {values[i].selected && renderInputs()}
 
             <button
-              className='adverse-event-button remove'
+              className='clinical-button remove'
               onClick={this.removeClick.bind(this, i)}>
              
               &#10006;  {/* Remove Cross Symbole */}
@@ -261,7 +259,7 @@ export default class AdverseEventsWidget extends React.Component {
               start_date: '',
               end_date: '',
               matches: [],
-              data_collection_ui: false
+              selected: false
             }
           ]
       })
@@ -285,7 +283,7 @@ export default class AdverseEventsWidget extends React.Component {
 
   render() {
     let save_btn_props = {
-      className: 'adverse-events-button save',
+      className: 'clinical-button save',
       onClick: this.handleSubmit.bind(this)
     };
  
@@ -294,7 +292,7 @@ export default class AdverseEventsWidget extends React.Component {
         {this.createInput()}
 
         <button
-          className='adverse-events-button add'
+          className='clinical-button add'
           onClick={this.addClick.bind(this)}>
 
           &#10010; ADD
