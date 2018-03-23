@@ -1,14 +1,14 @@
 import React from 'react';
-import data from 'json-loader!../../../../data/ctcae_data.json';
 import ClinicalInput from './clinical_input';
 
-export default class AdverseEventsWidget extends React.Component {
-  constructor(props) {
+export default class AdverseEventsWidget extends React.Component{
+  constructor(props){
     super(props);
+
     this.state = {
-      term_obj: null,
+      term_obj: props.term_obj,
       info_obj: null,
-      terms: [],
+      terms: props.terms,
       values: [],
       info_display: 'none',
       location: {
@@ -18,40 +18,22 @@ export default class AdverseEventsWidget extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.processJSONData();
-  }
-
-  processJSONData() {
-    let term_obj= null;
-    let terms = [];
-    term_obj = Object.assign({}, ...Object.keys(data).
-      map(key => {
-        terms.push(data[key]['CTCAE v4.0 Term']);
-        return {[data[key]['CTCAE v4.0 Term']]: data[key]}
-        } 
-      )
-    )
-    this.setState({term_obj, terms});
-  }
-
-  onSearchChange(i, event) {
-
+  onSearchChange(index, event){
     let {term_obj, terms} = this.state;
     let values = [...this.state.values];
     let query = event.target.value.toLowerCase();
 
-    values[i].searchValue = event.target.value;
+    values[index].searchValue = event.target.value;
     if(query){
       let matches = [];
 
       terms.forEach( term => {
-        if(query.length > 1 && term.toLowerCase().includes(query)) {
+        if(query.length > 1 && term.toLowerCase().includes(query)){
           matches.push(term);
         }
       });
-      values[i].matches = matches;
-      values[i].selected = false;
+      values[index].matches = matches;
+      values[index].selected = false;
     }
     this.setState({values});
   }
@@ -62,29 +44,29 @@ export default class AdverseEventsWidget extends React.Component {
     this.setState({values});
   }
 
-  onTermSelect(i, event){
-    let selectionVal = event.target.attributes.getNamedItem('data-term').value
+  onTermSelect(index, event){
+    let selectionVal = event.target.attributes.getNamedItem('data-term').value;
     let values = [...this.state.values];
-    values[i].searchValue = selectionVal;
-    values[i].matches = [];
-    values[i].grade = null;
-    values[i].selected = true;
-    this.setState({values});    
+    values[index].searchValue = selectionVal;
+    values[index].matches = [];
+    values[index].grade = null;
+    values[index].selected = true;
+    this.setState({values});
   }
 
-  removeClick(i, event){
+  removeClick(index, event){
     event.preventDefault();
-    this.setState(prevState => {
+    this.setState((prevState)=>{
       let values = [...prevState.values];
-      values.splice(i, 1);
+      values.splice(index, 1);
       return {values};
     });
   }
 
-  onInputChange(i, property, event) {
+  onInputChange(index, property, event){
     let values = [...this.state.values];
-    values[i][property] = event.target.value;
-    this.setState({ values });
+    values[index][property] = event.target.value;
+    this.setState({values});
   }
 
   infoTipShow(event){
@@ -117,38 +99,39 @@ export default class AdverseEventsWidget extends React.Component {
     this.setState({info_display: 'none'});
   }
   
-  optionGrades(term) {
+  optionGrades(term){
     let grades = [];
     let {term_obj} = this.state;
 
-    for(let i=1; i <6; i++) {
-      let grade_string = `${i}: ${term_obj[term]['Grade ' + i]}`;
+    for(let index = 1; index < 6; index++){
+      let grade_string = `${index}: ${term_obj[term]['Grade ' + index]}`;
       grades.push(
-        <option key={term+ i} value={'Grade ' + i}>{grade_string}</option>
+        <option key={term+index} value={'Grade '+index}>{grade_string}</option>
       );
     }
-    return grades
+
+    return grades;
   }
 
   createInput(){
     let {values, term_obj, info_obj} = this.state;
 
     return(
-      values.map((el, i) => {
+      values.map((el, index)=>{
         let grade_input_props = null;
         let start_date_props = null;
         let end_date_props = null;
         let renderInputs = null;
         
         let search_props = {
-          input_key: i,
+          input_key: index,
           input_type: 'search',
           input_placeholder: 'Search',
           input_class_name: 'clinical-search',
-          inputChange: this.onSearchChange.bind(this, i),
-          input_value: values[i].searchValue || '',
-          search_options: values[i].matches || [],
-          onSelectionChange: this.onTermSelect.bind(this,  i),
+          inputChange: this.onSearchChange.bind(this, index),
+          input_value: values[index].searchValue || '',
+          search_options: values[index].matches || [],
+          onSelectionChange: this.onTermSelect.bind(this, index),
           infoTipShow: this.infoTipShow.bind(this),
           infoTipHide: this.infoTipHide.bind(this)
         };
@@ -160,7 +143,7 @@ export default class AdverseEventsWidget extends React.Component {
         }
 
         let info_tip_props = {
-          key: i+'info',
+          key: index+'info',
           className: 'info-tip',
           style: style_props
         }
@@ -169,77 +152,76 @@ export default class AdverseEventsWidget extends React.Component {
           return ( 
             <div {...info_tip_props}>
               {
-                Object.keys(info_obj).map((obj_key, i)=>{
+                Object.keys(info_obj).map((obj_key, index)=>{
                   return(
                     <div key={i+info_obj[obj_key]}>
 
-                      {info_obj[obj_key]}<br/><br/>
+                      {info_obj[obj_key]}<br /><br />
                     </div>
                   )
                 })
               }
             </div>
-          )
-        }
+          );
+        };
 
-        if(values[i].selected) {
+        if(values[index].selected){
           grade_input_props = {
-            input_key: i + values[i].searchValue,
+            input_key: index + values[index].searchValue,
             input_class_name: 'clinical-grade',
             input_type: 'select',
-            input_value: values[i].grade || '',
-            inputChange: this.onInputChange.bind(this, i, 'grade'),
-            select_options: this.optionGrades(values[i].searchValue) || '',
+            input_value: values[index].grade || '',
+            inputChange: this.onInputChange.bind(this, index, 'grade'),
+            select_options: this.optionGrades(values[index].searchValue) || '',
             selection_label: 'Grade'
-          }
+          };
 
           start_date_props = {
-            input_key: i + values[i].searchValue,
+            input_key: index + values[index].searchValue,
             input_class_name: 'clinical-date',
             input_type: 'date',
-            input_value: values[i].start_date || '',
-            inputChange: this.onInputChange.bind(this, i, 'start_date'),
+            input_value: values[index].start_date || '',
+            inputChange: this.onInputChange.bind(this, index, 'start_date'),
             selection_label: 'Start Date'
-          }
+          };
 
           end_date_props = {
-            input_key: i + values[i].searchValue,
+            input_key: index + values[index].searchValue,
             input_class_name: 'clinical-date',
             input_type: 'date',
-            input_value: values[i].end_date || '',
-            inputChange: this.onInputChange.bind(this, i, 'end_date'),
+            input_value: values[index].end_date || '',
+            inputChange: this.onInputChange.bind(this, index, 'end_date'),
             selection_label: 'End Date'
-          }
+          };
         
-          renderInputs = () => {
+          renderInputs = ()=>{
             let renderInput_props = {
-              key: i + values[i].searchValue + ' render-inputs',
+              key: index + values[index].searchValue + ' render-inputs',
               className: 'render-inputs'
-            }
+            };
+
             return (
               <div {...renderInput_props}>
-                <ClinicalInput {...grade_input_props}/>
-                <ClinicalInput {...start_date_props}/>
-                <ClinicalInput {...end_date_props}/>
+
+                <ClinicalInput {...grade_input_props} />
+                <ClinicalInput {...start_date_props} />
+                <ClinicalInput {...end_date_props} />
               </div>
-            )
-          }
+            );
+          };
         }
 
         return (
-          <div className='clinical-group' key={i}>
+          <div className='clinical-group' key={index}>
 
-            <ClinicalInput {...search_props}/>
-
+            <ClinicalInput {...search_props} />
             {info_obj && renderInfoTip()}
-
-            {values[i].selected && renderInputs()}
-
+            {values[index].selected && renderInputs()}
             <button
               className='clinical-button remove'
-              onClick={this.removeClick.bind(this, i)}>
+              onClick={this.removeClick.bind(this, index)}>
              
-              &#10006;  {/* Remove Cross Symbole */}
+              &#10006;  {/* Remove Cross Symbol */}
             </button>
           </div>
         );
