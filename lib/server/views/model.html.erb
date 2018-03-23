@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta charset='utf-8'/>
 <html>
   <head>
     <title>
@@ -19,7 +20,7 @@
            user: <%= @user ? "'#{@user.first} #{@user.last}'" : 'null'%>,
            mode: 'browse',
            environment: '<%= Timur.instance.environment %>',
-           model_name: '<%= @params[:model_name].underscore %>',
+           model_name: '<%= @params[:model_name] %>',
            record_name: '<%= @params[:record_name] %>',
            can_edit: <%=  @user && @user.can_edit?(@params[:project_name]) ? :true : :false  %>,
            is_admin: <%=  @user && @user.is_admin?(@params[:project_name]) ? :true : :false  %>
