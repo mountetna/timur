@@ -128,8 +128,9 @@ export class BarPlotBar extends React.Component{
 }
 
 export class Dot extends React.Component{
-  getInitialState(){
-    return { highlighted: false }
+  constructor() {
+    super();
+    this.state = { highlighted: false };
   }
   render() {
     let { highlighted, category, similar, name, highlight_name, mouse_handler, x, y } = this.props;

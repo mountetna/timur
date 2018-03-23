@@ -84,15 +84,13 @@ namespace :timur do
 
       # Select the plot file that is associated with our attribute (if there
       # is one).
-      view_plot = plots.select do |plot|
-        plot if(
-          plot['project'] == view_tab.project &&
-          plot['view_name'] == view_tab.model &&
-          plot['tab_name'] == view_tab.name &&
-          plot['pane_name'] == view_pane.name &&
-          plot['attribute_name'] == view_attribute.name
-        )
-      end.first
+      view_plot = plots.find do |plot|
+        plot['project'] == view_tab.project &&
+        plot['view_name'] == view_tab.model &&
+        plot['tab_name'] == view_tab.name &&
+        plot['pane_name'] == view_pane.name &&
+        plot['attribute_name'] == view_attribute.name
+      end
 
       # Here the view_attribute should have manifest data attached to it's old
       # plot. We need to make sure we have a manifest before proceeding.
@@ -106,7 +104,7 @@ namespace :timur do
       # Create manifest records from the plots in the view_attribtes table.
       manifest = Manifest.create({
         name: view_attribute.plot['name'],
-        user_id: 51,
+        user: User.first,
         description: '',
         access: 'view',
         project: view_tab.project,
@@ -120,7 +118,7 @@ namespace :timur do
 
         # Associate the manifest id to the plot.
         view_plot['manifest_id'] = manifest.id
-        view_plot['user_id'] = 51
+        view_plot['user_id'] = User.first.id
 
         # Remove the keys not required for the plot.
         ['title', 'view_name', 'tab_name', 'pane_name', 'attribute_name'].each do |key|
