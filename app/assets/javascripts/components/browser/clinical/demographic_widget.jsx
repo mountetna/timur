@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 // Class imports.
-import DemographicInput from './demographic_input';
+import DemographicInput from './clinical_input';
 
 export default class DemographicWidget extends React.Component{
 
@@ -60,7 +60,7 @@ export default class DemographicWidget extends React.Component{
       this.state.values.map((el, index)=>{
 
         let select_props = {
-          className: 'demographic-select',
+          className: 'clinical-select',
           onChange: this.handleSelectChange.bind(this, index),
           value: this.state.values[index].selectValue || ''
         };
@@ -79,12 +79,12 @@ export default class DemographicWidget extends React.Component{
         }
 
         let button_props = {
-          className: 'demographic-button remove',
+          className: 'clinical-button remove',
           onClick: this.removeClick.bind(this, index)
         };
 
         return(
-          <div className='demographic-group' key={index}>
+          <div className='clinical-group' key={index}>
 
             <select {...select_props}>
 
@@ -154,17 +154,17 @@ export default class DemographicWidget extends React.Component{
     if (!record_names.length) return <div>No Entries</div>;
  
     let add_btn_props = {
-      className: 'demographic-button',
+      className: 'clinical-button',
       onClick: this.addClick.bind(this)
     };
 
     let save_btn_props = {
-      className: 'demographic-button',
+      className: 'clinical-button',
       onClick: this.handleSubmit.bind(this)
     };
 
     return(
-      <div className='demographic-group'>
+      <div className='clinical-group'>
         {this.createInput()}
 
         <button {...add_btn_props}>
