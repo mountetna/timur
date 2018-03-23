@@ -23,7 +23,7 @@ describe 'ManifestsController' do
   context '#index' do
     it 'must be a project viewer' do
       get_manifest(nil, :non_user)
-      expect(last_response.status).to eq(401)
+      expect(last_response.status).to eq(403)
     end
     it 'returns the manifest view' do
       get_manifest(nil, :viewer)
@@ -35,7 +35,7 @@ describe 'ManifestsController' do
   context '#fetch' do
     it 'must be a project viewer' do
       get_manifest(:fetch, :non_user)
-      expect(last_response.status).to eq(401)
+      expect(last_response.status).to eq(403)
     end
 
     it 'retrieves a list of manifests' do
@@ -69,7 +69,7 @@ describe 'ManifestsController' do
 
     it 'must be a project viewer' do
       post_manifest(:create, :non_user, @manifest)
-      expect(last_response.status).to eq(401)
+      expect(last_response.status).to eq(403)
     end
 
     it 'keeps non admins from creating public manifests' do
@@ -99,7 +99,7 @@ describe 'ManifestsController' do
   context '#destroy' do
     it 'must be a project user' do
       delete_manifest(1, :non_user)
-      expect(last_response.status).to eq(401)
+      expect(last_response.status).to eq(403)
     end
 
     it 'prevents manifest destruction by non-owners' do

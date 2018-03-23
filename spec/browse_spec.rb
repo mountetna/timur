@@ -95,7 +95,7 @@ describe BrowseController do
       get_browse('browse')
       expect(last_response.status).to eq(302)
       expect(last_response.headers['Location']).to eq(
-        'http://example.org/labors/browse/project/The Twelve Labors of Hercules'
+        'http://example.org/labors/browse/project/The%20Twelve%20Labors%20of%20Hercules'
       )
     end
   end
