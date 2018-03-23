@@ -308,7 +308,7 @@ class ModelMap extends Component {
 export default connect(
   (state) => {
     let magma = new Magma(state);
-    let model_names = magma.model_names();
+    let model_names = magma.modelNames();
     return {
       model_names,
       templates: model_names.map(model_name => magma.template(model_name))

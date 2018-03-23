@@ -107,7 +107,7 @@ export default class Predicate extends Component {
       values: choices,
       onChange: this.setInputArgument.bind(this, pos)
     };
-    return <SelectInput {...} />;
+    return <SelectInput {...input_props} />;
   }
 
   renderVerbInputs() {
