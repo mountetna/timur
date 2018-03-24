@@ -5,6 +5,7 @@ import {requestDocuments} from './magma_actions';
 import {Exchange} from './exchange_actions';
 import * as ManifestActions from './manifest_actions';
 import * as TabSelector from '../selectors/tab_selector';
+import * as Cookies from '../utils/cookies';
 
 // Flip a config variable.
 export const toggleConfig = (key)=>{
@@ -79,3 +80,12 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
       .catch(localError);
   };
 };
+
+export const addTokenUser = (user)=>{
+  return {
+    type: 'ADD_TOKEN_USER',
+    token: Cookies.getItem('JANUS_TOKEN')
+  };
+};
+
+
