@@ -15,21 +15,32 @@ export class Root extends React.Component{
   }
  
   render(){
-    let project_props = null;
+    let {token_permissions} = this.props;
+    let link_props = {className: 'project-link'};
 
-    if(this.props.token_permissions){
-      return this.props.token_permissions.map((obj, index)=>{
+    return (
+      <div className='project-selector-panel'>
+        <div className='project-selector-header'>
 
-        project_props = {
-          className:'list-selection',
-          key: index
-        }
-        return <button {...project_props}>{obj.project_name}</button>
-      })
-    }
-    else{
-      return null;
-    }
+          Available Projects
+          {
+            token_permissions ? (
+              token_permissions.map((obj, index)=>{
+                link_props['key'] = index; 
+                link_props['href'] =  '\\' + obj.project_name;
+                return (
+                  <a {...link_props}>
+                    {obj.project_name} &nbsp;
+                    <span className='project-role'>({obj.role})</span>
+                  </a>
+                )
+              })
+            ) :
+              null
+          } 
+        </div>
+      </div>
+    )
   }
 }
 
@@ -42,7 +53,7 @@ const mapDispatchToProps = (dispatch, own_props)=>{
   return {
     fetchPermissionsSettings: ()=>{
       dispatch(TimurActions.addTokenUser());
-    }
+    } 
   };
 };
 
