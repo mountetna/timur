@@ -66,8 +66,7 @@ export default class AttributeViewer extends Component{
       case 'Magma::ChildAttribute':
         return <LinkAttribute {...this.props} />;
       case 'Magma::TableAttribute':
-        // return <TableAttribute {...this.props} />;
-        return <DemographicAttributeContainer {...this.props} />;
+        return <TableAttribute {...this.props} />;
       case 'Magma::FileAttribute':
         return <DocumentAttribute {...this.props} />;
       case 'Magma::ImageAttribute':
