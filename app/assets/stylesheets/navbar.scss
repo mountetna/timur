@@ -136,7 +136,7 @@ $logo_size: 70px;
       }
     }
     #identifier_search {
-      border-bottom: 2px solid forestgreen;
+      border-bottom: 2px solid #22a778;
       flex-grow: 1;
       text-align: right;
       display: flex;
@@ -145,52 +145,53 @@ $logo_size: 70px;
       position: relative;
       .search {
         display: flex;
-        background-color: rgba(teal, 0.1);
-        border: 1px solid forestgreen;
-        border-radius: 12px;
+        border: 1px solid #22a778;
         margin-right: 5px;
         padding-right: 5px;
         align-items: center;
         span {
           margin-left: 3px;
           font-size: 12px;
-          color: darkgreen;
+          color: #22a778;
           margin-right: 2px;
         }
         input[type="text"] {
           border: none;
-          background-color: transparent;
-          color: purple;
+          font-family: "Oxygen", sans-serif;
           font-size: 14px;
           width: 200px;
-          font-family: $value_font;
         }
       }
       .drop_down {
-        display: block;
-        border-top: none;
-        border-bottom: 2px solid forestgreen;
-        background-color: mix(forestgreen,white,20%);
-        display: inline;
+        border: 1px solid #22a778;
         position: absolute;
-        right: 15px;
+        right: 7px;
         text-align: left;
         top: 22px;
-        width: 205px;
+        background-color: white;
         z-index: 1000;
+        width: 223px;
+        a {
+          color: black;
+        }
         .title {
-          font-family: $body_font;
+          font-family: "Oxygen", sans-serif;
           font-weight: bold;
-          background-color: rgba(forestgreen,0.4);
-          font-size: 14px;
+          background-color: #22a778;
+          font-size: 12px;
+          color: white;
+          padding: 3px;
         }
         .list {
-          font-family: $value_font;
+          font-family: "Oxygen", sans-serif;
           font-size: 12px;
-          max-height: 80px;
-          overflow: auto;
+          overflow: hidden;
           .identifier {
-            padding: 1px;
+            padding: 2px 5px;
+            white-space: nowrap;
+          }
+          .identifier:hover {
+            background-color: #f1f1f1;
           }
         }
       }
@@ -198,7 +199,7 @@ $logo_size: 70px;
     #login {
       color: brown;
       text-align: right;
-      border-bottom: 2px solid forestgreen;
+      border-bottom: 2px solid #22a778;
     }
   }
 }

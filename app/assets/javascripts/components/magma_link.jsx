@@ -16,7 +16,7 @@ export default class MagmaLink extends React.Component{
     };
 
     return(
-      <a {...link_props}>
+      <a title={this.props.link} {...link_props}>
 
         {this.props.link}
       </a>
