@@ -1,36 +1,12 @@
-import React from 'react';
+// Framework libraries.
+import * as React from 'react';
 
-export default class DemographicInput extends React.Component{
-  constructor(props) {
+// Class imports.
+import DropdownSearch from '../../generic/dropdown_search';
+
+export default class ClinicalInput extends React.Component{
+  constructor(props){
     super(props);
-
-    this.renderSearchOptions = this.renderSearchOptions.bind(this);
-  }
-
-  renderSearchOptions(term, i) {
-    let option_props = {
-      className: 'item-container', 
-      key: term + i, 
-      'data-term': term,
-      onClick: this.props.onSelectionChange
-    }
-
-    let icon_props = {
-      key: `${term + i}info`,
-      'data-term': term || '',
-      className: 'fa fa-info-circle',
-      'aria-hidden': 'true',
-      onMouseEnter: this.props.infoTipShow,
-      onMouseLeave: this.props.infoTipHide,
-    }
-
-    return (
-      <div {...option_props}>
-
-        {term} 
-        {this.props.infoTipShow  && <i {...icon_props}></i>}
-      </div>
-    );
   }
 
   render(){
@@ -40,11 +16,11 @@ export default class DemographicInput extends React.Component{
       input_key,
       input_value,
       select_options,
-      inputChange,
       selection_label,
       input_class_name,
       search_options,
-      input_placeholder 
+      input_placeholder,
+      inputChange,
     } = this.props;
 
     let input_props = {
@@ -64,7 +40,14 @@ export default class DemographicInput extends React.Component{
         return <input {...input_props} />;
       case 'date':
         input_props['key'] = `date-${input_key}`;
-        input_props['type'] = 'date';
+        input_props['type'] = 'datetime-local';
+
+        let timestamp = Date.parse(input_value);
+        if(!isNaN(timestamp)){
+          let dt = new Date(timestamp).toISOString().replace('Z', '');
+          input_props['value'] = dt;
+        }
+
         return <input {...input_props} />;
       case 'regex':
       case 'select':
@@ -81,21 +64,7 @@ export default class DemographicInput extends React.Component{
           </select>
         );
       case 'search':
-        input_props['key'] = `search-${input_key}`;
-        input_props['className'] = 'search-bar-group';
-        input_props['placeholder'] = input_placeholder
-        return(
-          <div className='search-bar-group'>
-
-            <input {...input_props} />
-            {
-              search_options.length ? 
-              <div className='option-items' key={input_value} id={input_value}>
-                {search_options.map(this.renderSearchOptions)}
-              </div> : ''
-            }
-          </div>
-        )
+        return <DropdownSearch {...this.props} />;
       default:
         return <div>{'Input Type Error'}</div>;
     }
