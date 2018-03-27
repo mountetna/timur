@@ -14,8 +14,9 @@ class SearchController <  ApplicationController
   def table_json
     begin
       response = Magma::Client.instance.query(
-        token, params[:project_name],
-        [ params[:model_name], "::all", "::identifier" ]
+        token,
+        params[:project_name],
+        [params[:model_name], '::all', '::identifier']
       )
       ids = JSON.parse(payload)
       render(json: { record_names: ids['answer'].map(&:last) })
@@ -53,7 +54,8 @@ class SearchController <  ApplicationController
     begin
       magma = Magma::Client.instance
       response = magma.retrieve(
-        token, params[:project_name],
+        token,
+        params[:project_name],
         params
       )
       render json: response.body
@@ -66,7 +68,8 @@ class SearchController <  ApplicationController
     begin
       magma = Magma::Client.instance
       response = magma.query(
-        token, params[:project_name],
+        token,
+        params[:project_name],
         params[:question]
       )
       render json: response.body
@@ -100,7 +103,10 @@ class SearchController <  ApplicationController
   def process_manifest(manifest)
     # Append the record name to the manifest as it needs it for processing.
     manifest_elements = [
-      ['record_name', "'#{params[:record_name]}'"]
+      [
+        'record_name',
+        "'#{params[:record_name]}'"
+      ]
     ]
 
     # Translate the manifests into a form usable by DataManifest.
@@ -146,4 +152,3 @@ class SearchController <  ApplicationController
     end
   end
 end
-
