@@ -160,7 +160,7 @@ export class Browser extends React.Component{
     }));
 
     let list_menu_props = {
-      name: 'Browser',
+      name: this.state,
       items: list_items,
       select: this.tabSelectionHandler.bind(this)
     }
@@ -205,10 +205,8 @@ export class Browser extends React.Component{
           
           <ListMenu {...list_menu_props} />
         </div>
-        <div className='right-column-group'>
+        <div className='right-column-group2'>
 
-          <br />
-          <br />
           <BrowserTab {...browser_tab_props} />
         </div>
       </div>
