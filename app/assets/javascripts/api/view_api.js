@@ -9,7 +9,7 @@ export const getView = (model_name, tab_name, exchange)=>{
     body: JSON.stringify({ model_name, tab_name })
   };
 
-  let exchangePromise = exchange.fetch(Routes.view_json_path(PROJECT_NAME), route_opts)
+  let exchangePromise = exchange.fetch(Routes.view_path(PROJECT_NAME), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
