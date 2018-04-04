@@ -93,6 +93,7 @@ export default class AdverseEventWidget extends React.Component{
   }
 
   infoTipShow(event){
+
     const OFFSET_X = 10;
     const OFFSET_Y = -140;
     const SPACE = '\xa0';
@@ -100,8 +101,8 @@ export default class AdverseEventWidget extends React.Component{
     let current_location = location;
     let term = event.target.attributes.getNamedItem('data-term').value;
     let info_obj = {
-      soc: `SOC: ${SPACE}${term_obj[term]['CTCAE v4.0 SOC']}`,
-      def: `DEF: ${SPACE}${term_obj[term]['CTCAE v4.0 AE Term Definition']}`
+      soc: `SOC: ${SPACE}${term_obj[term]['system_organ_class']}`,
+      def: `DEF: ${SPACE}${term_obj[term]['definition']}`
     }
 
     let info_height =  Math.round(
@@ -123,15 +124,16 @@ export default class AdverseEventWidget extends React.Component{
   }
   
   optionGrades(term){
-    let grades = [];
     let {term_obj} = this.state;
+    let grades = term_obj[term].grade.map((grade, index)=>{
+      let grade_string = `${index+1}: ${term_obj[term].grade[index]}`;
+      return(
+        <option key={term+index} value={index}>
 
-    for(let index = 1; index < 6; index++){
-      let grade_string = `${index}: ${term_obj[term]['Grade ' + index]}`;
-      grades.push(
-        <option key={term+index} value={'Grade '+index}>{grade_string}</option>
+          {grade_string}
+        </option>
       );
-    }
+    });
 
     return grades;
   }
@@ -143,7 +145,7 @@ export default class AdverseEventWidget extends React.Component{
       input_key: index + values[index].search_value,
       input_class_name: 'clinical-grade',
       input_type: 'select',
-      input_value: values[index].grade || '',
+      input_value: values[index].grade || undefined,
       select_options: this.optionGrades(values[index].search_value) || '',
       selection_label: 'Grade',
       inputChange: this.onInputChange.bind(this, index, 'grade')
@@ -182,6 +184,33 @@ export default class AdverseEventWidget extends React.Component{
     );
   }
 
+  renderInfoTip(index){
+    let {info_obj, info_display, location} = this.state;
+    let info_tip_props = {
+      key: index+'info',
+      className: 'info-tip',
+      style: {
+        display: info_display,
+        left: location.x || 0,
+        top: location.y || 0
+      }
+    };
+
+    return(
+      <div {...info_tip_props}>
+
+        {Object.keys(info_obj).map((obj_key, idx)=>{
+          return(
+            <div key={idx+info_obj[obj_key]}>
+
+              {info_obj[obj_key]}<br/><br/>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   createInput(){
     let {values, term_obj, info_obj} = this.state;
     let clinical_groups = values.map((elem, index)=>{
@@ -204,6 +233,7 @@ export default class AdverseEventWidget extends React.Component{
         <div className='clinical-group' key={index}>
 
           <ClinicalInput {...search_props} />
+          {info_obj && this.renderInfoTip(index)}
           {values[index].selected && this.renderSecondaryInputs(index)}
           <button className='clinical-button remove' onClick={this.removeClick.bind(this, index)}>
 
