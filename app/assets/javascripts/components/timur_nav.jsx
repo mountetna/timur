@@ -25,7 +25,7 @@ export class TimurNav extends React.Component{
         const tab_props = {
           className: 'nav-menu-btn',
           key: Math.random(),
-          href: `${window.location.origin}/${tabs[name]}/${this.props.project}`
+          href: `${window.location.origin}${tabs[name]}/${this.props.project}`
         };
 
         return <a {...tab_props}>{name}</a>;
@@ -86,7 +86,6 @@ export class TimurNav extends React.Component{
           <img src='/images/timur_logo_basic.png' alt='' />
         </div>
       </div>
-      <div className='pathname'>{this.renderNavPath()}</div>
     </div>
     );
   }
