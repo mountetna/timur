@@ -1,14 +1,27 @@
-class PlotController < Timur::Controller
-  def index
-    @project_name = params[:project_name]
-    @manifest_id = params[:manifest_id]
-    @id = params[:id]
-    @is_editing = params[:is_editing]
-  end
-
+class PlotsController < Timur::Controller
   def create
     @plot = @manifest.plots.new(plot_params)
     save_plot
+    params[:project] = params[:project_name]
+    params[:user_id] = current_user.id
+    params[:access] = 'private'
+
+    @plot = @manifest.plots.new(plot_params)
+    @plot.configuration = plot_configuration
+    save_plot
+  end
+
+  def fetch
+    # Pull the plots from the database.
+    plots = Plot.where(
+      Sequel[user: current_user] & (
+      Sequel[access: [ 'public', 'view' ]] |
+      Sequel[project: params[:project_name]])
+    ).all
+
+    success_json(
+      plots: plots
+    )
   end
 
   def update

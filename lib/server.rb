@@ -2,6 +2,7 @@ require_relative './server/controllers/timur_controller'
 require_relative './server/controllers/browse_controller'
 require_relative './server/controllers/magma_controller'
 require_relative './server/controllers/manifests_controller'
+require_relative './server/controllers/plots_controller'
 
 class Timur
   class Server < Etna::Server
@@ -9,51 +10,62 @@ class Timur
     get '/', action: 'welcome#index'
 
     # welcome_controller.rb
-    get 'static/:path', action: 'welcome#static', as: :static
-    get 'login', action: 'welcome#login', as: :login
-    get 'auth', action: 'welcome#auth', as: :auth
     get 'no_auth', action: 'welcome#no_auth', as: :no_auth
-    get 'auth_error', action: 'welcome#auth_error', as: :auth_error
+    get 'login', action: 'welcome#login', as: :login
 
-    # activity_controller.rb
-    get ':project_name/activity', action: 'browse#activity', as: :activity
+    using auth: { user: { can_view?: :project_name } } do
+      # activity_controller.rb
+      get ':project_name/activity', action: 'browse#activity', as: :activity
 
-    # browse_controller.rb
-    get ':project_name', action: 'browse#index', as: :project
-    get ':project_name/browse', action: 'browse#index', as: :browse
-    get ':project_name/view/:model_name', action: 'browse#view', as: :view
-    get ':project_name/browse/:model_name/*record_name', as: :browse_model do
-      erb_view(:model)
+      # browse_controller.rb
+      get ':project_name', action: 'browse#index', as: :project
+      get ':project_name/browse', action: 'browse#index', as: :browse
+      get ':project_name/view/:model_name', action: 'browse#view', as: :view
+
+      # browse view
+      get ':project_name/browse/:model_name/*record_name', as: :browse_model do
+        erb_view(:model)
+      end
+
+      # search view
+      get ':project_name/search', as: :search do
+        erb_view(:search)
+      end
+
+      # map view
+      get ':project_name/map', as: :map do
+        erb_view(:map)
+      end
+
+      # magma_controller.rb
+      post ':project_name/update', action: 'magma#update', auth: { user: { can_edit?: :project_name } }
+      post ':project_name/query', action: 'magma#query'
+      post ':project_name/retrieve', action: 'magma#retrieve'
+      post ':project_name/retrieve/tsv', action: 'magma#retrieve_tsv'
+
+      # archimedes_controller.rb
+      post ':project_name/consignment', action: 'archimedes#consignment', as: :consignment
+
+      # plot_controller.rb
+      get ':project_name/plots', as: :plots do
+        erb_view(:plots)
+      end
+
+      post ':project_name/plots/fetch', action: 'plots#fetch'
+      post ':project_name/plots/create', action: 'plots#create'
+      put ':project_name/plots/update/:id', action: 'plots#update'
+      delete ':project_name/plots/destroy/:id', action: 'plots#destroy'
+
+      # manifest_controller.rb
+      get ':project_name/manifests', as: :manifests do
+        erb_view(:manifests)
+      end
+      get ':project_name/manifests/fetch', action: 'manifests#fetch'
+      post ':project_name/manifests/create', action: 'manifests#create'
+      post ':project_name/manifests/update/:id', action: 'manifests#update'
+      delete ':project_name/manifests/destroy/:id', action: 'manifests#destroy'
     end
-    get ':project_name/map', as: :map do
-      erb_view(:map)
-    end
 
-    # magma_controller.rb
-    post ':project_name/update', action: 'magma#update'
-    post ':project_name/query', action: 'magma#query'
-    post ':project_name/retrieve', action: 'magma#retrieve'
-    post ':project_name/retrieve/tsv', action: 'magma#retrieve_tsv'
-
-    # archimedes_controller.rb
-    post ':project_name/consignment', action: 'archimedes#consignment', as: :consignment
-
-    # plot_controller.rb
-    get ':project_name/plots', as: :plots, auth: { user: { can_view?: :project_name } } do
-      erb_view(:plots)
-    end
-    post ':project_name/plots/create', action: 'plots#create'
-    put ':project_name/plots/update/:id', action: 'plots#update'
-    delete ':project_name/plots/destroy/:id', action: 'plots#destroy'
-
-    # manifest_controller.rb
-    get ':project_name/manifests', as: :manifests, auth: { user: { can_view?: :project_name } } do
-      erb_view(:manifests)
-    end
-    get ':project_name/manifests/fetch', action: 'manifests#fetch', auth: { user: { can_view?: :project_name } }
-    post ':project_name/manifests/create', action: 'manifests#create', auth: { user: { can_view?: :project_name } }
-    post ':project_name/manifests/update/:id', action: 'manifests#update', auth: { user: { can_view?: :project_name } }
-    delete ':project_name/manifests/destroy/:id', action: 'manifests#destroy', auth: { user: { can_view?: :project_name } }
 
     def initialize(config)
       super
