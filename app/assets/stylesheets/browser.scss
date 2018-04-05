@@ -7,7 +7,7 @@
 
 .browser {
   position: relative;
-  padding-top: 30px;
+  padding-top: 10px;
   .header {
     font-family: $body_font;
     position: relative;
@@ -47,6 +47,7 @@
     margin-bottom: 3px;
     .spacer1 {
       padding: 5px;
+      padding-left: 10px;
       border-bottom: 1px solid forestgreen;
     }
     .spacer2 {

@@ -128,67 +128,77 @@ $black: #000000;
   margin-top: 3px;
   padding: 2px;
   position: relative;
-  .search {
-    margin-right: 5px;
-    padding-right: 5px;
-    align-items: center;
-    span {
-      font-size: 12px;
-      color: #22a778;
-      background-color: white;
-      line-height: 13px;
-      border-top: 1px solid #80C48C;
-      border-left: 1px solid #80C48C;
-      border-bottom: 1px solid #80C48C;
-      padding: 3px;
-      position: relative;
-      top: -2px;
-    }
-    input[type="text"] {
-      border-top: 1px solid #80C48C;
-      border-right: 1px solid #80C48C;
-      border-bottom: 1px solid #80C48C;
-      border-left: none;
-      font-family: "Oxygen", sans-serif;
-      font-size: 14px;
-      width: 200px;
-      outline: none;
-    }
-  }
-  .drop_down {
-    border: 1px solid lightgrey;
-    position: absolute;
-    right: 12px;
-    text-align: left;
-    top: 22px;
-    background-color: white;
-    z-index: 1000;
-    width: 219px;
-    a {
-      color: black;
-    }
-    .title {
-      font-family: "Oxygen", sans-serif;
-      font-weight: bold;
-      background-color: #22a778;
-      font-size: 12px;
-      color: white;
-      padding: 3px;
-    }
-    .list {
-      font-family: "Oxygen", sans-serif;
-      font-size: 12px;
-      overflow: hidden;
-      .identifier {
-        padding: 2px 5px;
-        white-space: nowrap;
-      }
-      .identifier:hover {
-        background-color: #f1f1f1;
-      }
-    }
-  }
+} 
+
+#identifier_search .search{
+  margin-right: 5px;
+  padding-right: 5px;
+  align-items: center;
 }
+
+#identifier_search .search span{
+  font-size: 12px;
+  color: grey;
+  background-color: white;
+  line-height: 12px;
+  border-top: 1px solid grey;
+  border-left: 1px solid grey;
+  border-bottom: 1px solid grey;
+  padding: 3px;
+  position: relative;
+  top: -1px;
+}
+
+#identifier_search .search input[type="text"]{
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+  border-bottom: 1px solid grey;
+  border-left: none;
+  font-family: "Oxygen", sans-serif;
+  font-size: 13px;
+  width: 200px;
+  outline: none;
+}
+
+#identifier_search .drop_down{
+  border: 1px solid grey;
+  position: absolute;
+  right: 12px;
+  text-align: left;
+  top: 22px;
+  background-color: white;
+  z-index: 1000;
+  width: 219px;
+}
+
+#identifier_search .drop_down a{
+  color: black;
+}
+
+#identifier_search .drop_down .title{
+  font-family: "Oxygen", sans-serif;
+  font-weight: bold;
+  background-color: #22a778;
+  font-size: 12px;
+  color: white;
+  padding: 3px;
+}
+
+#identifier_search .drop_down .list{
+  font-family: "Oxygen", sans-serif;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+#identifier_search .drop_down .list .identifier{
+  padding: 2px 5px;
+  white-space: nowrap;
+}
+
+#identifier_search .drop_down .list .identifier:hover{
+  background-color: #f1f1f1;
+}
+
 #login {
   float: right;
   pointer-events: none;
