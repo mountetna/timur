@@ -11,22 +11,25 @@ describe BrowseController do
   end
 
   context '#view' do
-    it 'gets the view json' do
-      view_pane = create(:view_pane, project_name: 'labors', view_model_name: 'monster', tab_name: 'stats', name: 'default')
-      size = create(:view_attribute, view_pane: view_pane, name: 'size')
-      weight = create(:view_attribute, view_pane: view_pane, name: 'weight')
-      odor = create(:view_attribute, view_pane: view_pane, name: 'odor')
+    it 'gets the view json with indexes in order' do
+      view_tab = create(:view_tab,
+        project: 'labors',
+        model: 'monster',
+        index_order: 1,
+        name: 'stats')
+      view_pane = create(:view_pane, view_tab: view_tab, name: 'default')
+      size = create(:view_attribute, view_pane: view_pane, index_order: 2, name: 'size')
+      weight = create(:view_attribute, view_pane: view_pane, index_order: 1, name: 'weight')
+      odor = create(:view_attribute, view_pane: view_pane, index_order: 3, name: 'odor')
 
-      get_browse('view/monster?stats')
+      get_browse('view/monster')
 
       expect(last_response.status).to eq(200)
       json = json_body(last_response.body)
 
       expect(
-        json[:tabs][:stats][:panes][:default][:display].map do |att|
-          att[:name]
-        end
-      ).to eq(['size', 'weight', 'odor'])
+        json[:views][:monster][:tabs][:stats][:panes][:default][:attributes].keys
+      ).to eq([:weight, :size, :odor])
     end
   end
 

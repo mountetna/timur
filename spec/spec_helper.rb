@@ -84,6 +84,10 @@ def json_body(body)
 end
 
 FactoryBot.define do
+  factory :view_tab do
+    to_create(&:save)
+  end
+
   factory :view_pane do
     to_create(&:save)
   end

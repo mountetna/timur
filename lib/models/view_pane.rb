@@ -1,5 +1,6 @@
 class ViewPane < Sequel::Model
-  one_to_many :view_attributes
+  many_to_one :view_tab
+  one_to_many :view_attributes, order: :index_order
 
   def self.build_view(model_name, project_name, load_tab_name)
     # first collect all of the panes matching this thing
@@ -49,8 +50,12 @@ class ViewPane < Sequel::Model
 
   def to_hash
     {
+      id: id,
+      name: name,
       title: title,
-      display: view_attributes.map(&:to_hash)
+      description: description,
+      index_order: index_order,
+      attributes: Hash[ view_attributes.map{|a| [ a.name, a.to_hash ] } ]
     }
   end
 end

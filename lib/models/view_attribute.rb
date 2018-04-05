@@ -3,14 +3,13 @@ class ViewAttribute < Sequel::Model
 
   def to_hash
     {
+      id: id,
       name: name,
-      attribute: {
-        name: name,
-        attribute_class: attribute_class,
-        display_name: display_name,
-        plot: plot,
-        placeholder: placeholder
-      }.reject { |k,v| v.nil? }
+      title: title,
+      attribute_class: attribute_class,
+      index_order: index_order,
+      plot_id: plot_id,
+      manifest_id: manifest_id
     }
   end
 end

@@ -34,10 +34,10 @@ class BrowseController < Timur::Controller
   end
 
   def view
-    tab_name = @params[:tab_name] ? @params[:tab_name].to_sym : nil
-    view = ViewPane.build_view(@params[:model_name],
-                               @params[:project_name],
-                               tab_name)
+    view = ViewTab.retrieve_view(
+      @params[:project_name],
+      @params[:model_name]
+    )
     success(view.to_json, 'application/json')
   end
 
