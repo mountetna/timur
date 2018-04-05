@@ -75,7 +75,7 @@ export default class DemographicWidget extends React.Component{
             input_value: values[index].inputValue || '',
             select_options: this.optionValues(values[index].selectValue) || '',
             inputChange: this.handleInputChange.bind(this, index)
-          }
+          };
         }
 
         let button_props = {
