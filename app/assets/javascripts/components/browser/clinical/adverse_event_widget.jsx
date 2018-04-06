@@ -17,7 +17,8 @@ export default class AdverseEventWidget extends React.Component{
       location: {
         x:0,
         y:0
-      }
+      },
+      add_count: 0
     };
   }
 
@@ -30,8 +31,11 @@ export default class AdverseEventWidget extends React.Component{
       return ae;
     });
 
+    let add_count = this.state.add_count;
+    add_count = values.length;
+
     if(values.length <= 0) return;
-    this.setState({values});
+    this.setState({values, add_count});
   }
 
   resolveAE(meddra_code){
@@ -82,7 +86,7 @@ export default class AdverseEventWidget extends React.Component{
     this.setState((prevState)=>{
       let values = [...prevState.values];
       values.splice(index, 1);
-      return {values};
+      return {values, add_count: prevState.add_count-1};
     });
   }
 
@@ -260,7 +264,8 @@ export default class AdverseEventWidget extends React.Component{
               matches: [],
               selected: false
             }
-          ]
+          ],
+        add_count: prevState.add_count + 1
       })
     );
   }
@@ -288,6 +293,15 @@ export default class AdverseEventWidget extends React.Component{
  
     return(
       <div>
+        
+       { this.state.add_count > 0 &&
+         <ul>
+          <li>TERM</li>
+          <li>GRADE</li>
+          <li>START</li>
+          <li>END</li>
+        </ul>
+      }
         {this.createInput()}
         <button className='clinical-button add' onClick={this.addAdverseEvent.bind(this)}>
 
