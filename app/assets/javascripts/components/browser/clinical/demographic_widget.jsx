@@ -16,8 +16,12 @@ export default class DemographicWidget extends React.Component{
 
   componentWillReceiveProps(next_props){
 
-    let {documents, options} = next_props;
-    if(Object.keys(documents).length <= 0) return;
+    let {documents, dictionary} = next_props;
+    let options = dictionary.definitions;
+    if(
+      Object.keys(documents).length <= 0 ||
+      Object.keys(options).length <= 0
+    ) return;
 
     // Interleave the documents with the dictionary/options.
     let values = [];
@@ -46,6 +50,8 @@ export default class DemographicWidget extends React.Component{
   }
 
   optionValues(option){
+    if(!this.state.options[option]) return null;
+
     let items = [];
     this.state.options[option].value.forEach((el, index)=>{
       items.push(

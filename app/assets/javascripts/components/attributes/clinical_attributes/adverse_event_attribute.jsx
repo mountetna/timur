@@ -6,6 +6,7 @@ import * as ReactRedux from 'react-redux';
 import {GenericClinicalAttribute} from './generic_clinical_attribute';
 import AdverseEventWidget from '../../browser/clinical/adverse_event_widget';
 import Magma from '../../../magma';
+import DictionarySelector from '../../../selectors/dictionary_selector';
 
 import data from 'json-loader!../../../../data/ctcae_data.json';
 
@@ -14,8 +15,6 @@ import * as MagmaActions from '../../../actions/magma_actions';
 
 export class AdverseEventAttribute extends GenericClinicalAttribute{
   render(){
-    if(this.props.mode != 'browse') return <div className='value'></div>;
-
     let ae_props = {
       term_obj: this.props.term_obj,
       terms: this.props.terms,
@@ -32,6 +31,11 @@ export class AdverseEventAttribute extends GenericClinicalAttribute{
 }
 
 const mapStateToProps = (state, own_props)=>{
+
+  let dictionary = new DictionarySelector(
+    state,
+    own_props.attribute.model_name
+  );
 
   let terms = [];
   let term_obj = Object.assign({}, ...Object.keys(data).map((key)=>{
@@ -58,14 +62,15 @@ const mapStateToProps = (state, own_props)=>{
     terms,
     template,
     documents,
-    record_names
+    record_names,
+    dictionary
   };
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
-    fetchDictionary: (dictionary_names)=>{
-      dispatch(MagmaActions.requestDictionaries(dictionary_names));
+    fetchDictionary: (project_name, dict_name)=>{
+      dispatch(MagmaActions.requestDictionaries(project_name, dict_name));
     }
   };
 };
