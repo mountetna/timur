@@ -142,8 +142,10 @@ export const requestDictionaries = (project_name, dictionary_name)=>{
   return (dispatch)=>{
     let localSuccess = (response)=>{
       for(let dict_name in response.models){
-        let key_name = `${project_name}_${dict_name}`;
-        dispatch(addDictionary(key_name, response.models[dict_name].documents));
+        dispatch(addDictionary(
+          `${project_name}_${dict_name}`,
+          response.models[dict_name].documents
+        ));
       }
     };
 
