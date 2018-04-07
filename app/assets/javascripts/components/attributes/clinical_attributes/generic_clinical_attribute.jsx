@@ -11,23 +11,19 @@ export class GenericClinicalAttribute extends React.Component{
   }
 
   componentDidUpdate(){
-
-    /* 
-     * Here we check if the component is in edit mode (we only need the
-     * dictionary if we are editing/validating), that there is a named
-     * dictionary defined, that there are NO current definitions in our
-     * dictionary, and that we have not yet made the request to fetch the
-     * dictionary.
-     */
+    // Check for a dictionary to fetch that corresponds to a model/component.
     if(
-      !this.state.fetched_dictionary &&
-      'name' in this.props.dictionary &&
-      this.props.mode == 'edit'
-    ){
-      let {fetchDictionary, dictionary} = this.props;
-      fetchDictionary(dictionary.project, dictionary.name);
-      this.setState({fetched_dictionary: true});
-    }
+      this.state.fetched_dictionary ||
+      !('dictionary' in this.props) ||
+      !('name' in this.props.dictionary) ||
+      this.props.dictionary.name == undefined
+    ) return;
+
+    this.props.fetchDictionary(
+      this.props.dictionary.project,
+      this.props.dictionary.name
+    );
+    this.setState({fetched_dictionary: true});
   }
 
   render(){
