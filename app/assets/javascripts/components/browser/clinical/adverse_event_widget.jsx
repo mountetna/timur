@@ -23,6 +23,8 @@ export default class AdverseEventWidget extends React.Component{
   }
 
   componentWillReceiveProps(next_props){
+    if(Object.keys(this.state.term_obj).length <= 0) return;
+
     let values = Object.keys(next_props.documents).map((key)=>{
       let ae = next_props.documents[key];
       ae['matches'] = [];
@@ -129,8 +131,8 @@ export default class AdverseEventWidget extends React.Component{
   
   optionGrades(term){
     let {term_obj} = this.state;
-    let grades = term_obj[term].grade.map((grade, index)=>{
-      let grade_string = `${index+1}: ${term_obj[term].grade[index]}`;
+    let grades = this.state.term_obj[term].grade.map((grade, index)=>{
+      let grade_string =`${index+1}: ${this.state.term_obj[term].grade[index]}`;
       return(
         <option key={term+index} value={index}>
 
