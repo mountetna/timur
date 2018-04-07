@@ -9,9 +9,9 @@ export default class AdverseEventWidget extends React.Component{
     super(props);
 
     this.state = {
-      term_obj: props.term_obj,
+      term_obj: {},
       info_obj: null,
-      terms: props.terms,
+      terms: [],
       values: [],
       info_display: 'none',
       location: {
@@ -23,13 +23,16 @@ export default class AdverseEventWidget extends React.Component{
   }
 
   componentWillReceiveProps(next_props){
-    if(Object.keys(this.state.term_obj).length <= 0) return;
+    if(
+      Object.keys(next_props.term_obj).length <= 0 ||
+      next_props.terms.length <= 0
+    ) return;
 
     let values = Object.keys(next_props.documents).map((key)=>{
       let ae = next_props.documents[key];
       ae['matches'] = [];
       ae['selected'] = true;
-      ae['search_value'] = this.resolveAE(ae.meddra_code);
+      ae['search_value'] = this.resolveAE(ae.meddra_code, next_props.term_obj);
       return ae;
     });
 
@@ -37,12 +40,17 @@ export default class AdverseEventWidget extends React.Component{
     add_count = values.length;
 
     if(values.length <= 0) return;
-    this.setState({values, add_count});
+    this.setState({
+      values,
+      add_count,
+      terms: next_props.terms,
+      term_obj: next_props.term_obj
+    });
   }
 
-  resolveAE(meddra_code){
-    let adverse_events = Object.keys(this.props.term_obj).filter((key)=>{
-      return (this.props.term_obj[key].meddra_code == meddra_code);
+  resolveAE(meddra_code, term_obj){
+    let adverse_events = Object.keys(term_obj).filter((key)=>{
+      return (term_obj[key].meddra_code == meddra_code);
     });
     return adverse_events[0];
   }
@@ -130,7 +138,6 @@ export default class AdverseEventWidget extends React.Component{
   }
   
   optionGrades(term){
-    let {term_obj} = this.state;
     let grades = this.state.term_obj[term].grade.map((grade, index)=>{
       let grade_string =`${index+1}: ${this.state.term_obj[term].grade[index]}`;
       return(

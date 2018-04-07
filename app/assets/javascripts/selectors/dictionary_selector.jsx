@@ -45,11 +45,28 @@ export const selectDemograhicDictionary = Reselect.createSelector(
   selectDictionary,
   (dictionary)=>{
 
-    // Remap the dictionary to use the name (rather than the db id) as the key.
+    /* 
+     * Remap the dictionary to use the name (rather than the db id) as the key.
+     * We want to leave the dictionary in the store unmutated and close (if not
+     * and exact copy) of what comes out of the db.
+     */
     let new_definitions = {};
+
+    // Condense the definitions by name and concatenate values (if any).
     for(var id in dictionary.definitions){
+
       let name = dictionary.definitions[id].name;
-      new_definitions[name] = dictionary.definitions[id];
+      if(!(name in new_definitions)){
+        new_definitions[name] = Object.assign({}, dictionary.definitions[id]);
+        new_definitions[name]['value'] = [];
+      }
+
+      if(dictionary.definitions[id].type == 'regex'){
+        new_definitions[name].value.push(dictionary.definitions[id].value);
+      }
+      else{
+        new_definitions[name]['value'] = [''];
+      }
     }
 
     return {
@@ -64,14 +81,29 @@ export const selectAdverseEventDictionary = Reselect.createSelector(
   selectDictionary,
   (dictionary)=>{
 
-    /*
-    let new_dict = {};
-    dictionary.each((definition)=>{
+    // Resort the dictionary by CTCAE Term.
+    let new_definitions = {};
+    let terms = [];
+    for(var id in dictionary.definitions){
+      let definition = Object.assign({}, dictionary.definitions[id]);
+      let term = definition.term;
+      terms.push(term);
+      new_definitions[term] = definition;
 
-    });
-    return new_dict;
-    */
+      // Condense the grade as well.
+      new_definitions[term]['grade'] = [];
+      new_definitions[term]['grade'].push(definition['grade_one']);
+      new_definitions[term]['grade'].push(definition['grade_two']);
+      new_definitions[term]['grade'].push(definition['grade_three']);
+      new_definitions[term]['grade'].push(definition['grade_four']);
+      new_definitions[term]['grade'].push(definition['grade_five']);
+    }
 
-    return dictionary;
+    return {
+      project: dictionary.project,
+      name: dictionary.name,
+      definitions: new_definitions,
+      terms
+    };
   }
 );
