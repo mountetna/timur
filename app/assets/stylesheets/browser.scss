@@ -117,3 +117,25 @@
     }
   }
 }
+
+#ui-container ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; 
+  max-width: 942px;
+}
+
+#ui-container ul li{
+  float: left;
+  display: block;
+  color: silver;
+  text-align: center;
+  padding: 0 4px;
+  padding-top: 4px;
+  text-decoration: none;
+  min-width: 217px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center;
+}

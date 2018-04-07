@@ -39,10 +39,10 @@ const mapStateToProps = (state, own_props)=>{
 
   let terms = [];
   let term_obj = Object.assign({}, ...Object.keys(data).map((key)=>{
-    terms.push(data[key]['CTCAE v4.0 Term']);
-      data[key]['meddra_code'] = key;
+    terms.push(data[key]['term']);
+    data[key]['meddra_code'] = key;
     return {
-      [data[key]['CTCAE v4.0 Term']]: data[key]
+      [data[key]['term']]: data[key]
     };
   }));
 
