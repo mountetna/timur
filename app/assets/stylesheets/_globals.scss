@@ -1,4 +1,26 @@
 /* NEW GLOBALS ****************************************************************/
+$font-path: '../fonts' !default;
+$main-font: 'gotham_bookregular';
+$main-font-bold: 'gotham_boldregular';
+$monospace_font: 'Courier New', Courier, monospace;
+
+$body_font: 'Oxygen', sans-serif;
+$value_font: 'Cousine', monospace;
+$talk_font: 'Lora', serif;
+$quote_font: 'Crimson Text', serif;
+
+$light-color: #a9d58e;
+$med-color: #22a778;
+$dark-color: #24a684;
+$darkest-color: #19755d;
+
+$light-grey: #eeeeee;
+$med-grey-1: #999999;
+$med-grey-2: #666666;
+$dark-grey: #333333;
+
+$white: #ffffff;
+$black: #000000;
 
 .left-column-group{
   display: inline-block;
@@ -52,24 +74,6 @@ a:hover{
 .page-detail-group span{
   color: $med-grey-1;
 }
-
-$font-path: '../fonts' !default;
-$main-font: 'gotham_bookregular';
-$main-font-bold: 'gotham_boldregular';
-$monospace_font: 'Courier New', Courier, monospace;
-
-$light-color: #a9d58e;
-$med-color: #22a778;
-$dark-color: #24a684;
-$darkest-color: #19755d;
-
-$light-grey: #eeeeee;
-$med-grey-1: #999999;
-$med-grey-2: #666666;
-$dark-grey: #333333;
-
-$white: #ffffff;
-$black: #000000;
 
 /* OLD GLOBALS ****************************************************************/
 
