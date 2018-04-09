@@ -45,23 +45,13 @@
 }
 
 /* NEW ************************************************************************/
+#browse{
+  padding-left: 150px;
+}
 
 .browser .header{
   padding: 0;
   margin-left: 15px;
-}
-
-.page-detail-group{
-  display: inline-block;
-  height: 35px;
-  font-family: $body_font;
-  font-size: 1.2em;
-  text-transform: uppercase;
-  color: $dark-grey;
-}
-
-.page-detail-group span{
-  color: $med-grey-1;
 }
 
 .browser-tab-bar{

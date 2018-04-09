@@ -40,8 +40,17 @@ a:hover{
   text-decoration: underline;
 }
 
-#browse{
-  padding-left: 150px;
+.page-detail-group{
+  display: inline-block;
+  height: 35px;
+  font-family: $body_font;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  color: $dark-grey;
+}
+
+.page-detail-group span{
+  color: $med-grey-1;
 }
 
 $font-path: '../fonts' !default;
