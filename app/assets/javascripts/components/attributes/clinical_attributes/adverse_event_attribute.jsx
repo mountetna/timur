@@ -6,6 +6,7 @@ import * as ReactRedux from 'react-redux';
 import {GenericClinicalAttribute} from './generic_clinical_attribute';
 import AdverseEventWidget from '../../browser/clinical/adverse_event_widget';
 import Magma from '../../../magma';
+import * as DictionarySelector from '../../../selectors/dictionary_selector';
 
 import data from 'json-loader!../../../../data/ctcae_data.json';
 
@@ -14,11 +15,9 @@ import * as MagmaActions from '../../../actions/magma_actions';
 
 export class AdverseEventAttribute extends GenericClinicalAttribute{
   render(){
-    if(this.props.mode != 'browse') return <div className='value'></div>;
-
     let ae_props = {
-      term_obj: this.props.term_obj,
-      terms: this.props.terms,
+      term_obj: this.props.dictionary.definitions || {},
+      terms: this.props.dictionary.terms || [],
       documents: this.props.documents
     };
 
@@ -33,14 +32,10 @@ export class AdverseEventAttribute extends GenericClinicalAttribute{
 
 const mapStateToProps = (state, own_props)=>{
 
-  let terms = [];
-  let term_obj = Object.assign({}, ...Object.keys(data).map((key)=>{
-    terms.push(data[key]['term']);
-    data[key]['meddra_code'] = key;
-    return {
-      [data[key]['term']]: data[key]
-    };
-  }));
+  let dictionary = DictionarySelector.selectAdverseEventDictionary(
+    state,
+    own_props.attribute.model_name
+  );
 
   let magma = new Magma(state);
   let template = magma.template(own_props.attribute.model_name);
@@ -54,18 +49,17 @@ const mapStateToProps = (state, own_props)=>{
   let record_names = Object.keys(documents).sort();
 
   return {
-    term_obj,
-    terms,
     template,
     documents,
-    record_names
+    record_names,
+    dictionary
   };
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
-    fetchDictionary: (dictionary_names)=>{
-      dispatch(MagmaActions.requestDictionaries(dictionary_names));
+    fetchDictionary: (project_name, dict_name)=>{
+      dispatch(MagmaActions.requestDictionaries(project_name, dict_name));
     }
   };
 };

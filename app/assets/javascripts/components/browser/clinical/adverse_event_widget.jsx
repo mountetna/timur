@@ -9,34 +9,48 @@ export default class AdverseEventWidget extends React.Component{
     super(props);
 
     this.state = {
-      term_obj: props.term_obj,
+      term_obj: {},
       info_obj: null,
-      terms: props.terms,
+      terms: [],
       values: [],
       info_display: 'none',
       location: {
         x:0,
         y:0
-      }
+      },
+      add_count: 0
     };
   }
 
   componentWillReceiveProps(next_props){
+    if(
+      Object.keys(next_props.term_obj).length <= 0 ||
+      next_props.terms.length <= 0
+    ) return;
+
     let values = Object.keys(next_props.documents).map((key)=>{
       let ae = next_props.documents[key];
       ae['matches'] = [];
       ae['selected'] = true;
-      ae['search_value'] = this.resolveAE(ae.meddra_code);
+      ae['search_value'] = this.resolveAE(ae.meddra_code, next_props.term_obj);
       return ae;
     });
 
+    let add_count = this.state.add_count;
+    add_count = values.length;
+
     if(values.length <= 0) return;
-    this.setState({values});
+    this.setState({
+      values,
+      add_count,
+      terms: next_props.terms,
+      term_obj: next_props.term_obj
+    });
   }
 
-  resolveAE(meddra_code){
-    let adverse_events = Object.keys(this.props.term_obj).filter((key)=>{
-      return (this.props.term_obj[key].meddra_code == meddra_code);
+  resolveAE(meddra_code, term_obj){
+    let adverse_events = Object.keys(term_obj).filter((key)=>{
+      return (term_obj[key].meddra_code == meddra_code);
     });
     return adverse_events[0];
   }
@@ -82,7 +96,7 @@ export default class AdverseEventWidget extends React.Component{
     this.setState((prevState)=>{
       let values = [...prevState.values];
       values.splice(index, 1);
-      return {values};
+      return {values, add_count: prevState.add_count-1};
     });
   }
 
@@ -124,9 +138,8 @@ export default class AdverseEventWidget extends React.Component{
   }
   
   optionGrades(term){
-    let {term_obj} = this.state;
-    let grades = term_obj[term].grade.map((grade, index)=>{
-      let grade_string = `${index+1}: ${term_obj[term].grade[index]}`;
+    let grades = this.state.term_obj[term].grade.map((grade, index)=>{
+      let grade_string =`${index+1}: ${this.state.term_obj[term].grade[index]}`;
       return(
         <option key={term+index} value={index}>
 
@@ -260,7 +273,8 @@ export default class AdverseEventWidget extends React.Component{
               matches: [],
               selected: false
             }
-          ]
+          ],
+        add_count: prevState.add_count + 1
       })
     );
   }
@@ -288,6 +302,15 @@ export default class AdverseEventWidget extends React.Component{
  
     return(
       <div>
+        
+       { this.state.add_count > 0 &&
+         <ul>
+          <li>TERM</li>
+          <li>GRADE</li>
+          <li>START</li>
+          <li>END</li>
+        </ul>
+      }
         {this.createInput()}
         <button className='clinical-button add' onClick={this.addAdverseEvent.bind(this)}>
 

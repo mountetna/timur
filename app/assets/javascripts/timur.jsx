@@ -18,6 +18,7 @@ import manifests from './reducers/manifests_reducer';
 import consignments from './reducers/consignments_reducer';
 import exchanges from './reducers/exchanges_reducer';
 import predicates from './reducers/predicates_reducer';
+import dictionary from './reducers/dictionary_reducer';
 
 // Components.
 import {ManifestsContainer as Manifests} from './components/manifest/manifests';
@@ -64,7 +65,8 @@ class TimurApplication{
       search: {
         pages: {}
       },
-      timur: {}
+      timur: {},
+      dictionary: {}
     };
 
     let reducers = Redux.combineReducers({
@@ -77,7 +79,8 @@ class TimurApplication{
       manifests,
       consignments,
       exchanges,
-      predicates
+      predicates,
+      dictionary
     });
 
     let middlewares = [

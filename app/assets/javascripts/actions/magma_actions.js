@@ -44,6 +44,14 @@ export const addPredicates = (predicates)=>{
   };
 };
 
+export const addDictionary = (dictionary_name, definitions)=>{
+  return {
+    type: 'ADD_DICTIONARY',
+    dictionary_name,
+    definitions
+  };
+};
+
 /*
  * Here we add the models and documents to the store. At the same time we strip
  * off the model namespacing. The server returns the full name of the model. 
@@ -92,25 +100,25 @@ export const requestDocuments = (args)=>{
       consumePayload(dispatch, response);
       if(success != undefined) success(response);
     };
-  
-    let localError = (e) => {
+
+    let localError = (e)=>{
       if (!e.response) {
         dispatch(showMessages([`Something is amiss. ${e}`]));
         return;
       }
-  
+
       e.response.json().then((response)=>{
         let errStr = response.errors.map((error)=> `* ${error}`);
         errStr = [`### Our request was refused.\n\n${errStr}`];
         dispatch(showMessages(errStr));
       });
-  
+
       if(error != undefined){
         let message = JSON.parse(error.response);
         error(message);
       }
     };
-  
+
     let get_doc_args = [
       {
         model_name,
@@ -123,11 +131,43 @@ export const requestDocuments = (args)=>{
       },
       new Exchange(dispatch, exchange_name)
     ];
-  
+
     MagmaAPI.getDocuments(...get_doc_args)
       .then(localSuccess)
       .catch(localError);
-    }
+  }
+};
+
+export const requestDictionaries = (project_name, dictionary_name)=>{
+  return (dispatch)=>{
+    let localSuccess = (response)=>{
+      for(let dict_name in response.models){
+        dispatch(addDictionary(
+          `${project_name}_${dict_name}`,
+          response.models[dict_name].documents
+        ));
+      }
+    };
+
+    let localError = (response)=>{
+      console.log(response);
+    };
+
+    let exchange_name = `Dictionary ${dictionary_name} for ${project_name}`;
+    let get_dict_args = [
+      {
+        model_name: dictionary_name,
+        record_names: 'all',
+        attribute_names: 'all'
+      },
+      new Exchange(dispatch, exchange_name),
+      project_name
+    ];
+
+    MagmaAPI.getDocuments(...get_dict_args)
+      .then(localSuccess)
+      .catch(localError);
+  }
 };
 
 export const requestModels = ()=>{

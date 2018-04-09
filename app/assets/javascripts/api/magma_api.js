@@ -55,7 +55,12 @@ export const getTSV = (model_name, record_names, exchange)=>{
     .then(FetchUtils.generateDownload(`${model_name}.tsv`));
 };
 
-export const getDocuments = (doc_args, exchange)=>{
+/*
+ * Normally we default the 'project_name' to whatever was set by the URL route.
+ * However, here we have an oppertunity to specifiy data from other projects. 
+ * This is important when retreiving dictionaries.
+ */
+export const getDocuments = (doc_args, exchange, project_name = PROJECT_NAME)=>{
   let route_opts = {
     method: 'POST',
     credentials: 'same-origin',
@@ -63,7 +68,11 @@ export const getDocuments = (doc_args, exchange)=>{
     body: JSON.stringify(doc_args)
   };
 
-  let fetch_opts = [Routes.records_json_path(PROJECT_NAME), route_opts];
+  let fetch_opts = [
+    Routes.records_json_path(project_name.toLowerCase()),
+    route_opts
+  ];
+
   return exchange.fetch(...fetch_opts)
     .then(FetchUtils.checkStatus)
     .then(FetchUtils.parseJSON);

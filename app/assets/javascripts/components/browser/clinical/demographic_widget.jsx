@@ -15,9 +15,13 @@ export default class DemographicWidget extends React.Component{
   }
 
   componentWillReceiveProps(next_props){
+    let {documents, dictionary} = next_props;
+    let options = dictionary.definitions;
 
-    let {documents, options} = next_props;
-    if(Object.keys(documents).length <= 0) return;
+    if(
+      Object.keys(documents).length <= 0 ||
+      Object.keys(options).length <= 0
+    ) return;
 
     // Interleave the documents with the dictionary/options.
     let values = [];
@@ -46,6 +50,8 @@ export default class DemographicWidget extends React.Component{
   }
 
   optionValues(option){
+    if(!this.state.options[option]) return null;
+
     let items = [];
     this.state.options[option].value.forEach((el, index)=>{
       items.push(
@@ -55,59 +61,57 @@ export default class DemographicWidget extends React.Component{
     return items;
   }
 
+
   createInput(){
-    return(
-      this.state.values.map((el, index)=>{
+    return this.state.values.map((el, index)=>{
 
-        let select_props = {
-          className: 'clinical-select',
-          onChange: this.handleSelectChange.bind(this, index),
-          value: this.state.values[index].selectValue || ''
+      let select_props = {
+        className: 'clinical-select',
+        onChange: this.handleSelectChange.bind(this, index),
+        value: this.state.values[index].selectValue || ''
+      };
+
+      let demographics_input_props = null;
+      let values = this.state.values;
+
+      if(values[index].selectValue){
+        demographics_input_props = {
+          input_key: index,
+          input_type: values[index].inputType,
+          input_value: values[index].inputValue || '',
+          select_options: this.optionValues(values[index].selectValue) || '',
+          inputChange: this.handleInputChange.bind(this, index)
         };
-
-        let demographics_input_props = null;
-        let values = this.state.values;
-
-        if(values[index].selectValue){
-          demographics_input_props = {
-            input_key: index,
-            input_type: values[index].inputType,
-            input_value: values[index].inputValue || '',
-            select_options: this.optionValues(values[index].selectValue) || '',
-            inputChange: this.handleInputChange.bind(this, index)
-          };
-        }
-
-        let button_props = {
-          className: 'clinical-button remove',
-          onClick: this.removeClick.bind(this, index)
-        };
-
-        return(
-          <div className='clinical-group' key={index}>
-
-            <select {...select_props}>
-
-              <option defaultValue=''>
-
-                Make Selection
-              </option>
-              {this.optionLabels()}
-            </select>
-            {
-              values[index].selectValue &&
-              <DemographicInput {...demographics_input_props} />
-            }
-            <button {...button_props}>
-
-              &#10006;
-            </button>
-          </div>
-        );
       }
-    )
-  )
- }
+
+      let button_props = {
+        className: 'clinical-button remove',
+        onClick: this.removeClick.bind(this, index)
+      };
+
+      return(
+        <div className='clinical-group' key={index}>
+
+          <select {...select_props}>
+
+            <option defaultValue=''>
+
+              Make Selection
+            </option>
+            {this.optionLabels()}
+          </select>
+          {
+            values[index].selectValue &&
+            <DemographicInput {...demographics_input_props} />
+          }
+          <button {...button_props}>
+
+            &#10006;
+          </button>
+        </div>
+      );
+    });
+  }
 
   handleSelectChange(index, event){
     let values = [...this.state.values];

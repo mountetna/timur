@@ -64,8 +64,8 @@ const views = (old_views = {}, action)=>{
   }
 };
 
-const timurReducer = function(timur, action) {
-  if (!timur) timur = { }
+const timurReducer = function(timur, action){
+  if (!timur) timur = {};
   switch(action.type) {
     case 'ADD_TAB':
     case 'ADD_VIEW':
