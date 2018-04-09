@@ -299,18 +299,18 @@ export default class AdverseEventWidget extends React.Component{
       className: 'clinical-button save',
       onClick: this.handleSubmit.bind(this)
     };
- 
+
     return(
       <div>
-        
-       { this.state.add_count > 0 &&
+
+        {this.state.add_count > 0 &&
          <ul>
           <li>TERM</li>
           <li>GRADE</li>
           <li>START</li>
           <li>END</li>
         </ul>
-      }
+        }
         {this.createInput()}
         <button className='clinical-button add' onClick={this.addAdverseEvent.bind(this)}>
 
