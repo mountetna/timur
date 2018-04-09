@@ -8,8 +8,6 @@ import AdverseEventWidget from '../../browser/clinical/adverse_event_widget';
 import Magma from '../../../magma';
 import * as DictionarySelector from '../../../selectors/dictionary_selector';
 
-import data from 'json-loader!../../../../data/ctcae_data.json';
-
 // Module imports.
 import * as MagmaActions from '../../../actions/magma_actions';
 
