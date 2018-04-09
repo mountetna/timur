@@ -1,24 +1,6 @@
 // Common variables
 @import "globals";
 
-$font-path: '../fonts' !default;
-$main-font: 'gotham_bookregular';
-$main-font-bold: 'gotham_boldregular';
-$monospace_font: 'Courier New', Courier, monospace;
-
-$light-color: #a9d58e;
-$med-color: #22a778;
-$dark-color: #24a684;
-$darkest-color: #19755d;
-
-$light-grey: #eeeeee;
-$med-grey-1: #999999;
-$med-grey-2: #666666;
-$dark-grey: #333333;
-
-$white: #ffffff;
-$black: #000000;
-
 #header-group{
   position: relative;
   width: 100%;
@@ -165,7 +147,7 @@ $black: #000000;
   position: absolute;
   right: 12px;
   text-align: left;
-  top: 22px;
+  top: 20px;
   background-color: white;
   z-index: 1000;
   width: 219px;
@@ -181,7 +163,9 @@ $black: #000000;
   background-color: #22a778;
   font-size: 12px;
   color: white;
-  padding: 3px;
+  height: 18px;
+  padding-top: 2px;
+  padding-left: 5px;
 }
 
 #identifier_search .drop_down .list{

@@ -143,7 +143,15 @@ export class Browser extends React.Component{
   render(){
 
     let {mode, current_tab_index} = this.state;
-    let {can_edit, revision, view, template, doc} = this.props;
+    let {
+      can_edit,
+      revision,
+      view,
+      template,
+      doc,
+      model_name,
+      record_name
+    } = this.props;
 
     // Render an empty view if there is no view data yet.
     if(!view || !template || !doc) return this.renderEmpytView();
@@ -188,13 +196,10 @@ export class Browser extends React.Component{
 
         <Header {...header_props}>
 
-          <div className='model-name'>
+          <div className='page-detail-group'>
 
-            {this.camelize(this.props.model_name)}
-          </div>
-          <div className='record-name'>
-
-            {this.props.record_name}
+            <span>{`${PROJECT_NAME} > BROWSER > ${model_name} > `}</span>
+            {record_name}
           </div>
           <Help info='edit' />
         </Header>

@@ -53,7 +53,7 @@ export class TabBar extends React.Component{
     if (Object.keys(tabs).length == 1) return <div style={{display: 'none'}} />
 
     return(
-      <div className='tabbar'>
+      <div className='browser-tab-bar'>
 
         <div className='spacer1' />
         {this.renderTabs()}

@@ -24,7 +24,7 @@ export class IdentifierSearch extends React.Component{
     if(!this.state.has_focus) return null;
     if(!this.props.identifiers) return null;
     if(!this.state.match_string) return null;
-    if(this.state.match_string.length < 2) return null;
+    if(this.state.match_string.length < 3) return null;
 
     var match_exp = new RegExp(this.state.match_string, 'i');
     var matches = null;
@@ -44,48 +44,49 @@ export class IdentifierSearch extends React.Component{
     return matches;
   }
 
-  renderIdentifiers(matches, modelName){
+  renderIdentifiers(matches, model_name){
 
-    return matches.map(function(identifier){
+    // Render only the first 5 matches.
+    let links = [];
+    let limit = (matches.length >= 5) ? 5 : matches.length;
+    for(let a = 0; a < limit; ++a){
 
-      var identProps = {
-
-        'key': identifier,
+      let ident_props = {
+        'key': matches[a],
         'className': 'identifier'
       };
 
-      var magmaLinkProps = {
-
-        'link': identifier,
-        'model': modelName
+      let magma_link_props = {
+        'link': matches[a],
+        'model': model_name
       };
 
-      return(
-        <div {...identProps}>
+      links.push(
+        <div {...ident_props}>
 
-          <MagmaLink {...magmaLinkProps} />
+          <MagmaLink {...magma_link_props} />
         </div>
       );
-    });
+    }
+
+    links.push(<div className='identifier'>{'...'}</div>);
+    return links;
   }
 
-  renderMatches(matchingIdents){
-
-    var self = this;
-    return Object.keys(matchingIdents).map(function(modelName){
-
-      var matches = matchingIdents[modelName];
+  renderMatches(matching_idents){
+    let self = this;
+    return Object.keys(matching_idents).map(function(model_name){
       return(
 
-        <div key={modelName}>
+        <div key={model_name}>
 
           <div className='title'>
 
-            {modelName}
+            {model_name}
           </div>
           <div className='list'>
 
-            {self.renderIdentifiers(matches, modelName)}
+            {self.renderIdentifiers(matching_idents[model_name], model_name)}
           </div>
         </div>
       );
@@ -93,29 +94,23 @@ export class IdentifierSearch extends React.Component{
   }
 
   renderMatchingIdentifiers(){
-
-    var matchingIdents = this.find_matches();
-    if(matchingIdents){
-
+    let matching_idents = this.find_matches();
+    if(matching_idents){
       return(
         <div className='drop_down'>
 
-          {this.renderMatches(matchingIdents)}
+          {this.renderMatches(matching_idents)}
         </div>
       );
     }
-    else{
 
-      return null;
-    }
+    return null;
   }
 
   render(){
 
     var self = this;
-
-    var identSearchProps = {
-
+    var ident_search_props = {
       'id': 'identifier_search',
       'onBlur': function(e){
         setTimeout(function(){
@@ -127,8 +122,7 @@ export class IdentifierSearch extends React.Component{
       }
     };
 
-    var inputProps = {
-
+    var input_props = {
       'type': 'text',
       'value': this.state.match_string,
       'onChange': function(e){
@@ -137,12 +131,12 @@ export class IdentifierSearch extends React.Component{
     };
 
     return(
-      <div {...identSearchProps}>
+      <div {...ident_search_props}>
 
         <div className='search'>
 
           <span className='fa fa-search' />
-          <input {...inputProps} />
+          <input {...input_props} />
         </div>
         {this.renderMatchingIdentifiers()}
       </div>
