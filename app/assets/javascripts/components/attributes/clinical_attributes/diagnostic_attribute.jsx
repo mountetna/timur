@@ -6,6 +6,7 @@ import * as ReactRedux from 'react-redux';
 import {GenericClinicalAttribute} from './generic_clinical_attribute';
 import DemographicWidget from '../../browser/clinical/demographic_widget';
 import Magma from '../../../magma';
+import * as DictionarySelector from '../../../selectors/dictionary_selector';
 
 // Module imports.
 import * as MagmaActions from '../../../actions/magma_actions';
@@ -33,20 +34,25 @@ const mapStateToProps = (state, own_props)=>{
     own_props.filter
   );
 
+  let dictionary = DictionarySelector.selectDemograhicDictionary(
+    state,
+    own_props.attribute.model_name
+  );
+
   let record_names = Object.keys(documents).sort();
 
   return {
-    options: {},
     template,
     documents,
-    record_names
+    record_names,
+    dictionary
   };
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
-    fetchDictionary: (dictionary_names)=>{
-      dispatch(MagmaActions.requestDictionaries(dictionary_names));
+    fetchDictionary: (project_name, dict_name)=>{
+      dispatch(MagmaActions.requestDictionaries(project_name, dict_name));
     }
   };
 };
