@@ -4,7 +4,7 @@
   <head>
     <title>
       <%= Timur.instance.environment == :development ? 'Dev Timur' : 'Timur' %>
-      - Map
+      - Plots
     </title>
     <link rel='stylesheet' media='screen' href='/css/timur.bundle.css'/>
     <script src='/js/routes.js'></script>
@@ -17,8 +17,14 @@
       const timur = new TimurApp(
         {
           user: <%= @user ? "'#{@user.first} #{@user.last}'" : 'null'%>,
-          mode: 'map',
-          environment: '<%= Timur.instance.environment %>'
+          mode: 'plots',
+          environment: '<%= Timur.instance.environment %>',
+          manifestsUI: {
+            selected: '<%= @params[:manifest_id] %>' ? <%= @params[:manifest_id] %> : null
+          },
+          plots: {
+            selected: '<%= @params[:id] %>' ? <%= @params[:id] %> : null
+          }
         },
         'root'
       );
