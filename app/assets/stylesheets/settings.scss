@@ -1,24 +1,5 @@
 @import 'globals';
 
-// Common variables
-$font-path: '../fonts' !default;
-$main-font: 'Oxygen', sans-serif;
-$main-font-bold: 'Oxygen', sans-serif;
-$monospace_font: 'Courier New', Courier, monospace;
-
-$light-color: #a9d58e;
-$med-color: #22a778;
-$dark-color: #24a684;
-$darkest-color: #19755d;
-
-$light-grey: #eeeeee;
-$med-grey-1: #999999;
-$med-grey-2: #666666;
-$dark-grey: #333333;
-
-$white: #ffffff;
-$black: #000000;
-
 .settings-view-group{
   position: relative;
   font-family: $body_font;
@@ -102,79 +83,6 @@ $black: #000000;
 }
 
 /******************************************************************************/
-
-.page-detail-group{
-  height: 35px;
-  padding-left: 15px;
-  margin-top: 35px;
-
-  font-family: $main-font;
-  font-size: 1.2em;
-  text-transform: uppercase;
-  color: $dark-grey;
-
-  border-bottom: 1px solid $med-grey-1;
-}
-
-.left-column-group{
-  display: inline-block;
-  width: 175px;
-  overflow: hidden;
-}
-
-.left-column-menu-title{
-  width: 100%;
-  height: 25px;
-
-  font-family: $main-font;
-  color: $dark-grey;
-  font-size: 0.8em;
-  text-transform: uppercase;
-  text-indent: 15px;
-  line-height: 25px;
-
-  background: $light-color;
-}
-
-.left-column-selection-btn{
-  width: 100%;
-  height: 25px;
-
-  padding: 0px;
-  border: none;
-  outline: none;
-
-  font-family: $main-font;
-  color: $dark-grey;
-  font-size: 0.8em;
-  text-indent: 15px;
-  text-align: left;
-
-  background: none;
-  cursor: pointer
-}
-
-.left-column-selection-btn:hover{
-  background: $light-grey;
-}
-
-.right-column-group{
-  position: absolute;
-  top: 36px;
-  left: 175px;
-  right: 0px;
-  overflow: hidden;
-}
-
-.parse-error-message {
-  background: #ffe1e6;
-  float: right;
-  border: none;
-  outline: none;
-  padding:5px;
-  font-size: 0.6em;
-  margin-right: 10px;
-}
 
 .view-setting-tab-group{
   margin-bottom: 30px;
