@@ -1,4 +1,5 @@
 require_relative './server/controllers/timur_controller'
+require_relative './server/controllers/archimedes_controller'
 require_relative './server/controllers/browse_controller'
 require_relative './server/controllers/magma_controller'
 require_relative './server/controllers/manifests_controller'
