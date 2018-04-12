@@ -56,13 +56,17 @@ export default class DemographicWidget extends React.Component{
   }
 
   createInput(){
+    let browse_mode = this.props.mode =='browse';
+
     return(
       this.state.values.map((el, index)=>{
 
         let select_props = {
-          className: 'clinical-select',
           onChange: this.handleSelectChange.bind(this, index),
-          value: this.state.values[index].selectValue || ''
+          value: this.state.values[index].selectValue || '',
+          disabled: browse_mode,
+          className: this.state.values[index].selectValue || browse_mode ? 
+            'clinical-select' : 'clinical-select empty' 
         };
 
         let demographics_input_props = null;
@@ -74,7 +78,10 @@ export default class DemographicWidget extends React.Component{
             input_type: values[index].inputType,
             input_value: values[index].inputValue || '',
             select_options: this.optionValues(values[index].selectValue) || '',
-            inputChange: this.handleInputChange.bind(this, index)
+            inputChange: this.handleInputChange.bind(this, index),
+            input_disabled: browse_mode,
+            extend_class_name: values[index].inputValue || browse_mode ? 
+              '' : 'empty'
           };
         }
 
@@ -90,7 +97,7 @@ export default class DemographicWidget extends React.Component{
 
               <option defaultValue=''>
 
-                Make Selection
+                Select
               </option>
               {this.optionLabels()}
             </select>
@@ -98,10 +105,7 @@ export default class DemographicWidget extends React.Component{
               values[index].selectValue &&
               <DemographicInput {...demographics_input_props} />
             }
-            <button {...button_props}>
-
-              &#10006;
-            </button>
+            {!browse_mode && <button {...button_props}>&#10006;</button>}
           </div>
         );
       }
@@ -150,7 +154,7 @@ export default class DemographicWidget extends React.Component{
   }
 
   render(){
-    let {record_names} = this.props;
+    let {record_names, mode} = this.props;
     if (!record_names.length) return <div>No Entries</div>;
  
     let add_btn_props = {
@@ -164,17 +168,22 @@ export default class DemographicWidget extends React.Component{
     };
 
     return(
-      <div className='clinical-group'>
+      <div className='clinical-parent-group'>
+
         {this.createInput()}
+        {
+          mode == 'edit' && 
+            <div>
+              <button {...add_btn_props}>
 
-        <button {...add_btn_props}>
-
-          &#10010;{' ADD'}
-        </button>
-        <button {...save_btn_props}>
-
-          {'SAVE'}
-        </button>
+                &#10010;{' ADD'}
+              </button>
+              <button {...save_btn_props}>
+  
+                {'SAVE'}
+              </button>
+            </div>
+        }
       </div>
     );
   }

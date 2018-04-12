@@ -37,27 +37,34 @@ export default class DropdownSearch extends React.Component{
       input_value,
       search_options,
       input_placeholder,
-      inputChange
+      input_class_name,
+      inputChange,
+      input_disabled,
     } = this.props;
 
     let input_props = {
-      className: 'search-bar-group',
+      className: input_class_name || 'search-bar-group',
       value: input_value,
       onChange: inputChange,
       key: `search-${input_key}`,
-      placeholder: input_placeholder
+      placeholder: input_placeholder,
+      disabled: input_disabled
     };
 
     return(
       <div className='search-bar-group'>
+        { 
+          input_disabled ?
+            <div className='search-bar-diabled'>{input_value}</div> :    
+            <input {...input_props} />
+        }
 
-        <input {...input_props} />
         {
           search_options.length ?
-          <div className='option-items' key={input_value} id={input_value}>
+            <div className='option-items' key={input_value} id={input_value}>
 
-            {search_options.map(this.renderSearchOptions.bind(this))}
-          </div> : ''
+              {search_options.map(this.renderSearchOptions.bind(this))}
+            </div> : ''
         }
       </div>
     );

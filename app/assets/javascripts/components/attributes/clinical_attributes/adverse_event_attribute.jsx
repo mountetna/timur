@@ -14,12 +14,12 @@ import * as MagmaActions from '../../../actions/magma_actions';
 
 export class AdverseEventAttribute extends GenericClinicalAttribute{
   render(){
-    if(this.props.mode != 'browse') return <div className='value'></div>;
-
+   
     let ae_props = {
       term_obj: this.props.term_obj,
       terms: this.props.terms,
-      documents: this.props.documents
+      documents: this.props.documents,
+      mode:this.props.mode
     };
 
     return(

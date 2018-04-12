@@ -8,64 +8,76 @@
   -o-appearance: none;
 }
 
-.clinical-select{
+%clinical-shared{
   font-family: $body_font;
-  border: 1px solid silver;
+  border: 1px solid transparent;
   outline: 0;
   color: black;
-  padding: 0.65em 0.5em 0.55em 0.75em;
-  border-radius: 3px;
+  padding: 0.55em 0.5em 0.55em 0.75em;
   background: #fff;
   margin: 5px;
-  height: 30px;
-  min-width: 225px;
+  height: 14px;
+  width: 210px;
+}
+
+.clinical-select{
+  @extend %clinical-shared;
+  height: auto;
+  width: 225px;
+  border-radius: 0;
+  white-space:pre-wrap;
+  word-wrap: break-word;      /* IE 5.5-7 */
+  white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
 }
 
 .clinical-input{
-  font-family: $body_font;
-  border: 1px solid silver;
-  outline: 0;
-  color: black;
-  padding: 0.65em 0.5em 0.55em 0.75em;
-  border-radius: 3px;
-  background: #fff;
-  margin: 5px;
-  height: 15px;
-  min-width: 210px;
+  @extend %clinical-shared;
+  vertical-align: top;
+  caret-color: #22a778;
+}
+
+.clinical-select.empty,
+.clinical-input.empty{
+  border: 1px solid #dddddd;
 }
 
 .clinical-button{
-  padding: 5px;
-  border: 1px solid #333;
+  padding: 6px;
+  border: 1px solid silver;
+  background-color: white;
+  color: gray;
   outline: none;
-  background: #eee;
-  font-size: 0.6em;
-  margin: 5px;
+  font-size: 0.7em;
+  margin: 8px 5px;
   cursor: pointer;
-}
-
-.clinical-button:hover{
-  color: #fff;
-  background: #22a778;
-  border: 1px solid #22a778;
-}
-
-.remove {
-  border: 1px solid white;
-  background: none;
-  color: black;
-  padding: 5px 10px 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  font-size: .8em;
   border-radius: 3px;
 }
 
-.remove:hover{
-  color: #fff;
-  background: #22a778;
-  border: #22a778;
+.clinical-button:hover{
+  color: #22a778;
+  border: 1px solid #22a778;
+}
+
+.clinical-group .remove{
+  border: none;
+  background: none;
+  color: gray;
+  padding: 4px 9px 4px 9px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  vertical-align: top;
+  position: relative;
+  top: 5px;
+  margin: 0 5px;
+  -webkit-text-stroke: 1px white;
+}
+
+.clinical-group .remove:hover{
+  color:#22a778;
+  border: 1px solid #22a778;
+  border-radius: 3px;
 }
 
 .clinical-group > .remove {
@@ -83,35 +95,34 @@
   /*the container must be positioned relative:*/
   // position: relative;
   display: inline-block;
+  vertical-align: top;
 }
 
-.search-bar-group input, 
-.render-inputs input {
-  font-family: $body_font;
-  border: 1px solid silver;
-  outline: 0;
-  color: black;
-  padding: 0.65em 0.5em 0.55em 0.75em;
-  border-radius: 3px;
-  background: #fff;
-  margin: 5px;
-  height: 15px;
-  min-width: 210px;
-  max-width: 210px;
+.search-bar-group input{
+  @extend %clinical-shared;
+  caret-color: #22a778;
 }
 
-.render-inputs select {
-  font-family: $body_font;
-  border: 1px solid silver;
-  outline: 0;
-  color: black;
-  padding: 0.65em 0.5em 0.55em 0.75em;
-  border-radius: 3px;
-  background: #fff;
-  margin: 5px;
-  height: 30px;
-  min-width: 225px;
-  max-width: 225px;
+.search-bar-diabled{
+  @extend %clinical-shared;
+  font-size: 11px;
+}
+
+.clinical-group{
+  border-bottom: 1px solid #ddd;
+  width: fit-content;
+  min-height: 38px;
+}
+
+.clinical-group input:hover,
+.clinical-group select:hover{
+  border: 1px solid #22a778;
+
+}
+
+.clinical-group input:disabled:hover,
+.clinical-group select:disabled:hover{
+  border: 1px solid transparent;
 }
 
 .option-items {
@@ -121,22 +132,22 @@
   margin-left: 5px;
   max-height: 400px;
   overflow-y: scroll;
-  direction:rtl;
+  direction: rtl;
   font-size: .7em;
 }
 
 .option-items .item-container {
-  padding: 0.5em;
-  cursor: pointer;
-  background-color: #fff; 
   font-family: $body_font;
-  direction:ltr;
+  background-color: #fff;
+  padding: 0.5em;
+  direction:  ltr;
   min-width: 210px;
+  cursor: pointer;
 }
 
 .option-items .item-container:hover {
   /*when hovering an item:*/
-  background-color: #e9e9e9; 
+  background-color: #e9e9e9;
 }
 
 .item-container i{
@@ -144,7 +155,7 @@
   display: block;
   visibility: hidden;
   float: right;
-  color: 	#909090; 
+  color:	#909090;
   margin-left: 10px;
  }
 
@@ -164,7 +175,7 @@
   padding: 10px;
   border-radius: 6px;
   font-size: .7em;
-  overflow: auto; 
+  overflow: auto;
   font-family: $body_font;
   z-index: 99;
   position: absolute;

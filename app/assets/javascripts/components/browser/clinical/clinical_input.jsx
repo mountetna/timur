@@ -17,16 +17,18 @@ export default class ClinicalInput extends React.Component{
       input_value,
       select_options,
       selection_label,
-      input_class_name,
+      extend_class_name,
       search_options,
       input_placeholder,
       inputChange,
+      input_disabled
     } = this.props;
 
     let input_props = {
-      className: 'clinical-input',
+      className: `clinical-input ${extend_class_name}`,
       value: input_value,
-      onChange: inputChange
+      onChange: inputChange,
+      disabled: input_disabled
     };
 
     switch(input_type){
@@ -52,7 +54,7 @@ export default class ClinicalInput extends React.Component{
       case 'regex':
       case 'select':
         input_props['key'] = `regex-${input_key}`;
-        input_props['className'] = 'clinical-select';
+        input_props['className'] = `clinical-select ${extend_class_name}` ;
         return(
           <select {...input_props}>
 

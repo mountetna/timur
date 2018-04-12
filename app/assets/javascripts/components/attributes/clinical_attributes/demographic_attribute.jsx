@@ -12,8 +12,7 @@ import * as MagmaActions from '../../../actions/magma_actions';
 
 export class DemographicAttribute extends GenericClinicalAttribute{
   render(){
-    if(this.props.mode != 'browse') return <div className='value'></div>;
-
+  
     return(
       <div className='value'>
 

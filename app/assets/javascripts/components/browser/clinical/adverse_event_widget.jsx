@@ -145,32 +145,40 @@ export default class AdverseEventWidget extends React.Component{
   renderSecondaryInputs(index){
     let {values} = this.state;
 
+    let browse_mode = this.props.mode =='browse';
+
     let grade_input_props = {
       input_key: index + values[index].search_value,
-      input_class_name: 'clinical-grade',
       input_type: 'select',
       input_value: values[index].grade || undefined,
       select_options: this.optionGrades(values[index].search_value) || '',
       selection_label: 'Grade',
-      inputChange: this.onInputChange.bind(this, index, 'grade')
+      inputChange: this.onInputChange.bind(this, index, 'grade'),
+      input_disabled: browse_mode,
+      extend_class_name: values[index].grade !== null || browse_mode ?
+        '' : 'empty'
     };
 
     let start_date_props = {
       input_key: index + values[index].search_value,
-      input_class_name: 'clinical-date',
       input_type: 'date',
       input_value: values[index].start_date || '',
       inputChange: this.onInputChange.bind(this, index, 'start_date'),
-      selection_label: 'Start Date'
+      selection_label: 'Start Date',
+      input_disabled: browse_mode,
+      extend_class_name: values[index].start_date || browse_mode ? 
+        '' : 'empty'
     };
 
     let end_date_props = {
       input_key: index + values[index].search_value,
-      input_class_name: 'clinical-date',
       input_type: 'date',
       input_value: values[index].end_date || '',
       inputChange: this.onInputChange.bind(this, index, 'end_date'),
-      selection_label: 'End Date'
+      selection_label: 'End Date',
+      input_disabled: browse_mode,
+      extend_class_name: values[index].end_date || browse_mode ? 
+        '' : 'empty',
     };
 
     let input_group_props = {
@@ -217,15 +225,17 @@ export default class AdverseEventWidget extends React.Component{
 
   createInput(){
     let {values, term_obj, info_obj} = this.state;
+    let browse_mode = this.props.mode =='browse';
     let clinical_groups = values.map((elem, index)=>{
 
       let search_props = {
         input_key: index,
         input_type: 'search',
         input_placeholder: 'Search',
-        input_class_name: 'clinical-search',
+
         input_value: values[index].search_value || '',
         search_options: values[index].matches || [],
+        input_disabled: browse_mode,
 
         inputChange: this.onSearchChange.bind(this, index),
         onSelectionChange: this.onTermSelect.bind(this, index),
@@ -239,10 +249,13 @@ export default class AdverseEventWidget extends React.Component{
           <ClinicalInput {...search_props} />
           {info_obj && this.renderInfoTip(index)}
           {values[index].selected && this.renderSecondaryInputs(index)}
-          <button className='clinical-button remove' onClick={this.removeClick.bind(this, index)}>
+          { 
+            !browse_mode && 
+              <button className='clinical-button remove' onClick={this.removeClick.bind(this, index)}>
 
-            &#10006;  {/* Remove Cross Symbol */}
-          </button>
+                &#10006;  {/* Remove Cross Symbol */}
+              </button>
+          }
         </div>
       );
     });
@@ -303,14 +316,19 @@ export default class AdverseEventWidget extends React.Component{
         </ul>
       }
         {this.createInput()}
-        <button className='clinical-button add' onClick={this.addAdverseEvent.bind(this)}>
+        {
+          this.props.mode == 'edit' && 
+            <div>
+              <button className='clinical-button add' onClick={this.addAdverseEvent.bind(this)}>
 
-          &#10010; ADD
-        </button>
-        <button {...save_btn_props}>
+                &#10010; ADD
+              </button>
+              <button {...save_btn_props}>
 
-          {'SAVE'}
-        </button>
+                {'SAVE'}
+              </button>
+            </div>
+        }
       </div>
     );
   }
