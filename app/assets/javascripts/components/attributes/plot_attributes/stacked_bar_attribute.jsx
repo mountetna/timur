@@ -1,10 +1,13 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
+
 import StackedBarPlot from '../../plotter/plots/stacked_bar_plot';
 import * as ConsignmentSelector from '../../../selectors/consignment_selector';
+
 // Class imports.
 import {GenericPlotAttribute} from './generic_plot_attribute';
 import Consignment from '../../../models/consignment';
+
 // Module imports.
 import * as ManifestActions from '../../../actions/manifest_actions';
 
@@ -36,17 +39,23 @@ export class StackedBarPlotAttribute extends GenericPlotAttribute{
       margin
     } = layout;
 
+    let stacked_bar_props = {
+      ymin,
+      ymax,
+      margin,
+      data,
+      legend,
+      plot: {
+        name,
+        width,
+        height
+      }
+    };
+
     return(
-      <div className="value">
-    {data[0] &&
-      <StackedBarPlot
-        ymin={ymin}
-        ymax={ymax}
-        plot={{name, width, height}}
-        margin={margin}
-        data={data}
-        legend={legend}
-      />}
+      <div className='value'>
+
+        {data[0] && <StackedBarPlot {...stacked_bar_props} />}
       </div>
     );
   }
@@ -115,7 +124,7 @@ const mapStateToProps = (state = {}, own_props)=>{
     selected_plot,
     selected_manifest,
     selected_consignment
-  }
+  };
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{

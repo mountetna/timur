@@ -34,7 +34,7 @@
     .model-name {
       display: inline-block;
       padding: 0px 5px;
-      color: deeppink;
+      color: black;
     }
     .record-name {
       display: inline-block;
@@ -96,7 +96,8 @@
           padding-right: 8px;
           text-align: right;
           font-family: $body_font;
-          color: midnightblue;
+          padding-top: 5px;
+          // color: midnightblue;
         }
         > .value {
           border-bottom: 1px solid rgba(forestgreen,0.1);
@@ -116,4 +117,26 @@
       }
     }
   }
+}
+
+#ui-container ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; 
+  max-width: 980px;
+  background-color: #F5F5F5;
+}
+
+#ui-container ul li{
+  float: left;
+  display: block;
+  color: silver;
+  padding: 5px;
+  text-decoration: none;
+  min-width: 217px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: left;
+  font-size: 12px;
 }
