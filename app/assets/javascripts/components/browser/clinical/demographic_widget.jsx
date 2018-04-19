@@ -16,6 +16,8 @@ export default class DemographicWidget extends React.Component{
 
   componentWillReceiveProps(next_props){
     let {documents, dictionary} = next_props;
+    if(dictionary == undefined) return;
+
     let options = dictionary.definitions;
 
     if(
@@ -26,11 +28,19 @@ export default class DemographicWidget extends React.Component{
     // Interleave the documents with the dictionary/options.
     let values = [];
     for(let obj in documents){
-      values.push({
-        selectValue: documents[obj].name.trim(),
-        inputValue:documents[obj].value.trim(),
-        inputType: options[documents[obj].name].type.trim()
-      });
+
+      // This can be removed once we have all of the fields in the dictionary.
+      if(documents[obj].name == undefined){
+        console.log(documents[obj].names);
+      }
+
+      if(documents[obj].name in options){
+        values.push({
+          selectValue: documents[obj].name.trim(),
+          inputValue:documents[obj].value.trim(),
+          inputType: options[documents[obj].name].type.trim()
+        });
+      }
     }
 
     this.setState({

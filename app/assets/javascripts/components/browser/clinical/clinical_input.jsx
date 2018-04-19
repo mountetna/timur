@@ -49,6 +49,7 @@ export default class ClinicalInput extends React.Component{
         }
 
         return <input {...input_props} />;
+      case 'boolean':
       case 'regex':
       case 'select':
         input_props['key'] = `regex-${input_key}`;
@@ -66,7 +67,8 @@ export default class ClinicalInput extends React.Component{
       case 'search':
         return <DropdownSearch {...this.props} />;
       default:
-        return <div>{'Input Type Error'}</div>;
+        console.log('Input Type Error: '+ input_type);
+        return null;
     }
   }
 }

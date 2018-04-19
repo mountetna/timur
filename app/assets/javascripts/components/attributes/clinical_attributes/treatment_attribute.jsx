@@ -4,25 +4,21 @@ import * as ReactRedux from 'react-redux';
 
 // Class imports.
 import {GenericClinicalAttribute} from './generic_clinical_attribute';
-import AdverseEventWidget from '../../browser/clinical/adverse_event_widget';
+import DemographicWidget from '../../browser/clinical/demographic_widget';
 import Magma from '../../../magma';
-import * as DictionarySelector from '../../../selectors/dictionary_selector';
 
 // Module imports.
 import * as MagmaActions from '../../../actions/magma_actions';
+import * as DictionarySelector from '../../../selectors/dictionary_selector';
 
-export class AdverseEventAttribute extends GenericClinicalAttribute{
+export class TreatmentAttribute extends GenericClinicalAttribute{
   render(){
-    let ae_props = {
-      term_obj: this.props.dictionary.definitions || {},
-      terms: this.props.dictionary.terms || [],
-      documents: this.props.documents
-    };
+    if(this.props.mode != 'browse') return <div className='value'></div>;
 
     return(
       <div className='value'>
 
-        <AdverseEventWidget {...ae_props} />
+        <DemographicWidget {...this.props} />
       </div>
     );
   }
@@ -38,7 +34,7 @@ const mapStateToProps = (state, own_props)=>{
     own_props.filter
   );
 
-  let dictionary = DictionarySelector.selectAdverseEventDictionary(
+  let dictionary = DictionarySelector.selectDemograhicDictionary(
     state,
     own_props.attribute.model_name
   );
@@ -61,7 +57,7 @@ const mapDispatchToProps = (dispatch, own_props)=>{
   };
 };
 
-export const AdverseEventAttributeContainer = ReactRedux.connect(
+export const TreatmentAttributeContainer = ReactRedux.connect(
   mapStateToProps,
   mapDispatchToProps
-)(AdverseEventAttribute);
+)(TreatmentAttribute);

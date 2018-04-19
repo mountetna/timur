@@ -26,6 +26,7 @@ import {HistogramAttributeContainer} from './plot_attributes/histogram_attribute
 // The clinical components.
 import {DemographicAttributeContainer} from './clinical_attributes/demographic_attribute';
 import {DiagnosticAttributeContainer} from './clinical_attributes/diagnostic_attribute';
+import {TreatmentAttributeContainer} from './clinical_attributes/treatment_attribute';
 import {AdverseEventAttributeContainer} from './clinical_attributes/adverse_event_attribute';
 
 export default class AttributeViewer extends Component{
@@ -54,6 +55,8 @@ export default class AttributeViewer extends Component{
         return <DemographicAttributeContainer {...this.props} />;
       case 'DiagnosticAttribute':
         return <DiagnosticAttributeContainer {...this.props} />;
+      case 'TreatmentAttribute':
+        return <TreatmentAttributeContainer {...this.props} />;
       case 'AdverseEventAttribute':
         return <AdverseEventAttributeContainer {...this.props} />;
 
