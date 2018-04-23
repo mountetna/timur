@@ -3,13 +3,12 @@ import {headers, parseJSON, checkStatus} from '../utils/fetch_utils';
 
 export const getView = (model_name, tab_name, exchange)=>{
   let route_opts = {
-    method: 'POST',
+    method: 'GET',
     credentials: 'same-origin',
     headers: headers('json', 'csrf'),
-    body: JSON.stringify({ model_name, tab_name })
   };
 
-  let exchangePromise = exchange.fetch(Routes.view_path(PROJECT_NAME), route_opts)
+  let exchangePromise = exchange.fetch(Routes.view_path(PROJECT_NAME, model_name), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
