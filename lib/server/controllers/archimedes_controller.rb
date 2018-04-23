@@ -29,10 +29,11 @@ class ArchimedesController <  Timur::Controller
     ]
 
     # Translate the manifests into a form usable by DataManifest.
-    manifest[:data]['elements'].each do |manifest_element|
+    data = Hash[manifest[:data].map{|(k,v)| [k.to_sym,v]}]
+    data[:elements].each do |manifest_element|
       manifest_elements.push([
-        manifest_element['name'],
-        manifest_element['script']
+        manifest_element[:name],
+        manifest_element[:script]
       ])
     end
 

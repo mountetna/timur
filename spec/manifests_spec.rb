@@ -47,10 +47,17 @@ describe 'ManifestsController' do
       friend_private_manifests = create_list(:manifest, 3, :private, :script, user: friend)
       user_private_manifests = create_list(:manifest, 3, :private, :script, user: viewer)
 
+      md5sum = Digest::MD5.hexdigest(public_manifests.first.data.to_json)
+
       get_manifest(:fetch, :viewer)
       json = json_body(last_response.body)
-      manifest_names = json[:manifests].map{|manifest| manifest[:name]}
 
+      # it returns md5s for each manifest
+      manifest_md5s = json[:manifests].map{|manifest| manifest[:md5sum_data]}.uniq
+      expect(manifest_md5s).to eq([md5sum])
+
+      # it only returns manifests you can see
+      manifest_names = json[:manifests].map{|manifest| manifest[:name]}
       expect(manifest_names).to include(*public_manifests.map(&:name))
       expect(manifest_names).to include(*user_private_manifests.map(&:name))
       expect(manifest_names).not_to include(*friend_private_manifests.map(&:name))
