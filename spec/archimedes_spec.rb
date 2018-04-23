@@ -1,5 +1,33 @@
 require_relative '../app/models/archimedes'
 
+describe ArchimedesController do
+  include Rack::Test::Methods
+
+  def app
+    OUTER_APP
+  end
+
+  it 'runs a consignment via the endpoint' do
+    script = {
+      data: {
+        elements: [
+          { name: 'test', script: "'blah'" }
+        ]
+      }
+    }
+
+    md5sum = Digest::MD5.hexdigest(script[:data].to_json).to_sym
+    auth_header(:viewer)
+    json_post('labors/consignment', queries: [
+      script
+    ])
+
+    expect(last_response.status).to eq(200)
+    json = json_body(last_response.body)
+    expect(json).to eq(md5sum => { test: 'blah' })
+  end
+end
+
 describe Archimedes::Manifest do
   it 'runs a basic query' do
     value = 'this is a test'
