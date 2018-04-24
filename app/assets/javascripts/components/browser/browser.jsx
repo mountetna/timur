@@ -17,7 +17,7 @@ import * as ReactRedux from 'react-redux';
 import Magma from '../../magma';
 import Header from '../header';
 import {HelpContainer as Help} from '../help';
-import {TabBarContainer as TabBar} from '../tab_bar';
+import ListMenu from '../list_menu';
 import BrowserTab from './browser_tab';
 
 // Module imports.
@@ -154,13 +154,16 @@ export class Browser extends React.Component{
       handler: this.headerHandler.bind(this)
     };
 
-    let tab_bar_props = {
-      mode,
-      revision,
-      view,
-      current_tab_index,
-      clickTab: this.tabSelectionHandler.bind(this)
-    };
+    let list_items = Object.keys(view.tabs).map((key, index) => ({
+      name: key,
+      id: index,
+    }));
+
+    let list_menu_props = {
+      name: this.state,
+      items: list_items,
+      select: this.tabSelectionHandler.bind(this)
+    }
 
     // Select the current tab data from by the 'current_tab_index'.
     let tab = TabSelector.getTabByIndexOrder(view.tabs, current_tab_index);
@@ -198,8 +201,14 @@ export class Browser extends React.Component{
           </div>
           <Help info='edit' />
         </Header>
-        <TabBar {...tab_bar_props} />
-        <BrowserTab {...browser_tab_props} />
+        <div className='left-column-group'>
+          
+          <ListMenu {...list_menu_props} />
+        </div>
+        <div className='right-column-group2'>
+
+          <BrowserTab {...browser_tab_props} />
+        </div>
       </div>
     );
   }
