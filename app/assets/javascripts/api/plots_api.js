@@ -1,5 +1,5 @@
 // Module imports.
-import {headers, parseJSON, checkStatus} from '../utils/fetch_utils';
+import * as FetchUtils from '../utils/fetch_utils';
 
 export const plotIndexUrl = (queryParams) => {
   let path = Routes.plots_path(PROJECT_NAME);
@@ -26,52 +26,52 @@ export const fetchPlots = ()=>{
   let route_opts = {
     credentials: 'same-origin',
     method: 'POST',
-    headers: headers('json', 'csrf')
+    headers: FetchUtils.headers('json', 'csrf')
   };
-  let route = Routes.plots_fetch_path(PROJECT_NAME);
 
-  return fetch(route, route_opts)
-    .then(checkStatus)
-    .then(parseJSON);
+  let uri = Routes.plots_fetch_path(PROJECT_NAME);
+  return fetch(uri, route_opts)
+    .then(FetchUtils.checkStatus)
+    .then(FetchUtils.parseJSON);
 }
 
 export const createPlot = (plot)=>{
   let route_opts = {
     credentials: 'same-origin',
     method: 'POST',
-    headers: headers('json', 'csrf'),
+    headers: FetchUtils.headers('json', 'csrf'),
     body: JSON.stringify(plot)
   };
-  let route = Routes.manifests_plots_create_path(PROJECT_NAME);
 
-  return fetch(route, route_opts)
-    .then(checkStatus)
-    .then(parseJSON);
+  let uri = Routes.manifests_plots_create_path(PROJECT_NAME);
+  return fetch(uri, route_opts)
+    .then(FetchUtils.checkStatus)
+    .then(FetchUtils.parseJSON);
 };
 
 export const destroyPlot = (plot)=>{
   let route_opts = {
     credentials: 'same-origin',
-    headers: headers('json', 'csrf'),
+    headers: FetchUtils.headers('json', 'csrf'),
     method: 'DELETE'
   };
-  let route = Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.id);
 
-  return fetch(route, route_opts)
-    .then(checkStatus)
-    .then(parseJSON);
+  let uri = Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.id);
+  return fetch(uri, route_opts)
+    .then(FetchUtils.checkStatus)
+    .then(FetchUtils.parseJSON);
 };
 
 export const updatePlot = (plot)=>{
   let route_opts = {
     credentials: 'same-origin',
     method: 'PUT',
-    headers: headers('json', 'csrf'),
+    headers: FetchUtils.headers('json', 'csrf'),
     body: JSON.stringify(plot)
   };
-  let route = Routes.manifests_plots_update_path(PROJECT_NAME, plot.id);
 
-  return fetch(route, route_opts)
-    .then(checkStatus)
-    .then(parseJSON);
+  let uri = Routes.manifests_plots_update_path(PROJECT_NAME, plot.id);
+  return fetch(uri, route_opts)
+    .then(FetchUtils.checkStatus)
+    .then(FetchUtils.parseJSON);
 };

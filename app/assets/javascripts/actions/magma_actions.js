@@ -1,5 +1,4 @@
 import {showMessages} from './message_actions';
-import {Exchange} from './exchange_actions';
 import * as MagmaAPI from '../api/magma_api';
 
 export const addTemplate = (template)=>{
@@ -111,20 +110,17 @@ export const requestDocuments = (args)=>{
       }
     };
   
-    let get_doc_args = [
-      {
-        model_name,
-        record_names,
-        attribute_names,
-        filter,
-        page,
-        page_size,
-        collapse_tables
-      },
-      new Exchange(dispatch, exchange_name)
-    ];
+    let get_doc_args = {
+      model_name,
+      record_names,
+      attribute_names,
+      filter,
+      page,
+      page_size,
+      collapse_tables
+    };
   
-    MagmaAPI.getDocuments(...get_doc_args)
+    MagmaAPI.getDocuments(get_doc_args)
       .then(localSuccess)
       .catch(localError);
     }
@@ -209,8 +205,7 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
       if(error != undefined) error();
     };
 
-    let exchng = new Exchange(dispatch, `revisions-${model_name}`);
-    MagmaAPI.postRevisions(setFormData(revisions, model_name), exchng)
+    MagmaAPI.postRevisions(setFormData(revisions, model_name))
       .then(localSuccess)
       .catch(localError);
   }
@@ -244,8 +239,8 @@ export const requestAnswer = (question, callback)=>{
     if(Array.isArray(question)){
       question_name = [].concat.apply([], question).join('-');
     }
-    let exchange = new Exchange(dispatch, question_name);
-    MagmaAPI.getAnswer(question, exchange)
+
+    MagmaAPI.getAnswer(question)
       .then(localSuccess)
       .catch(localError);
   };

@@ -1,6 +1,5 @@
 // Module imports.
 import {showMessages} from './message_actions';
-import {Exchange} from './exchange_actions';
 import * as ManifestAPI from '../api/manifests_api';
 
 // Add retrieved manifests to the store.
@@ -71,7 +70,7 @@ export const requestManifests = ()=>{
       showErrors(err, dispatch);
     };
 
-    return ManifestAPI.fetchManifests(new Exchange(dispatch,'request-manifest'))
+    return ManifestAPI.fetchManifests()
       .then(localSuccess)
       .catch(localError);
   };
@@ -90,7 +89,7 @@ export const deleteManifest = (manifest_id)=>{
       showErrors(err, dispatch);
     };
 
-   return ManifestAPI.destroyManifest(manifest_id, new Exchange(dispatch, 'delete-manifest'))
+   return ManifestAPI.destroyManifest(manifest_id)
       .then(localSuccess)
       .catch(localError);
   };
@@ -109,7 +108,7 @@ export const saveNewManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    return ManifestAPI.createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
+    return ManifestAPI.createManifest(manifest)
       .then(localSuccess)
       .catch(localError);
   };
@@ -126,7 +125,7 @@ export const saveManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    return ManifestAPI.updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
+    return ManifestAPI.updateManifest(manifest, manifest.id)
       .then(localSuccess)
       .catch(localError);
   };
@@ -144,7 +143,7 @@ export const copyManifest = (manifest)=>{
       showErrors(err, dispatch);
     };
 
-    return ManifestAPI.createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
+    return ManifestAPI.createManifest({...manifest, 'name': `${manifest.name}(copy)`})
       .then(localSuccess)
       .catch(localError);
   };
@@ -207,8 +206,7 @@ export const requestConsignments = (manifests, success, error)=>{
       else throw e;
     };
 
-    let exchng = new Exchange(dispatch, 'consignment list');
-    ManifestAPI.getConsignments(manifests, exchng)
+    ManifestAPI.getConsignments(manifests)
       .then(localSuccess)
       .catch(localError);
   };
@@ -239,9 +237,7 @@ export const requestConsignmentsByManifestId = (manifest_ids, record_name)=>{
       console.log(response);
     };
 
-    let exchng = new Exchange(dispatch, 'consignment list');
-
-    ManifestAPI.getConsignmentsByManifestId(manifest_ids, record_name, exchng)
+    ManifestAPI.getConsignmentsByManifestId(manifest_ids, record_name)
       .then(localSuccess)
       .catch(localError);
   }

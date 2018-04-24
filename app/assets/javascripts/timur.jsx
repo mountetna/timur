@@ -16,7 +16,6 @@ import search from './reducers/search_reducer';
 import manifestsUI from './reducers/manifest_ui_reducer';
 import manifests from './reducers/manifests_reducer';
 import consignments from './reducers/consignments_reducer';
-import exchanges from './reducers/exchanges_reducer';
 import predicates from './reducers/predicates_reducer';
 
 // Components.
@@ -43,7 +42,6 @@ class TimurApplication{
 
     let default_state = {
       consignments: {},
-      exchanges: {},
       magma: {
         models: {},
         tables: {}
@@ -63,7 +61,9 @@ class TimurApplication{
       search: {
         pages: {}
       },
-      timur: {}
+      timur: {
+        loader_ui_stack: []
+      }
     };
 
     let reducers = Redux.combineReducers({

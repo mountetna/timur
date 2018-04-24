@@ -2,7 +2,6 @@
 import {getView} from '../api/view_api';
 import {showMessages} from './message_actions';
 import {requestDocuments} from './magma_actions';
-import {Exchange} from './exchange_actions';
 import * as ManifestActions from './manifest_actions';
 import * as TabSelector from '../selectors/tab_selector';
 import * as Cookies from '../utils/cookies';
@@ -42,11 +41,9 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
       }
 
       // Request the documents needed to populate this 'tab'.
-      let exchange_name = `tab ${tab_nm} for ${model_nm} ${rec_nm}`;
       dispatch(
         requestDocuments({
           model_name: model_nm,
-          exchange_name,
           record_names: [rec_nm],
           attribute_names: TabSelector.getAttributes(tab)
         })
@@ -74,8 +71,7 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
      * First, we pull the view file from the Timur server. This will contain a
      * a data object that reperesents the layout of the page.
      */
-    var exchange = new Exchange(dispatch,`view for ${model_nm} ${rec_nm}`);
-    getView(model_nm, tab_nm, exchange)
+    getView(model_nm, tab_nm)
       .then(localSuccess)
       .catch(localError);
   };
