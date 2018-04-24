@@ -62,6 +62,29 @@ a:hover{
   text-decoration: underline;
 }
 
+.home-page-header-group{
+  margin-left: 0px;
+  padding-left: 15px;
+  border-bottom: 1px solid $dark-color;
+}
+
+.home-page-project-link{
+  color: $dark-grey;
+  margin-left: 15px;
+  padding-top: 15px;
+  display: block;
+  font-size: 16px;
+}
+
+.home-page-project-link:hover{
+  color: $darkest-color;
+}
+
+.home-page-project-role{
+  font-size: 12px;
+  opacity: .5;
+}
+
 .page-detail-group{
   display: inline-block;
   height: 35px;

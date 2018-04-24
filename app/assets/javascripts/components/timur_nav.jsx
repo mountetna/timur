@@ -13,7 +13,7 @@ export class TimurNav extends React.Component{
   }
 
   renderTabs(){
-    var tabs = {
+    let tabs = {
       PLOT: Routes.plots_path(PROJECT_NAME),
       MANIFEST: Routes.manifests_path(PROJECT_NAME),
       MAP: Routes.map_path(PROJECT_NAME),
@@ -35,7 +35,7 @@ export class TimurNav extends React.Component{
   }
 
   renderNavPath(){
-    //remove all leading and trailing slashes
+    //Remove all leading and trailing slashes.
     let str = window.location.pathname.replace(/^\/+|\/+$/g, '')
 
     str = str.replace( /\/|%20/g, (match, i) =>{
@@ -45,10 +45,7 @@ export class TimurNav extends React.Component{
   }
   
   render() {
-    let login_path = Routes.login_path();
-    let login = this.props.user || <a href={ login_path}>Login</a>;
-    var heading;
-    var logo_id;
+    let login = this.props.user || <a href={Routes.login_path()}>Login</a>;
 
     let activity_props = {
       className: 'nav-menu-btn',
@@ -57,7 +54,9 @@ export class TimurNav extends React.Component{
 
     let help_props = {
       className: 'nav-menu-btn',
-      onClick: (e) => this.props.toggleConfig('help_shown') 
+      onClick: (event)=>{
+        this.props.toggleConfig('help_shown');
+      }
     }
 
     return (
@@ -81,15 +80,11 @@ export class TimurNav extends React.Component{
         
           <a className='nav-menu-btn' id='login'>
 
-            { login }
+            {login}
           </a>
-          <IdentifierSearch/>
-          {this.renderTabs()}
-          {this.props.can_edit ? <a {...activity_props}>ACTIVITY</a>: null}
-          <a {...help_props}>
 
-            {this.props.helpShown ? 'HIDE HELP' : 'HELP'}
-          </a>
+          {this.props.mode !== 'home' && <IdentifierSearch />}
+          {this.props.mode !== 'home' && this.renderTabs()}
         </div>
         <div className='logo-group'>
 
