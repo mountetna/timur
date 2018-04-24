@@ -82,8 +82,6 @@ export default class AttributeViewer extends Component{
         msg += ' with class '+attribute.attribute_class+' to a display class!';
         console.log(msg);
         return null;
-        //throw msg;
-        //return null;
     }
   }
 }
