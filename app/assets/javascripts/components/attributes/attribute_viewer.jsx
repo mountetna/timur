@@ -80,8 +80,10 @@ export default class AttributeViewer extends Component{
       default:
         var msg = 'Could not match attribute '+attribute.name;
         msg += ' with class '+attribute.attribute_class+' to a display class!';
-        throw msg;
+        console.log(msg);
         return null;
+        //throw msg;
+        //return null;
     }
   }
 }
