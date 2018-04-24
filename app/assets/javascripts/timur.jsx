@@ -25,11 +25,14 @@ import {BrowserContainer as Browser} from './components/browser/browser';
 import {PlotterContainer as Plotter} from './components/plotter/plotter';
 import {MessagesContainer as Messages} from './components/messages';
 import {TimurNavContainer as TimurNav} from './components/timur_nav';
+import {TimurRootNavContainer as TimurRootNav} from './components/timur_root_nav';
+import { RootContainer as Root } from './components/root';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
 import Activity from './components/activity';
 import Noauth from './components/noauth';
+
 
 
 class TimurApplication{
@@ -95,6 +98,8 @@ class TimurApplication{
 
   createComponent(props){
     switch(props.mode){
+      case 'root':
+        return <Root {...props} />;
       case 'manifests':
         return <Manifests {...props} />;
       case 'browse':
@@ -126,9 +131,11 @@ class TimurApplication{
       <Provider store={this.store}>
 
         <div id='ui-container'>
-
-          <TimurNav {...timur_nav_props} />
-          <Messages />
+          {
+            props.mode === 'root' ? <TimurRootNav {...timur_nav_props} /> :
+              <TimurNav {...timur_nav_props} />
+          }
+          {props.mode !== 'root' && <Messages />}
           {this.createComponent(props)}
         </div>
       </Provider>,
