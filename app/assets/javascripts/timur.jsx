@@ -24,7 +24,7 @@ import {ManifestsContainer as Manifests} from './components/manifest/manifests';
 import {BrowserContainer as Browser} from './components/browser/browser';
 import {PlotterContainer as Plotter} from './components/plotter/plotter';
 import {MessagesContainer as Messages} from './components/messages';
-import {TimurNavContainer as TimurNav} from './components/timur_nav';
+import {TimurNavContainer as TimurNav} from './components/general/timur_nav';
 import {HomePageContainer as HomePage} from './components/home_page';
 
 import ModelMap from './components/model_map';

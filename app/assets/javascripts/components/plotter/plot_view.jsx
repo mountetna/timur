@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Class imports.
-import ButtonBar from '../button_bar';
+import ButtonBar from '../general/button_bar';
 import {ScatterPlotContainer as ScatterPlot} from './plots/scatter_plot';
 import HeatMapPlot from './plots/heat_map_plot';
 import {GenericPlotForm} from './forms/generic_plot_form';

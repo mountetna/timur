@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Class imports.
-import ListMenu from '../list_menu';
+import ListMenu from '../general/list_menu';
 import {PlotViewContainer as PlotView} from './plot_view';
 
 // Module imports.
