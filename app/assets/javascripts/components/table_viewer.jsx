@@ -5,7 +5,6 @@ import Magma from '../magma';
 import { requestTSV } from '../actions/magma_actions';
 
 import Pager from './pager';
-import {HelpContainer as Help} from './help';
 import AttributeViewer from './attributes/attribute_viewer';
 
 const TableColumn = (template, document) => (att_name) => (
@@ -37,7 +36,6 @@ class TableViewer extends React.Component {
         <div className='search'>&#x2315;</div>
         <input className='filter' type='text' onChange={ (e) => onFilter(e.target.value) }/>
         <input className='export' type='button' onClick={ () => requestTSV(model_name, record_names) } value={'\u21af TSV'}/>
-        <Help info='table_viewer'/>
       </Pager>
     );
   }

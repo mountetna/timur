@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 import {IdentifierSearchContainer as IdentifierSearch} from '../identifier_search';
-import {HelpContainer as Help} from '../help';
 import * as TimurActions from '../../actions/timur_actions';
 
 export class TimurNav extends React.Component{
