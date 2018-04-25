@@ -1,4 +1,5 @@
 import {showMessages} from './message_actions';
+import * as TimurActions from './timur_actions';
 import * as MagmaAPI from '../api/magma_api';
 
 export const addTemplate = (template)=>{
@@ -90,6 +91,8 @@ export const requestDocuments = (args)=>{
 
       consumePayload(dispatch, response);
       if(success != undefined) success(response);
+
+      dispatch(TimurActions.popLoaderUI());
     };
   
     let localError = (e) => {
@@ -108,6 +111,8 @@ export const requestDocuments = (args)=>{
         let message = JSON.parse(error.response);
         error(message);
       }
+
+      dispatch(TimurActions.popLoaderUI());
     };
   
     let get_doc_args = {
@@ -124,6 +129,8 @@ export const requestDocuments = (args)=>{
       .then(localSuccess)
       .catch(localError);
     }
+
+    dispatch(TimurActions.pushLoaderUI());
 };
 
 export const requestModels = ()=>{

@@ -23,6 +23,19 @@ export const addTab = (view_name, tab_name, tab)=>{
   };
 };
 
+// See the loader_ui component for infomation on these two actions.
+export const popLoaderUI = ()=>{
+  return {
+    type: 'POP_LOADER_STACK'
+  };
+};
+
+export const pushLoaderUI = ()=>{
+  return {
+    type: 'PUSH_LOADER_STACK'
+  };
+};
+
 /*
  * Request a view for a given model/record/tab and send requests for additional 
  * data.
@@ -60,11 +73,13 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
       }
 
       if(success != undefined) success();
+      dispatch(popLoaderUI());
     };
 
     // Handle an error from 'getView'.
     var localError = (e)=>{
       if(error != undefined) error(e);
+      dispatch(popLoaderUI());
     };
 
     /*
@@ -74,6 +89,8 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
     getView(model_nm, tab_nm)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(pushLoaderUI());
   };
 };
 

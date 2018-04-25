@@ -1,6 +1,7 @@
 // Module imports.
 import {showMessages} from './message_actions';
 import * as ManifestAPI from '../api/manifests_api';
+import * as TimurActions from './timur_actions';
 
 // Add retrieved manifests to the store.
 const loadManifests = (manifestsById)=>({
@@ -64,15 +65,19 @@ export const requestManifests = ()=>{
       }, {});
 
       dispatch(loadManifests(manifests_by_id));
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (err)=>{
       showErrors(err, dispatch);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     return ManifestAPI.fetchManifests()
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   };
 };
 
@@ -83,15 +88,19 @@ export const deleteManifest = (manifest_id)=>{
     let localSuccess = (data)=>{
       dispatch(selectManifest(null));
       dispatch(removeManifest(manifest_id));
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (err)=>{
       showErrors(err, dispatch);
+      dispatch(TimurActions.popLoaderUI());
     };
 
    return ManifestAPI.destroyManifest(manifest_id)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   };
 };
 
@@ -102,15 +111,19 @@ export const saveNewManifest = (manifest)=>{
     let localSuccess = (response)=>{
       dispatch(addManifest(response.manifest));
       dispatch(selectManifest(response.manifest.id));
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (err)=>{
       showErrors(err, dispatch);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     return ManifestAPI.createManifest(manifest)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   };
 };
 
@@ -119,15 +132,19 @@ export const saveManifest = (manifest)=>{
 
     let localSuccess = (response)=>{
       dispatch(editManifest(response.manifest));
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (err)=>{
       showErrors(err, dispatch);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     return ManifestAPI.updateManifest(manifest, manifest.id)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   };
 };
 
@@ -137,15 +154,19 @@ export const copyManifest = (manifest)=>{
     let localSuccess = (response)=>{
       dispatch(addManifest(response.manifest));
       dispatch(selectManifest(response.manifest.id));
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (err)=>{
       showErrors(err, dispatch);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     return ManifestAPI.createManifest({...manifest, 'name': `${manifest.name}(copy)`})
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   };
 };
 
@@ -173,6 +194,7 @@ export const requestConsignments = (manifests, success, error)=>{
       }
 
       if(success != undefined) success(response);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localErrorResponse = (response)=>{
@@ -199,16 +221,20 @@ export const requestConsignments = (manifests, success, error)=>{
       }
 
       if(error != undefined) error(response);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (e) => {
       if (e.response) e.response.json().then(localErrorResponse);
       else throw e;
+      dispatch(TimurActions.popLoaderUI());
     };
 
     ManifestAPI.getConsignments(manifests)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   };
 };
 
@@ -231,15 +257,20 @@ export const requestConsignmentsByManifestId = (manifest_ids, record_name)=>{
       for(let md5sum in response){
         dispatch(addConsignment(md5sum, response[md5sum]));
       }
+
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (response)=>{
       console.log(response);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     ManifestAPI.getConsignmentsByManifestId(manifest_ids, record_name)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   }
 };
 
