@@ -11,7 +11,19 @@ export default class BrowserPane extends React.Component{
 
   renderTitle(){
     let {title, name} = this.props.pane;
-    if(title) return <div className='title' title={name}>{title}</div>;
+
+    if(title){
+      return(
+        <div className='title' title={name}>
+
+          <div className='title-group'>
+
+            {title}
+          </div>
+        </div>
+      );
+    }
+
     return null;
   }
 
@@ -68,7 +80,7 @@ export default class BrowserPane extends React.Component{
 
   render(){
     if(Object.keys(this.props.pane.attributes).length == 0){
-      return <div style={{'display': 'none'}} />;
+      return <div>&nbsp;</div>
     }
 
     return(

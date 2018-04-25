@@ -1,5 +1,5 @@
 import {showMessages} from './message_actions';
-import {Exchange} from './exchange_actions';
+import * as TimurActions from './timur_actions';
 import * as MagmaAPI from '../api/magma_api';
 
 export const addTemplate = (template)=>{
@@ -81,7 +81,10 @@ export const requestDocuments = (args)=>{
   } = args;
 
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
+
     let localSuccess = (response)=>{
+      dispatch(TimurActions.popLoaderUI());
 
       if('error' in response){
         dispatch(showMessages([`There was a ${response.type} error.`]));
@@ -93,7 +96,9 @@ export const requestDocuments = (args)=>{
       if(success != undefined) success(response);
     };
   
-    let localError = (e) => {
+    let localError = (e)=>{
+      dispatch(TimurActions.popLoaderUI());
+
       if (!e.response) {
         dispatch(showMessages([`Something is amiss. ${e}`]));
         return;
@@ -111,23 +116,20 @@ export const requestDocuments = (args)=>{
       }
     };
   
-    let get_doc_args = [
-      {
-        model_name,
-        record_names,
-        attribute_names,
-        filter,
-        page,
-        page_size,
-        collapse_tables
-      },
-      new Exchange(dispatch, exchange_name)
-    ];
-  
-    MagmaAPI.getDocuments(...get_doc_args)
+    let get_doc_args = {
+      model_name,
+      record_names,
+      attribute_names,
+      filter,
+      page,
+      page_size,
+      collapse_tables
+    };
+
+    MagmaAPI.getDocuments(get_doc_args)
       .then(localSuccess)
       .catch(localError);
-    }
+  }
 };
 
 export const requestModels = ()=>{
@@ -183,8 +185,10 @@ const setFormData = (revisions, model_name)=>{
 
 export const sendRevisions = (model_name, revisions, success, error)=>{
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
 
     let localSuccess = (response)=>{
+      dispatch(TimurActions.popLoaderUI());
       consumePayload(dispatch, response);
 
       for(var record_name in revisions){
@@ -200,6 +204,7 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
     };
 
     let localError = (e)=>{
+      dispatch(TimurActions.popLoaderUI());
       e.response.json().then((response)=>{
         let errStr = response.errors.map((error)=> `* ${error}`);
         errStr = [`### The change we sought did not occur.\n\n${errStr}`];
@@ -209,8 +214,7 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
       if(error != undefined) error();
     };
 
-    let exchng = new Exchange(dispatch, `revisions-${model_name}`);
-    MagmaAPI.postRevisions(setFormData(revisions, model_name), exchng)
+    MagmaAPI.postRevisions(setFormData(revisions, model_name))
       .then(localSuccess)
       .catch(localError);
   }
@@ -225,8 +229,10 @@ export const requestTSV = (model_name,filter)=>{
 
 export const requestAnswer = (question, callback)=>{
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
 
     let localSuccess = (response)=>{
+      dispatch(TimurActions.popLoaderUI());
       if('error' in response){
         dispatch(showMessages([`There was a ${response.type} error.`]));
         console.log(response.error);
@@ -237,6 +243,7 @@ export const requestAnswer = (question, callback)=>{
     };
 
     let localError = (error)=>{
+      dispatch(TimurActions.popLoaderUI());
       console.log(error);
     };
 
@@ -244,8 +251,8 @@ export const requestAnswer = (question, callback)=>{
     if(Array.isArray(question)){
       question_name = [].concat.apply([], question).join('-');
     }
-    let exchange = new Exchange(dispatch, question_name);
-    MagmaAPI.getAnswer(question, exchange)
+
+    MagmaAPI.getAnswer(question)
       .then(localSuccess)
       .catch(localError);
   };

@@ -1,19 +1,6 @@
 @import "globals";
 
 .project {
-	.header {
-		>span {
-			display: none;
-		}
-		.model_name {
-			display: none;
-		}
-		.record_name {
-			color: darkorchid
-		}
-		padding: 0;
-		margin-left: 50px;
-	}
 
 	#tab {
 		&.overview {

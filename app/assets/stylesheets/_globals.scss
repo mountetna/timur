@@ -1,66 +1,26 @@
+/* NEW GLOBALS ****************************************************************/
+$font-path: '../fonts' !default;
+$main-font: 'gotham_bookregular';
+$main-font-bold: 'gotham_boldregular';
+$monospace_font: 'Courier New', Courier, monospace;
+
 $body_font: 'Oxygen', sans-serif;
 $value_font: 'Cousine', monospace;
 $talk_font: 'Lora', serif;
 $quote_font: 'Crimson Text', serif;
 
-@mixin text_defaults {
-  color: darkorchid;
-  border: 0px none black;
-  border-bottom: 1px solid forestgreen;
-  font-family: $value_font;
-  font-size: 16px;
-  margin: 0;
-  padding: 0;
-}
+$light-color: #a9d58e;
+$med-color: #22a778;
+$dark-color: #24a684;
+$darkest-color: #19755d;
 
-@mixin text_box {
-  font-family: $value_font;
-  font-size: 14px;
-  border: 0px none black;
-  border-top: 1px solid forestgreen;
-  border-left: 1px solid forestgreen;
-  box-shadow: 2px 2px 3px 1px #ddd inset;
-}
+$light-grey: #eeeeee;
+$med-grey-1: #999999;
+$med-grey-2: #666666;
+$dark-grey: #333333;
 
-@mixin green_link {
-  color: forestgreen;
-  font-weight: bold;
-
-  &:hover {
-    text-decoration: underline
-  }
-
-  span {
-    margin-left: 5px;
-    padding-right: 5px;
-  }
-}
-
-@mixin green_button {
-  cursor: pointer;
-  font-family: $body_font;
-  color: forestgreen;
-  margin-left: 4px;
-  padding: 2px;
-  font-size: 14px;
-  background-color: rgba(forestgreen,0.2);
-  &:disabled {
-    color: grey;
-    border: darkgrey;
-    background-color: rgba(grey,0.2);
-  }
-  &:hover {
-    background-color: rgba(forestgreen,0.3);
-  }
-}
-
-@mixin header_button {
-  cursor: pointer;
-  font-size: 20px;
-  color: forestgreen;
-}
-
-/* NEW GLOBALS ****************************************************************/
+$white: #ffffff;
+$black: #000000;
 
 .left-column-group{
   display: inline-block;
@@ -82,4 +42,163 @@ $quote_font: 'Crimson Text', serif;
 
 input:focus{
   outline-offset: 0px;
+}
+
+body{
+  margin: 0px !important;
+}
+
+#main{
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+a{
+  text-decoration: none;
+  color: olive;
+}
+
+a:hover{
+  text-decoration: underline;
+}
+
+.home-page-header-group{
+  margin-left: 0px;
+  padding-left: 15px;
+  border-bottom: 1px solid $dark-color;
+}
+
+.home-page-project-link{
+  color: $dark-grey;
+  margin-left: 15px;
+  padding-top: 15px;
+  display: block;
+  font-size: 16px;
+}
+
+.home-page-project-link:hover{
+  color: $darkest-color;
+}
+
+.home-page-project-role{
+  font-size: 12px;
+  opacity: .5;
+}
+
+.page-detail-group{
+  display: inline-block;
+  height: 35px;
+  font-family: $body_font;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  color: $dark-grey;
+}
+
+.page-detail-group span{
+  font-size: 0.7em;
+  color: $med-grey-1;
+}
+
+.loader-ui-group,
+.loader-ui-background{
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+}
+
+.loader-ui-background{
+  background: $med-grey-1;
+  opacity: 0.6;
+  z-index: 10001;
+}
+
+@keyframes loader-graphic{
+  to{
+    transform: rotate(360deg);
+  }
+}
+ 
+.loader-graphic:before{
+  position: absolute;
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  margin-left: -75px;
+  border-radius: 50%;
+  border: 13px solid $light-grey;
+  border-top-color: $darkest-color;
+  opacity: 0.8;
+  z-index: 10002;
+  animation: loader-graphic 1.5s linear infinite;
+}
+
+/* OLD GLOBALS ****************************************************************/
+
+$body_font: 'Oxygen', sans-serif;
+$value_font: 'Cousine', monospace;
+$talk_font: 'Lora', serif;
+$quote_font: 'Crimson Text', serif;
+
+@mixin text_defaults {
+  color: darkorchid;
+  border: 0px none black;
+  border-bottom: 1px solid $med-color;
+  font-family: $value_font;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin text_box {
+  font-family: $value_font;
+  font-size: 14px;
+  border: 0px none black;
+  border-top: 1px solid $med-color;
+  border-left: 1px solid $med-color;
+  box-shadow: 2px 2px 3px 1px #ddd inset;
+}
+
+@mixin green_link {
+  color: $med-color;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: underline
+  }
+
+  span {
+    margin-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+@mixin green_button {
+  cursor: pointer;
+  font-family: $body_font;
+  color: $med-color;
+  margin-left: 4px;
+  padding: 2px;
+  font-size: 14px;
+  background-color: rgba(forestgreen, 0.2);
+  &:disabled {
+    color: grey;
+    border: darkgrey;
+    background-color: rgba(grey,0.2);
+  }
+  &:hover {
+    background-color: rgba(forestgreen, 0.3);
+  }
+}
+
+@mixin header_button {
+  cursor: pointer;
+  font-size: 20px;
+  color: $med-color;
 }

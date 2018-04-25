@@ -3,11 +3,12 @@
 
 .loader{
   font-family: $body_font;
+  margin-left: 15px;
 }
 
 .browser {
   position: relative;
-  padding-top: 30px;
+  padding-top: 10px;
   .header {
     font-family: $body_font;
     position: relative;
@@ -41,79 +42,101 @@
       font-size: 25px;
     }
   }
-  .tabbar {
-    font-family: $body_font;
-    display: flex;
-    margin-bottom: 3px;
-    .spacer1 {
-      padding: 5px;
-      border-bottom: 1px solid forestgreen;
-    }
-    .spacer2 {
-      flex-grow: 1;
-      border-bottom: 1px solid forestgreen;
-    }
-    .tab {
-      color: mediumvioletred;
-      background-color: rgba(skyblue,0.2);
-      border: 1px solid forestgreen;
-      display: inline-block;
-      margin-right: -1px;
-      padding: 5px 20px;
-      cursor: pointer;
-    }
-    .revised {
-      background-color: rgba(pink,0.3);
-    }
-    .selected {
-      color: sienna;
-      background-color: rgba(wheat,0.3);
-      cursor: default;
-      border-bottom: none;
-    }
-  }
-  #tab {
-    .pane {
-      margin-bottom: 1px;
-      .title {
-        font-family: $body_font;
-        background-color: rgba(tan,0.3);
-        border: 1px solid tan;
-        border-bottom: none;
-        color: indianred;
-        width: 15%;
-        padding-right: 7px;
-        text-align: right;
-      }
-      .attribute {
-        display: flex;
-        @include default_attribute;
-        .name {
-          border-bottom: 1px solid rgba(forestgreen,0.1);
-          border-right: 1px solid forestgreen;
-          display: inline-block;
-          width: 15%;
-          padding-right: 8px;
-          text-align: right;
-          font-family: $body_font;
-          color: midnightblue;
-        }
-        > .value {
-          border-bottom: 1px solid rgba(forestgreen,0.1);
-          flex-grow: 1;
-          display: inline-block;
-          border-left: 1px solid forestgreen;
-          padding-left: 9px;
-          margin-left: 2px;
-          padding-top: 3px;
-          width: 85%;
-        }
-        &:first-of-type {
-          .name, > .value {
-            border-top: 2px solid forestgreen;
-          }
-        }
-      }
-    }
-  }
+}
+
+/* NEW ************************************************************************/
+#browse{
+  padding-left: 150px;
+}
+
+.browser .header{
+  padding: 0;
+  margin-left: 15px;
+}
+
+.browser-tab-bar{
+  font-family: $body_font;
+  display: flex;
+}
+
+.browser-tab-bar .spacer1{
+  padding: 5px;
+  padding-left: 10px;
+  border-bottom: 1px solid $dark-color;
+}
+
+.browser-tab-bar .spacer2{
+  flex-grow: 1;
+  border-bottom: 1px solid $dark-color;
+}
+
+.browser-tab-bar .tab{
+  color: $dark-grey;
+  border: 1px solid $dark-color;
+  display: inline-block;
+  margin-right: -1px;
+  padding: 5px 20px;
+  cursor: pointer;
+}
+
+.browser-tab-bar .revised{
+  background-color: rgba(pink, 0.3);
+}
+
+.browser-tab-bar .selected{
+  color: $white;
+  background-color: $med-color;
+  cursor: default;
+  border-bottom: none;
+}
+
+#browser-tab{
+  margin-top: 15px;
+}
+
+#browser-tab .pane{
+  margin-bottom: 1px;
+}
+
+#browser-tab .pane .title{
+  font-family: $body_font;
+  border-bottom: 1px $dark-color solid;
+  color: $dark-grey;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+#browser-tab .pane .title-group{
+  width: 170px;
+  text-align: right;
+  background: $dark-color;
+  color: $white;
+  padding: 3px;
+  padding-right: 10px;
+}
+
+#browser-tab .pane .attributes .attribute{
+  display: flex;
+  @include default_attribute;
+}
+
+#browser-tab .pane .attributes .attribute .name{
+  display: inline-block;
+  min-width: 170px;
+  max-width: 170px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  text-align: right;
+  font-family: $body_font;
+  color: $dark-grey;
+}
+
+#browser-tab .pane .attributes .attribute .value{
+  flex-grow: 1;
+  display: inline-block;
+  font-family: $body_font;
+  border-left: 1px solid $med-color;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  color: $dark-grey;
 }

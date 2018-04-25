@@ -18,7 +18,7 @@ import { selectSearchCache } from '../../selectors/search_cache';
 import { cacheSearchPage, setSearchPageSize, setSearchPage } from '../../actions/search_actions';
 
 import SearchQuery from './search_query';
-import Header from '../header';
+import Header from '../general/header';
 import SearchTable from './search_table';
 import SearchQuestion from './search_question';
 

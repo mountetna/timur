@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Class imports.
-import ButtonBar from '../button_bar';
+import ButtonBar from '../general/button_bar';
 import Consignment from '../../models/consignment';
 
 // Module imports.

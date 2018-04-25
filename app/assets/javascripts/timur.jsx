@@ -16,21 +16,21 @@ import search from './reducers/search_reducer';
 import manifestsUI from './reducers/manifest_ui_reducer';
 import manifests from './reducers/manifests_reducer';
 import consignments from './reducers/consignments_reducer';
-import exchanges from './reducers/exchanges_reducer';
 import predicates from './reducers/predicates_reducer';
 
 // Components.
+import {LoaderUIContainer as LoaderUI} from './components/general/loader_ui';
 import {ManifestsContainer as Manifests} from './components/manifest/manifests';
 import {BrowserContainer as Browser} from './components/browser/browser';
 import {PlotterContainer as Plotter} from './components/plotter/plotter';
 import {MessagesContainer as Messages} from './components/messages';
-import {TimurNavContainer as TimurNav} from './components/timur_nav';
+import {TimurNavContainer as TimurNav} from './components/general/timur_nav';
+import {HomePageContainer as HomePage} from './components/home_page';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
 import Activity from './components/activity';
 import Noauth from './components/noauth';
-
 
 class TimurApplication{
   constructor(initial_props, container_id){
@@ -43,7 +43,6 @@ class TimurApplication{
 
     let default_state = {
       consignments: {},
-      exchanges: {},
       magma: {
         models: {},
         tables: {}
@@ -63,7 +62,9 @@ class TimurApplication{
       search: {
         pages: {}
       },
-      timur: {}
+      timur: {
+        loader_ui_stack: []
+      }
     };
 
     let reducers = Redux.combineReducers({
@@ -75,7 +76,6 @@ class TimurApplication{
       manifestsUI,
       manifests,
       consignments,
-      exchanges,
       predicates
     });
 
@@ -95,6 +95,8 @@ class TimurApplication{
 
   createComponent(props){
     switch(props.mode){
+      case 'home':
+        return <HomePage {...props} />;
       case 'manifests':
         return <Manifests {...props} />;
       case 'browse':
@@ -128,8 +130,9 @@ class TimurApplication{
         <div id='ui-container'>
 
           <TimurNav {...timur_nav_props} />
-          <Messages />
+          {props.mode !== 'home' && <Messages />}
           {this.createComponent(props)}
+          <LoaderUI />
         </div>
       </Provider>,
       document.getElementById(containr_id)

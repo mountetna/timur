@@ -11,15 +11,11 @@ export default class MagmaLink extends React.Component{
     ];
 
     let link_props = {
-      'className': 'link',
-      'href': Routes.browse_model_path(...route_args)
+      className: 'link',
+      href: Routes.browse_model_path(...route_args),
+      title: this.props.link
     };
 
-    return(
-      <a {...link_props}>
-
-        {this.props.link}
-      </a>
-    );
+    return <a {...link_props}>{this.props.link}</a>;
   }
 }

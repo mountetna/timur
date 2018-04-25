@@ -1,204 +1,197 @@
+// Common variables
 @import "globals";
 
-$logo_size: 70px;
-
-#header {
+#header-group{
   position: relative;
-  height: 80px;
-  @mixin basic_logo($color,$image) {
-    @keyframes spin {
-      0% {
-        transform-origin: 35px 35px;
-        transform: rotate(0deg);
-      }
-      50% {
-        transform-origin: 35px 35px;
-        transform: rotate(180deg);
-      }
-      100% {
-        transform-origin: 35px 35px;
-        transform: rotate(360deg);
-      }
-    }
-    @keyframes flicker {
-      0% {
-        filter: hue-rotate(0deg);
-      }
-      50% {
-        filter: hue-rotate(180deg);
-      }
-      100% {
-        filter: hue-rotate(360deg);
-      }
-    }
-    &.throb {
-      .halo {
-        animation: flicker 3s infinite alternate, spin 5s linear infinite;
-        opacity: 1;
-        transition: opacity 1s, animation 1s;
-      }
-    }
-    width: $logo_size;
-    height: $logo_size;
-    border: 3px solid $color;
-    border-radius: 50%;
-    display: inline-block;
-    vertical-align:top;
-    position: relative;
-    .image {
-      background-image: url($image);
-      width: $logo_size;
-      height: $logo_size;
-      background-size: cover;
-      background-position: 0px -6px;
-      border-radius: 50%;
-      position: absolute;
-    }
-    .halo {
-      position: absolute;
-      opacity: 0;
-      transition: opacity 1s;
-      z-index: -1;
-      svg {
-        overflow: visible;
-        circle {
-          stroke-width: 1px;
-          stroke: goldenrod;
-          fill: none;
-        }
-        path {
-          stroke-width: 1px;
-          &.long {
-            stroke: goldenrod;
-          }
-          &.short {
-            stroke: indianred;
-          }
-        }
-      }
-    }
-  }
-  #logo {
-    #normal {
-      @include basic_logo(#066306,'/images/Timur.png');
-    }
-    #dev {
-      @include basic_logo(#630606,'/images/Timur-dev.png');
-    }
-    border-bottom: 2px solid forestgreen;
-    display: inline-block;
-    width: 90px;
-    height: 78px;
-  }
-  #help_float {
-    position: absolute;
-    top: 6px;
-    left: 25px;
-  }
-  #heading {
-    font-family: 'Cinzel', serif;
-    font-size: 40px;
-    display: inline-block;
-    color: forestgreen;
-    height: 70px;
-    vertical-align: top;
-  }
-  #nav {
-    font-family: $body_font;
-    position: absolute;
-    width: calc(100% - 90px);
-    left: 90px;
-    bottom: 0px;
-    border-top: 1px solid forestgreen;
-    display: flex;
-    .nav_tab {
-      display: inline-block;
-      font-size: 16px;
-      padding: 0px 25px;
-      border-right: 1px solid forestgreen;
-      border-bottom: 2px solid forestgreen;
-      text-transform: capitalize;
-      background-color: rgba(skyblue,0.1);
-      a {
-        color: teal;
-        cursor: pointer;
-      }
-    }
-    .selected {
-      border-bottom: 0px;
-      background-color: white;
-      &:first-child {
-        border-left: 1px solid rgba(forestgreen,0.1);
-      }
-      a {
-        color: goldenrod;
-        cursor: pointer;
-      }
-    }
-    #identifier_search {
-      border-bottom: 2px solid forestgreen;
-      flex-grow: 1;
-      text-align: right;
-      display: flex;
-      padding: 2px;
-      justify-content: flex-end;
-      position: relative;
-      .search {
-        display: flex;
-        background-color: rgba(teal, 0.1);
-        border: 1px solid forestgreen;
-        border-radius: 12px;
-        margin-right: 5px;
-        padding-right: 5px;
-        align-items: center;
-        span {
-          margin-left: 3px;
-          font-size: 12px;
-          color: darkgreen;
-          margin-right: 2px;
-        }
-        input[type="text"] {
-          border: none;
-          background-color: transparent;
-          color: purple;
-          font-size: 14px;
-          width: 200px;
-          font-family: $value_font;
-        }
-      }
-      .drop_down {
-        display: block;
-        border-top: none;
-        border-bottom: 2px solid forestgreen;
-        background-color: mix(forestgreen,white,20%);
-        display: inline;
-        position: absolute;
-        right: 15px;
-        text-align: left;
-        top: 22px;
-        width: 205px;
-        z-index: 1000;
-        .title {
-          font-family: $body_font;
-          font-weight: bold;
-          background-color: rgba(forestgreen,0.4);
-          font-size: 14px;
-        }
-        .list {
-          font-family: $value_font;
-          font-size: 12px;
-          max-height: 80px;
-          overflow: auto;
-          .identifier {
-            padding: 1px;
-          }
-        }
-      }
-    }
-    #login {
-      color: brown;
-      text-align: right;
-      border-bottom: 2px solid forestgreen;
-    }
-  }
+  width: 100%;
+  height: 90px;
+  margin-bottom: 10px;
+  z-index: 10000;
 }
+
+.logo-group{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 80px;
+  height: 80px;
+}
+
+.logo-group img{
+  width: 80px;
+  height: 80px;
+}
+
+#title-menu{
+  position: absolute;
+  height: 30px;
+  right: 0px;
+  left: 0px;
+  top: 10px;
+  padding-left: 90px;
+}
+
+.title-menu-btn{
+  margin-top: 0px;
+  margin-left: 0px;
+  font-family: $body_font;
+  font-weight: bold;
+  font-size: 1.8em;
+  line-height: 12px;
+  text-align: left;
+  color: $black;
+  background: none;
+  border: 0px;
+  line-height: 17px;
+}
+
+.title-menu-btn-sub{
+  font-size: 0.5em;
+  letter-spacing: 5px;
+  font-family: $body_font;
+  font-weight: normal;
+}
+
+#ucsf-logo{
+  float:right;
+  width: 50px;
+  height: 22px;
+  margin-top: 5px;
+  margin-right: 12px;
+}
+
+#nav-menu{
+  position: absolute;
+  left: 40px;
+  right: 0px;
+  bottom: 5px;
+  height: 30px;
+
+  /* fallback DIY*/
+  background: $med-color;
+
+  /* Safari 4-5, Chrome 1-9 */
+  background: -webkit-gradient(linear, left top, right top, from($light-color), color-stop(0.25, $dark-color), color-stop(0.5, $dark-color), color-stop(0.75, $dark-color), to($dark-color));
+
+  /* Safari 5.1+, Chrome 10+ */
+  background: -webkit-linear-gradient(left, $light-color, $dark-color, $dark-color, $dark-color, $dark-color);
+
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(left, $light-color, $dark-color, $dark-color, $dark-color, $dark-color);
+
+  /* IE 10 */
+  background: -ms-linear-gradient(left, $light-color, $dark-color, $dark-color, $dark-color, $dark-color);
+
+  /* Opera 11.10+ */
+  background: -o-linear-gradient(left, $light-color, $dark-color, $dark-color, $dark-color, $dark-color);
+}
+
+.nav-menu-btn{
+  display: block;
+  position: relative;
+  float: right;
+  margin-right: 15px;
+  padding-top: 7px;
+  height: 20px;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: $body_font;
+  color: $white;
+  font-size: 0.7em;
+}
+
+.nav-menu-btn:hover {
+  text-decoration: underline;
+}
+
+#identifier_search {
+  float: right;
+  margin-top: 3px;
+  padding: 2px;
+  position: relative;
+} 
+
+#identifier_search .search{
+  margin-right: 5px;
+  padding-right: 5px;
+  align-items: center;
+}
+
+#identifier_search .search span{
+  font-size: 12px;
+  color: grey;
+  background-color: white;
+  line-height: 12px;
+  border-top: 1px solid grey;
+  border-left: 1px solid grey;
+  border-bottom: 1px solid grey;
+  padding: 3px;
+  position: relative;
+  top: -1px;
+}
+
+#identifier_search .search input[type="text"]{
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+  border-bottom: 1px solid grey;
+  border-left: none;
+  font-family: "Oxygen", sans-serif;
+  font-size: 13px;
+  width: 200px;
+  outline: none;
+}
+
+#identifier_search .drop_down{
+  border: 1px solid grey;
+  position: absolute;
+  right: 12px;
+  text-align: left;
+  top: 20px;
+  background-color: white;
+  z-index: 1000;
+  width: 219px;
+}
+
+#identifier_search .drop_down a{
+  color: black;
+}
+
+#identifier_search .drop_down .title{
+  font-family: "Oxygen", sans-serif;
+  font-weight: bold;
+  background-color: #22a778;
+  font-size: 12px;
+  color: white;
+  height: 18px;
+  padding-top: 2px;
+  padding-left: 5px;
+}
+
+#identifier_search .drop_down .list{
+  font-family: "Oxygen", sans-serif;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+#identifier_search .drop_down .list .identifier{
+  padding: 2px 5px;
+  white-space: nowrap;
+}
+
+#identifier_search .drop_down .list .identifier:hover{
+  background-color: #f1f1f1;
+}
+
+#login {
+  float: right;
+  pointer-events: none;
+  cursor: default;
+}
+
+.pathname{
+  margin-top: 20px;
+  margin-left: 15px;
+  font-family: $body_font;
+}
+

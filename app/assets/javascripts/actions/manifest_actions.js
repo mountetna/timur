@@ -1,7 +1,7 @@
 // Module imports.
 import {showMessages} from './message_actions';
-import {Exchange} from './exchange_actions';
 import * as ManifestAPI from '../api/manifests_api';
+import * as TimurActions from './timur_actions';
 
 // Add retrieved manifests to the store.
 const loadManifests = (manifestsById)=>({
@@ -51,8 +51,10 @@ export const addConsignment = (md5sum, consignment)=>{
 // Retrieve all user-visible manifests and send to store.
 export const requestManifests = ()=>{
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
 
     let localSuccess = ({manifests})=>{
+      dispatch(TimurActions.popLoaderUI());
 
       // Bail out if there are no manifests.
       if (manifests == null) return;
@@ -68,10 +70,11 @@ export const requestManifests = ()=>{
     };
 
     let localError = (err)=>{
+      dispatch(TimurActions.popLoaderUI());
       showErrors(err, dispatch);
     };
 
-    return ManifestAPI.fetchManifests(new Exchange(dispatch,'request-manifest'))
+    ManifestAPI.fetchManifests()
       .then(localSuccess)
       .catch(localError);
   };
@@ -80,17 +83,20 @@ export const requestManifests = ()=>{
 // Delete a manifest from the database and the store.
 export const deleteManifest = (manifest_id)=>{
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
 
     let localSuccess = (data)=>{
+      dispatch(TimurActions.popLoaderUI());
       dispatch(selectManifest(null));
       dispatch(removeManifest(manifest_id));
     };
 
     let localError = (err)=>{
+      dispatch(TimurActions.popLoaderUI());
       showErrors(err, dispatch);
     };
 
-   return ManifestAPI.destroyManifest(manifest_id, new Exchange(dispatch, 'delete-manifest'))
+   ManifestAPI.destroyManifest(manifest_id)
       .then(localSuccess)
       .catch(localError);
   };
@@ -103,30 +109,37 @@ export const saveNewManifest = (manifest)=>{
     let localSuccess = (response)=>{
       dispatch(addManifest(response.manifest));
       dispatch(selectManifest(response.manifest.id));
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (err)=>{
       showErrors(err, dispatch);
+      dispatch(TimurActions.popLoaderUI());
     };
 
-    return ManifestAPI.createManifest(manifest, new Exchange(dispatch, 'save-new-manifest'))
+    ManifestAPI.createManifest(manifest)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   };
 };
 
 export const saveManifest = (manifest)=>{
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
 
     let localSuccess = (response)=>{
+      dispatch(TimurActions.popLoaderUI());
       dispatch(editManifest(response.manifest));
     };
 
     let localError = (err)=>{
+      dispatch(TimurActions.popLoaderUI());
       showErrors(err, dispatch);
     };
 
-    return ManifestAPI.updateManifest(manifest, manifest.id, new Exchange(dispatch, 'save-manifest'))
+    ManifestAPI.updateManifest(manifest, manifest.id)
       .then(localSuccess)
       .catch(localError);
   };
@@ -134,17 +147,20 @@ export const saveManifest = (manifest)=>{
 
 export const copyManifest = (manifest)=>{
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
 
     let localSuccess = (response)=>{
+      dispatch(TimurActions.popLoaderUI());
       dispatch(addManifest(response.manifest));
       dispatch(selectManifest(response.manifest.id));
     };
 
     let localError = (err)=>{
+      dispatch(TimurActions.popLoaderUI());
       showErrors(err, dispatch);
     };
 
-    return ManifestAPI.createManifest({...manifest, 'name': `${manifest.name}(copy)`}, new Exchange(dispatch, 'copy-manifest'))
+    ManifestAPI.createManifest({...manifest, 'name': `${manifest.name}(copy)`})
       .then(localSuccess)
       .catch(localError);
   };
@@ -174,6 +190,7 @@ export const requestConsignments = (manifests, success, error)=>{
       }
 
       if(success != undefined) success(response);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localErrorResponse = (response)=>{
@@ -200,17 +217,20 @@ export const requestConsignments = (manifests, success, error)=>{
       }
 
       if(error != undefined) error(response);
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (e) => {
       if (e.response) e.response.json().then(localErrorResponse);
       else throw e;
+      dispatch(TimurActions.popLoaderUI());
     };
 
-    let exchng = new Exchange(dispatch, 'consignment list');
-    ManifestAPI.getConsignments(manifests, exchng)
+    ManifestAPI.getConsignments(manifests)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   };
 };
 
@@ -233,17 +253,20 @@ export const requestConsignmentsByManifestId = (manifest_ids, record_name)=>{
       for(let md5sum in response){
         dispatch(addConsignment(md5sum, response[md5sum]));
       }
+
+      dispatch(TimurActions.popLoaderUI());
     };
 
     let localError = (response)=>{
       console.log(response);
+      dispatch(TimurActions.popLoaderUI());
     };
 
-    let exchng = new Exchange(dispatch, 'consignment list');
-
-    ManifestAPI.getConsignmentsByManifestId(manifest_ids, record_name, exchng)
+    ManifestAPI.getConsignmentsByManifestId(manifest_ids, record_name)
       .then(localSuccess)
       .catch(localError);
+
+    dispatch(TimurActions.pushLoaderUI());
   }
 };
 

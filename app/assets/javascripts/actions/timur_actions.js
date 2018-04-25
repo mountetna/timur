@@ -1,10 +1,9 @@
-// Class imports.
-import {getView} from '../api/view_api';
-import {showMessages} from './message_actions';
-import {requestDocuments} from './magma_actions';
-import {Exchange} from './exchange_actions';
+// Module imports.
+import * as ViewAPI from '../api/view_api';
+import * as MagmaActions from './magma_actions';
 import * as ManifestActions from './manifest_actions';
 import * as TabSelector from '../selectors/tab_selector';
+import * as Cookies from '../utils/cookies';
 
 // Flip a config variable.
 export const toggleConfig = (key)=>{
@@ -23,14 +22,30 @@ export const addTab = (view_name, tab_name, tab)=>{
   };
 };
 
+// See the loader_ui component for infomation on these two actions.
+export const popLoaderUI = ()=>{
+  return {
+    type: 'POP_LOADER_STACK'
+  };
+};
+
+export const pushLoaderUI = ()=>{
+  return {
+    type: 'PUSH_LOADER_STACK'
+  };
+};
+
 /*
  * Request a view for a given model/record/tab and send requests for additional 
  * data.
  */
 export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
   return (dispatch)=>{
+    dispatch(pushLoaderUI());
+
     // Handle success from 'getView'.
     var localSuccess = (response)=>{
+      dispatch(popLoaderUI());
 
       let tab;
       if(response.views[model_nm].tabs[tab_nm] == null){
@@ -41,11 +56,9 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
       }
 
       // Request the documents needed to populate this 'tab'.
-      let exchange_name = `tab ${tab_nm} for ${model_nm} ${rec_nm}`;
       dispatch(
-        requestDocuments({
+        MagmaActions.requestDocuments({
           model_name: model_nm,
-          exchange_name,
           record_names: [rec_nm],
           attribute_names: TabSelector.getAttributes(tab)
         })
@@ -66,6 +79,7 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
 
     // Handle an error from 'getView'.
     var localError = (e)=>{
+      dispatch(popLoaderUI());
       if(error != undefined) error(e);
     };
 
@@ -73,9 +87,17 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
      * First, we pull the view file from the Timur server. This will contain a
      * a data object that reperesents the layout of the page.
      */
-    var exchange = new Exchange(dispatch,`view for ${model_nm} ${rec_nm}`);
-    getView(model_nm, tab_nm, exchange)
+    ViewAPI.getView(model_nm, tab_nm)
       .then(localSuccess)
       .catch(localError);
   };
 };
+
+export const addTokenUser = (user)=>{
+  return {
+    type: 'ADD_TOKEN_USER',
+    token: Cookies.getItem('JANUS_TOKEN')
+  };
+};
+
+

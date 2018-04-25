@@ -15,9 +15,8 @@ import * as ReactRedux from 'react-redux';
 
 // Class imports.
 import Magma from '../../magma';
-import Header from '../header';
-import {HelpContainer as Help} from '../help';
-import {TabBarContainer as TabBar} from '../tab_bar';
+import Header from '../general/header';
+import {TabBarContainer as TabBar} from '../general/tab_bar';
 import BrowserTab from './browser_tab';
 
 // Module imports.
@@ -125,28 +124,21 @@ export class Browser extends React.Component{
     }
   }
 
-  renderEmpytView(){
-    return(
-      <div className='browser'>
-
-        <div id='loader-container'>
-
-          <div className='loader'>
-
-            {'Loading...'}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   render(){
 
     let {mode, current_tab_index} = this.state;
-    let {can_edit, revision, view, template, doc} = this.props;
+    let {
+      can_edit,
+      revision,
+      view,
+      template,
+      doc,
+      model_name,
+      record_name
+    } = this.props;
 
     // Render an empty view if there is no view data yet.
-    if(!view || !template || !doc) return this.renderEmpytView();
+    if(!view || !template || !doc) return null;
 
     let header_props = {
       mode,
@@ -188,15 +180,11 @@ export class Browser extends React.Component{
 
         <Header {...header_props}>
 
-          <div className='model-name'>
+          <div className='page-detail-group'>
 
-            {this.camelize(this.props.model_name)}
+            <span>{`${model_name} : `}</span>
+            {record_name}
           </div>
-          <div className='record-name'>
-
-            {this.props.record_name}
-          </div>
-          <Help info='edit' />
         </Header>
         <TabBar {...tab_bar_props} />
         <BrowserTab {...browser_tab_props} />
