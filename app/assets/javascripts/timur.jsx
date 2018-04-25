@@ -19,6 +19,7 @@ import consignments from './reducers/consignments_reducer';
 import predicates from './reducers/predicates_reducer';
 
 // Components.
+import {LoaderUIContainer as LoaderUI} from './components/general/loader_ui';
 import {ManifestsContainer as Manifests} from './components/manifest/manifests';
 import {BrowserContainer as Browser} from './components/browser/browser';
 import {PlotterContainer as Plotter} from './components/plotter/plotter';
@@ -75,7 +76,6 @@ class TimurApplication{
       manifestsUI,
       manifests,
       consignments,
-      exchanges,
       predicates
     });
 
@@ -132,6 +132,7 @@ class TimurApplication{
           <TimurNav {...timur_nav_props} />
           {props.mode !== 'home' && <Messages />}
           {this.createComponent(props)}
+          <LoaderUI />
         </div>
       </Provider>,
       document.getElementById(containr_id)
