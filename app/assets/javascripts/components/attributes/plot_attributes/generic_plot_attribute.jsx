@@ -1,6 +1,5 @@
 // Framework libraries.
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
 
 export class GenericPlotAttribute extends React.Component{
   constructor(props){

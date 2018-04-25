@@ -17,6 +17,7 @@
 @import "navbar";
 @import "messages";
 @import "browser";
+@import "browser_clinical";
 @import "plotter";
 @import "table";
 @import "datepicker";
@@ -31,6 +32,7 @@
 @import "model_map";
 @import "list_selector";
 @import "predicate";
+@import "settings.scss";
 
 @import "~prism/prism";
 

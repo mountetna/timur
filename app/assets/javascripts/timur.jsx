@@ -18,6 +18,7 @@ import manifests from './reducers/manifests_reducer';
 import consignments from './reducers/consignments_reducer';
 import exchanges from './reducers/exchanges_reducer';
 import predicates from './reducers/predicates_reducer';
+import dictionary from './reducers/dictionary_reducer';
 
 // Components.
 import {ManifestsContainer as Manifests} from './components/manifest/manifests';
@@ -25,6 +26,7 @@ import {BrowserContainer as Browser} from './components/browser/browser';
 import {PlotterContainer as Plotter} from './components/plotter/plotter';
 import {MessagesContainer as Messages} from './components/messages';
 import {TimurNavContainer as TimurNav} from './components/timur_nav';
+import {Settings} from './components/settings/settings';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
@@ -63,7 +65,8 @@ class TimurApplication{
       search: {
         pages: {}
       },
-      timur: {}
+      timur: {},
+      dictionary: {}
     };
 
     let reducers = Redux.combineReducers({
@@ -76,7 +79,8 @@ class TimurApplication{
       manifests,
       consignments,
       exchanges,
-      predicates
+      predicates,
+      dictionary
     });
 
     let middlewares = [
@@ -102,9 +106,11 @@ class TimurApplication{
       case 'map':
         return <ModelMap />;
       case 'plots':
-        return <Plotter {...props}/>;
+        return <Plotter {...props} />;
       case 'search':
-        return <Search  {...props} />; 
+        return <Search {...props} />;
+      case 'settings':
+        return <Settings {...props} />;
       case 'activity':
         return <Activity {...props} />;
       case 'noauth':

@@ -11,6 +11,11 @@ Rails.application.routes.draw do
   get 'no_auth'=> 'welcome#no_auth', as: :no_auth
   get 'auth_error'=> 'welcome#auth_error', as: :auth_error
 
+  # setting_controller.rb
+  get ':project_name/settings/' => 'settings#index'
+  post ':project_name/settings/update_view_json'  => 'settings#update_view_json', as: :update_view_json
+  get ':project_name/settings/:settings_page' => 'settings#index'
+
   # browse_controller.rb
   get ':project_name'=> 'browse#index', as: :project
   get ':project_name/browse'=> 'browse#index', as: :browse

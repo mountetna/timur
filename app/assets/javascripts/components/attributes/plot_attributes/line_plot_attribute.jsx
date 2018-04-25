@@ -92,13 +92,6 @@ const mapStateToProps = (state = {}, own_props)=>{
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
-    initialized: (component)=>{
-      dispatch({
-        type: 'INITIALIZED',
-        component
-      });
-    },
-
     fetchConsignment: (manifest_id, record_name)=>{
       dispatch(ManifestActions.requestConsignmentsByManifestId(
         [manifest_id],

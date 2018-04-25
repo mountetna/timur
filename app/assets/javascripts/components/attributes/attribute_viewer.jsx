@@ -14,37 +14,52 @@ import CollectionAttribute from './collection_attribute';
 import TextAttribute from './text_attribute';
 import {MetricsAttributeContainer as MetricsAttribute} from './metrics_attribute';
 
-// The plots.
-import {LinePlotAttributeContainer as LinePlotAttribute} from './plot_attributes/line_plot_attribute';
-import {BoxPlotAttributeContainer as BoxPlotAttribute} from './plot_attributes/box_plot_attribute';
-import {BarGraphAttributeContainer as BarGraphAttribute} from './plot_attributes/bar_graph_attribute';
-import {BarPlotAttributeContainer as BarPlotAttribute} from './plot_attributes/bar_plot_attribute';
+// The plot components.
+import {LinePlotAttributeContainer} from './plot_attributes/line_plot_attribute';
+import {BoxPlotAttributeContainer} from './plot_attributes/box_plot_attribute';
+import {BarGraphAttributeContainer} from './plot_attributes/bar_graph_attribute';
+import {BarPlotAttributeContainer} from './plot_attributes/bar_plot_attribute';
 import {StackedBarPlotAttributeContainer} from './plot_attributes/stacked_bar_attribute';
-import {SwarmPlotAttributeContainer as SwarmPlotAttribute} from './plot_attributes/swarm_plot_attribute';
-import {HistogramAttributeContainer as HistogramAttribute} from './plot_attributes/histogram_attribute';
+import {SwarmPlotAttributeContainer} from './plot_attributes/swarm_plot_attribute';
+import {HistogramAttributeContainer} from './plot_attributes/histogram_attribute';
+
+// The clinical components.
+import {DemographicAttributeContainer} from './clinical_attributes/demographic_attribute';
+import {DiagnosticAttributeContainer} from './clinical_attributes/diagnostic_attribute';
+import {TreatmentAttributeContainer} from './clinical_attributes/treatment_attribute';
+import {AdverseEventAttributeContainer} from './clinical_attributes/adverse_event_attribute';
 
 export default class AttributeViewer extends Component{
   render(){
     let {attribute} = this.props;
-
     switch(attribute.attribute_class){
+
+      // Plot components.
       case 'LinePlotAttribute':
-        return <LinePlotAttribute {...this.props} />;
+        return <LinePlotAttributeContainer {...this.props} />;
       case 'BoxPlotAttribute':
-        return <BoxPlotAttribute {...this.props} />;
+        return <BoxPlotAttributeContainer {...this.props} />;
       case 'BarGraphAttribute':
-        return <BarGraphAttribute {...this.props} />;
+        return <BarGraphAttributeContainer {...this.props} />;
       case 'BarPlotAttribute':
-        return <BarPlotAttribute {...this.props} />;
+        return <BarPlotAttributeContainer {...this.props} />;
       case 'StackedBarPlotAttribute':
         return <StackedBarPlotAttributeContainer {...this.props} />;
       case 'SwarmAttribute':
-        return <SwarmPlotAttribute {...this.props} />;
+        return <SwarmPlotAttributeContainer {...this.props} />;
       case 'HistogramAttribute':
-        return <HistogramAttribute {...this.props} />;
+        return <HistogramAttributeContainer {...this.props} />;
 
-      case 'BoxPlotAttribute':
-        return <BoxPlotAttribute {...this.props} />;
+      // Clinical components.
+      case 'DemographicAttribute':
+        return <DemographicAttributeContainer {...this.props} />;
+      case 'DiagnosticAttribute':
+        return <DiagnosticAttributeContainer {...this.props} />;
+      case 'TreatmentAttribute':
+        return <TreatmentAttributeContainer {...this.props} />;
+      case 'AdverseEventAttribute':
+        return <AdverseEventAttributeContainer {...this.props} />;
+
       case 'TextAttribute':
         return <TextAttribute {...this.props} />;
       case 'MarkdownAttribute':
