@@ -186,7 +186,6 @@ export class Browser extends React.Component{
             <span>{`${PROJECT_NAME} > BROWSER > ${model_name} > `}</span>
             {record_name}
           </div>
-          <Help info='edit' />
         </Header>
         <TabBar {...tab_bar_props} />
         <BrowserTab {...browser_tab_props} />
