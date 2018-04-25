@@ -59,9 +59,8 @@ const views = (old_views = {}, action)=>{
   }
 };
 
-const timurReducer = function(timur, action) {
-  if (!timur) timur = { }
-  switch(action.type) {
+const timurReducer = function(timur = {}, action){
+  switch(action.type){
     case 'ADD_TAB':
     case 'ADD_VIEW':
       return {
@@ -72,13 +71,26 @@ const timurReducer = function(timur, action) {
       return {
         ...timur,
         [action.key]: timur.hasOwnProperty(action.key) ? !timur[action.key] : true
-      }
+      };
     case 'ADD_TOKEN_USER':
       return {
         ...timur,
         user: parseToken(action.token)
-      }
-
+      };
+    case 'POP_LOADER_STACK':
+      let test = timur.loader_ui_stack.slice(0);
+      test.pop();
+      return {
+        ...timur,
+        loader_ui_stack: test
+      };
+    case 'PUSH_LOADER_STACK':
+      let test_2 = timur.loader_ui_stack.slice(0);
+      test_2.push(null);
+      return {
+        ...timur,
+        loader_ui_stack:test_2
+      };
     default:
       return timur;
   }
