@@ -98,6 +98,46 @@ a:hover{
   color: $med-grey-1;
 }
 
+.loader-ui-group,
+.loader-ui-background{
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+}
+
+.loader-ui-background{
+  background: $med-grey-1;
+  opacity: 0.6;
+  z-index: 10001;
+}
+
+@keyframes loader-graphic{
+  to{
+    transform: rotate(360deg);
+  }
+}
+ 
+.loader-graphic:before{
+  position: absolute;
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  margin-left: -75px;
+  border-radius: 50%;
+  border: 13px solid $light-grey;
+  border-top-color: $darkest-color;
+  opacity: 0.8;
+  z-index: 10002;
+  animation: loader-graphic 1.5s linear infinite;
+}
+
 /* OLD GLOBALS ****************************************************************/
 
 $body_font: 'Oxygen', sans-serif;
