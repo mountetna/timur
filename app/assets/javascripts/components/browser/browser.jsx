@@ -125,21 +125,6 @@ export class Browser extends React.Component{
     }
   }
 
-  renderEmpytView(){
-    return(
-      <div className='browser'>
-
-        <div id='loader-container'>
-
-          <div className='loader'>
-
-            {'Loading...'}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   render(){
 
     let {mode, current_tab_index} = this.state;
@@ -154,7 +139,7 @@ export class Browser extends React.Component{
     } = this.props;
 
     // Render an empty view if there is no view data yet.
-    if(!view || !template || !doc) return this.renderEmpytView();
+    if(!view || !template || !doc) return null;
 
     let header_props = {
       mode,
