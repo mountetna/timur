@@ -16,7 +16,6 @@ import * as ReactRedux from 'react-redux';
 // Class imports.
 import Magma from '../../magma';
 import Header from '../general/header';
-import {HelpContainer as Help} from '../help';
 import {TabBarContainer as TabBar} from '../general/tab_bar';
 import BrowserTab from './browser_tab';
 
@@ -183,7 +182,7 @@ export class Browser extends React.Component{
 
           <div className='page-detail-group'>
 
-            <span>{`${PROJECT_NAME} > BROWSER > ${model_name} > `}</span>
+            <span>{`${model_name} : `}</span>
             {record_name}
           </div>
         </Header>
