@@ -1,7 +1,6 @@
-// Class imports.
-import {getView} from '../api/view_api';
-import {showMessages} from './message_actions';
-import {requestDocuments} from './magma_actions';
+// Module imports.
+import * as ViewAPI from '../api/view_api';
+import * as MagmaActions from './magma_actions';
 import * as ManifestActions from './manifest_actions';
 import * as TabSelector from '../selectors/tab_selector';
 import * as Cookies from '../utils/cookies';
@@ -42,8 +41,11 @@ export const pushLoaderUI = ()=>{
  */
 export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
   return (dispatch)=>{
+    dispatch(pushLoaderUI());
+
     // Handle success from 'getView'.
     var localSuccess = (response)=>{
+      dispatch(popLoaderUI());
 
       let tab;
       if(response.views[model_nm].tabs[tab_nm] == null){
@@ -55,7 +57,7 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
 
       // Request the documents needed to populate this 'tab'.
       dispatch(
-        requestDocuments({
+        MagmaActions.requestDocuments({
           model_name: model_nm,
           record_names: [rec_nm],
           attribute_names: TabSelector.getAttributes(tab)
@@ -73,24 +75,21 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
       }
 
       if(success != undefined) success();
-      dispatch(popLoaderUI());
     };
 
     // Handle an error from 'getView'.
     var localError = (e)=>{
-      if(error != undefined) error(e);
       dispatch(popLoaderUI());
+      if(error != undefined) error(e);
     };
 
     /*
      * First, we pull the view file from the Timur server. This will contain a
      * a data object that reperesents the layout of the page.
      */
-    getView(model_nm, tab_nm)
+    ViewAPI.getView(model_nm, tab_nm)
       .then(localSuccess)
       .catch(localError);
-
-    dispatch(pushLoaderUI());
   };
 };
 

@@ -81,7 +81,10 @@ export const requestDocuments = (args)=>{
   } = args;
 
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
+
     let localSuccess = (response)=>{
+      dispatch(TimurActions.popLoaderUI());
 
       if('error' in response){
         dispatch(showMessages([`There was a ${response.type} error.`]));
@@ -91,11 +94,11 @@ export const requestDocuments = (args)=>{
 
       consumePayload(dispatch, response);
       if(success != undefined) success(response);
-
-      dispatch(TimurActions.popLoaderUI());
     };
   
-    let localError = (e) => {
+    let localError = (e)=>{
+      dispatch(TimurActions.popLoaderUI());
+
       if (!e.response) {
         dispatch(showMessages([`Something is amiss. ${e}`]));
         return;
@@ -111,8 +114,6 @@ export const requestDocuments = (args)=>{
         let message = JSON.parse(error.response);
         error(message);
       }
-
-      dispatch(TimurActions.popLoaderUI());
     };
   
     let get_doc_args = {
@@ -124,13 +125,11 @@ export const requestDocuments = (args)=>{
       page_size,
       collapse_tables
     };
-  
+
     MagmaAPI.getDocuments(get_doc_args)
       .then(localSuccess)
       .catch(localError);
-    }
-
-    dispatch(TimurActions.pushLoaderUI());
+  }
 };
 
 export const requestModels = ()=>{
@@ -186,8 +185,10 @@ const setFormData = (revisions, model_name)=>{
 
 export const sendRevisions = (model_name, revisions, success, error)=>{
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
 
     let localSuccess = (response)=>{
+      dispatch(TimurActions.popLoaderUI());
       consumePayload(dispatch, response);
 
       for(var record_name in revisions){
@@ -203,6 +204,7 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
     };
 
     let localError = (e)=>{
+      dispatch(TimurActions.popLoaderUI());
       e.response.json().then((response)=>{
         let errStr = response.errors.map((error)=> `* ${error}`);
         errStr = [`### The change we sought did not occur.\n\n${errStr}`];
@@ -227,8 +229,10 @@ export const requestTSV = (model_name,filter)=>{
 
 export const requestAnswer = (question, callback)=>{
   return (dispatch)=>{
+    dispatch(TimurActions.pushLoaderUI());
 
     let localSuccess = (response)=>{
+      dispatch(TimurActions.popLoaderUI());
       if('error' in response){
         dispatch(showMessages([`There was a ${response.type} error.`]));
         console.log(response.error);
@@ -239,6 +243,7 @@ export const requestAnswer = (question, callback)=>{
     };
 
     let localError = (error)=>{
+      dispatch(TimurActions.popLoaderUI());
       console.log(error);
     };
 

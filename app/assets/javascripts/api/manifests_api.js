@@ -64,7 +64,7 @@ export const getConsignments = (manifests)=>{
   };
 
   let uri = Routes.consignment_json_path(PROJECT_NAME);
-  return FetchUtils.fetch(uri, route_opts)
+  return fetch(uri, route_opts)
     .then(FetchUtils.checkStatus)
     .then(FetchUtils.parseJSON);
 };
