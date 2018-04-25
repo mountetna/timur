@@ -25,7 +25,7 @@ export class LoaderUI extends React.Component{
 
     this.state = {
       display: 'none',
-      delay: 1500, // In milliseconds.
+      delay: 1000, // In milliseconds.
       timeout: null,
       self: this
     };
