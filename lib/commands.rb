@@ -21,14 +21,12 @@ class Timur
       Sequel.extension(:migration)
       db = Timur.instance.db
 
-      Timur.instance.config(:project_path).split(/\s+/).each do |project_dir|
-        if version
-          puts "Migrating to version #{version}"
-          #Sequel::Migrator.run(db, File.join(project_dir, 'migrations'), table: table, target: version.to_i)
-        else
-          puts 'Migrating to latest'
-          #Sequel::Migrator.run(db, File.join(project_dir, 'migrations'), table: table)
-        end
+      if version
+        puts "Migrating to version #{version}"
+        Sequel::Migrator.run(db, 'db/migrations', target: version.to_i)
+      else
+        puts 'Migrating to latest'
+        Sequel::Migrator.run(db, 'db/migrations')
       end
     end
 
