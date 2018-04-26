@@ -54,7 +54,7 @@ class Timur
 
       post ':project_name/plots/fetch', action: 'plots#fetch'
       post ':project_name/plots/create', action: 'plots#create'
-      put ':project_name/plots/update/:id', action: 'plots#update'
+      post ':project_name/plots/update/:id', action: 'plots#update'
       delete ':project_name/plots/destroy/:id', action: 'plots#destroy'
 
       # manifest_controller.rb

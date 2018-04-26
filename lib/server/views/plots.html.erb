@@ -20,10 +20,10 @@
           mode: 'plots',
           environment: '<%= Timur.instance.environment %>',
           manifestsUI: {
-            selected: '<%= @params[:manifest_id] %>' ? <%= @params[:manifest_id] %> : null
+            selected: <%= @params[:manifest_id] ? @params[:manifest_id] : 'null' %>
           },
           plots: {
-            selected: '<%= @params[:id] %>' ? <%= @params[:id] %> : null
+            selected: <%= @params[:id] ? @params[:id] : 'null' %>
           }
         },
         'root'

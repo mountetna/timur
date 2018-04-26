@@ -52,7 +52,7 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.example_status_persistence_file_path = 'spec/examples.txt'
   #config.warnings = true
-  
+
   config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
@@ -109,6 +109,27 @@ FactoryBot.define do
           { name: 'value', script: '1+1' }
         ]
       }.to_json)
+    end
+
+    trait :public do
+      access 'public'
+    end
+
+    trait :private do
+      access 'private'
+    end
+  end
+
+  factory :plot do
+    to_create(&:save)
+    project 'labors'
+    sequence :name do |n|
+      "plot #{n}"
+    end
+
+    trait :scatter do
+      plot_type 'scatter'
+      configuration(plot: 'ok')
     end
 
     trait :public do

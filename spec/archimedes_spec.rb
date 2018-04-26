@@ -15,12 +15,10 @@ describe ArchimedesController do
         ]
       }
     }
-
     md5sum = Digest::MD5.hexdigest(script[:data].to_json).to_sym
+
     auth_header(:viewer)
-    json_post('labors/consignment', queries: [
-      script
-    ])
+    json_post('labors/consignment', queries: [ script ])
 
     expect(last_response.status).to eq(200)
     json = json_body(last_response.body)
