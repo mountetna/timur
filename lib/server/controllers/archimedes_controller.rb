@@ -29,7 +29,8 @@ class ArchimedesController <  Timur::Controller
     ]
 
     # Translate the manifests into a form usable by DataManifest.
-    data = Hash[manifest[:data].map{|(k,v)| [k.to_sym,v]}]
+    data = JSON.parse(manifest[:data].to_json, symbolize_names: true)
+
     data[:elements].each do |manifest_element|
       manifest_elements.push([
         manifest_element[:name],
