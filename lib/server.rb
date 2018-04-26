@@ -8,11 +8,14 @@ require_relative './server/controllers/plots_controller'
 class Timur
   class Server < Etna::Server
     # root path
-    get '/', action: 'welcome#index'
+    get '/' do
+      erb_view(:welcome)
+    end
 
     # welcome_controller.rb
-    get 'no_auth', action: 'welcome#no_auth', as: :no_auth
-    get 'login', action: 'welcome#login', as: :login
+    get 'no_auth' do
+      erb_view(:no_auth)
+    end
 
     using auth: { user: { can_view?: :project_name } } do
       # activity_controller.rb
