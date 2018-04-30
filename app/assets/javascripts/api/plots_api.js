@@ -42,7 +42,7 @@ export const createPlot = (plot)=>{
     headers: headers('json', 'csrf'),
     body: JSON.stringify(plot)
   };
-  let route = Routes.manifests_plots_create_path(PROJECT_NAME);
+  let route = Routes.plots_create_path(PROJECT_NAME);
 
   return fetch(route, route_opts)
     .then(checkStatus)
@@ -55,7 +55,7 @@ export const destroyPlot = (plot)=>{
     headers: headers('json', 'csrf'),
     method: 'DELETE'
   };
-  let route = Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.id);
+  let route = Routes.plots_destroy_path(PROJECT_NAME, plot.id);
 
   return fetch(route, route_opts)
     .then(checkStatus)
@@ -69,7 +69,7 @@ export const updatePlot = (plot)=>{
     headers: headers('json', 'csrf'),
     body: JSON.stringify(plot)
   };
-  let route = Routes.manifests_plots_update_path(PROJECT_NAME, plot.id);
+  let route = Routes.plots_update_path(PROJECT_NAME, plot.id);
 
   return fetch(route, route_opts)
     .then(checkStatus)

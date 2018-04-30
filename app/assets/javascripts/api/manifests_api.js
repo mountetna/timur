@@ -4,7 +4,7 @@ import {headers, parseJSON, checkStatus} from '../utils/fetch_utils';
 export const fetchManifests = (exchange)=>{
   let route_opts = {
     credentials: 'same-origin',
-    method: 'POST',
+    method: 'GET',
     headers: headers('json', 'csrf')
   };
 
@@ -68,7 +68,7 @@ export const getConsignments = (manifests, exchange)=>{
     body: JSON.stringify({queries: manifests})
   };
 
-  let exchangePromise = exchange.fetch(Routes.consignment_json_path(PROJECT_NAME), route_opts)
+  let exchangePromise = exchange.fetch(Routes.consignment_path(PROJECT_NAME), route_opts)
     .then(checkStatus)
     .then(parseJSON)
 
@@ -84,8 +84,7 @@ export const getConsignmentsByManifestId = (manifest_ids, record_name, exchange)
     body: JSON.stringify({manifest_ids, record_name})
   };
 
-  let uri = `/${PROJECT_NAME}/json/consignment_by_manifest_id_json`;
-  let exchangePromise = exchange.fetch(uri, route_opts)
+  let exchangePromise = exchange.fetch(Routes.consignment_path(PROJECT_NAME), route_opts)
     .then(checkStatus)
     .then(parseJSON)
 

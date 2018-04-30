@@ -16,7 +16,7 @@ export const getTSVForm = (data)=>{
   let form = create(
     'form',
     {
-      action: Routes.table_tsv_path(PROJECT_NAME),
+      action: Routes.magma_retrieve_tsv_path(PROJECT_NAME),
       method: 'POST'
     }
   );
@@ -48,7 +48,7 @@ export const getTSV = (model_name, record_names, exchange)=>{
     body: JSON.stringify({model_name, record_names})
   };
 
-  let fetch_opts = [Routes.table_tsv_path(PROJECT_NAME), route_opts];
+  let fetch_opts = [Routes.magma_retrieve_tsv_path(PROJECT_NAME), route_opts];
   return exchange.fetch(...fetch_opts)
     .then(FetchUtils.checkStatus)
     .then(FetchUtils.makeBlob)
@@ -63,7 +63,7 @@ export const getDocuments = (doc_args, exchange)=>{
     body: JSON.stringify(doc_args)
   };
 
-  let fetch_opts = [Routes.records_json_path(PROJECT_NAME), route_opts];
+  let fetch_opts = [Routes.magma_retrieve_path(PROJECT_NAME), route_opts];
   return exchange.fetch(...fetch_opts)
     .then(FetchUtils.checkStatus)
     .then(FetchUtils.parseJSON);
@@ -77,7 +77,7 @@ export const postRevisions = (revision_data, exchange)=>{
     body: revision_data
   };
 
-  let fetch_opts = [Routes.update_model_path(PROJECT_NAME), route_opts];
+  let fetch_opts = [Routes.magma_update_path(PROJECT_NAME), route_opts];
   return exchange.fetch(...fetch_opts)
     .then(FetchUtils.checkStatus)
     .then(FetchUtils.parseJSON);
@@ -91,7 +91,7 @@ export const getAnswer = (question, exchange)=>{
     body: JSON.stringify({question})
   };
 
-  let fetch_opts = [Routes.question_json_path(PROJECT_NAME), route_opts];
+  let fetch_opts = [Routes.magma_query_path(PROJECT_NAME), route_opts];
   return exchange.fetch(...fetch_opts)
     .then(FetchUtils.checkStatus)
     .then(FetchUtils.parseJSON);

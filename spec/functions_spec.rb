@@ -77,12 +77,12 @@ describe Archimedes::Default do
       vec2: '[ 1, 2, 3 ]',
       vec3: '[ 1, 0, 0 ]',
       vec4: '[ 4, 5, 6 ]',
-      any1: 'any(@vec1 == @vec2)',
-      any2: 'any(@vec1 == @vec3)',
-      any2: 'any(@vec1 == @vec4)'
+      all1: 'all(@vec1 == @vec2)',
+      all2: 'all(@vec1 == @vec3)',
+      all3: 'all(@vec1 == @vec4)'
     )
-    expect(payload['any1']).to be_truthy
-    expect(payload['any2']).to be_falsy
-    expect(payload['any3']).to be_falsy
+    expect(payload['all1']).to be_truthy
+    expect(payload['all2']).to be_falsy
+    expect(payload['all3']).to be_falsy
   end
 end

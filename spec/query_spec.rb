@@ -2,10 +2,9 @@ require_relative '../app/models/archimedes'
 
 describe Archimedes::Table do
   it 'should retrieve a table of data from Magma' do
-    stub_request(:post, 'https://magma-dev.ucsf-immunoprofiler.org//query')
+    stub_request(:post, Timur.instance.config(:magma)[:host]+'/query')
       .with(
         body: {
-          token:'xyzzy', 
           project_name:'timur', 
           query: ['match', ['games', 'patron', 'name', '::equals', 'Zeus'], '::all', [['contestant', 'city'], ['event'], ['score']]]
         }.to_json

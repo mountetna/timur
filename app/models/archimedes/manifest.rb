@@ -86,7 +86,7 @@ module Archimedes
         rescue RLTK::NotInLanguage
           raise Archimedes::LanguageError, "Could not resolve @#{variable} = #{query}"
         rescue Magma::ClientError => e
-          raise Archimedes::LanguageError.new("Magma Client error", e.body)
+          raise Archimedes::LanguageError, e.body
         rescue ArgumentError => e
           raise Archimedes::LanguageError, "In @#{variable}, #{e.message}"
         rescue TypeError => e

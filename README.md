@@ -29,33 +29,21 @@ by a component using d3.js.
 
 ## Search
 
-(This section is mostly theoretical.)
+The Search interface allows simple filtering of records by their attribute data and bulk download via TSV.
+The filter uses the Magma /retrieve api's filter syntax, described in detail here: https://github.com/mountetna/magma/wiki/Retrieve
 
-Timur should allow users to generate queries that define subsets of the data that they
-are interested in. We can break this down in three primary phases:
+## Manifests
 
-1) Filter layer - Here we define a series of interests - the set of entities we
-are interested in. Starting with the full set of entities of interests (e.g.
-Patients), we may define a susbset of this initial set by filtering based on
-its attributes. E.g., we filter our set to those Patients that are part of the
-'Colorectal' Experiment and have a tumor grade of 'poorly differentiated'.
-
-2) Map layer - Here we reduce our set of entities to a single variable based on
-the set.  For example, for each Patient in our set we might extract the
-expression level of the gene 'TERT' in the 'Tumor' RnaSeq dataset, producing a vector
-of values (either numerical or categorical).
-
-3) Equation layer - a vector of mapped variables may be combined with other
-mapped variables to yield new variables (for example, the ratio of two counts).
-
-These variables may be fed into plots.
+A Manifest allows data to be collected from multiple sources, usually starting
+from Magma, and possibly passing through several calculation services (Rtemis
+and Pythia). Manifests are written in a scripting language with R-like syntax
+(tentatively dubbed TimurLang). Writing a manifest is necessary for extracting
+data for use in plots with Timur.
 
 ## Plot
 
-Given a set of variables, we might want to produce fixed plots (again using d3.js). Possible plot types:
+Plots allow data retrieved using a manifest to be graphed in the browser. Timur features a few basic plot types:
 
 1) XY scatter - plot two numerical variables against each other
 
-2) One-dimensional scatter - plot a single numerical variable against a categorical variable
-
-3) Cluster/heatmap - Plot N numerical variables against each other.
+2) Cluster/heatmap - Plot N numerical variables against each other.
