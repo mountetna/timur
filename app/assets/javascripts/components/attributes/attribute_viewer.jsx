@@ -18,10 +18,11 @@ import {MetricsAttributeContainer as MetricsAttribute} from './metrics_attribute
 import {LinePlotAttributeContainer} from './plot_attributes/line_plot_attribute';
 import {BoxPlotAttributeContainer} from './plot_attributes/box_plot_attribute';
 import {BarGraphAttributeContainer} from './plot_attributes/bar_graph_attribute';
-import {BarPlotAttributeContainer} from './plot_attributes/bar_plot_attribute';
-import {StackedBarPlotAttributeContainer} from './plot_attributes/stacked_bar_attribute';
-import {SwarmPlotAttributeContainer} from './plot_attributes/swarm_plot_attribute';
-import {HistogramAttributeContainer} from './plot_attributes/histogram_attribute';
+
+// import {BarPlotAttributeContainer} from './plot_attributes/bar_plot_attribute';
+// import {StackedBarPlotAttributeContainer} from './plot_attributes/stacked_bar_attribute';
+// import {SwarmPlotAttributeContainer} from './plot_attributes/swarm_plot_attribute';
+// import {HistogramAttributeContainer} from './plot_attributes/histogram_attribute';
 
 // The clinical components.
 import {DemographicAttributeContainer} from './clinical_attributes/demographic_attribute';
@@ -35,9 +36,11 @@ export default class AttributeViewer extends Component{
 
       // Plot components.
       case 'LinePlotAttribute':
-        return <LinePlotAttributeContainer {...this.props} />;
+        // return <LinePlotAttributeContainer {...this.props} />;
+        return <div></div>
       case 'BoxPlotAttribute':
-        return <BoxPlotAttributeContainer {...this.props} />;
+        // return <BoxPlotAttributeContainer {...this.props} />;
+        return <div></div>
       case 'BarGraphAttribute':
         return <BarGraphAttributeContainer {...this.props} />;
       case 'BarPlotAttribute':
