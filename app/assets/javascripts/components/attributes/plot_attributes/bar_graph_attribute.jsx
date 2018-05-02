@@ -5,7 +5,7 @@ import * as ReactRedux from 'react-redux';
 // Class imports.
 import {GenericPlotAttribute} from './generic_plot_attribute';
 import BarGraph from '../../plotter/plots/bar_graph';
-import D3ResponsiveWrapper from '../../plotter/d3ResponsiveWrapper';
+import ResponsiveWrapper from '../../plotter/responsive_wrapper';
 import Consignment from '../../../models/consignment';
 
 // Module imports.
@@ -37,7 +37,7 @@ export class BarGraphAttribute extends GenericPlotAttribute{
 
     return(
       <div className='value'>
-        <D3ResponsiveWrapper render={ (width) => (
+        <ResponsiveWrapper render={width => (
           <BarGraph {...bar_graph_props} parentWidth={width} />
         )}/>
       </div>
