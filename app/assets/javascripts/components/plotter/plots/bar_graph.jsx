@@ -11,21 +11,8 @@ class BarGraph extends Component {
   }
 
   render() {
-    const data = [
-      { title: 'Kidney', value: 21 },
-      { title: 'Liver', value: 81 },
-      { title: 'Large Intestine', value: 25 },
-      { title: 'Small Intestine', value: 26 },
-      { title: 'Stomach', value: 11 },
-      { title: 'Heart', value: 44 },
-      { title: 'Bladder', value: 0 },
-      { title: 'Brain', value: 22 },
-      { title: 'Gall Bladder', value: 51 },
-      { title: 'Pancreas', value: 29 },
-      { title: 'Adrenal Gland', value: 2 },
-    ];
-    const margins = {top: 50, right: 20, bottom: 100, left: 60}
-    const {parent_width}=this.props;
+    const margins = {top: 50, right: 20, bottom: 100, left: 60};
+    const {parent_width, data}=this.props;
     const svg_width = parent_width > 800 ? 800 : parent_width;
     const svg_dimensions = {
       width: Math.max(svg_width, 300),
@@ -36,7 +23,7 @@ class BarGraph extends Component {
     // scaleBand type
     const xScale = this.xScale
       .padding(0.5)
-      .domain(data.map(d => d.title))
+      .domain(data.map(d => d.id))
       .range([margins.left, svg_dimensions.width - margins.right]);
   
      // scaleLinear type
