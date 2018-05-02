@@ -1,60 +1,52 @@
 import React, { Component } from 'react'
 
-export default (ChartComponent) => (
-  class ResponsiveChart extends Component {
-    constructor(props) {
-      super(props)
+class D3ResponsiveWrapper extends Component {
+  constructor(props) {
+    super(props)
 
-      this.state = {
-        containerWidth: null,
-      }
-
-      this.fitParentContainer = this.fitParentContainer.bind(this)
+    this.state = {
+      containerWidth: null,
     }
 
-    componentDidMount() {
-      this.fitParentContainer()
-      window.addEventListener('resize', this.fitParentContainer)
-    }
+    this.fitParentContainer = this.fitParentContainer.bind(this)
+  }
 
-    componentWillUnmount() {
-      window.removeEventListener('resize', this.fitParentContainer)
-    }
+  componentDidMount() {
+    this.fitParentContainer()
+    window.addEventListener('resize', this.fitParentContainer)
+  }
 
-    fitParentContainer() {
-      const { containerWidth } = this.state
-      const currentContainerWidth = this.chartContainer
-        .getBoundingClientRect().width
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.fitParentContainer)
+  }
 
-      const shouldResize = containerWidth !== currentContainerWidth
+  fitParentContainer() {
+    const { containerWidth } = this.state
+    const currentContainerWidth = this.chartContainer
+      .getBoundingClientRect().width
 
-      if (shouldResize) {
-        this.setState({
-          containerWidth: currentContainerWidth,
-        })
-      }
-    }
+    const shouldResize = containerWidth !== currentContainerWidth
 
-    renderChart() {
-      const parentWidth = this.state.containerWidth
-
-      return (
-        <ChartComponent {...this.props} parentWidth={parentWidth} />
-      )
-    }
-
-    render() {
-      const { containerWidth } = this.state
-      const shouldRenderChart = containerWidth !== null
-
-      return (
-        <div
-          ref={(el) => { this.chartContainer = el }}
-          className="Responsive-wrapper"
-        >
-          {shouldRenderChart && this.renderChart()}
-        </div>
-      )
+    if (shouldResize) {
+      this.setState({
+        containerWidth: currentContainerWidth,
+      })
     }
   }
-)
+
+  render() {
+    const {containerWidth} = this.state
+    const shouldRenderChart = containerWidth !== null
+
+    return (
+      <div
+        ref={(el) => { this.chartContainer = el }}
+        className="Responsive-wrapper"
+      >
+        {shouldRenderChart && this.props.render(width={containerWidth})}
+      </div>
+    )
+  }
+}
+
+export default D3ResponsiveWrapper

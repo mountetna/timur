@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import Axes from '../Axes';
 import Bars from '../bars';
-import D3ResponsiveWrapper from '../d3ResponsiveWrapper';
 
 class BarGraph extends Component {
   constructor() {
@@ -63,4 +62,4 @@ class BarGraph extends Component {
   }
 }
 
-export default D3ResponsiveWrapper(BarGraph)
+export default BarGraph 
