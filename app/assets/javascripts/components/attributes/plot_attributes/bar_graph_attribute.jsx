@@ -38,7 +38,7 @@ export class BarGraphAttribute extends GenericPlotAttribute{
     return(
       <div className='value'>
         <ResponsiveWrapper render={width => (
-          <BarGraph {...bar_graph_props} parentWidth={width} />
+          <BarGraph {...bar_graph_props} parent_width={width} />
         )}/>
       </div>
     );

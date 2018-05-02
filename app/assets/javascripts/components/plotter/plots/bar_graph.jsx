@@ -25,36 +25,38 @@ class BarGraph extends Component {
       { title: 'Adrenal Gland', value: 2 },
     ];
     const margins = {top: 50, right: 20, bottom: 100, left: 60}
-    const svgDimensions = {
-      width: Math.max(this.props.parentWidth, 300),
+    const {parent_width}=this.props;
+    const svg_width = parent_width > 800 ? 800 : parent_width;
+    const svg_dimensions = {
+      width: Math.max(svg_width, 300),
       height: 500};
 
-    const maxValue = Math.max(...data.map(d => d.value));
+    const max_value = Math.max(...data.map(d => d.value));
     
     // scaleBand type
     const xScale = this.xScale
       .padding(0.5)
       .domain(data.map(d => d.title))
-      .range([margins.left, svgDimensions.width - margins.right]);
+      .range([margins.left, svg_dimensions.width - margins.right]);
   
      // scaleLinear type
     const yScale = this.yScale      
-      .domain([0, maxValue])
-      .range([svgDimensions.height - margins.bottom, margins.top]);
+      .domain([0, max_value])
+      .range([svg_dimensions.height - margins.bottom, margins.top]);
 
     return (
-      <svg width={svgDimensions.width} height={svgDimensions.height}>
+      <svg width={svg_dimensions.width} height={svg_dimensions.height}>
         <Axes
           scales={{ xScale, yScale }}
           margins={margins}
-          svgDimensions={svgDimensions}
+          svg_dimensions={svg_dimensions}
         />
         <Bars
           scales={{ xScale, yScale }}
           margins={margins}
           data={data}
-          maxValue={maxValue}
-          svgDimensions={svgDimensions}
+          max_value={max_value}
+          svg_dimensions={svg_dimensions}
         />
     </svg>
     )

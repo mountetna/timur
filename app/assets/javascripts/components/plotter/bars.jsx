@@ -7,15 +7,15 @@ class Bars extends Component {
     super(props)
 
     this.colorScale = scaleLinear()
-      .domain([0, this.props.maxValue])
+      .domain([0, this.props.max_value])
       .range(['#e7f5e5', '#46a21f'])
       .interpolate(interpolateLab);
   }
 
   render() {
-    const {scales, margins, data, svgDimensions} = this.props;
+    const {scales, margins, data, svg_dimensions} = this.props;
     const {xScale, yScale} = scales;
-    const {height} = svgDimensions;
+    const {height} = svg_dimensions;
 
     const bars = (
       data.map(datum =>

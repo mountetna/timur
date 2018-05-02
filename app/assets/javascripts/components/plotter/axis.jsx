@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import * as d3Axis from 'd3-axis';
-import { select as d3Select } from 'd3-selection';
+import {select as d3Select} from 'd3-selection';
 
 class Axis extends Component {
   componentDidMount() {
@@ -12,10 +12,10 @@ class Axis extends Component {
   }
 
   renderAxis() {
-    const axisType = `axis${this.props.orient}`;
-    const axis = d3Axis[axisType]()
+    const axis_type = `axis${this.props.orient}`;
+    const axis = d3Axis[axis_type]()
       .scale(this.props.scale)
-      .tickSize(-this.props.tickSize)
+      .tickSize(-this.props.tick_size)
       .tickPadding([12])
       .ticks([4]);
 
@@ -26,7 +26,7 @@ class Axis extends Component {
     return (
       <g
         className={`Axis Axis-${this.props.orient}`}
-        ref={(el) => { this.axisElement = el; }}
+        ref={(el) => {this.axisElement = el;}}
         transform={this.props.translate}
       />
     )
