@@ -17,7 +17,7 @@ class Timur
       erb_view(:no_auth)
     end
 
-    using auth: { user: { can_view?: :project_name } } do
+    with auth: { user: { can_view?: :project_name } } do
       # activity_controller.rb
       get ':project_name/activity', action: 'browse#activity', as: :activity
 

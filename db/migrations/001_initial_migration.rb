@@ -1,26 +1,5 @@
 Sequel.migration do
   change do
-    create_table(:activities) do
-      primary_key :id
-      Integer :user_id
-      String :magma_model
-      String :identifier
-      String :action
-      DateTime :created_at, :null=>false
-      DateTime :updated_at, :null=>false
-    end
-
-    create_table(:permissions, :ignore_index_errors=>true) do
-      primary_key :id
-      Integer :whitelist_id
-      String :role
-      String :project_name
-      DateTime :created_at, :null=>false
-      DateTime :updated_at, :null=>false
-
-      index [:whitelist_id], :name=>:index_permissions_on_whitelist_id
-    end
-
     create_table(:plots, :ignore_index_errors=>true) do
       primary_key :id
       Integer :manifest_id, :null=>false
@@ -34,26 +13,6 @@ Sequel.migration do
       String :project
 
       index [:manifest_id], :name=>:index_plots_on_manifest_id
-    end
-
-    create_table(:projects, :ignore_index_errors=>true) do
-      primary_key :id
-      String :project_name, :null=>false
-      String :project_name_full
-      String :group_name
-
-      index [:project_name], :name=>:unique_project_name, :unique=>true
-    end
-
-    create_table(:saved_items, :ignore_index_errors=>true) do
-      primary_key :id
-      String :key
-      String :item_type
-      Integer :user_id
-      String :contents
-
-      index [:key], :name=>:index_saved_items_on_key, :unique=>true
-      index [:user_id], :name=>:index_saved_items_on_user_id
     end
 
     create_table(:schema_migrations, :ignore_index_errors=>true) do
@@ -83,18 +42,6 @@ Sequel.migration do
       Integer :index_order, :null=>false
       DateTime :created_at
       DateTime :updated_at
-    end
-
-    create_table(:whitelists, :ignore_index_errors=>true) do
-      primary_key :id
-      String :email
-      DateTime :created_at, :null=>false
-      DateTime :updated_at, :null=>false
-      String :token
-      String :first_name
-      String :last_name
-
-      index [:email], :name=>:index_whitelists_on_email, :unique=>true
     end
 
     create_table(:manifests, :ignore_index_errors=>true) do
