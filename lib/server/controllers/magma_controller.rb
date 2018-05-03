@@ -16,7 +16,7 @@ class MagmaController < Timur::Controller
     begin
       filename = "#{@params[:model_name]}.tsv"
       @response['Content-Type'] = 'text/tsv'
-      @response['Content-Disposition'] = %Q( attachment; filename="#{filename}" )
+      @response['Content-Disposition'] = %Q(attachment; filename="#{filename}")
 
       Magma::Client.instance.retrieve(
         token,
@@ -28,7 +28,6 @@ class MagmaController < Timur::Controller
         format: 'tsv'
       ) do |magma_response |
         magma_response.read_body do |chunk|
-        # this needs to use rack chunks instead
           @response.stream.write(chunk)
         end
         @response.stream.close
@@ -42,7 +41,8 @@ class MagmaController < Timur::Controller
     begin
       magma = Magma::Client.instance
       response = magma.retrieve(
-        token, @params[:project_name],
+        token,
+        @params[:project_name],
         @params
       )
       success(response.body, 'application/json')
@@ -50,12 +50,13 @@ class MagmaController < Timur::Controller
       failure(e.status, e.body)
     end
   end
-  
+
   def query
     begin
       magma = Magma::Client.instance
       response = magma.query(
-        token, @params[:project_name],
+        token,
+        @params[:project_name],
         @params[:question]
       )
       success(response.body, 'application/json')

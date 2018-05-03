@@ -6,8 +6,13 @@ class User < Sequel::Model
     @etna_user = user
   end
 
-  [ :is_superuser?, :can_edit?, :can_view?, :can_see_restricted?,
-    :is_admin? ].each do |test|
+  [
+    :is_superuser?,
+    :can_edit?,
+    :can_view?,
+    :can_see_restricted?,
+    :is_admin?
+  ].each do |test|
     define_method test do |project|
       @etna_user.send(test, project)
     end

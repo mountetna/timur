@@ -1,7 +1,8 @@
 class BrowseController < Timur::Controller
   def index
     response = Magma::Client.instance.query(
-      token, @params[:project_name],
+      token,
+      @params[:project_name],
       [ :project, '::first', '::identifier' ]
     )
 
@@ -11,7 +12,8 @@ class BrowseController < Timur::Controller
     )
 
     return redirect_to(
-      route_url( :browse_model,
+      route_url(
+        :browse_model,
         project_name: @params[:project_name],
         model_name: 'project',
         record_name: query[:answer]

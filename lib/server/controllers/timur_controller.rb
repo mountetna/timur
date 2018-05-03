@@ -4,7 +4,7 @@ class Timur
 
     private
 
-    def redirect_to path
+    def redirect_to(path)
       @response.redirect(path,302)
       @response.finish
     end

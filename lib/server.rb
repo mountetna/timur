@@ -42,13 +42,20 @@ class Timur
       end
 
       # magma_controller.rb
-      post ':project_name/update', action: 'magma#update', auth: { user: { can_edit?: :project_name } }
+
+      # the update endpoint is the only one requiring edit privileges
+      post ':project_name/update',
+        action: 'magma#update',
+        auth: { user: { can_edit?: :project_name } }
+
       post ':project_name/query', action: 'magma#query'
       post ':project_name/retrieve', action: 'magma#retrieve'
       post ':project_name/retrieve/tsv', action: 'magma#retrieve_tsv'
 
       # archimedes_controller.rb
-      post ':project_name/consignment', action: 'archimedes#consignment', as: :consignment
+      post ':project_name/consignment',
+        action: 'archimedes#consignment',
+        as: :consignment
 
       # plot_controller.rb
       get ':project_name/plots', as: :plots do

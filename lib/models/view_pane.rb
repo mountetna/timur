@@ -4,7 +4,10 @@ class ViewPane < Sequel::Model
 
   def self.build_view(model_name, project_name, load_tab_name)
     # first collect all of the panes matching this thing
-    panes = self.where(view_model_name: model_name, project_name: project_name).order(:created_at).all
+    panes = self.where(
+      view_model_name: model_name, project_name: project_name
+    ).order(:created_at).all
+
     if panes.empty?
       return {
         tabs: {
