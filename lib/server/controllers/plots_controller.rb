@@ -51,14 +51,4 @@ class PlotsController < Timur::Controller
     plot.destroy
     success('Plot destroyed')
   end
-
-  private
-
-  def save_plot
-    if @plot.save
-      render json: @plot.as_json
-    else
-      render :json => { :errors => @plot.errors.full_messages }, :status => 422
-    end
-  end
 end
