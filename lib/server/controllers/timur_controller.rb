@@ -13,6 +13,14 @@ class Timur
       success(hash.to_json, 'application/json')
     end
 
+    def config_json
+      {
+        project_name: @params[:project_name],
+        token_name: Timur.instance.config(:token_name),
+        magma_host: Timur.instance.config(:magma)[:host]
+      }.to_json
+    end
+
     def token
       @token ||= @request.cookies[Timur.instance.config(:token_name)]
     end
