@@ -5,7 +5,7 @@ export default class MagmaLink extends React.Component{
 
   render(){
     let route_args = [
-      PROJECT_NAME,
+      TIMUR_CONFIG.project_name,
       this.props.model,
       encodeURIComponent(this.props.link)
     ];
