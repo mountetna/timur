@@ -29,8 +29,6 @@ export class TimurNav extends React.Component{
   }
 
   render() {
-    let login_path = Routes.login_path();
-
     let tabs = {
       browse: Routes.browse_path(TIMUR_CONFIG.project_name),
       search: Routes.search_path(TIMUR_CONFIG.project_name),
@@ -39,7 +37,7 @@ export class TimurNav extends React.Component{
       plots: Routes.plots_path(TIMUR_CONFIG.project_name)
     };
 
-    let login = this.props.user || <a href={ login_path}>Login</a>;
+    let login = this.props.user;
     var heading;
     var logo_id;
 
