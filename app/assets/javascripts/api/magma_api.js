@@ -30,7 +30,7 @@ const create = (name, attributes)=>{
 };
 
 const input = (name, value)=>{
-  return create('input', {type: 'hidden', name, value})
+  return create('input', {type: 'hidden', name, value});
 };
 
 export const getTSVForm = (model_name, filter)=>{
@@ -54,9 +54,10 @@ export const getTSVForm = (model_name, filter)=>{
   );
 
   for (let name in data) {
-    let value = data[name]
-    if (value != undefined && value != null)
+    let value = data[name];
+    if (value != undefined && value != null) {
       form.appendChild(input(name, value));
+    }
   }
 
   form.style.display = 'none';
