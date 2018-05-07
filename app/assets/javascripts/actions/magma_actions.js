@@ -219,7 +219,7 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
 // Download a TSV from magma via Timur.
 export const requestTSV = (model_name,filter)=>{
   return (dispatch)=>{
-    MagmaAPI.getTSVForm({model_name, filter, record_names: 'all'});
+    MagmaAPI.getTSVForm(model_name,filter);
   };
 };
 

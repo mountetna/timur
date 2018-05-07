@@ -31,9 +31,13 @@ class ManifestsController < Timur::Controller
   def destroy
     @manifest = Manifest[@params[:id]]
 
-    raise Etna::BadRequest, "No manifest with id #{@params[:id]}" unless @manifest
+    unless @manifest
+      raise Etna::BadRequest, "No manifest with id #{@params[:id]}"
+    end
 
-    raise Etna::Forbidden, 'You cannot edit this manifest' unless @manifest.is_editable?(current_user)
+    unless @manifest.is_editable?(current_user)
+      raise Etna::Forbidden, 'You cannot edit this manifest'
+    end
 
     @manifest.delete
 
@@ -41,14 +45,6 @@ class ManifestsController < Timur::Controller
   end
 
   private
-
-  def save_manifest
-    if @manifest.save
-      render json: { :manifest => @manifest.to_json(current_user, params[:project_name]) }
-    else
-      error_response(@manifest)
-    end
-  end
 
   def manifest_params
     @params.select do |k,v|

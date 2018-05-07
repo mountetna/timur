@@ -12,7 +12,7 @@
   <body>
     <div id='root'></div>
     <script type='text/javascript'>
-      var PROJECT_NAME = '<%= @params[:project_name] %>';
+      var TIMUR_CONFIG = <%= config_json %>;
       const timur = new TimurApp(
         {
           user: <%= @user ? "'#{@user.first} #{@user.last}'" : 'null'%>,

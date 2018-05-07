@@ -8,7 +8,7 @@ export const getView = (model_name, tab_name, exchange)=>{
     headers: headers('json', 'csrf'),
   };
 
-  let exchangePromise = exchange.fetch(Routes.view_path(PROJECT_NAME, model_name), route_opts)
+  let exchangePromise = exchange.fetch(Routes.view_path(TIMUR_CONFIG.project_name, model_name), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
@@ -38,7 +38,7 @@ export const updateView = (view_obj, exchange)=>{
     body: JSON.stringify(view_obj)
   };
 
-  let exchangePromise = exchange.fetch(Routes.update_view_json_path(PROJECT_NAME), route_opts)
+  let exchangePromise = exchange.fetch(Routes.update_view_json_path(TIMUR_CONFIG.project_name), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
@@ -53,7 +53,7 @@ export const deleteView = (view_obj, exchange)=>{
     body: JSON.stringify(view_obj)
   };
 
-  let exchangePromise = exchange.fetch(Routes.delete_view_json_path(PROJECT_NAME), route_opts)
+  let exchangePromise = exchange.fetch(Routes.delete_view_json_path(TIMUR_CONFIG.project_name), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 

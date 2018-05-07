@@ -29,17 +29,15 @@ export class TimurNav extends React.Component{
   }
 
   render() {
-    let login_path = Routes.login_path();
-
     let tabs = {
-      browse: Routes.browse_path(PROJECT_NAME),
-      search: Routes.search_path(PROJECT_NAME),
-      map: Routes.map_path(PROJECT_NAME),
-      manifests: Routes.manifests_path(PROJECT_NAME),
-      plots: Routes.plots_path(PROJECT_NAME)
+      browse: Routes.browse_path(TIMUR_CONFIG.project_name),
+      search: Routes.search_path(TIMUR_CONFIG.project_name),
+      map: Routes.map_path(TIMUR_CONFIG.project_name),
+      manifests: Routes.manifests_path(TIMUR_CONFIG.project_name),
+      plots: Routes.plots_path(TIMUR_CONFIG.project_name)
     };
 
-    let login = this.props.user || <a href={ login_path}>Login</a>;
+    let login = this.props.user;
     var heading;
     var logo_id;
 
@@ -83,7 +81,7 @@ export class TimurNav extends React.Component{
                {
                  this.props.can_edit ?
                  <div className='nav_tab'>
-                   <a href={ Routes.activity_path(PROJECT_NAME) }>Activity</a>
+                   <a href={ Routes.activity_path(TIMUR_CONFIG.project_name) }>Activity</a>
                  </div>
                  : null
                }
