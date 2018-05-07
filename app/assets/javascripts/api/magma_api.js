@@ -2,7 +2,7 @@ import {
   parseJSON, generateDownload, makeBlob, checkStatus, headers
 } from '../utils/fetch_utils';
 
-const magmaPath = (endpoint) => `${TIMUR_CONFIG.magma_host}${endpoint}`;
+const magmaPath = (endpoint) => `${TIMUR_CONFIG.magma_host}/${endpoint}`;
 
 const magmaPost = (endpoint, exchange, params) => {
   return exchange.fetch(
@@ -30,7 +30,7 @@ const create = (name, attributes)=>{
 };
 
 const input = (name, value)=>{
-  return create('input', {type: 'hidden', name, value})
+  return create('input', {type: 'hidden', name, value});
 };
 
 export const getTSVForm = (model_name, filter)=>{
@@ -54,9 +54,10 @@ export const getTSVForm = (model_name, filter)=>{
   );
 
   for (let name in data) {
-    let value = data[name]
-    if (value != undefined && value != null)
+    let value = data[name];
+    if (value != undefined && value != null) {
       form.appendChild(input(name, value));
+    }
   }
 
   form.style.display = 'none';
@@ -84,5 +85,5 @@ export const postRevisions = (revision_data, exchange)=>{
 };
 
 export const getAnswer = (question, exchange)=>{
-  return magmaPost('query', exchange, revision_data);
+  return magmaPost('query', exchange, question);
 };
