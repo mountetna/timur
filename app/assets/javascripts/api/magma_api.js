@@ -2,7 +2,7 @@ import {
   parseJSON, generateDownload, makeBlob, checkStatus, headers
 } from '../utils/fetch_utils';
 
-const magmaPath = (endpoint) => `${TIMUR_CONFIG.magma_host}${endpoint}`;
+const magmaPath = (endpoint) => `${TIMUR_CONFIG.magma_host}/${endpoint}`;
 
 const magmaPost = (endpoint, exchange, params) => {
   return exchange.fetch(
@@ -84,5 +84,5 @@ export const postRevisions = (revision_data, exchange)=>{
 };
 
 export const getAnswer = (question, exchange)=>{
-  return magmaPost('query', exchange, revision_data);
+  return magmaPost('query', exchange, question);
 };
