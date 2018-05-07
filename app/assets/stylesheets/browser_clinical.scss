@@ -1,0 +1,175 @@
+@import "globals";
+@import "attribute";
+
+* {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+}
+
+.clinical-select{
+  font-family: $body_font;
+  border: 1px solid silver;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 30px;
+  min-width: 225px;
+}
+
+.clinical-input{
+  font-family: $body_font;
+  border: 1px solid silver;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 15px;
+  min-width: 210px;
+}
+
+.clinical-button{
+  padding: 5px;
+  border: 1px solid #333;
+  outline: none;
+  background: #eee;
+  font-size: 0.6em;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.clinical-button:hover{
+  color: #fff;
+  background: #22a778;
+  border: 1px solid #22a778;
+}
+
+.remove {
+  border: 1px solid white;
+  background: none;
+  color: black;
+  padding: 5px 10px 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: .8em;
+  border-radius: 3px;
+}
+
+.remove:hover{
+  color: #fff;
+  background: #22a778;
+  border: #22a778;
+}
+
+.clinical-group > .remove {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.clinical-group:hover > .remove{
+  visibility: visible;
+  opacity: 1;
+}
+
+.search-bar-group {
+  /*the container must be positioned relative:*/
+  // position: relative;
+  display: inline-block;
+}
+
+.search-bar-group input, 
+.render-inputs input {
+  font-family: $body_font;
+  border: 1px solid silver;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 15px;
+  min-width: 210px;
+  max-width: 210px;
+}
+
+.render-inputs select {
+  font-family: $body_font;
+  border: 1px solid silver;
+  outline: 0;
+  color: black;
+  padding: 0.65em 0.5em 0.55em 0.75em;
+  border-radius: 3px;
+  background: #fff;
+  margin: 5px;
+  height: 30px;
+  min-width: 225px;
+  max-width: 225px;
+}
+
+.option-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  z-index: 10;
+  margin-left: 5px;
+  max-height: 400px;
+  overflow-y: scroll;
+  direction:rtl;
+  font-size: .7em;
+}
+
+.option-items .item-container {
+  padding: 0.5em;
+  cursor: pointer;
+  background-color: #fff; 
+  font-family: $body_font;
+  direction:ltr;
+  min-width: 210px;
+}
+
+.option-items .item-container:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9; 
+}
+
+.item-container i{
+  position: relative;
+  display: block;
+  visibility: hidden;
+  float: right;
+  color: 	#909090; 
+  margin-left: 10px;
+ }
+
+.item-container:hover i{
+ visibility: visible;
+}
+
+.item-container i:hover{
+  color: #4CAF50;
+ }
+
+.info-tip {
+  max-width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: left;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: .7em;
+  overflow: auto; 
+  font-family: $body_font;
+  z-index: 99;
+  position: absolute;
+}
+
+.render-inputs {
+  display: inline-block;
+}
