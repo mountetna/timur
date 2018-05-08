@@ -1,4 +1,4 @@
-require_relative '../../../app/models/archimedes'
+require_relative '../../models/archimedes'
 
 class ArchimedesController <  Timur::Controller
   def consignment

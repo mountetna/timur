@@ -2,7 +2,7 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  context: path.resolve(__dirname, 'app/assets'),
+  context: path.resolve(__dirname, 'lib/client'),
   resolve: {
     extensions: [ '.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg' ],
     alias: {
@@ -10,7 +10,7 @@ module.exports = {
       'font-awesome': path.join(__dirname, 'node_modules/font-awesome')
     }
   },
-  entry: ['./javascripts/timur.jsx', './stylesheets/application.scss' ],
+  entry: ['./jsx/timur.jsx', './scss/application.scss' ],
   output: {
     filename: 'public/js/timur.bundle.js',
     path: __dirname
@@ -22,7 +22,7 @@ module.exports = {
 
         // Skip any files outside of your project's `src` directory
         include: [
-          path.resolve(__dirname, 'app/assets/javascripts'),
+          path.resolve(__dirname, 'lib/client/jsx'),
         ],
 
         // Only run `.js` and `.jsx` files through Babel
@@ -39,14 +39,14 @@ module.exports = {
         test: /\.(jpe?g|png|svg)$/i,
 
         include: [
-          path.resolve(__dirname, 'app/assets/images'),
+          path.resolve(__dirname, 'lib/client/img'),
         ],
 
         loader: 'file-loader',
 
         options: {
           name: '[name].[ext]',
-          outputPath: 'public/images/',
+          outputPath: 'public/img/',
           publicPath: function(url) { return url.replace(/public/,'') }
         }
       },

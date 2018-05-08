@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Module imports.
-import * as TimurActions from '../../javascripts/actions/timur_actions';
+import * as TimurActions from '../../jsx/actions/timur_actions';
 
 export class HomePage extends React.Component{
   constructor(props){
