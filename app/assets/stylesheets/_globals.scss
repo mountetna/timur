@@ -83,3 +83,25 @@ $quote_font: 'Crimson Text', serif;
 input:focus{
   outline-offset: 0px;
 }
+
+.home-page-header-group{
+  margin-left: 0px;
+  padding-left: 15px;
+}
+
+.home-page-project-link{
+  color: #333;
+  margin-left: 15px;
+  padding-top: 15px;
+  display: block;
+  font-size: 16px;
+}
+
+.home-page-project-link:hover{
+  text-decoration: underline;
+}
+
+.home-page-project-role{
+  font-size: 12px;
+  opacity: .5;
+}
