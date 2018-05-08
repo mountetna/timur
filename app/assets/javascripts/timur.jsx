@@ -25,6 +25,7 @@ import {BrowserContainer as Browser} from './components/browser/browser';
 import {PlotterContainer as Plotter} from './components/plotter/plotter';
 import {MessagesContainer as Messages} from './components/messages';
 import {TimurNavContainer as TimurNav} from './components/timur_nav';
+import {HomePageContainer as HomePage} from './components/home_page';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
@@ -95,6 +96,8 @@ class TimurApplication{
 
   createComponent(props){
     switch(props.mode){
+      case 'home':
+        return <HomePage {...props} />;
       case 'manifests':
         return <Manifests {...props} />;
       case 'browse':
@@ -114,7 +117,7 @@ class TimurApplication{
     }
   }
 
-  createUI(props, containr_id){
+  createUI(props, container_id){
     let timur_nav_props = {
       user: props.user,
       can_edit: props.can_edit,
@@ -132,7 +135,7 @@ class TimurApplication{
           {this.createComponent(props)}
         </div>
       </Provider>,
-      document.getElementById(containr_id)
+      document.getElementById(container_id)
     );
   }
 }
