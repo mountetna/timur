@@ -23,10 +23,8 @@ class ViewPane < ActiveRecord::Base
     if panes.empty?
       return {
         default: {
-          id: nil,
           name: 'default',
           title: '',
-          description: '',
           index_order: 0,
           attributes: {
           }
@@ -41,10 +39,7 @@ class ViewPane < ActiveRecord::Base
         [
           pane[:name],
           {
-            id: pane[:id],
-            name: pane[:name],
             title: pane[:title],
-            description: pane[:description],
             index_order: pane[:index_order],
             attributes: ViewAttribute.retrieve_attributes(pane[:id])
           }
@@ -52,5 +47,38 @@ class ViewPane < ActiveRecord::Base
       end
 
     ]
+  end
+
+  def self.update(view_tab_id, pane_name, pane_data)
+
+    return if view_tab_id.nil? || pane_name.nil?
+
+    find_query = {
+      view_tab_id: view_tab_id,
+      name: pane_name
+    }
+
+    update_query = {
+      title: pane_data['title'],
+      index_order: pane_data['index_order']
+    }
+
+    update_query = find_query.merge(update_query)
+
+    # First try and find a matching record. If there is not one then create one.
+    # If there is one then update the record.
+    self.where(find_query)
+      .first_or_create(update_query)
+      .update(update_query)
+
+    # Pull the record that was just updated/created.
+    pane = self.where(update_query).first
+
+    # Now loop over the attributes and save if needed.
+    if pane_data.key?('attributes') && pane_data['attributes']
+      pane_data['attributes'].each do |attribute_name, attribute_data|
+        ViewAttribute.update(pane.id, attribute_name, attribute_data)
+      end
+    end
   end
 end

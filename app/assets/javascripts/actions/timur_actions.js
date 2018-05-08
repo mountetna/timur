@@ -1,10 +1,13 @@
 // Class imports.
-import {getView} from '../api/view_api';
+import * as ViewAPI from '../api/view_api';
 import {showMessages} from './message_actions';
 import {requestDocuments} from './magma_actions';
 import {Exchange} from './exchange_actions';
+
+// Module imports.
 import * as ManifestActions from './manifest_actions';
 import * as TabSelector from '../selectors/tab_selector';
+import * as Cookies from '../utils/cookies';
 
 // Flip a config variable.
 export const toggleConfig = (key)=>{
@@ -23,6 +26,28 @@ export const addTab = (view_name, tab_name, tab)=>{
   };
 };
 
+export const addView = (view_name, view)=>{
+  return {
+    type: 'ADD_VIEW',
+    view_name, // The view name also references a Magma Model.
+    view
+  };
+};
+
+export const refreshViews = (views)=>{
+  return {
+    type: 'REFRESH_VIEWS',
+    views
+  };
+};
+
+export const addTokenUser = (user)=>{
+  return {
+    type: 'ADD_TOKEN_USER',
+    token: Cookies.getItem('JANUS_TOKEN')
+  };
+};
+
 /*
  * Request a view for a given model/record/tab and send requests for additional 
  * data.
@@ -30,7 +55,7 @@ export const addTab = (view_name, tab_name, tab)=>{
 export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
   return (dispatch)=>{
     // Handle success from 'getView'.
-    var localSuccess = (response)=>{
+    let localSuccess = (response)=>{
 
       let tab;
       if(response.views[model_nm].tabs[tab_nm] == null){
@@ -65,7 +90,7 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
     };
 
     // Handle an error from 'getView'.
-    var localError = (e)=>{
+    let localError = (e)=>{
       if(error != undefined) error(e);
     };
 
@@ -73,9 +98,63 @@ export const requestView = (model_nm, rec_nm, tab_nm, success, error)=>{
      * First, we pull the view file from the Timur server. This will contain a
      * a data object that reperesents the layout of the page.
      */
-    var exchange = new Exchange(dispatch,`view for ${model_nm} ${rec_nm}`);
-    getView(model_nm, tab_nm, exchange)
+    let exchange = new Exchange(dispatch,`view for ${model_nm} ${rec_nm}`);
+
+    ViewAPI.getView(model_nm, tab_nm, exchange)
       .then(localSuccess)
       .catch(localError);
   };
 };
+
+export const requestViewSettings = ()=>{
+  return (dispatch)=>{
+    let localSuccess = (response)=>{
+      Object.keys(response.views).forEach((key)=>{
+        dispatch(addView(key, response.views[key]));
+      });
+    };
+
+    let localError = (err)=>{
+      console.log(err);
+    };
+
+    let exchange = new Exchange(dispatch,'view for settings');
+    ViewAPI.getView('all', 'all', exchange)
+      .then(localSuccess)
+      .catch(localError);
+  };
+};
+
+export const updateViewSettings = (view_obj)=>{
+  return (dispatch)=>{
+    let localSuccess = (response)=>{
+      dispatch(refreshViews(response.views));
+    };
+
+    let localError = (err)=>{
+      console.log(err);
+    };
+
+    let exchange = new Exchange(dispatch,'updating view settings');
+    ViewAPI.updateView(view_obj, exchange)
+      .then(localSuccess)
+      .catch(localError);
+  };
+};
+
+export const deleteViewSettings = (view_obj)=>{
+  return (dispatch)=>{
+    let localSuccess = (response)=>{
+      dispatch(refreshViews(response.views));
+    };
+
+    let localError = (err)=>{
+      console.log(err);
+    };
+
+    let exchange = new Exchange(dispatch,'delete view settings');
+    ViewAPI.deleteView(view_obj, exchange)
+      .then(localSuccess)
+      .catch(localError);
+  };
+}

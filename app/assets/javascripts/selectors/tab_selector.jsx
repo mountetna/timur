@@ -2,13 +2,16 @@ export const getAttributes = (tab)=>{
 
   // Loop down on the tab object and extract the attributes.
   let attributes = Object.keys(tab.panes).map((pane_name)=>{
-    return Object.keys(tab.panes[pane_name].attributes).map((attr_name)=>{
-      return tab.panes[pane_name].attributes[attr_name].name;
-    });
+    return Object.keys(tab.panes[pane_name].attributes);
   });
 
   // Flatten.
   attributes = [].concat.apply([], attributes);
+
+  // Unique.
+  attributes = attributes.filter((value, index, self)=>{
+    return self.indexOf(value) === index;
+  });
 
   return (attributes.length <= 0) ? 'all' : attributes;
 };
@@ -32,7 +35,6 @@ export const getPlotIds = (tab)=>{
 
   return plot_ids;
 };
-
 
 /*
  * The tabs have an associated view index order. This helps us keep ordering of
