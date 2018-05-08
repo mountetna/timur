@@ -5,6 +5,7 @@ import {requestDocuments} from './magma_actions';
 import {Exchange} from './exchange_actions';
 import * as ManifestActions from './manifest_actions';
 import * as TabSelector from '../selectors/tab_selector';
+import * as Cookies from '../utils/cookies';
 
 // Flip a config variable.
 export const toggleConfig = (key)=>{
@@ -20,6 +21,13 @@ export const addTab = (view_name, tab_name, tab)=>{
     view_name, // The view name also references a Magma Model.
     tab_name,
     tab
+  };
+};
+
+export const addTokenUser = (user)=>{
+  return {
+    type: 'ADD_TOKEN_USER',
+    token: Cookies.getItem(TIMUR_CONFIG.token_name)
   };
 };
 

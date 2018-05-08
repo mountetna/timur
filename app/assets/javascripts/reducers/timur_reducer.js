@@ -1,3 +1,30 @@
+const roles = {a: 'administrator', e: 'editor', v: 'viewer'};
+
+const parsePermissions = (perms)=>{
+  // Permissions are encoded as 'a:project1,project2;v:project3'
+  let permissions = perms.split(/;/).map(perm => {
+    let [ role, projects ] = perm.split(/:/);
+    role = roles[role.toLowerCase()];
+    return projects.split(/,/).map(
+      project_name=>({role, project_name})
+    )
+  }).reduce((perms,perm) => perms.concat(perm), []);
+
+  return permissions;
+}
+
+const parseToken = (token)=>{
+  let [header, params, signature] = token.split(/\./);
+  let {email, first, last, perm} = JSON.parse(atob(params));
+
+  return {
+    email,
+    first,
+    last,
+    permissions: parsePermissions(perm)
+  };
+}
+
 const tabs = (old_tabs = {}, action)=>{
   switch(action['type']) {
     case 'ADD_TAB':
@@ -45,7 +72,12 @@ const timurReducer = function(timur, action) {
       return {
         ...timur,
         [action.key]: timur.hasOwnProperty(action.key) ? !timur[action.key] : true
-      }
+      };
+    case 'ADD_TOKEN_USER':
+      return {
+        ...timur,
+        user: parseToken(action.token)
+      };
     default:
       return timur;
   }
