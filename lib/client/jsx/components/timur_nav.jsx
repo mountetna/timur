@@ -14,11 +14,13 @@ export class TimurNav extends React.Component{
 
   renderTabs(){
     let tabs = {
+
       browse: Routes.browse_path(TIMUR_CONFIG.project_name),
       search: Routes.search_path(TIMUR_CONFIG.project_name),
       map: Routes.map_path(TIMUR_CONFIG.project_name),
       manifests: Routes.manifests_path(TIMUR_CONFIG.project_name),
-      plots: Routes.plots_path(TIMUR_CONFIG.project_name)
+      plots: Routes.plots_path(TIMUR_CONFIG.project_name),
+      help: 'https://github.com/mountetna/timur/wiki'
     };
 
     return(
