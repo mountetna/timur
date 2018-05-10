@@ -7,6 +7,7 @@ import TableAttribute from './table_attribute';
 // Standard attributes.
 import {AttributeContainer as Attribute} from './attribute';
 import {CheckboxAttributeContainer as CheckboxAttribute} from './checkbox_attribute';
+import {ClinicalAttributeContainer as ClinicalAttribute} from './clinical_attribute';
 import {CollectionAttributeContainer as CollectionAttribute} from './collection_attribute';
 import {DateTimeAttributeContainer as DateTimeAttribute} from './date_time_attribute';
 import {DocumentAttributeContainer as DocumentAttribute} from './document_attribute';
@@ -46,6 +47,12 @@ export default class AttributeViewer extends React.Component{
         return <SwarmPlotAttribute {...this.props} />;
       case 'HistogramAttribute':
         return <HistogramAttribute {...this.props} />;
+
+      case 'DemographicAttribute':
+      case 'DiagnosticAttribute':
+      case 'TreatmentAttribute':
+      case 'AdverseEventAttribute':
+        return <ClinicalAttribute  {...this.props} />;
 
       case 'BoxPlotAttribute':
         return <BoxPlotAttribute {...this.props} />;
