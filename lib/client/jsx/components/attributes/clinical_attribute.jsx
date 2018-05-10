@@ -54,7 +54,7 @@ const mapStateToProps = (state, own_props)=>{
     own_props.filter
   );
 
-  let dictionary = DictionarySelector.selectDemograhicDictionary(
+  let dictionary = DictionarySelector.selectClinicalDictionary(
     state,
     model_name
   );
