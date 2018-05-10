@@ -1,52 +1,79 @@
-import MagmaLink from '../magma_link';
-import { connect } from 'react-redux';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions';
-import React, { Component } from 'react';
+import * as MagmaActions from '../../actions/magma_actions';
+import MagmaLink from '../magma_link';
 import ListInput from '../inputs/list_input';
 import SlowTextInput from '../inputs/slow_text_input';
 
-class CollectionAttribute extends Component {
-  update(new_links) {
-    let { reviseDocument, document, template, attribute } = this.props;
-
-    reviseDocument( document, template, attribute, new_links );
-  }
-
-  renderLinks() {
-    let { value, attribute } = this.props;
+export default class CollectionAttribute extends React.Component{
+  renderLinks(){
+    let {value, attribute} = this.props;
     let links = value || [];
 
-    return <div className='collection'>
-      {
-        links.map( link => 
-          <div key={ link } className='collection_item'>
-            <MagmaLink link={ link } model={ attribute.model_name }/>
-          </div>
-        )
-      }
-    </div>;
+    return(
+      <div className='collection'>
+        {links.map((link)=>{
+            return(
+              <div key={link} className='collection_item'>
+                
+                <MagmaLink link={link} model={attribute.model_name} />
+              </div>
+            );
+          }
+        )}
+      </div>
+    );
   }
 
-  render() {
-    let { revision, mode, reviseDocument } = this.props;
+  render(){
+    let {
+      revision,
+      mode,
+      document,
+      template,
+      attribute,
+      reviseDocument
+    } = this.props;
 
-    return <div className='value'>
-      {
-        mode == 'edit'
-          ?  <ListInput
-            placeholder='New or existing ID'
-            className='link_text'
-            values={ revision || [] } 
-            itemInput={ SlowTextInput }
-            onChange={ this.update.bind(this) } />
-          : this.renderLinks()
+    let input_props = {
+      placeholder: 'New or existing ID',
+      className: 'link_text',
+      values: revision || [],
+      itemInput: SlowTextInput,
+      onChange: (new_links)=>{
+        reviseDocument({
+          document,
+          template,
+          attribute,
+          revised_value: new_links
+        });
       }
-    </div>;
+    };
+
+    return(
+      <div className='value'>
+
+        {mode == 'edit' ? <ListInput {...input_props} /> : this.renderLinks()}
+      </div>
+    );
   }
 }
 
-export default connect(
-  null,
-  { reviseDocument }
+const mapStateToProps = (dispatch, own_props)=>{
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    reviseDocument: (args)=>{
+      dispatch(MagmaActions.reviseDocument(args));
+    }
+  };
+};
+
+export const CollectionAttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(CollectionAttribute);

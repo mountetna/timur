@@ -1,29 +1,53 @@
-import { connect } from 'react-redux';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions';
-import React, { Component } from 'react';
+import * as MagmaActions from '../../actions/magma_actions';
 import SlowTextInput from '../inputs/slow_text_input';
 
-class Attribute extends Component {
-  renderEdit() {
-    let { document, template, attribute, revision, reviseDocument } = this.props;
-    return <SlowTextInput 
-      className='full_text' 
-      placeholder={ attribute.placeholder }
-      onChange={ (value) => { reviseDocument( document, template, attribute, value) } }
-      defaultValue={ revision } />;
+export default class Attribute extends React.Component{
+  renderEdit(){
+    let {document, template, attribute, revision, reviseDocument} = this.props;
+    let input_props = {
+      className: 'full_text',
+      placeholder: attribute.placeholder,
+      onChange: (value)=>{
+        reviseDocument({
+          document,
+          template,
+          attribute, 
+          revised_value: value
+        });
+      },
+      defaultValue: (revision == null) ? '' : revision
+    };
+
+    return <SlowTextInput {...input_props} />;
   }
 
-  render() {
-    let { mode, value } = this.props;
+  render(){
+    return(
+      <div className='value'>
 
-    return <div className='value'>
-      { mode == 'edit' ? this.renderEdit() : value }
-    </div>;
+        {(this.props.mode == 'edit') ? this.renderEdit() : this.props.value}
+      </div>
+    );
   }
 }
 
-export default connect(
-  null,
-  {reviseDocument}
+const mapStateToProps = (dispatch, own_props)=>{
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    reviseDocument: (args)=>{
+      dispatch(MagmaActions.reviseDocument(args));
+    }
+  };
+};
+
+export const AttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(Attribute);

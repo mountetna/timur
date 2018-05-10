@@ -2,51 +2,72 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions';
+import * as MagmaActions from '../../actions/magma_actions';
 
-class ImageAttribute extends React.Component{
+export default class ImageAttribute extends React.Component{
   renderEdit(){
-    let { document, template, attribute, reviseDocument } = this.props;
+    let {document, template, attribute, reviseDocument} = this.props;
     let input_props = {
-      onChange: (e) => reviseDocument(
-        document,
-        template,
-        attribute,
-        e.target.files[0]
-      ),
-      type:"file"
+      onChange: (event)=>{
+        reviseDocument({
+          document,
+          template,
+          attribute,
+          revised_value: e.target.files[0]
+        })
+      },
+      type: 'file'
     };
 
     return(
-      <div className="value">
+      <div className='value'>
+
         <input {...input_props} />
       </div>
     );
   }
 
   render(){
-    let { mode, value } = this.props;
-    if (mode == "edit") return this.renderEdit();
+    if(this.props.mode == 'edit') return this.renderEdit();
 
-    if (value){
+    if(this.props.value){
       return(
-        <div className="value">
-          <a href={ value.url } >
-            <img src={ value.thumb }/>
+
+        <div className='value'>
+
+          <a href={this.props.value.url}>
+
+            <img src={this.props.value.thumb} />
           </a>
         </div>
       );
     }
 
     return(
-      <div className="value">
-        <div className="document_empty">No file.</div>
+      <div className='value'>
+
+        <div className='document_empty'>
+
+          {'No file.'}
+        </div>
       </div>
     );
   }
 }
 
-export default ReactRedux.connect(
-  null,
-  {reviseDocument}
+const mapStateToProps = (dispatch, own_props)=>{
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    reviseDocument: (args)=>{
+      dispatch(MagmaActions.reviseDocument(args));
+    }
+  };
+};
+
+export const ImageAttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(ImageAttribute);
