@@ -45,7 +45,12 @@ export class Browser extends React.Component{
 
     this.props.requestManifests();
     this.props.requestPlots();
-    this.props.requestView(model_name, record_name, 'overview', onSuccess.bind(this));
+    this.props.requestView(
+      model_name,
+      record_name,
+      'overview',
+      onSuccess.bind(this)
+    );
   }
 
   camelize(str){
@@ -208,14 +213,13 @@ export class Browser extends React.Component{
 const mapStateToProps = (state = {}, own_props)=>{
 
   let {model_name, record_name} = own_props;
+  let mdl_nm = `${TIMUR_CONFIG.project_name}_${model_name}`;
 
   let magma = new Magma(state);
-  let template = magma.template(model_name);
-  let doc = magma.document(model_name, record_name);
-  let revision = magma.revision(model_name, record_name) || {};
-  let view = (state.timur.views ? state.timur.views[model_name] : null);
-
-  //let tab = getTabByIndexOrder(view.tabs, 0);
+  let template = magma.template(mdl_nm);
+  let doc = magma.document(mdl_nm, record_name);
+  let revision = magma.revision(mdl_nm, record_name) || {};
+  let view = (state.timur.views ? state.timur.views[mdl_nm] : null);
 
   return {
     template,
