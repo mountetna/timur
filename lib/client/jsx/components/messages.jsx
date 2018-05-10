@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 import { dismissMessages } from '../actions/message_actions';
-import markdown from '../markdown';
+import markdown from '../utils/markdown';
 
 const sanitize = (string) => string.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
