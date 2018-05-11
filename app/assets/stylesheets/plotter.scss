@@ -330,3 +330,13 @@
   transform: rotate(-45deg);
   text-anchor: end;
 }
+
+.tooltip-bg{
+  fill: #8A8A8A;
+  opacity: 0.9;
+}
+
+.tooltip-text{
+  font-size:12px;
+  fill:#ffffff;
+}

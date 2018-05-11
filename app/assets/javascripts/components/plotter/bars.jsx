@@ -17,20 +17,24 @@ class Bars extends Component {
       .range(['#cbf2bb', '#46a21f'])
       .interpolate(interpolateLab);
 
-    const bars = (data.map(datum => {
+    const bars = data.map(datum => {
       let rect_props = {
         key: datum.id,
         x: xScale(datum.id),
         y: yScale(datum.value),
         height: height - margins.bottom - scales.yScale(datum.value),
         width: xScale.bandwidth(),
-        fill: colorScale(datum.value)
+        fill: colorScale(datum.value),
+        onMouseOver: this.props.showToolTip,
+        onMouseOut: this.props.hideToolTip,
+        'data-value': datum.value,
+        'data-type': datum.id
       }
 
       return <rect {...rect_props}/>;
-    }))
+    })
 
-    return <g>{bars}</g>;
+    return <g>{bars}</g>
   }
 }
 

@@ -5,7 +5,7 @@ class ResponsiveWrapper extends Component {
     super(props)
 
     this.state = {
-      containerWidth: null
+      container_width: null
     }
 
     this.fitParentContainer = this.fitParentContainer.bind(this);
@@ -21,29 +21,29 @@ class ResponsiveWrapper extends Component {
   }
 
   fitParentContainer() {
-    const { containerWidth } = this.state;
-    const currentContainerWidth = this.chartContainer
+    const { container_width } = this.state;
+    const current_container_width = this.chartContainer
       .getBoundingClientRect().width;
 
-    const shouldResize = containerWidth !== currentContainerWidth;
+    const should_resize = container_width !== current_container_width;
 
-    if (shouldResize) {
+    if (should_resize) {
       this.setState({
-        containerWidth: currentContainerWidth
+        container_width: current_container_width
       })
     }
   }
 
   render() {
-    const {containerWidth} = this.state;
-    const shouldRenderChart = containerWidth !== null;
+    const {container_width} = this.state;
+    const should_render_chart = container_width !== null;
 
     return (
       <div
         ref={(el) => { this.chartContainer = el }}
         className="Responsive-wrapper"
       >
-        {shouldRenderChart && this.props.render(containerWidth)}
+        {should_render_chart && this.props.render(container_width)}
       </div>
     )
   }
