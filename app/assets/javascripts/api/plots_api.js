@@ -2,7 +2,7 @@
 import {headers, parseJSON, checkStatus} from '../utils/fetch_utils';
 
 export const plotIndexUrl = (queryParams) => {
-  let path = Routes.plots_path(PROJECT_NAME);
+  let path = Routes.plots_path(TIMUR_CONFIG.project_name);
 
   // List of params.
   const params = Object.keys(queryParams);
@@ -28,7 +28,7 @@ export const fetchPlots = ()=>{
     method: 'POST',
     headers: headers('json', 'csrf')
   };
-  let route = Routes.plots_fetch_path(PROJECT_NAME);
+  let route = Routes.plots_fetch_path(TIMUR_CONFIG.project_name);
 
   return fetch(route, route_opts)
     .then(checkStatus)
@@ -42,7 +42,7 @@ export const createPlot = (plot)=>{
     headers: headers('json', 'csrf'),
     body: JSON.stringify(plot)
   };
-  let route = Routes.manifests_plots_create_path(PROJECT_NAME);
+  let route = Routes.plots_create_path(TIMUR_CONFIG.project_name);
 
   return fetch(route, route_opts)
     .then(checkStatus)
@@ -55,7 +55,7 @@ export const destroyPlot = (plot)=>{
     headers: headers('json', 'csrf'),
     method: 'DELETE'
   };
-  let route = Routes.manifests_plots_destroy_path(PROJECT_NAME, plot.id);
+  let route = Routes.plots_destroy_path(TIMUR_CONFIG.project_name, plot.id);
 
   return fetch(route, route_opts)
     .then(checkStatus)
@@ -69,7 +69,7 @@ export const updatePlot = (plot)=>{
     headers: headers('json', 'csrf'),
     body: JSON.stringify(plot)
   };
-  let route = Routes.manifests_plots_update_path(PROJECT_NAME, plot.id);
+  let route = Routes.plots_update_path(TIMUR_CONFIG.project_name, plot.id);
 
   return fetch(route, route_opts)
     .then(checkStatus)

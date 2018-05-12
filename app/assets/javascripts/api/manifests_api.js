@@ -4,11 +4,11 @@ import {headers, parseJSON, checkStatus} from '../utils/fetch_utils';
 export const fetchManifests = (exchange)=>{
   let route_opts = {
     credentials: 'same-origin',
-    method: 'POST',
+    method: 'GET',
     headers: headers('json', 'csrf')
   };
 
-  let exchangePromise = exchange.fetch(Routes.manifests_fetch_path(PROJECT_NAME), route_opts)
+  let exchangePromise = exchange.fetch(Routes.manifests_fetch_path(TIMUR_CONFIG.project_name), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
@@ -23,7 +23,7 @@ export const createManifest = (manifest, exchange)=>{
     body: JSON.stringify(manifest)
   };
 
-  let exchangePromise = exchange.fetch(Routes.manifests_create_path(PROJECT_NAME), route_opts)
+  let exchangePromise = exchange.fetch(Routes.manifests_create_path(TIMUR_CONFIG.project_name), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
@@ -38,7 +38,7 @@ export const updateManifest = (manifestUpdates, manifest_id, exchange)=>{
     body: JSON.stringify(manifestUpdates)
   };
 
-  let exchangePromise = exchange.fetch(Routes.manifests_update_path(PROJECT_NAME, manifest_id), route_opts)
+  let exchangePromise = exchange.fetch(Routes.manifests_update_path(TIMUR_CONFIG.project_name, manifest_id), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
@@ -52,7 +52,7 @@ export const destroyManifest = (manifest_id, exchange)=>{
     headers: headers('json', 'csrf')
   };
 
-  let exchangePromise = exchange.fetch(Routes.manifests_destroy_path(PROJECT_NAME, manifest_id), route_opts)
+  let exchangePromise = exchange.fetch(Routes.manifests_destroy_path(TIMUR_CONFIG.project_name, manifest_id), route_opts)
     .then(checkStatus)
     .then(parseJSON);
 
@@ -68,7 +68,7 @@ export const getConsignments = (manifests, exchange)=>{
     body: JSON.stringify({queries: manifests})
   };
 
-  let exchangePromise = exchange.fetch(Routes.consignment_json_path(PROJECT_NAME), route_opts)
+  let exchangePromise = exchange.fetch(Routes.consignment_path(TIMUR_CONFIG.project_name), route_opts)
     .then(checkStatus)
     .then(parseJSON)
 
@@ -84,8 +84,7 @@ export const getConsignmentsByManifestId = (manifest_ids, record_name, exchange)
     body: JSON.stringify({manifest_ids, record_name})
   };
 
-  let uri = `/${PROJECT_NAME}/json/consignment_by_manifest_id_json`;
-  let exchangePromise = exchange.fetch(uri, route_opts)
+  let exchangePromise = exchange.fetch(Routes.consignment_path(TIMUR_CONFIG.project_name), route_opts)
     .then(checkStatus)
     .then(parseJSON)
 

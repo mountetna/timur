@@ -1,4 +1,25 @@
-import * as FetchUtils from '../utils/fetch_utils';
+import {
+  parseJSON, generateDownload, makeBlob, checkStatus, headers
+} from '../utils/fetch_utils';
+
+const magmaPath = (endpoint) => `${TIMUR_CONFIG.magma_host}/${endpoint}`;
+
+const magmaPost = (endpoint, exchange, params) => {
+  return exchange.fetch(
+    magmaPath(endpoint),
+    {
+      method: 'POST',
+      credentials: 'include',
+      headers: headers('json'),
+      body: JSON.stringify({
+        ...params,
+        project_name: TIMUR_CONFIG.project_name,
+      })
+    }
+  )
+    .then(checkStatus)
+    .then(parseJSON);
+}
 
 const create = (name, attributes)=>{
   let element = document.createElement(name);
@@ -9,29 +30,34 @@ const create = (name, attributes)=>{
 };
 
 const input = (name, value)=>{
-  return create('input', {type: 'hidden', name, value})
+  return create('input', {type: 'hidden', name, value});
 };
 
-export const getTSVForm = (data)=>{
+export const getTSVForm = (model_name, filter)=>{
+  let { Authorization } = headers('auth');
+  let data = {
+    'X-Etna-Authorization': Authorization,
+    project_name: TIMUR_CONFIG.project_name,
+    model_name,
+    record_names: 'all',
+    attribute_names: 'all',
+    filter,
+    format: 'tsv'
+  };
+
   let form = create(
     'form',
     {
-      action: Routes.table_tsv_path(PROJECT_NAME),
+      action: magmaPath('retrieve'),
       method: 'POST'
     }
   );
 
-  form.appendChild(
-    input('authenticity_token', FetchUtils.headers('csrf')['X-CSRF-Token'])
-  );
-
-  // Eliminate null and undefined values.
-  data = Object.keys(data)
-    .filter(key=>data[key] != undefined && data[key] != null)
-    .reduce((obj, key) => ({ ...obj, [key] : data[key] }), {});
-
-  for(let name in data){
-    form.appendChild(input(name, data[name]));
+  for (let name in data) {
+    let value = data[name];
+    if (value != undefined && value != null) {
+      form.appendChild(input(name, value));
+    }
   }
 
   form.style.display = 'none';
@@ -40,59 +66,24 @@ export const getTSVForm = (data)=>{
   document.body.removeChild(form);
 };
 
-export const getTSV = (model_name, record_names, exchange)=>{
-  let route_opts = {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: FetchUtils.headers('json', 'csrf'),
-    body: JSON.stringify({model_name, record_names})
-  };
-
-  let fetch_opts = [Routes.table_tsv_path(PROJECT_NAME), route_opts];
-  return exchange.fetch(...fetch_opts)
-    .then(FetchUtils.checkStatus)
-    .then(FetchUtils.makeBlob)
-    .then(FetchUtils.generateDownload(`${model_name}.tsv`));
-};
-
 export const getDocuments = (doc_args, exchange)=>{
-  let route_opts = {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: FetchUtils.headers('csrf', 'json'),
-    body: JSON.stringify(doc_args)
-  };
-
-  let fetch_opts = [Routes.records_json_path(PROJECT_NAME), route_opts];
-  return exchange.fetch(...fetch_opts)
-    .then(FetchUtils.checkStatus)
-    .then(FetchUtils.parseJSON);
+  return magmaPost('retrieve', exchange, doc_args);
 };
 
 export const postRevisions = (revision_data, exchange)=>{
-  let route_opts = {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: FetchUtils.headers('csrf'),
-    body: revision_data
-  };
-
-  let fetch_opts = [Routes.update_model_path(PROJECT_NAME), route_opts];
-  return exchange.fetch(...fetch_opts)
-    .then(FetchUtils.checkStatus)
-    .then(FetchUtils.parseJSON);
+  revision_data.append('project_name', TIMUR_CONFIG.project_name);
+  return exchange.fetch(
+    magmaPath('update'),
+    {
+      method: 'POST',
+      credentials: 'include',
+      body: revision_data
+    }
+  )
+    .then(checkStatus)
+    .then(parseJSON);
 };
 
 export const getAnswer = (question, exchange)=>{
-  let route_opts = { 
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: FetchUtils.headers('csrf', 'json'),
-    body: JSON.stringify({question})
-  };
-
-  let fetch_opts = [Routes.question_json_path(PROJECT_NAME), route_opts];
-  return exchange.fetch(...fetch_opts)
-    .then(FetchUtils.checkStatus)
-    .then(FetchUtils.parseJSON);
+  return magmaPost('query', exchange, question);
 };

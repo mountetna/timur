@@ -13,6 +13,7 @@
     "d3-ease": "^1.0.3",
     "downloadjs": "^1.4.7",
     "font-awesome": "^4.7.0",
+    "js-cookie": "^2.2.0",
     "json2csv": "^4.0.1",
     "marked": "^0.3.17",
     "plotly.js": "^1.35.0",

@@ -14,7 +14,7 @@ module Archimedes
       # an interface for easily defining a mathematical operation
       def operation *symbols
         make_operation(symbols) do |value, symbol, other_value|
-          value.send symbol, other_value
+          filter_nan(value.send(symbol, other_value))
         end
       end
       alias_method :operations, :operation
@@ -22,7 +22,7 @@ module Archimedes
       # an interface for easily defining a comparison operation
       def comparison *symbols
         make_operation(symbols) do |value, symbol, other_value|
-          !!value.send(symbol, other_value)
+          !!filter_nan(value.send(symbol, other_value))
         end
       end 
       alias_method :comparisons, :comparison
@@ -37,6 +37,10 @@ module Archimedes
             end
           end
         end
+      end
+
+      def filter_nan(value)
+        (value.respond_to?(:nan?) && value.nan?) ? nil : value
       end
     end
 

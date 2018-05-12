@@ -46,7 +46,7 @@ export const addPredicates = (predicates)=>{
 
 /*
  * Here we add the models and documents to the store. At the same time we strip
- * off the model namespacing. The server returns the full name of the model. 
+ * off the model namespacing. The server returns the full name of the model.
  * And we want that behavior so we can know from which project the data is
  * coming from. However, we do not want to propigate that namespacing to the UI.
  */
@@ -82,7 +82,6 @@ export const requestDocuments = (args)=>{
 
   return (dispatch)=>{
     let localSuccess = (response)=>{
-
       if('error' in response){
         dispatch(showMessages([`There was a ${response.type} error.`]));
         console.log(response.error);
@@ -92,25 +91,26 @@ export const requestDocuments = (args)=>{
       consumePayload(dispatch, response);
       if(success != undefined) success(response);
     };
-  
+
     let localError = (e) => {
       if (!e.response) {
         dispatch(showMessages([`Something is amiss. ${e}`]));
         return;
       }
-  
+
+
       e.response.json().then((response)=>{
         let errStr = response.errors.map((error)=> `* ${error}`);
         errStr = [`### Our request was refused.\n\n${errStr}`];
         dispatch(showMessages(errStr));
       });
-  
+
       if(error != undefined){
         let message = JSON.parse(error.response);
         error(message);
       }
     };
-  
+
     let get_doc_args = [
       {
         model_name,
@@ -123,8 +123,8 @@ export const requestDocuments = (args)=>{
       },
       new Exchange(dispatch, exchange_name)
     ];
-  
-    MagmaAPI.getDocuments(...get_doc_args)
+
+    return MagmaAPI.getDocuments(...get_doc_args)
       .then(localSuccess)
       .catch(localError);
     }
@@ -219,7 +219,7 @@ export const sendRevisions = (model_name, revisions, success, error)=>{
 // Download a TSV from magma via Timur.
 export const requestTSV = (model_name,filter)=>{
   return (dispatch)=>{
-    MagmaAPI.getTSVForm({model_name, filter, record_names: 'all'});
+    MagmaAPI.getTSVForm(model_name,filter);
   };
 };
 

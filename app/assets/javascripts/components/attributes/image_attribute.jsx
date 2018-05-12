@@ -2,20 +2,18 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
-import * as MagmaActions from '../../actions/magma_actions';
+import { reviseDocument } from '../../actions/magma_actions';
 
-export default class ImageAttribute extends React.Component{
+class ImageAttribute extends React.Component{
   renderEdit(){
-    let store = this.context.store;
-    let self = this;
+    let { document, template, attribute, reviseDocument } = this.props;
     let input_props = {
-      onChange:function(e) {
-        store.dispatch(reviseDocument(
-          self.props.document,
-          self.props.template,
-          self.props.attribute,
-          e.target.files[0]))
-      },
+      onChange: (e) => reviseDocument(
+        document,
+        template,
+        attribute,
+        e.target.files[0]
+      ),
       type:"file"
     };
 
@@ -27,15 +25,14 @@ export default class ImageAttribute extends React.Component{
   }
 
   render(){
-    let self = this;
-    let store = this.context.store
-    if (this.props.mode == "edit") return this.renderEdit();
-    
-    if (this.props.value){
+    let { mode, value } = this.props;
+    if (mode == "edit") return this.renderEdit();
+
+    if (value){
       return(
         <div className="value">
-          <a href={ this.props.value.url } >
-            <img src={ this.props.value.thumb }/>
+          <a href={ value.url } >
+            <img src={ value.thumb }/>
           </a>
         </div>
       );
@@ -48,3 +45,8 @@ export default class ImageAttribute extends React.Component{
     );
   }
 }
+
+export default ReactRedux.connect(
+  null,
+  {reviseDocument}
+)(ImageAttribute);

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+admin:
+  name: admin_name
+  email: admin@gmail.com
+
+admin2:
+  name: admin2_name
+  email: admin2@gmail.com
+
+viewer:
+  name: viewer_name
+  email: viewer@gmail.com
