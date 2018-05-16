@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Attribute from './attribute';
-import MarkdownAttribute from './markdown_attribute';
 import SelectAttribute from './select_attribute';
 import ImageAttribute from './image_attribute';
 import DocumentAttribute from './document_attribute';
@@ -13,6 +12,7 @@ import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
 import TextAttribute from './text_attribute';
 import {MetricsAttributeContainer as MetricsAttribute} from './metrics_attribute';
+import {MarkdownAttributeContainer as MarkdownAttribute} from './markdown_attribute';
 
 // The plots.
 import {LinePlotAttributeContainer as LinePlotAttribute} from './plot_attributes/line_plot_attribute';
