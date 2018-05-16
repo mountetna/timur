@@ -26,6 +26,7 @@ import {PlotterContainer as Plotter} from './components/plotter/plotter';
 import {MessagesContainer as Messages} from './components/messages';
 import {TimurNavContainer as TimurNav} from './components/timur_nav';
 import {HomePageContainer as HomePage} from './components/home_page';
+import {Settings} from './components/settings/settings';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
@@ -107,7 +108,9 @@ class TimurApplication{
       case 'plots':
         return <Plotter {...props}/>;
       case 'search':
-        return <Search  {...props} />; 
+        return <Search  {...props} />;
+      case 'settings':
+        return <Settings {...props} />;
       case 'activity':
         return <Activity {...props} />;
       case 'noauth':

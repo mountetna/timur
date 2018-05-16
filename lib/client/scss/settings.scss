@@ -1,0 +1,136 @@
+@import 'globals';
+
+.settings-view-group{
+  position: relative;
+  font-family: $body_font;
+}
+
+.settings-view-elements{
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 1px;
+}
+
+.settings-view-action-btn-group{
+  float: right;
+}
+
+.settings-view-action-btn-group button{
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.settings-view-form-title{
+  border-bottom: 1px solid #666666;
+  padding-bottom: 10px;
+}
+
+.settings-view-model-title-input{
+  border: none;
+  font-size: 1em;
+  margin-left: 10px;
+  width: 300px;
+  outline: 1px solid #666;
+  color: #111;
+}
+
+.disabled.settings-view-model-title-input{
+  outline: none;
+}
+
+.settings-view-tab-group {
+  text-align: justify;
+  font-size: .8em;
+  font-family: 'Courier New', Courier, monospace;
+  margin-left: 0px;
+  margin-top: 0px;
+  width: 100%;
+  height: 400px;
+  resize: vertical;
+  border: solid 2px #22a778;
+  outline-color: #22a778;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.disabled.settings-view-tab-group {
+  font-size: .8em;
+  border: 1px solid #000;
+}
+
+/* Button Styling, as opposed to positioning/layout ***************************/
+.settings-view-action-btn-group button,
+.settings-view-form-control-btn{
+  padding:5px;
+  border: 1px solid #333;
+  outline: none;
+  background: #eee;
+  font-size: 0.6em;
+}
+
+.settings-view-action-btn-group button:hover:enabled,
+.settings-view-form-control-btn:hover:enabled{
+  color: #fff;
+  background: #22a778;
+  border: 1px solid #22a778;
+}
+
+.settings-view-action-btn-group button:disabled,
+.settings-view-form-control-btn:disabled{
+  cursor: default;
+  border: 1px solid #ccc;
+}
+
+/******************************************************************************/
+
+.view-setting-tab-group{
+  margin-bottom: 30px;
+}
+
+.view-setting-tab-header{
+  width: 100%;
+  min-height: 25px;
+
+  font-family: $main-font;
+  color: $dark-grey;
+  font-size: 0.8em;
+  text-indent: 15px;
+  line-height: 25px;
+
+  border-left: 1px solid $med-grey-1;
+  background: $light-color;
+}
+
+.view-setting-pane-group{
+  margin-right: 50px;
+  margin-bottom: 15px;
+}
+
+.view-setting-pane-header{
+  top: 25px;
+  left: 0px;
+  right: 40px;
+  height: 25px;
+
+  font-family: $main-font;
+  color: $dark-grey;
+  font-size: 0.8em;
+  text-indent: 40px;
+  line-height: 25px;
+
+  border: 1px solid $med-grey-1;
+  background: $light-grey;
+}
+
+.view-setting-pane{
+  width: 100%;
+  min-height: 300px;
+  margin-top: -1px;
+  font-family: 'Courier New', Courier, monospace;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  resize: vertical;
+}
+  

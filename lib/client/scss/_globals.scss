@@ -62,6 +62,25 @@ $quote_font: 'Crimson Text', serif;
 
 /* NEW GLOBALS ****************************************************************/
 
+// Common variables
+$font-path: '../fonts' !default;
+$main-font: 'Oxygen', sans-serif;
+$main-font-bold: 'Oxygen', sans-serif;
+$monospace_font: 'Courier New', Courier, monospace;
+
+$light-color: #a9d58e;
+$med-color: #22a778;
+$dark-color: #24a684;
+$darkest-color: #19755d;
+
+$light-grey: #eeeeee;
+$med-grey-1: #999999;
+$med-grey-2: #666666;
+$dark-grey: #333333;
+
+$white: #ffffff;
+$black: #000000;
+
 .left-column-group{
   display: inline-block;
   width: 175px;
