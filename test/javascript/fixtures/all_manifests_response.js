@@ -54,7 +54,7 @@ export default {
       "id":8,
       "name":"manifest1",
       "description":"private manifest",
-      "project":"ipi",
+      "project":"labors",
       "access":"private",
       "data":{
         "elements":[
@@ -73,7 +73,7 @@ export default {
       "created_at":"2017-09-18T23:58:11.048Z",
       "updated_at":"2017-09-18T23:58:11.048Z",
       "user":{
-        "name":"Darrell Abrau"
+        "name":"Eurystheus"
       },
       "plots":[
 
@@ -84,7 +84,7 @@ export default {
       "id":9,
       "name":"manifest2",
       "description":"public manifest",
-      "project":"ipi",
+      "project":"labors",
       "access":"public",
       "data":{
         "elements":[
@@ -103,7 +103,7 @@ export default {
       "created_at":"2017-09-18T23:58:50.495Z",
       "updated_at":"2017-09-18T23:58:50.495Z",
       "user":{
-        "name":"Darrell Abrau"
+        "name":"Eurystheus"
       },
       "plots":[
 
@@ -114,7 +114,7 @@ export default {
       "id":10,
       "name":"new_manifest",
       "description":"new new",
-      "project":"ipi",
+      "project":"labors",
       "access":"private",
       "data":{
         "elements":[
@@ -128,7 +128,7 @@ export default {
       "created_at":"2017-09-19T00:11:12.260Z",
       "updated_at":"2017-09-19T00:11:12.260Z",
       "user":{
-        "name":"Darrell Abrau"
+        "name":"Eurystheus"
       },
       "plots":[
 
@@ -139,7 +139,7 @@ export default {
       "id":11,
       "name":"manifest_for_plot",
       "description":"for plot",
-      "project":"ipi",
+      "project":"labors",
       "access":"private",
       "data":{
         "elements":[
@@ -158,7 +158,7 @@ export default {
       "created_at":"2017-09-19T21:05:13.224Z",
       "updated_at":"2017-09-19T21:05:13.224Z",
       "user":{
-        "name":"Darrell Abrau"
+        "name":"Eurystheus"
       },
       "plots":[
         { ...plot }

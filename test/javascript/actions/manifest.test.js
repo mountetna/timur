@@ -10,12 +10,17 @@ import manifestResp from '../fixtures/manifest_response';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
+const PROJECT_NAME = 'labors';
+
 describe('async actions', () => {
   afterEach(() => {
     nock.cleanAll()
   });
 
-  global.PROJECT_NAME = 'ipi';
+  global.TIMUR_CONFIG = {
+    project_name: PROJECT_NAME,
+    magma_host: 'https://magma.test',
+  };
   global.Routes = {
     manifests_fetch_path: (projectName) => `http://www.fake.com/${projectName}/manifests`,
     manifests_destroy_path: (projectName, manifestId) => `http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`,
@@ -28,7 +33,7 @@ describe('async actions', () => {
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, LOAD_MANIFESTS, and ADD_PLOT when fetching user manifests has been done', () => {
     nock('http://www.fake.com')
-      .post('/ipi/manifests')
+      .get(`/${PROJECT_NAME}/manifests`)
       .reply(
         200,
         allManifestsResp,
@@ -42,7 +47,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"request-manifest",
-          exchange_path:"http://www.fake.com/ipi/manifests",
+          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests`,
           start_time: currentDate
         },
         exchange_name:"request-manifest",
@@ -69,7 +74,7 @@ describe('async actions', () => {
     const manifestId = 1;
 
     nock('http://www.fake.com')
-      .post(`/ipi/manifests/destroy/${manifestId}`)
+      .post(`/${PROJECT_NAME}/manifests/destroy/${manifestId}`)
       .reply(
         200,
         {"success":true},
@@ -83,7 +88,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"delete-manifest",
-          exchange_path:`http://www.fake.com/ipi/manifests/destroy/${manifestId}`,
+          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/destroy/${manifestId}`,
           start_time: currentDate
         },
         exchange_name:"delete-manifest",
@@ -112,7 +117,7 @@ describe('async actions', () => {
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, and SELECT_MANIFEST when creating a new user manifest has been done', () => {
     nock('http://www.fake.com')
-      .post('/ipi/manifests/create')
+      .post(`/${PROJECT_NAME}/manifests/create`)
       .reply(
         200,
         manifestResp,
@@ -126,7 +131,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"save-new-manifest",
-          exchange_path:"http://www.fake.com/ipi/manifests/create",
+          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/create`,
           start_time: currentDate
         },
         exchange_name:"save-new-manifest",
@@ -156,7 +161,7 @@ describe('async actions', () => {
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, and UPDATE_USER_MANIFEST when updating user manifest has been done', () => {
     nock('http://www.fake.com')
-      .post(`/ipi/manifests/update/${manifestResp.manifest.id}`)
+      .post(`/${PROJECT_NAME}/manifests/update/${manifestResp.manifest.id}`)
       .reply(
         200,
         manifestResp,
@@ -170,7 +175,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"save-manifest",
-          exchange_path:`http://www.fake.com/ipi/manifests/update/${manifestResp.manifest.id}`,
+          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/update/${manifestResp.manifest.id}`,
           start_time: currentDate
         },
         exchange_name:"save-manifest",
@@ -204,7 +209,7 @@ describe('async actions', () => {
     };
 
     nock('http://www.fake.com')
-      .post('/ipi/manifests/create')
+      .post(`/${PROJECT_NAME}/manifests/create`)
       .reply(
         200,
         { "manifest": copiedManifestResp },
@@ -218,7 +223,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"copy-manifest",
-          exchange_path:"http://www.fake.com/ipi/manifests/create",
+          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/create`,
           start_time: currentDate
         },
         exchange_name:"copy-manifest",
