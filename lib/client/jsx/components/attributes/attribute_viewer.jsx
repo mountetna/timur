@@ -51,7 +51,7 @@ export default class AttributeViewer extends React.Component{
       case 'DemographicAttribute':
       case 'DiagnosticAttribute':
       case 'TreatmentAttribute':
-      case 'AdverseEventAttribute':
+      //case 'AdverseEventAttribute':
         return <ClinicalAttribute  {...this.props} />;
 
       case 'BoxPlotAttribute':
