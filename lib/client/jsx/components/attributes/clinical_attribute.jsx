@@ -6,16 +6,32 @@ import * as ReactRedux from 'react-redux';
 import ClinicalInput from '../inputs/clinical_input';
 
 // Module imports.
-import * as MagmaActions from '../../actions/magma_actions';
-import * as MagmaSelector from '../../selectors/magma_selector';
-import * as DictionarySelector from '../../selectors/dictionary_selector';
+import {
+  requestDictionaries
+} from '../../actions/magma_actions';
+
+import {
+  selectModelDocuments,
+  selectModelTemplate
+} from '../../selectors/magma_selector';
+
+import {
+  selectDictionary,
+  selectNestedDictionary
+} from '../../selectors/dictionary_selector';
+
+import {
+  nestDataset,
+  interleaveDictionary
+} from '../../selectors/selector_utils.js';
+
 
 export class ClinicalAttribute extends React.Component{
   constructor(props){
     super(props);
 
     this.state = {
-      fetched_dictionary: false,
+      dictionary_requested: false,
       documents: {},
       dictionary: {}
     };
@@ -23,17 +39,17 @@ export class ClinicalAttribute extends React.Component{
 
   componentDidUpdate(){
 
-    let {dictionary, fetchDictionary} = this.props;
+    let {dictionary, requestDictionaries} = this.props;
 
     // Check for a dictionary to fetch that corresponds to a model/component.
     if(
-      this.state.fetched_dictionary ||
+      this.state.dictionary_requested ||
       !('name' in dictionary) ||
       dictionary.name == undefined
     ) return;
 
-    fetchDictionary({dictionary_name: dictionary.name}, dictionary.project);
-    this.setState({fetched_dictionary: true});
+    requestDictionaries({dictionary_name: dictionary.name}, dictionary.project);
+    this.setState({dictionary_requested: true});
   }
 
   static getDerivedStateFromProps(next_props, prev_state){
@@ -220,38 +236,56 @@ export class ClinicalAttribute extends React.Component{
     return definitions;
   }
 
-  renderRecord(record){
+  renderRecord(record, parent_definitions){
 
 //  Loop each object.
 //  Get it's corresponding dictionary value.
 //  Render the object.
 //  If it has children, insert a grouping recurse.
+//    let definitions = {};
+//    let dictionary = this.state.dictionary.definitions;
+//    definitions = this.selectDefinitions(record.name, definitions, dictionary);
 
 /*
-    let definitions = {};
-    let dictionary = this.state.dictionary.definitions;
-    definitions = this.selectDefinitions(record.name, definitions, dictionary);
-
     if(Object.keys(definitions).length > 1){
       console.log('wow');
     }
 */
+
+//    let definition = this.pullDefinition(record);
+
     let child_elements = [];
     for(let id in record.children){
       child_elements.push(this.renderRecord(record.children[id]));
     }
 
+    // Render the key.
+    let record_key = <div className='clinical-record-key'>{record.name}</div>;
+
+    // Render the value.
+    let record_value = (
+      <div className='clinical-record-value'>
+
+        {record.value}
+      </div>
+    );
+
+    if(record.definitions.values){
+      record_value = (
+        <select className='clinical-record-value-option' value={record.value}>
+
+          {record.definitions.values.map((val)=>{
+            return <option value={val}>{val}</option>;
+          })}
+        </select>
+      );
+    }
+
     return(
       <div className='clinical-record-group' key={`record_${record.id}`}>
 
-        <div className='clinical-record-key'>
-
-          {record.name}
-        </div>
-        <div className='clinical-record-value'>
-
-          {record.value}
-        </div>
+        {record_key}
+        {record_value}
         {child_elements}
       </div>
     );
@@ -316,17 +350,38 @@ const mapStateToProps = (state, own_props)=>{
   let project_name = TIMUR_CONFIG.project_name;
   let model_name = `${project_name}_${own_props.attribute.model_name}`;
 
+  /* 
+   * The main goal of processing the data here is to:
+   * 1. Attach the basic defintions to the documents.
+   * 2. Nest the documents in their proper hierarchy.
+   */
+
+  let documents = interleaveDictionary(
+    selectModelDocuments(state, model_name),
+    selectDictionary(state, model_name)
+  );
+
+  let nested_documents = {};
+  if(documents != undefined){
+    for(let id in documents){
+      nested_documents = nestDataset(
+        documents[id],
+        nested_documents
+      );
+    }
+  }
+
   return {
-    documents: MagmaSelector.selectNestedDocuments(state, model_name),
-    dictionary: DictionarySelector.selectNestedDictionary(state,model_name),
-    template: MagmaSelector.selectModelTemplate(state, model_name)
+    documents: nested_documents,
+    dictionary: selectNestedDictionary(state, model_name),
+    template: selectModelTemplate(state, model_name)
   };
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
-    fetchDictionary: (args, project_name)=>{
-      dispatch(MagmaActions.requestDictionaries(args, project_name));
+    requestDictionaries: (args, project_name)=>{
+      dispatch(requestDictionaries(args, project_name));
     }
   };
 };
