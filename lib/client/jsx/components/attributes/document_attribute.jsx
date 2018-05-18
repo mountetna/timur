@@ -6,48 +6,67 @@ import * as MagmaActions from '../../actions/magma_actions';
 
 export default class DocumentAttribute extends React.Component{
   renderEdit(){
-    let store = this.context.store;
-    let self = this;
+    let {document, template, attribute, reviseDocument} = this.props;
     let input_props = {
-      onChange: function(e) {
-        store.dispatch(MagmaActions.reviseDocument(
-          self.props.document,
-          self.props.template,
-          self.props.attribute,
-          e.target.files[0]))
+      onChange: function(event){
+        reviseDocument({
+          document,
+          template,
+          attribute,
+          revised_value: event.target.files[0]
+        });
       },
-      type:"file"
+      type: 'file'
     };
 
     return(
       <div className="value">
+
         <input {...input_props}/>
       </div>
-    )
+    );
   }
 
   render(){
+    if(this.props.mode == 'edit') return this.renderEdit();
 
-    let self = this;
-    let store = this.context.store
-    let link = this.props.value
-
-    if (this.props.mode == "edit") return this.renderEdit();
-
-    if (link){
+    if(this.props.value){
       return(
-        <div className="value">
-          <a href={ link.url } > { link.path } </a>
+        <div className='value'>
+
+          <a href={this.props.value.url}>
+
+            {this.props.value.path}
+          </a>
         </div>
       );
     }
 
     return(
-      <div className="value">
-        <div className="document_empty">
-          No file.
+      <div className='value'>
+
+        <div className='document_empty'>
+
+          {'No file.'}
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = (dispatch, own_props)=>{
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    reviseDocument: (args)=>{
+      dispatch(MagmaActions.reviseDocument(args));
+    }
+  };
+};
+
+export const DocumentAttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DocumentAttribute);

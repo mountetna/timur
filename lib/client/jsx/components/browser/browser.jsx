@@ -45,7 +45,12 @@ export class Browser extends React.Component{
 
     this.props.requestManifests();
     this.props.requestPlots();
-    this.props.requestView(model_name, record_name, 'overview', onSuccess.bind(this));
+    this.props.requestView({
+      model_name,
+      record_name,
+      tab_name: 'overview',
+      success: onSuccess.bind(this)
+    });
   }
 
   camelize(str){
@@ -55,34 +60,33 @@ export class Browser extends React.Component{
   }
 
   headerHandler(action){
+
+    let {
+      revision,
+      record_name,
+      model_name,
+      discardRevision,
+      sendRevisions
+    } = this.props;
+
     switch(action){
       case 'cancel':
-
         this.setState({mode: 'browse'});
-        this.props.discardRevision(
-          this.props.record_name,
-          this.props.model_name
-        );
+        discardRevision({record_name, model_name});
         return;
       case 'approve':
-
         if(this.props.has_revisions){
-
           this.setState({mode: 'submit'});
-          this.props.sendRevisions(
-            this.props.model_name,
-            {[this.props.record_name] : this.props.revision},
-            ()=>this.setState({mode: 'browse'}),
-            ()=>this.setState({mode: 'edit'})
-          );
+          sendRevisions({
+            model_name,
+            revisions: {[record_name] : revision},
+            success: ()=>this.setState({mode: 'browse'}),
+            error: ()=>this.setState({mode: 'browse'})
+          });
         }
         else{
-
           this.setState({mode: 'browse'});
-          this.props.discardRevision(
-            this.props.record_name,
-            this.props.model_name
-          );
+          discardRevision({record_name, model_name});
         }
         return;
       case 'edit':
@@ -208,14 +212,13 @@ export class Browser extends React.Component{
 const mapStateToProps = (state = {}, own_props)=>{
 
   let {model_name, record_name} = own_props;
+  let mdl_nm = `${TIMUR_CONFIG.project_name}_${model_name}`;
 
   let magma = new Magma(state);
-  let template = magma.template(model_name);
-  let doc = magma.document(model_name, record_name);
-  let revision = magma.revision(model_name, record_name) || {};
-  let view = (state.timur.views ? state.timur.views[model_name] : null);
-
-  //let tab = getTabByIndexOrder(view.tabs, 0);
+  let template = magma.template(mdl_nm);
+  let doc = magma.document(mdl_nm, record_name);
+  let revision = magma.revision(mdl_nm, record_name) || {};
+  let view = (state.timur.views ? state.timur.views[mdl_nm] : null);
 
   return {
     template,
@@ -236,13 +239,8 @@ const mapDispatchToProps = (dispatch, own_props)=>{
       dispatch(ManifestActions.requestManifests());
     },
 
-    requestView: (model_name, record_name, tab_name, onSuccess)=>{
-      dispatch(TimurActions.requestView(
-        model_name,
-        record_name,
-        tab_name,
-        onSuccess
-      ));
+    requestView: (args)=>{
+      dispatch(TimurActions.requestView(args));
     },
 
     requestDocuments: (model_name, record_name, attribute_names)=>{
@@ -255,12 +253,12 @@ const mapDispatchToProps = (dispatch, own_props)=>{
       }));
     },
 
-    discardRevision: ()=>{
-      dispatch(MagmaActions.discardRevision());
+    discardRevision: (args)=>{
+      dispatch(MagmaActions.discardRevision(args));
     },
 
-    sendRevisions: (model_name, revisions, success, error)=>{
-      dispatch(MagmaActions.sendRevisions(model_name,revisions,success,error));
+    sendRevisions: (args)=>{
+      dispatch(MagmaActions.sendRevisions(args));
     }
   };
 };

@@ -1,4 +1,3 @@
-
 // Framework libraries.
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
@@ -9,67 +8,84 @@ import MagmaLink from '../magma_link';
 
 export default class LinkAttribute extends React.Component{
   renderEdit(){
-
-    let self = this;
-    let store = this.context.store;
-    let link = this.props.revision;
+    let {document, template, attribute, reviseDocument} = this.props;
     let link_props = {
-      className:'delete_link',
-      onClick:function(e) {
-        store.dispatch(MagmaActions.reviseDocument(
-          self.props.document,
-          self.props.template,
-          self.props.attribute,
-          null))
+      className: 'delete_link',
+      onClick: function(event){
+        reviseDocument({
+          document,
+          template,
+          attribute,
+          revised_value: null
+        });
       }
-    }
+    };
 
-    if(link && link == this.props.value){
+    if(this.props.revision && this.props.revision == this.props.value){
       return(
         <div className='value'>
 
-          <span {...link_props}>{link}</span>
+          <span {...link_props}>
+
+            {this.props.revision}
+          </span>
         </div>
       );
     }
 
     let input_props = {
-      className:'link_text',
-      waitTime:500,
+      className: 'link_text',
+      waitTime: 500,
       onChange: (value)=>{
-        store.dispatch(MagmaActions.reviseDocument(
-          self.props.document,
-          self.props.template,
-          self.props.attribute,
-          value)
-        )
+        reviseDocument({
+          document,
+          template,
+          attribute,
+          revised_value: value
+        })
       },
-      placeholder:'New or existing ID'
-    }
+      placeholder:'New or existing ID',
+      defaultValue: ''
+    };
 
     return(
       <div className='value'>
 
-        <SlowTextInput />
+        <SlowTextInput {...input_props} />
       </div>
     );
   }
 
   render(){
-    let link = this.props.value;
-    let self = this;
-    let store = this.context.store;
-    
     if (this.props.mode == 'edit') return this.renderEdit();
 
-    if(link){
+    let {value, attribute} = this.props;
+    if(value){
       return(
         <div className='value'>
-          <MagmaLink link={link} model={ this.props.attribute.model_name } />
+
+          <MagmaLink link={value} model={attribute.model_name} />
         </div>
       );
     }
 
-    return <div className='value'/>;
+    return <div className='value' />;
   }
 }
+
+const mapStateToProps = (dispatch, own_props)=>{
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    reviseDocument: (args)=>{
+      dispatch(MagmaActions.reviseDocument(args));
+    }
+  };
+};
+
+export const LinkAttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LinkAttribute);

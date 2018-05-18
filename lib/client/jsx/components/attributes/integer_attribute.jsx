@@ -2,15 +2,17 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
+// Module imports.
 import * as MagmaActions from '../../actions/magma_actions';
-import TextAreaInput from '../inputs/text_area_input';
+import {IntegerInput} from '../inputs/numeric_input';
 
-export default class TextAttribute extends React.Component{
-  renderEdit(){
-    let {revision, document, template, attribute, reviseDocument} = this.props;
+export default class IntegerAttribute extends React.Component{
+  renderInput(){
+    let {revision, attribute, NumericInput, reviseDocument} = this.props;
     let input_props = {
+      className: 'full_text',
+      placeholder: attribute.placeholder,
       defaultValue: revision,
-      className: 'text_box',
       onChange: (value)=>{
         reviseDocument({
           document,
@@ -21,14 +23,14 @@ export default class TextAttribute extends React.Component{
       }
     };
 
-    return <TextAreaInput {...input_props} />;
+    return <IntegerInput {...input_props} />;
   }
 
   render(){
     return(
       <div className='value'>
 
-        {this.props.mode == 'edit' ? this.renderEdit() : this.props.value}
+        {this.props.mode == 'edit' ? this.renderInput() : this.props.value}
       </div>
     );
   }
@@ -46,7 +48,7 @@ const mapDispatchToProps = (dispatch, own_props)=>{
   };
 };
 
-export const TextAttributeContainer = ReactRedux.connect(
+export const IntegerAttributeContainer = ReactRedux.connect(
   mapStateToProps,
   mapDispatchToProps
-)(TextAttribute);
+)(IntegerAttribute);

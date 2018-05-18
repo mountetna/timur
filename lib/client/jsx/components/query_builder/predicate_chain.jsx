@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ModelPredicate from './model';
 import RecordPredicate from './record';
-import ValuePredicate from './value';
+import {ValuePredicateContainer as ValuePredicate} from './value';
 import TerminalPredicate from './terminal';
 
 /*

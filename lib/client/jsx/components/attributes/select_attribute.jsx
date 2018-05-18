@@ -7,35 +7,49 @@ import SelectInput from '../inputs/select_input';
 
 export default class SelectAttribute extends React.Component{
   renderEdit(){
-    let store = this.context.store;
-    let self = this;
+    let {value, document, template, attribute, reviseDocument} = this.props;
     let input_props = {
-      className:"selection",
-      onChange: function(value) {
-         store.dispatch(MagmaActions.reviseDocument(
-           self.props.document,
-           self.props.template,
-           self.props.attribute,
-           value)
-         )
-       },
-      defaultValue: this.props.value,
-      showNone:"disabled",
-      values: this.props.attribute.options
-    }
+      className: 'selection',
+      onChange: function(value){
+        reviseDocument({
+          document,
+          template,
+          attribute,
+          revised_value: value
+        });
+      },
+      defaultValue: value,
+      showNone: 'disabled',
+      values: attribute.options
+    };
 
     return(
-      <div className="value">
+      <div className='value'>
 
         <SelectInput {...input_props} />
       </div>
-    )
+    );
   }
 
   render(){
-    let self = this;
-    let store = this.context.store;
-    if (this.props.mode == "edit") return this.renderEdit();
-    return <div className="value">{ this.props.value }</div>;
+    if (this.props.mode == 'edit') return this.renderEdit();
+    return <div className='value'>{this.props.value}</div>;
   }
 }
+
+const mapStateToProps = (dispatch, own_props)=>{
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    reviseDocument: (args)=>{
+      dispatch(MagmaActions.reviseDocument(args));
+    }
+  };
+};
+
+export const SelectAttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectAttribute);

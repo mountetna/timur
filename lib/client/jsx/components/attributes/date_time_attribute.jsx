@@ -1,36 +1,57 @@
-import { connect } from 'react-redux';
+// Framework libraries.
+import * as React from 'react';
+import * as ReactRedux from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions';
-import React, { Component } from 'react';
+import * as MagmaActions from '../../actions/magma_actions';
+import * as DateUtils from '../../utils/dates';
 import DateTimeInput from '../inputs/date_time_input';
-import { formatDate, formatTime } from '../../utils/dates';
 
-class DateTimeAttribute extends Component {
-  render() {
-    let { value, mode } = this.props;
+export default class DateTimeAttribute extends React.Component{
+  renderEdit(){
+    let {document, template, attribute, reviseDocument} = this.props;
+    let input_props = {
+      defaultValue: this.props.revision,
+      onChange: (new_date)=>{
+        reviseDocument({
+          document,
+          template,
+          attribute,
+          revised_value: new_date && new_date.toISOString()
+        });
+      }
+    };
 
-    return <div className="value">
-      { mode == 'edit' ? this.renderEdit() : this.renderValue(value) }
-    </div>
+    return <DateTimeInput {...input_props} />;
   }
 
   renderValue(value){
-    return <div className='value'>{formatDate(value)}</div>;
+    return <div className='value'>{DateUtils.formatDate(value)}</div>;
   }
 
-  updateDate(new_date) {
-    console.log(new_date);
-    let { document, template, attribute, reviseDocument } = this.props;
-    reviseDocument( document, template, attribute, new_date && new_date.toISOString());
-  }
+  render(){
+    let {value, mode} = this.props;
+    return(
+      <div className='value'>
 
-  renderEdit() {
-    let { revision } = this.props;
-    return <DateTimeInput defaultValue={ revision } onChange={ this.updateDate.bind(this) } />;
+        {(mode == 'edit') ? this.renderEdit() : this.renderValue(value)}
+      </div>
+    );
   }
 }
 
-export default connect(
-  null,
-  { reviseDocument }
+const mapStateToProps = (dispatch, own_props)=>{
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, own_props)=>{
+  return {
+    reviseDocument: (args)=>{
+      dispatch(MagmaActions.reviseDocument(args));
+    }
+  };
+};
+
+export const DateTimeAttributeContainer = ReactRedux.connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(DateTimeAttribute);

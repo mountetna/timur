@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import NumericInput from './numeric_input';
-import SlowTextInput from '../inputs/slow_text_input';
 
 // This is an input to create and edit a list of items
 export default class ListInput extends Component {
