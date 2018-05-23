@@ -22,7 +22,8 @@ import {
 
 import {
   nestDataset,
-  interleaveDictionary
+  interleaveDictionary,
+  compressCheckboxFields
 } from '../../selectors/selector_utils.js';
 
 
@@ -214,8 +215,7 @@ export class ClinicalAttribute extends React.Component{
       );
     });
   }
-*/
-  
+
   // Recurse over the nested dictionary and extract the appropriate definitions.
   selectDefinitions(name, definitions, dictionary){
 
@@ -235,57 +235,68 @@ export class ClinicalAttribute extends React.Component{
 
     return definitions;
   }
-
-  renderRecord(record, parent_definitions){
-
-//  Loop each object.
-//  Get it's corresponding dictionary value.
-//  Render the object.
-//  If it has children, insert a grouping recurse.
-//    let definitions = {};
-//    let dictionary = this.state.dictionary.definitions;
-//    definitions = this.selectDefinitions(record.name, definitions, dictionary);
-
-/*
-    if(Object.keys(definitions).length > 1){
-      console.log('wow');
-    }
 */
+  renderInput(record){
+    let input_props = {
+      className: 'clinical-input',
+      value: record.value,
+      disabled: 'disabled',
+      key: `input_${record.type}_${record.id}`,
+      onChange: (event)=>{
+        console.log(event);
+      }
+    };
 
-//    let definition = this.pullDefinition(record);
+    switch(record.type){
+      case 'string':
+        input_props['type'] = 'text';
+        return <input {...input_props} />;
+      case 'textarea':
+        input_props['type'] = 'textarea';
+        return <input {...input_props} />;
+      case 'number':
+        input_props['type'] = 'number';
+        return <input {...input_props} />;
+      case 'date':
+        input_props['type'] = 'date';
+        return <input {...input_props} />;
+      case 'regex':
+      case 'dropdown':
+      case 'select':
+        if(record.definitions == undefined) return null;
+        if(record.definitions.values == undefined) return null;
+        return(
+          <select {...input_props}>
 
+            {record.definitions.values.map((val)=>{
+              return(
+                <option key={Math.random()} value={val}>
+
+                  {val}
+                </option>
+              );
+            })}
+          </select>
+        );
+    }
+
+    return <div>{'sup'}</div>;
+  }
+
+  renderRecord(record){
     let child_elements = [];
     for(let id in record.children){
       child_elements.push(this.renderRecord(record.children[id]));
     }
 
-    // Render the key.
-    let record_key = <div className='clinical-record-key'>{record.name}</div>;
-
-    // Render the value.
-    let record_value = (
-      <div className='clinical-record-value'>
-
-        {record.value}
-      </div>
-    );
-
-    if(record.definitions.values){
-      record_value = (
-        <select className='clinical-record-value-option' value={record.value}>
-
-          {record.definitions.values.map((val)=>{
-            return <option value={val}>{val}</option>;
-          })}
-        </select>
-      );
-    }
-
     return(
       <div className='clinical-record-group' key={`record_${record.id}`}>
 
-        {record_key}
-        {record_value}
+        <div className='clinical-record-key' data-name={record.name}>
+
+          {record.label}
+        </div>
+        <ClinicalInput record={record} />
         {child_elements}
       </div>
     );
@@ -356,8 +367,12 @@ const mapStateToProps = (state, own_props)=>{
    * 2. Nest the documents in their proper hierarchy.
    */
 
-  let documents = interleaveDictionary(
-    selectModelDocuments(state, model_name),
+  let documents = selectModelDocuments(state, model_name);
+
+  documents = compressCheckboxFields(documents);
+
+  documents = interleaveDictionary(
+    documents,
     selectDictionary(state, model_name)
   );
 
