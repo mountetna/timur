@@ -11,6 +11,89 @@ export default class ClinicalInput extends React.Component{
 
   render(){
 
+    let {record} = this.props;
+    let input_props = {
+      value: record.value,
+      className: 'clinical-record-input',
+      key: `input_${record.type}_${record.id}`,
+      onChange: (event)=>{
+        console.log(event);
+      }
+    };
+
+    switch(record.type){
+      case 'string':
+        input_props['type'] = 'text';
+        return <input {...input_props} />;
+      case 'textarea':
+        input_props['type'] = 'textarea';
+        return <input {...input_props} />;
+      case 'number':
+        input_props['type'] = 'number';
+        return <input {...input_props} />;
+      case 'date':
+        input_props['type'] = 'date';
+        input_props['className'] = ' clinical-record-date';
+        return <input {...input_props} />;
+      case 'regex':
+      case 'dropdown':
+      case 'select':
+      case 'boolean':
+        if(record.definitions == undefined) return null;
+        if(record.definitions.values == undefined) return null;
+        input_props['className'] = ' clinical-record-selector';
+        return(
+          <select {...input_props}>
+
+            {record.definitions.values.map((val)=>{
+              return(
+                <option key={Math.random()} value={val}>
+
+                  {val}
+                </option>
+              );
+            })}
+          </select>
+        );
+      case 'checkbox':
+        if(record.definitions == undefined) return null;
+        if(record.definitions.values == undefined) return null;
+        if(record.values == undefined) return null;
+
+        input_props['className'] = 'clinical-record-checkbox';
+        return(
+          <fieldset {...input_props}>
+            {record.definitions.values.map((val)=>{
+
+              if(record.values.indexOf(val) > -1){
+                console.log('sup');
+              }
+
+              let check_props = {
+                type: 'checkbox',
+                value: val,
+                checked: (record.values.indexOf(val) > -1) ? 'checked' : '',
+                onChange: (event)=>{
+                  console.log(event);
+                }
+              };
+
+              return(
+                <div className='clinical-record-checkbox-grouping'>
+
+                  <input {...check_props} />
+                  {val}
+                </div>
+              );
+            })}
+          </fieldset>
+        );
+    }
+
+    return <div>{'sup'}</div>;
+  }
+
+/*
     let {
       input_type,
       input_key,
@@ -71,4 +154,5 @@ export default class ClinicalInput extends React.Component{
         return null;
     }
   }
+*/
 }

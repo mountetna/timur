@@ -1,28 +1,111 @@
 @import "globals";
 @import "attribute";
 
+/*
 .clinical-record-group{
   border:1px solid #333;
   padding: 5px;
   margin-left: 15px;
 }
+*/
 
+/*
 .clinical-record-key,
 .clinical-record-value{
+  overflow: hidden;
   display: inline-block;
+  margin-right: 10px;
+  white-space: nowrap;
+  width: 175px;
+  height: 25px;
+  border: 1px solid #00ff00;
+  word-wrap: none;
+}
+*/
+
+.clinical-group{
+  margin-left: 10px;
+}
+
+.clinical-record-key{
+  display: inline-block;
+  vertical-align: top;
+  font-family: $body_font;
+  font-size: 1em;
+  border: 1px solid #00ff00;
+  outline: 0;
+  color: black;
+  /*padding: 0.65em 0.5em 0.55em 0.75em;*/
+  padding: 3px;
+  border-radius: 0px;
+  background: #fff;
+  height: 21px;
+  width: 225px;
+  overflow: hidden;
   margin-right: 10px;
 }
 
+.clinical-group > .clinical-record-group{
+  margin-bottom: 10px;
+  border: 1px solid #0000ff;
+}
+
+.clinical-record-input,
+.clinical-record-selector,
+.clinical-record-date,
+.clinical-record-checkbox{
+  font-family: $body_font;
+  font-size: 1em;
+  border: 1px solid #ff00cc;
+  outline: 0px;
+  display: inline-block;
+  vertical-align: top;
+  width: 225px;
+  padding: 3px;
+}
+
+.clinical-record-date,
+.clinical-record-input{
+  height: 21px;
+}
+
+.clinical-record-selector{
+  height: 29px;
+  width: 233px;
+}
+
+.clinical-record-group .clinical-record-group{
+  margin-top: 10px;
+}
+
+.clinical-record-checkbox-grouping{
+  border: 1px solid #0000ff;
+  width: 223px;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+/*
+.clinical-record-date{
+  height: 21px;
+  width: 227px;
+}
+*/
+
+/******************************************************************************/
+
+/*
 * {
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
   -o-appearance: none;
 }
+*/
 
 .clinical-select{
   font-family: $body_font;
-  border: 1px solid silver;
+  border: 1px solid #ffff00;
   outline: 0;
   color: black;
   /*padding: 0.65em 0.5em 0.55em 0.75em;*/
