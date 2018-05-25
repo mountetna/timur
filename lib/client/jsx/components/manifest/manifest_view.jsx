@@ -403,6 +403,7 @@ export class ManifestView extends React.Component{
       type: 'radio',
       disabled
     };
+
     let pub_props = {
       name: 'manifest-access',
       value: 'public',
@@ -438,7 +439,7 @@ export class ManifestView extends React.Component{
             <br />
             <div className='manifest-form-details'>
 
-              {`AUTHOR: ${user.name}`}
+              {`AUTHOR: ${user}`}
               <br />
               {`LAST UPDATED: ${updated_at}`}
               <br />
