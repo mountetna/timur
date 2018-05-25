@@ -7,8 +7,13 @@ import ListMenu from '../list_menu';
 import ManifestView from './manifest_view';
 
 // Module imports.
-import * as ManifestActions from '../../actions/manifest_actions';
-import * as ManifestSelector from '../../selectors/manifest_selector';
+import {addTokenUser} from '../../actions/timur_actions';
+import {requestManifests} from '../../actions/manifest_actions';
+
+import {
+  getAllManifests,
+  getSelectedManifest
+} from '../../selectors/manifest_selector';
 
 // Main component for viewing/editing manifests.
 export class Manifests extends React.Component{
@@ -17,6 +22,14 @@ export class Manifests extends React.Component{
   }
 
   componentDidMount(){
+
+    /*
+     * This function must run for any new manifest to process correctly. It
+     * allows the manifest selector to properly set the current user on a new
+     * manifest.
+     */
+    this.props.addTokenUser();
+
     this.props.requestManifests();
   }
 
@@ -66,7 +79,7 @@ const accessFilter = (access, manifests)=>{
 };
 
 const mapStateToProps = (state = {}, own_props)=>{
-  let manifests = ManifestSelector.getAllManifests(state);
+  let manifests = getAllManifests(state);
   let sections = {
     Public: accessFilter('public', manifests),
     Private: accessFilter('private', manifests)
@@ -74,14 +87,18 @@ const mapStateToProps = (state = {}, own_props)=>{
 
   return {
     sections,
-    selected_manifest: ManifestSelector.getSelectedManifest(state)
+    selected_manifest: getSelectedManifest(state)
   };
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
+    addTokenUser: ()=>{
+      dispatch(addTokenUser());
+    },
+
     requestManifests: ()=>{
-      dispatch(ManifestActions.requestManifests());
+      dispatch(requestManifests());
     },
 
     selectManifest: (id)=>{
