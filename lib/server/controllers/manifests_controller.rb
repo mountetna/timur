@@ -2,30 +2,31 @@ class ManifestsController < Timur::Controller
   def fetch
     # Pull the manifests from the database.
     manifests = Manifest.where(
-      Sequel[user_id: current_user.id] | Sequel[access: [ 'public', 'view' ]]
+      Sequel[user_id: current_user.id] | Sequel[access: ['public', 'view']]
     ).where(
       project: @params[:project_name]
     ).all
 
     success_json(
-      manifests: manifests.map { |m| m.to_hash(current_user) }
+      manifests: manifests.map {|m| m.to_hash(current_user)}
     )
   end
 
   def create
     @manifest = Manifest.create(manifest_params)
-
-    success_json(@manifest.to_json(current_user))
+    success_json(
+      manifest: @manifest.to_hash(current_user)
+    )
   end
 
   def update
     @manifest = Manifest[@params[:id]]
-
     raise Etna::Forbidden unless @manifest.is_editable?(current_user)
-
     @manifest.update(manifest_params)
 
-    success_json(@manifest.to_json(current_user))
+    success_json(
+      manifest: @manifest.to_hash(current_user)
+    )
   end
 
   def destroy
@@ -36,12 +37,13 @@ class ManifestsController < Timur::Controller
     end
 
     unless @manifest.is_editable?(current_user)
-      raise Etna::Forbidden, 'You cannot edit this manifest'
+      raise Etna::Forbidden, 'You cannot edit this manifest.'
     end
 
     @manifest.delete
-
-    success('')
+    success_json(
+      manifest: {id: @params[:id]}
+    )
   end
 
   private

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Module imports.
-import * as TimurActions from '../../jsx/actions/timur_actions';
+import {addTokenUser} from '../../jsx/actions/timur_actions';
 
 export class HomePage extends React.Component{
   constructor(props){
@@ -11,7 +11,7 @@ export class HomePage extends React.Component{
   }
 
   componentDidMount(){
-    this.props.fetchPermissionsSettings();
+    this.props.addTokenUser();
   }
 
   renderProjects(){
@@ -60,8 +60,8 @@ const mapStateToProps = (state = {}, own_props)=>{
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
-    fetchPermissionsSettings: ()=>{
-      dispatch(TimurActions.addTokenUser());
+    addTokenUser: ()=>{
+      dispatch(addTokenUser());
     } 
   };
 };
