@@ -2,77 +2,180 @@
 import * as React from 'react';
 
 // Class imports.
-import DropdownSearch from '../general/dropdown_search';
+//import SearchDropdown from '../general/search_dropdown';
 
 export default class ClinicalInput extends React.Component{
   constructor(props){
     super(props);
   }
 
-  render(){
+  renderSearch(input_props){
 
-    let {record} = this.props;
+    let random = Math.random().toString(16).slice(2, -1);
+
+    input_props['type'] = 'text';
+    input_props['list'] = random;
+    input_props['className'] = 'search-dropdown-input';
+
+    let button_style = {};
+    let group_props = {className: 'search-dropdown-group'};
+    if(!this.props.editing){
+      group_props['className'] += ' search-dropdown-group-disabled';
+      button_style = {display: 'none'};
+    }
+
+    let options = this.props.definitions.values.map((value)=>{
+      return <option value={value} />;
+    });
+
+    return(
+      <div {...group_props}>
+
+        <button className='search-dropdown-btn' style={button_style}>
+
+          <i class='fa fa-search'></i>
+        </button>
+        <input {...input_props} />
+        <datalist id={random} className='search-dropdown-tray'>
+
+          {options}
+        </datalist>
+      </div>
+    );
+  }
+
+  renderMulti(input_props){
+    let {value, definitions} = this.props;
+
+    let default_option = null;
+    if(value == null){
+      input_props['value'] = '';
+      default_option = (
+        <option value='' disabled>
+
+          {'Select...'}
+        </option>
+      );
+    }
+
+    let options = definitions.values.map((val)=>{
+      return(
+        <option key={Math.random()} value={val}>
+
+          {val}
+        </option>
+      );
+    });
+
+    input_props['className'] = 'clinical-record-selector';
+    return(
+      <select {...input_props}>
+
+        {default_option}
+        {options}
+      </select>
+    );
+  }
+
+  renderKey(input_props){
+    let {name, peers} = this.props;
+
+    let default_option = null;
+    if(name == null){
+      input_props['value'] = '';
+      default_option = (
+        <option value='' disabled>
+
+          {'Select...'}
+        </option>
+      );
+    }
+
+    let options = Object.keys(peers).map((name)=>{
+      return(
+        <option key={Math.random()} value={name}>
+
+          {peers[name].label}
+        </option>
+      );
+    });
+
+    input_props['className'] = 'clinical-record-selector';
+    return(
+      <select {...input_props}>
+
+        {default_option}
+        {options}
+      </select>
+    );
+  }
+
+  render(){
+    let {
+      id,
+      name,
+      type,
+      value,
+      values,
+      peers,
+      definitions,
+      editing,
+      onChange
+    } = this.props;
+
     let input_props = {
-      value: record.value,
+      value,
+      disabled: !editing,
       className: 'clinical-record-input',
-      key: `input_${record.type}_${record.id}`,
-      onChange: (event)=>{
-        console.log(event);
-      }
+      key: `input_${type}_${id}`,
+      'data-id': id,
+      'data-name': name,
+      onChange: onChange
     };
 
-    switch(record.type){
+    switch(type){
       case 'string':
         input_props['type'] = 'text';
         return <input {...input_props} />;
+
       case 'textarea':
         input_props['type'] = 'textarea';
         return <input {...input_props} />;
+
       case 'number':
         input_props['type'] = 'number';
         return <input {...input_props} />;
+
       case 'date':
         input_props['type'] = 'date';
-        input_props['className'] = ' clinical-record-date';
+        input_props['className'] = 'clinical-record-date';
         return <input {...input_props} />;
+
       case 'regex':
       case 'dropdown':
       case 'select':
       case 'boolean':
-        if(record.definitions == undefined) return null;
-        if(record.definitions.values == undefined) return null;
-        input_props['className'] = ' clinical-record-selector';
-        return(
-          <select {...input_props}>
+        if(definitions == undefined) return null;
+        if(definitions.values == undefined) return null;
+        if(definitions.values.length > 2){
+          return this.renderSearch(input_props);
+        }
+        else{
+          return this.renderMulti(input_props);
+        }
 
-            {record.definitions.values.map((val)=>{
-              return(
-                <option key={Math.random()} value={val}>
-
-                  {val}
-                </option>
-              );
-            })}
-          </select>
-        );
       case 'checkbox':
-        if(record.definitions == undefined) return null;
-        if(record.definitions.values == undefined) return null;
-        if(record.values == undefined) return null;
+        if(definitions.values == undefined) return null;
 
         input_props['className'] = 'clinical-record-checkbox';
-        return(
+        return (
           <fieldset {...input_props}>
-            {record.definitions.values.map((val)=>{
-
-              if(record.values.indexOf(val) > -1){
-                console.log('sup');
-              }
+            {definitions.values.map((def_val)=>{
 
               let check_props = {
                 type: 'checkbox',
-                value: val,
-                checked: (record.values.indexOf(val) > -1) ? 'checked' : '',
+                value: def_val,
+                defaultChecked: def_val == value ? true : false,
                 onChange: (event)=>{
                   console.log(event);
                 }
@@ -82,77 +185,20 @@ export default class ClinicalInput extends React.Component{
                 <div className='clinical-record-checkbox-grouping'>
 
                   <input {...check_props} />
-                  {val}
+                  {def_val}
                 </div>
               );
             })}
           </fieldset>
         );
-    }
 
-    return <div>{'sup'}</div>;
-  }
+      case 'key':
+        if(peers == null) return null;
+        if(Object.keys(peers).length <= 0) return null;
+        return this.renderKey(input_props);
 
-/*
-    let {
-      input_type,
-      input_key,
-      input_value,
-      select_options,
-      selection_label,
-      input_class_name,
-      search_options,
-      input_placeholder,
-      inputChange,
-    } = this.props;
-
-    let input_props = {
-      className: 'clinical-input',
-      value: input_value,
-      onChange: inputChange
-    };
-
-    switch(input_type){
-      case 'string':
-        input_props['key'] = `string-${input_key}`;
-        input_props['type'] = 'text';
-        return <input {...input_props} />;
-      case 'number':
-        input_props['key'] = `number-${input_key}`;
-        input_props['type'] = 'number';
-        return <input {...input_props} />;
-      case 'date':
-        input_props['key'] = `date-${input_key}`;
-        input_props['type'] = 'datetime-local';
-
-        let timestamp = Date.parse(input_value);
-        if(!isNaN(timestamp)){
-          let dt = new Date(timestamp).toISOString().replace('Z', '');
-          input_props['value'] = dt;
-        }
-
-        return <input {...input_props} />;
-      case 'boolean':
-      case 'regex':
-      case 'select':
-        input_props['key'] = `regex-${input_key}`;
-        input_props['className'] = 'clinical-select';
-        return(
-          <select {...input_props}>
-
-            <option defaultValue=''>
-            
-              {`Make ${selection_label || ''} Selection`}
-            </option>
-            {select_options}
-          </select>
-        );
-      case 'search':
-        return <DropdownSearch {...this.props} />;
       default:
-        console.log('Input Type Error: '+ input_type);
         return null;
     }
   }
-*/
 }
