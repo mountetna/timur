@@ -1,9 +1,17 @@
 // Framework libraries.
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
+
+// Class imports.
 import ListMenu from '../list_menu';
 import ButtonBar from '../button_bar';
-import * as TimurActions from '../../actions/timur_actions';
+
+// Module imports.
+import {
+  requestViewSettings,
+  updateViewSettings,
+  deleteViewSettings
+} from '../../actions/timur_actions';
 
 export class SettingsView extends React.Component{
   constructor(props){
@@ -22,7 +30,7 @@ export class SettingsView extends React.Component{
   }
   
   componentDidMount(){
-    this.props.fetchViewSettings();
+    this.props.requestViewSettings();
   }
 
   cloneView(selected_model_name){
@@ -137,7 +145,7 @@ export class SettingsView extends React.Component{
       let view_obj = this.state.view_settings_object;
       view_obj.tabs = JSON.parse(this.state.view_settings_string);
 
-      this.props.updateEditViewSettings(view_obj);
+      this.props.updateViewSettings(view_obj);
       this.setState({parse_error_message: ''});
       this.toggleEdit();
     }
@@ -320,16 +328,16 @@ const mapStateToProps = (state = {}, own_props)=>{
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
-    fetchViewSettings: ()=>{
-      dispatch(TimurActions.requestViewSettings());
+    requestViewSettings: ()=>{
+      dispatch(requestViewSettings());
     },
     
-    updateEditViewSettings: (model_obj)=>{
-      dispatch(TimurActions.updateViewSettings(model_obj));
+    updateViewSettings: (model_obj)=>{
+      dispatch(updateViewSettings(model_obj));
     },
 
     deleteViewSettings: (model_obj)=>{
-      dispatch(TimurActions.deleteViewSettings(model_obj));
+      dispatch(deleteViewSettings(model_obj));
     },
   };
 };
