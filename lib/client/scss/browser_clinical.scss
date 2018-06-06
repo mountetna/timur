@@ -32,6 +32,8 @@
   padding: 3px;
   margin-left: 10px;
   color: #000;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0px;
 }
 
 .clinical-record-date,
@@ -56,6 +58,10 @@
   background: #fff;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+.clinical-record-selector:focus{
+  outline-offset: 0px;
 }
 
 .clinical-record-date,
@@ -177,6 +183,8 @@
   color: #000;
 }
 
+/*
 .search-dropdown-group input::-webkit-calendar-picker-indicator {
   display: none;
 }
+*/
