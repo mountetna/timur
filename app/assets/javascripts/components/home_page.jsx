@@ -2,7 +2,13 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Module imports.
-import * as TimurActions from '../../javascripts/actions/timur_actions';
+import {
+  addTokenUser
+} from '../../javascripts/actions/timur_actions';
+
+import {
+  selectUserPermissions
+} from '../../javascripts/selectors/timur_selector';
 
 export class HomePage extends React.Component{
   constructor(props){
@@ -15,12 +21,12 @@ export class HomePage extends React.Component{
   }
 
   renderProjects(){
-    if(!this.props.token_permissions){
+    if(this.props.permissions.length <= 0){
       return <span>{'No available projects.'}</span>;
     }
 
     let link_props = {className: 'home-page-project-link'};
-    return this.props.token_permissions.map((permission, index)=>{
+    return this.props.permissions.map((permission, index)=>{
       link_props['key'] = index;
       link_props['href'] =  '/' + permission.project_name;
       return(
@@ -54,14 +60,15 @@ export class HomePage extends React.Component{
 }
 
 const mapStateToProps = (state = {}, own_props)=>{
-  if(state.timur.user === undefined) return {};
-  return {token_permissions: state.timur.user.permissions};
+  return {
+    permissions: selectUserPermissions(state)
+  }
 };
 
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
     fetchPermissionsSettings: ()=>{
-      dispatch(TimurActions.addTokenUser());
+      dispatch(addTokenUser());
     } 
   };
 };
