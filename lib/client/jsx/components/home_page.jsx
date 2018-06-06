@@ -4,11 +4,11 @@ import * as ReactRedux from 'react-redux';
 // Module imports.
 import {
   addTokenUser
-} from '../../javascripts/actions/timur_actions';
+} from '../actions/timur_actions';
 
 import {
   selectUserPermissions
-} from '../../javascripts/selectors/timur_selector';
+} from '../selectors/timur_selector';
 
 export class HomePage extends React.Component{
   constructor(props){
