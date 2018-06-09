@@ -50,8 +50,7 @@ describe PlotsController do
       user_private_plots = create_list(:plot, 3, :private, :scatter, user: viewer, manifest: manifest)
 
       post_plots(:fetch, :viewer)
-      json = json_body(last_response.body)
-      plot_names = json[:plots].map{|plot| plot[:name]}
+      plot_names = json_body[:plots].map{|plot| plot[:name]}
 
       expect(plot_names).to include(*public_plots.map(&:name))
       expect(plot_names).to include(*user_private_plots.map(&:name))
