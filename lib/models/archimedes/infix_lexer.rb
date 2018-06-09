@@ -13,6 +13,7 @@ module Archimedes
     rule(/\*/) { :MUL }
     rule(/\+/) { :ADD }
     rule(/\-/) { :SUB }
+    rule(/=/) { :ASSIGN }
     rule(/>/) { :GT }
     rule(/>=/) { :GTE }
     rule(/</) { :LT }
