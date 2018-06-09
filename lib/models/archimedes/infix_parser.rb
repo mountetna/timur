@@ -11,6 +11,19 @@ module Archimedes
     left :DOLLAR
     left :VAR
 
+    production(:script) do
+      clause('assignment') { |a| [a] }
+      clause('assignment script') { |a,script| [a] + script }
+    end
+
+    production(:assignment) do
+      # An assignment
+      clause('VAR .IDENT ASSIGN .e') do |i,e|
+        @variable = i
+        @vars[i] = e
+      end
+    end
+
     production(:e) do
 
       # these are the basic types
@@ -23,6 +36,7 @@ module Archimedes
 
       # A variable reference
       clause('VAR IDENT') { |v,i| @vars[i] }
+
 
       clause('EXC .e') { |e| !e }
 
@@ -59,7 +73,7 @@ module Archimedes
       clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
 
       # Macro dereferencing
-      clause('VAR .IDENT LPAREN .args RPAREN') { |i, args| macro(@vars[i], args) }
+      clause('VAR .IDENT LPAREN .args RPAREN') { |i, args| macro(i, args) }
 
       # Function calling
       clause('.IDENT LPAREN .args RPAREN') { |ident, args| 
