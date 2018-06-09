@@ -1,58 +1,3 @@
-# This is a list of requests for variables.
-#
-# The request comes in this form:
-# [
-#   [ "var_name", "calculation" ]
-# ]
-#
-# A calculation is an infix expression:
-#
-#   x / y
-#
-# The terms in a calculation are:
-# 1) A String, Number, Boolean
-# 2) A List of each of these.
-# 3) A function
-#
-#
-# An example manifest:
-#
-# {
-#   "record_name": {
-#     type: "formula",
-#     value: '"IPIMEL069.T1"'
-#   },
-#   "experiment_name: {
-#     type: "question",
-#     value: [ "sample", [ "sample_name", "::equals", "@record_name" ], "::first", "patient", "experiment", "name" ]
-#   },
-#   "qc": {
-#     type: "table",
-#     value: {
-#       rows: [ "sample", [ "patient", "experiment", "name", "::equals", "@experiment_name" ] ],
-#       columns: {
-#         treg_cd45_count: [ "population", [ "stain", "::equals", "treg" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
-#         nktb_cd45_count: [ "population", [ "stain", "::equals", "nktb" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
-#         sort_cd45_count: [ "population", [ "stain", "::equals", "sort" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
-#         dc_cd45_count: [ "population", [ "stain", "::equals", "dc" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
-#         treg_live_count: [ "population", [ "stain", "::equals", "treg" ], [ "name", "::equals", "Live" ], "::first", "count" ],
-#         nktb_live_count: [ "population", [ "stain", "::equals", "nktb" ], [ "name", "::equals", "Live" ], "::first", "count" ],
-#         sort_live_count: [ "population", [ "stain", "::equals", "sort" ], [ "name", "::equals", "Live" ], "::first", "count" ],
-#         dc_live_count: [ "population", [ "stain", "::equals", "dc" ], [ "name", "::equals", "Live" ], "::first", "count" ],
-#       }
-#     }
-#   },
-#   heights: {
-#     type: "vector",
-#     value: {
-#       items: [
-#         "@qc.treg_cd45_count / @qc.nktb_cd45_count",
-#         "@qc.treg_cd45_count / @qc.nktb_cd45_count",
-#       ]
-#     }
-#   }
-# }
-
 module Archimedes
   class Manifest < RLTK::Parser::Environment
     def initialize(token, project_name, manifest)
@@ -62,9 +7,17 @@ module Archimedes
       @vars = {}
     end
 
-    def macro(mac, args)
+    def macro(var, args)
+      mac = @vars[var]
       raise TypeError('Variable is not a macro') unless mac.is_a?(Archimedes::Macro)
-      resolve(mac.substitute(args))
+
+      # use the variable for storing the value
+      resolve("@#{var} = #{mac.substitute(args)}")
+      value = @vars[var]
+
+      # reset the macro
+      @vars[var] = mac
+      value
     end
 
     def payload
@@ -80,27 +33,23 @@ module Archimedes
     private
 
     def fill_manifest
-      @manifest.each do |variable, query|
-        begin
-          @vars[variable.to_s] = resolve(query)
-        rescue RLTK::NotInLanguage
-          raise Archimedes::LanguageError, "Could not resolve @#{variable} = #{query}"
-        rescue Magma::ClientError => e
-          raise Archimedes::LanguageError, e.body
-        rescue ArgumentError => e
-          raise Archimedes::LanguageError, "In @#{variable}, #{e.message}"
-        rescue TypeError => e
-          if e.message =~ /nil/
-            raise Archimedes::LanguageError, "Nil value error in @#{variable}"
-          else
-            raise Archimedes::LanguageError, "Type error in @#{variable}"
-          end
-        rescue ZeroDivisionError
-          raise Archimedes::LanguageError, "Divided by zero in @#{variable}"
-        rescue
-          raise Archimedes::LanguageError, "Unspecified error in @#{variable}"
-        end
+      resolve(@manifest)
+    rescue RLTK::NotInLanguage
+      raise Archimedes::LanguageError, "Could not resolve @#{@variable}"
+    rescue Magma::ClientError => e
+      raise Archimedes::LanguageError, e.body
+    rescue ArgumentError => e
+      raise Archimedes::LanguageError, "In @#{@variable}, #{e.message}"
+    rescue TypeError => e
+      if e.message =~ /nil/
+        raise Archimedes::LanguageError, "Nil value error in @#{@variable}"
+      else
+        raise Archimedes::LanguageError, "Type error in @#{@variable}"
       end
+    rescue ZeroDivisionError
+      raise Archimedes::LanguageError, "Divided by zero in @#{@variable}"
+    rescue
+      raise Archimedes::LanguageError, "Unspecified error in @#{@variable}"
     end
 
     def resolve(query)
