@@ -104,7 +104,7 @@ FactoryBot.define do
     end
 
     trait :script do
-      data({ script: '@value = 1 + 1' }.to_json)
+      script '@value = 1 + 1'
     end
 
     trait :public do

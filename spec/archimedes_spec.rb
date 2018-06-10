@@ -20,8 +20,8 @@ describe ArchimedesController do
 
   it 'runs a consignment record' do
     viewer = create(:user, :viewer)
-    manifest = create(:manifest, :private, data: "@test = 'blah'", user: viewer)
-    md5sum = Digest::MD5.hexdigest(manifest.data).to_sym
+    manifest = create(:manifest, :private, script: "@test = 'blah'", user: viewer)
+    md5sum = Digest::MD5.hexdigest(manifest.script).to_sym
 
     auth_header(:viewer)
     json_post('labors/consignment', manifest_ids: [ manifest.id ])
