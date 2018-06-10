@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetch from 'isomorphic-fetch';
 import nock from 'nock';
-import * as actions from '../../../app/assets/javascripts/actions/manifest_actions';
+import * as actions from '../../../lib/client/jsx/actions/manifest_actions';
 import allManifestsResp, { plot } from '../fixtures/all_manifests_response';
 import manifestStore, { manifest } from '../fixtures/manifests_store';
 import manifestResp from '../fixtures/manifest_response';
@@ -74,10 +74,10 @@ describe('async actions', () => {
     const manifestId = 1;
 
     nock('http://www.fake.com')
-      .post(`/${PROJECT_NAME}/manifests/destroy/${manifestId}`)
+      .delete(`/${PROJECT_NAME}/manifests/destroy/${manifestId}`)
       .reply(
         200,
-        {"success":true},
+        {"manifest": { "id": manifestId } },
         {
           'Access-Control-Allow-Origin': '*',
           'Content-type': 'application/json'
