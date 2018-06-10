@@ -102,32 +102,6 @@ export class ManifestView extends React.Component{
     return new_state;
   }
 
-  updateField(field_name){
-    return (event)=>{
-      let manifest = this.state.manifest;
-      manifest[field_name] = event.target.value;
-      this.setState({manifest});
-    }
-  }
-
-  updateElement(field_name, index){
-    return (event)=>{
-      let manifest = this.state.manifest;
-      manifest.data.elements[index][field_name] = event.target.value;
-      this.setState({manifest});
-    }
-  }
-
-  removeElement(index){
-    let manifest = this.state.manifest;
-
-    // Check that the index is within bounds.
-    if(index > (manifest.data.elements.length-1) || index < 0) return;
-
-    manifest.data.elements.splice(index, 1);
-    this.setState({manifest});
-  }
-
   updateManifest(){
     let manifest = this.state.manifest;
     this.setState({page_status: 'SAVING...'});
@@ -253,12 +227,6 @@ export class ManifestView extends React.Component{
       }
     };
 
-    let add_btn_props = {
-      className: 'manifest-query-btn manifest-add-btn',
-      onClick: this.addElement.bind(this),
-      disabled
-    };
-
     return(
       <div className='manifest-query-btn-group'>
 
@@ -272,93 +240,56 @@ export class ManifestView extends React.Component{
           <i className='far fa-file-code' aria-hidden='true'></i>
           {' SHOW SCRIPT'}
         </button>
-        <button {...add_btn_props}>
-
-          <i className='fas fa-plus' aria-hidden='true'></i>
-          {' ADD ELEMENT'}
-        </button>
       </div>
     );
   }
 
-  renderManifestElements(){
+  updateField(field_name){
+    return (event)=>{
+      let manifest = this.state.manifest;
+      manifest[field_name] = event.target.value;
+      this.setState({manifest});
+    }
+  }
+
+  updateScript(event) {
+    let { manifest } = this.state;
+
+    this.setState({ manifest: { ...manifest, script: event.target.value } });
+  }
+
+  renderManifestBody(){
     let {manifest, view_mode, is_editing} = this.state;
     let {consignment} = this.props;
     let disabled = (!is_editing) ? 'disabled' : '';
 
-    let manifest_elements = manifest.data.elements || [];
-    manifest_elements = manifest_elements.map((element, index)=>{
+    let { script } = manifest;
 
-      // Pull the data for this element.
-      let {name, script, description} = element;
-      let consignment_result = null;
-      if(consignment && consignment[name]){
-        consignment_result = consignment[name];
-      }
+    let textarea_props = {
+      className: `${disabled} manifest-form-element-textarea`,
+      onChange: this.updateScript.bind(this),
+      value: script,
+      disabled
+    };
 
-      // Set up the properties for this component.
-      let input_props = {
-        className: `${disabled}  manifest-form-element-title-input`,
-        onChange: this.updateElement('name', index),
-        type: 'text',
-        value: name,
-        disabled
-      };
+    // Set the individual manifest element based upon the view and edit modes.
+    let manifest_elem = null;
+    if(view_mode == 'consignment' && !is_editing && consignment_result!=null){
+      manifest_elem = manifestResult(name, consignment_result);
+    }
+    else if(view_mode == 'script' && !is_editing){
+      manifest_elem = manifestScript(script);
+    }
+    else if(view_mode == 'script' && is_editing){
+      manifest_elem = <textarea {...textarea_props}></textarea>;
+    }
 
-      let remove_btn_props = {
-        className: 'manifest-form-control-btn',
-        onClick: (event)=>{
-          if(confirm('Are you sure you want to remove this element?')){
-            this.removeElement(index);
-          }
-        },
-        disabled
-      };
-
-      let textarea_props = {
-        className: `${disabled} manifest-form-element-textarea`,
-        onChange: this.updateElement('script', index),
-        value: script,
-        disabled
-      };
-
-      // Set the individual manifest element based upon the view and edit modes.
-      let manifest_elem = null;
-      if(view_mode == 'consignment' && !is_editing && consignment_result!=null){
-        manifest_elem = manifestResult(name, consignment_result);
-      }
-      else if(view_mode == 'script' && !is_editing){
-        manifest_elem = manifestScript(script);
-      }
-      else if(view_mode == 'script' && is_editing){
-        manifest_elem = <textarea {...textarea_props}></textarea>;
-      }
-
-      // Render the component.
-      return(
-        <div className='manifest-form-element' key={'element-'+index}>
-
-          <div className='manifest-form-element-title'>
-
-            {'@'}
-            <input {...input_props} />
-            <button {...remove_btn_props}>
-
-              <i className='fas fa-times' aria-hidden='true'></i>
-              {' REMOVE'}
-            </button>
-          </div>
-          <span>
-
-            {' = '}
-          </span>
-          <br />
-          {manifest_elem}
-        </div>
-      );
-    });
-
-    return manifest_elements;
+    // Render the component.
+    return(
+      <div className='manifest-form-element'>
+        {manifest_elem}
+      </div>
+    );
   }
 
   render(){
@@ -455,8 +386,7 @@ export class ManifestView extends React.Component{
           </div>
           {this.renderElementButtons()}
           <div id='manifest-form-body'>
-
-            {this.renderManifestElements()}
+            {this.renderManifestBody()}
           </div>
         </div>
       </div>
