@@ -467,7 +467,7 @@ export class ManifestView extends React.Component{
 const mapStateToProps = (state = {}, own_props)=>{
   let consignment = ConsignmentSelector.selectConsignment(
     state,
-    own_props.manifest.md5sum_data
+    own_props.manifest.md5sum
   );
 
   return {...own_props, consignment};
