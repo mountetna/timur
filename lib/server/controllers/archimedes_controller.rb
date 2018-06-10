@@ -15,7 +15,7 @@ class ArchimedesController <  Timur::Controller
         raise Etna::BadRequest, "Could not find manifests #{missing_manifest_ids.join(', ')}"
       end
 
-      manifests = manifests.map(&:data)
+      manifests = manifests.map(&:script)
     end
 
     raise 'No manifests requested!' unless manifests && !manifests.empty?
