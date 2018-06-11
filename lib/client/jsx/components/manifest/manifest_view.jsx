@@ -1,17 +1,24 @@
 // Framework libraries.
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
+import { connect } from 'react-redux';
 
 // Class imports.
 import ButtonBar from '../button_bar';
 import Consignment from '../../models/consignment';
 
 // Module imports.
-import {manifestScript} from './manifest_script';
+import ManifestScript from './manifest_script';
+
 import {manifestResult} from './manifest_result';
-import * as ManifestActions from '../../actions/manifest_actions';
-import * as ManifestSelector from '../../selectors/manifest_selector';
-import * as ConsignmentSelector from '../../selectors/consignment_selector';
+import {
+  requestConsignments, copyManifest, deleteManifest,
+  saveNewManifest, saveManifest
+} from '../../actions/manifest_actions';
+import { cloneManifest } from '../../selectors/manifest_selector';
+import { selectConsignment } from '../../selectors/consignment_selector';
+
+import {formatDate} from '../../utils/dates';
+
 
 export class ManifestView extends React.Component{
   constructor(props){
@@ -19,7 +26,7 @@ export class ManifestView extends React.Component{
 
     if(props.manifest){
       this.state = {
-        manifest: ManifestSelector.cloneManifest(props),
+        manifest: cloneManifest(props),
         view_mode: 'script',
         is_editing: (props.manifest.id == 0) ? true : false,
         page_status: ''
@@ -33,6 +40,47 @@ export class ManifestView extends React.Component{
         page_status: ''
       };
     }
+
+    this.buttons = {
+      copy: {
+        click: ()=>{this.props.copyManifest(manifest);},
+        icon: 'files-o',
+        label: 'COPY'
+      },
+      delete: {
+        click: ()=>{
+          if(confirm('Are you sure you want to remove this manifest?')){
+            this.props.deleteManifest(manifest.id);
+          }
+        },
+        icon: 'trash-o',
+        label: 'DELETE'
+      },
+      edit: {
+        click: this.toggleEdit.bind(this),
+        icon: 'pencil-square-o',
+        label: 'EDIT'
+      },
+      run: {
+        icon: 'play',
+        label: 'RUN',
+        click: (event)=>{
+          if(is_editing) this.toggleEdit();
+          this.setState({view_mode: 'consignment'});
+          if(!consignment) requestConsignments(manifest);
+        }
+      },
+      save: {
+        click: this.updateManifest.bind(this),
+        icon: 'floppy-o',
+        label: 'SAVE'
+      },
+      cancel: {
+        click: this.cancelEdit.bind(this),
+        icon: 'ban',
+        label: 'CANCEL'
+      }
+    };
   }
 
   /*
@@ -66,7 +114,7 @@ export class ManifestView extends React.Component{
      * be reversed.
      */
     let new_state = {
-      manifest: ManifestSelector.cloneManifest(this.props),
+      manifest: cloneManifest(this.props),
       view_mode: 'script',
       is_editing
     };
@@ -128,7 +176,7 @@ export class ManifestView extends React.Component{
 
     // Reset the manifest
     this.setState({
-      manifest: ManifestSelector.cloneManifest(this.props),
+      manifest: cloneManifest(this.props),
       page_status: ''
     });
 
@@ -144,104 +192,19 @@ export class ManifestView extends React.Component{
     });
   }
 
-  addElement(){
-    let manifest = this.state.manifest;
-    manifest.data.elements.push({description: '', name: '', script: ''});
-    this.setState({manifest});
-  }
-
-  editableButtons(){
-    let {manifest} = this.state;
-    let {deleteManifest, copyManifest} = this.props;
-    let {is_editable} = this.state.manifest;
-
-    return [
-      is_editable && this.state.view_mode == 'output' && {
-        click: ()=>{
-          location.href = plotIndexUrl({
-            manifest_id: manifest.id,
-            is_editing: true
-          });
-        },
-        icon: 'fas fa-chart-line',
-        label: ' PLOT'
-      },
-      {
-        click: ()=>{copyManifest(manifest);},
-        icon: 'far fa-copy',
-        label: ' COPY'
-      },
-      is_editable && {
-        click: ()=>{
-          if(confirm('Are you sure you want to remove this manifest?')){
-            deleteManifest(manifest.id);
-          }
-        },
-        icon: 'far fa-trash-alt',
-        label: ' DELETE'
-      },
-      is_editable && {
-        click: this.toggleEdit.bind(this),
-        icon: 'far fa-edit',
-        label: ' EDIT'
-      }
-    ].filter(button=>button);
-  }
-
-  editingButtons(){
-    return [
-      this.state.manifest && {
-        click: this.updateManifest.bind(this),
-        icon: 'far fa-save',
-        label: ' SAVE'
-      },
-      {
-        click: this.cancelEdit.bind(this),
-        icon: 'fas fa-ban',
-        label: ' CANCEL'
-      }
-    ].filter(button=>button);
-  }
-
-  renderElementButtons(){
-    let {manifest, view_mode, is_editing} = this.state;
-    let {consignment, requestConsignments} = this.props;
-    let disabled = (!is_editing) ? 'disabled' : '';
-
-    let query_btn_props = {
-      className: 'manifest-query-btn',
-      disabled: (view_mode == 'consignment' || is_editing) ? 'disabled' : '',
-      onClick: (event)=>{
-        if(is_editing) this.toggleEdit();
-        this.setState({view_mode: 'consignment'});
-        if(!consignment) requestConsignments(manifest);
-      }
-    };
-
-    let script_btn_props = {
-      className: 'manifest-query-btn',
-      disabled: (view_mode == 'script' || is_editing) ? 'disabled' : '',
-      onClick: (event)=>{
-        this.setState({view_mode: 'script'});
-        if(!consignment) requestConsignments(manifest);
-      }
-    };
-
-    return(
-      <div className='manifest-query-btn-group'>
-
-        <button {...query_btn_props}>
-
-          <i className='fas fa-play' aria-hidden='true'></i>
-          {' RUN QUERY'}
-        </button>
-        <button {...script_btn_props}>
-
-          <i className='far fa-file-code' aria-hidden='true'></i>
-          {' SHOW SCRIPT'}
-        </button>
-      </div>
-    );
+  getButtons() {
+    let { manifest, view_mode, is_editing } = this.state;
+    return [ this.buttons.run ].concat(
+      is_editing ? [
+        manifest && this.buttons.save,
+        this.buttons.cancel
+      ] : [
+        view_mode == 'output' && this.buttons.plot,
+        this.buttons.copy,
+        manifest && this.buttons.delete,
+        manifest && this.buttons.edit,
+      ]
+    ).filter(button=>button);
   }
 
   updateField(field_name){
@@ -265,47 +228,30 @@ export class ManifestView extends React.Component{
 
     let { script } = manifest;
 
-    let textarea_props = {
-      className: `${disabled} manifest-form-element-textarea`,
-      onChange: this.updateScript.bind(this),
-      value: script,
-      disabled
-    };
-
-    // Set the individual manifest element based upon the view and edit modes.
-    let manifest_elem = null;
-    if(view_mode == 'consignment' && !is_editing && consignment_result!=null){
-      manifest_elem = manifestResult(name, consignment_result);
-    }
-    else if(view_mode == 'script' && !is_editing){
-      manifest_elem = manifestScript(script);
-    }
-    else if(view_mode == 'script' && is_editing){
-      manifest_elem = <textarea {...textarea_props}></textarea>;
-    }
+    //if(view_mode == 'consignment' && !is_editing && consignment_result!=null){
+    //manifest_elem = manifestResult(name, consignment_result);
+    //}
 
     // Render the component.
     return(
-      <div className='manifest-form-element'>
-        {manifest_elem}
-      </div>
+      <ManifestScript
+        script={script}
+        is_editing={is_editing}
+        onChange={ this.updateScript.bind(this) }/>
     );
   }
 
   render(){
+    let { manifest } = this.props;
 
-    /*
-     * When the manifest is null return an empty page. This happens on the 
-     * initial page load.
-     */
-    if(this.props.manifest == null) return null;
+    if (manifest == null) return null;
 
     let {name, user, updated_at, description, access} = this.state.manifest;
     let {is_editing, page_status} = this.state;
     let disabled = (!is_editing) ? 'disabled' : '';
 
     let input_props = {
-      className: `${disabled} manifest-form-title-input`,
+      className: 'manifest-form-title-input',
       onChange: this.updateField('name'),
       value: name,
       type: 'text',
@@ -313,19 +259,12 @@ export class ManifestView extends React.Component{
     };
 
     let textarea_props = {
-      className: `${disabled} manifest-form-description`,
       onChange: this.updateField('description'),
       value: (description) ? description : '',
       disabled
     };
 
-    let buttons;
-    if(is_editing){
-      buttons = this.editingButtons();
-    }
-    else{
-      buttons = this.editableButtons();
-    }
+    let buttons = this.getButtons();
 
     let priv_props = {
       name: 'manifest-access',
@@ -352,40 +291,27 @@ export class ManifestView extends React.Component{
 
     return(
       <div className='manifest-elements'>
-
         <div className='manifest-form-group'>
-
           <div className='manifest-form-header'>
-
             <div className='manifest-form-title'>
-
-              {'NAME: '}
               <input {...input_props} />
               <ButtonBar className='manifest-action-btn-group' buttons={buttons} />
               <span style={{float: 'right'}}>
-
                 {page_status}
               </span>
             </div>
-            <br />
             <div className='manifest-form-details'>
-
-              {`AUTHOR: ${user}`}
+              Updated <strong>{ formatDate(updated_at) }</strong> by <strong>{user}</strong>
               <br />
-              {`LAST UPDATED: ${updated_at}`}
-              <br />
-              {'ACCESS: '}
+              Access
               <input {...priv_props} />{'PRIVATE'}
               <input {...pub_props} />{'PUBLIC'}
               <br />
-              {'DESCRIPTION: '}
-              <br />
-              <textarea {...textarea_props} />
+              <textarea className='manifest-form-description' {...textarea_props} />
             </div>
 
           </div>
-          {this.renderElementButtons()}
-          <div id='manifest-form-body'>
+          <div className='manifest-form-body'>
             {this.renderManifestBody()}
           </div>
         </div>
@@ -394,47 +320,22 @@ export class ManifestView extends React.Component{
   }
 }
 
-const mapStateToProps = (state = {}, own_props)=>{
-  let consignment = ConsignmentSelector.selectConsignment(
-    state,
-    own_props.manifest.md5sum
-  );
+const selectManifest = (id)=> ({ type: 'SELECT_MANIFEST', id });
 
-  return {...own_props, consignment};
-};
+export default connect(
+  // map state
+  (state = {}, {manifest})=>{
+    let consignment = selectConsignment(
+      state,
+      manifest.md5sum
+    );
 
-const mapDispatchToProps = (dispatch, own_props)=>{
-  return {
-    requestConsignments: (manifest)=>{
-      dispatch(ManifestActions.requestConsignments([manifest]));
-    },
+    return {consignment};
+  },
 
-    copyManifest: (manifest_record)=>{
-      dispatch(ManifestActions.copyManifest(manifest_record));
-    },
-
-    deleteManifest: (manifest_id)=>{
-      dispatch(ManifestActions.deleteManifest(manifest_id));
-    },
-
-    saveNewManifest: (manifest)=>{
-      dispatch(ManifestActions.saveNewManifest(manifest));
-    },
-
-    saveManifest: (manifest)=>{
-      dispatch(ManifestActions.saveManifest(manifest));
-    },
-
-    selectManifest: (id)=>{
-      dispatch({
-        type: 'SELECT_MANIFEST',
-        id
-      });
-    },
-  };
-};
-
-export default ReactRedux.connect(
-  mapStateToProps,
-  mapDispatchToProps
+  // map dispatch
+  {
+    requestConsignments, copyManifest, deleteManifest,
+    saveNewManifest, saveManifest, selectManifest
+  }
 )(ManifestView);
