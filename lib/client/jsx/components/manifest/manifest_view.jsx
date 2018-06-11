@@ -24,7 +24,7 @@ export class ManifestView extends React.Component{
   constructor(props){
     super(props);
 
-    if(props.manifest){
+    if (props.manifest) {
       this.state = {
         manifest: cloneManifest(props),
         view_mode: 'script',
@@ -32,7 +32,7 @@ export class ManifestView extends React.Component{
         page_status: ''
       };
     }
-    else{
+    else {
       this.state = {
         manifest: {},
         view_mode: 'script',
@@ -221,32 +221,12 @@ export class ManifestView extends React.Component{
     this.setState({ manifest: { ...manifest, script: event.target.value } });
   }
 
-  renderManifestBody(){
-    let {manifest, view_mode, is_editing} = this.state;
-    let {consignment} = this.props;
-    let disabled = (!is_editing) ? 'disabled' : '';
-
-    let { script } = manifest;
-
-    //if(view_mode == 'consignment' && !is_editing && consignment_result!=null){
-    //manifest_elem = manifestResult(name, consignment_result);
-    //}
-
-    // Render the component.
-    return(
-      <ManifestScript
-        script={script}
-        is_editing={is_editing}
-        onChange={ this.updateScript.bind(this) }/>
-    );
-  }
-
   render(){
     let { manifest } = this.props;
 
     if (manifest == null) return null;
 
-    let {name, user, updated_at, description, access} = this.state.manifest;
+    let {script, name, user, updated_at, description, access} = this.state.manifest;
     let {is_editing, page_status} = this.state;
     let disabled = (!is_editing) ? 'disabled' : '';
 
@@ -311,9 +291,10 @@ export class ManifestView extends React.Component{
             </div>
 
           </div>
-          <div className='manifest-form-body'>
-            {this.renderManifestBody()}
-          </div>
+          <ManifestScript
+            script={script}
+            is_editing={is_editing}
+            onChange={ this.updateScript.bind(this) }/>
         </div>
       </div>
     );
