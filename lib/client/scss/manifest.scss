@@ -118,6 +118,36 @@
   margin-top: 10px;
   resize: vertical;
   white-space: pre-wrap;
+  font-family: $value_font;
+
+  .token {
+    &.comment {
+      color: #888;
+    }
+    &.macro {
+      color: #f40;
+    }
+    &.variable {
+      color: #b40;
+    }
+    &.string {
+      color: #a0f;
+    }
+    &.function {
+      color: #04d;
+    }
+    &.label, &.column {
+      color: #090;
+    }
+    &.template {
+      color: #f00;
+      font-weight: bold;
+    }
+    &.vector {
+      color: #000;
+      font-weight: bold;
+    }
+  }
 }
 
 .consignment-table{
