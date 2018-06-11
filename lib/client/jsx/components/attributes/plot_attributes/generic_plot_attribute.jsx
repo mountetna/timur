@@ -37,6 +37,7 @@ export class GenericPlotAttribute extends React.Component{
       if(selected_manifest != undefined){
         if(!this.state.fetched_consignment){
           fetchConsignment(selected_manifest.id, document[template.identifier]);
+          // fetchConsignment(selected_manifest.id, 1018);
           this.setState({fetched_consignment: true});
         }
       }

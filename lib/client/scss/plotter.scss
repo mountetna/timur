@@ -315,3 +315,28 @@
   }
 }
 */
+
+.Axis path,
+.Axis line {
+  stroke: #E0E0E0;
+}
+
+.Axis text {
+  font-size: 11px;
+  fill: black;
+}
+
+.Axis-Bottom text {
+  transform: rotate(-45deg);
+  text-anchor: end;
+}
+
+.tooltip-bg{
+  fill: 'black';
+  opacity: 0.7;
+}
+
+.tooltip-text{
+  font-size:12px;
+  fill:#ffffff;
+}
