@@ -17,6 +17,8 @@ class ManifestsController < Timur::Controller
     success_json(
       manifest: @manifest.to_hash(current_user)
     )
+  rescue Sequel::ValidationFailed => e
+    raise Etna::BadRequest, e.message
   end
 
   def update
