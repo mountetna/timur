@@ -40,6 +40,7 @@ export default class ManifestScript extends React.Component {
         <textarea
           ref={ editor => this.editor = editor }
           onScroll={ this.scroll.bind(this) }
+          placeholder='Enter your code here'
           className='manifest-editor'
           style={ { visibility: is_editing ? 'visible' : 'hidden' } }
           onChange={onChange}
