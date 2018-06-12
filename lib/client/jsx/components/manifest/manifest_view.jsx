@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 
 // Class imports.
 import ButtonBar from '../button_bar';
-import Consignment from '../../models/consignment';
 
 // Module imports.
 import ManifestScript from './manifest_script';
+import ConsignmentView from './consignment_view';
 
-import {manifestResult} from './manifest_result';
 import {
   requestConsignments
 } from '../../actions/manifest_actions';
@@ -114,7 +113,7 @@ export class ManifestView extends React.Component{
   }
 
   render(){
-    let { manifest, update } = this.props;
+    let { consignment, manifest, update } = this.props;
 
     if (manifest == null) return null;
 
@@ -173,6 +172,7 @@ export class ManifestView extends React.Component{
             script={script}
             is_editing={is_editing}
             onChange={ update('script') }/>
+          <ConsignmentView consignment={consignment}/>
         </div>
       </div>
     );
