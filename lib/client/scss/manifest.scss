@@ -8,6 +8,79 @@
 .manifest-elements{
   padding-left: 15px;
   padding-right: 15px;
+  .manifest-form-group {
+    .manifest-form-header {
+    }
+    .manifest-body{
+      position: relative;
+      height: 200px;
+
+      .manifest-display {
+        width: 100%;
+        resize: vertical;
+        box-sizing: border-box;
+        font-size: 1em;
+        font-family: $value_font;
+        margin: 0px;
+        height: 200px;
+        white-space: pre-wrap;
+        overflow: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .manifest-editor {
+        @extend .manifest-display;
+        color: transparent;
+        background: transparent;
+        border: 0px;
+        outline: 1px solid red;
+        &:focus {
+          caret-color: black;
+        }
+      }
+
+      .manifest-script{
+        @extend .manifest-display;
+        border: 1px solid #333;
+
+        .token {
+          &.comment { color: #888; }
+          &.macro { color: #f40; }
+          &.variable { color: #b40; }
+          &.string { color: #a0f; }
+          &.function { color: #04d; }
+          &.label, &.column { color: #090; }
+          &.template { color: #f00; font-weight: bold; }
+          &.vector { color: #000; font-weight: bold; }
+        }
+      }
+    }
+    .consignment-view {
+      padding-top: 5px;
+      border-spacing: 2px;
+      .label {
+        font-weight: bold;
+        font-size: 0.8em;
+      }
+      .consignment-result {
+        display: table-row;
+        .consignment-variable-name {
+          color: #b40;
+          font-family: $value_font;
+          display: table-cell;
+          width: 20%;
+          padding-right: 10px;
+          text-align: right;
+        }
+        .result {
+          width: 80%;
+          display: table-cell;
+        }
+      }
+    }
+  }
 
   .manifest-form-title {
     border-bottom: 1px solid #666666;
@@ -57,87 +130,67 @@
             box-sizing: border-box;
   }
 
-  .manifest-body{
-    position: relative;
+  
+}
 
-    .manifest-display {
-      width: 100%;
-      resize: vertical;
-      box-sizing: border-box;
-      font-size: 1em;
-      font-family: $value_font;
-      margin: 0px;
-      height: 200px;
-      white-space: pre-wrap;
+.consignment-result-group {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 150px;
+  margin: 5px 0;
+  border-bottom: 1px solid #333;
+  .consignment-table{
+    border: 1px solid #333;
+    font-family: monospace;
+    font-size: 1.1em;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    font-weight: 100;
+    display: table;
+    width: 100%;
+
+    .consignment-row {
+      display: table-row;
+    }
+
+    .consignment-head {
+      border-bottom: 1px solid #666;
+      display: table-header-group;
+      .consignment-header {
+        display: table-cell;
+        padding: 2px;
+        padding-left: 4px;
+        padding-right: 4px;
+        border-right: 1px solid #888;
+        border-bottom: 1px solid #888;
+        background-color: #ccf;
+      }
+    }
+
+    .consignment-body {
+      max-height: 150px;
       overflow: auto;
-      position: absolute;
-      top: 0;
-      left: 0;
+      display: table-row-group;
     }
 
-    .manifest-editor {
-      @extend .manifest-display;
-      color: transparent;
-      background: transparent;
-      border: 0px;
-      outline: 1px solid black;
-      &:focus {
-        caret-color: black;
-      }
-    }
-
-    .manifest-script{
-      @extend .manifest-display;
-      border-top: 1px solid #333;
-
-      .token {
-        &.comment { color: #888; }
-        &.macro { color: #f40; }
-        &.variable { color: #b40; }
-        &.string { color: #a0f; }
-        &.function { color: #04d; }
-        &.label, &.column { color: #090; }
-        &.template { color: #f00; font-weight: bold; }
-        &.vector { color: #000; font-weight: bold; }
-      }
+    .consignment-cell {
+      /*border-right: 1px solid #666;*/
+      display: table-cell;
+      padding: 2px;
+      padding-left: 4px;
+      padding-right: 4px;
+      border-right: 1px solid #888;
+      border-bottom: 1px solid #888;
     }
   }
-}
-
-.consignment-table{
-  border: 1px solid #333;
-  margin-top: 10px;
-  font-family: monospace;
-  font-size: 1.1em;
-  border-spacing: 0px;
-  font-weight: 100;
-}
-
-.consignment-table thead{
-  border-bottom: 1px solid #666;
-}
-
-.consignment-table td{
-  /*border-right: 1px solid #666;*/
-  padding: 2px;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-.consignment-table th{
-  padding: 2px;
-  padding-left: 4px;
-  padding-right: 4px;
 }
 
 .consignment-btn{
   margin-left: 10px;
   cursor: pointer;
-}
-
-.consignment-matrix,
-.consignment-vector{
-  margin-top: 10px;
+  i {
+    padding-right: 4px;
+  }
 }
 
 /* Button Styling, as opposed to positioning/layout ***************************/
