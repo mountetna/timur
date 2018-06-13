@@ -34,7 +34,7 @@ class MatrixResult extends React.Component{
         <tr key={index}>
 
           <td>{row_name}</td>
-          {row.map((data, index)=>(<td key={index}>{data}</td>))}
+          {row.map((data, index)=>(<td key={index}>{String(data)}</td>))}
         </tr>
       );
     });
