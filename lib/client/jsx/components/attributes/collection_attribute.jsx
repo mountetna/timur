@@ -2,10 +2,13 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
-import * as MagmaActions from '../../actions/magma_actions';
+// Class imports.
 import MagmaLink from '../magma_link';
 import ListInput from '../inputs/list_input';
 import SlowTextInput from '../inputs/slow_text_input';
+
+// Module imports.
+import{reviseDocument} from '../../actions/magma_actions';
 
 export default class CollectionAttribute extends React.Component{
   renderLinks(){
@@ -68,7 +71,7 @@ const mapStateToProps = (dispatch, own_props)=>{
 const mapDispatchToProps = (dispatch, own_props)=>{
   return {
     reviseDocument: (args)=>{
-      dispatch(MagmaActions.reviseDocument(args));
+      dispatch(reviseDocument(args));
     }
   };
 };
