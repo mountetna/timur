@@ -1,8 +1,8 @@
 // Framework libraries.
 import * as React from 'react';
-import * as TSV from '../../utils/tsv';
+import {downloadTSV} from '../../utils/tsv';
 
-class MatrixResult extends React.Component{
+export default class MatrixResult extends React.Component{
   componentWillMount(){
     this.setState({hidden: true});
   }
@@ -29,29 +29,31 @@ class MatrixResult extends React.Component{
   }
 
   tableRows(){
-    return this.props.matrix.map('row', (row, index, row_name)=>{
+    let rows = this.props.matrix.map('row', (row, index, row_name)=>{
       return(
         <tr key={index}>
 
           <td>{row_name}</td>
-          {row.map((data, index)=>(<td key={index}>{data}</td>))}
+          {row.map((data, index)=>(<td key={index}>{String(data)}</td>))}
         </tr>
       );
     });
+
+    return rows;
   }
 
   downloadMatrix(){
     let {name, matrix} = this.props;
     let matrix_map = matrix.map('row', (row, _, row_name)=>{
       return matrix.col_names.reduce(
-        (row_obj, col_name, i)=>{
-          return {...row_obj, [col_name]: row[i]};
+        (row_obj, col_name, index)=>{
+          return {...row_obj, [col_name]: row[index]};
         },
         {row_names: row_name}
       );
     });
 
-    TSV.downloadTSV(
+    downloadTSV(
       matrix_map,
       ['row_names'].concat(matrix.col_names),
       name
@@ -92,5 +94,3 @@ class MatrixResult extends React.Component{
     );
   }
 }
-
-export default MatrixResult;
