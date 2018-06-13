@@ -16,7 +16,7 @@ export class IdentifierSearch extends React.Component{
   }
 
   componentWillMount(){
-    this.props.requestIdentifiers();
+    //this.props.requestIdentifiers();
   }
 
   find_matches(){
