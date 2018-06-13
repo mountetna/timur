@@ -22,17 +22,16 @@ import predicates from './reducers/predicates_reducer';
 // Components.
 import {ManifestsContainer as Manifests} from './components/manifest/manifests';
 import {BrowserContainer as Browser} from './components/browser/browser';
+import {SearchContainer as Search} from './components/search/search';
 import {PlotterContainer as Plotter} from './components/plotter/plotter';
 import {MessagesContainer as Messages} from './components/messages';
 import {TimurNavContainer as TimurNav} from './components/timur_nav';
 import {HomePageContainer as HomePage} from './components/home_page';
+import {ModelMapContainer as ModelMap} from './components/model_map/model_map';
 import {Settings} from './components/settings/settings';
 
-import ModelMap from './components/model_map';
-import Search from './components/search/search';
 import Activity from './components/activity';
 import Noauth from './components/noauth';
-
 
 class TimurApplication{
   constructor(initial_props, container_id){
