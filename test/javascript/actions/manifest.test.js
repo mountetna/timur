@@ -12,6 +12,18 @@ const mockStore = configureMockStore(middlewares);
 
 const PROJECT_NAME = 'labors';
 
+const stub_url = (path, response, verb) => {
+  nock('http://www.fake.com')[verb](path)
+    .reply(
+      200,
+      response,
+      {
+        'Access-Control-Allow-Origin': '*',
+        'Content-type': 'application/json'
+      }
+    );
+}
+
 describe('async actions', () => {
   afterEach(() => {
     nock.cleanAll()
@@ -32,16 +44,11 @@ describe('async actions', () => {
   global.Date = jest.fn(() => currentDate);
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, LOAD_MANIFESTS, and ADD_PLOT when fetching user manifests has been done', () => {
-    nock('http://www.fake.com')
-      .get(`/${PROJECT_NAME}/manifests`)
-      .reply(
-        200,
-        allManifestsResp,
-        {
-          'Access-Control-Allow-Origin': '*',
-          'Content-type': 'application/json'
-        }
-      );
+    stub_url(
+      `/${PROJECT_NAME}/manifests`,
+      allManifestsResp,
+      'get'
+    );
 
     const expectedActions = [
       {
@@ -70,25 +77,20 @@ describe('async actions', () => {
     });
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, SELECT_MANIFEST, and REMOVE_MANIFEST when deleting a user manifest has been done', () => {
-    const manifestId = 1;
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE and REMOVE_MANIFEST when deleting a user manifest has been done', () => {
+    const manifest = { id: 1 };
 
-    nock('http://www.fake.com')
-      .delete(`/${PROJECT_NAME}/manifests/destroy/${manifestId}`)
-      .reply(
-        200,
-        {"manifest": { "id": manifestId } },
-        {
-          'Access-Control-Allow-Origin': '*',
-          'Content-type': 'application/json'
-        }
-      );
+    stub_url(
+      `/${PROJECT_NAME}/manifests/destroy/${manifest.id}`,
+      { manifest },
+      'delete'
+    );
 
     const expectedActions = [
       {
         exchange:{
           exchange_name:"delete-manifest",
-          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/destroy/${manifestId}`,
+          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/destroy/${manifest.id}`,
           start_time: currentDate
         },
         exchange_name:"delete-manifest",
@@ -99,33 +101,24 @@ describe('async actions', () => {
         type:"REMOVE_EXCHANGE"
       },
       {
-        type: 'SELECT_MANIFEST',
-        id: null
-      },
-      {
         type: 'REMOVE_MANIFEST',
-        id: manifestId
+        id: manifest.id
       }
     ];
 
     const store = mockStore({});
 
-    return store.dispatch(actions.deleteManifest(manifestId)).then(() => {
+    return store.dispatch(actions.deleteManifest(manifest)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, and SELECT_MANIFEST when creating a new user manifest has been done', () => {
-    nock('http://www.fake.com')
-      .post(`/${PROJECT_NAME}/manifests/create`)
-      .reply(
-        200,
-        manifestResp,
-        {
-          'Access-Control-Allow-Origin': '*',
-          'Content-type': 'application/json'
-        }
-      );
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE and ADD_MANIFEST when creating a new user manifest has been done', () => {
+    stub_url(
+      `/${PROJECT_NAME}/manifests/create`,
+      manifestResp,
+      'post'
+    );
 
     const expectedActions = [
       {
@@ -144,10 +137,6 @@ describe('async actions', () => {
       {
         type:"ADD_MANIFEST",
         ...manifestResp
-      },
-      {
-        type: 'SELECT_MANIFEST',
-        id: 12
       }
     ];
 
@@ -160,16 +149,11 @@ describe('async actions', () => {
   });
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, and UPDATE_USER_MANIFEST when updating user manifest has been done', () => {
-    nock('http://www.fake.com')
-      .post(`/${PROJECT_NAME}/manifests/update/${manifestResp.manifest.id}`)
-      .reply(
-        200,
-        manifestResp,
-        {
-          'Access-Control-Allow-Origin': '*',
-          'Content-type': 'application/json'
-        }
-      )
+    stub_url(
+      `/${PROJECT_NAME}/manifests/update/${manifestResp.manifest.id}`,
+      manifestResp,
+      'post'
+    )
 
     const expectedActions = [
       {
@@ -199,7 +183,7 @@ describe('async actions', () => {
 
   });
 
-  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, ADD_MANIFEST, and SELECT_MANIFEST when copying a user manifest has been done', () => {
+  it('creates ADD_EXCHANGE, REMOVE_EXCHANGE and ADD_MANIFEST when copying a user manifest has been done', () => {
     const newManifestId =  manifestResp.manifest.id + 1;
 
     const copiedManifestResp = {
@@ -208,16 +192,11 @@ describe('async actions', () => {
       id: newManifestId
     };
 
-    nock('http://www.fake.com')
-      .post(`/${PROJECT_NAME}/manifests/create`)
-      .reply(
-        200,
-        { "manifest": copiedManifestResp },
-        {
-          'Access-Control-Allow-Origin': '*',
-          'Content-type': 'application/json'
-        }
-      );
+    stub_url(
+      `/${PROJECT_NAME}/manifests/create`,
+      { "manifest": copiedManifestResp },
+      'post'
+    );
 
     const expectedActions = [
       {
@@ -236,10 +215,6 @@ describe('async actions', () => {
       {
         type:"ADD_MANIFEST",
         manifest: copiedManifestResp
-      },
-      {
-        type: 'SELECT_MANIFEST',
-        id: newManifestId
       }
     ];
 
