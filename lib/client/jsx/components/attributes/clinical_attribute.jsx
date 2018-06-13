@@ -525,17 +525,14 @@ export class ClinicalAttribute extends React.Component{
 }
 
 const mapStateToProps = (state, own_props)=>{
-  let project_name = TIMUR_CONFIG.project_name;
-  let model_name = `${project_name}_${own_props.attribute.model_name}`;
-
   /*
    * The main goal of processing the data here is to:
    * 1. Attach the basic defintions to the documents.
    * 2. Nest the documents in their proper hierarchy.
    */
 
-  let dictionary = selectDictionary(state, model_name);
-  let records = selectModelDocuments(state, model_name);
+  let dictionary = selectDictionary(state, own_props.attribute.model_name);
+  let records = selectModelDocuments(state, own_props.attribute.model_name);
 
   /*
    * Trim out 'identifier serch' items. We need fix the identifier search to not
@@ -563,8 +560,7 @@ const mapDispatchToProps = (dispatch, own_props)=>{
     },
 
     sendRevisions: (args)=>{
-      let action = sendRevisions(args);
-      dispatch(action);
+      dispatch(sendRevisions(args));
     }
   };
 };
