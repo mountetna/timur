@@ -9,7 +9,7 @@
   "dependencies": {
     "babel-core": "^6.26.0",
     "css-loader": "^0.28.10",
-    "d3": "^3.5.17",
+    "d3": "^4.13.0",
     "d3-ease": "^1.0.3",
     "downloadjs": "^1.4.7",
     "font-awesome": "^4.7.0",
