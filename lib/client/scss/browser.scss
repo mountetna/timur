@@ -98,6 +98,14 @@
           font-family: $body_font;
           color: midnightblue;
         }
+        > .value-timeline{
+          border-bottom: 1px solid rgba(forestgreen,0.1);
+          flex-grow: 1;
+          padding-left: 9px;
+          margin-left: 2px;
+          padding-top: 3px;
+          width: 85%;
+        }
         > .value {
           border-bottom: 1px solid rgba(forestgreen,0.1);
           flex-grow: 1;

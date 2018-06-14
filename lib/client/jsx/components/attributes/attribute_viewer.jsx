@@ -20,13 +20,14 @@ import {SelectAttributeContainer as SelectAttribute} from './select_attribute';
 import {TextAttributeContainer as TextAttribute} from './text_attribute';
 
 // The plots.
-import {LinePlotAttributeContainer as LinePlotAttribute} from './plot_attributes/line_plot_attribute';
-import {BoxPlotAttributeContainer as BoxPlotAttribute} from './plot_attributes/box_plot_attribute';
-import {BarGraphAttributeContainer as BarGraphAttribute} from './plot_attributes/bar_graph_attribute';
-import {BarPlotAttributeContainer as BarPlotAttribute} from './plot_attributes/bar_plot_attribute';
-import {StackedBarPlotAttributeContainer} from './plot_attributes/stacked_bar_attribute';
-import {SwarmPlotAttributeContainer as SwarmPlotAttribute} from './plot_attributes/swarm_plot_attribute';
-import {HistogramAttributeContainer as HistogramAttribute} from './plot_attributes/histogram_attribute';
+// import {LinePlotAttributeContainer as LinePlotAttribute} from './plot_attributes/line_plot_attribute';
+// import {BoxPlotAttributeContainer as BoxPlotAttribute} from './plot_attributes/box_plot_attribute';
+// import {BarGraphAttributeContainer as BarGraphAttribute} from './plot_attributes/bar_graph_attribute';
+// import {BarPlotAttributeContainer as BarPlotAttribute} from './plot_attributes/bar_plot_attribute';
+// import {StackedBarPlotAttributeContainer} from './plot_attributes/stacked_bar_attribute';
+// import {SwarmPlotAttributeContainer as SwarmPlotAttribute} from './plot_attributes/swarm_plot_attribute';
+// import {HistogramAttributeContainer as HistogramAttribute} from './plot_attributes/histogram_attribute';
+import {TimelineAttributeContainer as TimelineAttribute} from './plot_attributes/timeline_attribute';
 
 export default class AttributeViewer extends React.Component{
   render(){
@@ -51,8 +52,11 @@ export default class AttributeViewer extends React.Component{
       case 'DemographicAttribute':
       case 'DiagnosticAttribute':
       case 'TreatmentAttribute':
-      //case 'AdverseEventAttribute':
+      case 'AdverseEventAttribute':
         return <ClinicalAttribute  {...this.props} />;
+
+      case 'TimelinePlotAttribute':
+        return <TimelineAttribute {...this.props} />;
 
       case 'BoxPlotAttribute':
         return <BoxPlotAttribute {...this.props} />;
