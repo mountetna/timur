@@ -22,22 +22,30 @@ class Timur
 
       # browse_controller.rb
       get ':project_name', action: 'browse#index', as: :project
-      get ':project_name/browse', action: 'browse#index', as: :browse
       get ':project_name/view/:model_name', action: 'browse#view', as: :view
 
-      # browse view
+      # !!! ACHTUNG !!!
+      # view routes are parsed by the client and must also be set there
+      get ':project_name/browse', as: :browse do
+        erb_view(:client)
+      end
       get ':project_name/browse/:model_name/*record_name', as: :browse_model do
-        erb_view(:model)
+        erb_view(:client)
       end
-
-      # search view
       get ':project_name/search', as: :search do
-        erb_view(:search)
+        erb_view(:client)
       end
-
-      # map view
       get ':project_name/map', as: :map do
-        erb_view(:map)
+        erb_view(:client)
+      end
+      get ':project_name/manifests', as: :manifests do
+        erb_view(:client)
+      end
+      get ':project_name/manifest/:manifest_id' do
+        erb_view(:client)
+      end
+      get ':project_name/plots', as: :plots do
+        erb_view(:client)
       end
 
       # archimedes_controller.rb
@@ -45,20 +53,11 @@ class Timur
         action: 'archimedes#consignment',
         as: :consignment
 
-      # plot_controller.rb
-      get ':project_name/plots', as: :plots do
-        erb_view(:plots)
-      end
-
       post ':project_name/plots/fetch', action: 'plots#fetch'
       post ':project_name/plots/create', action: 'plots#create'
       post ':project_name/plots/update/:id', action: 'plots#update'
       delete ':project_name/plots/destroy/:id', action: 'plots#destroy'
 
-      # manifest_controller.rb
-      get ':project_name/manifests', as: :manifests do
-        erb_view(:manifests)
-      end
       get ':project_name/manifests/fetch', action: 'manifests#fetch'
       post ':project_name/manifests/create', action: 'manifests#create'
       post ':project_name/manifests/update/:id', action: 'manifests#update'
