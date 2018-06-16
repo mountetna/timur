@@ -15,38 +15,31 @@ export class TabBar extends React.Component{
   }
 
   renderTabs(){
-    let self = this;
-    let {view, current_tab_index, revised, clickTab} = this.props;
+    let {view, current_tab_index, revised, onClick} = this.props;
 
     let tabs = Object.keys(view.tabs).map((tab_name, index)=>{
+      let tab = view.tabs[tab_name];
 
-      // Render a selected tab.
-      if(current_tab_index == view.tabs[tab_name].index_order){
-        return(
-          <div className='selected tab' key={index}>
-
-            {self.formatName(tab_name)}
-          </div>
-        );
-      }
-
-      // Render a non selected tab.
-      let tab_props = {
-        key: tab_name,
-        className: revised[tab_name] ? 'revised tab' : 'tab',
-        onClick: function(event){
-          clickTab(view.tabs[tab_name].index_order);
-        }
-      };
-
-      return <div {...tab_props}>{self.formatName(tab_name)}</div>;
+      return(
+        (current_tab_index == tab.index_order) ?
+        // selected tab.
+        <div className='selected tab' key={index}>
+          {this.formatName(tab_name)}
+        </div>
+        :
+        // non selected tab.
+        <div className={ revised[tab_name] ? 'revised tab' : 'tab' }
+          onClick= { (event) => onClick(tab.index_order) }
+          key={index}>
+          {this.formatName(tab_name)}
+        </div>
+      );
     });
 
     return tabs;
   }
 
   render(){
-
     let {tabs} = this.props.view;
 
     // Don't bother showing only one tab.
