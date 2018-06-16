@@ -1,7 +1,8 @@
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var webpack = require('webpack');
 
-module.exports = {
+module.exports = env => ({
   context: path.resolve(__dirname, 'lib/client'),
   resolve: {
     extensions: [ '.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg' ],
@@ -64,5 +65,10 @@ module.exports = {
       filename: 'public/css/timur.bundle.css',
       allChunks: true,
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(env.NODE_ENV),
+      }
+    })
   ],
-};
+});
