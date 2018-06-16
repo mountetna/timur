@@ -5,6 +5,7 @@ import * as ReactRedux from 'react-redux';
 import {IdentifierSearchContainer as IdentifierSearch} from './identifier_search';
 import {HelpContainer as Help} from './help';
 import * as TimurActions from '../actions/timur_actions';
+import Link from './link';
 
 export class TimurNav extends React.Component{
   constructor(props){
@@ -12,9 +13,9 @@ export class TimurNav extends React.Component{
     this.state = {};
   }
 
-  renderTabs(){
+  renderTabs() {
+    let { mode } = this.props;
     let tabs = {
-
       browse: Routes.browse_path(TIMUR_CONFIG.project_name),
       search: Routes.search_path(TIMUR_CONFIG.project_name),
       map: Routes.map_path(TIMUR_CONFIG.project_name),
@@ -24,23 +25,11 @@ export class TimurNav extends React.Component{
     };
 
     return(
-      Object.keys(tabs).map((name)=>{
-
-        let tab_props = {
-          key: name,
-          className: 'nav_tab'+ (this.props.mode == name ? ' selected' : '')
-        };
-
-        return(
-          <div {...tab_props}>
-
-            <a href={tabs[name]}>
-
-              {name}
-            </a>
-          </div>
-        );
-     })
+      Object.keys(tabs).map((name)=>
+       <div key={name} className={ `nav_tab ${mode == name ? 'selected' : ''}` }>
+         <Link link={tabs[name]} name={name}/>
+       </div>
+     )
     );
   }
 
@@ -63,7 +52,7 @@ export class TimurNav extends React.Component{
       </svg>
     </div>
   }
-  
+
   render(){
 
     let login = this.props.user;
