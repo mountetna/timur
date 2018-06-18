@@ -27,54 +27,8 @@ describe BrowseController do
       expect(last_response.status).to eq(200)
 
       expect(
-        json_body[:views][:monster][:tabs][:stats][:panes][:default][:attributes].keys
+        json_body[:view][:tabs][:stats][:panes][:default][:attributes].keys
       ).to eq([:weight, :size, :odor])
-    end
-  end
-
-  context '#model' do
-    it 'returns the model view html' do
-      get_browse('browse/monster/Lernean%20Hydra')
-
-      expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/TIMUR_CONFIG/)
-      expect(last_response.body).to match(/record_name: 'Lernean Hydra'/)
-    end
-  end
-
-  context '#map' do
-    it 'returns the map view html' do
-      get_browse('map')
-
-      expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/TIMUR_CONFIG/)
-      expect(last_response.body).to match(/mode: 'map'/)
-    end
-  end
-
-  context '#index' do
-    it 'redirects to the main project record' do
-      stub_request(
-        :post,
-        Timur.instance.config(:magma)[:host]+'/query'
-      ).with(
-          body: {
-            project_name: "labors",
-            query: ["project","::first","::identifier"]
-          }.to_json,
-      ).to_return(
-        status: 200, 
-        body: {
-          answer: "The Twelve Labors of Hercules"
-        }.to_json,
-        headers: {}
-      )
-
-      get_browse('browse')
-      expect(last_response.status).to eq(302)
-      expect(last_response.headers['Location']).to eq(
-        'http://example.org/labors/browse/project/The%20Twelve%20Labors%20of%20Hercules'
-      )
     end
   end
 end

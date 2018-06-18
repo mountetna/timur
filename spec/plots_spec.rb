@@ -25,11 +25,6 @@ describe PlotsController do
       get_plots(nil, :non_user)
       expect(last_response.status).to eq(403)
     end
-    it 'returns the plots view' do
-      get_plots(nil, :viewer)
-      expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/mode: 'plots'/)
-    end
   end
 
   context '#fetch' do
