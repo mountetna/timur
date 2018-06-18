@@ -119,13 +119,13 @@ class TimurRouter extends React.Component {
 
     let Component = route.component;
 
-    console.log("Rerouting to "+route.template);
-    console.log(params);
+    // this key allows us to remount the component when the params change
+    let key = JSON.stringify(params);
 
     return <div id='ui-container'>
       <TimurNav environment={ environment } mode={ route.tab }/>
       <Messages />
-      <Component {...params}/>
+      <Component key={key} {...params}/>
     </div>
   }
 }
