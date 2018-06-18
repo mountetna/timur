@@ -19,7 +19,8 @@ import Noauth from './components/noauth';
 const ROUTES = [
   {
     template: '',
-    component: HomePage
+    component: HomePage,
+    tab: 'home'
   },
   {
     template: ':project_name/browse/',
