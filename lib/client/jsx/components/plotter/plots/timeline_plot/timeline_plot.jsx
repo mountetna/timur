@@ -93,10 +93,10 @@ class TimelinePlot extends Component {
 
   render() {
     if (this.state.timeDomain.length < 1) return null;
-    let margins = { top: 80, right: 145, bottom: 100, left: 145 };
+    let margins = { top: 80, right: 145, bottom: 400, left: 145 };
     let svg_dimensions = { 
       width: Math.max(this.props.parent_width, 500),
-      height: 500
+      height: 800
     };
     
     //Create time scale.

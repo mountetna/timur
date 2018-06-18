@@ -332,12 +332,14 @@
 }
 
 .tooltip-bg{
-  fill: 'black';
-  opacity: 0.8;
+  fill: #ccc;
+  pointer-events: none;
+  // opacity: 0.90;
 }
 
 .tooltip-text{
+  display: inline;
   font-family: "Open Sans", arial, x-locale-body, sans-serif;
-  font-size:11px;
-  fill:#ffffff;
+  font-size: 11px;
+  fill: black;
 }

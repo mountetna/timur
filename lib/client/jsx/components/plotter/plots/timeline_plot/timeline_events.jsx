@@ -26,8 +26,7 @@ class TimelineEvents extends Component {
           'data-value':  JSON.stringify(datum),
           'data-type': datum.label,
           'data-start': datum.start || '',
-          'data-end': datum.end || '',
-          'data-grade': datum.grade >= 0 ? datum.grade : null
+          'data-end': datum.end || ''
         };
         return <rect {...rect_props}/>;
 
@@ -44,8 +43,7 @@ class TimelineEvents extends Component {
           'data-value': JSON.stringify(datum),
           'data-type': datum.label,
           'data-start': datum.start || '',
-          'data-end': datum.end || '',
-          'data-grade': datum.grade >= 0 ? datum.grade : null
+          'data-end': datum.end || ''
         };
         return <circle {...cir_props}/>;
       }

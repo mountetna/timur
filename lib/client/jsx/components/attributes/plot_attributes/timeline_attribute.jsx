@@ -78,6 +78,23 @@ let uniqueLabelByDate = (array) => {
   return array;
 }
 
+let flatten = (nested_obj, array, level) => {
+  array = array || [];
+  level = level || 1;
+  for (let obj in nested_obj) {
+    array.push({
+      name: `${'· '.repeat(level)} ${nested_obj[obj].name.replace(/_/g, ' ')}`,
+      value: nested_obj[obj].value,
+    })
+    if (typeof nested_obj[obj].children === "object" && Object.keys(nested_obj[obj].children).length !== 0) {
+      let next_level = level + 1;
+      flatten(nested_obj[obj].children, array, next_level);
+    }
+
+  }
+  return array;
+}
+
 let normalizeD3Records = (records) => {
   let d3_records = [];
   for (let record in records) {
@@ -100,11 +117,17 @@ let normalizeD3Records = (records) => {
         d3_record[name]=records[record].children[child].value;
       } 
       else {
+
         d3_record.data.push({
-          name: records[record].children[child].name,
+          name: records[record].children[child].name.replace(/_/g, ' '),
           value: records[record].children[child].value,
           children: records[record].children[child].children
-        })
+        });
+
+        if (records[record].children[child].children !== null) {
+          let array = flatten(records[record].children[child].children);
+          d3_record.data = [...d3_record.data, ...array];
+        }
       }
     
     }
@@ -201,8 +224,13 @@ const mapStateToProps = (state = {}, own_props)=>{
           }
         }
       }
-
+      
+      console.log("============================ hashed obj ================")
+      console.log(hashed_obj);
       hashed_obj = nestDataset(hashed_obj, 'uid', 'parent_uid');
+
+      console.log("============================ nested hashed obj ================")
+      console.log(hashed_obj);
       records = normalizeD3Records(hashed_obj);
 
       let adverse_events_arr = [];
@@ -234,7 +262,7 @@ const mapStateToProps = (state = {}, own_props)=>{
             }
 
             hashed_obj[meddra_code] = {
-              grade: category.rows[index][1],
+              data: [{name: 'Grade', value: category.rows[index][1]}],
               start: utc_start_str,
               end: utc_end_str,
               name: category.rows[index][4],
@@ -255,6 +283,8 @@ const mapStateToProps = (state = {}, own_props)=>{
       adverse_events_arr = uniqueLabelByDate(adverse_events_arr);
       prior_adverse_events_arr = uniqueLabelByDate(prior_adverse_events_arr);
       records = [...adverse_events_arr, ...prior_adverse_events_arr, ...records];  
+      console.log("==================== records =========================")
+      console.log(records);
   }
   return {
     selected_plot,

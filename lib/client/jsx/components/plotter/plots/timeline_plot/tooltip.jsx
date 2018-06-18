@@ -16,9 +16,16 @@ class Tooltip extends Component {
  
     if(tooltip.display == true){
       let {x, y} = tooltip.location;
+      let increment = 0;
       visibility = 'visible';
       values = data.value ? JSON.parse(data.value).data : null;
-      height = values ? values.length * 10 + 100 : 80;
+
+      values.forEach( obj => {
+        let str = obj.name + obj.value;
+        if ( str.length > 52) {increment++}
+      });
+      
+      height = values ? (values.length + increment) * 18 + 70 : 80;
 
       if(height < y - 20){
         transform='translate(' + (x - width / 2) + 
@@ -66,11 +73,24 @@ class Tooltip extends Component {
 
     let  displayValues = (obj) => {
       return obj.map( (el, index) => {
+        let str_len = `${el.name +': '+ el.value}`.length;
+        if(str_len < 54){
           return(
             <tspan {...tspan_props} key={index} dy='18'>
-              {el.name +' : '+ el.value}
+              {el.name +': '+ el.value}
             </tspan>
           );
+        }
+        else {
+            return ([
+              <tspan {...tspan_props} key={index} dy='18'>
+                {el.name +' :'}
+              </tspan>, 
+              <tspan {...tspan_props} key={index+'shift'} dy='18'>
+                &#8627; {el.value}
+              </tspan>
+            ]);
+        }
       })
     }
 
@@ -81,13 +101,9 @@ class Tooltip extends Component {
         <polygon {...polygon_props}/>
         <text {...text_props}>
         
-          <tspan {...tspan_props}>{x_value +' : '+ data.type}</tspan>
+          <tspan {...tspan_props}>{x_value +': '+ data.type}</tspan>
           <tspan {...tspan_props} dy="18">{'Start: '+ data.start}</tspan>
           <tspan {...tspan_props} dy="18">{'End: '+ data.end}</tspan>
-          { 
-            data.grade !== null && 
-            <tspan {...tspan_props} dy="18">{'Grade: '+ data.grade}</tspan>
-          }
           {values && displayValues(values)}
         </text>
       </g>
