@@ -80,37 +80,35 @@ export class Browser extends React.Component{
     }).replace(/\s+/g, '');
   }
 
-  headerHandler(action) {
-    switch(action){
-      case 'cancel':
-        this.setState({mode: 'browse'});
-        this.props.discardRevision(
-          this.props.record_name,
-          this.props.model_name
-        );
-        return;
-      case 'approve':
-        if(this.props.has_revisions) {
-          this.setState({mode: 'submit'});
-          this.props.sendRevisions(
-            this.props.model_name,
-            {[this.props.record_name] : this.props.revision},
-            ()=>this.setState({mode: 'browse'}),
-            ()=>this.setState({mode: 'edit'})
-          );
-        }
-        else {
-          this.setState({mode: 'browse'});
-          this.props.discardRevision(
-            this.props.record_name,
-            this.props.model_name
-          );
-        }
-        return;
-      case 'edit':
-        this.setState({mode: 'edit'});
-        return;
-    }
+  setMode(mode) { this.setState({mode}) }
+  editMode() { this.setMode('edit') }
+  browseMode() { this.setMode('browse') }
+
+  cancelEdits() {
+    let { discardRevision, record_name, model_name } = this.props;
+
+    this.browseMode();
+    discardRevision(
+      record_name,
+      model_name
+    );
+  }
+
+  postEdits() {
+    let { revision, model_name, record_name, sendRevisions } = this.props;
+    this.setMode('submit');
+    sendRevisions(
+      model_name,
+      {[record_name] : revision},
+      this.browseMode.bind(this),
+      this.editMode.bind(this)
+    );
+  }
+
+  approveEdits() {
+    let { revision, model_name, record_name, sendRevisions } = this.props;
+    if (Object.keys(revision).length > 0) this.postEdits();
+    else this.cancelEdits();
   }
 
   selectTab(index_order) {
@@ -168,9 +166,11 @@ export class Browser extends React.Component{
 
     return(
       <div className={skin}>
-        <Header mode={mode}
-          can_edit={can_edit}
-          handler={ this.headerHandler.bind(this)}>
+        <Header
+          onEdit={ mode == 'browse' && can_edit && this.editMode.bind(this) }
+          onApprove={mode == 'edit' && this.approveEdits.bind(this) }
+          onCancel={ mode == 'edit' && this.cancelEdits.bind(this) }
+          onLoad={mode=='submit'}>
           <div className='model-name'>
             {this.camelize(model_name)}
           </div>
@@ -209,8 +209,7 @@ export const BrowserContainer = connect(
       template,
       revision,
       view,
-      doc,
-      has_revisions: (Object.keys(revision).length > 0)
+      doc
     };
   },
   // map dispatch
