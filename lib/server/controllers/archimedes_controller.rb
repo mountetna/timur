@@ -29,7 +29,7 @@ class ArchimedesController <  Timur::Controller
         Archimedes::Manifest.new(
           token,
           @params[:project_name],
-          script
+          with_record_name(script)
         ).payload
       ]
     end.to_h
@@ -37,6 +37,10 @@ class ArchimedesController <  Timur::Controller
     success_json(consignments)
   rescue Archimedes::LanguageError => e
     raise Etna::BadRequest, e.message.to_s
+  end
+
+  def with_record_name(script)
+    @params[:record_name] ? "@record_name = '#{@params[:record_name].gsub(/'/, "''")}'\n#{script}" : script
   end
 end
 
