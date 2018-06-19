@@ -26,7 +26,8 @@ export class TimelineAttribute extends GenericPlotAttribute{
     if(
         Object.keys(next_props).length <= 0 || 
         next_props.selected_consignment === null
-    ) {return null;}
+    ) return null;
+    
 
     return {
       records: next_props.records
@@ -37,15 +38,12 @@ export class TimelineAttribute extends GenericPlotAttribute{
     let plot_props = {
       all_events: this.state.records,
       color:'#29892a'
-    }
+    };
 
     return(
       <div id='timeline_charts' className='value-timeline'>
         {this.state.records && <Resize render={(width) => (
-          <TimelinePlot 
-            {...plot_props}
-            parent_width={width} 
-          />
+          <TimelinePlot {...plot_props} parent_width={width} />
         )}/>}
       </div>
     )
@@ -105,14 +103,14 @@ let flatten = (nested_obj, array, level) => {
     array.push({
       name: `${'· '.repeat(level)} ${nested_obj[obj].name.replace(/_/g, ' ')}`,
       value: nested_obj[obj].value,
-    })
-    if (
-        typeof nested_obj[obj].children === "object" && 
-        Object.keys(nested_obj[obj].children).length !== 0
+    });
+    if(
+      typeof nested_obj[obj].children === "object" && 
+      Object.keys(nested_obj[obj].children).length !== 0
     ) {
-       let next_level = level + 1;
-       flatten(nested_obj[obj].children, array, next_level);
-      }
+      let next_level = level + 1;
+      flatten(nested_obj[obj].children, array, next_level);
+    }
   }
   return array;
 }
@@ -163,13 +161,13 @@ let normalizePatientDataD3 = (records) => {
   d3_records.forEach(record => {
     switch(record.name) {
       case 'diagnosis_date':
-        diagnostic_arr.push(record)
+        diagnostic_arr.push(record);
         break;
       case 'prior_treatment':
-        prior_treatment_arr.push(record)
+        prior_treatment_arr.push(record);
         break;
       case 'study_treatment':
-        treatment_arr.push(record)
+        treatment_arr.push(record);
         break;
       default:
           break;
@@ -236,6 +234,8 @@ const mapStateToProps = (state = {}, own_props)=>{
    */
   let selected_plot, selected_manifest, selected_consignment = undefined;
   let records;
+  let ae_records;
+  let hashed_obj = {};
   
   // selected_plot = state.plots.plotsMap[own_props.attribute.plot_id];
   // if(selected_plot != undefined){
@@ -258,10 +258,8 @@ const mapStateToProps = (state = {}, own_props)=>{
       prior_treatment_data,
       adverse_events,
       prior_adverse_events
-      } = selected_consignment;
+    } = selected_consignment;
 
-    let hashed_obj = {};
-  
     let patient_data = [
       diagnostic_data, 
       treatment_data,
@@ -281,7 +279,7 @@ const mapStateToProps = (state = {}, own_props)=>{
     prior_adverse_events.rows.map(row => {row.push('prior_adverse_events');});
     adverse_events.col_names.push('name');
     adverse_events.rows.map(row => {row.push('adverse_events');});
-    let ae_records = normalizeAEPatientDataD3(hashed_obj, ae_patient_data);
+    ae_records = normalizeAEPatientDataD3(hashed_obj, ae_patient_data);
 
     records = [...ae_records, ...records];  
   }

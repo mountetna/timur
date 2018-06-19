@@ -66,14 +66,14 @@ class TimelinePlot extends Component {
       tooltip:{
         display:true,
         data: {
-            type: target.getAttribute('data-type'),
-            start: target.getAttribute('data-start'),
-            end: target.getAttribute('data-end'),
-            value: target.getAttribute('data-value') || null
-            },
+          type: target.getAttribute('data-type'),
+          start: target.getAttribute('data-start'),
+          end: target.getAttribute('data-end'),
+          value: target.getAttribute('data-value') || null
+        },
         location:{ 
-            x: target.getAttribute('x') ? rec_x : cir_x,
-            y: target.getAttribute('y') ? rec_y : cir_y
+          x: target.getAttribute('x') ? rec_x : cir_x,
+          y: target.getAttribute('y') ? rec_y : cir_y
         } 
       }
     });
@@ -102,7 +102,7 @@ class TimelinePlot extends Component {
     let svg_props = {
       width: svg_dimensions.width,
       height: svg_dimensions.height
-    }
+    };
     
     //Create time scale.
     let xScale = this.timeScale

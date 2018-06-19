@@ -6,7 +6,7 @@ class Resize extends Component {
 
     this.state = {
       container_width: null
-    }
+    };
 
     this.fitParentContainer = this.fitParentContainer.bind(this);
   }
@@ -30,7 +30,7 @@ class Resize extends Component {
     if(should_resize) {
       this.setState({
         container_width: current_container_width
-      })
+      });
     }
   }
 
@@ -40,13 +40,13 @@ class Resize extends Component {
     let ref_props = {
       ref: (el) => { this.chartContainer = el },
       className: 'resize-wrapper'
-    }
+    };
 
     return (
       <div {...ref_props}>
         {should_render_chart && this.props.render(container_width)}
       </div>
-    )
+    );
   }
 }
 

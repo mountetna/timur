@@ -17,15 +17,15 @@ export default class Axis extends Component {
     switch(this.props.orient) {
       case 'timeline-bottom':
         axis = d3.axisBottom(this.props.scale)
-        .tickSize(-this.props.tickSize)
-        .tickPadding([12])
-        .tickFormat(d3.timeFormat("%b '%y"));
-          break;
+          .tickSize(-this.props.tickSize)
+          .tickPadding([12])
+          .tickFormat(d3.timeFormat("%b '%y"));
+        break;
       case 'ordinal-left':
         axis = d3.axisLeft(this.props.scale)
-        .tickSize(-this.props.tickSize)
-        .tickPadding([12])
-          break;
+          .tickSize(-this.props.tickSize)
+          .tickPadding([12]);
+        break;
     }
 
     d3.select(this.axisElement).call(axis);
@@ -36,7 +36,7 @@ export default class Axis extends Component {
       className: `Axis Axis-${this.props.orient}`,
       ref: (el) => { this.axisElement = el; },
       transform: this.props.translate
-    }
+    };
     return <g {...props}/>;
   }
 }

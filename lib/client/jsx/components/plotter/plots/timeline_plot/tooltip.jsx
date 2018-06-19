@@ -10,7 +10,7 @@ class Tooltip extends Component {
     let transform_text = 'translate('+ width / 2 + ',' + 18 +')';
     let transform_arrow = '';
 
-    let {tooltip, bg_style, text_style, x_value, y_value} = this.props;
+    let {tooltip, bg_style, text_style, x_value} = this.props;
     let {data} = tooltip; 
     let values;
  
@@ -48,35 +48,36 @@ class Tooltip extends Component {
       className: bg_style,
       width,
       height,
-      rx: "5",
-      ry: "5",
+      rx: '5',
+      ry: '5',
       visibility
-    }
+    };
 
     let polygon_props = {
       className: bg_style,
       points: '10,0  30,0  20, 10',
       transform: transform_arrow,
       visibility
-    }
+    };
 
     let text_props = {
       visibility,
       transform: transform_text
-    }
+    };
 
     let tspan_props = {
       x:'-135',
       className: text_style,
       textAnchor: 'start'
-    }
+    };
 
-    let  displayValues = (obj) => {
+    let displayValues = (obj) => {
       return obj.map( (el, index) => {
         let str_len = `${el.name +': '+ el.value}`.length;
         if(str_len < 54){
           return (
             <tspan {...tspan_props} key={index} dy='18'>
+
               {el.name +': '+ el.value}
             </tspan>
           );
@@ -84,15 +85,17 @@ class Tooltip extends Component {
         else {
             return ([
               <tspan {...tspan_props} key={index} dy='18'>
+
                 {el.name +' :'}
               </tspan>, 
               <tspan {...tspan_props} key={index+'shift'} dy='18'>
+
                 &#8627; {el.value}
               </tspan>
             ]);
         }
       })
-    }
+    };
 
     return (
       <g transform = {transform}>

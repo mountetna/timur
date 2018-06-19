@@ -10,10 +10,10 @@ class TimelineEvents extends Component {
     let {xScale, yScale} = scales;
 
     const events = data.map((datum, index) => {
-      if((
-        datum.end !== undefined && 
-          datum.end !== null) && 
-        datum.start !== datum.end) {
+      if(
+        (datum.end !== undefined && datum.end !== null) && 
+        datum.start !== datum.end
+      ) {
         let rect_props = {
           key: `${datum.label}_${index}`,
           x: xScale(new Date(datum.start)),
