@@ -11,10 +11,10 @@ class Tooltip extends Component {
     let transform_arrow = '';
 
     let {tooltip, bg_style, text_style, x_value, y_value} = this.props;
-    let { data } = tooltip; 
+    let {data} = tooltip; 
     let values;
  
-    if(tooltip.display == true){
+    if(tooltip.display === true){
       let {x, y} = tooltip.location;
       let increment = 0;
       visibility = 'visible';
@@ -22,7 +22,7 @@ class Tooltip extends Component {
 
       values.forEach( obj => {
         let str = obj.name + obj.value;
-        if ( str.length > 52) {increment++}
+        if( str.length > 52) {increment++}
       });
     
       height = values ? (values.length + increment) * 18 + 65 : 80;

@@ -37,8 +37,6 @@ export default class Axis extends Component {
       ref: (el) => { this.axisElement = el; },
       transform: this.props.translate
     }
-    return (
-      <g {...props}/>
-    );
+    return <g {...props}/>;
   }
 }

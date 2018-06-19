@@ -24,8 +24,8 @@ export class TimelineAttribute extends GenericPlotAttribute{
   static getDerivedStateFromProps(next_props, prev_state){
 
     if(
-      Object.keys(next_props).length <= 0 || 
-      next_props.selected_consignment === null
+        Object.keys(next_props).length <= 0 || 
+        next_props.selected_consignment === null
     ) {return null;}
 
     return {
@@ -71,6 +71,23 @@ let normalizeDateName = (name) => {
   } 
 }
 
+let hashPatientData = (hashed_obj, array) => {
+  for(let category of array) {
+    if(category) {
+      for(let index = 0; index < category.row_names.length; ++index){
+
+        let uid = category.row_names[index];
+        hashed_obj[uid] = {
+          uid: uid,
+          parent_uid: category.rows[index][0],
+          name: normalizeDateName(category.rows[index][1]),
+          value: category.rows[index][2]
+        };
+      }
+    }
+  }
+}
+
 let uniqueLabelByDate = (array) => {
   array.sort((a,b) => {
     return new Date(a.start) - new Date(b.start);
@@ -84,7 +101,7 @@ let uniqueLabelByDate = (array) => {
 let flatten = (nested_obj, array, level) => {
   array = array || [];
   level = level || 1;
-  for (let obj in nested_obj) {
+  for(let obj in nested_obj) {
     array.push({
       name: `${'· '.repeat(level)} ${nested_obj[obj].name.replace(/_/g, ' ')}`,
       value: nested_obj[obj].value,
@@ -92,33 +109,33 @@ let flatten = (nested_obj, array, level) => {
     if (
         typeof nested_obj[obj].children === "object" && 
         Object.keys(nested_obj[obj].children).length !== 0
-       ) {
-          let next_level = level + 1;
-          flatten(nested_obj[obj].children, array, next_level);
-         }
+    ) {
+       let next_level = level + 1;
+       flatten(nested_obj[obj].children, array, next_level);
+      }
   }
   return array;
 }
 
-let normalizeD3Records = (records) => {
+let normalizePatientDataD3 = (records) => {
   let d3_records = [];
-  for (let record in records) {
+  for(let record in records) {
     let d3_record = {};
     d3_record.data = [];
     d3_record.name = records[record].name;
     d3_record.label = records[record].name.replace(/[_-]/g, " "); 
 
-    if (records[record].name === 'diagnosis_date') {
+    if(records[record].name === 'diagnosis_date') {
       let time_str = new Date(records[record].value).toUTCString();
       let parts = time_str.split(' ');
       let utc_time_str = `${parts[1]}-${parts[2]}-${parts[3]}`;
       d3_record.start = utc_time_str;
     }
 
-    for (let child in records[record].children) {
+    for(let child in records[record].children) {
       let  name = records[record].children[child].name;
 
-      if (name === 'start' || name === 'end'){
+      if(name === 'start' || name === 'end'){
         d3_record[name]=records[record].children[child].value;
       } 
       else {
@@ -129,7 +146,7 @@ let normalizeD3Records = (records) => {
           children: records[record].children[child].children
         });
 
-        if (records[record].children[child].children !== null) {
+        if(records[record].children[child].children !== null) {
           let array = flatten(records[record].children[child].children);
           d3_record.data = [...d3_record.data, ...array];
         }
@@ -138,7 +155,7 @@ let normalizeD3Records = (records) => {
     }
     d3_records.push(d3_record);
   }
-
+  // Group patient data by type 
   let prior_treatment_arr = [];
   let treatment_arr = [];
   let diagnostic_arr = [];
@@ -166,6 +183,53 @@ let normalizeD3Records = (records) => {
   return [...prior_treatment_arr, ...treatment_arr, ...diagnostic_arr];
 }
 
+let normalizeAEPatientDataD3 = (hashed_obj, array) => {
+  let adverse_events_arr = [];
+  let prior_adverse_events_arr = [];
+    
+  // create hashed objects for adverse events data.
+  for(let category of array){
+    if(category) {
+      for(let index = 0; index < category.rows.length; ++index){
+        let meddra_code = category.rows[index][0];
+        let utc_start_str;
+        let utc_end_str; 
+
+        if(category.rows[index][2]){
+          let start = category.rows[index][2].toString().split(' ');
+          utc_start_str  = `${start[2]}-${start[1]}-${start[3]}`;
+        }
+
+        if(category.rows[index][3]){
+          let end = category.rows[index][3].toString().split(' ');
+          utc_end_str  = `${end[2]}-${end[1]}-${end[3]}`;
+        }
+
+        hashed_obj[meddra_code] = {
+          data: [{name: 'Grade', value: category.rows[index][1]}],
+          start: utc_start_str || null,
+          end: utc_end_str || null,
+          name: category.rows[index][4],
+          label: category.rows[index][4]
+        };
+
+        if(hashed_obj[meddra_code].name === 'adverse_events'){
+          adverse_events_arr.push(hashed_obj[meddra_code]);
+        }
+
+        if(hashed_obj[meddra_code].name === 'prior_adverse_events'){
+          prior_adverse_events_arr.push(hashed_obj[meddra_code]);
+        }
+      }
+    }
+  }
+
+  adverse_events_arr = uniqueLabelByDate(adverse_events_arr);
+  prior_adverse_events_arr = uniqueLabelByDate(prior_adverse_events_arr);
+
+  return [...adverse_events_arr, ...prior_adverse_events_arr]
+};
+
 const mapStateToProps = (state = {}, own_props)=>{
   /*
    * Pull the data required for this plot.
@@ -186,7 +250,8 @@ const mapStateToProps = (state = {}, own_props)=>{
       selected_manifest.md5sum_data
     );
   }
-  if (selected_consignment) {
+  
+  if(selected_consignment) {
     let {
       diagnostic_data, 
       treatment_data,
@@ -194,85 +259,31 @@ const mapStateToProps = (state = {}, own_props)=>{
       adverse_events,
       prior_adverse_events
       } = selected_consignment;
-    
-      prior_adverse_events.col_names.push('name');
-      prior_adverse_events.rows.map(row => {row.push('prior_adverse_events');});
 
-      adverse_events.col_names.push('name');
-      adverse_events.rows.map(row => {row.push('adverse_events');});
+    let hashed_obj = {};
   
-      let patient_data = [
-        diagnostic_data, 
-        treatment_data,
-        prior_treatment_data,
-      ];
+    let patient_data = [
+      diagnostic_data, 
+      treatment_data,
+      prior_treatment_data,
+    ];
 
-      let ae_patient_data = [
-        adverse_events,
-        prior_adverse_events
-      ];
-
-      let hashed_obj = {};
+    let ae_patient_data = [
+      adverse_events,
+      prior_adverse_events
+    ];
  
-      for (let category of patient_data) {
-        if (category) {
-          for(let index = 0; index < category.row_names.length; ++index){
+    hashPatientData(hashed_obj, patient_data);
+    hashed_obj = nestDataset(hashed_obj, 'uid', 'parent_uid');
+    records = normalizePatientDataD3(hashed_obj);
 
-            let uid = category.row_names[index];
-            hashed_obj[uid] = {
-              uid: uid,
-              parent_uid: category.rows[index][0],
-              name: normalizeDateName(category.rows[index][1]),
-              value: category.rows[index][2]
-            };
-          }
-        }
-      }
-      
-      hashed_obj = nestDataset(hashed_obj, 'uid', 'parent_uid');
-      records = normalizeD3Records(hashed_obj);
+    prior_adverse_events.col_names.push('name');
+    prior_adverse_events.rows.map(row => {row.push('prior_adverse_events');});
+    adverse_events.col_names.push('name');
+    adverse_events.rows.map(row => {row.push('adverse_events');});
+    let ae_records = normalizeAEPatientDataD3(hashed_obj, ae_patient_data);
 
-      let adverse_events_arr = [];
-      let prior_adverse_events_arr = [];
-
-      for (let category of ae_patient_data){
-        if (category) {
-          for(let index = 0; index < category.rows.length; ++index){
-            let meddra_code = category.rows[index][0];
-            let utc_start_str;
-            let utc_end_str; 
-
-            if (category.rows[index][2]){
-              let start = category.rows[index][2].toString().split(' ');
-              utc_start_str  = `${start[2]}-${start[1]}-${start[3]}`;
-            }
-
-            if (category.rows[index][3]){
-              let end = category.rows[index][3].toString().split(' ');
-              utc_end_str  = `${end[2]}-${end[1]}-${end[3]}`;
-            }
-
-            hashed_obj[meddra_code] = {
-              data: [{name: 'Grade', value: category.rows[index][1]}],
-              start: utc_start_str || null,
-              end: utc_end_str || null,
-              name: category.rows[index][4],
-              label: category.rows[index][4]
-            };
-
-            if(hashed_obj[meddra_code].name === 'adverse_events'){
-              adverse_events_arr.push(hashed_obj[meddra_code]);
-            }
-
-            if(hashed_obj[meddra_code].name === 'prior_adverse_events'){
-              prior_adverse_events_arr.push(hashed_obj[meddra_code]);
-            }
-          }
-        }
-      }
-      adverse_events_arr = uniqueLabelByDate(adverse_events_arr);
-      prior_adverse_events_arr = uniqueLabelByDate(prior_adverse_events_arr);
-      records = [...adverse_events_arr, ...prior_adverse_events_arr, ...records];  
+    records = [...ae_records, ...records];  
   }
 
   return {
@@ -291,7 +302,6 @@ const mapDispatchToProps = (dispatch, own_props)=>{
         record_name
       ));
     }
-
   };
 };
 

@@ -19,7 +19,7 @@ class TimelinePlot extends Component {
   }
 
   static getDerivedStateFromProps(next_props, prev_state){
-    if (next_props.all_events.length <= 0 ) return null;
+    if(next_props.all_events.length <= 0 ) return null;
     
     // Set start and end date for timeline axis.
     let min =  next_props.all_events[0].start ? 
@@ -28,19 +28,19 @@ class TimelinePlot extends Component {
     let max =  next_props.all_events[0].end ? 
       new Date(next_props.all_events[0].end) : min;
 
-    for (let i = 1; i < next_props.all_events.length; i++) {
+    for(let i = 1; i < next_props.all_events.length; i++) {
       let start_time = next_props.all_events[i].start ? 
         new Date (next_props.all_events[i].start) : null;
 
       let end_time = next_props.all_events[i].end ? 
         new Date(next_props.all_events[i].end) : start_time;
 
-      if (start_time < min){min = start_time;} 
-      if (end_time > max){max = end_time;}
+      if(start_time < min){min = start_time;} 
+      if(end_time > max){max = end_time;}
     }
 
     let current_date = new Date();
-    if (max > current_date){
+    if(max > current_date){
       max = current_date;
     }
 
@@ -91,12 +91,12 @@ class TimelinePlot extends Component {
   }
 
   render() {
-    if (this.state.timeDomain.length < 1) return null;
+    if(this.state.timeDomain.length < 1) return null;
     let {timeDomain, data} = this.state;
-    let margins = { top: 41, right: 145, bottom: 400, left: 145 };
+    let margins = { top: 41, right: 145, bottom: 440, left: 145 };
     let svg_dimensions = { 
       width: Math.max(this.props.parent_width, 500),
-      height: data.length * 24 + 441
+      height: data.length * 24 + 481
     };
 
     let svg_props = {
@@ -107,7 +107,8 @@ class TimelinePlot extends Component {
     //Create time scale.
     let xScale = this.timeScale
       .domain(timeDomain)
-      .range([margins.left, svg_dimensions.width - margins.right]);
+      .range([margins.left, svg_dimensions.width - margins.right])
+      .nice();
     
     let yScale = this.bandScale
       .padding(0.5)

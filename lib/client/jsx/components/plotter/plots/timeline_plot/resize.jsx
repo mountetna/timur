@@ -21,13 +21,13 @@ class Resize extends Component {
   }
 
   fitParentContainer() {
-    let { container_width } = this.state;
+    let {container_width} = this.state;
     let current_container_width = this.chartContainer
       .getBoundingClientRect().width;
 
     let should_resize = container_width !== current_container_width;
 
-    if (should_resize) {
+    if(should_resize) {
       this.setState({
         container_width: current_container_width
       })
@@ -39,7 +39,7 @@ class Resize extends Component {
     let should_render_chart = container_width !== null;
     let ref_props = {
       ref: (el) => { this.chartContainer = el },
-      className: "resize-wrapper"
+      className: 'resize-wrapper'
     }
 
     return (
@@ -50,4 +50,4 @@ class Resize extends Component {
   }
 }
 
-export default Resize
+export default Resize;
