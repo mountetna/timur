@@ -1,11 +1,11 @@
 // Framework libraries.
 import * as React from 'react';
-import * as TSV from '../../utils/tsv';
+import { downloadTSV } from '../../utils/tsv';
 import ConsignmentTable from './consignment_table';
 
 class VectorResult extends React.Component{
   constructor(props){
-    super(props)
+    super(props);
     this.state = { hidden: true };
   }
 
@@ -18,7 +18,7 @@ class VectorResult extends React.Component{
     let vectors = this.props.vector.map((label,value)=>{
       return {label, value};
     });
-    TSV.downloadTSV(vectors, ['label', 'value'], this.props.name);
+    downloadTSV(vectors, ['label', 'value'], this.props.name);
   }
 
   table() {
@@ -26,7 +26,7 @@ class VectorResult extends React.Component{
     let headers = [ 'Labels', 'Values' ];
     let rows = vector.map((label, value)=>[ label, value ]);
 
-    return <ConsignmentTable headers={ headers } rows={ rows }/>
+    return <ConsignmentTable headers={ headers } rows={ rows }/>;
   }
 
   render(){

@@ -6,7 +6,9 @@ Sequel.migration do
 
     self[:manifests].all do |manifest|
       self[:manifests].where(id: manifest[:id]).update(
-        script: manifest[:data]["elements"].map{|e| "@#{e['name']} = #{e['script']}"}.join("\n")
+        script: manifest[:data]['elements'].map { |e|
+          "@#{e['name']} = #{e['script']}"
+        }.join("\n")
       )
     end
 
