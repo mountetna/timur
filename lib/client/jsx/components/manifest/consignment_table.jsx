@@ -1,6 +1,5 @@
 // Framework libraries.
 import * as React from 'react';
-import * as TSV from '../../utils/tsv';
 
 class ConsignmentTable extends React.Component{
   header() {
