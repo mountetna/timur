@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 class Resize extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       container_width: null
@@ -21,11 +21,11 @@ class Resize extends Component {
   }
 
   fitParentContainer() {
-    const { container_width } = this.state;
-    const current_container_width = this.chartContainer
+    let { container_width } = this.state;
+    let current_container_width = this.chartContainer
       .getBoundingClientRect().width;
 
-    const should_resize = container_width !== current_container_width;
+    let should_resize = container_width !== current_container_width;
 
     if (should_resize) {
       this.setState({
@@ -35,14 +35,15 @@ class Resize extends Component {
   }
 
   render() {
-    const {container_width} = this.state;
-    const should_render_chart = container_width !== null;
+    let {container_width} = this.state;
+    let should_render_chart = container_width !== null;
+    let ref_props = {
+      ref: (el) => { this.chartContainer = el },
+      className: "resize-wrapper"
+    }
 
     return (
-      <div
-        ref={(el) => { this.chartContainer = el }}
-        className="resize-wrapper"
-      >
+      <div {...ref_props}>
         {should_render_chart && this.props.render(container_width)}
       </div>
     )

@@ -4,7 +4,6 @@ import * as ReactRedux from 'react-redux';
 
 // Class imports.
 import {GenericPlotAttribute} from './generic_plot_attribute';
-import Consignment from '../../../models/consignment';
 import TimelinePlot from '../../plotter/plots/timeline_plot/timeline_plot';
 import Resize from '../../plotter/plots/timeline_plot/resize';
 
@@ -12,11 +11,10 @@ import Resize from '../../plotter/plots/timeline_plot/resize';
 import * as ManifestActions from '../../../actions/manifest_actions';
 import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 import {nestDataset} from '../../../selectors/selector_utils.js';
-import { EMLINK } from 'constants';
 
 export class TimelineAttribute extends GenericPlotAttribute{
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       records: null,
@@ -36,11 +34,16 @@ export class TimelineAttribute extends GenericPlotAttribute{
   }
 
   render(){ 
+    let plot_props = {
+      all_events: this.state.records,
+      color:'#29892a'
+    }
+
     return(
       <div id='timeline_charts' className='value-timeline'>
         {this.state.records && <Resize render={(width) => (
           <TimelinePlot 
-            all_events = {this.state.records} 
+            {...plot_props}
             parent_width={width} 
           />
         )}/>}
@@ -73,7 +76,7 @@ let uniqueLabelByDate = (array) => {
     return new Date(a.start) - new Date(b.start);
   });
   array.map((obj, index) => {
-    obj.label = `${obj.label} ${index+1}`;
+    obj.label = `${obj.label} ${++index}`;
   });
   return array;
 }
@@ -86,11 +89,13 @@ let flatten = (nested_obj, array, level) => {
       name: `${'· '.repeat(level)} ${nested_obj[obj].name.replace(/_/g, ' ')}`,
       value: nested_obj[obj].value,
     })
-    if (typeof nested_obj[obj].children === "object" && Object.keys(nested_obj[obj].children).length !== 0) {
-      let next_level = level + 1;
-      flatten(nested_obj[obj].children, array, next_level);
-    }
-
+    if (
+        typeof nested_obj[obj].children === "object" && 
+        Object.keys(nested_obj[obj].children).length !== 0
+       ) {
+          let next_level = level + 1;
+          flatten(nested_obj[obj].children, array, next_level);
+         }
   }
   return array;
 }
@@ -175,7 +180,6 @@ const mapStateToProps = (state = {}, own_props)=>{
 
   selected_manifest = state.manifests['179'];
 
-
   if(selected_manifest != undefined){
     selected_consignment = ConsignmentSelector.selectConsignment(
       state,
@@ -225,12 +229,7 @@ const mapStateToProps = (state = {}, own_props)=>{
         }
       }
       
-      console.log("============================ hashed obj ================")
-      console.log(hashed_obj);
       hashed_obj = nestDataset(hashed_obj, 'uid', 'parent_uid');
-
-      console.log("============================ nested hashed obj ================")
-      console.log(hashed_obj);
       records = normalizeD3Records(hashed_obj);
 
       let adverse_events_arr = [];
@@ -240,31 +239,23 @@ const mapStateToProps = (state = {}, own_props)=>{
         if (category) {
           for(let index = 0; index < category.rows.length; ++index){
             let meddra_code = category.rows[index][0];
-            let start;
             let utc_start_str;
-            let end;
             let utc_end_str; 
 
             if (category.rows[index][2]){
-              start = category.rows[index][2].toString().split(' ');
+              let start = category.rows[index][2].toString().split(' ');
               utc_start_str  = `${start[2]}-${start[1]}-${start[3]}`;
-            }
-            else {
-              utc_start_str = null
             }
 
             if (category.rows[index][3]){
-              end = category.rows[index][3].toString().split(' ');
+              let end = category.rows[index][3].toString().split(' ');
               utc_end_str  = `${end[2]}-${end[1]}-${end[3]}`;
-            }
-            else {
-              utc_end_str = null
             }
 
             hashed_obj[meddra_code] = {
               data: [{name: 'Grade', value: category.rows[index][1]}],
-              start: utc_start_str,
-              end: utc_end_str,
+              start: utc_start_str || null,
+              end: utc_end_str || null,
               name: category.rows[index][4],
               label: category.rows[index][4]
             };
@@ -276,16 +267,14 @@ const mapStateToProps = (state = {}, own_props)=>{
             if(hashed_obj[meddra_code].name === 'prior_adverse_events'){
               prior_adverse_events_arr.push(hashed_obj[meddra_code]);
             }
-
           }
         }
       }
       adverse_events_arr = uniqueLabelByDate(adverse_events_arr);
       prior_adverse_events_arr = uniqueLabelByDate(prior_adverse_events_arr);
       records = [...adverse_events_arr, ...prior_adverse_events_arr, ...records];  
-      console.log("==================== records =========================")
-      console.log(records);
   }
+
   return {
     selected_plot,
     selected_manifest,

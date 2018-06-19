@@ -69,7 +69,6 @@ class TimelinePlot extends Component {
             type: target.getAttribute('data-type'),
             start: target.getAttribute('data-start'),
             end: target.getAttribute('data-end'),
-            grade: target.getAttribute('data-grade'),
             value: target.getAttribute('data-value') || null
             },
         location:{ 
@@ -93,31 +92,37 @@ class TimelinePlot extends Component {
 
   render() {
     if (this.state.timeDomain.length < 1) return null;
-    let margins = { top: 80, right: 145, bottom: 400, left: 145 };
+    let {timeDomain, data} = this.state;
+    let margins = { top: 41, right: 145, bottom: 400, left: 145 };
     let svg_dimensions = { 
       width: Math.max(this.props.parent_width, 500),
-      height: 800
+      height: data.length * 24 + 441
     };
+
+    let svg_props = {
+      width: svg_dimensions.width,
+      height: svg_dimensions.height
+    }
     
     //Create time scale.
     let xScale = this.timeScale
-      .domain(this.state.timeDomain)
+      .domain(timeDomain)
       .range([margins.left, svg_dimensions.width - margins.right]);
     
     let yScale = this.bandScale
       .padding(0.5)
-      .domain(this.state.data.map(datum => datum.label))
+      .domain(data.map(datum => datum.label))
       .range([svg_dimensions.height - margins.bottom, margins.top]);
 
     let xProps = {
-      orient: 'Bottom',
+      orient: 'timeline-bottom',
       scale: xScale,
       translate: `translate(0, ${svg_dimensions.height - margins.bottom})`,
       tickSize: svg_dimensions.height - margins.top - margins.bottom,
     };
     
     let yProps = {
-      orient: 'Left',
+      orient: 'ordinal-left',
       scale: yScale,
       translate: `translate(${margins.left}, 0)`,
       tickSize: svg_dimensions.width - margins.left - margins.right,
@@ -129,7 +134,8 @@ class TimelinePlot extends Component {
       data: this.state.data,
       svg_dimensions,
       showToolTip: this.showToolTip,
-      hideToolTip: this.hideToolTip
+      hideToolTip: this.hideToolTip,
+      color: this.props.color
     };
 
     let tooltip_props = {
@@ -141,7 +147,7 @@ class TimelinePlot extends Component {
     };
 
     return(
-      <svg width= {svg_dimensions.width} height= {svg_dimensions.height}>
+      <svg {...svg_props}>
         <Axis {...xProps} />
         <Axis {...yProps} />
         <TimelineEvents {...events_props} />

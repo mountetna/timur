@@ -7,7 +7,7 @@ class Tooltip extends Component {
     let transform = '';
     let width = 290;
     let height;
-    let transform_text = 'translate('+ width / 2 + ',' + 15 +')';
+    let transform_text = 'translate('+ width / 2 + ',' + 18 +')';
     let transform_arrow = '';
 
     let {tooltip, bg_style, text_style, x_value, y_value} = this.props;
@@ -24,17 +24,17 @@ class Tooltip extends Component {
         let str = obj.name + obj.value;
         if ( str.length > 52) {increment++}
       });
-      
-      height = values ? (values.length + increment) * 18 + 70 : 80;
-
-      if(height < y - 20){
+    
+      height = values ? (values.length + increment) * 18 + 65 : 80;
+    
+      if(height < y - 18){
         transform='translate(' + (x - width / 2) + 
           ',' + (y - height - 20) + ')';
 
         transform_arrow='translate('+ (width / 2 - 20) + 
           ',' + (height - .2) +')';
       }
-      else{
+      else {
         transform = 'translate(' + (x - width / 2) + ',' + 
           (Math.round(y) + 20) + ')';
 
@@ -75,7 +75,7 @@ class Tooltip extends Component {
       return obj.map( (el, index) => {
         let str_len = `${el.name +': '+ el.value}`.length;
         if(str_len < 54){
-          return(
+          return (
             <tspan {...tspan_props} key={index} dy='18'>
               {el.name +': '+ el.value}
             </tspan>
@@ -102,8 +102,8 @@ class Tooltip extends Component {
         <text {...text_props}>
         
           <tspan {...tspan_props}>{x_value +': '+ data.type}</tspan>
-          <tspan {...tspan_props} dy="18">{'Start: '+ data.start}</tspan>
-          <tspan {...tspan_props} dy="18">{'End: '+ data.end}</tspan>
+          <tspan {...tspan_props} dy='18'>{'Start: '+ data.start}</tspan>
+          <tspan {...tspan_props} dy='18'>{'End: '+ data.end}</tspan>
           {values && displayValues(values)}
         </text>
       </g>
