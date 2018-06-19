@@ -129,7 +129,7 @@ export class GenericPlotForm extends React.Component{
           <input {...input_props} value={series_item.name} onChange={this.updateSeriesHandler(series_index, 'name')} />
           <button {...button_props} onClick={this.removeSeriesHandler(series_index)}>
 
-            <i className='fa fa-times' aria-hidden='true'></i>
+            <i className='fas fa-times' aria-hidden='true'></i>
             {' REMOVE'}
           </button>
           <br />
@@ -223,7 +223,7 @@ export class GenericPlotForm extends React.Component{
               </span>
               <button {...button_props}>
 
-                <i className='fa fa-plus' aria-hidden='true'></i>
+                <i className='fas fa-plus' aria-hidden='true'></i>
                 {' ADD SERIES'}
               </button>
             </div>

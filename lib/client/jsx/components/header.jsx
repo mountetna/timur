@@ -9,11 +9,11 @@ class HeaderApprove extends React.Component{
 
         <div className='cancel' onClick={handler.bind(null,'cancel')}>
 
-          <span className='fa fa-close' />
+          <span className='far fa-times-circle' />
         </div>
         <div className='approve' onClick={handler.bind(null, 'approve')}>
 
-          <span className='fa fa-check' />
+          <span className='fas fa-check' />
         </div>
       </div>
     );
@@ -25,7 +25,7 @@ class HeaderWaiting extends React.Component{
     return(
       <div className='submit'>
 
-        <span className='fa fa-spinner fa-pulse' />
+        <span className='fas fa-spinner' />
       </div>
     );
   }
@@ -37,7 +37,7 @@ class HeaderEdit extends React.Component{
     return(
       <div className='edit' onClick={handler.bind(null, 'edit')}>
 
-        <span className='fa fa-pencil' />
+        <span className='far fa-edit' />
       </div>
     );
   }
@@ -49,7 +49,7 @@ class HeaderClose extends React.Component{
     return(
       <div className='close' onClick={handler.bind(null, 'close')}>
 
-        <span className='fa fa-times-circle' />
+        <span className='far fa-times-circle' />
       </div>
     );
   }

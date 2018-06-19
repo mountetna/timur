@@ -46,7 +46,7 @@ module.exports = {
 
         options: {
           name: '[name].[ext]',
-          outputPath: 'public/img/',
+          outputPath: 'public/images/',
           publicPath: function(url) { return url.replace(/public/,'') }
         }
       },

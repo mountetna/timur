@@ -189,12 +189,12 @@ export class ManifestView extends React.Component{
             is_editing: true
           });
         },
-        icon: 'line-chart',
+        icon: 'fas fa-chart-line',
         label: ' PLOT'
       },
       {
         click: ()=>{copyManifest(manifest);},
-        icon: 'files-o',
+        icon: 'far fa-copy',
         label: ' COPY'
       },
       is_editable && {
@@ -203,12 +203,12 @@ export class ManifestView extends React.Component{
             deleteManifest(manifest.id);
           }
         },
-        icon: 'trash-o',
+        icon: 'far fa-trash-alt',
         label: ' DELETE'
       },
       is_editable && {
         click: this.toggleEdit.bind(this),
-        icon: 'pencil-square-o',
+        icon: 'far fa-edit',
         label: ' EDIT'
       }
     ].filter(button=>button);
@@ -218,12 +218,12 @@ export class ManifestView extends React.Component{
     return [
       this.state.manifest && {
         click: this.updateManifest.bind(this),
-        icon: 'floppy-o',
+        icon: 'far fa-save',
         label: ' SAVE'
       },
       {
         click: this.cancelEdit.bind(this),
-        icon: 'ban',
+        icon: 'fas fa-ban',
         label: ' CANCEL'
       }
     ].filter(button=>button);
@@ -264,17 +264,17 @@ export class ManifestView extends React.Component{
 
         <button {...query_btn_props}>
 
-          <i className='fa fa-play' aria-hidden='true'></i>
+          <i className='fas fa-play' aria-hidden='true'></i>
           {' RUN QUERY'}
         </button>
         <button {...script_btn_props}>
 
-          <i className='fa fa-file-code-o' aria-hidden='true'></i>
+          <i className='far fa-file-code' aria-hidden='true'></i>
           {' SHOW SCRIPT'}
         </button>
         <button {...add_btn_props}>
 
-          <i className='fa fa-plus' aria-hidden='true'></i>
+          <i className='fas fa-plus' aria-hidden='true'></i>
           {' ADD ELEMENT'}
         </button>
       </div>
@@ -344,7 +344,7 @@ export class ManifestView extends React.Component{
             <input {...input_props} />
             <button {...remove_btn_props}>
 
-              <i className='fa fa-times' aria-hidden='true'></i>
+              <i className='fas fa-times' aria-hidden='true'></i>
               {' REMOVE'}
             </button>
           </div>

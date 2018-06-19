@@ -60,7 +60,7 @@ export default class ListMenu extends React.Component{
     return (
       <button onClick={()=>create()} className='list-selector-new-btn'>
 
-        <i className='fa fa-plus' aria-hidden='true' />
+        <i className='fas fa-plus' aria-hidden='true' />
         {` NEW ${name}`}
       </button>
     );

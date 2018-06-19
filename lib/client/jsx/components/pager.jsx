@@ -44,17 +44,17 @@ class Pager extends Component {
 
   renderLeft() {
     if (this.props.current_page > 1) {
-      return <span className='turner active fa fa-chevron-left' onClick={ this.rewindPage.bind(this) } />
+      return <span className='turner active fas fa-chevron-left' onClick={ this.rewindPage.bind(this) } />
     } else {
-      return <span className='turner inactive fa fa-chevron-left'/>
+      return <span className='turner inactive fas fa-chevron-left'/>
     }
   }
 
   renderRight() {
     if (this.props.current_page < this.props.pages) {
-      return <span className='turner active fa fa-chevron-right' onClick={ this.advancePage.bind(this) }/>
+      return <span className='turner active fas fa-chevron-right' onClick={ this.advancePage.bind(this) }/>
     } else {
-      return <span className='turner inactive fa fa-chevron-right'/>
+      return <span className='turner inactive fas fa-chevron-right'/>
     }
   }
 

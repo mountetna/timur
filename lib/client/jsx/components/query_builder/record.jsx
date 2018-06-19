@@ -83,7 +83,7 @@ class RecordPredicate extends Component {
           update={ this.updateVectors.bind(this) }/>
         <span onClick={ this.addVector.bind(this) }
           title='New vector'
-          className='new fa fa-plus' aria-hidden='true' />
+          className='new fas fa-plus' aria-hidden='true' />
       </div>
     );
   }

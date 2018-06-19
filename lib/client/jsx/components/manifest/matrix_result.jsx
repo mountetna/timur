@@ -66,12 +66,12 @@ class MatrixResult extends React.Component{
         {`Table Data: ${matrix.num_rows} rows x ${matrix.num_cols} cols`}
         <button className='consignment-btn' onClick={this.downloadMatrix.bind(this)}>
           
-          <i className='fa fa-download' aria-hidden='true' ></i>
+          <i className='fas fa-download' aria-hidden='true' ></i>
           {' DOWNLOAD'}
         </button>
         <button className='consignment-btn' onClick={this.toggle.bind(this)}>
 
-          <i className='fa fa-table' aria-hidden='true'></i>
+          <i className='fas fa-table' aria-hidden='true'></i>
           {this.state.hidden ? ' SHOW' : ' HIDE'}
         </button>
         <div style={{display : this.display()}}>
