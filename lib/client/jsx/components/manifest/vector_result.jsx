@@ -44,12 +44,12 @@ class VectorResult extends React.Component{
         {`Vector Data: ${vector.size} elements`}
         <button className='consignment-btn' onClick={this.downloadVector.bind(this)}>
           
-          <i className='fa fa-download' aria-hidden='true'></i>
+          <i className='fas fa-download' aria-hidden='true'></i>
           {' DOWNLOAD'}
         </button>
         <button className='consignment-btn' onClick={this.toggle.bind(this)}>
 
-          <i className='fa fa-table' aria-hidden='true'></i>
+          <i className='fas fa-table' aria-hidden='true'></i>
           {this.state.hidden ? ' SHOW' : ' HIDE'}
         </button>
         <div style={{display : this.display()}}>

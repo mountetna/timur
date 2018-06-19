@@ -26,7 +26,7 @@ export default class BrowserTab extends React.Component{
   }
 
   render(){
-    if(!this.props.tab) return <span className='fa fa-spinner fa-pulse' />;
+    if(!this.props.tab) return <span className='fas fa-spinner fa-pulse' />;
 
     return(
       <div id='tab' className={this.props.name}>

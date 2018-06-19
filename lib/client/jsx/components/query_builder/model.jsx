@@ -34,7 +34,7 @@ class ModelPredicate extends Component {
     let span_props = {
       onClick: this.addFilter.bind(this),
       title: 'New filter',
-      className: 'new fa fa-plus'
+      className: 'new fas fa-plus'
     };
 
     return(

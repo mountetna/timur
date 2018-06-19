@@ -25,7 +25,7 @@ const BarButton = (button)=>{
   return(
     <button key={button.label} onClick={button.click}>
 
-      <i className={`fa fa-${ button.icon }`} aria-hidden='true'></i>
+      <i className={`${ button.icon }`} aria-hidden='true'></i>
       {button.label}
     </button>
   );

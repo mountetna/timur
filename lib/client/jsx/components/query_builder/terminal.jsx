@@ -9,11 +9,11 @@ export default class TerminalPredicate extends Component {
     let terminal_class, predicate_class;
     
     if (terminal_type == return_type || (!terminal_type && return_type)) {
-      terminal_class = 'fa fa-check';
+      terminal_class = 'fas fa-check';
       predicate_class = 'predicate completed';
     }
     else {
-      terminal_class = 'fa fa-exclamation';
+      terminal_class = 'fas fa-exclamation';
       predicate_class = 'predicate';
     }
 

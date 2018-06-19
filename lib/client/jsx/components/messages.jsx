@@ -42,13 +42,13 @@ export class Messages extends React.Component{
     if (messages.length > 1) {
       nav = <div id="nav">
         {
-          current_message ?  <span className="arrow fa fa-chevron-left" onClick={ this.prevMessage.bind(this) }/> : null
+          current_message ?  <span className="arrow fas fa-chevron-left" onClick={ this.prevMessage.bind(this) }/> : null
         }
         <span className="pager">
           Page { current_message + 1 } of { messages.length }
         </span>
         {
-          current_message < messages.length-1 ?  <span className="arrow fa fa-chevron-right" onClick={ this.nextMessage.bind(this) }/> : null
+          current_message < messages.length-1 ?  <span className="arrow fas fa-chevron-right" onClick={ this.nextMessage.bind(this) }/> : null
         }
       </div>
     }
@@ -62,7 +62,7 @@ export class Messages extends React.Component{
               </svg>
             </div>
             <div id="dismiss" onClick={ this.dismissMessages.bind(this) }>
-              <span className="fa fa-check"> </span>
+              <span className="fas fa-check"> </span>
             </div>
             <div id="message_viewer">
               { nav }

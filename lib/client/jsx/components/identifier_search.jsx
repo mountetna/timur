@@ -141,7 +141,7 @@ export class IdentifierSearch extends React.Component{
 
         <div className='search'>
 
-          <span className='fa fa-search' />
+          <span className='fas fa-search' />
           <input {...inputProps} />
         </div>
         {this.renderMatchingIdentifiers()}
