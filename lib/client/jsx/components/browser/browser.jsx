@@ -41,40 +41,79 @@ export class Browser extends React.Component{
 
     this.state = {
       mode: 'loading',
-      current_tab_index: 0,
-      current_tab_name: 'overview'
+      current_tab_index: 0
     };
   }
 
   componentDidMount(){
-    let { model_name, record_name,
-      setLocation, requestAnswer, requestManifests, requestPlots, requestView } = this.props;
+    let { requestManifests, requestPlots } = this.props;
 
     requestManifests();
     requestPlots();
+    this.requestData();
+  }
+
+  requestData() {
+    let {
+      model_name, record_name, view,
+      setLocation, requestAnswer, requestView
+    } = this.props;
 
     if (!model_name && !record_name) {
+      // ask magma for the project name
       requestAnswer(
         { query: [ 'project', '::first', '::identifier' ] },
-        ({answer}) => {
-          let path = Routes.browse_model_path(
+
+        // redirect there
+        ({answer}) => setLocation(
+          Routes.browse_model_path(
             TIMUR_CONFIG.project_name,
             'project',
             answer
-          );
-          setLocation(path);
-        }
+          )
+        )
       );
-    } else {
-      let browseMode = ()=>{this.setState({mode: 'browse'})};
+    } else if (!view) {
+      // we are told the model and record name, get the view
       requestView(
-        model_name, record_name, 'overview',
-        browseMode.bind(this)
-      );
+        model_name, record_name, 'overview', this.requestViewDocuments.bind(this, 'overview')
+      )
+    } else {
+      this.browseMode();
     }
   }
 
-  camelize(str){
+  requestViewDocuments(tab_name,response) {
+    let { view } = response;
+    if (!tab_name in view.tabs) tab_name = 'default';
+    this.requestTabDocuments(view.tabs[tab_name])
+  }
+
+  requestTabDocuments(tab) {
+    if (!tab) return;
+
+    let { requestDocuments, model_name, record_name, doc, template } = this.props;
+    let exchange_name = `tab ${tab.name} for ${model_name} ${record_name}`;
+
+    let attribute_names = getAttributes(tab);
+
+    let hasAttributes = doc && template && Array.isArray(attribute_names) && attribute_names.every(
+      attr_name => !(attr_name in template.attributes) || (attr_name in doc)
+    );
+    // ensure attribute data is present in the document
+    if (!hasAttributes) {
+      // or else make a new request
+      requestDocuments({
+        model_name, record_names: [record_name],
+        attribute_names,
+        exchange_name,
+        success: this.browseMode.bind(this)
+      });
+    }
+  }
+
+
+  camelize(str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index){
       return letter.toUpperCase();
     }).replace(/\s+/g, '');
@@ -117,22 +156,9 @@ export class Browser extends React.Component{
     // Set the new requested tab state.
     this.setState({current_tab_index: index_order});
 
-    current_tab = view.tab(index_order);
-      Object.values(view.tabs).find(tab=>tab.index_order == index_order)
-
-    if (current_tab) {
-      let attribute_names = getAttributes(current_tab);
-
-      // ensure attribute data is present in the document
-      if (!attribute_names.every(attr_name => (attr_name in doc))) {
-        // or else make a new request
-        requestDocuments({
-          model_name, record_name,
-          attribute_names,
-          exchange_name: `${model_name} ${record_name}`
-        });
-      }
-    }
+    this.requestTabDocuments(
+      getTabByIndexOrder(view, index_order)
+    )
   }
 
   renderEmptyView(){
