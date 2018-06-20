@@ -21,13 +21,13 @@ class Whitelist < ActiveRecord::Base
       whitelist = self.for_janus_user(janus_user) if janus_user
     end
 
-    whitelist
+    return whitelist
   end
 
   def self.for_janus_user(janus_user)
-    self.where(email: janus_user.email).first_or_create do |whitelist|
-      whitelist.set_from_janus_user(janus_user)
-    end
+    whitelist = self.where(email: janus_user.email).first_or_create
+    whitelist.set_from_janus_user(janus_user)
+    return whitelist
   end
 
   def set_from_janus_user(janus_user)

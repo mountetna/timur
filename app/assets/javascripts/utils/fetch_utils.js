@@ -1,5 +1,5 @@
 import downloadjs from 'downloadjs';
-import Cookies from 'js-cookie';
+import * as Cookies from './cookies';
 
 export const checkStatus = (response)=>{
   if(response.status >= 200 && response.status < 300){
@@ -45,7 +45,7 @@ export const headers = (...types)=>{
         if(csrf) add('X-CSRF-Token', csrf.getAttribute('content'));
         break;
       case 'auth':
-        let token = Cookies.get(TIMUR_CONFIG.token_name);
+        let token = Cookies.getItem(TIMUR_CONFIG.token_name);
         add('Authorization', `Etna ${token}`);
         break;
       default:

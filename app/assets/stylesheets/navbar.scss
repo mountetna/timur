@@ -85,7 +85,6 @@ $logo_size: 70px;
     #dev {
       @include basic_logo(#630606,'/images/Timur-dev.png');
     }
-    border-bottom: 2px solid forestgreen;
     display: inline-block;
     width: 90px;
     height: 78px;
@@ -104,21 +103,7 @@ $logo_size: 70px;
     vertical-align: top;
   }
   #nav {
-    font-family: $body_font;
-    position: absolute;
-    width: calc(100% - 90px);
-    left: 90px;
-    bottom: 0px;
-    border-top: 1px solid forestgreen;
-    display: flex;
     .nav_tab {
-      display: inline-block;
-      font-size: 16px;
-      padding: 0px 25px;
-      border-right: 1px solid forestgreen;
-      border-bottom: 2px solid forestgreen;
-      text-transform: capitalize;
-      background-color: rgba(skyblue,0.1);
       a {
         color: teal;
         cursor: pointer;
@@ -136,13 +121,7 @@ $logo_size: 70px;
       }
     }
     #identifier_search {
-      border-bottom: 2px solid forestgreen;
-      flex-grow: 1;
-      text-align: right;
-      display: flex;
-      padding: 2px;
-      justify-content: flex-end;
-      position: relative;
+      
       .search {
         display: flex;
         background-color: rgba(teal, 0.1);
@@ -198,7 +177,53 @@ $logo_size: 70px;
     #login {
       color: brown;
       text-align: right;
-      border-bottom: 2px solid forestgreen;
     }
   }
+}
+
+/* NEW CSS ********************************************************************/
+
+#header{
+  position: relative;
+  height: 80px;
+  border-bottom: 2px solid forestgreen;
+}
+
+#nav {
+  font-family: $body_font;
+  position: relative;
+  width: calc(100% - 90px);
+  height: 25px;
+  margin-top: -25px;
+  margin-left: 90px;
+  border-top: 1px solid forestgreen;
+}
+
+.nav_tab{
+  height: 100%;
+  display: inline-block;
+  font-size: 16px;
+  padding: 0px 25px;
+  border-right: 1px solid forestgreen;
+  text-transform: capitalize;
+  background-color: rgba(skyblue,0.1);
+}
+
+#logo{
+  border-bottom: none;
+}
+
+#identifier_search{
+  display: inline-block;
+  width: 235px;
+  border-bottom: none;
+  float: right;
+  padding: 2px;
+  position: relative;
+}
+
+#login{
+  display: inline-block;
+  border-bottom: none;
+  float: right;
 }
