@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <meta charset='utf-8'/>
 <html>
+
   <head>
+
     <title>
-      <%= Timur.instance.environment == :development ? 'Dev Timur' : 'Timur' %> - Search
+
+      <%= Timur.instance.environment == :development ? 'Dev Timur' : 'Timur' %>
+      - Search
     </title>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css' integrity='sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp' crossorigin='anonymous'>
     <link rel='stylesheet' media='screen' href='/css/timur.bundle.css'/>
     <script src='/js/routes.js'></script>
     <script src='/js/timur.bundle.js'></script>
   </head>
   <body>
+
     <div id='root'></div>
     <script type='text/javascript'>
+
       var TIMUR_CONFIG = <%= config_json %>;
       const timur = new TimurApp(
         {

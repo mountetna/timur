@@ -20,6 +20,7 @@ config.yml
 /public/fonts
 /public/css
 /public/images
+/public/img
 /public/coverage
 
 package-lock.json

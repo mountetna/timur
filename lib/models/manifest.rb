@@ -24,17 +24,17 @@ class Manifest < Sequel::Model
     other_user == user || other_user.is_admin?(project)
   end
 
-  def md5sum_data
-    Digest::MD5.hexdigest(data.to_json)
-  end
-
   def to_hash(other_user)
-    [ :id, :name, :description, :project, :access, :data ].map do |k|
-      [ k, self[k] ]
-    end.to_h.merge(
+    self_obj = [:id, :name, :description, :project, :access, :data].map do |k|
+      [k, self[k]]
+    end
+
+    return self_obj.to_h.merge(
+      updated_at: self.updated_at,
       user: user.name,
       is_editable: is_editable?(other_user),
-      md5sum_data: md5sum_data
+      md5sum: Digest::MD5.hexdigest(values.to_json),
+      md5sum_data: Digest::MD5.hexdigest(data.to_json)
     )
   end
 end
