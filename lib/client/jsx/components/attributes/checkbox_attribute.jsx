@@ -1,26 +1,28 @@
 // Framework libraries.
 import * as React from 'react';
+import { connect } from 'react-redux';
 
-import * as MagmaActions from '../../actions/magma_actions';
+import { reviseDocument } from '../../actions/magma_actions';
 
-export default class CheckboxAttribute extends React.Component{
+class CheckboxAttribute extends React.Component{
+  revise(e) {
+    let { document, template, attribute, reviseDocument } = this.props;
+
+    reviseDocument(
+      document,
+      template,
+      attribute,
+      e.target.checked ? true : false
+    );
+  }
+
   renderEdit(){
-    let store = this.context.store;
-    let self = this;
+    let { revision } = this.props;
     let input_props = {
       type:"checkbox",
       className:"text_box",
-      onChange:function(e) {
-         store.dispatch(
-           MagmaActions.reviseDocument(
-             self.props.document,
-             self.props.template,
-             self.props.attribute,
-             e.target.checked ? true : false
-           )
-         )
-       },
-      defaultChecked: this.props.revision
+      onChange: this.revise.bind(this),
+      defaultChecked: revision
     };
 
     return(
@@ -31,10 +33,13 @@ export default class CheckboxAttribute extends React.Component{
   }
 
   render(){
-    let self = this;
-    let store = this.context.store;
-
-    if (this.props.mode == "edit") return this.renderEdit();
-    return <div className="value"> { this.props.value ? "yes" : "no" } </div>
+    let { mode, value } = this.props;
+    if (mode == "edit") return this.renderEdit();
+    return <div className="value"> { value ? "yes" : "no" } </div>
   }
 }
+
+export default connect(
+  null,
+  { reviseDocument }
+)(CheckboxAttribute);

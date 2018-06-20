@@ -1,21 +1,23 @@
 // Framework libraries.
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
 
-import * as MagmaActions from '../../actions/magma_actions';
+import { connect } from 'react-redux';
+import { reviseDocument } from '../../actions/magma_actions';
 
-export default class DocumentAttribute extends React.Component{
+class DocumentAttribute extends React.Component{
+  revise(e) {
+    let { document, template, attribute, reviseDocument } = this.props;
+
+    reviseDocument(
+      document,
+      template,
+      attribute,
+      e.target.files[0]
+    )
+  }
   renderEdit(){
-    let store = this.context.store;
-    let self = this;
     let input_props = {
-      onChange: function(e) {
-        store.dispatch(MagmaActions.reviseDocument(
-          self.props.document,
-          self.props.template,
-          self.props.attribute,
-          e.target.files[0]))
-      },
+      onChange: this.revise.bind(this),
       type:"file"
     };
 
@@ -27,17 +29,14 @@ export default class DocumentAttribute extends React.Component{
   }
 
   render(){
+    let { mode, value } = this.props;
 
-    let self = this;
-    let store = this.context.store
-    let link = this.props.value
+    if (mode == "edit") return this.renderEdit();
 
-    if (this.props.mode == "edit") return this.renderEdit();
-
-    if (link){
+    if (value){
       return(
         <div className="value">
-          <a href={ link.url } > { link.path } </a>
+          <a href={ value.url } > { value.path } </a>
         </div>
       );
     }
@@ -51,3 +50,8 @@ export default class DocumentAttribute extends React.Component{
     );
   }
 }
+
+export default connect(
+  null,
+  { reviseDocument }
+)(DocumentAttribute);
