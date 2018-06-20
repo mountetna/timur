@@ -1,27 +1,30 @@
 // Framework libraries.
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
+import { connect } from 'react-redux';
 
-import * as MagmaActions from '../../actions/magma_actions';
+import { reviseDocument } from '../../actions/magma_actions';
 import SelectInput from '../inputs/select_input';
 
-export default class SelectAttribute extends React.Component{
+class SelectAttribute extends React.Component{
+  revise(value) {
+    let { document, template, attribute, reviseDocument } = this.props;
+
+    reviseDocument(
+      document,
+      template,
+      attribute,
+      value
+    )
+  }
+
   renderEdit(){
-    let store = this.context.store;
-    let self = this;
+    let { attribute, value } = this.props;
     let input_props = {
       className:"selection",
-      onChange: function(value) {
-         store.dispatch(MagmaActions.reviseDocument(
-           self.props.document,
-           self.props.template,
-           self.props.attribute,
-           value)
-         )
-       },
-      defaultValue: this.props.value,
+      onChange: this.revise.bind(this),
+      defaultValue: value,
       showNone:"disabled",
-      values: this.props.attribute.options
+      values: attribute.options
     }
 
     return(
@@ -33,9 +36,13 @@ export default class SelectAttribute extends React.Component{
   }
 
   render(){
-    let self = this;
-    let store = this.context.store;
-    if (this.props.mode == "edit") return this.renderEdit();
-    return <div className="value">{ this.props.value }</div>;
+    let { mode, value } = this.props;
+    if (mode == "edit") return this.renderEdit();
+    return <div className="value">{ value }</div>;
   }
 }
+
+export default connect(
+  null,
+  { reviseDocument }
+)(SelectAttribute);
