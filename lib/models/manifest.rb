@@ -7,7 +7,7 @@ class Manifest < Sequel::Model
     super
     validates_presence :name
     validates_presence :project
-    validates_presence :data
+    validates_presence :script
     validates_includes [ 'public', 'private', 'view' ], :access
   end
 
@@ -25,7 +25,7 @@ class Manifest < Sequel::Model
   end
 
   def to_hash(other_user)
-    self_obj = [:id, :name, :description, :project, :access, :data].map do |k|
+    self_obj = [:id, :name, :description, :project, :access, :script].map do |k|
       [k, self[k]]
     end
 
@@ -33,8 +33,7 @@ class Manifest < Sequel::Model
       updated_at: self.updated_at,
       user: user.name,
       is_editable: is_editable?(other_user),
-      md5sum: Digest::MD5.hexdigest(values.to_json),
-      md5sum_data: Digest::MD5.hexdigest(data.to_json)
+      md5sum: Digest::MD5.hexdigest(script)
     )
   end
 end

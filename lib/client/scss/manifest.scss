@@ -8,164 +8,189 @@
 .manifest-elements{
   padding-left: 15px;
   padding-right: 15px;
+  .manifest-form-group {
+    .manifest-form-header {
+    }
+    .manifest-body{
+      position: relative;
+      height: 200px;
+
+      .manifest-display {
+        width: 100%;
+        resize: vertical;
+        box-sizing: border-box;
+        font-size: 1em;
+        font-family: $value_font;
+        margin: 0px;
+        height: 200px;
+        white-space: pre-wrap;
+        overflow: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .manifest-editor {
+        @extend .manifest-display;
+        color: transparent;
+        background: transparent;
+        border: 0px;
+        outline: 1px solid red;
+        &:focus {
+          caret-color: black;
+        }
+      }
+
+      .manifest-script{
+        @extend .manifest-display;
+        border: 1px solid #333;
+
+        .token {
+          &.comment { color: #888; }
+          &.macro { color: #f40; }
+          &.variable { color: #b40; }
+          &.string { color: #a0f; }
+          &.function { color: #04d; }
+          &.label, &.column { color: #090; }
+          &.template { color: #f00; font-weight: bold; }
+          &.vector { color: #000; font-weight: bold; }
+        }
+      }
+    }
+    .consignment-view {
+      padding-top: 5px;
+      border-spacing: 2px;
+      .label {
+        font-weight: bold;
+        font-size: 0.8em;
+      }
+      .consignment-result {
+        display: table-row;
+        .consignment-variable-name {
+          color: #b40;
+          font-family: $value_font;
+          display: table-cell;
+          width: 20%;
+          padding-right: 10px;
+          text-align: right;
+        }
+        .result {
+          width: 80%;
+          display: table-cell;
+        }
+      }
+    }
+  }
+
+  .manifest-form-title {
+    border-bottom: 1px solid #666666;
+    padding-bottom: 10px;
+
+    .manifest-form-title-input{
+      border: none;
+      font-size: 1em;
+      width: 300px;
+      color: #111;
+      outline: 1px solid #333;
+      &:disabled {
+        @extend .disabled;
+      }
+    }
+
+    .manifest-action-btn-group{
+      float: right;
+
+      button{
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    }
+
+  }
+  .manifest-form-details{
+    font-size: 0.8em;
+    line-height: 25px;
+  }
+
+  .manifest-form-description{
+    text-align: justify;
+    font-size: 1.2em;
+    margin-left: 0px;
+    margin-top: 0px;
+    width: 100%;
+    resize: vertical;
+    border: 0px;
+    outline: 1px solid #333;
+    &:disabled {
+      @extend .disabled;
+      resize: none;
+    }
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+
+  
 }
 
-.manifest-action-btn-group{
-  float: right;
-}
+.consignment-result-group {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 150px;
+  margin: 5px 0;
+  border-bottom: 1px solid #333;
+  .consignment-table{
+    border: 1px solid #333;
+    font-family: monospace;
+    font-size: 1.1em;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    font-weight: 100;
+    display: table;
+    width: 100%;
 
-.manifest-action-btn-group button{
-  margin-left: 10px;
-  cursor: pointer;
-}
+    .consignment-row {
+      display: table-row;
+    }
 
-.manifest-form-title{
-  border-bottom: 1px solid #666666;
-  padding-bottom: 10px;
-}
+    .consignment-head {
+      border-bottom: 1px solid #666;
+      display: table-header-group;
+      .consignment-header {
+        display: table-cell;
+        padding: 2px;
+        padding-left: 4px;
+        padding-right: 4px;
+        border-right: 1px solid #888;
+        border-bottom: 1px solid #888;
+        background-color: #ccf;
+      }
+    }
 
-.manifest-form-title-input{
-  border: none;
-  font-size: 1em;
-  margin-left: 10px;
-  width: 300px;
-  outline: 1px solid #333;
-  color: #111;
-}
+    .consignment-body {
+      max-height: 150px;
+      overflow: auto;
+      display: table-row-group;
+    }
 
-.manifest-form-group-title{
-  display: block;
-  float: left;
-  height: 100%;
-}
-
-.manifest-form-access-group{
-  width: 100%;
-  height: 35px;
-  margin-bottom: 6px;
-  font-size: 1em;
-  line-height: 25px;
-}
-
-.manifest-form-access-group input{
-  margin-left: 10px;
-}
-
-.manifest-form-details{
-  font-size: 0.8em;
-  margin-top: -6px;
-  margin-bottom: 10px;
-  line-height: 25px;
-  padding-bottom: 10px;
-}
-
-.manifest-form-description{
-  text-align: justify;
-  font-size: 1.2em;
-  margin-left: 0px;
-  margin-top: 0px;
-  width: 100%;
-  resize: vertical;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-}
-
-.manifest-query-btn-group{
-  margin-top: 10px;
-  margin-bottom: 25px;
-}
-
-.manifest-query-btn{
-  vertical-align: top;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.manifest-add-btn{
-  float: right;
-  cursor: pointer;
-  margin-right: 0px
-}
-
-.manifest-form-body{
-  margin-top: 20px;
-}
-
-.manifest-form-element{
-  margin-bottom: 20px;
-}
-
-.manifest-form-element-title{
-  display: inline;
-  color: #22a778;
-}
-
-.manifest-form-element-title-input{
-  color: #22a778;
-  font-size: 1em;
-  outline: 1px solid #333;
-  border: none;
-}
-
-.manifest-form-control-btn{
-  float: right;
-}
-
-.manifest-script{
-  border: 1px solid #333;
-  padding: 10px;
-  margin-top: 10px;
-  resize: vertical;
-  white-space: pre-wrap;
-}
-
-.consignment-table{
-  border: 1px solid #333;
-  margin-top: 10px;
-  font-family: monospace;
-  font-size: 1.1em;
-  border-spacing: 0px;
-  font-weight: 100;
-}
-
-.consignment-table thead{
-  border-bottom: 1px solid #666;
-}
-
-.consignment-table td{
-  /*border-right: 1px solid #666;*/
-  padding: 2px;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-.consignment-table th{
-  padding: 2px;
-  padding-left: 4px;
-  padding-right: 4px;
+    .consignment-cell {
+      /*border-right: 1px solid #666;*/
+      display: table-cell;
+      padding: 2px;
+      padding-left: 4px;
+      padding-right: 4px;
+      border-right: 1px solid #888;
+      border-bottom: 1px solid #888;
+    }
+  }
 }
 
 .consignment-btn{
   margin-left: 10px;
   cursor: pointer;
-}
-
-.consignment-matrix,
-.consignment-vector{
-  margin-top: 10px;
-}
-
-.manifest-form-element-textarea{
-  width: 100%;
-  margin-top: 10px;
-  min-height: 200px;
-  resize: vertical;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 1em;
+  i {
+    padding-right: 4px;
+  }
 }
 
 /* Button Styling, as opposed to positioning/layout ***************************/

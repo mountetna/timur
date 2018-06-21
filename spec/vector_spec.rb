@@ -1,4 +1,4 @@
-require_relative '../app/models/archimedes/vector'
+require_relative '../lib/models/archimedes/vector'
 
 def vector(items)
   Archimedes::Vector.new(items.map{|i| [ nil, i ]})
