@@ -47,23 +47,7 @@ module.exports = {
         options: {
           name: '[name].[ext]',
           outputPath: 'public/images/',
-          publicPath: function(url) { return url.replace(/public/,'') }
-        }
-      },
-
-      {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)(\?.*$|$)/,
-
-        include: [
-          path.resolve(__dirname, 'node_modules/font-awesome'),
-        ],
-
-        loader: 'file-loader',
-        
-        options: {
-          name: '[name].[ext]',
-          outputPath: 'public/fonts/',
-          publicPath: function(url) { return url.replace(/public/,'') }
+          publicPath: '/images'
         }
       },
 
