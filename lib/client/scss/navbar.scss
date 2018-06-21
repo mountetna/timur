@@ -80,10 +80,10 @@ $logo_size: 70px;
   }
   #logo {
     #normal {
-      @include basic_logo(#066306,'/images/Timur.png');
+      @include basic_logo(#066306,'../img/Timur.png');
     }
     #dev {
-      @include basic_logo(#630606,'/images/Timur-dev.png');
+      @include basic_logo(#630606,'../img/Timur-dev.png');
     }
     display: inline-block;
     width: 90px;
