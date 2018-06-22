@@ -265,7 +265,7 @@ export class SettingsView extends React.Component{
   createNewView(){
     let view_settings_object = {
       model_name: '',
-      project_name: PROJECT_NAME,
+      project_name: TIMUR_CONFIG.project_name,
       tabs:{
         default:{
           description: '',
