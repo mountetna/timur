@@ -15,24 +15,6 @@ export default class BrowserPane extends React.Component{
     return null;
   }
 
-  interleaveAttribute(attribute, templates){
-
-    if(templates.attributes[attribute.name] == undefined) return attribute;
-    let template = templates.attributes[attribute.name];
-
-    for(let prop in template){
-      if(
-        !(prop in attribute) ||
-        attribute[prop] == null ||
-        attribute[prop] == ''
-      ){
-        attribute[prop] = template[prop];
-      }
-    }
-
-    return attribute;
-  }
-
   renderAttributes(){
     let {template, doc, revision, pane, mode} = this.props;
     let display = Object.keys(pane.attributes).map((attr_name, index)=>{
@@ -43,7 +25,7 @@ export default class BrowserPane extends React.Component{
       if (mode == 'edit' && !pane.attributes[attr_name].editable) return null;
 
       // The Timur view attribute.
-      let attr = this.interleaveAttribute(pane.attributes[attr_name], template);
+      let attr = pane.attributes[attr_name];
 
       // The data of the attribute
       let value = doc[attr_name];
@@ -59,7 +41,7 @@ export default class BrowserPane extends React.Component{
         template,
         value,
         mode,
-        attribute: attr,
+        attribute: pane.attributes[attr_name],
         document: doc,
         revision: revised_value
       };

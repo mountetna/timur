@@ -15,10 +15,10 @@ export const getAttributes = (tab)=>{
 
 export const getPlotIds = (tab)=>{
 
-  // Loop down on the tab object and extract the manifest ids.
+  // Loop down on the tab object and extract the plot ids.
   let plot_ids = Object.keys(tab.panes).map((pane_name)=>{
     return Object.keys(tab.panes[pane_name].attributes).map((attr_name)=>{
-      return tab.panes[pane_name].attributes[attr_name].plot_ids;
+      return tab.panes[pane_name].attributes[attr_name].plot_id;
     });
   });
 
@@ -26,31 +26,14 @@ export const getPlotIds = (tab)=>{
   plot_ids = [].concat.apply([], plot_ids);
 
   // Compact.
-  plot_ids = plot_ids.filter((item)=>{
-    return (item == undefined || item == null) ? false : true;
+  plot_ids = plot_ids.filter((plot_id)=>{
+    if(plot_id != undefined && plot_id != null && Number.isInteger(plot_id)){
+      return true;
+    }
+    return false;
   });
 
   return plot_ids;
-};
-
-
-/*
- * The tabs have an associated view index order. This helps us keep ordering of
- * the tabs. If you know the index order id of the tab you want you can pass it
- * in and this function will extract it for you.
- */
-export const getTabByIndexOrder = (tabs, view_index)=>{
-  let tab = {};
-
-  if(Object.keys(tabs).length > 0){
-    Object.keys(tabs).forEach((tab_name, index)=>{
-      if(tabs[tab_name].index_order == view_index){
-        tab = tabs[tab_name];
-      }
-    })
-  }
-
-  return tab;
 };
 
 /*
@@ -82,26 +65,25 @@ export const interleaveAttributes = (tab, template)=>{
          * in the Timur view pane...
          */
         if(attr_name in template.attributes){
-          let view_attribute = pane.attributes[attr_name];
-          let template_attribute = template.attributes[attr_name];
+          let view_attr = pane.attributes[attr_name];
+          let tmpl_attr = template.attributes[attr_name];
+
+          // Set the viewablity on the attribute.
+          view_attr['editable'] = tmpl_attr ? true : false;
 
           /*
-           * First we need to manually set the 'attribute_class' of the
-           * view attribute since we don't want it to be over written in the
-           * object interleave.
+           * Loop over the template attribute properties. If the propery is
+           * missing or is empty from the view attribute then set it.
            */
-          if(view_attribute.attribute_class == null){
-            view_attribute.attribute_class = template_attribute.attribute_class;
+          for(let prop in tmpl_attr){
+            if(
+              !(prop in view_attr) ||
+              view_attr[prop] == null ||
+              view_attr[prop] == ''
+            ){
+              view_attr[prop] = tmpl_attr[prop];
+            }
           }
-
-          // Interleave the attribute properties and set it back on the pane.
-          pane.attributes[attr_name] = Object.assign(
-            {
-              editable: template_attribute ? true : false
-            },
-            template_attribute,
-            view_attribute
-          );
         }
       });
     }
