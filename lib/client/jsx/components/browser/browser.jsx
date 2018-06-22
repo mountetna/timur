@@ -215,8 +215,6 @@ const mapStateToProps = (state = {}, own_props)=>{
   let revision = magma.revision(model_name, record_name) || {};
   let view = (state.timur.views ? state.timur.views[model_name] : null);
 
-  //let tab = getTabByIndexOrder(view.tabs, 0);
-
   return {
     template,
     revision,
