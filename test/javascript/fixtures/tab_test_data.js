@@ -133,6 +133,13 @@ export const view_data = {
               }
             }
           }
+        },
+        other_tab: {
+          name: 'other_tab',
+          title: '',
+          index_order: 123,
+          panes: {
+          }
         }
       }
     }
@@ -147,71 +154,3 @@ export const monsters = {
     }
   }
 };
-
-/*
-{
- "default": {
-   "name": "default",
-   "title": "",
-   "description": "",
-   "index_order": 0,
-   "panes": {
-     "default": {
-       "name": "default",
-       "title": "",
-       "index_order": 0,
-       "attributes": {
-         "demographic": {
-           "name": "demographic",
-           "title": null,
-           "attribute_class": "DemographicAttribute",
-           "index_order": 0,
-           "plot_id": null,
-           "manifest_id": null
-         },
-         "diagnostic": {
-           "name": "diagnostic",
-           "title": null,
-           "attribute_class": "DiagnosticAttribute",
-           "index_order": 1,
-           "plot_id": null,
-           "manifest_id": null
-         },
-         "prior_treatment": {
-           "name": "prior_treatment",
-           "title": null,
-           "attribute_class": "TreatmentAttribute",
-           "index_order": 2,
-           "plot_id": null,
-           "manifest_id": null
-         },
-         "treatment": {
-           "name": "treatment",
-           "title": null,
-           "attribute_class": "TreatmentAttribute",
-           "index_order": 4,
-           "plot_id": null,
-           "manifest_id": null
-         },
-         "prior_adverse_event": {
-           "name": "prior_adverse_event",
-           "title": null,
-           "attribute_class": "AdverseEventAttribute",
-           "index_order": 5,
-           "plot_id": null,
-           "manifest_id": null
-         },
-         "adverse_event": {
-           "name": "adverse_event",
-           "title": null,
-           "attribute_class": "AdverseEventAttribute",
-           "index_order": 6,
-           "plot_id": null,
-           "manifest_id": null
-         }
-       }
-     }
-   }
- }
-}
-*/

@@ -6,6 +6,7 @@ import {
 import {
   getAttributes,
   getPlotIds,
+  getTabByIndexOrder,
   interleaveAttributes
 } from '../../../lib/client/jsx/selectors/tab_selector';
 
@@ -24,6 +25,19 @@ describe('tab selector', ()=>{
     let expected_value = [123, 456];
 
     expect(plot_ids).toEqual(expected_value);
+  });
+
+  it('Extrats a tab by it\'s index_order.', ()=>{
+    let tab = getTabByIndexOrder(view_data.views.monster.tabs, 123);
+    let expected_value = {
+      name: 'other_tab',
+      title: '',
+      index_order: 123,
+      panes: {
+      }
+    };
+
+    expect(tab).toEqual(expected_value);
   });
 
   let long_str = `Interleaves the view attribute properties with the tab

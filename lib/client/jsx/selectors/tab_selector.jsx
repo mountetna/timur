@@ -36,6 +36,27 @@ export const getPlotIds = (tab)=>{
   return plot_ids;
 };
 
+
+/*
+ * The tabs have an associated view index order. This helps us keep ordering of
+ * the tabs. If you know the index order id of the tab you want you can pass it
+ * in and this function will extract it for you.
+ */
+
+export const getTabByIndexOrder = (tabs, view_index)=>{
+  let tab = {};
+
+  if(Object.keys(tabs).length > 0){
+    Object.keys(tabs).forEach((tab_name, index)=>{
+      if(tabs[tab_name].index_order == view_index){
+        tab = tabs[tab_name];
+      }
+    })
+  }
+
+  return tab;
+};
+
 /*
  * There is a correlation between the Timur view model attributes and the Magma
  * model attributes. When we want to render the attributes we interleave the two
