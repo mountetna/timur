@@ -16,7 +16,7 @@ class Timur
       erb_view(:no_auth)
     end
 
-    with auth: {user: {can_view?: :project_name}} do
+    with(auth: {user: {can_view?: :project_name}}) do
 
 # PAGES. Delivers the base HTML and UI.
 
@@ -52,17 +52,6 @@ class Timur
 
 # CONTROLLER ACTIONS. Supports the API and backend calls.
 
-      # view_controller.rb
-      get ':project_name/view/:model_name',
-        action: 'view#view_json',
-        as: :view_json
-      post ':project_name/view/update_view_json',
-        action: 'view#update_view_json',
-        as: :update_view_json
-      post ':project_name/view/delete_view_json',
-        action: 'view#delete_view_json',
-        as: :delete_view_json
-
       # browse_controller.rb
       get ':project_name', action: 'browse#index', as: :project
       get ':project_name/browse', action: 'browse#index', as: :browse
@@ -84,6 +73,19 @@ class Timur
       post ':project_name/manifests/create', action: 'manifests#create'
       post ':project_name/manifests/update/:id', action: 'manifests#update'
       delete ':project_name/manifests/destroy/:id', action: 'manifests#destroy'
+    end
+
+    with(auth: {user: {is_admin?: :project_name}}) do
+      # view_controller.rb
+      get ':project_name/view/:model_name',
+        action: 'view#retrieve_view',
+        as: :retrieve_view
+      post ':project_name/view/update',
+        action: 'view#update_view',
+        as: :update_view
+      post ':project_name/view/delete',
+        action: 'view#delete_view',
+        as: :delete_view
     end
 
     def initialize(config)
