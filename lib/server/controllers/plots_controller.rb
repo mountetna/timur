@@ -36,8 +36,14 @@ class PlotsController < Timur::Controller
   def update
     plot = Plot[@params[:id]]
     raise Etna::BadRequest, 'No such plot!' unless plot
-    raise Etna::Forbidden, 'Cannot update plot!' unless plot.is_editable?(current_user)
-    raise Etna::Forbidden, 'Only admin can set access!' if @params[:access] && !current_user.is_admin?(plot.project)
+
+    unless plot.is_editable?(current_user)
+      raise Etna::Forbidden, 'Cannot update plot!'
+    end
+
+    if @params[:access] && !current_user.is_admin?(plot.project)
+      raise Etna::Forbidden, 'Only admin can set access!'
+    end
 
     plot.update_allowed(@params)
 
@@ -47,7 +53,9 @@ class PlotsController < Timur::Controller
   def destroy
     plot = Plot[@params[:id]]
     raise Etna::BadRequest, 'No such plot!' unless plot
-    raise Etna::Forbidden, 'Cannot destroy plot!' unless plot.is_editable?(current_user)
+    unless plot.is_editable?(current_user)
+      raise Etna::Forbidden, 'Cannot destroy plot!'
+    end
     plot.destroy
     success('Plot destroyed')
   end
