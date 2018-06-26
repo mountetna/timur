@@ -1,16 +1,5 @@
 class ViewAttribute < Sequel::Model
-  many_to_one :view_pane
-
-  def to_hash
-    {
-      name: name,
-      title: title,
-      attribute_class: attribute_class,
-      index_order: index_order,
-      plot_id: plot_id,
-      manifest_id: manifest_id
-    }
-  end
+  many_to_one(:view_pane)
 
   def self.update(view_pane_id, attribute_name, attribute_data)
 
@@ -28,6 +17,7 @@ class ViewAttribute < Sequel::Model
       plot_id: attribute_data[:plot_id],
       manifest_id: attribute_data[:manifest_id]
     }
+
     update_query = find_query.merge(update_query)
 
     attribute = self.first(find_query)
@@ -36,5 +26,16 @@ class ViewAttribute < Sequel::Model
     else
       attribute = attribute.set(update_query).save
     end
+  end
+
+  def to_hash
+    {
+      name: name,
+      title: title,
+      attribute_class: attribute_class,
+      index_order: index_order,
+      plot_id: plot_id,
+      manifest_id: manifest_id
+    }
   end
 end

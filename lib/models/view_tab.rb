@@ -1,15 +1,5 @@
 class ViewTab < Sequel::Model
-  one_to_many :view_panes, order: :index_order
-
-  def to_hash
-    {
-      name: name,
-      title: title,
-      description: description,
-      index_order: index_order,
-      panes: Hash[view_panes.map {|p| [p.name, p.to_hash] }]
-    }
-  end
+  one_to_many(:view_panes, {order: :index_order})
 
   def self.generate_default_tab(project_name, model_name)
     return {
@@ -52,6 +42,7 @@ class ViewTab < Sequel::Model
       description: tab_data[:description].to_s,
       index_order: tab_data[:index_order].to_i
     }
+
     update_query = find_query.merge(update_query)
 
     tab = self.first(find_query)
@@ -68,5 +59,20 @@ class ViewTab < Sequel::Model
         ViewPane.update(tab.id, pane_name, pane_data)
       end
     end
+  end
+
+  def remove
+    self.view_panes.each {|pane| pane.remove}
+    self.delete
+  end
+
+  def to_hash
+    {
+      name: name,
+      title: title,
+      description: description,
+      index_order: index_order,
+      panes: Hash[view_panes.map {|p| [p.name, p.to_hash] }]
+    }
   end
 end

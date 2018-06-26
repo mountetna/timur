@@ -1,15 +1,6 @@
 class ViewPane < Sequel::Model
-  many_to_one :view_tab
-  one_to_many :view_attributes, order: :index_order
-
-  def to_hash
-    {
-      name: name,
-      title: title,
-      index_order: index_order,
-      attributes: Hash[ view_attributes.map{|a| [a.name, a.to_hash] }]
-    }
-  end
+  many_to_one(:view_tab)
+  one_to_many(:view_attributes, {order: :index_order})
 
   def self.update(view_tab_id, pane_name, pane_data)
 
@@ -24,6 +15,7 @@ class ViewPane < Sequel::Model
       title: pane_data[:title].to_s,
       index_order: pane_data[:index_order].to_i
     }
+
     update_query = find_query.merge(update_query)
 
     pane = self.first(find_query)
@@ -39,5 +31,19 @@ class ViewPane < Sequel::Model
         ViewAttribute.update(pane.id, attribute_name, attribute_data)
       end
     end
+  end
+
+  def to_hash
+    {
+      name: name,
+      title: title,
+      index_order: index_order,
+      attributes: Hash[ view_attributes.map{|a| [a.name, a.to_hash] }]
+    }
+  end
+
+  def remove
+    self.view_attributes.each {|attribute| attribute.delete}
+    self.delete
   end
 end
