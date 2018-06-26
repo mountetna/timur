@@ -82,8 +82,45 @@ export const model_template = {
   parent: 'labor'
 };
 
+export const monsters = {
+  models: {
+    monster: {
+      documents: model_documents,
+      template: model_template
+    }
+  }
+};
+
 export const view_data = {
   views: {
+
+    olympian: {
+      model_name: 'olympian',
+      project_name: 'labors',
+      tabs: {
+        name: 'default',
+        title: '',
+        index_order: 0,
+        panes: {
+          default: {
+            name: 'default',
+            title: '',
+            index_order: 0,
+            attributes: {
+              name: {
+                name: 'name',
+                title: null,
+                attribute_class: null,
+                index_order: 1,
+                plot_id: null,
+                manifest_id: null
+              }
+            }
+          }
+        }
+      }
+    },
+
     monster: {
       model_name: 'monster',
       project_name: 'labors',
@@ -146,11 +183,33 @@ export const view_data = {
   }
 };
 
-export const monsters = {
-  models: {
-    monster: {
-      documents: model_documents,
-      template: model_template
+/*
+ * When one requests a model view that is not present in the Timur DB then we
+ * return a default view object.
+ */
+export const default_view_data = {
+  views: {
+    farmers: {
+      project_name: 'labors',
+      model_name: 'farmers',
+      tabs: {
+        default: {
+          name: 'default',
+          title: '',
+          description: '',
+          index_order: 0,
+          panes: {
+            default: {
+              name: 'default',
+              title: '',
+              description: '',
+              index_order: 0,
+              attributes: {
+              }
+            }
+          }
+        }
+      }
     }
   }
-};
+}
