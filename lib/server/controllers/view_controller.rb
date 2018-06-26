@@ -8,7 +8,6 @@ class ViewController < Timur::Controller
       project: @params[:project_name],
       model: @params[:model_name]
     }
-
     success(pull_view_data(query_params).to_json, 'application/json')
   end
 
@@ -22,31 +21,25 @@ class ViewController < Timur::Controller
           tab_datum
         )
       end
+
+      retrieve_view
     else
-      failure(
-        401,
-        {errors: ['There is no tab data to save.']}
-      )
-      return
+      failure(401, {errors: ['There is no tab data to save.']})
     end
   end
 
   # Remove the view by the model name.
   def delete_view
-    success(
-      pull_view_data(@params[:project_name], @params[:model_name]).to_json,
-      'application/json'
-    )
-
-    ViewTab.where({
+    query_params = {
       project: @params[:project_name],
       model: @params[:model_name]
-    }).destroy_all
+    }
 
-    success(
-      pull_all_views(@params[:project_name]).to_json,
-      'application/json'
-    )
+    view_tabs = ViewTab.where().all
+    view_tabs.each {|tab| tab.remove}
+
+    query_params[:model] = 'all'
+    success(pull_view_data(query_params).to_json, 'application/json')
   end
 
   private
@@ -66,8 +59,8 @@ class ViewController < Timur::Controller
     # generic empty tab set.
     if view_tabs.empty?
       views[:views][model_name] = ViewTab.generate_default_tab(
-        project_name,
-        model_name
+        query_params[:project],
+        query_params[:model]
       )
     else
 
