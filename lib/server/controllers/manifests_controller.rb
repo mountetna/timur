@@ -17,6 +17,8 @@ class ManifestsController < Timur::Controller
     success_json(
       manifest: @manifest.to_hash(current_user)
     )
+  rescue Sequel::ValidationFailed => e
+    raise Etna::BadRequest, e.message
   end
 
   def update
@@ -50,11 +52,8 @@ class ManifestsController < Timur::Controller
 
   def manifest_params
     @params.select do |k,v|
-      if current_user.is_admin?(@params[:project_name])
-        [:name, :data, :description, :access].include?(k)
-      else
-        [:name, :data, :description].include?(k)
-      end
+      (current_user.is_admin?(@params[:project_name]) && k == :access) ||
+        [:name, :script, :description].include?(k)
     end.merge(
       user: current_user,
       project: @params[:project_name]

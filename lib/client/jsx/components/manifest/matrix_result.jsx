@@ -1,43 +1,16 @@
 // Framework libraries.
 import * as React from 'react';
 import * as TSV from '../../utils/tsv';
+import ConsignmentTable from './consignment_table';
 
 class MatrixResult extends React.Component{
-  componentWillMount(){
-    this.setState({hidden: true});
+  constructor(props) {
+    super(props);
+    this.state = { hidden: true };
   }
 
-  toggle(){
+  toggle() {
     this.setState({hidden: !this.state.hidden});
-  }
-
-  display(){
-    return this.state.hidden ? 'none' : 'initial';
-  }
-
-  header(){
-    let header_cells = this.props.matrix.col_names.map((col_name, index)=>{
-      return <th key={index}>{col_name}</th>
-    });
-
-    return(
-      <tr>
-        <th>{'Row Names'}</th>
-        {header_cells}
-      </tr>
-    );
-  }
-
-  tableRows(){
-    return this.props.matrix.map('row', (row, index, row_name)=>{
-      return(
-        <tr key={index}>
-
-          <td>{row_name}</td>
-          {row.map((data, index)=>(<td key={index}>{data}</td>))}
-        </tr>
-      );
-    });
   }
 
   downloadMatrix(){
@@ -58,36 +31,32 @@ class MatrixResult extends React.Component{
     );
   }
 
+  table() {
+    let { matrix } = this.props;
+    let headers = [ 'Row Names', ...matrix.col_names ];
+    let rows = matrix.map('row', (row, index, row_name)=>[ row_name, ...row ]);
+
+    return <ConsignmentTable headers={ headers } rows={ rows }/>
+  }
+
   render(){
     let {matrix} = this.props;
+    let {hidden} = this.state;
     return(
       <div className='consignment-matrix'>
+        <i className='fas fa-table'/>
 
-        {`Table Data: ${matrix.num_rows} rows x ${matrix.num_cols} cols`}
+        {` ${matrix.num_rows} rows x ${matrix.num_cols} cols`}
+
         <button className='consignment-btn' onClick={this.downloadMatrix.bind(this)}>
-          
           <i className='fas fa-download' aria-hidden='true' ></i>
-          {' DOWNLOAD'}
+          {'DOWNLOAD'}
         </button>
         <button className='consignment-btn' onClick={this.toggle.bind(this)}>
-
           <i className='fas fa-table' aria-hidden='true'></i>
-          {this.state.hidden ? ' SHOW' : ' HIDE'}
+          { hidden ? 'SHOW' : 'HIDE'}
         </button>
-        <div style={{display : this.display()}}>
-
-          <table className='consignment-table'>
-
-            <thead>
-
-              {this.header()}
-            </thead>
-            <tbody>
-
-              {this.tableRows()}
-            </tbody>
-          </table>
-        </div>
+        { !hidden && this.table() }
       </div>
     );
   }

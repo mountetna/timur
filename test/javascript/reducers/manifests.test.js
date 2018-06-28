@@ -1,4 +1,4 @@
-import reducer from '../../../app/assets/javascripts/reducers/manifests_reducer';
+import reducer from '../../../lib/client/jsx/reducers/manifests_reducer';
 import manifestStore, { manifest } from '../fixtures/manifests_store'
 
 describe('manifests reducer', () => {

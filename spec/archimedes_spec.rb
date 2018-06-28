@@ -1,4 +1,4 @@
-require_relative '../app/models/archimedes'
+require_relative '../lib/models/archimedes'
 
 describe ArchimedesController do
   include Rack::Test::Methods
@@ -7,22 +7,27 @@ describe ArchimedesController do
     OUTER_APP
   end
 
-  it 'runs a consignment via the endpoint' do
-    script = {
-      data: {
-        elements: [
-          { name: 'test', script: "'blah'" }
-        ]
-      }
-    }
-    md5sum = Digest::MD5.hexdigest(script[:data].to_json).to_sym
+  it 'runs a consignment script' do
+    script = "@test = 'blah'"
+    md5sum = Digest::MD5.hexdigest(script).to_sym
 
     auth_header(:viewer)
     json_post('labors/consignment', queries: [ script ])
 
     expect(last_response.status).to eq(200)
-    json = json_body(last_response.body)
-    expect(json).to eq(md5sum => { test: 'blah' })
+    expect(json_body).to eq(md5sum => { test: 'blah' })
+  end
+
+  it 'runs a consignment record' do
+    viewer = create(:user, :viewer)
+    manifest = create(:manifest, :private, script: "@test = 'blah'", user: viewer)
+    md5sum = Digest::MD5.hexdigest(manifest.script).to_sym
+
+    auth_header(:viewer)
+    json_post('labors/consignment', manifest_ids: [ manifest.id ])
+
+    expect(last_response.status).to eq(200)
+    expect(json_body).to eq(md5sum => { test: 'blah' })
   end
 end
 
@@ -104,12 +109,14 @@ describe Archimedes::Manifest do
       gt: "4 > 0",
       gte: "4 >= 9",
       lt: "4 < 10",
-      lte: "4 <= 15"
+      lte: "4 <= 15",
+      eq: "4 == 15"
     )
 
     expect(payload['gt']).to be(true)
     expect(payload['gte']).to be(false)
     expect(payload['lt']).to be(true)
     expect(payload['lte']).to be(true)
+    expect(payload['eq']).to be(false)
   end
 end

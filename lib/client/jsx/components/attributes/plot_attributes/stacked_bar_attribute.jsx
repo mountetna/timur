@@ -65,7 +65,7 @@ const mapStateToProps = (state = {}, own_props)=>{
   if(selected_manifest != undefined){
     selected_consignment = ConsignmentSelector.selectConsignment(
       state,
-      selected_manifest.md5sum_data
+      selected_manifest.md5sum
     );
   }
 
