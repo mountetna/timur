@@ -6,8 +6,8 @@ module.exports = {
   resolve: {
     extensions: [ '.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg' ],
     alias: {
-      'prism': path.join(__dirname, 'node_modules/prismjs/themes'),
-      'font-awesome': path.join(__dirname, 'node_modules/font-awesome')
+      'font-awesome': path.join(__dirname, 'node_modules/font-awesome'),
+      'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib')
     }
   },
   entry: ['./jsx/timur.jsx', './scss/application.scss' ],

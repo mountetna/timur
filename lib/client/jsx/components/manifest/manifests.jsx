@@ -76,9 +76,13 @@ export class Manifests extends React.Component{
       let { manifest, md5sum } = this.state;
       let new_md5sum;
 
-      manifest[field_name] = event.target.value;
-
-      if (field_name == 'script') new_md5sum = md5(manifest.script);
+      if (field_name == 'script') {
+        // the code editor does not emit an event, just the new value
+        manifest.script = event;
+        new_md5sum = md5(manifest.script);
+      } else {
+        manifest[field_name] = event.target.value;
+      }
       this.setState({manifest, md5sum: new_md5sum || md5sum});
     }
   }
