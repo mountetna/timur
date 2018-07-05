@@ -9,8 +9,6 @@
  * compiled file so the styles you add here take precedence over styles defined in any styles
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
- *
- *= require jquery-ui/datepicker
  */
 
 @import "globals";
@@ -32,17 +30,7 @@
 @import "list_selector";
 @import "predicate";
 
-@import "~prism/prism";
-
-/* prism-coy.css
-prism.css
-prism-dark.css
-prism-funky.css
-prism-okaidia.css
-prism-solarizedlight.css
-prism-tomorrow.css
-prism-twilight.css */
-
+@import "~code-mirror/codemirror";
 @import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen:400,700);
 
 #main {
