@@ -1,4 +1,4 @@
-import reducer from '../../../app/assets/javascripts/reducers/plots_reducer';
+import reducer from '../../../lib/client/jsx/reducers/plots_reducer';
 import { plot as testPlot } from '../fixtures/all_manifests_response';
 
 describe('plots reducer', () => {

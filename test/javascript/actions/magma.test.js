@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import fetch from 'isomorphic-fetch';
 import nock from 'nock';
 import monsters from '../fixtures/monsters';
-import * as actions from '../../../app/assets/javascripts/actions/magma_actions';
+import * as actions from '../../../lib/client/jsx/actions/magma_actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
