@@ -14,10 +14,14 @@
     .manifest-script {
       &.editing {
         border: 1px solid #333;
+        .CodeMirror {
+          background: #fffafa;
+        }
       }
       border-top: 1px solid #888;
       .CodeMirror {
         max-height: 200px;
+        background: #fafffa;
       }
       .cm-comment { color: #888; }
       .cm-macro { color: #f40; }
