@@ -6,17 +6,20 @@ const NoneOption = (showNone) => (
   : null
 );
 
-const Option = (v) => (
+const Option = (v,i) => (
   Object.keys(v).includes('key', 'value', 'text')
-  ? <option key={v.key} value={v.value}>{ v.text }</option>
-  : <option key={v} value={v}>{ v }</option>
+  ? <option key={v.key} value={i}>{ v.text }</option>
+  : <option key={v} value={i}>{ v }</option>
 );
 
 // This is an input to select one from a list of options
 export default class SelectInput extends Component {
   onChange(evt) {
-    let { value } = evt.target;
-    if (this.props.onChange) this.props.onChange( value == '' ? null : value );
+    let index = evt.target.value;
+    let { onChange, values } = this.props;
+    let value = values[parseInt(index)]
+
+    if (onChange) onChange( value == '' ? null : value );
   }
 
   render() {
