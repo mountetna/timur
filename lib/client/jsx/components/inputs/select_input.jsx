@@ -19,6 +19,12 @@ export default class SelectInput extends Component {
     let { onChange, values } = this.props;
     let value = values[parseInt(index)]
 
+    // props.values may be [ { key, value, text } ]
+    if (value != null
+      && typeof value === 'object'
+      && 'value' in value)
+      value = value.value;
+
     if (onChange) onChange( value == '' ? null : value );
   }
 
