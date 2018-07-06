@@ -1,4 +1,4 @@
-require_relative '../app/models/archimedes'
+require_relative '../lib/models/archimedes'
 
 describe Archimedes::Matrix do
   it "should create a matrix with bind('rows/cols',M,M,V,V)" do
