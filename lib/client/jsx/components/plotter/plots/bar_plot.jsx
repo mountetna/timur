@@ -42,7 +42,7 @@ export default class BarPlot extends React.Component{
       width={ plot.width }
       height={ plot.height }>
       <PlotCanvas
-        onWheel={ this.onWheel }
+        onWheel={ this.onWheel.bind(this) }
         x={ margin.left } y={ margin.top }
         width={ width }
         height={ height }>
@@ -89,8 +89,8 @@ export default class BarPlot extends React.Component{
 export class BarPlotBar extends React.Component{
   render() {
     let {
-      model_name, heights, x, scale, width, ymin, ymax, color, similar,
-      highlight_names, highlighted_name, category, mouse_handler, select 
+      name, model_name, heights, x, scale, width, ymin, ymax, color, similar,
+      highlight_names, highlighted_name, category, mouse_handler, select
     } = this.props;
 
     return <g className="bar">
