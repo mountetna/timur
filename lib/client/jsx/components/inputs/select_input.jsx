@@ -7,9 +7,9 @@ const NoneOption = (showNone) => (
 );
 
 const Option = (v,i) => (
-  Object.keys(v).includes('key', 'value', 'text')
-  ? <option key={v.key} value={i}>{ v.text }</option>
-  : <option key={v} value={i}>{ v }</option>
+  (v != null && Object.keys(v).includes('value', 'text'))
+  ? <option key={i} value={i}>{ v.text }</option>
+  : <option key={i} value={i}>{ v }</option>
 );
 
 // This is an input to select one from a list of options
