@@ -12,18 +12,15 @@ export default class BarPlot extends React.Component{
   }
 
   onWheel(event) {
-    let zoom = this.state.zoom
-    event.preventDefault()
+    let { zoom } = this.state;
+    event.preventDefault();
 
-    if (event.deltaY > 0)
-      zoom = zoom * 0.8
-    else
-      zoom = zoom * 1.2
-    if (zoom < 1e-6)
-      zoom = 1e-6
-    if (zoom > 1)
-      zoom = 1
-    this.setState({ zoom: zoom })
+    if (event.deltaY > 0) zoom = zoom * 0.8;
+    else zoom = zoom * 1.2;
+    if (zoom < 1e-6) zoom = 1e-6;
+    if (zoom > 1) zoom = 1;
+
+    this.setState({zoom});
   }
   render() {
     let { plot, model_name, ymin, ymax, legend, bars } = this.props;
@@ -37,11 +34,11 @@ export default class BarPlot extends React.Component{
     let yScale = D3Scale.createScale(
       [ ymin, zoom_ymax ],
       [ height, 0 ]
-    )
+    );
 
-    return <svg 
+    return <svg
       id={ plot.name }
-      className="bar_plot" 
+      className="bar_plot"
       width={ plot.width }
       height={ plot.height }>
       <PlotCanvas
@@ -85,7 +82,7 @@ export default class BarPlot extends React.Component{
         )
       }
       </PlotCanvas>
-    </svg>
+    </svg>;
   }
 }
 
@@ -99,17 +96,18 @@ export class BarPlotBar extends React.Component{
     return <g className="bar">
       {
         heights.map( (name,height,i) => {
-          if (height == null) return null
+          if (height == null) return null;
 
-          if (select == i)
+          if (select == i) {
             return <rect key={i}
               x={ x }
               y={ scale( height ) - scale(ymax) }
               width={ width }
-              style={ { stroke: (color || "white") } }
-              height={ scale(ymin) - scale( height ) }/>
-          else
-            return <Dot key={i} 
+              style={ { stroke: (color || 'white') } }
+              height={ scale(ymin) - scale( height ) }/>;
+          }
+          else {
+            return <Dot key={i}
               model_name={ model_name }
               category={ category ? category(i) : null }
               similar={ similar ? similar[i] : null }
@@ -119,7 +117,8 @@ export class BarPlotBar extends React.Component{
               y={ scale(height) }
               highlighted={ highlight_names[i] == highlighted_name }
               highlight_name={ highlight_names[i] }
-             />
+             />;
+          }
         })
       }
       <text textAnchor="start" 
@@ -129,7 +128,7 @@ export class BarPlotBar extends React.Component{
         }>
         { name }
       </text>
-    </g>
+    </g>;
   }
 }
 
@@ -153,14 +152,14 @@ export class Dot extends React.Component{
         <circle className={classes}
           onMouseOver={
             (event) => {
-              this.setState({ highlighted: true })
-              mouse_handler(highlight_name) 
+              this.setState({ highlighted: true });
+              mouse_handler(highlight_name);
             }
           }
           onMouseOut={
             (event) => {
-              this.setState({highlighted: false})
-              mouse_handler(null)
+              this.setState({highlighted: false});
+              mouse_handler(null);
             }
           }
           r="2.5"
@@ -174,6 +173,6 @@ export class Dot extends React.Component{
             { name }
           </text> : null
         }
-      </a>
+      </a>;
   }
 }
