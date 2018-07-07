@@ -15,14 +15,14 @@ import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 export class BarPlotAttribute extends GenericPlotAttribute{
   render(){
     let { selected_plot, template, bars } = this.props;
-    if (selected_plot == undefined) return null;
+    if (!selected_plot) return null;
 
     let bar_plot_props = {
       ymin: 0,
       ymax: 1,
       legend: selected_plot.legend,
       plot: selected_plot.layout,
-      model_name: template.name,
+      model_name: template ? template.name : null,
       bars
     };
 
