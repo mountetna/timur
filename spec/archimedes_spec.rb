@@ -1,4 +1,4 @@
-require_relative '../app/models/archimedes'
+require_relative '../lib/models/archimedes'
 
 describe ArchimedesController do
   include Rack::Test::Methods
