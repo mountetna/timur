@@ -60,7 +60,7 @@
     "setupTestFrameworkScriptFile": "./test/setup.js"
   },
   "scripts": {
-    "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./app/assets/javascripts/** ",
+    "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./lib/client/jsx/** ",
     "lintfile": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ",
     "test": "jest"
   }

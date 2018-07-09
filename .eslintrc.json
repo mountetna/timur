@@ -12,27 +12,8 @@
     "node": true
   },
   "globals": {
-    "$": false,
     "Routes": false,
-    "React": false,
-    "freshen": false,
-    "dates": false,
-    "marked": false,
-    "magmaActions": false,
-    "messageActions": false,
-    "connect": false,
-    "plotActions": false,
-    "timurActions": false,
-    "Keycode": false,
-    "Matrix": false,
-    "classNames": false,
-    "chroma": false,
-    "Tree": false,
-    "Redux": false,
-    "Set": false,
-    "thunk": false,
-    "TableSet": false,
-    "TableColumn": false
+    "TIMUR_CONFIG": false
   },
   "plugins": [
     "react"
