@@ -11,51 +11,26 @@
   .manifest-form-group {
     .manifest-form-header {
     }
-    .manifest-body{
-      position: relative;
-      height: 200px;
-
-      .manifest-display {
-        width: 100%;
-        resize: vertical;
-        box-sizing: border-box;
-        font-size: 1em;
-        font-family: $value_font;
-        margin: 0px;
-        height: 200px;
-        white-space: pre-wrap;
-        overflow: auto;
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-
-      .manifest-editor {
-        @extend .manifest-display;
-        color: transparent;
-        background: transparent;
-        border: 0px;
-        outline: 1px solid red;
-        &:focus {
-          caret-color: black;
-        }
-      }
-
-      .manifest-script{
-        @extend .manifest-display;
+    .manifest-script {
+      &.editing {
         border: 1px solid #333;
-
-        .token {
-          &.comment { color: #888; }
-          &.macro { color: #f40; }
-          &.variable { color: #b40; }
-          &.string { color: #a0f; }
-          &.function { color: #04d; }
-          &.label, &.column { color: #090; }
-          &.template { color: #f00; font-weight: bold; }
-          &.vector { color: #000; font-weight: bold; }
+        .CodeMirror {
+          background: #fffafa;
         }
       }
+      border-top: 1px solid #888;
+      .CodeMirror {
+        max-height: 200px;
+        background: #fafffa;
+      }
+      .cm-comment { color: #888; }
+      .cm-macro { color: #f40; }
+      .cm-variable { color: #b40; }
+      .cm-string { color: #a0f; }
+      .cm-function { color: #04d; }
+      .cm-label, &.column { color: #090; }
+      .cm-template { color: #f00; font-weight: bold; }
+      .cm-vector { color: #000; font-weight: bold; }
     }
     .consignment-view {
       padding-top: 5px;
@@ -130,7 +105,7 @@
             box-sizing: border-box;
   }
 
-  
+
 }
 
 .consignment-result-group {
