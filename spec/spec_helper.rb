@@ -70,9 +70,7 @@ end
 
 
 def run_script script
-  txt = script.map do |name, exp|
-    "@#{name} = #{exp}"
-  end.join("\n")
+  txt = script
 
   manifest = Archimedes::Manifest.new(
     'xyzzy',
