@@ -34,12 +34,15 @@ module Archimedes
 
     def fill_manifest
       resolve(@manifest)
-    rescue RLTK::NotInLanguage
-      raise Archimedes::LanguageError, "Could not resolve @#{@variable}"
+    rescue RLTK::NotInLanguage => e
+      current_position = e.current.position
+      line = current_position.line_number
+      position = current_position.line_offset
+      raise Archimedes::LanguageError, "Syntax error at line #{line}, position #{position}"
     rescue Magma::ClientError => e
       raise Archimedes::LanguageError, e.body
     rescue ArgumentError => e
-      raise Archimedes::LanguageError, "In @#{@variable}, #{e.message}"
+      raise Archimedes::LanguageError, e.message
     rescue TypeError => e
       if e.message =~ /nil/
         raise Archimedes::LanguageError, "Nil value error in @#{@variable}"
