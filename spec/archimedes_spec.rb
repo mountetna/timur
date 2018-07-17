@@ -40,12 +40,6 @@ describe Archimedes::Manifest do
     expect(payload['var1']).to eq(value)
   end
 
-  it 'raises errors for broken syntax' do
-    expect {
-      run_script('@var1 = invalid syntax')
-    }.to raise_error(Archimedes::LanguageError)
-  end
-
   it 'reports line numbers errors for broken syntax' do
     expect {
       run_script(
@@ -53,7 +47,7 @@ describe Archimedes::Manifest do
          @var2 = invalid syntax
          @var3 = 2'
       )
-    }.to raise_error(Archimedes::LanguageError, 'Syntax error at line 2, position 25')
+    }.to raise_error(Archimedes::LanguageError, 'Syntax error in line 2, position 25')
   end
 
   it 'supports math operations' do
