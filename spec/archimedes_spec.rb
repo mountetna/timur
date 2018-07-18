@@ -47,7 +47,7 @@ describe Archimedes::Manifest do
          @var2 = invalid syntax
          @var3 = 2'
       )
-    }.to raise_error(Archimedes::LanguageError, 'Syntax error in line 2, position 25')
+    }.to raise_error(Archimedes::LanguageError, 'Syntax error in line 2, near expression `= invalid syntax`')
   end
 
   it 'supports math operations' do

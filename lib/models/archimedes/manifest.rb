@@ -35,8 +35,6 @@ module Archimedes
     def current_fragment
       bounds = [ @positions[0], @positions[-1] ]
       line = bounds.map(&:line_number).compact.uniq
-      require 'pry'
-      binding.pry
       "in #{
         line.length == 1 ? :line : :lines
       } #{
@@ -46,13 +44,24 @@ module Archimedes
       }`"
     end
 
+    def line_fragment(line,position)
+      lines = @manifest.split(/\n/)
+
+      current_line = lines[line-1]
+      # the previous ten characters with rest of word, if possible
+      before = current_line[0..position].scan(/(^.{0,9}|(?<=^|\s)\S*.{10}).$/x).flatten.first
+      # the next ten characters with rest of word, if possible
+      after = current_line[position..-1].scan(/^((.{10}\S*)(?=\s|$)|.{0,9}$)/).flatten.first
+      "line #{line}, near expression `#{before}#{after}`"
+    end
+
     def fill_manifest
       resolve(@manifest)
     rescue RLTK::NotInLanguage => e
       current_position = e.current.position
       line = current_position.line_number
       position = current_position.line_offset
-      raise Archimedes::LanguageError, "Syntax error in line #{line}, position #{position}"
+      raise Archimedes::LanguageError, "Syntax error in #{line_fragment(line,position)}"
     rescue Magma::ClientError => e
       raise Archimedes::LanguageError, e.body
     rescue ArgumentError => e
