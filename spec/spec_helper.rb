@@ -78,7 +78,7 @@ def run_script script
     txt
   )
   manifest.payload
-  manifest.instance_variable_get('@vars')
+  manifest.instance_variable_get('@return_vars')
 end
 
 FactoryBot.define do

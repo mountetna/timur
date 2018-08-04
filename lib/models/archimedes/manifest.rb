@@ -5,6 +5,7 @@ module Archimedes
       @project_name = project_name
       @manifest = manifest
       @vars = {}
+      @return_vars = {}
     end
 
     def macro(var, args)
@@ -24,7 +25,7 @@ module Archimedes
       fill_manifest
 
       Hash[
-        @vars.map do |var, value|
+        @return_vars.map do |var, value|
           [ var, value.respond_to?(:payload) ? value.payload : value ]
         end
       ]

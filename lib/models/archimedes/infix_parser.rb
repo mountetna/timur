@@ -19,8 +19,8 @@ module Archimedes
     production(:assignment) do
       # An assignment
       clause('VAR .IDENT ASSIGN .e') do |i,e|
-        @variable = i
         @vars[i] = e
+        @return_vars[i] = e unless e.is_a?(Archimedes::Macro)
       end
     end
 
