@@ -27,7 +27,7 @@ class ConsignmentTable extends React.Component{
   }
 
   render() {
-    return <div className='consignment-result-group'>
+    return <div className='consignment-table-container'>
       <div className='consignment-table'>
         <div className='consignment-head'>
           {this.header()}

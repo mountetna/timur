@@ -7,21 +7,16 @@ export default class ConsignmentView extends React.Component {
 
     if (!consignment) return null;
 
-    console.log("Consignment is ");
-    console.log(consignment);
-
     return <div className='consignment-view'>
-      <div className='label'>Results:</div>
+      <div className='consignment-view-label'>Results:</div>
       {
         Object.keys(consignment).map(
-          (name,i) => {
-            if (consignment[name] == 'macro') return null;
-            return <div key={i} className='consignment-result'>
+          (name,i) =>
+            <div key={i} className='consignment-variable-group'>
               <div className='consignment-variable-name'>@{name}:</div>
               <ConsignmentResult name={name} data={consignment[name]}/>
             </div>
-          }
-        ).filter(_=>_)
+        )
       }
     </div>
   }

@@ -32,29 +32,7 @@
       .cm-template { color: #f00; font-weight: bold; }
       .cm-vector { color: #000; font-weight: bold; }
     }
-    .consignment-view {
-      padding-top: 5px;
-      border-spacing: 2px;
-      .label {
-        font-weight: bold;
-        font-size: 0.8em;
-      }
-      .consignment-result {
-        display: table-row;
-        .consignment-variable-name {
-          color: #b40;
-          font-family: $value_font;
-          display: table-cell;
-          width: 20%;
-          padding-right: 10px;
-          text-align: right;
-        }
-        .result {
-          width: 80%;
-          display: table-cell;
-        }
-      }
-    }
+
   }
 
   .manifest-form-title {
@@ -104,61 +82,9 @@
        -moz-box-sizing: border-box;
             box-sizing: border-box;
   }
-
-  
 }
 
-.consignment-result-group {
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: 150px;
-  margin: 5px 0;
-  border-bottom: 1px solid #333;
-  .consignment-table{
-    border: 1px solid #333;
-    font-family: monospace;
-    font-size: 1.1em;
-    border-spacing: 0px;
-    border-collapse: collapse;
-    font-weight: 100;
-    display: table;
-    width: 100%;
 
-    .consignment-row {
-      display: table-row;
-    }
-
-    .consignment-head {
-      border-bottom: 1px solid #666;
-      display: table-header-group;
-      .consignment-header {
-        display: table-cell;
-        padding: 2px;
-        padding-left: 4px;
-        padding-right: 4px;
-        border-right: 1px solid #888;
-        border-bottom: 1px solid #888;
-        background-color: #ccf;
-      }
-    }
-
-    .consignment-body {
-      max-height: 150px;
-      overflow: auto;
-      display: table-row-group;
-    }
-
-    .consignment-cell {
-      /*border-right: 1px solid #666;*/
-      display: table-cell;
-      padding: 2px;
-      padding-left: 4px;
-      padding-right: 4px;
-      border-right: 1px solid #888;
-      border-bottom: 1px solid #888;
-    }
-  }
-}
 
 .consignment-btn{
   margin-left: 10px;
@@ -198,45 +124,94 @@
 }
 
 /******************************************************************************/
+.consignment-table-container {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 150px;
+  margin: 5px 0;
 
-.result {
-  font-weight: bolder;
-  .toggle {
-    margin-left: 3px;
-    font-weight: lighter;
-    cursor: pointer;
-    color: blue;
-  }
-  .fa-list {
-    color: goldenrod;
-  }
-  .fa-table {
-    color: salmon;
-  }
-  .fa-download {
-    color: blue;
-    cursor: pointer;
-    &:hover {
-      color: dodgerblue;
+  .consignment-table{
+    border: 1px solid #333;
+    font-family: monospace;
+    font-size: 1.1em;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    font-weight: 100;
+    display: table;
+    width: 98%;
+
+    .consignment-row {
+      display: table-row;
+    }
+
+    .consignment-head {
+      border-bottom: 1px solid #666;
+      display: table-header-group;
+      .consignment-header {
+        display: table-cell;
+        padding: 2px;
+        padding-left: 4px;
+        padding-right: 4px;
+        border-right: 1px solid #888;
+        border-bottom: 1px solid #888;
+        background-color: #ccf;
+      }
+    }
+
+    .consignment-body {
+      max-height: 150px;
+      overflow: auto;
+      display: table-row-group;
+    }
+
+    .consignment-cell {
+      /*border-right: 1px solid #666;*/
+      display: table-cell;
+      padding: 2px;
+      padding-left: 4px;
+      padding-right: 4px;
+      border-right: 1px solid #888;
+      border-bottom: 1px solid #888;
     }
   }
 }
 
-.vector, .matrix {
-  table {
-    border: 2px solid forestgreen;
-    border-collapse: collapse;
-    th {
-      background-color: rgba(#0cf, 0.5);
-      padding: 2px;
-      text-align: center;
-      border-bottom: 1px solid rgba(forestgreen, 0.2);
-      border-left: 1px solid forestgreen;
+.consignment-view {
+  padding-top: 5px;
+  border-spacing: 2px;
+  display: table;
+  width: 100%;
+  .consignment-view-label {
+    font-weight: bold;
+    font-size: 0.8em;
+  }
+  .consignment-variable-group {
+    display: table-row;
+    .consignment-variable-name {
+      color: #b40;
+      font-family: $value_font;
+      display: table-cell;
+      width: 20%;
+      padding-right: 10px;
+      text-align: right;
     }
-    td {
-      padding: 2px 8px;
-      border-bottom: 1px solid rgba(forestgreen, 0.2);
-      border-left: 1px solid forestgreen;
+    .consignment-result {
+      width: 100%;
+      display: block;
+      font-weight: bolder;
+      .vector-icon {
+        color: goldenrod;
+      }
+      .matrix-icon {
+        color: salmon;
+      }
+      .download-icon {
+        color: blue;
+        cursor: pointer;
+        &:hover {
+          color: dodgerblue;
+        }
+      }
     }
   }
 }

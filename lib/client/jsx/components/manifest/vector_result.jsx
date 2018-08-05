@@ -2,6 +2,8 @@
 import * as React from 'react';
 import { downloadTSV } from '../../utils/tsv';
 import ConsignmentTable from './consignment_table';
+import ConsignmentResult from './consignment_result';
+import { isPrimitiveType } from '../../utils/types'
 
 class VectorResult extends React.Component{
   constructor(props){
@@ -24,7 +26,10 @@ class VectorResult extends React.Component{
   table() {
     let { vector } = this.props;
     let headers = [ 'Labels', 'Values' ];
-    let rows = vector.map((label, value)=>[ label, value ]);
+    let rows = vector.map((label, value)=>[
+      label,
+      isPrimitiveType(value) ? value : <ConsignmentResult data={ value } />
+    ]);
 
     return <ConsignmentTable headers={ headers } rows={ rows }/>;
   }
@@ -34,10 +39,10 @@ class VectorResult extends React.Component{
     let {hidden} = this.state;
     return(
       <div className='consignment-vector'>
-        <i className='fas fa-list' aria-hidden='true'/>
+        <i className='vector-icon fas fa-list' aria-hidden='true'/>
         {` ${vector.size} elements`}
         <button className='consignment-btn' onClick={this.downloadVector.bind(this)}>
-          <i className='fas fa-download' aria-hidden='true'></i>
+          <i className='download-icon fas fa-download' aria-hidden='true'></i>
           {'DOWNLOAD'}
         </button>
         <button className='consignment-btn' onClick={this.toggle.bind(this)}>

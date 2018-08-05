@@ -2,6 +2,8 @@
 import * as React from 'react';
 import * as TSV from '../../utils/tsv';
 import ConsignmentTable from './consignment_table';
+import ConsignmentResult from './consignment_result';
+import { isPrimitiveType } from '../../utils/types'
 
 class MatrixResult extends React.Component{
   constructor(props) {
@@ -34,7 +36,9 @@ class MatrixResult extends React.Component{
   table() {
     let { matrix } = this.props;
     let headers = [ 'Row Names', ...matrix.col_names ];
-    let rows = matrix.map('row', (row, index, row_name)=>[ row_name, ...row ]);
+    let rows = matrix.map('row', (row, index, row_name)=>[ row_name, ...row.map(
+      value => isPrimitiveType(value) ? value : <ConsignmentResult data={ value } />
+    )]);
 
     return <ConsignmentTable headers={ headers } rows={ rows }/>
   }
@@ -44,12 +48,12 @@ class MatrixResult extends React.Component{
     let {hidden} = this.state;
     return(
       <div className='consignment-matrix'>
-        <i className='fas fa-table'/>
+        <i className='matrix-icon fas fa-table'/>
 
         {` ${matrix.num_rows} rows x ${matrix.num_cols} cols`}
 
         <button className='consignment-btn' onClick={this.downloadMatrix.bind(this)}>
-          <i className='fas fa-download' aria-hidden='true' ></i>
+          <i className='download-icon fas fa-download' aria-hidden='true' ></i>
           {'DOWNLOAD'}
         </button>
         <button className='consignment-btn' onClick={this.toggle.bind(this)}>
