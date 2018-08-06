@@ -25,10 +25,9 @@ describe BrowseController do
       get_browse('view/monster')
 
       expect(last_response.status).to eq(200)
-      json = json_body(last_response.body)
 
       expect(
-        json[:views][:monster][:tabs][:stats][:panes][:default][:attributes].keys
+        json_body[:views][:monster][:tabs][:stats][:panes][:default][:attributes].keys
       ).to eq([:weight, :size, :odor])
     end
   end
@@ -38,7 +37,7 @@ describe BrowseController do
       get_browse('browse/monster/Lernean%20Hydra')
 
       expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/var PROJECT_NAME = 'labors';/)
+      expect(last_response.body).to match(/TIMUR_CONFIG/)
       expect(last_response.body).to match(/record_name: 'Lernean Hydra'/)
     end
   end
@@ -48,32 +47,8 @@ describe BrowseController do
       get_browse('map')
 
       expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/var PROJECT_NAME = 'labors';/)
+      expect(last_response.body).to match(/TIMUR_CONFIG/)
       expect(last_response.body).to match(/mode: 'map'/)
-    end
-  end
-
-  context '#update' do
-    it 'posts an update to magma' do
-      stub_request(
-        :post,
-        Timur.instance.config(:magma)[:host]+'/update'
-      ).with do |req|
-        expect(req.body.lines[1]).to eq(%Q{Content-Disposition: form-data; name="revisions[monster][Lernean Hydra][heads]"\r\n})
-      end
-      auth_header(:editor)
-      json_post('labors/update',
-        {
-          revisions: {
-            monster: {
-              'Lernean Hydra': {
-                heads: 6
-              }
-            }
-          }
-        }
-      )
-      expect(last_response.status).to eq(200)
     end
   end
 

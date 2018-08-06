@@ -70,17 +70,15 @@ end
 
 
 def run_script script
+  txt = script
+
   manifest = Archimedes::Manifest.new(
     'xyzzy',
     'timur',
-    script.to_a
+    txt
   )
   manifest.payload
-  manifest.instance_variable_get('@vars')
-end
-
-def json_body(body)
-  JSON.parse(body, symbolize_names: true)
+  manifest.instance_variable_get('@return_vars')
 end
 
 FactoryBot.define do
@@ -104,11 +102,7 @@ FactoryBot.define do
     end
 
     trait :script do
-      data({
-        elements: [
-          { name: 'value', script: '1+1' }
-        ]
-      }.to_json)
+      script '@value = 1 + 1'
     end
 
     trait :public do
@@ -153,8 +147,8 @@ FactoryBot.define do
   end
 end
 
-def json_body(body)
-  JSON.parse(body, symbolize_names: true)
+def json_body
+  JSON.parse(last_response.body, symbolize_names: true)
 end
 
 def json_post(endpoint, hash)

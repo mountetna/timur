@@ -22,8 +22,8 @@ describe Archimedes::Table do
       )
 
     payload = run_script(
-      table: <<EOT
-table(
+      %q!
+@table = table(
   [
     'match',
     [ 'games', 'patron', 'name', '::equals', 'Zeus' ],
@@ -36,7 +36,7 @@ table(
   ],
   [ order: 'event' ]
 )
-EOT
+      !
     )
     expect(payload['table']).to be_a(Archimedes::Matrix)
     expect(payload['table'].rows.map(&:to_values)).to eq([

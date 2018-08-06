@@ -1,58 +1,3 @@
-# This is a list of requests for variables.
-#
-# The request comes in this form:
-# [
-#   [ "var_name", "calculation" ]
-# ]
-#
-# A calculation is an infix expression:
-#
-#   x / y
-#
-# The terms in a calculation are:
-# 1) A String, Number, Boolean
-# 2) A List of each of these.
-# 3) A function
-#
-#
-# An example manifest:
-#
-# {
-#   "record_name": {
-#     type: "formula",
-#     value: '"IPIMEL069.T1"'
-#   },
-#   "experiment_name: {
-#     type: "question",
-#     value: [ "sample", [ "sample_name", "::equals", "@record_name" ], "::first", "patient", "experiment", "name" ]
-#   },
-#   "qc": {
-#     type: "table",
-#     value: {
-#       rows: [ "sample", [ "patient", "experiment", "name", "::equals", "@experiment_name" ] ],
-#       columns: {
-#         treg_cd45_count: [ "population", [ "stain", "::equals", "treg" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
-#         nktb_cd45_count: [ "population", [ "stain", "::equals", "nktb" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
-#         sort_cd45_count: [ "population", [ "stain", "::equals", "sort" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
-#         dc_cd45_count: [ "population", [ "stain", "::equals", "dc" ], [ "name", "::equals", "CD45+" ], "::first", "count" ],
-#         treg_live_count: [ "population", [ "stain", "::equals", "treg" ], [ "name", "::equals", "Live" ], "::first", "count" ],
-#         nktb_live_count: [ "population", [ "stain", "::equals", "nktb" ], [ "name", "::equals", "Live" ], "::first", "count" ],
-#         sort_live_count: [ "population", [ "stain", "::equals", "sort" ], [ "name", "::equals", "Live" ], "::first", "count" ],
-#         dc_live_count: [ "population", [ "stain", "::equals", "dc" ], [ "name", "::equals", "Live" ], "::first", "count" ],
-#       }
-#     }
-#   },
-#   heights: {
-#     type: "vector",
-#     value: {
-#       items: [
-#         "@qc.treg_cd45_count / @qc.nktb_cd45_count",
-#         "@qc.treg_cd45_count / @qc.nktb_cd45_count",
-#       ]
-#     }
-#   }
-# }
-
 module Archimedes
   class Manifest < RLTK::Parser::Environment
     def initialize(token, project_name, manifest)
@@ -60,18 +5,27 @@ module Archimedes
       @project_name = project_name
       @manifest = manifest
       @vars = {}
+      @return_vars = {}
     end
 
-    def macro(mac, args)
+    def macro(var, args)
+      mac = @vars[var]
       raise TypeError('Variable is not a macro') unless mac.is_a?(Archimedes::Macro)
-      resolve(mac.substitute(args))
+
+      # use the variable for storing the value
+      resolve("@#{var} = #{mac.substitute(args)}")
+      value = @vars[var]
+
+      # reset the macro
+      @vars[var] = mac
+      value
     end
 
     def payload
       fill_manifest
 
       Hash[
-        @vars.map do |var, value|
+        @return_vars.map do |var, value|
           [ var, value.respond_to?(:payload) ? value.payload : value ]
         end
       ]
@@ -79,28 +33,50 @@ module Archimedes
 
     private
 
+    def current_fragment
+      bounds = [ @positions[0], @positions[-1] ]
+      line = bounds.map(&:line_number).compact.uniq
+      "in #{
+        line.length == 1 ? :line : :lines
+      } #{
+        line.length == 1 ? line.first : line.join('-')
+      }, expression `#{
+        @manifest[bounds[0].stream_offset..bounds[1].stream_offset]
+      }`"
+    end
+
+    def line_fragment(line,position)
+      lines = @manifest.split(/\n/)
+
+      current_line = lines[line-1]
+      # the previous ten characters with rest of word, if possible
+      before = current_line[0..position].scan(/(^.{0,9}|(?<=^|\s)\S*.{10}).$/x).flatten.first
+      # the next ten characters with rest of word, if possible
+      after = current_line[position..-1].scan(/^((.{10}\S*)(?=\s|$)|.{0,9}$)/).flatten.first
+      "line #{line}, near expression `#{before}#{after}`"
+    end
+
     def fill_manifest
-      @manifest.each do |variable, query|
-        begin
-          @vars[variable.to_s] = resolve(query)
-        rescue RLTK::NotInLanguage
-          raise Archimedes::LanguageError, "Could not resolve @#{variable} = #{query}"
-        rescue Magma::ClientError => e
-          raise Archimedes::LanguageError, e.body
-        rescue ArgumentError => e
-          raise Archimedes::LanguageError, "In @#{variable}, #{e.message}"
-        rescue TypeError => e
-          if e.message =~ /nil/
-            raise Archimedes::LanguageError, "Nil value error in @#{variable}"
-          else
-            raise Archimedes::LanguageError, "Type error in @#{variable}"
-          end
-        rescue ZeroDivisionError
-          raise Archimedes::LanguageError, "Divided by zero in @#{variable}"
-        rescue
-          raise Archimedes::LanguageError, "Unspecified error in @#{variable}"
-        end
+      resolve(@manifest)
+    rescue RLTK::NotInLanguage => e
+      current_position = e.current.position
+      line = current_position.line_number
+      position = current_position.line_offset
+      raise Archimedes::LanguageError, "Syntax error in #{line_fragment(line,position)}"
+    rescue Magma::ClientError => e
+      raise Archimedes::LanguageError, e.body
+    rescue ArgumentError => e
+      raise Archimedes::LanguageError, e.message
+    rescue TypeError => e
+      if e.message =~ /nil/
+        raise Archimedes::LanguageError, "Nil value error in #{current_fragment}"
+      else
+        raise Archimedes::LanguageError, "Type error in #{current_fragment}"
       end
+    rescue ZeroDivisionError
+      raise Archimedes::LanguageError, "Divided by zero in #{current_fragment}"
+    rescue
+      raise Archimedes::LanguageError, "Unspecified error in #{current_fragment}"
     end
 
     def resolve(query)
