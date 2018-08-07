@@ -8,14 +8,16 @@ export default class MagmaLink extends React.Component{
     let { link, model } = this.props;
 
     return(
-      <Link name={ link }
+      <Link
         link={
           Routes.browse_model_path(
             TIMUR_CONFIG.project_name,
             model,
             encodeURIComponent(link)
           )
-        }/>
+        }>
+        { link }
+      </Link>
     );
   }
 }

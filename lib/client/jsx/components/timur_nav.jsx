@@ -25,9 +25,9 @@ export class TimurNav extends React.Component{
     };
 
     return(
-      Object.keys(tabs).map((name)=>
-       <div key={name} className={ `nav_tab ${mode == name ? 'selected' : ''}` }>
-         <Link link={tabs[name]} name={name}/>
+      Object.keys(tabs).map((tab_name)=>
+       <div key={tab_name} className={ `nav_tab ${mode == tab_name ? 'selected' : ''}` }>
+         <Link link={tabs[tab_name]}>{tab_name}</Link>
        </div>
      )
     );
