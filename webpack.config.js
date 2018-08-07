@@ -7,7 +7,6 @@ module.exports = env => ({
   resolve: {
     extensions: [ '.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg' ],
     alias: {
-      'font-awesome': path.join(__dirname, 'node_modules/font-awesome'),
       'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib')
     }
   },
