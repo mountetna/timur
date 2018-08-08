@@ -10,6 +10,7 @@ import {TimurNavContainer as TimurNav} from './components/timur_nav';
 import {MessagesContainer as Messages} from './components/messages';
 
 import { showMessages } from './actions/message_actions';
+import { updateLocation } from './actions/location_actions';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
@@ -97,6 +98,17 @@ ROUTES.forEach(route => {
 });
 
 class TimurRouter extends React.Component {
+  constructor(props) {
+    super(props);
+
+    window.onpopstate = this.updateLocation.bind(this);
+  }
+
+  updateLocation() {
+    let { updateLocation } = this.props;
+    updateLocation(location.pathname);
+  }
+
   render() {
     let { location, showMessages, environment } = this.props;
 
@@ -132,5 +144,5 @@ class TimurRouter extends React.Component {
 
 export default connect(
   ({location}) => ({ location }),
-  { showMessages }
+  { showMessages, updateLocation }
 )(TimurRouter);
