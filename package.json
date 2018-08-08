@@ -55,6 +55,7 @@
     "testMatch": [
       "**/test/javascript/**/?(*.)(spec|test).js?(x)"
     ],
+    "testURL": "http://www.fake.com",
     "collectCoverageFrom": [
       "lib/client/jsx/**/*.js?(x)"
     ],

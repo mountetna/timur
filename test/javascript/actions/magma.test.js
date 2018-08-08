@@ -1,29 +1,19 @@
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import fetch from 'isomorphic-fetch';
-import nock from 'nock';
 import monsters from '../fixtures/monsters';
 import * as actions from '../../../lib/client/jsx/actions/magma_actions';
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+import { mockStore, mockDate, mockFetch, setConfig, stubUrl, cleanStubs } from '../helpers';
 
 const PROJECT_NAME = 'labors';
 
 describe('async actions', () => {
-  afterEach(() => {
-    nock.cleanAll()
-  });
+  afterEach(cleanStubs);
 
-  global.TIMUR_CONFIG = {
+  mockDate();
+  mockFetch();
+
+  setConfig({
     project_name: PROJECT_NAME,
     magma_host: 'https://magma.test',
-  };
-
-  global.fetch = fetch;
-  const currentDate = new Date();
-  global.Date = jest.fn(() => currentDate);
-
+  });
 
   it('requests documents from the magma /retrieve endpoint', () => {
     let request = {
@@ -32,23 +22,20 @@ describe('async actions', () => {
       attribute_names: 'all',
       record_names: 'all',
     }
-    nock(TIMUR_CONFIG.magma_host)
-      .post('/retrieve', request)
-      .reply(
-        200,
-        monsters,
-        {
-          'Access-Control-Allow-Origin': '*',
-          'Content-type': 'application/json'
-        }
-      );
+    stubUrl({
+      verb: 'post',
+      path: '/retrieve',
+      request,
+      response: monsters,
+      host: TIMUR_CONFIG.magma_host
+    });
 
     const expectedActions = [
       {
         exchange: {
           exchange_name: 'magma-test-retrieve',
           exchange_path: 'https://magma.test/retrieve',
-          start_time: currentDate,
+          start_time: Date(),
         },
         exchange_name: 'magma-test-retrieve',
         type: 'ADD_EXCHANGE',
