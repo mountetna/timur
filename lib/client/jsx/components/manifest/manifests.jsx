@@ -9,14 +9,11 @@ import ListMenu from '../list_menu';
 import ManifestView from './manifest_view';
 
 // Module imports.
-import {addTokenUser} from '../../actions/timur_actions';
 import {
   requestManifests, saveNewManifest, saveManifest, copyManifest, deleteManifest
 } from '../../actions/manifest_actions';
-import {
-  getAllManifests,
-  getSelectedManifest
-} from '../../selectors/manifest_selector';
+import { pushLocation } from '../../actions/location_actions';
+import { getAllManifests } from '../../selectors/manifest_selector';
 
 // Main component for viewing/editing manifests.
 export class Manifests extends React.Component{
@@ -26,49 +23,67 @@ export class Manifests extends React.Component{
   }
 
   componentDidMount(){
-    /*
-     * This function must run for any new manifest to process correctly. It
-     * allows the manifest selector to properly set the current user on a new
-     * manifest.
-     */
-    this.props.addTokenUser();
+    // load all manifests for the selector
     this.props.requestManifests();
+  }
+
+  componentDidUpdate() {
+    let { manifest_id, manifests } = this.props;
+    let { manifest } = this.state;
+
+    if (manifest_id && manifests && !manifest) this.selectManifest(manifest_id, false);
   }
 
   create() {
     // A manifest with an id of '0' is a new manifest.
-    let date = new Date;
-    let manifest = {
-      id: 0,
-      access: 'private',
-      name: '',
-      description: '',
-      script: '',
-      created_at: date.toString(),
-      updated_at: date.toString()
-    };
-    this.setState({manifest});
+    this.selectManifest('new', true);
   }
 
   setManifest({manifest}) {
     this.selectManifest(manifest.id)
   }
 
-  selectManifest(id) {
-    if (!id) {
-      this.setState({manifest: null, md5sum: null});
-      return;
+  selectManifest(id, push=true) {
+    let { manifests, pushLocation } = this.props;
+    let manifest;
+
+    switch(id) {
+      case 'new':
+        let date = new Date;
+        manifest = {
+          id: 0,
+          access: 'private',
+          name: '',
+          description: '',
+          script: '',
+          created_at: date.toString(),
+          updated_at: date.toString()
+        }
+        break;
+      case null:
+        manifest = null;
+        break;
+      default:
+        // find it in the existing manifests
+        manifest = manifests && manifests.find(m=>m.id ==id);
+        if (!manifest) return;
+
+        // copy it so you don't modify the store
+        manifest = { ...manifest };
+        break;
     }
-
-    let { manifests } = this.props;
-
-    let manifest = manifests.find(m=>m.id ==id);
 
     // copy it so you don't modify the store
     this.setState({
-      manifest: { ...manifest },
-      md5sum: manifest.md5sum
+      manifest,
+      md5sum: manifest ? md5(manifest.script) : null
     });
+
+    if (push) pushLocation(
+      id == null ?
+      Routes.manifests_path(TIMUR_CONFIG.project_name) :
+      Routes.manifest_path(TIMUR_CONFIG.project_name, id)
+    );
   }
 
   updateField(field_name){
@@ -103,7 +118,7 @@ export class Manifests extends React.Component{
 
   deleteManifest() {
     let { manifest } = this.state;
-    this.props.deleteManifest(manifest, () => this.selectManifest(0));
+    this.props.deleteManifest(manifest, () => this.selectManifest(null));
   }
 
   revertManifest() {
@@ -112,7 +127,7 @@ export class Manifests extends React.Component{
     if (id > 0)
       this.selectManifest(id);
     else
-      this.setState({manifest: null});
+      this.selectManifest(null);
   }
 
   render(){
@@ -163,5 +178,8 @@ export const ManifestsContainer = ReactRedux.connect(
     };
   },
   // map dispatch
-  { addTokenUser, requestManifests, saveNewManifest, saveManifest, copyManifest, deleteManifest }
+  {
+    requestManifests, saveNewManifest, saveManifest, copyManifest, deleteManifest,
+    pushLocation
+  }
 )(Manifests);

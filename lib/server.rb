@@ -41,7 +41,7 @@ class Timur
       get ':project_name/manifests', as: :manifests do
         erb_view(:client)
       end
-      get ':project_name/manifest/:manifest_id' do
+      get ':project_name/manifest/:manifest_id', as: :manifest do
         erb_view(:client)
       end
       get ':project_name/plots', as: :plots do
