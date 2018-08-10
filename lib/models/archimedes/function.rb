@@ -40,9 +40,9 @@ module Archimedes
   end
 end
 
-require_relative 'functions/default'
 require_relative 'functions/rtemis'
 require_relative 'functions/question'
 require_relative 'functions/spread'
 require_relative 'functions/table'
 require_relative 'functions/matrix'
+require_relative 'functions/vector'
