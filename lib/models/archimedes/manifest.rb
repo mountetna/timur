@@ -66,7 +66,7 @@ module Archimedes
     rescue Magma::ClientError => e
       raise Archimedes::LanguageError, e.body
     rescue ArgumentError => e
-      raise Archimedes::LanguageError, e.message
+      raise Archimedes::LanguageError, "#{e.message} in #{current_fragment}"
     rescue TypeError => e
       if e.message =~ /nil/
         raise Archimedes::LanguageError, "Nil value error in #{current_fragment}"
