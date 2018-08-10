@@ -4,12 +4,12 @@ import * as ReactRedux from 'react-redux';
 
 // Class imports.
 import {GenericPlotAttribute} from './generic_plot_attribute';
-import BarGraph from '../../plotter/plots/bar_graph';
+import BarGraph from '../../plotter_d3_v5/plots/bar_plot/bar_graph';
+import Resize from '../../plotter_d3_v5/resize';
 import Consignment from '../../../models/consignment';
 
 // Module imports.
 import * as ManifestActions from '../../../actions/manifest_actions';
-import * as Colors from '../../../utils/colors';
 import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 
 export class BarGraphAttribute extends GenericPlotAttribute{
@@ -20,24 +20,23 @@ export class BarGraphAttribute extends GenericPlotAttribute{
      * When I rebuilt this component 'ymin', 'ymax', 'datumKey' were undefined.
      * We need to check if these are still used and remove them if not.
      */
-    let {selected_plot, data, ymin, ymax, datumKey} = this.props;
+    let {selected_plot, data} = this.props;
     let bar_graph_props = {
-      ymin,
-      ymax,
-      datumKey,
       data,
       plot: {
-        name: '',
-        height: selected_plot.layout.height,
+        height: selected_plot.layout.height + 100,
         width: selected_plot.layout.width,
+        margins: {top: 40, right: 50, bottom: 100, left: 60},
+        color_range: ['#cbf2bb', '#46a21f']
       },
-      margin: selected_plot.layout.margin,
     };
-
+  
     return(
       <div className='value'>
 
-        <BarGraph {...bar_graph_props} />
+        <Resize render={width => (
+          <BarGraph {...bar_graph_props} parent_width={width} />
+        )}/>
       </div>
     );
   }

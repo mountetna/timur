@@ -7,6 +7,10 @@ $quote_font: 'Lora', serif;
 $input_border_color: #c0c0c0;
 $input_background_color: #f9f9f9;
 
+$dark-grey: #222;
+$med-grey-2: #888;
+$light-grey: #ccc;
+
 @mixin text_defaults {
   color: darkorchid;
   border: none;

@@ -315,3 +315,84 @@
   }
 }
 */
+
+.axis path,
+.axis line {
+  stroke: #E0E0E0;
+}
+
+.axis text {
+  font-size: 11px;
+  fill: black;
+}
+
+.axis-Bottom text, .axis-timeline-bottom text {
+  transform: rotate(-45deg);
+  text-anchor: end;
+}
+
+.box-group text {
+  visibility: hidden;
+}
+
+.box-group:hover text {
+  visibility: visible;
+  font-size: 8px;
+  alignment-baseline: middle;
+}
+
+.legend-container {
+  width: 75%;
+  margin-top: 25px;
+  margin-left: auto;
+}
+
+.category-group {
+  display: inline-block;
+  margin-right: 24px;
+  vertical-align: middle
+}
+
+.label-rect {
+  display: inline-block;
+  margin-right: 8px;
+  width: 16px;
+  height: 8px;
+  vertical-align: middle;
+}
+
+.label-text {
+  display: inline;
+  font-size: 11px;
+}
+
+#timeline_group_chart .axis.axis-Left text {
+  display: none;
+}
+
+.clip_path_obj{
+  clip-path: url(#clip);
+}
+
+#timeline_group_chart .resize-wrapper{
+  margin-right: 100px;
+}
+
+.tooltip-bg{
+  stroke: $dark-grey;
+  stroke-width: 1px;
+  fill: $med-grey-2;
+  pointer-events: none;
+}
+
+.tooltip-arrow{
+  fill: $med-grey-2;
+  pointer-events: none;
+}
+
+.tooltip-text{
+  display: inline;
+  font-size: 0.8em;
+  fill: $light-grey;
+  font-family: $body_font;
+}

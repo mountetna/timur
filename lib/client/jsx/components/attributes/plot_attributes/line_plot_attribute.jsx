@@ -1,32 +1,41 @@
-// Framework libraries.
+ // Framework libraries.
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 // Class imports.
 import {GenericPlotAttribute} from './generic_plot_attribute';
-import LinePlot from '../../plotter/plots/line_plot';
+import LineGraph from '../../plotter_d3_v5/plots/line_plot/line_graph';
+import Resize from '../../plotter_d3_v5/resize';
 import Consignment from '../../../models/consignment';
 
 // Module imports.
 import * as ManifestActions from '../../../actions/manifest_actions';
-import * as Colors from '../../../utils/colors';
 import * as ConsignmentSelector from '../../../selectors/consignment_selector';
 
 export class LinePlotAttribute extends GenericPlotAttribute{
   render(){
-    if(this.props.selected_plot == undefined) return null;
+    let {selected_plot, lines, x_min_max,  y_min_max} = this.props;
+    if(selected_plot == undefined) return null;
+ 
+    selected_plot.layout.height = 400;
 
     let line_plot_props = {
-      ylabel: 'sample count',
-      xlabel: '',
-      plot: this.props.selected_plot.layout,
-      lines: this.props.lines
+      plot: {
+        height: selected_plot.layout.height,
+        width: selected_plot.layout.width,
+        x_min_max,
+        y_min_max,
+        margins: {top: 40, right: 50, bottom: 100, left: 60}
+      },
+      lines
     };
 
     return(
       <div className='value'>
-
-        <LinePlot {...line_plot_props} />
+  
+        <Resize render={width => (
+          <LineGraph {...line_plot_props} parent_width={width} />
+        )}/>
       </div>
     );
   }
@@ -55,7 +64,6 @@ const mapStateToProps = (state = {}, own_props)=>{
    */
   let lines = [];
   if(selected_consignment && selected_consignment.lines){
-    let colors = Colors.autoColors(selected_consignment.lines.size);
 
     lines = selected_consignment.lines.map((label, line, index_a)=>{
 
@@ -73,17 +81,33 @@ const mapStateToProps = (state = {}, own_props)=>{
 
       return {
         label,
-        points,
-        color: colors[index_a]
+        points
       };
     });
   }
+
+  let x_values = lines.reduce(
+    (values, line) => values.concat(line.points.map((point) => point.x )),
+    []
+  )
+
+  let y_values = lines.reduce(
+    (values, line) => values.concat(line.points.map((point) => point.y )),
+    []
+  )
+
+  let x_min = Math.min(...x_values);
+  let x_max = Math.max(...x_values);
+  let y_min = Math.min(...y_values);
+  let y_max = Math.max(...y_values);
 
   /*
    * Set the data required for this plot.
    */
   return {
     lines,
+    x_min_max: [x_min, x_max],
+    y_min_max: [y_min, y_max],
     selected_plot,
     selected_manifest,
     selected_consignment

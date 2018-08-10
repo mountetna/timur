@@ -34,6 +34,7 @@ export class GenericPlotAttribute extends React.Component{
      * have the manifest (data request), then go ahead and make the request.
      */
     if(selected_consignment == undefined){
+      
       if(selected_manifest != undefined){
         if(!this.state.fetched_consignment){
           fetchConsignment(selected_manifest.id, document[template.identifier]);
