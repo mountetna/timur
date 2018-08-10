@@ -1,6 +1,6 @@
 require_relative '../lib/models/archimedes'
 
-describe Archimedes::Default do
+describe Archimedes::VectorFunctions do
   it 'computes vector length' do
     payload = run_script(
      '@vec = [ 1, 2, 3 ]
@@ -47,6 +47,37 @@ describe Archimedes::Default do
     )
     values = [ 'a', 'b', 'c' ].map{|l| payload['labeled'][l]}
     expect(values).to eq([1,2,3])
+  end
+  it 'extracts labels' do
+    payload = run_script(
+     "@vec = [ a: 1, b: 2, c: 3 ]
+      @labels = labels(@vec)"
+    )
+    expect(payload['labels'].to_values).to eq(['a','b','c'])
+  end
+  it 'generates a sequence' do
+    payload = run_script(
+     "@vec = seq(1,10)
+      @vec2 = seq(1,20,2)"
+    )
+    expect(payload['vec'].to_values).to eq((1..10).to_a)
+    expect(payload['vec2'].to_values).to eq([1,3,5,7,9,11,13,15,17,19])
+  end
+  it 'repeats a vector' do
+    payload = run_script(
+      "@vec = [1,2,3]
+       @rep = rep(@vec,3)"
+    )
+    expect(payload['rep'].to_values).to eq([1,2,3]*3)
+  end
+  it 'joins vector elements into a string' do
+    payload = run_script(
+      "@vec = ['a','b','c']
+       @join = join(@vec)
+       @join2 = join(@vec, ', ')"
+    )
+    expect(payload['join']).to eq('abc')
+    expect(payload['join2']).to eq('a, b, c')
   end
   it 'concats two vectors' do
     payload = run_script(

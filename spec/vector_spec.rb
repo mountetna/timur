@@ -85,4 +85,12 @@ describe Archimedes::Vector do
     expect(v2).to be_a(Archimedes::Vector)
     expect(v2.to_values).to eq([false,true,false])
   end
+  it "supports subsetting with another vector" do
+    v1 = vector([1,2,3,4,5,6])
+    v2 = vector([0,2,4])
+    v3 = v1[v2]
+
+    expect(v3).to be_a(Archimedes::Vector)
+    expect(v3.to_values).to eq([1,3,5])
+  end
 end
