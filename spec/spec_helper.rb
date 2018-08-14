@@ -117,6 +117,7 @@ FactoryBot.define do
   factory :plot do
     to_create(&:save)
     project 'labors'
+    script '@test = 1'
     sequence :name do |n|
       "plot #{n}"
     end

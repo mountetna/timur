@@ -38,11 +38,9 @@ describe PlotsController do
       friend = create(:user, :editor)
       viewer = create(:user, :viewer)
 
-      manifest = create(:manifest, :public, :script, user: admin)
-
-      public_plots = create_list(:plot, 3, :public, :scatter, user: admin, manifest: manifest)
-      friend_private_plots = create_list(:plot, 3, :private,:scatter, user: friend, manifest: manifest)
-      user_private_plots = create_list(:plot, 3, :private, :scatter, user: viewer, manifest: manifest)
+      public_plots = create_list(:plot, 3, :public, :scatter, user: admin)
+      friend_private_plots = create_list(:plot, 3, :private,:scatter, user: friend)
+      user_private_plots = create_list(:plot, 3, :private, :scatter, user: viewer)
 
       post_plots(:fetch, :viewer)
       plot_names = json_body[:plots].map{|plot| plot[:name]}
@@ -57,18 +55,13 @@ describe PlotsController do
     before(:each) do
       @user = create(:user, :viewer)
 
-      @manifest = create(
-        :manifest, :public, :script,
-        user: @user
-      )
-
       @plot = {
         name: 'test plot',
         plot_type: 'scatter',
         project_name: 'ipi',
         access: 'private',
-        configuration: { data: 'xyz' },
-        manifest_id: @manifest.id
+        script: '@test = 1',
+        configuration: { data: 'xyz' }
       }
     end
 
@@ -81,6 +74,7 @@ describe PlotsController do
       post_plots(:create, :viewer, @plot)
 
       expect(last_response.status).to eq(200)
+
 
       plot = Plot.first
       expect(plot.name).to  eq(@plot[:name])
@@ -97,13 +91,8 @@ describe PlotsController do
     before(:each) do
       @user = create(:user, :viewer)
 
-      @manifest = create(
-        :manifest, :public, :script,
-        user: @user
-      )
-
       @plot = create(
-        :plot, :private, :scatter, user: @user, manifest: @manifest
+        :plot, :private, :scatter, user: @user
       )
     end
 
@@ -123,7 +112,7 @@ describe PlotsController do
       delete_plots(@plot, :editor)
       expect(last_response.status).to eq(403)
 
-      public_plot = create(:plot, :public, :scatter, user: @user, manifest: @manifest)
+      public_plot = create(:plot, :public, :scatter, user: @user)
 
       delete_plots(public_plot, :editor)
       expect(last_response.status).to eq(403)
@@ -142,16 +131,11 @@ describe PlotsController do
     before(:each) do
       @user = create(:user, :viewer)
 
-      @manifest = create(
-        :manifest, :public, :script,
-        user: @user
-      )
-
-      @plot = create(:plot, :private, :scatter, user: @user, manifest: @manifest)
+      @plot = create(:plot, :private, :scatter, user: @user)
     end
 
     it 'requires permission to update' do
-      public_plot = create(:plot, :public, :scatter, user: @user, manifest: @manifest)
+      public_plot = create(:plot, :public, :scatter, user: @user)
 
       post_plots("update/#{@plot.id}", :editor, plot_type: 'heatmap')
       expect(last_response.status).to eq(403)

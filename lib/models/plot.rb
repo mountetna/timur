@@ -8,7 +8,7 @@ class Plot < Sequel::Model
     validates_presence :name
     validates_presence :plot_type
     validates_presence :configuration
-    validates_presence :manifest
+    validates_presence :script
   end
 
   def before_validation

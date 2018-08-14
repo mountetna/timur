@@ -15,15 +15,7 @@ import TextAttribute from './text_attribute';
 import {MetricsAttributeContainer as MetricsAttribute} from './metrics_attribute';
 import {MarkdownAttributeContainer as MarkdownAttribute} from './markdown_attribute';
 
-// The plots.
-import {LinePlotAttributeContainer as LinePlotAttribute} from './plot_attributes/line_plot_attribute';
-import {BoxPlotAttributeContainer as BoxPlotAttribute} from './plot_attributes/box_plot_attribute';
-import {BarGraphAttributeContainer as BarGraphAttribute} from './plot_attributes/bar_graph_attribute';
-import {TimelineGroupAttributeContainer as TimelineGroupPlotAttribute} from './plot_attributes/timeline_group_plot_attribute';
-// import {BarPlotAttributeContainer as BarPlotAttribute} from './plot_attributes/bar_plot_attribute';
-// import {StackedBarPlotAttributeContainer} from './plot_attributes/stacked_bar_attribute';
-// import {SwarmPlotAttributeContainer as SwarmPlotAttribute} from './plot_attributes/swarm_plot_attribute';
-// import {HistogramAttributeContainer as HistogramAttribute} from './plot_attributes/histogram_attribute';
+import PlotAttribute from './plot_attribute';
 
 export default class AttributeViewer extends React.Component{
   render(){
@@ -32,21 +24,14 @@ export default class AttributeViewer extends React.Component{
 
     switch(attribute.attribute_class){
       case 'LinePlotAttribute':
-        return <LinePlotAttribute {...this.props} />;
       case 'BoxPlotAttribute':
-        return <BoxPlotAttribute {...this.props} />;
       case 'BarGraphAttribute':
-        return <BarGraphAttribute {...this.props} />;
       case 'TimelineGroupPlotAttribute':
-        return <TimelineGroupPlotAttribute {...this.props} />;
-      // case 'BarPlotAttribute':
-      //   return <BarPlotAttribute {...this.props} />;
-      // case 'StackedBarPlotAttribute':
-      //   return <StackedBarPlotAttributeContainer {...this.props} />;
-      // case 'SwarmAttribute':
-      //   return <SwarmPlotAttribute {...this.props} />;
-      // case 'HistogramAttribute':
-      //   return <HistogramAttribute {...this.props} />;
+      case 'BarPlotAttribute':
+      case 'StackedBarPlotAttribute':
+      case 'SwarmAttribute':
+      case 'HistogramAttribute':
+        return <PlotAttribute {...this.props} />;
 
       case 'DemographicAttribute':
       case 'DiagnosticAttribute':
