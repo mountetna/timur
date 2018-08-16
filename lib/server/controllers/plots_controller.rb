@@ -1,9 +1,5 @@
 class PlotsController < Timur::Controller
   def create
-    manifest = Manifest[@params[:manifest_id]]
-
-    raise Etna::BadRequest, 'Missing manifest!' unless manifest
-
     plot = Plot.new(
       project: @params[:project_name],
       user: current_user,
@@ -11,7 +7,7 @@ class PlotsController < Timur::Controller
       name: @params[:name],
       plot_type: @params[:plot_type],
       configuration: @params[:configuration],
-      manifest: manifest
+      script: @params[:script]
     )
     plot.save
 
@@ -31,6 +27,12 @@ class PlotsController < Timur::Controller
     success_json(
       plots: plots.map(&:to_hash)
     )
+  end
+
+  def get
+    plot = Plot[@params[:id]]
+    raise Etna::BadRequest, 'No such plot!' unless plot
+    success_json(plot.to_hash)
   end
 
   def update

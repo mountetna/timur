@@ -5,6 +5,11 @@ describe PlotsController do
     OUTER_APP
   end
 
+  def get_plot id, user
+    auth_header(user)
+    get("/labors/plot/#{id}")
+  end
+
   def get_plots endpoint, user
     auth_header(user)
     get("/labors/plots/#{endpoint}")
@@ -27,6 +32,21 @@ describe PlotsController do
     end
   end
 
+  context '#get' do
+    it 'must be a project viewer' do
+      get_plot(1, :non_user)
+      expect(last_response.status).to eq(403)
+    end
+
+    it 'retrieves a single plot' do
+      viewer = create(:user, :viewer)
+
+      plot = create(:plot, :private, :scatter, user: viewer)
+
+      get_plot(plot.id, :viewer)
+      expect(json_body[:name]).to eq(plot.name)
+    end
+  end
   context '#fetch' do
     it 'must be a project viewer' do
       post_plots(:fetch, :non_user)

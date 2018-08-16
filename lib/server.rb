@@ -25,6 +25,12 @@ class Timur
         action: 'archimedes#consignment',
         as: :consignment
 
+      # plot_controller.rb
+      get ':project_name/plots', as: :plots do
+        erb_view(:plots)
+      end
+
+      get ':project_name/plot/:id', action: 'plots#get'
       post ':project_name/plots/fetch', action: 'plots#fetch'
       post ':project_name/plots/create', action: 'plots#create'
       post ':project_name/plots/update/:id', action: 'plots#update'
