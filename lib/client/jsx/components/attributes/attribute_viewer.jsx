@@ -31,6 +31,7 @@ export default class AttributeViewer extends React.Component{
       case 'StackedBarPlotAttribute':
       case 'SwarmAttribute':
       case 'HistogramAttribute':
+      case 'PlotAttribute':
         return <PlotAttribute {...this.props} />;
 
       case 'DemographicAttribute':
