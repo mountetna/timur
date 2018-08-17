@@ -2,8 +2,6 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
-import md5 from 'md5';
-
 // Class imports.
 import ListMenu from '../list_menu';
 import ManifestView from './manifest_view';
@@ -14,6 +12,7 @@ import {
 } from '../../actions/manifest_actions';
 import { pushLocation } from '../../actions/location_actions';
 import { getAllManifests } from '../../selectors/manifest_selector';
+import { MD5 } from '../../selectors/consignment_selector';
 
 // Main component for viewing/editing manifests.
 export class Manifests extends React.Component{
@@ -76,7 +75,7 @@ export class Manifests extends React.Component{
     // copy it so you don't modify the store
     this.setState({
       manifest,
-      md5sum: manifest ? md5(manifest.script) : null
+      md5sum: manifest ? MD5(manifest.script) : null
     });
 
     if (push) pushLocation(
@@ -94,7 +93,7 @@ export class Manifests extends React.Component{
       if (field_name == 'script') {
         // the code editor does not emit an event, just the new value
         manifest.script = event;
-        new_md5sum = md5(manifest.script);
+        new_md5sum = MD5(manifest.script);
       } else {
         manifest[field_name] = event.target.value;
       }

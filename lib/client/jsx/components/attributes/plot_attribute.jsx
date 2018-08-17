@@ -67,6 +67,12 @@ class PlotAttribute extends React.Component {
 }
 
 export default connect(
-  null,
+  // map state
+  (state, {attribute: { plot_id }}) => {
+    let plot = selectPlot(state, plot_id);
+    let consignment = plot ? selectConsignment(state, MD5(plot.script)) : null;
+    return { plot, consignment };
+  },
+  // map dispatch
   { requestPlot, requestConsignments }
 )(PlotAttribute);
