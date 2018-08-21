@@ -1,4 +1,4 @@
-require_relative '../lib/models/archimedes'
+require_relative '../../lib/models/archimedes'
 
 describe Archimedes::VectorFunctions do
   it 'computes vector length' do
