@@ -66,7 +66,7 @@ export class ManifestView extends React.Component{
 
   runManifest() {
     let { consignment, requestConsignments, manifest } = this.props;
-    if(!consignment) requestConsignments([manifest]);
+    if(!consignment) requestConsignments([manifest.script]);
   }
 
   updateManifest() {
