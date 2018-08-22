@@ -22,7 +22,7 @@ export class BoxPlotAttribute extends GenericPlotAttribute{
         height: selected_plot.layout.height + 200,
         width: selected_plot.layout.width,
         y_min_max: [0, 1],
-        margins: {top: 40, right: 50, bottom: 100, left: 60},
+        margin: {top: 40, right: 50, bottom: 100, left: 60},
         color_range: ['#cbf2bb', '#46a21f']
       },
       groups

@@ -25,7 +25,7 @@ export class LinePlotAttribute extends GenericPlotAttribute{
         width: selected_plot.layout.width,
         x_min_max,
         y_min_max,
-        margins: {top: 40, right: 50, bottom: 100, left: 60}
+        margin: {top: 40, right: 50, bottom: 100, left: 60}
       },
       lines
     };
@@ -42,12 +42,11 @@ export class LinePlotAttribute extends GenericPlotAttribute{
 }
 
 const mapStateToProps = (state = {}, own_props)=>{
-
   /*
    * Pull the data required for this plot.
    */
   let selected_plot, selected_manifest, selected_consignment = undefined;
-  
+
   selected_plot = state.plots.plotsMap[own_props.attribute.plot_id];
   if(selected_plot != undefined){
     selected_manifest = state.manifests[selected_plot.manifest_id];

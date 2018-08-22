@@ -12,7 +12,7 @@ class BoxGraph extends Component{
 
   render(){
     let {parent_width, plot, groups}=this.props;
-    let {margins, y_min_max, color_range} = plot;
+    let {margin, y_min_max, color_range} = plot;
     let svg_width = parent_width > 800 ? 800 : parent_width;
     let svg_dimensions = {
       width: Math.max(svg_width, 300),
@@ -22,12 +22,12 @@ class BoxGraph extends Component{
     let xScale = this.xScale
       .padding(.8)
       .domain(groups.map(group => group.label))
-      .range([margins.left, svg_dimensions.width - margins.right]);
+      .range([margin.left, svg_dimensions.width - margin.right]);
   
     // scaleLinear type
     let yScale = this.yScale      
       .domain(y_min_max)
-      .range([svg_dimensions.height - margins.bottom, margins.top])
+      .range([svg_dimensions.height - margin.bottom, margin.top])
       .nice();
 
     let svg_props = {
@@ -38,15 +38,15 @@ class BoxGraph extends Component{
     let axis_x_props = {
       orient: 'Bottom',
       scale: xScale,
-      translate: `translate(0, ${svg_dimensions.height - margins.bottom})`,
-      tickSize: svg_dimensions.height - margins.top - margins.bottom
+      translate: `translate(0, ${svg_dimensions.height - margin.bottom})`,
+      tickSize: svg_dimensions.height - margin.top - margin.bottom
     };
 
     let axis_y_props = {
       orient: 'Left',
       scale: yScale,
-      translate: `translate(${margins.left}, 0)`,
-      tickSize: svg_dimensions.width - margins.left - margins.right
+      translate: `translate(${margin.left}, 0)`,
+      tickSize: svg_dimensions.width - margin.left - margin.right
     };
 
     let box_props = {

@@ -113,7 +113,7 @@ class TimelineGraph extends React.Component{
   render(){
     if(this.state.time_domain.length < 1) return null;
     let {time_domain, data, tooltip, zoom_transform} = this.state;
-    let margins = {top: 41, right: 5, bottom: 100, left: 150};
+    let margin = {top: 41, right: 5, bottom: 100, left: 150};
     let svg_dimensions = {
       width: Math.max(this.props.parent_width, 500),
       height: data.length * 24 + 481
@@ -122,13 +122,13 @@ class TimelineGraph extends React.Component{
     //Create time scale.
     let xScale = this.timeScale
       .domain(time_domain)
-      .range([margins.left, svg_dimensions.width - margins.right])
+      .range([margin.left, svg_dimensions.width - margin.right])
       .nice();
 
     let yScale = this.bandScale
       .padding(0.5)
       .domain(data.map(datum => datum.event_id))
-      .range([svg_dimensions.height - margins.bottom, margins.top]);
+      .range([svg_dimensions.height - margin.bottom, margin.top]);
 
     this.zoom.scaleExtent([1, 100])
       .translateExtent([
@@ -144,21 +144,21 @@ class TimelineGraph extends React.Component{
     let xProps = {
       orient: 'Bottom',
       scale: xScale,
-      translate: `translate(0, ${svg_dimensions.height - margins.bottom})`,
-      tickSize: svg_dimensions.height - margins.top - margins.bottom,
+      translate: `translate(0, ${svg_dimensions.height - margin.bottom})`,
+      tickSize: svg_dimensions.height - margin.top - margin.bottom,
       timeformat: "%b '%y"
     };
 
     let yProps = {
       orient: 'Left',
       scale: yScale,
-      translate: `translate(${margins.left}, 0)`,
-      tickSize: svg_dimensions.width - margins.left - margins.right
+      translate: `translate(${margin.left}, 0)`,
+      tickSize: svg_dimensions.width - margin.left - margin.right
     };
 
     let events_props = {
       scales: {xScale, yScale},
-      margins,
+      margin,
       data,
       svg_dimensions,
       showToolTip: this.showToolTip.bind(this),
@@ -181,9 +181,9 @@ class TimelineGraph extends React.Component{
 
     let rect_props = {
       className: 'zoom',
-      width: svg_dimensions.width - margins.right - margins.left,
+      width: svg_dimensions.width - margin.right - margin.left,
       height: svg_dimensions.height,
-      transform: `translate(${margins.left}, ${margins.top})`
+      transform: `translate(${margin.left}, ${margin.top})`
     };
 
     return(

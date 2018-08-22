@@ -7,17 +7,17 @@ class Lines extends Component{
     let {xScale, yScale} = scales;
     let color = d3.scaleOrdinal(d3.schemeCategory10);
     let  linePath = d3.line()
-      .x((d) => (xScale(d.x)))
-      .y((d) => (yScale(d.y)));
+      .x(d=>d.x)
+      .y(d=>d.y);
 
-    let d3_lines = lines.map((line, index) => {
-
+    let d3_lines = lines.map(({name, variables: { x, y} }, index) => {
+      let points = x.map((l,v,i)=>({ x: xScale(x(i)), y: yScale(y(i)) }));
       let path_props = {
         key: `line_${index}`,
         className: 'line',
-        d: linePath(line.points),
+        d: linePath(points),
         fill: 'none',
-        stroke: color(line.label)
+        stroke: color(name)
       };
 
       return <path {...path_props}></path>;

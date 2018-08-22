@@ -7,7 +7,7 @@ class Bars extends Component{
   render(){
     let {
         scales, 
-        margins, 
+        margin, 
         data, 
         svg_dimensions, 
         max_value, 
@@ -27,7 +27,7 @@ class Bars extends Component{
         key: `bar_${index}`,
         x: xScale(datum.id),
         y: yScale(datum.value),
-        height: height - margins.bottom - yScale(datum.value),
+        height: height - margin.bottom - yScale(datum.value),
         width: xScale.bandwidth(),
         fill: colorScale(datum.value),
         // onMouseOver: this.props.showToolTip,

@@ -26,7 +26,7 @@ export class BarGraphAttribute extends GenericPlotAttribute{
       plot: {
         height: selected_plot.layout.height + 100,
         width: selected_plot.layout.width,
-        margins: {top: 40, right: 50, bottom: 100, left: 60},
+        margin: {top: 40, right: 50, bottom: 100, left: 60},
         color_range: ['#cbf2bb', '#46a21f']
       },
     };

@@ -45,7 +45,7 @@ class BarGraph extends Component{
 
   render(){
     let {parent_width, plot}=this.props;
-    let {margins, color_range} = plot;
+    let {margin, color_range} = plot;
     let svg_width = parent_width > 800 ? 800 : parent_width;
     let svg_dimensions = {
       width: Math.max(svg_width, plot.width),
@@ -58,12 +58,12 @@ class BarGraph extends Component{
     let xScale = this.xScale
       .padding(0.5)
       .domain(this.state.data.map(d => d.id))
-      .range([margins.left, svg_dimensions.width - margins.right]);
+      .range([margin.left, svg_dimensions.width - margin.right]);
   
      // scaleLinear type
     let yScale = this.yScale      
       .domain([0, max_value])
-      .range([svg_dimensions.height - margins.bottom, margins.top])
+      .range([svg_dimensions.height - margin.bottom, margin.top])
       .nice();
 
     let svg_props = {
@@ -74,20 +74,20 @@ class BarGraph extends Component{
     let axis_x_props = {
       orient: 'Bottom',
       scale: xScale,
-      translate: `translate(0, ${svg_dimensions.height - margins.bottom})`,
-      tickSize: svg_dimensions.height - margins.top - margins.bottom,
+      translate: `translate(0, ${svg_dimensions.height - margin.bottom})`,
+      tickSize: svg_dimensions.height - margin.top - margin.bottom,
     };
 
     let axis_y_props = {
       orient: 'Left',
       scale: yScale,
-      translate: `translate(${margins.left}, 0)`,
-      tickSize: svg_dimensions.width - margins.left - margins.right,
+      translate: `translate(${margin.left}, 0)`,
+      tickSize: svg_dimensions.width - margin.left - margin.right,
     };
 
     let bars_props = {
       scales: {xScale, yScale},
-      margins,
+      margin,
       data: this.state.data,
       max_value,
       svg_dimensions,
