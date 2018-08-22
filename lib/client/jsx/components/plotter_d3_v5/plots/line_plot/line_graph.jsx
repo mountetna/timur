@@ -4,7 +4,7 @@ import Lines from './lines';
 import Axis from '../../axis';
 import Legend from '../../legend';
 
-class LineGraph extends Component{
+export default class LineGraph extends Component{
   constructor(props){
     super(props);
     this.timeScale = d3.scaleTime();
@@ -12,32 +12,35 @@ class LineGraph extends Component{
   }
 
   render(){
-    let {parent_width, plot, lines}=this.props;
-    let {margins, x_min_max, y_min_max} = plot;
+    let { parent_width, layout, data } = this.props;
+    let { xdomain, ydomain, plot_series } = data;
+    let { margin, height } = layout;
     let svg_width = parent_width > 800 ? 800 : parent_width;
     let svg_dimensions = {
       width: Math.max(svg_width, 300),
-      height: plot.height
+      height
     };
-    
+
+
+
     let color = d3.scaleOrdinal(d3.schemeCategory10);
-    let labels = lines.map(line => {
+    let labels = plot_series.map(series => {
       return {
-        color: color(line.label),
-        text: line.label
+        color: color(series.name),
+        text: series.name
       };
     });
 
     // Create time scale.
     let xScale = this.timeScale
-      .domain(x_min_max)
-      .range([margins.left, svg_dimensions.width - margins.right])
+      .domain(xdomain.values)
+      .range([margin.left, svg_dimensions.width - margin.right])
       .nice();
-  
+
      // scaleLinear type
     let yScale = this.yScale      
-      .domain(y_min_max)
-      .range([svg_dimensions.height - margins.bottom, margins.top])
+      .domain(ydomain.values)
+      .range([svg_dimensions.height - margin.bottom, margin.top])
       .nice();
 
     let svg_props = {
@@ -48,19 +51,19 @@ class LineGraph extends Component{
     let axis_x_props = {
       orient: 'Bottom',
       scale: xScale,
-      translate: `translate(0, ${svg_dimensions.height - margins.bottom})`,
-      tickSize: svg_dimensions.height - margins.top - margins.bottom
+      translate: `translate(0, ${svg_dimensions.height - margin.bottom})`,
+      tickSize: svg_dimensions.height - margin.top - margin.bottom
     };
 
     let axis_y_props = {
       orient: 'Left',
       scale: yScale,
-      translate: `translate(${margins.left}, 0)`,
-      tickSize: svg_dimensions.width - margins.left - margins.right
+      translate: `translate(${margin.left}, 0)`,
+      tickSize: svg_dimensions.width - margin.left - margin.right
     };
 
     let line_props = {
-      lines,
+      lines: plot_series,
       scales: {xScale, yScale}
     };
 
@@ -80,5 +83,3 @@ class LineGraph extends Component{
     );
   }
 }
-
-export default LineGraph;
