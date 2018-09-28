@@ -1,0 +1,63 @@
+// Styles governing a reusable Document
+// view
+
+.document-window {
+  position: relative;
+  font-family: $body_font;
+  .document-view {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    .document-view-header {
+      .document-title {
+        border-bottom: 1px solid #666666;
+        padding-bottom: 10px;
+
+        .document-title-input{
+          border: none;
+          font-size: 1em;
+          width: 300px;
+          color: #111;
+          outline: 1px solid #333;
+          &:disabled {
+            @extend .disabled;
+          }
+        }
+
+        .document-action-btn-group{
+          float: right;
+
+          button {
+            @include timur-button;
+          }
+        }
+
+        .document-status {
+          float: right;
+        }
+      }
+
+      .document-details {
+        font-size: 0.8em;
+        line-height: 25px;
+
+        .document-description {
+          text-align: justify;
+          font-size: 1.2em;
+          margin-left: 0px;
+          margin-top: 0px;
+          width: 100%;
+          resize: vertical;
+          border: 0px;
+          outline: 1px solid #333;
+          &:disabled {
+            @extend .disabled;
+            resize: none;
+          }
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+}
+

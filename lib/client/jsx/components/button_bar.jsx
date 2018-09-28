@@ -6,6 +6,34 @@ import * as React from 'react';
  *   className - can be passed in
  *   buttons - an array of { label, icon, click }
  */
+
+const BUTTONS = {
+  copy: {
+    icon: 'fas fa-copy',
+    label: 'COPY'
+  },
+  remove: {
+    icon: 'fas fa-trash-alt',
+    label: 'DELETE'
+  },
+  edit: {
+    icon: 'fas fa-edit',
+    label: 'EDIT'
+  },
+  run: {
+    icon: 'fas fa-play',
+    label: 'RUN',
+  },
+  save: {
+    icon: 'far fa-save',
+    label: 'SAVE'
+  },
+  cancel: {
+    icon: 'fas fa-ban',
+    label: 'CANCEL'
+  }
+};
+
 export default class ButtonBar extends React.Component{
   render(){
     return(
@@ -21,12 +49,9 @@ export default class ButtonBar extends React.Component{
  * A single button, which displays a text 'label', a Font Awesome 'icon' and
  * responds to 'click'.
  */
-const BarButton = (button)=>{
-  return(
-    <button key={button.label} onClick={button.click}>
-
-      <i className={`${ button.icon }`} aria-hidden='true'></i>
-      {button.label}
-    </button>
-  );
-};
+const BarButton = (button)=>(
+  <button key={button.type} onClick={button.click}>
+    <i className={`${ BUTTONS[button.type].icon }`} aria-hidden='true'></i>
+    {BUTTONS[button.type].label}
+  </button>
+);
