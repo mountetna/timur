@@ -1,24 +1,51 @@
 // Framework libraries.
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
+import { connect } from 'react-redux';
 
-// Class imports.
-import ListMenu from '../list_menu';
-import ManifestView from './manifest_view';
-
-// Module imports.
+import DocumentWindow from '../document/document_window';
+import ManifestScript from './manifest_script';
+import ConsignmentView from './consignment_view';
+import {addTokenUser} from '../../actions/timur_actions';
 import {
-  requestManifests, saveNewManifest, saveManifest, copyManifest, deleteManifest
+  requestManifests, saveNewManifest, saveManifest,
+  copyManifest, deleteManifest, requestConsignments
 } from '../../actions/manifest_actions';
 import { pushLocation } from '../../actions/location_actions';
 import { getAllManifests } from '../../selectors/manifest_selector';
-import { MD5 } from '../../selectors/consignment_selector';
+import { selectConsignment, MD5 } from '../../selectors/consignment_selector';
+
+// Wrapper for consignment selection
+class ManifestWindow extends React.Component {
+  runManifest() {
+    let { consignment, requestConsignments, document } = this.props;
+    if(!consignment) requestConsignments([document.script]);
+  }
+
+  render() {
+    return <DocumentWindow
+      onRun={ this.runManifest.bind(this) }
+      { ...this.props }
+    />
+  }
+}
+
+ManifestWindow = connect(
+  // map state
+  (state = {}, {md5sum})=>({
+    consignment: md5sum && selectConsignment(state, md5sum)
+  }),
+
+  // map dispatch
+  { requestConsignments }
+)(ManifestWindow);
 
 // Main component for viewing/editing manifests.
 export class Manifests extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      editing: false,
+    };
   }
 
   componentDidMount(){
@@ -34,7 +61,6 @@ export class Manifests extends React.Component{
   }
 
   create() {
-    // A manifest with an id of '0' is a new manifest.
     this.selectManifest('new', true);
   }
 
@@ -102,12 +128,14 @@ export class Manifests extends React.Component{
   }
 
   saveManifest() {
-    let { manifest } = this.state;
+    let { manifest, editing } = this.state;
     // A new manifest should have an id set to 0.
     if(manifest.id <= 0)
       this.props.saveNewManifest(manifest,this.setManifest.bind(this));
     else
       this.props.saveManifest(manifest);
+
+    if (editing) this.toggleEdit();
   }
 
   copyManifest() {
@@ -117,68 +145,65 @@ export class Manifests extends React.Component{
 
   deleteManifest() {
     let { manifest } = this.state;
-    this.props.deleteManifest(manifest, () => this.selectManifest(null));
+    if(confirm('Are you sure you want to remove this manifest?')){
+      this.props.deleteManifest(manifest, () => this.selectManifest(0));
+    }
   }
 
   revertManifest() {
-    let { manifest: { id } } = this.state;
+    let { manifest: { id }, editing } = this.state;
 
     if (id > 0)
       this.selectManifest(id);
     else
       this.selectManifest(null);
+
+    if (editing) this.toggleEdit();
+  }
+
+  toggleEdit(){
+    this.setState({
+      editing: (!this.state.editing)
+    });
   }
 
   render(){
-    let { sections, is_admin, component_name } = this.props;
-    let { manifest, md5sum } = this.state;
+    let { manifests, is_admin, component_name } = this.props;
+    let { manifest, md5sum, editing } = this.state;
 
     return(
-      <div className='manifest-group'>
-        <div className='left-column-group'>
-          <ListMenu name='Manifest'
-            create={this.create.bind(this)}
-            select={this.selectManifest.bind(this)}
-            sections={sections}/>
-        </div>
-        <div className='right-column-group'>
-          <ManifestView
-            force_edit={ manifest && manifest.id == 0 }
-            update={ this.updateField.bind(this) }
-            revert={ this.revertManifest.bind(this) }
-            save={ this.saveManifest.bind(this) }
-            copy={ this.copyManifest.bind(this) }
-            remove={ this.deleteManifest.bind(this) }
-            md5sum={ md5sum }
-            manifest={ manifest } is_admin={ is_admin } />
-        </div>
-      </div>
+      <ManifestWindow
+        md5sum={ md5sum }
+        documentType='manifest'
+        editing={ editing }
+        document={ manifest }
+        documents={manifests}
+        onCreate={this.create.bind(this)}
+        onSelect={this.selectManifest.bind(this)}
+        onUpdate={ this.updateField.bind(this) }
+        onEdit={ this.toggleEdit.bind(this) }
+        onCancel={ this.revertManifest.bind(this) }
+        onSave={ this.saveManifest.bind(this) }
+        onCopy={ this.copyManifest.bind(this) }
+        onRemove={ this.deleteManifest.bind(this) } >
+        <ManifestScript
+          script={manifest && manifest.script}
+          is_editing={editing}
+          onChange={ this.updateField.bind(this)('script') }/>
+        <ConsignmentView md5sum={md5sum}/>
+      </ManifestWindow>
     );
   }
 }
 
-const accessFilter = (access, manifests)=>{
-  return manifests.filter(m => m.access == access).sort((a,b) => a > b);
-};
-
-
-export const ManifestsContainer = ReactRedux.connect(
+export const ManifestsContainer = connect(
   // map state
-  (state)=>{
-    let manifests = getAllManifests(state);
-    let sections = {
-      Public: accessFilter('public', manifests),
-      Private: accessFilter('private', manifests)
-    };
-
-    return {
-      sections,
-      manifests
-    };
-  },
+  (state)=>({
+    manifests: getAllManifests(state)
+  }),
   // map dispatch
   {
-    requestManifests, saveNewManifest, saveManifest, copyManifest, deleteManifest,
-    pushLocation
+    requestManifests, saveNewManifest, saveManifest, copyManifest, deleteManifest, requestConsignments,
+    pushLocation, addTokenUser
   }
 )(Manifests);
