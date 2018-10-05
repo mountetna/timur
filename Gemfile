@@ -1,8 +1,5 @@
 source 'https://rubygems.org'
 
-# utility library
-gem 'extlib'
-
 # etna application/server gem
 gem 'etna'
 
