@@ -56,7 +56,13 @@ module Archimedes
 
     def [] idx
       if idx.is_a?(Numeric)
-        @vector[idx][1]
+        idx >= 0 && idx < @vector.length ? @vector[idx][1] : nil
+      elsif idx.is_a?(Vector)
+        Vector.new(
+          idx.map do |l,i|
+            i >= 0 && i < @vector.length ? @vector[i] : nil
+          end.compact
+        )
       else
         label_index[idx] ?  @vector[ label_index[idx] ][1] : nil
       end

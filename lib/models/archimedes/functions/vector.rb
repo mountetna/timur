@@ -1,7 +1,7 @@
 module Archimedes
   # A general grab-bag class for functions that don't merit their own
   # class
-  class Default < Archimedes::FunctionCollection
+  class VectorFunctions < Archimedes::FunctionCollection
     def length(vector)
       vector.length
     end
@@ -52,15 +52,33 @@ module Archimedes
       Vector.new(labels.to_values.zip(vector.to_values))
     end
 
+    def labels(vector)
+      Vector.new(vector.map {|l,v| [ nil, l ]})
+    end
+
+    def rep(vector,times)
+      labels = vector.to_labels
+      values = vector.to_values
+      Vector.new((labels*times).zip(values*times))
+    end
+
+    def join(vector,sep="")
+      vector.to_values.join(sep)
+    end
+
+    def seq(start,stop,interval=1)
+      Vector.new((start..stop).step(interval).map{|i| [nil,i]})
+    end
+
     def concat(*vectors)
       vectors.reduce do |summ, vec|
         summ = summ ? summ.concat(vec) : vec
       end
     end
 
-    def log(value, base=10)
+    def log(value, base=Math::E)
       if value.is_a?(Archimedes::Matrix)
-        Rtemis.instance.call(:log, value)
+        Rtemis.instance.call(:log, value, base)
       else
         Vector.op(value) {|v| Math.log(v,base) }
       end

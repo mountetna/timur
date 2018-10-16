@@ -1,4 +1,4 @@
-require_relative '../lib/models/archimedes'
+require_relative '../../lib/models/archimedes'
 
 describe Archimedes::Matrix do
   it "should create a matrix with bind('rows/cols',M,M,V,V)" do
@@ -126,5 +126,16 @@ describe Archimedes::Matrix do
     )
     expect(payload['rowsum'].to_values).to eq([22,26,30])
     expect(payload['colsum'].to_values).to eq([6,15,24,33])
+  end
+  it "extracs rownames and colnames" do
+    payload = run_script(
+     "@matrix = bind('cols', [
+          a: [ x: 1, y: 2, z: 3 ], b: [ 4, 5, 6 ], c: [ 7, 8, 9 ], d: [ 10, 11, 12 ]
+        ])
+      @rownames = rownames(@matrix)
+      @colnames = colnames(@matrix)"
+    )
+    expect(payload['rownames'].to_values).to eq(['x','y','z'])
+    expect(payload['colnames'].to_values).to eq(['a','b','c','d'])
   end
 end

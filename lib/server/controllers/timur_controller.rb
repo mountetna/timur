@@ -25,14 +25,6 @@ class Timur
       @token ||= @request.cookies[Timur.instance.config(:token_name)]
     end
 
-    def janus_login_path(refer)
-      uri = URI(
-        Rails.application.secrets.janus_addr.chomp('/') + '/login'
-      )
-      uri.query = URI.encode_www_form(refer: refer)
-      return uri.to_s
-    end
-
     def current_user
       @current_user ||= User.find_or_create(email: @user.email) do |user|
         user.name = "#{@user.first} #{@user.last}"
