@@ -1,5 +1,5 @@
-export default {
- 8:{
+export const manifestStore = [
+ {
    id:8,
    name:"manifest1",
    description:"private manifest",
@@ -26,7 +26,7 @@ export default {
     },
    is_editable:true
   },
- 9:{
+  {
    id:9,
    name:"manifest2",
    description:"public manifest",
@@ -53,7 +53,7 @@ export default {
     },
    is_editable:true
   },
- 10:{
+  {
    id:10,
    name:"new_manifest",
    description:"new new",
@@ -75,7 +75,7 @@ export default {
     },
    is_editable:true
   },
- 11:{
+  {
    id:11,
    name:"manifest_for_plot",
    description:"for plot",
@@ -102,7 +102,7 @@ export default {
     },
    is_editable:true
   }
-};
+];
 
 export const manifest = {
   id:16,

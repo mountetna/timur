@@ -64,7 +64,7 @@ export class Manifests extends React.Component{
     this.selectManifest('new', true);
   }
 
-  setManifest({manifest}) {
+  setManifest(manifest) {
     this.selectManifest(manifest.id)
   }
 
