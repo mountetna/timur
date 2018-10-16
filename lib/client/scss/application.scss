@@ -11,6 +11,9 @@
  * file per style scope.
  */
 
+@import "~code-mirror/codemirror";
+@import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen:400,700);
+
 @import "globals";
 @import "button";
 @import "navbar";
