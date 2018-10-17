@@ -40,7 +40,7 @@ ManifestWindow = connect(
 )(ManifestWindow);
 
 // Main component for viewing/editing manifests.
-export class Manifests extends React.Component{
+class Manifests extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -196,7 +196,7 @@ export class Manifests extends React.Component{
   }
 }
 
-export const ManifestsContainer = connect(
+export default connect(
   // map state
   (state)=>({
     manifests: getAllManifests(state)
