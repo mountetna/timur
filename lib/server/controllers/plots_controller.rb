@@ -43,7 +43,7 @@ class PlotsController < Timur::Controller
 
     plot.update_allowed(@params)
 
-    success('ok')
+    success_json(plot.to_hash)
   end
 
   def destroy
