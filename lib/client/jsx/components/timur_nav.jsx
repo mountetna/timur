@@ -4,8 +4,8 @@ import * as ReactRedux from 'react-redux';
 
 import {IdentifierSearchContainer as IdentifierSearch} from './identifier_search';
 import {HelpContainer as Help} from './help';
-import * as TimurActions from '../actions/timur_actions';
 import Link from './link';
+import { selectUser } from '../selectors/timur_selector';
 
 export class TimurNav extends React.Component{
   constructor(props){
@@ -55,7 +55,8 @@ export class TimurNav extends React.Component{
 
   render(){
 
-    let login = this.props.user;
+    let { user } = this.props;
+    let login = user ? `${user.first} ${user.last}` : '';
     let heading = <span>{'Timur'}<b>{' : '}</b>{'Data Browser'}</span>;
     let logo_id = 'normal';
 
@@ -99,22 +100,6 @@ export class TimurNav extends React.Component{
   }
 }
 
-const mapStateToProps = (state = {}, own_props)=>{
-  return {
-    helpShown: state.timur.help_shown,
-    exchanges: state.exchanges
-  };
-};
-
-const mapDispatchToProps = (dispatch, own_props)=>{
-  return {
-    toggleConfig: (text)=>{
-      dispatch(TimurActions.toggleConfig(text));
-    }
-  };
-};
-
 export const TimurNavContainer = ReactRedux.connect(
-  mapStateToProps,
-  mapDispatchToProps
+  (state) => ({exchanges: state.exchanges, user: selectUser(state)})
 )(TimurNav);
