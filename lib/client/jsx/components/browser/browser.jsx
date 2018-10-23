@@ -34,6 +34,7 @@ import {
   getAttributes,
   selectView
 } from '../../selectors/tab_selector';
+import { selectUserProjectRole } from '../../selectors/timur_selector';
 
 export class Browser extends React.Component{
   constructor(props){
@@ -175,7 +176,8 @@ export class Browser extends React.Component{
 
   render(){
     let {mode, current_tab_index} = this.state;
-    let {can_edit, revision, view, template, doc, model_name, record_name} = this.props;
+    let {role, revision, view, template, doc, model_name, record_name} = this.props;
+    let can_edit = role == 'administrator' || role == 'editor';
 
     // Render an empty view if there is no view data yet.
     if(!view || !template || !doc) return this.renderEmptyView();
@@ -230,12 +232,14 @@ export const BrowserContainer = connect(
     let doc = magma.document(model_name, record_name);
     let revision = magma.revision(model_name, record_name) || {};
     let view = selectView(state, model_name);
+    let role = selectUserProjectRole(state);
 
     return {
       template,
       revision,
       view,
-      doc
+      doc,
+      role
     };
   },
   // map dispatch
