@@ -6,6 +6,8 @@ import DocumentWindow from '../document/document_window';
 import ListMenu from '../list_menu';
 import ManifestScript from '../manifest/manifest_script';
 import ConsignmentView from '../manifest/consignment_view';
+import PlotLayout from './plot_layout';
+import PlotSeries from './plot_series';
 
 import {
     requestManifests, selectManifest, requestConsignmentsByManifestId
@@ -178,10 +180,17 @@ class Plotter extends React.Component{
 
         onCreate={this.createPlot.bind(this)}
         onSelect={this.selectPlot.bind(this)} >
+        Manifest:
         <ManifestScript
           script={ plot && plot.script }
           is_editing={ editing }
           onChange={ this.updateField.bind(this)('script') }/>
+        Layout:
+        <PlotLayout/>
+        Series:
+        <span> + add series </span>
+
+        <PlotSeries/>
       </DocumentWindow>
     );
   }

@@ -1,37 +1,29 @@
 @import 'globals';
 
-.plotter-group{
+.plot-window {
+  .CodeMirror {
+    max-height: 100px;
+  }
+}
+
+.plotter-group {
   position: relative;
   font-family: $body_font;
 }
 
-.plotter-view-group{
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.plotter-action-btn-group{
-  float: right;
-}
-
-.plotter-action-btn-group button{
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-.plotter-add-btn{
+.plotter-add-btn {
   float: right;
   cursor: pointer;
   margin-right: 0px
 }
 
-.plotter-form-title{
+.plotter-form-title {
   border-bottom: 1px solid #666666;
   margin-top: 5px;
   padding-bottom: 10px;
 }
 
-.plotter-form-title-input{
+.plotter-form-title-input {
   border: none;
   font-size: 1em;
   margin-left: 10px;

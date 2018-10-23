@@ -1,4 +1,8 @@
-@import 'globals';
+.manifest-window {
+  .CodeMirror {
+    max-height: 200px;
+  }
+}
 
 .manifest-script {
   &.editing {
@@ -9,7 +13,6 @@
   }
   border-top: 1px solid #888;
   .CodeMirror {
-    max-height: 200px;
     background: #fafffa;
   }
   .cm-comment { color: #888; }

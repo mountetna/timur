@@ -23,12 +23,12 @@ export default class DocumentWindow extends React.Component{
     };
 
     return(
-      <div className='document-window'>
+      <div className={ `document-window ${documentType}-window` }>
         <div className='left-column-group'>
           <ListMenu name={ documentType }
-            create={onCreate}
-            select={onSelect}
-            sections={sections}/>
+            create={ onCreate }
+            select={ onSelect }
+            sections={ sections }/>
         </div>
         <div className='right-column-group'>
           <DocumentView
