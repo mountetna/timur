@@ -36,7 +36,7 @@ import {
 } from '../../selectors/tab_selector';
 import { selectUserProjectRole } from '../../selectors/timur_selector';
 
-export class Browser extends React.Component{
+class Browser extends React.Component{
   constructor(props){
     super(props);
 
@@ -222,9 +222,7 @@ export class Browser extends React.Component{
   }
 }
 
-
-
-export const BrowserContainer = connect(
+export default connect(
   // map state
   (state = {}, {model_name, record_name})=>{
     let magma = new Magma(state);

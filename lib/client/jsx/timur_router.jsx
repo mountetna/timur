@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 
 // Components.
 import {ManifestsContainer as Manifests} from './components/manifest/manifests';
-import {BrowserContainer as Browser} from './components/browser/browser';
+import Browser from './components/browser/browser';
 import {PlotterContainer as Plotter} from './components/plotter/plotter';
 import {HomePageContainer as HomePage} from './components/home_page';
-import {TimurNavContainer as TimurNav} from './components/timur_nav';
-import {MessagesContainer as Messages} from './components/messages';
+import TimurNav from './components/timur_nav';
+import Messages from './components/messages';
 
 import { showMessages } from './actions/message_actions';
 import { updateLocation } from './actions/location_actions';

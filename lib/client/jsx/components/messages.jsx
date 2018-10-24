@@ -1,13 +1,13 @@
 // Framework libraries.
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
+import { connect } from 'react-redux';
 
 import { dismissMessages } from '../actions/message_actions';
 import markdown from '../utils/markdown';
 
 const sanitize = (string) => string.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
-export class Messages extends React.Component{
+class Messages extends React.Component{
   constructor(props){
     super(props);
 
@@ -73,15 +73,8 @@ export class Messages extends React.Component{
   }
 }
 
-const mapStateToProps = (state = {}, own_props)=>{
-  return {
-    messages: state.messages
-  };
-};
 
-const mapDispatchToProps = { dismissMessages };
-
-export const MessagesContainer = ReactRedux.connect(
-  mapStateToProps,
-  mapDispatchToProps
+export default connect(
+ ({messages})=>({messages}),
+ { dismissMessages }
 )(Messages);

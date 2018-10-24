@@ -1,13 +1,13 @@
 // Framework libraries.
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
+import { connect } from 'react-redux';
 
 import {IdentifierSearchContainer as IdentifierSearch} from './identifier_search';
 import {HelpContainer as Help} from './help';
 import Link from './link';
 import { selectUser } from '../selectors/timur_selector';
 
-export class TimurNav extends React.Component{
+class TimurNav extends React.Component{
   constructor(props){
     super(props);
     this.state = {};
@@ -100,6 +100,6 @@ export class TimurNav extends React.Component{
   }
 }
 
-export const TimurNavContainer = ReactRedux.connect(
+export default connect(
   (state) => ({exchanges: state.exchanges, user: selectUser(state)})
 )(TimurNav);
