@@ -1,25 +1,23 @@
 // Framework libraries.
 import * as React from 'react';
+import Link from './link';
 
 export default class MagmaLink extends React.Component{
 
   render(){
-    let route_args = [
-      TIMUR_CONFIG.project_name,
-      this.props.model,
-      encodeURIComponent(this.props.link)
-    ];
-
-    let link_props = {
-      'className': 'link',
-      'href': Routes.browse_model_path(...route_args)
-    };
+    let { link, model } = this.props;
 
     return(
-      <a {...link_props}>
-
-        {this.props.link}
-      </a>
+      <Link
+        link={
+          Routes.browse_model_path(
+            TIMUR_CONFIG.project_name,
+            model,
+            encodeURIComponent(link)
+          )
+        }>
+        { link }
+      </Link>
     );
   }
 }

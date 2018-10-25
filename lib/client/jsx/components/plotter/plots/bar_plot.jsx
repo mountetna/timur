@@ -4,6 +4,7 @@ import * as D3Scale from '../../../utils/d3_scale';
 import Legend from '../legend';
 import PlotCanvas from '../plot_canvas';
 import YAxis from '../yaxis';
+import Link from '../../link';
 
 export default class BarPlot extends React.Component{
   constructor(props){
@@ -146,7 +147,8 @@ export class Dot extends React.Component{
       similar && 'similar'
     ].filter(_=>_).join(' ');
 
-    return <a xlinkHref={
+    return <Link
+      link={
       Routes.browse_model_path(TIMUR_CONFIG.project_name, model_name, name)
     }>
         <circle className={classes}
@@ -173,6 +175,6 @@ export class Dot extends React.Component{
             { name }
           </text> : null
         }
-      </a>;
+      </Link>;
   }
 }

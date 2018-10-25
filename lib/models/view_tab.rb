@@ -12,19 +12,17 @@ class ViewTab < Sequel::Model
 
     # Return the hashed data object.
     return {
-      views: {
-        model_name => {
-          model_name: model_name,
-          project_name: project_name,
-          tabs: Hash[
-            tabs.map do |tab|
-              [
-                tab.name,
-                tab.to_hash
-              ]
-            end
-          ]
-        }
+      view: {
+        model_name: model_name,
+        project_name: project_name,
+        tabs: Hash[
+          tabs.map do |tab|
+            [
+              tab.name,
+              tab.to_hash
+            ]
+          end
+        ]
       }
     }
   end
@@ -42,7 +40,7 @@ class ViewTab < Sequel::Model
 
   def self.generate_default_tab(project_name, model_name)
     return {
-      views: Hash[
+      view: Hash[
         model_name,
         {
           project_name: project_name,

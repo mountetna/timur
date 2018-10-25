@@ -13,7 +13,6 @@
     "d3": "^3.5.17",
     "d3-ease": "^1.0.3",
     "downloadjs": "^1.4.7",
-    "font-awesome": "^4.7.0",
     "js-cookie": "^2.2.0",
     "json2csv": "^4.0.1",
     "marked": "^0.3.17",
@@ -56,6 +55,7 @@
     "testMatch": [
       "**/test/javascript/**/?(*.)(spec|test).js?(x)"
     ],
+    "testURL": "http://www.fake.com",
     "collectCoverageFrom": [
       "lib/client/jsx/**/*.js?(x)"
     ],

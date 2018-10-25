@@ -11,7 +11,7 @@
 
 // Framework libraries.
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
+import { connect } from 'react-redux';
 
 // Class imports.
 import Magma from '../../magma';
@@ -21,118 +21,152 @@ import {TabBarContainer as TabBar} from '../tab_bar';
 import BrowserTab from './browser_tab';
 
 // Module imports.
-import * as ManifestActions from '../../actions/manifest_actions';
-import * as PlotActions from '../../actions/plot_actions';
-import * as TimurActions from '../../actions/timur_actions';
-import * as MagmaActions from '../../actions/magma_actions';
-import * as TabSelector from '../../selectors/tab_selector';
+import { requestManifests } from '../../actions/manifest_actions';
+import { requestPlots } from '../../actions/plot_actions';
+import { setLocation } from '../../actions/location_actions';
+import { requestView } from '../../actions/timur_actions';
+import {
+  sendRevisions, discardRevision, requestDocuments, requestAnswer
+} from '../../actions/magma_actions';
+import {
+  interleaveAttributes,
+  getTabByIndexOrder,
+  getAttributes,
+  selectView
+} from '../../selectors/tab_selector';
+import { selectUserProjectRole } from '../../selectors/timur_selector';
 
-export class Browser extends React.Component{
-
+class Browser extends React.Component{
   constructor(props){
     super(props);
 
     this.state = {
       mode: 'loading',
-      current_tab_index: 0,
-      current_tab_name: 'overview'
+      current_tab_index: 0
     };
   }
 
   componentDidMount(){
-    let {model_name, record_name} = this.props;
-    let onSuccess = ()=>{this.setState({mode: 'browse'})};
+    let { requestManifests, requestPlots } = this.props;
 
-    this.props.requestManifests();
-    this.props.requestPlots();
-    this.props.requestView(model_name, record_name, 'overview', onSuccess.bind(this));
+    requestManifests();
+    requestPlots();
+    this.requestData();
   }
 
-  camelize(str){
+  requestData() {
+    let {
+      model_name, record_name, view,
+      setLocation, requestAnswer, requestView
+    } = this.props;
+
+    if (!model_name && !record_name) {
+      // ask magma for the project name
+      requestAnswer(
+        { query: [ 'project', '::first', '::identifier' ] },
+
+        // redirect there
+        ({answer}) => setLocation(
+          Routes.browse_model_path(
+            TIMUR_CONFIG.project_name,
+            'project',
+            answer
+          )
+        )
+      );
+    } else if (!view) {
+      // we are told the model and record name, get the view
+      requestView(
+        model_name, record_name, 'overview', this.requestViewDocuments.bind(this, 'overview')
+      )
+    } else {
+      this.browseMode();
+    }
+  }
+
+  requestViewDocuments(tab_name,response) {
+    let { view } = response;
+    if (!tab_name in view.tabs) tab_name = 'default';
+    this.requestTabDocuments(view.tabs[tab_name])
+  }
+
+  requestTabDocuments(tab) {
+    if (!tab) return;
+
+    let { requestDocuments, model_name, record_name, doc, template } = this.props;
+    let exchange_name = `tab ${tab.name} for ${model_name} ${record_name}`;
+
+    let attribute_names = getAttributes(tab);
+
+    let hasAttributes = doc && template && Array.isArray(attribute_names) && attribute_names.every(
+      attr_name => !(attr_name in template.attributes) || (attr_name in doc)
+    );
+    // ensure attribute data is present in the document
+    if (!hasAttributes) {
+      // or else make a new request
+      requestDocuments({
+        model_name, record_names: [record_name],
+        attribute_names,
+        exchange_name,
+        success: this.browseMode.bind(this)
+      });
+    }
+  }
+
+
+  camelize(str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index){
       return letter.toUpperCase();
     }).replace(/\s+/g, '');
   }
 
-  headerHandler(action){
-    switch(action){
-      case 'cancel':
+  setMode(mode) { this.setState({mode}) }
+  editMode() { this.setMode('edit') }
+  browseMode() { this.setMode('browse') }
 
-        this.setState({mode: 'browse'});
-        this.props.discardRevision(
-          this.props.record_name,
-          this.props.model_name
-        );
-        return;
-      case 'approve':
+  cancelEdits() {
+    let { discardRevision, record_name, model_name } = this.props;
 
-        if(this.props.has_revisions){
-
-          this.setState({mode: 'submit'});
-          this.props.sendRevisions(
-            this.props.model_name,
-            {[this.props.record_name] : this.props.revision},
-            ()=>this.setState({mode: 'browse'}),
-            ()=>this.setState({mode: 'edit'})
-          );
-        }
-        else{
-
-          this.setState({mode: 'browse'});
-          this.props.discardRevision(
-            this.props.record_name,
-            this.props.model_name
-          );
-        }
-        return;
-      case 'edit':
-
-        this.setState({mode: 'edit'});
-        return;
-    }
+    this.browseMode();
+    discardRevision(
+      record_name,
+      model_name
+    );
   }
 
-  tabSelectionHandler(index_order){
+  postEdits() {
+    let { revision, model_name, record_name, sendRevisions } = this.props;
+    this.setMode('submit');
+    sendRevisions(
+      model_name,
+      {[record_name] : revision},
+      this.browseMode.bind(this),
+      this.editMode.bind(this)
+    );
+  }
 
+  approveEdits() {
+    let { revision, model_name, record_name, sendRevisions } = this.props;
+    if (Object.keys(revision).length > 0) this.postEdits();
+    else this.cancelEdits();
+  }
+
+  selectTab(index_order) {
     let {requestDocuments, model_name, record_name, view, doc} = this.props;
 
     // Set the new requested tab state.
     this.setState({current_tab_index: index_order});
 
-    // If the current tab data isn't in the store then request the tab data.
-    tab_check_loop:
-    for(let tab_name in view.tabs){
-
-      // Check for the matching tab's index.
-      if(view.tabs[tab_name].index_order == index_order){
-
-        /*
-         * If the attributes from the tab are already present in the model's
-         * document then we break.
-         */
-        let tab_attr = TabSelector.getAttributes(view.tabs[tab_name]);
-        for(let attr_name in doc){
-          if(tab_attr.includes(attr_name)) break tab_check_loop;
-        }
-
-        /*
-         * If the attributes required from the tab are NOT present in the
-         * model's document then we need to request that data.
-         */
-        requestDocuments(model_name, record_name, tab_attr);
-        break tab_check_loop;
-      }
-    }
+    this.requestTabDocuments(
+      getTabByIndexOrder(view, index_order)
+    )
   }
 
-  renderEmpytView(){
+  renderEmptyView(){
     return(
       <div className='browser'>
-
         <div id='loader-container'>
-
           <div className='loader'>
-
             {'Loading...'}
           </div>
         </div>
@@ -141,131 +175,74 @@ export class Browser extends React.Component{
   }
 
   render(){
-
     let {mode, current_tab_index} = this.state;
-    let {can_edit, revision, view, template, doc} = this.props;
+    let {role, revision, view, template, doc, model_name, record_name} = this.props;
+    let can_edit = role == 'administrator' || role == 'editor';
 
     // Render an empty view if there is no view data yet.
-    if(!view || !template || !doc) return this.renderEmpytView();
-
-    let header_props = {
-      mode,
-      can_edit,
-      handler: this.headerHandler.bind(this)
-    };
-
-    let tab_bar_props = {
-      mode,
-      revision,
-      view,
-      current_tab_index,
-      clickTab: this.tabSelectionHandler.bind(this)
-    };
+    if(!view || !template || !doc) return this.renderEmptyView();
 
     // Select the current tab data from by the 'current_tab_index'.
-    let tab = TabSelector.getTabByIndexOrder(view.tabs, current_tab_index);
-
-    /*
-     * Add the attribute details from the Magma model into the Timur view model.
-     * and append the actual data to it.
-     */
-    tab = TabSelector.interleaveAttributes(tab, template);
-
-    var browser_tab_props = {
-      template,
-      doc,
-      revision,
-      mode,
-      tab
-    };
+    let tab = interleaveAttributes(
+      getTabByIndexOrder(view, current_tab_index),
+      template
+    );
 
     // Set at 'skin' on the browser styling.
     let skin = 'browser';
-    if(this.state.mode == 'browse') skin = 'browser '+this.props.model_name;
+    if(mode == 'browse') skin = 'browser '+model_name;
 
     return(
       <div className={skin}>
-
-        <Header {...header_props}>
-
+        <Header
+          onEdit={ mode == 'browse' && can_edit && this.editMode.bind(this) }
+          onApprove={mode == 'edit' && this.approveEdits.bind(this) }
+          onCancel={ mode == 'edit' && this.cancelEdits.bind(this) }
+          onLoad={mode=='submit'}>
           <div className='model-name'>
-
-            {this.camelize(this.props.model_name)}
+            {this.camelize(model_name)}
           </div>
           <div className='record-name'>
-
-            {this.props.record_name}
+            {record_name}
           </div>
           <Help info='edit' />
         </Header>
-        <TabBar {...tab_bar_props} />
-        <BrowserTab {...browser_tab_props} />
+        <TabBar
+          mode={mode}
+          revision={revision}
+          view={view}
+          current_tab_index={current_tab_index}
+          onClick={this.selectTab.bind(this)}
+        />
+        <BrowserTab {
+            ...{ template, doc, revision, mode, tab }
+          } />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state = {}, own_props)=>{
+export default connect(
+  // map state
+  (state = {}, {model_name, record_name})=>{
+    let magma = new Magma(state);
+    let template = magma.template(model_name);
+    let doc = magma.document(model_name, record_name);
+    let revision = magma.revision(model_name, record_name) || {};
+    let view = selectView(state, model_name);
+    let role = selectUserProjectRole(state);
 
-  let {model_name, record_name} = own_props;
-
-  let magma = new Magma(state);
-  let template = magma.template(model_name);
-  let doc = magma.document(model_name, record_name);
-  let revision = magma.revision(model_name, record_name) || {};
-  let view = (state.timur.views ? state.timur.views[model_name] : null);
-
-  //let tab = getTabByIndexOrder(view.tabs, 0);
-
-  return {
-    template,
-    revision,
-    view,
-    doc,
-    has_revisions: (Object.keys(revision).length > 0)
-  };
-};
-
-const mapDispatchToProps = (dispatch, own_props)=>{
-  return {
-    requestPlots: ()=>{
-      dispatch(PlotActions.requestPlots());
-    },
-
-    requestManifests: ()=>{
-      dispatch(ManifestActions.requestManifests());
-    },
-
-    requestView: (model_name, record_name, tab_name, onSuccess)=>{
-      dispatch(TimurActions.requestView(
-        model_name,
-        record_name,
-        tab_name,
-        onSuccess
-      ));
-    },
-
-    requestDocuments: (model_name, record_name, attribute_names)=>{
-      let exchange_name = `${model_name} ${record_name}`;
-      dispatch(MagmaActions.requestDocuments({
-        model_name,
-        exchange_name,
-        record_names: [record_name],
-        attribute_names
-      }));
-    },
-
-    discardRevision: ()=>{
-      dispatch(MagmaActions.discardRevision());
-    },
-
-    sendRevisions: (model_name, revisions, success, error)=>{
-      dispatch(MagmaActions.sendRevisions(model_name,revisions,success,error));
-    }
-  };
-};
-
-export const BrowserContainer = ReactRedux.connect(
-  mapStateToProps,
-  mapDispatchToProps
+    return {
+      template,
+      revision,
+      view,
+      doc,
+      role
+    };
+  },
+  // map dispatch
+  {
+    requestPlots, requestManifests, requestView, requestAnswer,
+    requestDocuments, discardRevision, sendRevisions, setLocation
+  }
 )(Browser);

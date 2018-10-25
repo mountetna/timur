@@ -25,11 +25,6 @@ describe 'ManifestsController' do
       get_manifest(nil, :non_user)
       expect(last_response.status).to eq(403)
     end
-    it 'returns the manifest view' do
-      get_manifest(nil, :viewer)
-      expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/mode: 'manifests'/)
-    end
   end
 
   context '#fetch' do
