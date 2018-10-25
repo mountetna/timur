@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 // Components.
 import {ManifestsContainer as Manifests} from './components/manifest/manifests';
 import Browser from './components/browser/browser';
-import {PlotterContainer as Plotter} from './components/plotter/plotter';
+import {PlotterContainer as Plotter} from './components/plotter_d3_v5/plotter';
 import {HomePageContainer as HomePage} from './components/home_page';
 import TimurNav from './components/timur_nav';
 import Messages from './components/messages';
