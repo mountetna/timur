@@ -36,4 +36,15 @@ class Plot < Sequel::Model
 
     update(plot_params)
   end
+
+
+  def to_hash
+    [ :id, :name, :access, :configuration, :created_at,
+      :plot_type, :project, :script ].map do |key|
+      [ key, self[key] ]
+    end.to_h.merge(
+      updated_at: self.updated_at.iso8601,
+      user: user.name
+    )
+  end
 end
