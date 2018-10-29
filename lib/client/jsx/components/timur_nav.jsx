@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {IdentifierSearchContainer as IdentifierSearch} from './identifier_search';
 import {HelpContainer as Help} from './help';
 import Link from './link';
-import { selectUser } from '../selectors/timur_selector';
+import { selectUser } from '../selectors/user_selector';
 
 class TimurNav extends React.Component{
   constructor(props){

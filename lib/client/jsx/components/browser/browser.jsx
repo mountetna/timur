@@ -24,7 +24,7 @@ import BrowserTab from './browser_tab';
 import { requestManifests } from '../../actions/manifest_actions';
 import { requestPlots } from '../../actions/plot_actions';
 import { setLocation } from '../../actions/location_actions';
-import { requestView } from '../../actions/timur_actions';
+import { requestView } from '../../actions/view_actions';
 import {
   sendRevisions, discardRevision, requestDocuments, requestAnswer
 } from '../../actions/magma_actions';
@@ -34,7 +34,7 @@ import {
   getAttributes,
   selectView
 } from '../../selectors/tab_selector';
-import { selectUserProjectRole } from '../../selectors/timur_selector';
+import { selectUserProjectRole } from '../../selectors/user_selector';
 
 class Browser extends React.Component{
   constructor(props){
