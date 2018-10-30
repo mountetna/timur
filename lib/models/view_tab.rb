@@ -7,9 +7,6 @@ class ViewTab < Sequel::Model
       .order(:index_order)
       .all
 
-    # Return an empty view data object if there are no entries.
-    return generate_default_tab(project_name, model_name) if tabs.empty?
-
     # Return the hashed data object.
     return {
       view: {
@@ -35,38 +32,6 @@ class ViewTab < Sequel::Model
       description: description,
       index_order: index_order,
       panes: Hash[view_panes.map { |p| [ p.name, p.to_hash ] }]
-    }
-  end
-
-  def self.generate_default_tab(project_name, model_name)
-    return {
-      view: Hash[
-        model_name,
-        {
-          project_name: project_name,
-          model_name: model_name,
-          tabs: {
-            default: {
-              id: nil,
-              name: 'default',
-              title: '',
-              description: '',
-              index_order: 0,
-              panes: {
-                default: {
-                  id: nil,
-                  name: 'default',
-                  title: '',
-                  description: '',
-                  index_order: 0,
-                  attributes: { # Here we should return the default attributes for the model.
-                  }
-                }
-              }
-            }
-          }
-        }
-      ]
     }
   end
 end
