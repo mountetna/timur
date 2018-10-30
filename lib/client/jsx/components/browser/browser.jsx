@@ -16,7 +16,6 @@ import { connect } from 'react-redux';
 // Class imports.
 import Magma from '../../magma';
 import Header from '../header';
-import {HelpContainer as Help} from '../help';
 import {TabBarContainer as TabBar} from '../tab_bar';
 import BrowserTab from './browser_tab';
 
@@ -205,7 +204,6 @@ class Browser extends React.Component{
           <div className='record-name'>
             {record_name}
           </div>
-          <Help info='edit' />
         </Header>
         <TabBar
           mode={mode}

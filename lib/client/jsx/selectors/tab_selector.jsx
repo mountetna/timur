@@ -1,6 +1,6 @@
 export const selectView = (state, model_name) => (
-  state.timur.views
-  ? state.timur.views[model_name]
+  state.views
+  ? state.views[model_name]
   : null
 )
 
