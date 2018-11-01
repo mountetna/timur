@@ -1,7 +1,9 @@
-$body_font: 'Oxygen', sans-serif;
+$body_font: 'Open Sans', sans-serif;
+$title_font: 'Montserrat', sans-serif;
 $value_font: 'Cousine', monospace;
 $talk_font: 'Lora', serif;
 $quote_font: 'Crimson Text', serif;
+
 
 @mixin text_defaults {
   color: darkorchid;
