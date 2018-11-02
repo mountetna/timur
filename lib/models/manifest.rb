@@ -30,7 +30,7 @@ class Manifest < Sequel::Model
     end
 
     return self_obj.to_h.merge(
-      updated_at: self.updated_at,
+      updated_at: self.updated_at.iso8601,
       user: user.name,
       is_editable: is_editable?(other_user),
       md5sum: Digest::MD5.hexdigest(script)
