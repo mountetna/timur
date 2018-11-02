@@ -1,0 +1,75 @@
+@mixin basic_logo($color,$image,$logo_size) {
+  @keyframes spin {
+    0% {
+      transform-origin: $logo_size/2 $logo_size/2;
+      transform: rotate(0deg);
+    }
+    50% {
+      transform-origin: $logo_size/2 $logo_size/2;
+      transform: rotate(180deg);
+    }
+    100% {
+      transform-origin: $logo_size/2 $logo_size/2;
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes flicker {
+    0% {
+      filter: hue-rotate(0deg);
+    }
+    50% {
+      filter: hue-rotate(180deg);
+    }
+    100% {
+      filter: hue-rotate(360deg);
+    }
+  }
+  &.throb {
+    .halo {
+      animation: flicker 6s infinite alternate, spin 10s linear infinite;
+      opacity: 1;
+      transition: opacity 1s, animation 1s;
+    }
+  }
+  width: $logo_size;
+  height: $logo_size;
+  background: white;
+  border: 1px solid $color;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align:top;
+  position: relative;
+  .image {
+    background-image: url($image);
+    width: $logo_size;
+    height: $logo_size;
+    background-size: cover;
+    background-position: 0px -6px;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 1;
+  }
+  .halo {
+    pointer-events: none;
+    position: absolute;
+    opacity: 0;
+    transition: opacity 1s;
+    svg {
+      overflow: visible;
+      circle {
+        stroke-width: 1px;
+        stroke: goldenrod;
+        fill: none;
+      }
+      path {
+        stroke-width: 1px;
+        &.long {
+          stroke: goldenrod;
+        }
+        &.short {
+          stroke: indianred;
+        }
+      }
+    }
+  }
+}

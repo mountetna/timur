@@ -1,132 +1,46 @@
-@import "globals";
-
-$logo_size: 70px;
+@import "logo";
 
 #header {
   position: relative;
-  height: 80px;
-  @mixin basic_logo($color,$image) {
-    @keyframes spin {
-      0% {
-        transform-origin: 35px 35px;
-        transform: rotate(0deg);
-      }
-      50% {
-        transform-origin: 35px 35px;
-        transform: rotate(180deg);
-      }
-      100% {
-        transform-origin: 35px 35px;
-        transform: rotate(360deg);
-      }
-    }
-    @keyframes flicker {
-      0% {
-        filter: hue-rotate(0deg);
-      }
-      50% {
-        filter: hue-rotate(180deg);
-      }
-      100% {
-        filter: hue-rotate(360deg);
-      }
-    }
-    &.throb {
-      .halo {
-        animation: flicker 3s infinite alternate, spin 5s linear infinite;
-        opacity: 1;
-        transition: opacity 1s, animation 1s;
-      }
-    }
-    width: $logo_size;
-    height: $logo_size;
-    border: 3px solid $color;
-    border-radius: 50%;
-    display: inline-block;
-    vertical-align:top;
-    position: relative;
-    .image {
-      background-image: url($image);
-      width: $logo_size;
-      height: $logo_size;
-      background-size: cover;
-      background-position: 0px -6px;
-      border-radius: 50%;
-      position: absolute;
-    }
-    .halo {
-      position: absolute;
-      opacity: 0;
-      transition: opacity 1s;
-      z-index: -1;
-      svg {
-        overflow: visible;
-        circle {
-          stroke-width: 1px;
-          stroke: goldenrod;
-          fill: none;
-        }
-        path {
-          stroke-width: 1px;
-          &.long {
-            stroke: goldenrod;
-          }
-          &.short {
-            stroke: indianred;
-          }
-        }
-      }
-    }
-  }
+  height: 85px;
   #logo {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 60px;
+    height: 60px;
+
     #normal {
-      @include basic_logo(#066306,'../img/Timur.png');
+      @include basic_logo(#066306,'../img/Timur.png', 50px);
     }
     #dev {
-      @include basic_logo(#630606,'../img/Timur-dev.png');
+      @include basic_logo(#630606,'../img/Timur-dev.png', 50px);
     }
-    display: inline-block;
-    width: 90px;
-    height: 78px;
   }
-  #help_float {
+
+  #title {
     position: absolute;
-    top: 6px;
-    left: 25px;
-  }
-  #heading {
-    font-family: 'Cinzel', serif;
-    font-size: 40px;
-    display: inline-block;
-    color: forestgreen;
-    height: 70px;
-    vertical-align: top;
-  }
-  #nav {
-    .nav_tab {
-      a {
-        color: teal;
-        cursor: pointer;
-      }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 65px;
+    padding-right: 5px;
+    width: calc(100% - 70px);
+    height: 60px;
+    background: linear-gradient(to right, #EEFCE5 0%, #A4E882 20%, #1A8F4D 40%);
+
+    #heading {
+      color: #333;
+      font-family: 'Montserrat', serif;
+      font-size: 1.8em;
     }
-    .selected {
-      border-bottom: 0px;
-      background-color: white;
-      &:first-child {
-        border-left: 1px solid rgba(forestgreen,0.1);
-      }
-      a {
-        color: goldenrod;
-        cursor: pointer;
-      }
-    }
+
     #identifier_search {
-      
       .search {
         display: flex;
-        background-color: rgba(teal, 0.1);
+        background-color: rgba(white, 0.5);
         border: 1px solid forestgreen;
-        border-radius: 12px;
+        border-radius: 2px;
         margin-right: 5px;
         padding-right: 5px;
         align-items: center;
@@ -174,43 +88,40 @@ $logo_size: 70px;
         }
       }
     }
+
     #login {
-      color: brown;
-      text-align: right;
+      color: white;
+      font-family: $body_font;
     }
   }
-}
 
-/* NEW CSS ********************************************************************/
+  #nav {
+    font-family: $body_font;
+    background-color: #efe;
+    position: relative;
+    top: 60px;
+    height: 25px;
 
-#header{
-  position: relative;
-  height: 80px;
-  border-bottom: 2px solid forestgreen;
-}
+    .nav_tab {
+      height: 100%;
+      display: inline-block;
+      font-size: 16px;
+      padding: 0px 25px;
+      text-transform: capitalize;
 
-#nav {
-  font-family: $body_font;
-  position: relative;
-  width: calc(100% - 90px);
-  height: 25px;
-  margin-top: -25px;
-  margin-left: 90px;
-  border-top: 1px solid forestgreen;
-}
-
-.nav_tab{
-  height: 100%;
-  display: inline-block;
-  font-size: 16px;
-  padding: 0px 25px;
-  border-right: 1px solid forestgreen;
-  text-transform: capitalize;
-  background-color: rgba(skyblue,0.1);
-}
-
-#logo{
-  border-bottom: none;
+      a {
+        color: teal;
+        cursor: pointer;
+      }
+    }
+    .selected {
+      background-color: white;
+      a {
+        color: goldenrod;
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 #identifier_search{
@@ -220,10 +131,4 @@ $logo_size: 70px;
   float: right;
   padding: 2px;
   position: relative;
-}
-
-#login{
-  display: inline-block;
-  border-bottom: none;
-  float: right;
 }
