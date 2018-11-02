@@ -1,8 +1,8 @@
 $body_font: 'Open Sans', sans-serif;
 $title_font: 'Montserrat', sans-serif;
 $value_font: 'Cousine', monospace;
-$talk_font: 'Lora', serif;
-$quote_font: 'Crimson Text', serif;
+$talk_font: 'Crimson Text', serif;
+$quote_font: 'Lora', serif;
 
 
 @mixin text_defaults {
@@ -37,6 +37,8 @@ $quote_font: 'Crimson Text', serif;
     padding-right: 5px;
   }
 }
+
+$thin_rule: 1px solid rgba(forestgreen,0.1);
 
 @mixin green_button {
   cursor: pointer;

@@ -22,6 +22,7 @@
       .CodeMirror {
         max-height: 200px;
         background: #fafffa;
+        font-family: $value_font;
       }
       .cm-comment { color: #888; }
       .cm-macro { color: #f40; }
