@@ -39,7 +39,7 @@ export const timurStore = () => {
     thunk
   ];
 
-  if (process.env.NODE_ENV == 'development') middlewares.push(createLogger());
+  if (process.env.NODE_ENV == 'development') middlewares.push(createLogger({collapsed: true}));
 
   return createStore(
     reducers,
