@@ -21,42 +21,52 @@ const ROUTES = [
   {
     template: '',
     component: HomePage,
-    tab: 'home'
+    mode: 'home'
+  },
+  {
+    template: ':project_name/',
+    component: Browser,
+    mode: 'browse'
   },
   {
     template: ':project_name/browse/',
     component: Browser,
-    tab: 'browse'
+    mode: 'browse'
   },
   {
     template: ':project_name/browse/:model_name/*record_name',
     component: Browser,
-    tab: 'browse'
+    mode: 'browse'
+  },
+  {
+    template: ':project_name/browse/:model_name/*record_name#:tab_name',
+    component: Browser,
+    mode: 'browse'
   },
   {
     template: ':project_name/search',
     component: Search,
-    tab: 'search'
+    mode: 'search'
   },
   {
     template: ':project_name/map',
     component: ModelMap,
-    tab: 'map'
+    mode: 'map'
   },
   {
     template: ':project_name/manifests',
     component: Manifests,
-    tab: 'manifests'
+    mode: 'manifests'
   },
   {
     template: ':project_name/manifest/:manifest_id',
     component: Manifests,
-    tab: 'manifests'
+    mode: 'manifests'
   },
   {
     template: ':project_name/plots',
     component: Plotter,
-    tab: 'plots'
+    mode: 'plots'
   },
 ];
 
@@ -67,34 +77,59 @@ const ROUTE_PART=/(:[\w]+|\*[\w]+$)/g;
 
 const UNSAFE=/[^\-_.!~*'()a-zA-Z\d;\/?:@&=+$,]/g;
 
-const route_regexp = (template) => (
-  new RegExp(
-    '^/' +
-    template.
-      // any :params match separator-free strings
-      replace(NAMED_PARAM, '([^\\.\\/\\?]+)').
-      // any *params match arbitrary strings
-      replace(GLOB_PARAM, '(.+)').
-      // ignore any trailing slashes in the route
-      replace(/\/$/, '') +
-      // trailing slashes in the path can be ignored
-    '/?' + '$'
-  )
-);
+const route_regexp = (template) =>
+  template.
+  // any :params match separator-free strings
+  replace(NAMED_PARAM, '([^\\.\\/\\?\\#]+)').
+  // any *params match arbitrary strings
+  replace(GLOB_PARAM, '(.+?)').
+  // ignore any trailing slashes in the route
+  replace(/\/$/, '');
 
-const route_parts = (template) => {
+const routeParts = (template) => {
   let parts = []
   // this does not replace, merely uses replace() to scan
-  template.replace(
+  if (template) template.replace(
     ROUTE_PART,
     (part) => parts.push(part.replace(/^./,''))
   );
   return parts;
 };
 
+const matchRoute = ({ path, hash }, route) => (
+  // match the route part
+  path.match(route.path_regexp) && (!hash || (route.hash_regexp && hash.match(route.hash_regexp)))
+);
+
+const routeParams = ({path,hash}, route) => {
+  let [ _, ...values ] = path.match(route.path_regexp);
+
+  if (hash) {
+    let [ _, ...hash_values ] = hash.match(route.hash_regexp);
+    values = values.concat(hash_values);
+  }
+
+  let params = route.parts.reduce(
+    (map, key, index) => {
+      map[key] = values[index];
+      return map;
+    },
+    {}
+  );
+  return params;
+}
+
 ROUTES.forEach(route => {
-  route.regexp = route_regexp(route.template);
-  route.parts = route_parts(route.template);
+  let [ template_path, template_hash ] = route.template.split(/#/);
+  route.path_regexp = new RegExp(
+    `^/${ route_regexp(template_path) }/?$`
+  );
+  route.hash_regexp = template_hash ? new RegExp(
+    `^#${route_regexp(template_hash)}$`
+  ) : null;
+  route.parts = routeParts(template_path).concat(
+    routeParts(template_hash)
+  );
 });
 
 class TimurRouter extends React.Component {
@@ -106,36 +141,30 @@ class TimurRouter extends React.Component {
 
   updateLocation() {
     let { updateLocation } = this.props;
-    updateLocation(location.pathname);
+    updateLocation(location);
   }
 
   render() {
     let { location, showMessages, environment } = this.props;
 
-    let route = ROUTES.find(route => location.match(route.regexp));
+    let route = ROUTES.find(route => matchRoute(location,route));
 
     if (!route) {
       showMessages([ '### You have lost your way: Path Invalid.' ]);
       return null;
     }
 
-    let [ _, ...values ] = location.match(route.regexp);
-
-    let params = route.parts.reduce(
-      (map, key, index) => {
-        map[key] = values[index];
-        return map;
-      },
-      {}
-    );
-
+    let params = routeParams(location, route);
+    console.log("Matched route");
+    console.log(route);
+    console.log(params);
     let Component = route.component;
 
     // this key allows us to remount the component when the params change
     let key = JSON.stringify(params);
 
     return <div id='ui-container'>
-      <TimurNav environment={ environment } mode={ route.tab }/>
+      <TimurNav environment={ environment } mode={ route.mode }/>
       <Messages />
       <Component key={key} {...params}/>
     </div>
