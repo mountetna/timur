@@ -4,6 +4,11 @@ export const selectView = (state, model_name) => (
   : null
 )
 
+export const getDefaultTab = (view) =>
+  Object.keys(view.tabs).sort(
+    (tab1,tab2) => view.tabs[tab1].index_order - view.tabs[tab2].index_order
+  )[0];
+
 export const getAttributes = (tab)=>{
   let {panes} = tab;
   let attributes = Object.values(panes).reduce(

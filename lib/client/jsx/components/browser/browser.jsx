@@ -31,6 +31,7 @@ import {
   interleaveAttributes,
   getTabByIndexOrder,
   getAttributes,
+  getDefaultTab,
   selectView
 } from '../../selectors/tab_selector';
 import { selectUserProjectRole } from '../../selectors/user_selector';
@@ -55,7 +56,7 @@ class Browser extends React.Component{
 
   requestData() {
     let {
-      model_name, record_name, view,
+      model_name, record_name, view, tab_name,
       setLocation, requestAnswer, requestView
     } = this.props;
 
@@ -76,17 +77,20 @@ class Browser extends React.Component{
     } else if (!view) {
       // we are told the model and record name, get the view
       requestView(
-        model_name, record_name, 'overview', this.requestViewDocuments.bind(this, 'overview')
+        model_name,
+        this.requestDefaultTab.bind(this)
       )
+    } else if (!tab_name) {
+      this.requestDefaultTab(view);
     } else {
+      this.requestTabDocuments(view.tabs[tab_name]);
       this.browseMode();
     }
   }
 
-  requestViewDocuments(tab_name,response) {
-    let { view } = response;
-    if (!tab_name in view.tabs) tab_name = 'default';
-    this.requestTabDocuments(view.tabs[tab_name])
+  requestDefaultTab(view) {
+    let { setLocation } = this.props;
+    setLocation(window.location.href + `#${ getDefaultTab(view) }`);
   }
 
   requestTabDocuments(tab) {
@@ -100,6 +104,7 @@ class Browser extends React.Component{
     let hasAttributes = doc && template && Array.isArray(attribute_names) && attribute_names.every(
       attr_name => !(attr_name in template.attributes) || (attr_name in doc)
     );
+
     // ensure attribute data is present in the document
     if (!hasAttributes) {
       // or else make a new request
