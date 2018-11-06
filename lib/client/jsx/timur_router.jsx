@@ -155,9 +155,6 @@ class TimurRouter extends React.Component {
     }
 
     let params = routeParams(location, route);
-    console.log("Matched route");
-    console.log(route);
-    console.log(params);
     let Component = route.component;
 
     // this key allows us to remount the component when the params change
