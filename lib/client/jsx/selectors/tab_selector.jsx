@@ -36,11 +36,6 @@ export const getPlotIds = (tab)=>{
 };
 
 
-export const getTabByIndexOrder = (view, order)=>
-  Object.values(view.tabs).find(
-    tab => tab.index_order == order
-  );
-
 /*
  * There is a correlation between the Timur view model attributes and the Magma
  * model attributes. When we want to render the attributes we interleave the two

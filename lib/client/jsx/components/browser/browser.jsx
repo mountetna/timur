@@ -29,7 +29,6 @@ import {
 } from '../../actions/magma_actions';
 import {
   interleaveAttributes,
-  getTabByIndexOrder,
   getAttributes,
   getDefaultTab,
   selectView
@@ -40,10 +39,7 @@ class Browser extends React.Component{
   constructor(props){
     super(props);
 
-    this.state = {
-      mode: 'loading',
-      current_tab_index: 0
-    };
+    this.state = { mode: 'loading' };
   }
 
   componentDidMount(){
@@ -89,8 +85,12 @@ class Browser extends React.Component{
   }
 
   requestDefaultTab(view) {
+    this.selectTab(getDefaultTab(view));
+  }
+
+  selectTab(tab_name) {
     let { setLocation } = this.props;
-    setLocation(window.location.href + `#${ getDefaultTab(view) }`);
+    setLocation(window.location.href.replace(/#.*/,'') + `#${ tab_name }`);
   }
 
   requestTabDocuments(tab) {
@@ -116,7 +116,6 @@ class Browser extends React.Component{
       });
     }
   }
-
 
   camelize(str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index){
@@ -155,17 +154,6 @@ class Browser extends React.Component{
     else this.cancelEdits();
   }
 
-  selectTab(index_order) {
-    let {requestDocuments, model_name, record_name, view, doc} = this.props;
-
-    // Set the new requested tab state.
-    this.setState({current_tab_index: index_order});
-
-    this.requestTabDocuments(
-      getTabByIndexOrder(view, index_order)
-    )
-  }
-
   renderEmptyView(){
     return(
       <div className='browser'>
@@ -179,16 +167,15 @@ class Browser extends React.Component{
   }
 
   render(){
-    let {mode, current_tab_index} = this.state;
-    let {role, revision, view, template, doc, model_name, record_name} = this.props;
+    let {mode} = this.state;
+    let {role, revision, view, template, doc, model_name, record_name, tab_name} = this.props;
     let can_edit = role == 'administrator' || role == 'editor';
 
     // Render an empty view if there is no view data yet.
     if(!view || !template || !doc) return this.renderEmptyView();
 
-    // Select the current tab data from by the 'current_tab_index'.
     let tab = interleaveAttributes(
-      getTabByIndexOrder(view, current_tab_index),
+      view.tabs[tab_name],
       template
     );
 
@@ -214,7 +201,7 @@ class Browser extends React.Component{
           mode={mode}
           revision={revision}
           view={view}
-          current_tab_index={current_tab_index}
+          current_tab={tab_name}
           onClick={this.selectTab.bind(this)}
         />
         <BrowserTab {
