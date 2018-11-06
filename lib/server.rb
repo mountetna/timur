@@ -21,11 +21,13 @@ class Timur
       get ':project_name/activity', action: 'browse#activity', as: :activity
 
       # browse_controller.rb
-      get ':project_name', action: 'browse#index', as: :project
       get ':project_name/view/:model_name', action: 'browse#view', as: :view
 
       # !!! ACHTUNG !!!
       # view routes are parsed by the client and must also be set there
+      get ':project_name', as: :project do
+        erb_view(:client)
+      end
       get ':project_name/browse', as: :browse do
         erb_view(:client)
       end
