@@ -6,49 +6,14 @@ require_relative './server/controllers/plots_controller'
 
 class Timur
   class Server < Etna::Server
-    # root path
-    get '/' do
-      erb_view(:welcome)
-    end
-
     # welcome_controller.rb
-    get 'no_auth' do
+    get 'no_auth', as: :no_auth do
       erb_view(:no_auth)
     end
 
     with auth: { user: { can_view?: :project_name } } do
-      # activity_controller.rb
-      get ':project_name/activity', action: 'browse#activity', as: :activity
-
       # browse_controller.rb
       get ':project_name/view/:model_name', action: 'browse#view', as: :view
-
-      # !!! ACHTUNG !!!
-      # view routes are parsed by the client and must also be set there
-      get ':project_name', as: :project do
-        erb_view(:client)
-      end
-      get ':project_name/browse', as: :browse do
-        erb_view(:client)
-      end
-      get ':project_name/browse/:model_name/*record_name', as: :browse_model do
-        erb_view(:client)
-      end
-      get ':project_name/search', as: :search do
-        erb_view(:client)
-      end
-      get ':project_name/map', as: :map do
-        erb_view(:client)
-      end
-      get ':project_name/manifests', as: :manifests do
-        erb_view(:client)
-      end
-      get ':project_name/manifest/:manifest_id', as: :manifest do
-        erb_view(:client)
-      end
-      get ':project_name/plots', as: :plots do
-        erb_view(:client)
-      end
 
       # archimedes_controller.rb
       post ':project_name/consignment',
@@ -64,8 +29,19 @@ class Timur
       post ':project_name/manifests/create', action: 'manifests#create'
       post ':project_name/manifests/update/:id', action: 'manifests#update'
       delete ':project_name/manifests/destroy/:id', action: 'manifests#destroy'
-    end
 
+      # remaining view routes are parsed by the client and must also be set there
+      # root path
+      get '/', as: :root do
+        erb_view(:client)
+      end
+      get ':project_name', as: :project do
+        erb_view(:client)
+      end
+      get ':project_name/*view_path', as: :project_view do
+        erb_view(:client)
+      end
+    end
 
     def initialize(config)
       super

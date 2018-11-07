@@ -29,41 +29,49 @@ const ROUTES = [
     mode: 'browse'
   },
   {
+    name: 'browse',
     template: ':project_name/browse/',
     component: Browser,
     mode: 'browse'
   },
   {
+    name: 'browse_model',
     template: ':project_name/browse/:model_name/*record_name',
     component: Browser,
     mode: 'browse'
   },
   {
+    name: 'browse_tab',
     template: ':project_name/browse/:model_name/*record_name#:tab_name',
     component: Browser,
     mode: 'browse'
   },
   {
+    name: 'search',
     template: ':project_name/search',
     component: Search,
     mode: 'search'
   },
   {
+    name: 'map',
     template: ':project_name/map',
     component: ModelMap,
     mode: 'map'
   },
   {
+    name: 'manifests',
     template: ':project_name/manifests',
     component: Manifests,
     mode: 'manifests'
   },
   {
+    name: 'manifest',
     template: ':project_name/manifest/:manifest_id',
     component: Manifests,
     mode: 'manifests'
   },
   {
+    name: 'plots',
     template: ':project_name/plots',
     component: Plotter,
     mode: 'plots'
@@ -77,8 +85,7 @@ const ROUTE_PART=/(:[\w]+|\*[\w]+$)/g;
 
 const UNSAFE=/[^\-_.!~*'()a-zA-Z\d;\/?:@&=+$,]/g;
 
-const route_regexp = (template) =>
-  template.
+const route_regexp = (template) => template.
   // any :params match separator-free strings
   replace(NAMED_PARAM, '([^\\.\\/\\?\\#]+)').
   // any *params match arbitrary strings
@@ -87,13 +94,21 @@ const route_regexp = (template) =>
   replace(/\/$/, '');
 
 const routeParts = (template) => {
-  let parts = []
+  let parts = [];
   // this does not replace, merely uses replace() to scan
   if (template) template.replace(
     ROUTE_PART,
     (part) => parts.push(part.replace(/^./,''))
   );
   return parts;
+};
+
+const routePath = (template, params) => {
+  let index = 0;
+  return '/' + template.replace(
+    ROUTE_PART,
+    part => params[index++]
+  );
 };
 
 const matchRoute = ({ path, hash }, route) => (
@@ -119,17 +134,18 @@ const routeParams = ({path,hash}, route) => {
   return params;
 }
 
+
+window.Routes = window.Routes || {};
+
 ROUTES.forEach(route => {
-  let [ template_path, template_hash ] = route.template.split(/#/);
-  route.path_regexp = new RegExp(
-    `^/${ route_regexp(template_path) }/?$`
-  );
-  route.hash_regexp = template_hash ? new RegExp(
-    `^#${route_regexp(template_hash)}$`
-  ) : null;
-  route.parts = routeParts(template_path).concat(
-    routeParts(template_hash)
-  );
+  let [ path, hash ] = route.template.split(/#/);
+  route.path_regexp = new RegExp(`^/${ route_regexp(path) }/?$`);
+  route.hash_regexp = hash ? new RegExp(`^#${route_regexp(hash)}$`) : null;
+  route.parts = routeParts(path).concat(routeParts(hash));
+  if (route.name) {
+    window.Routes[`${route.name}_path`] = (...params) =>
+      routePath(route.template, params);
+  }
 });
 
 class TimurRouter extends React.Component {

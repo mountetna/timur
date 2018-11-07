@@ -172,7 +172,7 @@ class Browser extends React.Component{
     let can_edit = role == 'administrator' || role == 'editor';
 
     // Render an empty view if there is no view data yet.
-    if(!view || !template || !doc) return this.renderEmptyView();
+    if(!view || !template || !doc || !tab_name) return this.renderEmptyView();
 
     let tab = interleaveAttributes(
       view.tabs[tab_name],
