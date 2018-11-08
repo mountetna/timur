@@ -96,13 +96,13 @@ class Browser extends React.Component{
   requestTabDocuments(tab) {
     if (!tab) return;
 
-    let { requestDocuments, model_name, record_name, doc, template } = this.props;
+    let { requestDocuments, model_name, record_name, record, template } = this.props;
     let exchange_name = `tab ${tab.name} for ${model_name} ${record_name}`;
 
     let attribute_names = getAttributes(tab);
 
-    let hasAttributes = doc && template && Array.isArray(attribute_names) && attribute_names.every(
-      attr_name => !(attr_name in template.attributes) || (attr_name in doc)
+    let hasAttributes = record && template && Array.isArray(attribute_names) && attribute_names.every(
+      attr_name => !(attr_name in template.attributes) || (attr_name in record)
     );
 
     // ensure attribute data is present in the document
@@ -168,11 +168,11 @@ class Browser extends React.Component{
 
   render(){
     let {mode} = this.state;
-    let {role, revision, view, template, doc, model_name, record_name, tab_name} = this.props;
+    let {role, revision, view, template, record, model_name, record_name, tab_name} = this.props;
     let can_edit = role == 'administrator' || role == 'editor';
 
     // Render an empty view if there is no view data yet.
-    if(!view || !template || !doc || !tab_name) return this.renderEmptyView();
+    if(!view || !template || !record || !tab_name) return this.renderEmptyView();
 
     let tab = interleaveAttributes(
       view.tabs[tab_name],
@@ -205,7 +205,7 @@ class Browser extends React.Component{
           onClick={this.selectTab.bind(this)}
         />
         <BrowserTab {
-            ...{ template, doc, revision, mode, tab }
+            ...{ template, record, revision, mode, tab }
           } />
       </div>
     );
@@ -217,7 +217,7 @@ export default connect(
   (state = {}, {model_name, record_name})=>{
     let magma = new Magma(state);
     let template = magma.template(model_name);
-    let doc = magma.document(model_name, record_name);
+    let record = magma.document(model_name, record_name);
     let revision = magma.revision(model_name, record_name) || {};
     let view = selectView(state, model_name);
     let role = selectUserProjectRole(state);
@@ -226,7 +226,7 @@ export default connect(
       template,
       revision,
       view,
-      doc,
+      record,
       role
     };
   },
