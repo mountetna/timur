@@ -74,17 +74,31 @@ class Browser extends React.Component{
       // we are told the model and record name, get the view
       requestView(
         model_name,
-        this.requestDefaultTab.bind(this)
+        this.selectOrShowTab.bind(this)
       )
     } else if (!tab_name) {
-      this.requestDefaultTab(view);
+      this.selectDefaultTab(view);
     } else {
-      this.requestTabDocuments(view.tabs[tab_name]);
-      this.browseMode();
+      this.showTab();
     }
   }
 
-  requestDefaultTab(view) {
+  showTab() {
+    let { view, tab_name } = this.props;
+
+    this.requestTabDocuments(view.tabs[tab_name]);
+    this.browseMode();
+  }
+
+  selectOrShowTab(view) {
+    let { tab_name } = this.props;
+    if (tab_name)
+      this.showTab();
+    else
+      this.selectDefaultTab(view);
+  }
+
+  selectDefaultTab(view) {
     this.selectTab(getDefaultTab(view));
   }
 

@@ -5,7 +5,7 @@ import * as React from 'react';
 import AttributeViewer from '../attributes/attribute_viewer';
 
 const PaneAttribute = ({attribute, mode, value, revision, template, record}) => (
-  (attribute.shown && (mode != 'edit' || attribute.editable)) ?
+  (attribute.shown != false && (mode != 'edit' || attribute.editable)) ?
     <div className='attribute'>
       <div className={ `name ${ (mode == 'edit' && value != revision) ? 'revised' : '' }` }
         title={attribute.desc}>
@@ -32,8 +32,8 @@ const BrowserPane = ({template, record, revision, pane, mode}) =>
     }
     <div className='attributes'>
       {
-        Object.keys(pane.attributes).map(attribute_name=>
-          <PaneAttribute
+        Object.keys(pane.attributes).map(attribute_name=> {
+          return <PaneAttribute
             key={attribute_name}
             template={template}
             document={document}
@@ -43,7 +43,7 @@ const BrowserPane = ({template, record, revision, pane, mode}) =>
             revision={ (attribute_name in revision) ?  revision[attribute_name] : record[attribute_name] }
             attribute={pane.attributes[attribute_name]}
           />
-        ).filter(_=>_)
+        }).filter(_=>_)
       }
     </div>
   </div>;
