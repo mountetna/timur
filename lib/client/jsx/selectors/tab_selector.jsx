@@ -61,7 +61,13 @@ export const interleaveAttributes = (tab, template)=>{
 
       // if there are no pane attributes show the whole template
       if (Object.keys(pane.attributes).length == 0) {
-        attributes = { ...template.attributes };
+        attributes = { ...Object.keys(template.attributes).reduce((attributes, att_name)=> {
+          attributes[att_name] = {
+            ...template.attributes[att_name],
+            editable: true
+          };
+          return attributes;
+        },{})};
       } else {
         // expand any attributes which are in the template
         Object.keys(pane.attributes).filter(attr_name=>attr_name in template.attributes).forEach(
