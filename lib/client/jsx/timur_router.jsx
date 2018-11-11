@@ -148,6 +148,8 @@ ROUTES.forEach(route => {
   }
 });
 
+const Empty = () => <div/>;
+
 class TimurRouter extends React.Component {
   constructor(props) {
     super(props);
@@ -164,20 +166,25 @@ class TimurRouter extends React.Component {
     let { location, showMessages, environment } = this.props;
 
     let route = ROUTES.find(route => matchRoute(location,route));
+    let params = {};
+    let Component;
+    let mode;
 
     if (!route) {
       showMessages([ '### You have lost your way: Path Invalid.' ]);
-      return null;
+      mode = 'home';
+      Component = Empty;
+    } else {
+      mode = route.mode;
+      Component = route.component;
+      params = routeParams(location, route);
     }
-
-    let params = routeParams(location, route);
-    let Component = route.component;
 
     // this key allows us to remount the component when the params change
     let key = JSON.stringify(params);
 
     return <div id='ui-container'>
-      <TimurNav environment={ environment } mode={ route.mode }/>
+      <TimurNav environment={ environment } mode={ mode }/>
       <Messages />
       <Component key={key} {...params}/>
     </div>

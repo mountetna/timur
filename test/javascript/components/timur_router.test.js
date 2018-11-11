@@ -39,7 +39,7 @@ describe('TimurRouter', () => {
     const store=mockStore({
       location: {
         path: '/labors/browse/monster/Nemean Lion',
-        hash: 'images'
+        hash: '#images'
       }
     });
 
