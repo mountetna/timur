@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 // Module imports.
-import { selectUserPermissions } from '../selectors/timur_selector';
+import { selectUserPermissions } from '../selectors/user_selector';
 
 export class HomePage extends React.Component{
   renderProjects(){

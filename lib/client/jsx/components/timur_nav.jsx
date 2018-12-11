@@ -3,9 +3,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import {IdentifierSearchContainer as IdentifierSearch} from './identifier_search';
-import {HelpContainer as Help} from './help';
 import Link from './link';
-import { selectUser } from '../selectors/timur_selector';
+import { selectUser } from '../selectors/user_selector';
 
 class TimurNav extends React.Component{
   constructor(props){
@@ -79,12 +78,7 @@ class TimurNav extends React.Component{
             </div>
           </a>
         </div>
-        <div id='help_float'>
-
-          <Help info='timur' />
-        </div>
         <div id='heading'>
-
           {heading}
         </div>
         <div id='nav'>

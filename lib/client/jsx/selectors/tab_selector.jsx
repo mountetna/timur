@@ -1,8 +1,13 @@
 export const selectView = (state, model_name) => (
-  state.timur.views
-  ? state.timur.views[model_name]
+  state.views
+  ? state.views[model_name]
   : null
 )
+
+export const getDefaultTab = (view) =>
+  Object.keys(view.tabs).sort(
+    (tab1,tab2) => view.tabs[tab1].index_order - view.tabs[tab2].index_order
+  )[0] || 'default';
 
 export const getAttributes = (tab)=>{
   let {panes} = tab;
@@ -31,11 +36,6 @@ export const getPlotIds = (tab)=>{
 };
 
 
-export const getTabByIndexOrder = (view, order)=>
-  Object.values(view.tabs).find(
-    tab => tab.index_order == order
-  );
-
 /*
  * There is a correlation between the Timur view model attributes and the Magma
  * model attributes. When we want to render the attributes we interleave the two
@@ -61,7 +61,13 @@ export const interleaveAttributes = (tab, template)=>{
 
       // if there are no pane attributes show the whole template
       if (Object.keys(pane.attributes).length == 0) {
-        attributes = { ...template.attributes };
+        attributes = { ...Object.keys(template.attributes).reduce((attributes, att_name)=> {
+          attributes[att_name] = {
+            ...template.attributes[att_name],
+            editable: true
+          };
+          return attributes;
+        },{})};
       } else {
         // expand any attributes which are in the template
         Object.keys(pane.attributes).filter(attr_name=>attr_name in template.attributes).forEach(

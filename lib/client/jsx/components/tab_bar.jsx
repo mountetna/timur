@@ -15,13 +15,13 @@ export class TabBar extends React.Component{
   }
 
   renderTabs(){
-    let {view, current_tab_index, revised, onClick} = this.props;
+    let {view, current_tab, revised, onClick} = this.props;
 
     let tabs = Object.keys(view.tabs).map((tab_name, index)=>{
       let tab = view.tabs[tab_name];
 
       return(
-        (current_tab_index == tab.index_order) ?
+        (current_tab == tab.name) ?
         // selected tab.
         <div className='selected tab' key={index}>
           {this.formatName(tab_name)}
@@ -29,7 +29,7 @@ export class TabBar extends React.Component{
         :
         // non selected tab.
         <div className={ revised[tab_name] ? 'revised tab' : 'tab' }
-          onClick= { (event) => onClick(tab.index_order) }
+          onClick= { (event) => onClick(tab.name) }
           key={index}>
           {this.formatName(tab_name)}
         </div>

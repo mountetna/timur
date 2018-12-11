@@ -13,6 +13,22 @@ class Timur
     end
   end
 
+  class Schema < Etna::Command
+    usage 'Show the current database schema.'
+
+    def execute
+      Timur.instance.db.tap do |db|
+        db.extension(:schema_dumper)
+        puts db.dump_schema_migration
+      end
+    end
+
+    def setup(config)
+      super
+      Timur.instance.setup_db
+    end
+  end
+
   class Migrate < Etna::Command
     usage 'Run migrations for the current environment.'
 
@@ -56,15 +72,18 @@ class Timur
 
     def route_js
       require_relative 'server'
-      %Q!
-window.Routes = {
+      <<EOT.chomp
+window.Routes = Object.assign(
+  window.Routes || {},
+  {
 #{
   Timur::Server.routes.map do |route|
     route_func(route)
   end.join(",\n")
 }
-};
-!
+  }
+);
+EOT
     end
 
     def route_func route
@@ -77,10 +96,9 @@ window.Routes = {
         ]
       )
 
-      %Q!
-  #{route.name}_path: function(#{required_parts.join(', ')}) {
-    return '#{route_path}';
-  }!
+      <<EOT.chomp
+    #{route.name}_path: (#{required_parts.join(', ')}) => ('#{route_path}')
+EOT
     end
 
     def execute

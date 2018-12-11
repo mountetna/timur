@@ -5,7 +5,8 @@ import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import TimurRouter from './timur_router';
 import {timurStore} from './timur_store';
-import {addTokenUser} from './actions/timur_actions'
+import {addTokenUser} from './actions/user_actions'
+import * as Cookies from './utils/cookies';
 
 class TimurApplication{
   constructor(props, container_id){
@@ -13,7 +14,12 @@ class TimurApplication{
     this.createStore();
 
     // add user info from the token to the store
-    this.store.dispatch(addTokenUser());
+    this.store.dispatch(
+      {
+        type: 'ADD_TOKEN_USER',
+        token: Cookies.getItem(TIMUR_CONFIG.token_name)
+      }
+    );
 
     // create the base component
     this.createUI(props, container_id);

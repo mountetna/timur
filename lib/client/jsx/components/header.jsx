@@ -14,8 +14,8 @@ class Header extends React.Component{
     return(
       <div className='header'>
         {children}
-        {onEdit && headerButton('edit',onEdit, ['pencil'])}
-        {onCancel && headerButton('cancel',onCancel, ['close'])}
+        {onEdit && headerButton('edit',onEdit, ['pencil-alt'])}
+        {onCancel && headerButton('cancel',onCancel, ['ban'])}
         {onApprove && headerButton('approve',onApprove, ['check'])}
         {onClose && headerButton('close',onClose, ['times-circle'])}
         {onLoad && headerButton('load',null, ['spinner', 'pulse'])}

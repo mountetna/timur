@@ -16,7 +16,6 @@ import { connect } from 'react-redux';
 // Class imports.
 import Magma from '../../magma';
 import Header from '../header';
-import {HelpContainer as Help} from '../help';
 import {TabBarContainer as TabBar} from '../tab_bar';
 import BrowserTab from './browser_tab';
 
@@ -24,26 +23,23 @@ import BrowserTab from './browser_tab';
 import { requestManifests } from '../../actions/manifest_actions';
 import { requestPlots } from '../../actions/plot_actions';
 import { setLocation } from '../../actions/location_actions';
-import { requestView } from '../../actions/timur_actions';
+import { requestView } from '../../actions/view_actions';
 import {
   sendRevisions, discardRevision, requestDocuments, requestAnswer
 } from '../../actions/magma_actions';
 import {
   interleaveAttributes,
-  getTabByIndexOrder,
   getAttributes,
+  getDefaultTab,
   selectView
 } from '../../selectors/tab_selector';
-import { selectUserProjectRole } from '../../selectors/timur_selector';
+import { selectUserProjectRole } from '../../selectors/user_selector';
 
 class Browser extends React.Component{
   constructor(props){
     super(props);
 
-    this.state = {
-      mode: 'loading',
-      current_tab_index: 0
-    };
+    this.state = { mode: 'loading' };
   }
 
   componentDidMount(){
@@ -56,7 +52,7 @@ class Browser extends React.Component{
 
   requestData() {
     let {
-      model_name, record_name, view,
+      model_name, record_name, view, tab_name,
       setLocation, requestAnswer, requestView
     } = this.props;
 
@@ -77,30 +73,52 @@ class Browser extends React.Component{
     } else if (!view) {
       // we are told the model and record name, get the view
       requestView(
-        model_name, record_name, 'overview', this.requestViewDocuments.bind(this, 'overview')
+        model_name,
+        this.selectOrShowTab.bind(this)
       )
+    } else if (!tab_name) {
+      this.selectDefaultTab(view);
     } else {
-      this.browseMode();
+      this.showTab();
     }
   }
 
-  requestViewDocuments(tab_name,response) {
-    let { view } = response;
-    if (!tab_name in view.tabs) tab_name = 'default';
-    this.requestTabDocuments(view.tabs[tab_name])
+  showTab() {
+    let { view, tab_name } = this.props;
+
+    this.requestTabDocuments(view.tabs[tab_name]);
+    this.browseMode();
+  }
+
+  selectOrShowTab(view) {
+    let { tab_name } = this.props;
+    if (tab_name)
+      this.showTab();
+    else
+      this.selectDefaultTab(view);
+  }
+
+  selectDefaultTab(view) {
+    this.selectTab(getDefaultTab(view));
+  }
+
+  selectTab(tab_name) {
+    let { setLocation } = this.props;
+    setLocation(window.location.href.replace(/#.*/,'') + `#${ tab_name }`);
   }
 
   requestTabDocuments(tab) {
     if (!tab) return;
 
-    let { requestDocuments, model_name, record_name, doc, template } = this.props;
+    let { requestDocuments, model_name, record_name, record, template } = this.props;
     let exchange_name = `tab ${tab.name} for ${model_name} ${record_name}`;
 
     let attribute_names = getAttributes(tab);
 
-    let hasAttributes = doc && template && Array.isArray(attribute_names) && attribute_names.every(
-      attr_name => !(attr_name in template.attributes) || (attr_name in doc)
+    let hasAttributes = record && template && Array.isArray(attribute_names) && attribute_names.every(
+      attr_name => !(attr_name in template.attributes) || (attr_name in record)
     );
+
     // ensure attribute data is present in the document
     if (!hasAttributes) {
       // or else make a new request
@@ -112,7 +130,6 @@ class Browser extends React.Component{
       });
     }
   }
-
 
   camelize(str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index){
@@ -151,17 +168,6 @@ class Browser extends React.Component{
     else this.cancelEdits();
   }
 
-  selectTab(index_order) {
-    let {requestDocuments, model_name, record_name, view, doc} = this.props;
-
-    // Set the new requested tab state.
-    this.setState({current_tab_index: index_order});
-
-    this.requestTabDocuments(
-      getTabByIndexOrder(view, index_order)
-    )
-  }
-
   renderEmptyView(){
     return(
       <div className='browser'>
@@ -175,16 +181,15 @@ class Browser extends React.Component{
   }
 
   render(){
-    let {mode, current_tab_index} = this.state;
-    let {role, revision, view, template, doc, model_name, record_name} = this.props;
+    let {mode} = this.state;
+    let {role, revision, view, template, record, model_name, record_name, tab_name} = this.props;
     let can_edit = role == 'administrator' || role == 'editor';
 
     // Render an empty view if there is no view data yet.
-    if(!view || !template || !doc) return this.renderEmptyView();
+    if(!view || !template || !record || !tab_name) return this.renderEmptyView();
 
-    // Select the current tab data from by the 'current_tab_index'.
     let tab = interleaveAttributes(
-      getTabByIndexOrder(view, current_tab_index),
+      view.tabs[tab_name],
       template
     );
 
@@ -205,17 +210,16 @@ class Browser extends React.Component{
           <div className='record-name'>
             {record_name}
           </div>
-          <Help info='edit' />
         </Header>
         <TabBar
           mode={mode}
           revision={revision}
           view={view}
-          current_tab_index={current_tab_index}
+          current_tab={tab_name}
           onClick={this.selectTab.bind(this)}
         />
         <BrowserTab {
-            ...{ template, doc, revision, mode, tab }
+            ...{ template, record, revision, mode, tab }
           } />
       </div>
     );
@@ -227,7 +231,7 @@ export default connect(
   (state = {}, {model_name, record_name})=>{
     let magma = new Magma(state);
     let template = magma.template(model_name);
-    let doc = magma.document(model_name, record_name);
+    let record = magma.document(model_name, record_name);
     let revision = magma.revision(model_name, record_name) || {};
     let view = selectView(state, model_name);
     let role = selectUserProjectRole(state);
@@ -236,7 +240,7 @@ export default connect(
       template,
       revision,
       view,
-      doc,
+      record,
       role
     };
   },
