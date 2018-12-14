@@ -76,7 +76,8 @@ class PlotAttribute extends React.Component {
 
 export default connect(
   // map state
-  (state, {document: { name: record_name }, attribute: { plot_id }}) => {
+  (state, props) => {
+    let {document: { name: record_name }, attribute: { plot_id }} = props;
     let plot = selectPlot(state, plot_id, { record_name });
     let consignment = plot ? selectConsignment(state, MD5(plot.plotScript)) : null;
     let data = consignment ? plotData(plot, consignment) : null;

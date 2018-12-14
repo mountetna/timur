@@ -25,7 +25,7 @@ class Plot < Sequel::Model
   end
 
   EDITABLE_ATTRIBUTES = [
-    :manifest_id, :access, :name, :plot_type,
+    :script, :access, :name, :plot_type,
     :configuration, :access
   ]
 
