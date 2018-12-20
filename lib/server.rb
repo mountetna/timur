@@ -11,6 +11,11 @@ class Timur
       erb_view(:no_auth)
     end
 
+    # root path
+    get '/', as: :root do
+      erb_view(:client)
+    end
+
     with auth: { user: { can_view?: :project_name } } do
       # browse_controller.rb
       get ':project_name/view/:model_name', action: 'browse#view', as: :view
@@ -31,10 +36,6 @@ class Timur
       delete ':project_name/manifests/destroy/:id', action: 'manifests#destroy'
 
       # remaining view routes are parsed by the client and must also be set there
-      # root path
-      get '/', as: :root do
-        erb_view(:client)
-      end
       get ':project_name', as: :project do
         erb_view(:client)
       end
