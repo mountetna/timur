@@ -5,7 +5,7 @@ Sequel.migration do
       Integer :manifest_id, :null=>false
       String :name, :null=>false
       String :plot_type, :null=>false
-      String :configuration, :null=>false
+      json :configuration, :null=>false
       DateTime :created_at, :null=>false
       DateTime :updated_at, :null=>false
       Integer :user_id
