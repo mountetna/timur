@@ -17,7 +17,6 @@ gem 'pg', '~> 0.21'
 gem 'sequel', '4.49.0'
 
 group :development, :test do
-  gem 'spring'
   gem 'rspec'
   gem 'simplecov'
   gem 'pry'
@@ -25,8 +24,4 @@ group :development, :test do
   gem 'factory_bot'
   gem 'database_cleaner'
   gem 'rack-test', require: "rack/test"
-end
-
-group :test, :production do
-  gem 'omniauth-shibboleth'
 end
