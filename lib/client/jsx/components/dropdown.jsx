@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import FontAwesome from 'react-fontawesome';
-import onClickOutside from 'react-onclickoutside';
 
 class Dropdown extends Component{
   constructor(props){
@@ -9,11 +8,28 @@ class Dropdown extends Component{
       list_open: false
     };
 
+    this.close = this.close.bind(this);
     this.toggleList = this.toggleList.bind(this);
     this.selectItem = this.selectItem.bind(this);
   }
 
-  handleClickOutside(e){
+  componentDidUpdate(){
+    const {list_open} = this.state;
+    setTimeout(() => {
+      if(list_open){
+        window.addEventListener('click', this.close);
+      }
+      else{
+        window.removeEventListener('click', this.close);
+      }
+    }, 0);
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener('click', this.close);
+  }
+
+  close(){
     this.setState({
       list_open: false
     });
@@ -25,7 +41,7 @@ class Dropdown extends Component{
     }, () => this.props.onSelect(index));
   }
 
-  toggleList() {
+  toggleList(){
     this.setState(prevState => ({
       list_open: !prevState.list_open
     }));
@@ -34,19 +50,20 @@ class Dropdown extends Component{
   render(){
     const {list, selected_index, default_text} = this.props;
     const {list_open} = this.state;
-    let header_text = selected_index != null ? list[selected_index] : default_text;
+    let selected_item =  selected_index == null || selected_index == -1 ? null : list[selected_index];
+    let header_text = selected_item || default_text;
     
     return(
-      <div className="dd-wrapper">
-        <div className="dd-header" onClick={this.toggleList}>
-          <div className="dd-header-text" >{header_text}</div>
-          <i className={ list_open ? 'fa fa-angle-up' : 'fa fa-angle-down'}></i>
+      <div className='dd-container'>
+        <div className='dd-header' onClick={this.toggleList}>
+          <div className='dd-header-text'>{header_text}</div>
+          <i className={list_open ? 'fa fa-angle-up' : 'fa fa-angle-down'}></i>
         </div>
         {list_open && 
-          <ul className="dd-list">
+          <ul className='dd-list'>
             {list.map((item, index)=> (
-              <li className="dd-list-item" key={index} onClick={() => this.selectItem(index)}>
-                  {item} {index === selected_index && <FontAwesome name="check"/>}
+              <li className='dd-list-item' key={index} onClick={() => this.selectItem(index)}>
+                  {item} {index === selected_index &&  <i className='fa fa-check'></i>}
               </li>
             ))}
           </ul>
@@ -56,4 +73,4 @@ class Dropdown extends Component{
   }
 }
 
-export default onClickOutside(Dropdown);
+export default Dropdown;

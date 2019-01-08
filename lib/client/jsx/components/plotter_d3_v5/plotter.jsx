@@ -1,7 +1,6 @@
 // Framework libraries.
 import * as React from 'react';
 import { connect } from 'react-redux';
-import FontAwesome from 'react-fontawesome';
 
 import DocumentWindow from '../document/document_window';
 import ListMenu from '../list_menu';
@@ -10,6 +9,7 @@ import ManifestScript from '../manifest/manifest_script';
 import ConsignmentView from '../manifest/consignment_view';
 import PlotLayout from './plot_layout';
 import PlotSeries from './plot_series';
+import Plot from './plot';
 
 import {
     requestManifests, selectManifest, requestConsignmentsByManifestId
@@ -19,13 +19,11 @@ import {
   requestPlots, selectPlot, saveNewPlot, savePlot, deletePlot
 } from '../../actions/plot_actions';
 
-import { getAllPlots, getSelectedPlot } from '../../selectors/plot_selector';
+import { getAllPlots, getSelectedPlot, plotWithScript } from '../../selectors/plot_selector';
 import { MD5, getLoadedConsignmentIds } from '../../selectors/consignment_selector';
 import {
   isEmptyManifests, getEditableManifests
 } from '../../selectors/manifest_selector';
-
-
 // the basic plotter interface
 //
 // basics:
@@ -51,25 +49,16 @@ import {
 const PLOTS = [
   {
     name: 'lineplot',
+    label: 'Line Plot',
     series_types: [
-      { name: 'line', variables: { x: 'expression', y: 'expression' } },
-      { name: 'scatter', variables: { x: 'expression', y: 'expression' } }
+      { type: 'line', variables: { x: 'expression', y: 'expression', color: 'color_type'} },
+      { type: 'scatter', variables: { x: 'expression', y: 'expression', color: 'color_type'} }
     ]
   },
   {
-    name: 'barpLot',
+    name: 'barplot',
     series_types: [
-      { name: 'line', variables: { x: 'expression', y: 'expression' } },
-      { name: 'scatter', variables: { x: 'expression', y: 'expression' } }
-
-    ]
-  },
-  {
-    name: 'heatplot',
-    series_types: [
-      { name: 'line', variables: { x: 'expression', y: 'expression' } },
-      { name: 'scatter', variables: { x: 'expression', y: 'expression' } }
-
+      { type: 'bar', variables: { height: 'expression', category: 'expression' } }
     ]
   }
 ];
@@ -78,14 +67,11 @@ class Plotter extends React.Component{
     super(props);
     this.state = {
       selected_plot_index: null,
-      active_selected_plot_series_index: null,
-      plot: null
+      selected_plot_series_index: null,
+      plot: null,
+      unsaved_plots: {},
+      new_plot_series_counter: 0
     };
-
-    this.onSelectPlot = this.onSelectPlot.bind(this);
-    this.onSelectPlotSeries = this.onSelectPlotSeries.bind(this);
-    this.onReset = this.onReset.bind(this);
-    this.onAddSeries = this.onAddSeries.bind(this);
   }
 
   componentDidMount(){
@@ -103,10 +89,10 @@ class Plotter extends React.Component{
       configuration: {
         layout: {
           height: 0,
-          width: 0
+          margin: {top: 10, bottom: 10, left: 10, right: 10}
         },
         plot_series: [],
-        plot_type: ''
+        plot_type: null
       },
       created_at: date.toString(),
       updated_at: date.toString()
@@ -124,7 +110,7 @@ class Plotter extends React.Component{
       return;
     }
 
-    let { plots } = this.props;
+    let {plots} = this.props;
 
     let plot = plots.find(p=>p.id ==id);
 
@@ -148,7 +134,23 @@ class Plotter extends React.Component{
         plot[field_name] = event.target.value;
       }
       this.setState({plot, md5sum: new_md5sum || md5sum});
-    }
+    };
+  }
+
+  updatePlotField(field_name){
+    return (value)=>{
+      let { plot } = this.state;
+      plot[field_name] = value;
+      this.setState({plot});
+    };
+  }
+
+  updatePlotConfiguration(field_name){
+    return (value)=>{
+      let { plot } = this.state;
+      let new_configuration = {...plot.configuration, [field_name]: value};
+      this.updatePlotField('configuration')(new_configuration);
+    };
   }
 
   savePlot() {
@@ -190,32 +192,107 @@ class Plotter extends React.Component{
 
     if (editing) this.toggleEdit();
   }
-  
-  onSelectPlot(index) {    
-    this.setState({
-      selected_plot_index: index
-    });
+
+  renderEditor() {
+    let {plot} = this.state;
+    let plot_config = PLOTS.find(pc => pc.name == plot.plot_type);
+ 
+    return(<div>
+    Manifest
+    <ManifestScript
+      script={ plot.script }
+      is_editing={ true }
+      onChange={ this.updateField.bind(this)('script') }/>
+    Layout
+    <hr />
+    <PlotLayout 
+      layout={ plot.configuration.layout }
+      onChange={
+        this.updatePlotConfiguration('layout')
+      }
+    />
+
+    Plot Type
+    <hr />
+    <br/>
+    { plot.plot_type != null ? 
+      <div className='wrapper'>
+        <div className='dd-wrapper left'>
+          <div className='dd-header-title-text'>
+            {plot.plot_type}
+          </div> 
+
+          {plot.plot_type &&
+            <div>
+              <Dropdown 
+                  default_text="Add Series"
+                  list={plot_config.series_types.map(series=> series.type)}
+                  onSelect={(index) => {
+                    let new_series = {series_type: plot_config.series_types[index].type, variables: {}, label: null};
+                    this.updatePlotConfiguration('plot_series')(
+                      [new_series, ...plot.configuration.plot_series],
+                    );
+                  }}
+                  selected_index={null}
+                />
+            </div>
+          }
+          </div>
+          <div className='dd-wrapper right'>
+            <div>
+              <i onClick={() => {
+                  this.updatePlotField('plot_type')(null);
+                  this.updatePlotConfiguration('plot_series')([]);
+                }}
+                className='right fa fa-lg'>&times;
+              </i>
+            </div>
+          </div>
+      </div>
+    
+      :
+      <Dropdown 
+        default_text = 'Select Plot'
+        list={PLOTS.map(plot_config => plot_config.name)}
+        onSelect={(index) => {this.updatePlotField('plot_type')(PLOTS[index].name);}}
+        selected_index = {PLOTS.indexOf(plot_config)}
+      />
+    } 
+
+
+
+    { plot.configuration.plot_series.map((series, index)=>
+      <PlotSeries 
+          key={`ps-container-${index}`}  
+          plot_series={series} 
+          series_config={plot_config.series_types.find(s=>s.type==series.series_type)}
+          onDelete= {()=>{
+            let new_plot_series = plot.configuration.plot_series.slice(0);
+            new_plot_series.splice(index, 1);
+            this.updatePlotConfiguration('plot_series')(new_plot_series);
+          }}
+          onChange={(name, value) => { 
+            let new_plot_series = plot.configuration.plot_series.slice(0);
+            new_plot_series[index] = {...series, [name]: value};
+            this.updatePlotConfiguration('plot_series')(new_plot_series);
+      }}/>)
+    }
+    </div>);
+
   }
 
+  renderPlot() {
+    let {plot} = this.state;
 
+    return(
+      <div className='chart'>
+        <Resize render={width => (
+          <Plot plot={plotWithScript([plot, {}])} width={width}/>
+        )}/>
+      </div>
+    );
 
-  onSelectPlotSeries(index) {
-    this.setState({
-      active_selected_plot_series_index: index
-    });
   }
-
-  onReset(){
-    this.setState({
-      selected_plot_index: null,
-      active_selected_plot_series_index: null
-    });
-  }
-
-  onAddSeries() {
-    return <PlotSeries />;
-  }
-  
   render(){
     // Variables.
     let {
@@ -223,7 +300,7 @@ class Plotter extends React.Component{
       loaded_consignments
     } = this.props;
 
-    let { plot, editing, md5sum, selected_plot_index } = this.state;
+    let { plot, editing, md5sum } = this.state;
   
     return(
       <DocumentWindow
@@ -241,73 +318,7 @@ class Plotter extends React.Component{
 
         onCreate={this.createPlot.bind(this)}
         onSelect={this.selectPlot.bind(this)} >
-        Manifest:
-        <ManifestScript
-          script={ plot && plot.script }
-          is_editing={ editing }
-          onChange={ this.updateField.bind(this)('script') }/>
-        Layout:
-        <PlotLayout/>
-        Series:
-        <span> + add series </span>
-        {selected_plot_index != null ? 
-          
-          <div className='dd-wrapper'>
-            <div className='dd-header'>
-              <div className='dd-header-text'>
-                {PLOTS[selected_plot_index].name}
-              </div>
-              <FontAwesome onClick={this.onReset} name='times'/>
-            </div> 
-            <div>
-              <Dropdown 
-                default_text = "Select Plot Series"
-                list = {PLOTS[selected_plot_index].series_types.map(series=> series.name)}
-                onSelect = {this.onSelectPlotSeries}
-                selected_index = {this.state.active_selected_plot_series_index}
-              />
-              <div className="dd-header">
-                <label className="dd-header-text"> x:</label>
-                <div className="dd-header-text">
-                  <input
-                    className="input"
-                    type="text"
-                    name="xexpression"
-                    value="test"
-                  />
-                </div>
-              </div>
-
-              <div className="dd-header">
-              <label className="dd-header-text"> y:</label>
-              <div className="dd-header-text">
-                <input
-                  className="input"
-                  type="text"
-                  name="xexpression"
-                  value="test"
-                />
-              </div>
-            </div>
-            <button>Add Series</button>
-
-            
-              <form>
-              
-              </form>
-          
-            </div>
-
-          </div>
-        
-          :
-          <Dropdown 
-            default_text = 'Select Plot'
-            list={PLOTS.map(plot => plot.name)}
-            onSelect={this.onSelectPlot}
-            selected_index = {selected_plot_index}
-          />
-        }
+        {editing ? this.renderEditor() : this.renderPlot()}
 
       </DocumentWindow>
     );
