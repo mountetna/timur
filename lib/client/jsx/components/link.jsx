@@ -3,16 +3,18 @@ import {connect} from 'react-redux';
 import { pushLocation } from '../actions/location_actions';
 
 class Link extends React.Component {
-  render() {
+  pushLocation(event) {
     let { children, link, pushLocation } = this.props;
+
+    event.preventDefault();
+    pushLocation(link);
+  }
+
+  render() {
+    let { children, link } = this.props;
     return <a
       className='link'
-      onClick={
-        (event) => {
-          event.preventDefault();
-          pushLocation(link);
-        }
-      }
+      onClick={ link.match(/^http/) ? null : this.pushLocation.bind(this) }
       href={ link } >
       {children}
     </a>
