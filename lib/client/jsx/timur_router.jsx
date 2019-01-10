@@ -117,7 +117,7 @@ const matchRoute = ({ path, hash }, route) => (
 );
 
 const routeParams = ({path,hash}, route) => {
-  let [ _, ...values ] = path.match(route.path_regexp);
+  let [ _, ...values ] = decodeURIComponent(path).match(route.path_regexp);
 
   if (hash) {
     let [ _, ...hash_values ] = hash.match(route.hash_regexp);

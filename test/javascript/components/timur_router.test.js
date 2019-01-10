@@ -25,14 +25,25 @@ describe('TimurRouter', () => {
       }
     });
 
-    let component = mount(
-      <TimurRouter store={store}/>
-    );
+    let component = mount(<TimurRouter store={store}/>);
 
     let p = component.find('mock-browser').first();
     expect(p.prop('project_name')).toEqual('labors');
     expect(p.prop('model_name')).toEqual('monster');
     expect(p.prop('record_name')).toEqual('Nemean Lion');
+  });
+
+  it('can deal with encoded slashes params', () => {
+    let component = mount(<TimurRouter store={
+      mockStore({
+        location: {
+          path: '/labors/browse/monster/Nemean Lion%2FLioness'
+        }
+      })
+    }/>);
+
+    let p = component.find('mock-browser').first();
+    expect(p.prop('record_name')).toEqual('Nemean Lion/Lioness');
   });
 
   it('matches hash arguments in the route', () => {
