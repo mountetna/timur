@@ -14,7 +14,7 @@ class Link extends React.Component {
     let { children, link } = this.props;
     return <a
       className='link'
-      onClick={ link.match(/^http/) ? null : this.pushLocation.bind(this) }
+      onClick={ link.match(/^https?:\/\//) ? null : this.pushLocation.bind(this) }
       href={ link } >
       {children}
     </a>
