@@ -59,10 +59,11 @@
 }
 
 .wrapper {
-  background-color: #767676;
   padding: 8px;
   display: flex;
   justify-content: space-between;
+  background: #eee;
+  min-width: 500px;;
 }
 
 .dd-wrapper{
@@ -75,9 +76,13 @@
 
 .dd-wrapper.right div i{
   flex: 1 1 0;
-  color: #fff;
   margin-right: 10px;
   padding-top: 10px;
+}
+
+.select-plot {
+  background-color: #eee;
+  padding: 10px;
 }
 
 .dd-header {
@@ -119,11 +124,10 @@
 }
 .dd-header-title-text {
   text-transform: capitalize;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: normal;
   margin: 2px 20px;
   margin-right: 30px;
-  color: #fff;
 }
 
 .dd-list {
@@ -160,22 +164,33 @@
   background-color: #eee;
 }
 
-.ps-container {
-  border-radius: 2px;
-  padding: 5px 30px 30px 30px;
-  max-width: 400px;
-  background: #fff;
-  border: 1px solid #bdc3c7;
+.ps-list-container {
+  padding: 5px 5px 5px 15px;
+  background: #eee;
+  min-width: 500px;
+}
+.ps-list-container:empty { 
+  border: none;
+  padding: 0px;
 }
 
-.ps-container:hover {
+.ps-card-container {
+  border-radius: 2px;
+  padding-bottom: 10px;
+  width: 440px;
+  background: #fff;
+  border: 1px solid #bdc3c7;
+  margin-bottom: 10px;
+}
+
+.ps-card-container:hover {
   box-shadow: 0 2px 6px 0 rgba(0,0,0,.2);
   // box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 .ps-label {
   display: inline-block;
-  min-width: 60px;
+  min-width: 80px;
   text-align: right;
   margin-right: 20px;
   color: #767676;
@@ -190,9 +205,10 @@
   border-radius: 3px;
   cursor: text;
   margin-top: 10px;
+  margin-right: 5px;
   overflow-x: hidden;
   overflow-y: auto;
-  width: 300px;
+  min-width: 280px;
   box-shadow: 0 1px 1px 1px rgba(0,0,0,.05);
   font-size: 15px;
   padding-left: 10px;
@@ -205,25 +221,27 @@
 }
 
 .ps-header {
-  padding-top: 10px;
-  padding-bottom: 10px;
   text-align: left;
-  font-size: 18px;
-  border-bottom: 1px solid darkgray;
-  color: black;
+  font-size: 16px;
+  color: #767676;
   text-transform: capitalize;
-  margin-bottom: 15px;
+  background-color: rgba(34, 139, 34, 0.2);
+  min-width: 380px;
+  margin-right: 0px;
+  padding: 0px 10px 0px 10px;
 }
 
-.ps-container i {
+.ps-card-container i {
   display: block;
   float: right;
-  color: darkgray;
-  
+  color: #767676;
+  font-weight: normal;
 }
 
-.ps-container i:hover {
+.ps-card-container i:hover {
   color: #484848;
+  font-weight: bolder;
+
 }
 
 .ps-button {
@@ -246,6 +264,10 @@ color: white;
   outline: none;
 }
 
+.pl-container {
+  background-color: #eee;
+  min-width: 500px;
+}
 .pl-input { 
   background-color: #fff;
   border: 1px solid #dfdfdf;
@@ -283,18 +305,27 @@ color: white;
 .pl-container .unit {
   margin-left: -16px;
   font-size: 85%;
- 
   font-weight: 900;
 	letter-spacing: 0.03em;
 }
 
 .type-label {
+  letter-spacing: 0.03em;
+  text-transform: capitalize;
   float: left;
   width: 60px;
   position: relative;
   top: 30px;
-  text-align: right;
+  margin-left: 30px;
 }
 .pl-group {
   float: left;
+}
+
+.section-header{
+  font-size: 115%;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 40px;
+  color: forestgreen;
 }

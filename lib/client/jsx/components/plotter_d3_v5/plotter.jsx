@@ -10,6 +10,7 @@ import ConsignmentView from '../manifest/consignment_view';
 import PlotLayout from './plot_layout';
 import PlotSeries from './plot_series';
 import Plot from './plot';
+import Resize from './resize';
 
 import {
     requestManifests, selectManifest, requestConsignmentsByManifestId
@@ -203,18 +204,20 @@ class Plotter extends React.Component{
       script={ plot.script }
       is_editing={ true }
       onChange={ this.updateField.bind(this)('script') }/>
-    Layout
-    <hr />
+    <br />
+  
+    <span className='section-header'>layout </span>
+    <br />
     <PlotLayout 
       layout={ plot.configuration.layout }
       onChange={
         this.updatePlotConfiguration('layout')
       }
     />
-
-    Plot Type
-    <hr />
-    <br/>
+    <br />
+    
+    <span className='section-header'>Plot Type </span>
+    <br />
     { plot.plot_type != null ? 
       <div className='wrapper'>
         <div className='dd-wrapper left'>
@@ -228,7 +231,7 @@ class Plotter extends React.Component{
                   default_text="Add Series"
                   list={plot_config.series_types.map(series=> series.type)}
                   onSelect={(index) => {
-                    let new_series = {series_type: plot_config.series_types[index].type, variables: {}, label: null};
+                    let new_series = {series_type: plot_config.series_types[index].type, variables: {}, name: null};
                     this.updatePlotConfiguration('plot_series')(
                       [new_series, ...plot.configuration.plot_series],
                     );
@@ -251,19 +254,21 @@ class Plotter extends React.Component{
       </div>
     
       :
+      <div className='select-plot'>
       <Dropdown 
         default_text = 'Select Plot'
         list={PLOTS.map(plot_config => plot_config.name)}
         onSelect={(index) => {this.updatePlotField('plot_type')(PLOTS[index].name);}}
         selected_index = {PLOTS.indexOf(plot_config)}
       />
+      </div>
     } 
 
 
-
+    <div className='ps-list-container'> 
     { plot.configuration.plot_series.map((series, index)=>
       <PlotSeries 
-          key={`ps-container-${index}`}  
+          key={`ps-card-container-${index}`}  
           plot_series={series} 
           series_config={plot_config.series_types.find(s=>s.type==series.series_type)}
           onDelete= {()=>{
@@ -277,6 +282,7 @@ class Plotter extends React.Component{
             this.updatePlotConfiguration('plot_series')(new_plot_series);
       }}/>)
     }
+    </div>
     </div>);
 
   }

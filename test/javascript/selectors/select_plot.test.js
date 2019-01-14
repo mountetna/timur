@@ -51,7 +51,7 @@ describe('Plot Selector', () => {
       }
     };
     plot.configuration.plot_series.push(plot_series_obj);
-    const input_variables = '\n@test_line____x = @x\n@test_line____y = @y\n';
+    const input_variables = '\n@series0____x = @x\n@series0____y = @y\n';
     const selected_plot = selectPlot(fake_state, fake_plot_id, {});
     expect(selected_plot.plotScript).toEqual('\n' + plot.script + input_variables);
   });
@@ -66,8 +66,8 @@ describe('Plot Selector', () => {
     };
     plot.configuration.plot_series.push(plot_series_obj);
     plot.plot_type = 'lineplot';
-    const input_variables = '\n@test_line____x = @x\n@test_line____y = @y\n';
-    const plot_variables = '@lineplot____xdomain = [ min( concat( @test_line____x)), max( concat( @test_line____x)) ]\n@lineplot____ydomain = [ min( concat( @test_line____y)), max( concat( @test_line____y)) ]';
+    const input_variables = '\n@series0____x = @x\n@series0____y = @y\n';
+    const plot_variables = '@lineplot____xdomain = [ min( concat( @series0____x)), max( concat( @series0____x)) ]\n@lineplot____ydomain = [ min( concat( @series0____y)), max( concat( @series0____y)) ]';
     const selected_plot = selectPlot(fake_state, fake_plot_id, {});
     expect(selected_plot.plotScript).toEqual('\n' + plot.script + input_variables + plot_variables);
   });
