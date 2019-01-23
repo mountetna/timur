@@ -13,17 +13,31 @@ import Plot from './plot';
 import Resize from './resize';
 
 import {
-    requestManifests, selectManifest, requestConsignmentsByManifestId
+  requestManifests,
+  selectManifest,
+  requestConsignmentsByManifestId
 } from '../../actions/manifest_actions';
 
 import {
-  requestPlots, selectPlot, saveNewPlot, savePlot, deletePlot
+  requestPlots,
+  selectPlot,
+  saveNewPlot,
+  savePlot,
+  deletePlot
 } from '../../actions/plot_actions';
 
-import { getAllPlots, getSelectedPlot, plotWithScript } from '../../selectors/plot_selector';
-import { MD5, getLoadedConsignmentIds } from '../../selectors/consignment_selector';
 import {
-  isEmptyManifests, getEditableManifests
+  getAllPlots,
+  getSelectedPlot,
+  plotWithScript
+} from '../../selectors/plot_selector';
+import {
+  MD5,
+  getLoadedConsignmentIds
+} from '../../selectors/consignment_selector';
+import {
+  isEmptyManifests,
+  getEditableManifests
 } from '../../selectors/manifest_selector';
 // the basic plotter interface
 //
@@ -49,21 +63,35 @@ import {
 
 const PLOTS = [
   {
-    name: 'lineplot',
-    label: 'Line Plot',
+    name: 'xy',
+    label: 'XY Plot',
     series_types: [
-      { type: 'line', variables: { x: 'expression', y: 'expression', color: 'color_type'} },
-      { type: 'scatter', variables: { x: 'expression', y: 'expression', color: 'color_type'} }
+      {
+        type: 'line',
+        variables: { x: 'expression', y: 'expression', color: 'color_type' }
+      },
+      {
+        type: 'scatter',
+        variables: { x: 'expression', y: 'expression', color: 'color_type' }
+      }
     ]
   },
   {
-    name: 'barplot',
+    name: 'category',
+    label: 'Category Plot',
     series_types: [
-      { type: 'bar', variables: { height: 'expression', category: 'expression' } }
+      {
+        type: 'bar',
+        variables: { value: 'expression', category: 'expression', color: 'color_type' },
+      },
+      {
+        type: 'box',
+        variables: { value: 'expression', category: 'expression', color: 'color_type' }
+      }
     ]
   }
 ];
-class Plotter extends React.Component{
+class Plotter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,13 +103,13 @@ class Plotter extends React.Component{
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.requestManifests();
     this.props.requestPlots();
   }
 
   createPlot() {
-    let date = new Date;
+    let date = new Date();
     let plot = {
       id: 0,
       access: 'private',
@@ -89,8 +117,8 @@ class Plotter extends React.Component{
       script: '',
       configuration: {
         layout: {
-          height: 0,
-          margin: {top: 10, bottom: 10, left: 10, right: 10}
+          height: 200,
+          margin: { top: 30, bottom: 30, left: 30, right: 30 }
         },
         plot_series: [],
         plot_type: null
@@ -98,22 +126,22 @@ class Plotter extends React.Component{
       created_at: date.toString(),
       updated_at: date.toString()
     };
-    this.setState({plot, editing: true});
+    this.setState({ plot, editing: true });
   }
 
-  setPlot({plot}) {
+  setPlot({ plot }) {
     this.selectPlot(plot.id);
   }
 
   selectPlot(id) {
     if (!id) {
-      this.setState({plot: null, md5sum: null});
+      this.setState({ plot: null, md5sum: null });
       return;
     }
 
-    let {plots} = this.props;
+    let { plots } = this.props;
 
-    let plot = plots.find(p=>p.id ==id);
+    let plot = plots.find(p => p.id == id);
 
     // copy it so you don't modify the store
     this.setState({
@@ -122,8 +150,8 @@ class Plotter extends React.Component{
     });
   }
 
-  updateField(field_name){
-    return (event)=>{
+  updateField(field_name) {
+    return event => {
       let { plot, md5sum } = this.state;
       let new_md5sum;
 
@@ -134,22 +162,22 @@ class Plotter extends React.Component{
       } else {
         plot[field_name] = event.target.value;
       }
-      this.setState({plot, md5sum: new_md5sum || md5sum});
+      this.setState({ plot, md5sum: new_md5sum || md5sum });
     };
   }
 
-  updatePlotField(field_name){
-    return (value)=>{
+  updatePlotField(field_name) {
+    return value => {
       let { plot } = this.state;
       plot[field_name] = value;
-      this.setState({plot});
+      this.setState({ plot });
     };
   }
 
-  updatePlotConfiguration(field_name){
-    return (value)=>{
+  updatePlotConfiguration(field_name) {
+    return value => {
       let { plot } = this.state;
-      let new_configuration = {...plot.configuration, [field_name]: value};
+      let new_configuration = { ...plot.configuration, [field_name]: value };
       this.updatePlotField('configuration')(new_configuration);
     };
   }
@@ -157,17 +185,15 @@ class Plotter extends React.Component{
   savePlot() {
     let { plot, editing } = this.state;
     // A new plot should have an id set to 0.
-    if(plot.id <= 0)
-      this.props.saveNewPlot(plot,this.setPlot.bind(this));
-    else
-      this.props.savePlot(plot);
+    if (plot.id <= 0) this.props.saveNewPlot(plot, this.setPlot.bind(this));
+    else this.props.savePlot(plot);
 
     if (editing) this.toggleEdit();
   }
 
   toggleEdit() {
     this.setState({
-      editing: (!this.state.editing)
+      editing: !this.state.editing
     });
   }
 
@@ -178,162 +204,161 @@ class Plotter extends React.Component{
 
   deletePlot() {
     let { plot } = this.state;
-    if(confirm('Are you sure you want to remove this plot?')){
+    if (confirm('Are you sure you want to remove this plot?')) {
       this.props.deletePlot(plot, () => this.selectPlot(0));
     }
   }
-  
-  revertPlot() {
-    let { plot: { id }, editing } = this.state;
 
-    if (id > 0)
-      this.selectPlot(id);
-    else
-      this.setState({plot: null});
+  revertPlot() {
+    let {
+      plot: { id },
+      editing
+    } = this.state;
+
+    if (id > 0) this.selectPlot(id);
+    else this.setState({ plot: null });
 
     if (editing) this.toggleEdit();
   }
 
   renderEditor() {
-    let {plot} = this.state;
+    let { plot } = this.state;
     let plot_config = PLOTS.find(pc => pc.name == plot.plot_type);
- 
-    return(<div>
-    Manifest
-    <ManifestScript
-      script={ plot.script }
-      is_editing={ true }
-      onChange={ this.updateField.bind(this)('script') }/>
-    <br />
-  
-    <span className='section-header'>layout </span>
-    <br />
-    <PlotLayout 
-      layout={ plot.configuration.layout }
-      onChange={
-        this.updatePlotConfiguration('layout')
-      }
-    />
-    <br />
-    
-    <span className='section-header'>Plot Type </span>
-    <br />
-    { plot.plot_type != null ? 
-      <div className='wrapper'>
-        <div className='dd-wrapper left'>
-          <div className='dd-header-title-text'>
-            {plot.plot_type}
-          </div> 
 
-          {plot.plot_type &&
-            <div>
-              <Dropdown 
-                  default_text="Add Series"
-                  list={plot_config.series_types.map(series=> series.type)}
-                  onSelect={(index) => {
-                    let new_series = {series_type: plot_config.series_types[index].type, variables: {}, name: null};
-                    this.updatePlotConfiguration('plot_series')(
-                      [new_series, ...plot.configuration.plot_series],
-                    );
+    return (
+      <div>
+        Manifest
+        <ManifestScript
+          script={plot.script}
+          is_editing={true}
+          onChange={this.updateField.bind(this)('script')}
+        />
+        <br />
+        <span className='section-header'>layout </span>
+        <br />
+        <PlotLayout
+          layout={plot.configuration.layout}
+          onChange={this.updatePlotConfiguration('layout')}
+        />
+        <br />
+        <span className='section-header'>Plot Type </span>
+        <br />
+        {plot.plot_type != null ? (
+          <div className='wrapper'>
+            <div className='dd-wrapper left'>
+              <div className='dd-header-title-text'>{plot_config.label}</div>
+              <div>
+                <Dropdown
+                  default_text='Add Series'
+                  list={plot_config.series_types.map(series => series.type)}
+                  onSelect={index => {
+                    let new_series = {
+                      series_type: plot_config.series_types[index].type,
+                      variables: {},
+                      name: null
+                    };
+                    this.updatePlotConfiguration('plot_series')([
+                      new_series,
+                      ...plot.configuration.plot_series
+                    ]);
                   }}
                   selected_index={null}
                 />
+              </div>
             </div>
-          }
-          </div>
-          <div className='dd-wrapper right'>
-            <div>
-              <i onClick={() => {
-                  this.updatePlotField('plot_type')(null);
-                  this.updatePlotConfiguration('plot_series')([]);
-                }}
-                className='right fa fa-lg'>&times;
-              </i>
+            <div className='dd-wrapper right'>
+              <div>
+                <i
+                  onClick={() => {
+                    this.updatePlotField('plot_type')(null);
+                    this.updatePlotConfiguration('plot_series')([]);
+                  }}
+                  className='right fa fa-lg'
+                >
+                  &times;
+                </i>
+              </div>
             </div>
           </div>
+        ) : (
+          <div className='select-plot'>
+            <Dropdown
+              default_text='Select Plot'
+              list={PLOTS.map(plot_config => plot_config.name)}
+              onSelect={index => {
+                this.updatePlotField('plot_type')(PLOTS[index].name);
+              }}
+              selected_index={PLOTS.indexOf(plot_config)}
+            />
+          </div>
+        )}
+        <div className='ps-list-container'>
+          {plot.configuration.plot_series.map((series, index) => (
+            <PlotSeries
+              key={`ps-card-container-${index}`}
+              plot_series={series}
+              series_config={plot_config.series_types.find(
+                s => s.type == series.series_type
+              )}
+              onDelete={() => {
+                let new_plot_series = plot.configuration.plot_series.slice(0);
+                new_plot_series.splice(index, 1);
+                this.updatePlotConfiguration('plot_series')(new_plot_series);
+              }}
+              onChange={(name, value) => {
+                let new_plot_series = plot.configuration.plot_series.slice(0);
+                new_plot_series[index] = { ...series, [name]: value };
+                this.updatePlotConfiguration('plot_series')(new_plot_series);
+              }}
+            />
+          ))}
+        </div>
       </div>
-    
-      :
-      <div className='select-plot'>
-      <Dropdown 
-        default_text = 'Select Plot'
-        list={PLOTS.map(plot_config => plot_config.name)}
-        onSelect={(index) => {this.updatePlotField('plot_type')(PLOTS[index].name);}}
-        selected_index = {PLOTS.indexOf(plot_config)}
-      />
-      </div>
-    } 
-
-
-    <div className='ps-list-container'> 
-    { plot.configuration.plot_series.map((series, index)=>
-      <PlotSeries 
-          key={`ps-card-container-${index}`}  
-          plot_series={series} 
-          series_config={plot_config.series_types.find(s=>s.type==series.series_type)}
-          onDelete= {()=>{
-            let new_plot_series = plot.configuration.plot_series.slice(0);
-            new_plot_series.splice(index, 1);
-            this.updatePlotConfiguration('plot_series')(new_plot_series);
-          }}
-          onChange={(name, value) => { 
-            let new_plot_series = plot.configuration.plot_series.slice(0);
-            new_plot_series[index] = {...series, [name]: value};
-            this.updatePlotConfiguration('plot_series')(new_plot_series);
-      }}/>)
-    }
-    </div>
-    </div>);
-
+    );
   }
 
   renderPlot() {
-    let {plot} = this.state;
+    let { plot } = this.state;
 
-    return(
+    return (
       <div className='chart'>
-        <Resize render={width => (
-          <Plot plot={plotWithScript([plot, {}])} width={width}/>
-        )}/>
+        <Resize
+          render={width => (
+            <Plot plot={plotWithScript([plot, {}])} width={width} />
+          )}
+        />
       </div>
     );
-
   }
-  render(){
+  render() {
     // Variables.
-    let {
-      plots,
-      loaded_consignments
-    } = this.props;
+    let { plots, loaded_consignments } = this.props;
 
     let { plot, editing, md5sum } = this.state;
-  
-    return(
+
+    return (
       <DocumentWindow
-        editing={ editing }
-        document={ plot }
-        documents={ plots }
+        editing={editing}
+        document={plot}
+        documents={plots}
         documentType='plot'
-        onUpdate={ this.updateField.bind(this) }
-        onEdit={ this.toggleEdit.bind(this) }
-
-        onCancel={ this.revertPlot.bind(this) }
-        onSave={ this.savePlot.bind(this) }
-        onCopy={ this.copyPlot.bind(this) }
-        onRemove={ this.deletePlot.bind(this) } 
-
+        onUpdate={this.updateField.bind(this)}
+        onEdit={this.toggleEdit.bind(this)}
+        onCancel={this.revertPlot.bind(this)}
+        onSave={this.savePlot.bind(this)}
+        onCopy={this.copyPlot.bind(this)}
+        onRemove={this.deletePlot.bind(this)}
         onCreate={this.createPlot.bind(this)}
-        onSelect={this.selectPlot.bind(this)} >
+        onSelect={this.selectPlot.bind(this)}
+      >
         {editing ? this.renderEditor() : this.renderPlot()}
-
       </DocumentWindow>
     );
   }
 }
 
 export default connect(
-  (state = {}, own_props)=>{
-
+  (state = {}, own_props) => {
     let plots = getAllPlots(state);
     return {
       plots,
