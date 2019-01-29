@@ -3,8 +3,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { selectPlot } from '../../selectors/plot_selector';
 import { requestPlot } from '../../actions/plot_actions';
-import Plot from '../plotter_d3_v5/plot';
-import Resize from '../plotter_d3_v5/resize';
+import Plot from '../plots/plot';
+import Resize from '../resize';
 class PlotAttribute extends React.Component {
   componentDidMount() {
     let {

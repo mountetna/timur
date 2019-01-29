@@ -46,7 +46,7 @@ const categoryGroups = (category, value)=>{
       });
 
       return {
-        label: category_names,
+        label: category_name,
         values: category_values,
         inliers: {whisker_min, whisker_max, quartile_data},
         outliers,
@@ -64,6 +64,8 @@ class Boxes extends Component{
 
 
     let groups = categoryGroups(category, value);
+    console.log('======= groups ===========', groups);
+
     let boxes = groups.map( (group,index_group) => {
       let bar_height = yScale(group.inliers.quartile_data[0]) 
         - yScale(group.inliers.quartile_data[2]);
@@ -74,7 +76,6 @@ class Boxes extends Component{
       let y_max_scale = yScale(group.inliers.whisker_max);
 
       let outliers = group.outliers.map((outlier, index) => {
-
         let outlier_props = {
           key: `outlier_${index}`,
           r: 3,
@@ -140,8 +141,8 @@ class Boxes extends Component{
         y: yScale(group.inliers.quartile_data[2]),
         height: bar_height,
         width: xScale.bandwidth(),
-        fill: colorScale(group.inliers.quartile_data[1]),
-        stroke: colorScale(group.inliers.quartile_data[2])
+        fill: 'green',
+        stroke: 'green'
       };
 
       let upper_quartile_props = {

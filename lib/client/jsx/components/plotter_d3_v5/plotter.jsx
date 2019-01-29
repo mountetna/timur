@@ -9,8 +9,8 @@ import ManifestScript from '../manifest/manifest_script';
 import ConsignmentView from '../manifest/consignment_view';
 import PlotLayout from './plot_layout';
 import PlotSeries from './plot_series';
-import Plot from './plot';
-import Resize from './resize';
+import Plot, {PLOTS} from '../plots/plot';
+import Resize from '../resize';
 
 import {
   requestManifests,
@@ -60,37 +60,7 @@ import {
 //  - remove
 //  type
 //  series vars, e.g. x y color
-
-const PLOTS = [
-  {
-    name: 'xy',
-    label: 'XY Plot',
-    series_types: [
-      {
-        type: 'line',
-        variables: { x: 'expression', y: 'expression', color: 'color_type' }
-      },
-      {
-        type: 'scatter',
-        variables: { x: 'expression', y: 'expression', color: 'color_type' }
-      }
-    ]
-  },
-  {
-    name: 'category',
-    label: 'Category Plot',
-    series_types: [
-      {
-        type: 'bar',
-        variables: { value: 'expression', category: 'expression', color: 'color_type' },
-      },
-      {
-        type: 'box',
-        variables: { value: 'expression', category: 'expression', color: 'color_type' }
-      }
-    ]
-  }
-];
+const PLOT_TYPES = Object.keys(PLOTS).sort();
 class Plotter extends React.Component {
   constructor(props) {
     super(props);
@@ -223,7 +193,7 @@ class Plotter extends React.Component {
 
   renderEditor() {
     let { plot } = this.state;
-    let plot_config = PLOTS.find(pc => pc.name == plot.plot_type);
+    let plot_config = PLOTS[plot.plot_type];
 
     return (
       <div>
@@ -284,11 +254,11 @@ class Plotter extends React.Component {
           <div className='select-plot'>
             <Dropdown
               default_text='Select Plot'
-              list={PLOTS.map(plot_config => plot_config.name)}
-              onSelect={index => {
-                this.updatePlotField('plot_type')(PLOTS[index].name);
+              list={ PLOT_TYPES }
+              onSelect={ index=>{
+                this.updatePlotField('plot_type')(PLOT_TYPES[index]);
               }}
-              selected_index={PLOTS.indexOf(plot_config)}
+              selected_index={PLOT_TYPES.indexOf(plot.plot_type)}
             />
           </div>
         )}

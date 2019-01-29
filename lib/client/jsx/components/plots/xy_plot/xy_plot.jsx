@@ -1,15 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import * as d3 from 'd3';
-import Axis from '../../axis';
-// import Bars from './bars';
-import Boxes from './boxes';
+import Line from './line';
+import Scatter from './scatter';
+import Axis from '../axis';
+import Legend from '../legend';
 
-export default class CategoryPlot extends Component{
-  constructor(props){
-    super(props);
-    this.xScale = d3.scaleBand();
-  }
-
+export default class XYPlot extends Component {
   scale(axis) {
     return axis.values[0] instanceof Date ? d3.scaleTime() : d3.scaleLinear();
   }
@@ -17,11 +13,11 @@ export default class CategoryPlot extends Component{
   seriesComponent({ series, index, xScale, yScale, color }) {
     let Component;
     switch (series.series_type) {
-      // case 'bar':
-      //   Component = Bars;
-      //   break;
-      case 'box':
-        Component = Boxes;
+      case 'line':
+        Component = Line;
+        break;
+      case 'scatter':
+        Component = Scatter;
         break;
       default:
         return null;
@@ -37,9 +33,9 @@ export default class CategoryPlot extends Component{
     );
   }
 
-  render(){
-    let {parent_width, layout, data}=this.props;
-    let {domain, plot_series} = data;
+  render() {
+    let { parent_width, layout, data } = this.props;
+    let { xdomain, ydomain, plot_series } = data;
     let { margin, height } = layout;
     let svg_width = parent_width > 800 ? 800 : parent_width;
     let svg_dimensions = {
@@ -47,17 +43,26 @@ export default class CategoryPlot extends Component{
       height
     };
 
+    if (!xdomain || !ydomain) return null;
 
-    let categories = [...new Set([].concat(...plot_series.map( s => s.variables.category.labels)))];
-    // scaleBand type
-    let xScale = this.xScale
-      .padding(.8)
-      .domain(categories)
-      .range([margin.left, svg_dimensions.width - margin.right]);
-  
+    let color = d3.scaleOrdinal(d3.schemeCategory10);
+    let labels = plot_series.map(series => {
+      return {
+        color: color(series.name),
+        text: series.name
+      };
+    });
+
+    // Create time scale.
+
+    let xScale = this.scale(xdomain)
+      .domain(xdomain.values)
+      .range([margin.left, svg_dimensions.width - margin.right])
+      .nice();
+
     // scaleLinear type
-    let yScale = this.scale(domain)     
-      .domain(domain)
+    let yScale = this.scale(ydomain)
+      .domain(ydomain.values)
       .range([svg_dimensions.height - margin.bottom, margin.top])
       .nice();
 
@@ -80,21 +85,23 @@ export default class CategoryPlot extends Component{
       tickSize: svg_dimensions.width - margin.left - margin.right
     };
 
-    return(
+    return (
       <div>
+        <Legend labels={labels} />
         <svg {...svg_props}>
-          <Axis {...axis_x_props}/>
-          <Axis {...axis_y_props}/>
+          <Axis {...axis_x_props} />
+          <Axis {...axis_y_props} />
           {plot_series.map((series, index) =>
             this.seriesComponent({
               series,
               index,
               xScale,
-              yScale
+              yScale,
+              color: labels[index].color
             })
           )}
         </svg>
-     </div>
+      </div>
     );
   }
 }

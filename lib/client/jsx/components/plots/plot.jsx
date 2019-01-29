@@ -8,15 +8,66 @@ import { requestConsignments } from '../../actions/manifest_actions';
 // import BarPlot from './plotter/plots/bar_plot';
 // import BoxGraph from './plots/box_plot/box_graph';
 // import Histogram from '../plotter/plots/histogram';
-import LineGraph, {
-  configureLineGraph
-} from '../plotter_d3_v5/plots/line_plot/line_graph';
-import XYPlot from '../plotter_d3_v5/plots/xy_plot/xy_plot';
-import CategoryPlot from '../plotter_d3_v5/plots/category_plot/category_plot';
+import XYPlot from './xy_plot/xy_plot';
+import CategoryPlot from './category_plot/category_plot';
 // import StackedBarPlot from '../plotter/plots/stacked_bar_plot';
 // import Swarm from '../plotter/plots/swarm';
-import Resize from './resize';
-import TimelinePlot from './plots/timeline_plot/timeline_graph';
+// import TimelinePlot from './plots/timeline_plot/timeline_graph';
+
+// script addendum helpers
+const varName = (name, vname) => `${name}____${vname}`;
+
+const seriesVars = (plot_series, vname) =>
+  plot_series.map((s, index) => `@${varName(`series${index}`, vname)}`);
+
+export const PLOTS = {
+  xy: {
+    name: 'xy',
+    label: 'XY Plot',
+    series_types: [
+      {
+        type: 'line',
+        variables: { x: 'expression', y: 'expression', color: 'color_type' }
+      },
+      {
+        type: 'scatter',
+        variables: { x: 'expression', y: 'expression', color: 'color_type' }
+      }
+    ],
+    variables: ['xdomain', 'ydomain'],
+    addendum: plot_series => {
+      let all_x = seriesVars(plot_series, 'x').join(', ');
+      let all_y = seriesVars(plot_series, 'y').join(', ');
+
+      return {
+        xdomain: `[ min( concat( ${all_x})), max( concat( ${all_x})) ]`,
+        ydomain: `[ min( concat( ${all_y})), max( concat( ${all_y})) ]`
+      };
+    }
+  },
+  category: {
+    name: 'category',
+    label: 'Category Plot',
+    series_types: [
+      {
+        type: 'bar',
+        variables: { value: 'expression', category: 'expression', color: 'color_type' },
+      },
+      {
+        type: 'box',
+        variables: { value: 'expression', category: 'expression', color: 'color_type' }
+      }
+    ],
+    variables: ['domain'],
+    addendum: plot_series => {
+      let all_values = seriesVars(plot_series, 'value').join(', ');
+
+      return {
+        domain: `[ min( concat( ${all_values})), max( concat( ${all_values})) ]`,
+      };
+    }
+  }
+};
 
 class Plot extends React.Component {
   componentDidMount() {
@@ -52,9 +103,6 @@ class Plot extends React.Component {
       //     PlotComponent = Histogram; break;
       //   case 'swarm':
       //     PlotComponent = SwarmPlot; break;
-      case 'lineplot':
-        PlotComponent = LineGraph;
-        break;
       //   case 'scatter':
       //     PlotComponent = ScatterPlot; break;
       //   case 'heatmap':
