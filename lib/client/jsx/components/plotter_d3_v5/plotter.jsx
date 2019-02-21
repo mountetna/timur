@@ -12,12 +12,7 @@ import PlotSeries from './plot_series';
 import Plot, {PLOTS} from '../plots/plot';
 import Resize from '../resize';
 
-import {
-  requestManifests,
-  selectManifest,
-  requestConsignmentsByManifestId
-} from '../../actions/manifest_actions';
-
+import { pushLocation } from '../../actions/location_actions';
 import {
   requestPlots,
   selectPlot,
@@ -27,6 +22,7 @@ import {
 } from '../../actions/plot_actions';
 
 import {
+  newPlot,
   getAllPlots,
   getSelectedPlot,
   plotWithScript
@@ -74,50 +70,55 @@ class Plotter extends React.Component {
   }
 
   componentDidMount() {
-    this.props.requestManifests();
     this.props.requestPlots();
   }
 
+  componentDidUpdate() {
+    let { plot_id, plots } = this.props;
+    let { plot } = this.state;
+
+    if (plot_id && plots && !plot) this.selectPlot(plot_id, false);
+  }
+
   createPlot() {
-    let date = new Date();
-    let plot = {
-      id: 0,
-      access: 'private',
-      name: null,
-      script: '',
-      configuration: {
-        layout: {
-          height: 200,
-          margin: { top: 30, bottom: 30, left: 30, right: 30 }
-        },
-        plot_series: [],
-        plot_type: null
-      },
-      created_at: date.toString(),
-      updated_at: date.toString()
-    };
-    this.setState({ plot, editing: true });
+    this.selectPlot('new', true);
   }
 
   setPlot({ plot }) {
     this.selectPlot(plot.id);
   }
 
-  selectPlot(id) {
-    if (!id) {
-      this.setState({ plot: null, md5sum: null });
-      return;
+  selectPlot(id, push=true) {
+    let { plots, pushLocation } = this.props;
+    let plot;
+
+    switch(id) {
+      case 'new':
+        plot = newPlot()
+        break;
+      case null:
+        plot = null;
+        break;
+      default:
+        // find it in the existing manifests
+        plot = plots.find(p => p.id == id);
+        if (!plot) return;
+
+        // copy it so you don't modify the store
+        plot = { ...plot };
+        break;
     }
 
-    let { plots } = this.props;
-
-    let plot = plots.find(p => p.id == id);
-
-    // copy it so you don't modify the store
     this.setState({
-      plot: { ...plot },
-      md5sum: MD5(plot.script)
+      plot,
+      md5sum: plot ? MD5(plot.script) : null
     });
+
+    if (push) pushLocation(
+      id == null ?
+      Routes.plots_path(TIMUR_CONFIG.project_name) :
+      Routes.plot_path(TIMUR_CONFIG.project_name, id)
+    );
   }
 
   updateField(field_name) {
@@ -302,7 +303,7 @@ class Plotter extends React.Component {
   }
   render() {
     // Variables.
-    let { plots, loaded_consignments } = this.props;
+    let { plots } = this.props;
 
     let { plot, editing, md5sum } = this.state;
 
@@ -328,23 +329,15 @@ class Plotter extends React.Component {
 }
 
 export default connect(
-  (state = {}, own_props) => {
-    let plots = getAllPlots(state);
-    return {
-      plots,
-      is_empty_manifests: isEmptyManifests(state),
-      plotable_manifests: getEditableManifests(state),
-      loaded_consignments: getLoadedConsignmentIds(state)
-    };
-  },
+  (state) => ({
+    plots: getAllPlots(state)
+  }),
   {
     requestPlots,
-    requestManifests,
-    selectManifest,
     selectPlot,
-    requestConsignmentsByManifestId,
     saveNewPlot,
     savePlot,
-    deletePlot
+    deletePlot,
+    pushLocation
   }
 )(Plotter);

@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import DocumentWindow from '../document/document_window';
 import ManifestScript from './manifest_script';
 import ConsignmentView from './consignment_view';
-import {addTokenUser} from '../../actions/timur_actions';
 import {
   requestManifests, saveNewManifest, saveManifest,
   copyManifest, deleteManifest, requestConsignments
@@ -98,7 +97,6 @@ class Manifests extends React.Component{
         break;
     }
 
-    // copy it so you don't modify the store
     this.setState({
       manifest,
       md5sum: manifest ? MD5(manifest.script) : null
@@ -204,6 +202,6 @@ export default connect(
   // map dispatch
   {
     requestManifests, saveNewManifest, saveManifest, copyManifest, deleteManifest, requestConsignments,
-    pushLocation, addTokenUser
+    pushLocation
   }
 )(Manifests);

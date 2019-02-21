@@ -76,6 +76,12 @@ const ROUTES = [
     component: Plotter,
     mode: 'plots'
   },
+  {
+    name: 'plot',
+    template: ':project_name/plot/:plot_id',
+    component: Plotter,
+    mode: 'plots'
+  },
 ];
 
 

@@ -89,24 +89,6 @@ class Plot extends React.Component {
     } = plot;
     let PlotComponent;
     switch (plot_type) {
-      //   case 'boxplot':
-      //     return null;
-      //     PlotComponent = BoxGraph; break;
-      //   case 'barplot':
-      //     PlotComponent = BarPlot; break;
-      //   case 'bargraph':
-      //     return null;
-      // PlotComponent = BarGraph; break;
-      //   case 'stackedbar':
-      //     PlotComponent = StackedBarPlot; break;
-      //   case 'histogram':
-      //     PlotComponent = Histogram; break;
-      //   case 'swarm':
-      //     PlotComponent = SwarmPlot; break;
-      //   case 'scatter':
-      //     PlotComponent = ScatterPlot; break;
-      //   case 'heatmap':
-      //     PlotComponent = HeatmapPlot; break;
       case 'xy':
         PlotComponent = XYPlot;
         break;
