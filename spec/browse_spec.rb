@@ -5,10 +5,6 @@ describe BrowseController do
     OUTER_APP
   end
 
-  def get_browse(endpoint, user=:viewer)
-    auth_header(user)
-    get("/labors/#{endpoint}")
-  end
 
   context '#view' do
     it 'gets the view json with indexes in order' do
@@ -22,7 +18,8 @@ describe BrowseController do
       weight = create(:view_attribute, view_pane: view_pane, index_order: 1, name: 'weight')
       odor = create(:view_attribute, view_pane: view_pane, index_order: 3, name: 'odor')
 
-      get_browse('view/monster')
+      auth_header(:viewer)
+      get('/api/view/labors/monster')
 
       expect(last_response.status).to eq(200)
 

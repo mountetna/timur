@@ -7,7 +7,7 @@ describe 'ManifestsController' do
 
   def get_manifest endpoint, user
     auth_header(user)
-    get("/labors/manifests/#{endpoint}")
+    get("/api/labors/manifests/#{endpoint}")
   end
 
   def post_manifest endpoint, user, hash={}
@@ -20,16 +20,9 @@ describe 'ManifestsController' do
     delete("/labors/manifests/destroy/#{manifest_id}")
   end
 
-  context '#index' do
-    it 'must be a project viewer' do
-      get_manifest(nil, :non_user)
-      expect(last_response.status).to eq(403)
-    end
-  end
-
   context '#fetch' do
     it 'must be a project viewer' do
-      get_manifest(:fetch, :non_user)
+      fetch_documents(:manifest, :non_user)
       expect(last_response.status).to eq(403)
     end
 
@@ -44,7 +37,7 @@ describe 'ManifestsController' do
 
       md5sum = Digest::MD5.hexdigest(public_manifests.first.script)
 
-      get_manifest(:fetch, :viewer)
+      fetch_documents(:manifest, :viewer)
 
       # it returns md5s for each manifest
       manifest_md5s = json_body[:manifests].map{|manifest| manifest[:md5sum]}.uniq
@@ -69,37 +62,35 @@ describe 'ManifestsController' do
     end
 
     it 'must be a project viewer' do
-      post_manifest(:create, :non_user, @manifest)
+      create_document(:manifest, @manifest, :non_user)
       expect(last_response.status).to eq(403)
     end
 
     it 'keeps non admins from creating public manifests' do
-      post_manifest(:create, :viewer, @manifest)
+      create_document(:manifest, @manifest, :viewer)
+
       expect(last_response.status).to eq(200)
       expect(Manifest.first.access).to eq('private')
     end
 
     it 'lets admins create public manifests' do
-      post_manifest(:create, :admin, @manifest)
-      manifest = Manifest.first
+      create_document(:manifest, @manifest, :admin)
 
       expect(last_response.status).to eq(200)
-      expect(manifest.name).to  eq('test manifest')
+      expect(Manifest.first.name).to eq('test manifest')
     end
 
-    it 'creates a manifest' do
-      post_manifest(:create, :viewer, @manifest.merge(access: 'private'))
+    it 'creates a private manifest' do
+      create_document(:manifest, @manifest.merge(access: 'private'), :viewer)
 
       expect(last_response.status).to eq(200)
-
-      manifest = Manifest.first
-      expect(manifest.name).to  eq('test manifest')
+      expect(Manifest.first.name).to  eq('test manifest')
     end
   end
 
   context '#destroy' do
     it 'must be a project user' do
-      delete_manifest(1, :non_user)
+      destroy_document(:manifest, 1, :non_user)
       expect(last_response.status).to eq(403)
     end
 
@@ -110,10 +101,10 @@ describe 'ManifestsController' do
       manifest_public = create(:manifest, :private, :script, user: admin)
       manifest_private = create(:manifest, :public, :script, user: admin)
 
-      delete_manifest(manifest_public.id, :viewer)
+      destroy_document(:manifest, manifest_public.id, :viewer)
       expect(last_response.status).to eq(403)
 
-      delete_manifest(manifest_private.id, :viewer)
+      destroy_document(:manifest, manifest_private.id, :viewer)
       expect(last_response.status).to eq(403)
 
       expect(Manifest.count).to eq(2)
@@ -124,7 +115,7 @@ describe 'ManifestsController' do
       admin = create(:user, :admin)
       manifest = create(:manifest, :public, :script, user: viewer)
 
-      delete_manifest(manifest.id, :admin)
+      destroy_document(:manifest, manifest.id, :admin)
       expect(last_response.status).to eq(200)
       expect(Manifest.count).to eq(0)
     end
@@ -133,7 +124,7 @@ describe 'ManifestsController' do
       viewer = create(:user, :viewer)
       manifest = create(:manifest, :private, :script, user: viewer)
 
-      delete_manifest(manifest.id, :viewer)
+      destroy_document(:manifest, manifest.id, :viewer)
 
       expect(Manifest.count).to eq(0)
     end
@@ -147,10 +138,18 @@ describe 'ManifestsController' do
       manifest_public = create(:manifest, :private, :script, user: admin, description: 'original')
       manifest_private = create(:manifest, :public, :script, user: admin, description: 'original')
 
-      post_manifest( "update/#{manifest_public.id}", :viewer, description: 'changed')
+      update_document(
+        :manifest, manifest_public.id,
+        { description: 'changed' },
+        :viewer
+      )
       expect(last_response.status).to eq(403)
 
-      post_manifest( "update/#{manifest_private.id}", :viewer, description: 'changed')
+      update_document(
+        :manifest, manifest_private.id,
+        { description: 'changed' },
+        :viewer
+      )
       expect(last_response.status).to eq(403)
 
       manifest_public.refresh
@@ -164,7 +163,9 @@ describe 'ManifestsController' do
       viewer = create(:user, :viewer)
       manifest = create(:manifest, :private, :script, user: viewer, description: 'original')
 
-      post_manifest("update/#{manifest.id}", :viewer, description: 'changed')
+      update_document(
+        :manifest, manifest.id, { description: 'changed' }, :viewer
+      )
       manifest.refresh
 
       expect(manifest.description).to eq('changed')
@@ -176,11 +177,15 @@ describe 'ManifestsController' do
       admin = create(:user, :admin)
       manifest = create(:manifest, :public, :script, user: viewer, description: 'original')
 
-      post_manifest("update/#{manifest.id}", :editor, description: 'changed')
+      update_document(
+        :manifest, manifest.id, { description: 'changed' }, :editor
+      )
       manifest.refresh
       expect(manifest.description).to eq('original')
 
-      post_manifest("update/#{manifest.id}", :admin, description: 'changed')
+      update_document(
+        :manifest, manifest.id, { description: 'changed' }, :admin
+      )
       manifest.refresh
       expect(manifest.description).to eq('changed')
     end
