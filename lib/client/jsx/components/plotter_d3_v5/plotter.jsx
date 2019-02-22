@@ -111,7 +111,8 @@ class Plotter extends React.Component {
 
     this.setState({
       plot,
-      md5sum: plot ? MD5(plot.script) : null
+      md5sum: plot ? MD5(plot.script) : null,
+      editing: id == 'new'
     });
 
     if (push) pushLocation(
@@ -181,13 +182,10 @@ class Plotter extends React.Component {
   }
 
   revertPlot() {
-    let {
-      plot: { id },
-      editing
-    } = this.state;
+    let { plot: { id }, editing } = this.state;
 
     if (id > 0) this.selectPlot(id);
-    else this.setState({ plot: null });
+    else this.selectPlot(null);
 
     if (editing) this.toggleEdit();
   }
@@ -214,7 +212,7 @@ class Plotter extends React.Component {
         <br />
         <span className='section-header'>Plot Type </span>
         <br />
-        {plot.plot_type != null ? (
+        {plot_config ? (
           <div className='wrapper'>
             <div className='dd-wrapper left'>
               <div className='dd-header-title-text'>{plot_config.label}</div>

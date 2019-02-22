@@ -99,7 +99,8 @@ class Manifests extends React.Component{
 
     this.setState({
       manifest,
-      md5sum: manifest ? MD5(manifest.script) : null
+      md5sum: manifest ? MD5(manifest.script) : null,
+      editing: id == 'new'
     });
 
     if (push) pushLocation(
@@ -151,10 +152,8 @@ class Manifests extends React.Component{
   revertManifest() {
     let { manifest: { id }, editing } = this.state;
 
-    if (id > 0)
-      this.selectManifest(id);
-    else
-      this.selectManifest(null);
+    if (id > 0) this.selectManifest(id);
+    else this.selectManifest(null);
 
     if (editing) this.toggleEdit();
   }

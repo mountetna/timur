@@ -73,7 +73,7 @@ class Plot extends React.Component {
   componentDidMount() {
     let { data, requestConsignments, plot, inputs } = this.props;
 
-    if (!data) {
+    if (!data && plot.script) {
       requestConsignments([plot.plotScript]);
     }
   }
