@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import {IdentifierSearchContainer as IdentifierSearch} from './identifier_search';
+import IdentifierSearch from './identifier_search';
 import Link from './link';
 import { selectUser } from '../selectors/user_selector';
 
@@ -77,18 +77,13 @@ class TimurNav extends React.Component{
 
     return(
       <div id='header'>
-        <div id='title'>
-          <div id='heading'>
-            Timur
-          </div>
-          {mode !== 'home' && <IdentifierSearch />}
-          <div id='login'>
-            {login}
-          </div>
-        </div>
         <Logo exchanges={exchanges} logo_id={logo_id}/>
+        {mode !== 'home' && <IdentifierSearch />}
         <div id='nav'>
           {mode !== 'home' && this.renderTabs()}
+        </div>
+        <div id='login'>
+          {login}
         </div>
       </div>
     );
