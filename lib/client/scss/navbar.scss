@@ -2,13 +2,16 @@
 
 #header {
   position: relative;
-  height: 85px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid lightgray;
   #logo {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 60px;
+    flex-basis: 60px;
     height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     #normal {
       @include basic_logo(#066306,'../img/Timur.png', 50px);
@@ -18,89 +21,19 @@
     }
   }
 
-  #title {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-left: 65px;
-    padding-right: 5px;
-    width: calc(100% - 70px);
-    height: 60px;
-    background: linear-gradient(to right, #EEFCE5 0%, #A4E882 20%, #1A8F4D 40%);
-
-    #heading {
-      color: #333;
-      font-family: 'Montserrat', serif;
-      font-size: 1.8em;
-    }
-
-    #identifier_search {
-      .search {
-        display: flex;
-        background-color: rgba(white, 0.5);
-        border: 1px solid forestgreen;
-        border-radius: 2px;
-        margin-right: 5px;
-        padding-right: 5px;
-        align-items: center;
-        span {
-          margin-left: 3px;
-          font-size: 12px;
-          color: darkgreen;
-          margin-right: 2px;
-        }
-        input[type="text"] {
-          border: none;
-          background-color: transparent;
-          color: purple;
-          font-size: 14px;
-          width: 200px;
-          font-family: $value_font;
-        }
-      }
-      .drop_down {
-        display: block;
-        border-top: none;
-        border-bottom: 2px solid forestgreen;
-        background-color: mix(forestgreen,white,20%);
-        display: inline;
-        position: absolute;
-        right: 15px;
-        text-align: left;
-        top: 22px;
-        width: 205px;
-        z-index: 1000;
-        .title {
-          font-family: $body_font;
-          font-weight: bold;
-          background-color: rgba(forestgreen,0.4);
-          font-size: 14px;
-        }
-        .list {
-          font-family: $value_font;
-          font-size: 12px;
-          max-height: 80px;
-          overflow: auto;
-          .identifier {
-            padding: 1px;
-          }
-        }
-      }
-    }
-
-    #login {
-      color: white;
-      font-family: $body_font;
-    }
+  #identifier_search {
+    flex-basis: 250px;
+    position: relative;
   }
 
-  #nav {
+  #login {
+    color: forestgreen;
+    flex-basis: 10%;
     font-family: $body_font;
-    background-color: #efe;
-    position: relative;
-    top: 60px;
-    height: 25px;
+  }
+  #nav {
+    flex-grow: 1;
+    font-family: $body_font;
 
     .nav_tab {
       height: 100%;
@@ -110,25 +43,15 @@
       text-transform: capitalize;
 
       a {
-        color: teal;
+        color: darkgray;
         cursor: pointer;
+        outline: 0;
       }
     }
     .selected {
-      background-color: white;
       a {
-        color: goldenrod;
-        cursor: pointer;
+        color: darkgoldenrod;
       }
     }
   }
-}
-
-#identifier_search{
-  display: inline-block;
-  width: 235px;
-  border-bottom: none;
-  float: right;
-  padding: 2px;
-  position: relative;
 }
