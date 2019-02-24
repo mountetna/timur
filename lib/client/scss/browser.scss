@@ -11,6 +11,7 @@
     font-family: $body_font;
     position: relative;
     padding: 3px;
+    margin-top: 5px;
     @keyframes fade {
       0% { color: forestgreen; }
       50% { color: midnightblue; }
@@ -40,14 +41,14 @@
     }
   }
   .tabbar {
+    margin-top: 10px;
     font-family: $body_font;
     display: flex;
-    background-color: rgba(skyblue,0.2);
     margin-bottom: 3px;
+    border-bottom: 2px solid #ccc;
     .tab {
-      color: mediumvioletred;
+      color: darkgray;
       display: inline-block;
-      margin-right: -1px;
       padding: 5px 20px;
       cursor: pointer;
     }
@@ -55,8 +56,9 @@
       background-color: rgba(pink,0.3);
     }
     .selected {
-      color: sienna;
+      color: forestgreen;
       background-color: white;
+      border-bottom: 3px solid forestgreen;
       cursor: default;
     }
   }
