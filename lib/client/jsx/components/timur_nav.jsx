@@ -32,7 +32,7 @@ const Logo = ({exchanges, logo_id}) =>
 
         <div className='image'>
         </div>
-        <Halo radius={25}/>
+        <Halo radius={27.5}/>
       </div>
     </a>
   </div>;

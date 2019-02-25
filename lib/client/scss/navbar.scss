@@ -7,17 +7,18 @@
   align-items: center;
   border-bottom: 1px solid lightgray;
   #logo {
-    flex-basis: 60px;
-    height: 60px;
+    flex-basis: 55px;
+    height: 55px;
     display: flex;
+    margin-left: 4px;
     align-items: center;
     justify-content: center;
 
     #normal {
-      @include basic_logo(#066306,'../img/Timur.png', 50px);
+      @include basic_logo(#066306,'../img/Timur.png', 55px);
     }
     #dev {
-      @include basic_logo(#630606,'../img/Timur-dev.png', 50px);
+      @include basic_logo(#630606,'../img/Timur-dev.png', 55px);
     }
   }
 
