@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Magma from '../../magma';
-import SearchTableColumnHeader from './search_table_column_header';
-import SearchTableRow from './search_table_row';
+import AttributeViewer from '../attributes/attribute_viewer';
+import ReactTable from 'react-table';
 
 // exclude things not shown and tables
 const displayedAttributes = (template) =>
@@ -13,47 +13,42 @@ const displayedAttributes = (template) =>
   )
 
 class SearchTable extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-
-  focusCell(row, column) {
-    if (column == null) return (row == this.state.focus_row)
-    if (row == null) return (column == this.state.focus_col)
-    this.setState({ focus_row: row, focus_col: column })
-  }
-
   render() {
-    let { record_names, documents, template, attribute_names, mode } = this.props
+    let { record_names, documents, template, attribute_names, page, pages, page_size, setPage } = this.props;
 
-    if (!record_names) return <div className='table'></div>
+    if (!record_names) return <div className='table'></div>;
+
+    let columns = attribute_names.map(
+      att_name => (
+        {
+          Header: att_name,
+          accessor: att_name,
+          Cell: ({value}) => <AttributeViewer
+            template={template}
+            document={document}
+            value={value}
+            attribute={ template.attributes[att_name] }
+          />
+        }
+      )
+    );
+
+    let data = record_names.map(record_name => documents[record_name]);
 
     return <div className='table'>
-              <div className='table_row'>
-              {
-                attribute_names.map((att_name,i) =>
-                  <SearchTableColumnHeader key={att_name} 
-                    column={ att_name }
-                    focused={ this.focusCell( null, att_name ) }
-                  />
-                )
-              }
-              </div>
-              {
-                record_names.map((record_name) =>
-                  <SearchTableRow 
-                    key={ record_name }
-                    mode={ mode }
-                    attribute_names={ attribute_names }
-                    document={ documents[record_name] }
-                    template={template}
-                    record_name={ record_name }
-                    focusCell={ this.focusCell.bind(this) }
-                  />
-                )
-              }
-             </div>
+      <ReactTable
+        manual
+        showPaginationBottom={ false }
+        showPaginationTop={ true }
+        onPageChange={ setPage }
+        page={ page }
+        pages={ pages }
+        pageSize={ page_size }
+        columns={columns}
+        nextText={'›'}
+        previousText={'‹'}
+        data={ data }/>
+    </div>;
   }
 }
 

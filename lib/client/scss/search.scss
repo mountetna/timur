@@ -1,157 +1,75 @@
 @import "globals";
 @import "attribute";
 
-$query_color: rgba(skyblue,0.2);
-
 #search {
-	font-family: $body_font;
-	.button {
-		@include green_button;
-		background-color: #A6C9A6;
-	}
-	.filter {
-		@include text_defaults;
-		margin: 0 9px;
-	}
-	.control {
-		padding-top: 10px;
-		padding-bottom: 4px;
-		background-color: $query_color;
-		border-bottom: 1px solid goldenrod;
-		color: midnightblue;
+  font-family: $body_font;
+  .button {
+    @include green_button;
+    margin-left: 4px;
+  }
+  .filter {
+    @include text_defaults;
+    margin: 0 9px;
+  }
+  .control {
+    padding-top: 10px;
+    padding-bottom: 4px;
 
-	}
-	.query {
-	}
-	.pages {
-		.page_size {
-			display: block;
-			padding: 2px 4px;
-			select {
-				margin-left: 4px;
-				vertical-align: middle;
-			}
-		}
-		.results {
-			display: block;
-			padding: 2px 4px;
-			.model_name {
-				display: inline;
-				color: #33333c;
-			}
-		}
-		.pager {
-			padding: 2px 4px;
-			display: block;
-			.turner {
-				display: inline-block;
-				width: 15px;
-				padding: 4px;
-				text-align: center;
-				&.inactive {
-					color: gray;
-				}
-				&.active {
-					color: forestgreen;
-					cursor: pointer;
-					&:hover {
-						background-color: rgba(forestgreen,0.2)
-					}
-				}
-			}
-			.report {
-				display: inline-block;
-				width: 120px;
-				text-align: center;
-			}
-			.page_edit {
-				display: inline-block;
-				width: 30px;
-				border: 1px solid forestgreen;
-				font-family: $body_font;
-				font-size: 16px;
-			}
-		}
-	}
-	select {
-		border: 1px solid forestgreen;
-		color: #33333c;
-		font-family: $value_font;
-		font-size: 16px;
-		background: white;
-	}
-	.label {
-		padding: 4px;
-	}
-	.header {
-		font-family: $body_font;
-		position: relative;
-		background-color: rgba(forestgreen,0.2);
-		@keyframes fade {
-			0% { color: forestgreen; }
-			50% { color: midnightblue; }
-			100% { color: forestgreen; }
-		}
-		.edit, .approve, .cancel, .submit {
-			@include header_button;
-			display: inline-block;
-			font-size: 25px;
-			padding-left: 5px;
-		}
-		.submit {
-			animation-name: fade;
-			animation-duration: 1s;
-			animation-iteration-count: infinite;
-		}
-		.inline {
-			display: inline-block;
-		}
-	}
-	.table {
-		color: darkorchid;
-		font-family: "Cousine",monospace;
-		.table_header {
-			color: teal;
-			cursor: ew-resize;
-			text-align: center;
-		}
-		.table_row {
-			.table_data {
-				@include default_attribute;
-				white-space: nowrap;
-				vertical-align: middle;
-				text-align: center;
-				.value {
-					img {
-						max-width: 100%;
-						max-height: 17px;
-					}
-					textarea.text_box {
-						max-height: 17px;
-					}
-				}
-				&.focused_row {
-					height: 150px;
-					background-color: rgba(midnightblue,0.1);
-					white-space: normal;
-					.value {
-						img {
-							max-height: 140px;
-						}
-						textarea.text_box {
-							max-height: 140px;
-						}
-					}
-				}
-				&.revised {
-					background-color: rgba(pink,0.3);
-				}
-			}
-		}
-		.focused_col {
-			width: 250px;
-			background-color: rgba(forestgreen,0.1);
-			white-space: normal;
-		}
-	}
+  }
+  .query {
+  }
+  .pages {
+    .page_size {
+      display: block;
+      padding: 2px 4px;
+      select {
+        margin-left: 4px;
+        vertical-align: middle;
+      }
+    }
+    .results {
+      display: block;
+      padding: 2px 4px;
+      .model_name {
+        display: inline;
+        color: #33333c;
+      }
+    }
+  }
+  select {
+    border: 1px solid forestgreen;
+    color: #33333c;
+    font-family: $value_font;
+    font-size: 16px;
+    background: white;
+  }
+  .label {
+    padding: 4px;
+  }
+  .table {
+    font-family: $value_font;
+    .ReactTable {
+      border: none;
+      .rt-thead {
+        box-shadow: none;
+        border-bottom: 1px solid darkgray;
+        font-family: $body_font;
+      }
+      .-pagination {
+        .-previous,.-next {
+          flex: 0;
+          .-btn {
+            @include green_button;
+            padding: 0px 20px 3px 20px;
+            font-size: 1.6em;
+          }
+        }
+        box-shadow: none;
+        border-top: none;
+        padding: 0px;
+      }
+      .rt-tbody {
+      }
+    }
+  }
 }

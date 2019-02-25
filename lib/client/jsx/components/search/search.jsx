@@ -1,13 +1,4 @@
 import Pager from '../pager';
-/*
- * TODO! The <Header /> component has been disabled here. The <Header />
- * component is used to render the bulk edit buttons and events. Editing is
- * presently not working on this 'tab'. We either need to fix the editing
- * feature OR remove the editing feature. Presently the code for editing still
- * exists in this component but has been disabled by removing the <Header />
- * component from the render.
- */
-
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
@@ -17,25 +8,23 @@ import { requestTSV, requestModels, requestDocuments } from '../../actions/magma
 import { selectSearchCache } from '../../selectors/search_cache';
 import { cacheSearchPage, setSearchPageSize, setSearchPage } from '../../actions/search_actions';
 
-import SearchQuery from './search_query';
-import Header from '../header';
 import SearchTable from './search_table';
-import SearchQuestion from './search_question';
 
 class Search extends Component {
   constructor(props) {
     super(props)
-    this.state = { mode: 'search', page_size: 10 }
+    this.state = { page_size: 10 }
   }
 
   getPage(page, newSearch=false) {
+    page = page + 1;
     if (!this.pageCached(page) || newSearch) {
       this.props.requestDocuments({
         model_name: this.state.selected_model,
         record_names: 'all',
         attribute_names: 'all',
         filter: this.state.current_filter,
-        page,
+        page: page,
         page_size: this.state.page_size,
         collapse_tables: true,
         exchange_name: `request-${this.state.selected_model}`,
@@ -87,7 +76,7 @@ class Search extends Component {
       <input type='button' className='button' value='Search' 
         disabled={ !this.state.selected_model }
         onClick={ 
-          () => this.getPage(1, true)
+          () => this.getPage(0, true)
         } />
       <input className='button' 
         type='button' 
@@ -99,37 +88,36 @@ class Search extends Component {
   }
 
   render() {
-    var pages = this.props.model_name ? Math.ceil(this.state.results / this.props.page_size) : null
+    let { model_name, record_names, page_size, current_page } = this.props;
+    let { results } = this.state;
+    let pages = model_name ? Math.ceil(results / page_size) : -1;
 
     return <div id='search'>
-        { this.state.mode == 'search' ?
-          <div className='control'>
-            {
-              this.renderQuery()
-            }
-            {
-              pages != null ? 
-                <div className='pages'>
-                  <div className='results'>
-                    Found { this.state.results } records in <span className='model_name'>{ this.props.model_name }</span>
-                  </div>
-                <Pager pages={ pages } 
-                  current_page={ this.props.current_page }
-                  set_page={ this.getPage.bind(this) } >
-                </Pager>
-                </div>: null
-            }
-          </div> : null
+      <div className='control'>
+        {
+          this.renderQuery()
         }
         {
-          this.props.model_name ? <div className='documents'>
-            <SearchTable 
-              mode={ this.state.mode }
-              model_name={ this.props.model_name }
-              record_names={ this.props.record_names }
-            />
-          </div> : null
+          pages != -1 ?
+            <div className='pages'>
+              <div className='results'>
+                Found { results } records in <span className='model_name'>{ model_name }</span>
+              </div>
+            </div> : null
         }
+      </div>
+      {
+        model_name ? <div className='documents'>
+          <SearchTable
+            model_name={ model_name }
+            record_names={ record_names }
+            page={ current_page-1 }
+            pages={ pages }
+            page_size={ page_size }
+            setPage={ this.getPage.bind(this) }
+          />
+        </div> : null
+      }
     </div>
   }
 }

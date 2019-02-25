@@ -31,9 +31,8 @@
 
     .button {
       @include green_button;
-      margin-left: 0px;
     }
-    
+
     .selection {
       border: 1px solid forestgreen;
       color: #33333c;
