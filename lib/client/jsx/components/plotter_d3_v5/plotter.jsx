@@ -262,7 +262,7 @@ class Plotter extends React.Component {
           </div>
         )}
         <div className='ps-list-container'>
-          {plot.configuration.plot_series.map((series, index) => (
+          {plot.configuration.plot_series && plot.configuration.plot_series.map((series, index) => (
             <PlotSeries
               key={`ps-card-container-${index}`}
               plot_series={series}
