@@ -313,6 +313,10 @@
   stroke: #E0E0E0;
 }
 
+.axis.axis-Left line {
+  stroke-dasharray: 2, 2;
+}
+
 .axis text {
   font-size: 11px;
   fill: black;
