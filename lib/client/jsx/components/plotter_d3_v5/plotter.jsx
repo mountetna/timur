@@ -57,6 +57,57 @@ import {
 //  type
 //  series vars, e.g. x y color
 const PLOT_TYPES = Object.keys(PLOTS).sort();
+
+const SelectPlot = ({update, selected}) =>
+  <div className='select-plot'>
+    <Dropdown
+      default_text='Select Plot'
+      list={ PLOT_TYPES }
+      onSelect={ index=>{
+        update(PLOT_TYPES[index]);
+      }}
+      selected_index={PLOT_TYPES.indexOf(selected)}
+    />
+  </div>;
+
+const SeriesConfig = ({ label, series_types, updateType, updateSeries, plot_series }) =>
+  <div className='wrapper'>
+    <div className='pc-wrapper left'>
+      <div className='pc-header-title-text'>{label}</div>
+      <div>
+        <Dropdown
+          default_text='Add Series'
+          list={series_types.map(series => series.type)}
+          onSelect={index => {
+            let new_series = {
+              series_type: series_types[index].type,
+              variables: {},
+              name: null
+            };
+            updateSeries([
+              new_series,
+              ...(plot_series || [])
+            ]);
+          }}
+          selected_index={null}
+        />
+      </div>
+    </div>
+    <div className='pc-wrapper right'>
+      <div>
+        <i
+          onClick={() => {
+            updateType(null);
+            updateSeries([]);
+          }}
+          className='fa fa-lg'
+        >
+          &times;
+        </i>
+      </div>
+    </div>
+  </div>;
+
 class Plotter extends React.Component {
   constructor(props) {
     super(props);
@@ -213,53 +264,15 @@ class Plotter extends React.Component {
         <span className='section-header'>Plot Type </span>
         <br />
         {plot_config ? (
-          <div className='wrapper'>
-            <div className='dd-wrapper left'>
-              <div className='dd-header-title-text'>{plot_config.label}</div>
-              <div>
-                <Dropdown
-                  default_text='Add Series'
-                  list={plot_config.series_types.map(series => series.type)}
-                  onSelect={index => {
-                    let new_series = {
-                      series_type: plot_config.series_types[index].type,
-                      variables: {},
-                      name: null
-                    };
-                    this.updatePlotConfiguration('plot_series')([
-                      new_series,
-                      ...plot.configuration.plot_series
-                    ]);
-                  }}
-                  selected_index={null}
-                />
-              </div>
-            </div>
-            <div className='dd-wrapper right'>
-              <div>
-                <i
-                  onClick={() => {
-                    this.updatePlotField('plot_type')(null);
-                    this.updatePlotConfiguration('plot_series')([]);
-                  }}
-                  className='right fa fa-lg'
-                >
-                  &times;
-                </i>
-              </div>
-            </div>
-          </div>
+          <SeriesConfig
+            label={plot_config.label}
+            series_types={ plot_config.series_types }
+            updateType={this.updatePlotField('plot_type')}
+            updateSeries={ this.updatePlotConfiguration('plot_series')}
+            plot_series={plot.configuration.plot_series}
+          />
         ) : (
-          <div className='select-plot'>
-            <Dropdown
-              default_text='Select Plot'
-              list={ PLOT_TYPES }
-              onSelect={ index=>{
-                this.updatePlotField('plot_type')(PLOT_TYPES[index]);
-              }}
-              selected_index={PLOT_TYPES.indexOf(plot.plot_type)}
-            />
-          </div>
+          <SelectPlot update={ this.updatePlotField('plot_type') } selected={ plot.plot_type }/>
         )}
         <div className='ps-list-container'>
           {plot.configuration.plot_series && plot.configuration.plot_series.map((series, index) => (
