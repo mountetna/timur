@@ -19,10 +19,9 @@ const categoryGroups = (category, value)=>{
 
     return category_names.map((category_name, index)=>{
 
-      let null_counter = 0;
       let indexes = category.which(c => (c == category_name)).filter(i => (i!= null));
 
-      let category_values = value(indexes).sort((a,b)=> a-b );
+      let category_values = value(indexes).sort((a,b)=> a-b ).filter(i => i!=null);
 
       let quartile_data = [
         quantile(category_values, 0.25),
@@ -31,9 +30,8 @@ const categoryGroups = (category, value)=>{
       ];
 
       let iqr = (quartile_data[2] - quartile_data[0]) * 1.5;
-      
+
       let whisker_min = category_values.find(value => {
-        if(value === null) null_counter++;
         return value >= quartile_data[0] - iqr && value !== null;
       });
 
@@ -49,151 +47,125 @@ const categoryGroups = (category, value)=>{
         label: category_name,
         values: category_values,
         inliers: {whisker_min, whisker_max, quartile_data},
-        outliers,
-        null_counter
+        outliers
       };
 
     });
 };
 
+const Outlier = ({x,y,outlier, text_position, color}) =>
+  <g className='outlier'>
+    <circle
+      r='2'
+      cx={ x }
+      cy={ y }
+      fill={ color }
+      stroke='none'
+    />
+    <text textAnchor='end' x={ text_position - 4 } y={y} >{outlier.toFixed(2)}</text>
+  </g>;
+
+const Whisker = ({x, y_min, y_max, color}) => <line
+        x1={ x }
+        x2={ x }
+        y1={ y_max }
+        y2={ y_min }
+        stroke={ color }
+        strokeWidth='0.5'
+      />;
+
+const Box = ({x,y,width,height,color}) => <rect
+  x={ x }
+  y={ y }
+  height={ height }
+  width={ width }
+  fill={ color }
+/>;
+
+const WhiskerTip = ({x,y,width,color}) =><line
+  x1={ x - (width / 2) }
+  x2={ x + (width / 2) }
+  y1={ y }
+  y2={ y }
+  stroke={ color }
+/>;
+
+const WhiskerText = ({x,q,scale,anchor}) =>
+  <text textAnchor={anchor} x={x + (anchor=='start' ? 2 : -2)} y={scale(q)}>{q.toFixed(2)}</text>;
+
 const DEFAULT_COLOR = '#333333';
 class Boxes extends Component{
   render(){
-    let { series, xScale, yScale, color } = this.props;
-    let { variables: { category, value } } = series;
+    let { series, xScale, yScale, offset, width } = this.props;
+    let { variables: { category, value, color } } = series;
 
+
+    if (category.size != value.size) return null;
 
     let groups = categoryGroups(category, value);
     console.log('======= groups ===========', groups);
 
     let boxes = groups.map( (group,index_group) => {
-      let bar_height = yScale(group.inliers.quartile_data[0]) 
-        - yScale(group.inliers.quartile_data[2]);
-      let width = xScale.bandwidth();
-      let x_position = xScale(group.label) + (xScale.bandwidth() / 2);
-      let median = yScale(group.inliers.quartile_data[1]);
-      let y_min_scale = yScale(group.inliers.whisker_min);
-      let y_max_scale = yScale(group.inliers.whisker_max);
 
-      let outliers = group.outliers.map((outlier, index) => {
-        let outlier_props = {
-          key: `outlier_${index}`,
-          r: 3,
-          cx: x_position,
-          cy: yScale(outlier),
-          stroke: DEFAULT_COLOR,
-          fill: 'none'
-        };
+      let { label, values, inliers } = group;
+      let { whisker_min, whisker_max, quartile_data } = inliers;
 
-        let outlier_text_priops = {
-          key: `outlier_${index}_xy`,
-          x: xScale(group.label) - (2 * width),
-          y: yScale(outlier)
-        };
 
-        return [
-          <circle {...outlier_props} />, 
-          <text {...outlier_text_priops}>{outlier.toFixed(2)}</text>
-        ];
-      });
+      if (!values.length) return null;
 
-      let whisker_props = {
-        key: `${group.label}_stem`,
-        x1: x_position,
-        x2: x_position,
-        y1: y_max_scale,
-        y2: y_min_scale,
-        stroke: DEFAULT_COLOR,
-        'strokeDasharray': '5, 5',
-        'strokeWidth': '0.5'
-      };
+      let x_position = xScale(label) + (width / 2) + offset;
+      let text_position = xScale(label) + offset;
 
-      let whisker_lower_props = {
-        key: `${group.label}_whisker_lower`,
-        x1: x_position - (width / 2),
-        x2: x_position + (width / 2),
-        y1: y_min_scale ,
-        y2: y_min_scale ,
-        stroke: DEFAULT_COLOR
-      };
-
-      let median_props = {
-        key: `${group.label}_median`,
-        x1: x_position - (width / 2),
-        x2: x_position + (width / 2),
-        y1: median,
-        y2: median,
-        stroke: DEFAULT_COLOR
-      };
-
-      let whisker_upper_props = {
-        key: `${group.label}_whisker_upper`,
-        x1: x_position - (width / 2),
-        x2: x_position + (width / 2),
-        y1: y_max_scale,
-        y2: y_max_scale,
-        stroke: DEFAULT_COLOR
-      };
-
-      let rect_props = {
-        key: group.label,
-        x: xScale(group.label),
-        y: yScale(group.inliers.quartile_data[2]),
-        height: bar_height,
-        width: xScale.bandwidth(),
-        fill: 'green',
-        stroke: 'green'
-      };
-
-      let upper_quartile_props = {
-        key: `${group.label}_upper_qt`,
-        x: xScale(group.label) - (2 * width),
-        y: yScale(group.inliers.quartile_data[2])
-      };
-
-      let median_quartile_props = {
-        key: `${group.label}_mid_qt`,
-        x: xScale(group.label) - (2 * width),
-        y: yScale(group.inliers.quartile_data[1])
-      };
-
-      let lower_quartile_props = {
-        key: `${group.label}_lower_qt`,
-        x: xScale(group.label) - (2 * width),
-        y: yScale(group.inliers.quartile_data[0])
-      };
-
-      let whisker_min_props = {
-        key: `${group.label}_whisker_min`,
-        x: xScale(group.label) - (2 * width),
-        y: yScale(group.inliers.whisker_min)
-      };
-
-      let whisker_max_props = {
-        key: `${group.label}_whisker_max`,
-        x: xScale(group.label) - (2 * width),
-        y: yScale(group.inliers.whisker_max)
-      };
+      let median = yScale(quartile_data[1]);
+      let y_min_scale = yScale(whisker_min);
+      let y_max_scale = yScale(whisker_max);
 
       return(
-        <g className='box-group' key={index_group}>
+        <g>
+          <g className='box-group' key={index_group}>
+            <Whisker
+              x={ x_position }
+              color={color}
+              y_min={ y_min_scale }
+              y_max={ y_max_scale }/>
 
-          <line {...whisker_props} />
-          <rect {...rect_props} />
-          <line {...whisker_upper_props} />
-          <line {...median_props} />
-          <line {...whisker_lower_props} />
-          <text {...upper_quartile_props}>{group.inliers.quartile_data[2].toFixed(2)} </text>
-          <text {...median_quartile_props}>{group.inliers.quartile_data[1].toFixed(2)} </text>
-          <text {...lower_quartile_props}>{group.inliers.quartile_data[0].toFixed(2)}</text>
-          <text {...whisker_min_props}>{group.inliers.whisker_min.toFixed(2)} </text>
-          <text {...whisker_max_props}>{group.inliers.whisker_max.toFixed(2)}</text>
-          {outliers}
+            <Box
+              x={ x_position - (width / 2) }
+              y={ yScale(quartile_data[2]) }
+              height={ yScale(quartile_data[0]) - yScale(quartile_data[2]) }
+              width={ width }
+              color={ color }
+            />
+
+            <WhiskerTip color={color} x={ x_position } width={ width } y={ y_max_scale }/>
+            <WhiskerTip color={color} x={ x_position } width={ width } y={ median }/>
+            <WhiskerTip color={color} x={ x_position } width={ width } y={ y_min_scale }/>
+
+            <WhiskerText x={text_position+width} anchor='start' q={quartile_data[2]} scale={yScale}/>
+            <WhiskerText x={text_position+width} anchor='start' q={quartile_data[1]} scale={yScale}/>
+            <WhiskerText x={text_position+width} anchor='start' q={quartile_data[0]} scale={yScale}/>
+
+            <WhiskerText x={text_position} anchor='end' q={whisker_min} scale={yScale}/>
+            <WhiskerText x={text_position} anchor='end' q={whisker_max} scale={yScale}/>
+          </g>
+          <g className='outlier-group'>
+          {
+            group.outliers.map( (outlier, index) =>
+              <Outlier
+                x={ x_position }
+                y={ yScale(outlier) }
+                outlier={ outlier }
+                color={ color }
+                text_position={ x_position }
+                key={ `outlier_${index}` }/>
+            )
+          }
+          </g>
         </g>
       );
     });
 
-    return <g key={'boxes'}>{boxes}</g>;
+    return <g className='box-series' key={'boxes'}>{boxes}</g>;
   }
 }
 
