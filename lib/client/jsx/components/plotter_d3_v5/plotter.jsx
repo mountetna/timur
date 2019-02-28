@@ -274,6 +274,7 @@ class Plotter extends React.Component {
         ) : (
           <SelectPlot update={ this.updatePlotField('plot_type') } selected={ plot.plot_type }/>
         )}
+        { plot_config &&
         <div className='ps-list-container'>
           {plot.configuration.plot_series && plot.configuration.plot_series.map((series, index) => (
             <PlotSeries
@@ -295,6 +296,7 @@ class Plotter extends React.Component {
             />
           ))}
         </div>
+        }
       </div>
     );
   }
