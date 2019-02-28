@@ -1,8 +1,34 @@
 import React, {Component} from 'react';
 import * as d3 from 'd3';
 import Axis from '../axis';
-// import Bars from './bars';
+import Bars from './bars';
 import Boxes from './boxes';
+
+const SeriesComponent = ({ series, index, count, xScale, yScale }) => {
+  let Component;
+  switch (series.series_type) {
+    case 'bar':
+      Component = Bars;
+      break;
+    case 'box':
+      Component = Boxes;
+      break;
+    default:
+      return null;
+  }
+  let width = (xScale.bandwidth() - (4 * count-1))/ count;
+  let offset = (width + 4) * index;
+  return (
+    <Component
+      xScale={xScale}
+      yScale={yScale}
+      key={index}
+      width={width}
+      offset={offset}
+      series={series}
+    />
+  );
+}
 
 export default class CategoryPlot extends Component{
   constructor(props){
@@ -14,28 +40,6 @@ export default class CategoryPlot extends Component{
     return axis.values[0] instanceof Date ? d3.scaleTime() : d3.scaleLinear();
   }
 
-  seriesComponent({ series, index, xScale, yScale, color }) {
-    let Component;
-    switch (series.series_type) {
-      // case 'bar':
-      //   Component = Bars;
-      //   break;
-      case 'box':
-        Component = Boxes;
-        break;
-      default:
-        return null;
-    }
-    return (
-      <Component
-        xScale={xScale}
-        yScale={yScale}
-        key={index}
-        series={series}
-        color={color}
-      />
-    );
-  }
 
   render(){
     let {parent_width, layout, data}=this.props;
@@ -51,7 +55,7 @@ export default class CategoryPlot extends Component{
 
     // scaleBand type
     let xScale = this.xScale
-      .padding(.8)
+      .padding(.2)
       .domain(categories)
       .range([margin.left, svg_dimensions.width - margin.right]);
   
@@ -86,12 +90,13 @@ export default class CategoryPlot extends Component{
           <Axis {...axis_x_props}/>
           <Axis {...axis_y_props}/>
           {plot_series.map((series, index) =>
-            this.seriesComponent({
-              series,
-              index,
-              xScale,
-              yScale
-            })
+            <SeriesComponent
+              series={series}
+              index={index}
+              count={plot_series.length}
+              xScale={xScale}
+              yScale={yScale}
+            />
           )}
         </svg>
      </div>

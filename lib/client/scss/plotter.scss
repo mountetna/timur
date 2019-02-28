@@ -147,33 +147,24 @@
 
 /******************************************************************************/
 
-.axis path,
-.axis line {
-  stroke: #E0E0E0;
-}
+.axis {
+  path, line {
+    stroke: #E0E0E0;
+  }
 
-.axis.axis-Left line {
-  stroke-dasharray: 2, 2;
-}
+  &.axis-Left line {
+    stroke-dasharray: 2, 2;
+  }
 
-.axis text {
-  font-size: 11px;
-  fill: black;
-}
+  text {
+    font-size: 11px;
+    fill: black;
+  }
 
-.axis-Bottom text, .axis-timeline-bottom text {
-  transform: rotate(-45deg);
-  text-anchor: end;
-}
-
-.box-group text {
-  visibility: hidden;
-}
-
-.box-group:hover text {
-  visibility: visible;
-  font-size: 8px;
-  alignment-baseline: middle;
+  &.axis-Bottom text, .axis-timeline-bottom text {
+    transform: rotate(-45deg);
+    text-anchor: end;
+  }
 }
 
 .legend-container {
