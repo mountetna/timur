@@ -24,12 +24,13 @@ class PlotLayout extends React.Component{
 
   render(){
     let {layout, onChange} = this.props;
-    let {margin, height} = layout;
+    let {margin, height, width} = layout;
     return(
        <div className='pl-container'>
           <div>
           <label className='type-label'>Size</label>
           {this.renderInput('height', height, (new_height)=>onChange({...layout, height: new_height}))}
+          {this.renderInput('width', width, (new_width)=>onChange({...layout, width: new_width}))}
           </div>
           <div style={{clear:'both'}}></div>
           <div>
