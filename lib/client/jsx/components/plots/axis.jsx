@@ -12,17 +12,27 @@ export default class Axis extends Component{
 
   renderAxis(){
     //Add scales to axis
-    let axis_type = `axis${this.props.orient}`;
-    let axis = d3[axis_type](this.props.scale)
-      .tickSize(-this.props.tickSize)
+    let { scale, orient, timeformat, tickSize } = this.props;
+
+    let axis_type = `axis${orient}`;
+    let axis = d3[axis_type](scale)
+      .tickSize(-tickSize)
       .ticks(5)
       .tickPadding([12]);
 
-    if(this.props.timeformat){
-      axis.tickFormat(d3.timeFormat(this.props.timeformat));
+    if(timeformat){
+      axis.tickFormat(d3.timeFormat(timeformat));
     }
 
-    d3.select(this.axisElement).call(axis);
+    let fontSize = scale.bandwidth ? Math.min(
+      Math.ceil(0.75 * scale.bandwidth()),
+      12
+    ) : 11;
+
+    let element = d3.select(this.axisElement)
+
+    element.selectAll("*").remove();
+    element.append('g').style('font-size', `${fontSize}px`).call(axis);
   }
 
   render(){
