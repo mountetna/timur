@@ -15,7 +15,7 @@ class Bars extends Component{
         key={`bar_${index}`}
         x={ xScale(label)+offset }
         y={ yScale(value(index)) }
-        height={ yScale(0)-yScale(value(index)) }
+        height={ yScale.range()[0]-yScale(value(index)) }
         width={ width }
         fill={ color }
         datavalue={ value(index) }
