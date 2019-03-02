@@ -121,8 +121,8 @@ class Boxes extends Component{
       let y_max_scale = yScale(whisker_max);
 
       return(
-        <g>
-          <g className='box-group' key={index_group}>
+        <g key={index_group}>
+          <g className='box-group'>
             <Whisker
               x={ x_position }
               color={color}
