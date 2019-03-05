@@ -75,7 +75,9 @@ module Archimedes
       end
     rescue ZeroDivisionError
       raise Archimedes::LanguageError, "Divided by zero in #{current_fragment}"
-    rescue
+    rescue Exception => e
+      puts e.message
+      puts e.backtrace
       raise Archimedes::LanguageError, "Unspecified error in #{current_fragment}"
     end
 
