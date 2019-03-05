@@ -10,8 +10,8 @@ class Rtemis
         arg.respond_to?(:payload) ? arg.payload : arg
       end
     })
-    response = JSON.parse(response.body)
-    output = response["output"]
+    json = JSON.parse(response.body)
+    output = json["output"]
     return parse_output(output)
   end
 
@@ -26,6 +26,8 @@ class Rtemis
           [ item["label"], parse_output(item["value"]) ]
         })
       end
+    elsif output.is_a?(Array)
+      return Archimedes::Vector.new(output.map{|item| [ nil, parse_output(item) ]})
     else
       return output
     end
