@@ -3,10 +3,31 @@ import * as d3 from 'd3';
 import Line from './line';
 import Scatter from './scatter';
 import PlotCanvas from '../plot_canvas';
+import { seriesVars } from '../../../selectors/plot_selector';
 
-const SERIES_COMPONENTS = {
-  line: Line,
-  scatter: Scatter
+export const XYConfig = {
+  name: 'xy',
+  label: 'XY Plot',
+  computed: {
+    xdomain: plot_series => {
+      let all_x = seriesVars(plot_series, 'x').join(', ');
+      return `[ min( concat( ${all_x})), max( concat( ${all_x})) ]`;
+    },
+    ydomain: plot_series => {
+      let all_y = seriesVars(plot_series, 'y').join(', ');
+      return `[ min( concat( ${all_y})), max( concat( ${all_y})) ]`;
+    }
+  },
+  series_types: {
+    line: {
+      variables: { x: 'expression', y: 'expression', color: 'color_type' },
+      component: Line
+    },
+    scatter: {
+      variables: { x: 'expression', y: 'expression', color: 'color_type' },
+      component: Scatter
+    }
+  }
 };
 
 const SeriesComponent = ({ series, ...props}) => {
