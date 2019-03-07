@@ -52,7 +52,7 @@ export const categoryGroups = (category, value, groupFunc)=>{
 };
 
 const SeriesComponent = ({ series, index, count, xScale, ...props}) => {
-  let Component = SERIES_COMPONENTS[series.series_type];
+  let { component: Component } = CategoryConfig.series_types[series.series_type] || {};
 
   let width = (xScale.bandwidth() - (4 * count-1))/ count;
   let offset = (width + 4) * index;

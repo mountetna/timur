@@ -77,10 +77,10 @@ const SeriesConfig = ({ label, series_types, updateType, updateSeries, plot_seri
       <div>
         <Dropdown
           default_text='Add Series'
-          list={series_types.map(series => series.type)}
+          list={Object.keys(series_types)}
           onSelect={index => {
             let new_series = {
-              series_type: series_types[index].type,
+              series_type: Object.keys(series_types)[index],
               variables: {},
               name: null
             };
@@ -280,9 +280,7 @@ class Plotter extends React.Component {
             <PlotSeries
               key={`ps-card-container-${index}`}
               plot_series={series}
-              series_config={plot_config.series_types.find(
-                s => s.type == series.series_type
-              )}
+              series_config={plot_config.series_types[ series.series_type]}
               onDelete={() => {
                 let new_plot_series = plot.configuration.plot_series.slice(0);
                 new_plot_series.splice(index, 1);

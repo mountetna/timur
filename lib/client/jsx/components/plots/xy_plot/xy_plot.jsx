@@ -31,7 +31,7 @@ export const XYConfig = {
 };
 
 const SeriesComponent = ({ series, ...props}) => {
-  let Component = SERIES_COMPONENTS[series.series_type];
+  let { component: Component } = XYConfig.series_types[series.series_type] || {};
   return (
     Component && <Component
       series={series}
