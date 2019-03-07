@@ -14,6 +14,29 @@ let quantile = (values, p) => {
   return values[ id ]
 };
 
+const boxData = (label, values) => {
+  let quartile_data = [
+    quantile(values, 0.25),
+    quantile(values, 0.5),
+    quantile(values, 0.75)
+  ];
+
+  let values = values.filter(v=>v!==null);
+
+  let iqr = (quartile_data[2] - quartile_data[0]) * 1.5;
+
+  let whisker_min = values.find(v => v >= quartile_data[0] - iqr);
+  let whisker_max = values.reverse().find(v => v <= quartile_data[2] + iqr);
+  let outliers = values.filter(v => v < whisker_min  || v > whisker_max);
+
+  return {
+    label,
+    values,
+    inliers: { quartile_data, whisker_min, whisker_max },
+    outliers
+  };
+}
+
 const categoryGroups = (category, value)=>{
   let category_names = [...new Set(category.values)];
 
@@ -23,32 +46,7 @@ const categoryGroups = (category, value)=>{
 
       let category_values = value(indexes).sort((a,b)=> a-b ).filter(i => i!=null);
 
-      let quartile_data = [
-        quantile(category_values, 0.25),
-        quantile(category_values, 0.5),
-        quantile(category_values, 0.75)
-      ];
-
-      let iqr = (quartile_data[2] - quartile_data[0]) * 1.5;
-
-      let whisker_min = category_values.find(value => {
-        return value >= quartile_data[0] - iqr && value !== null;
-      });
-
-      let whisker_max = category_values.reverse().find(value => {
-        return value <= quartile_data[2] + iqr;
-      });
-
-      let outliers = category_values.filter(value => {
-        return (value < whisker_min  || value > whisker_max) && value !== null;
-      });
-
-      return {
-        label: category_name,
-        values: category_values,
-        inliers: {whisker_min, whisker_max, quartile_data},
-        outliers
-      };
+      return boxData(category_name, category_values);
 
     });
 };
