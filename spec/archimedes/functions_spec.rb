@@ -112,4 +112,13 @@ describe Archimedes::VectorFunctions do
     expect(payload['all2']).to be_falsy
     expect(payload['all3']).to be_falsy
   end
+
+  it 'groups vector values by label' do
+    payload = run_script(
+      "@factors = [ 'a', 'a', 'a', 'b', 'b', 'b', 'b' ]
+       @data = [ m: 1, n: 3, o: 5, p: 1, q: 4, r: 9, s: 16 ]
+       @groups = group(@data, @factors)"
+    )
+    expect(payload['groups']).to eq([])
+  end
 end
