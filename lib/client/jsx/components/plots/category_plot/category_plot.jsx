@@ -35,12 +35,7 @@ export const CategoryConfig = {
     beeswarm: {
       variables: {
         value: 'expression', category: 'expression', color: 'color_type'
-      },
-      computed: {
-        beeswarm: index => `beeswarm(@${varName(
-          `series${index}`, 'value'
-        )})`
-      },
+      }
       component: Beeswarms
     }
   }
