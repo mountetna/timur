@@ -1,7 +1,7 @@
-
 import React, {Component} from 'react';
 import * as d3 from 'd3';
 import {interpolateLab} from 'd3-interpolate';
+import { categoryGroups } from './category_plot';
 
 let quantile = (values, p) => {
   if ( p == 0.0 ) { return values[ 0 ] }
@@ -21,7 +21,7 @@ const boxData = (label, values) => {
     quantile(values, 0.75)
   ];
 
-  let values = values.filter(v=>v!==null);
+  values = values.filter(v=>v!==null);
 
   let iqr = (quartile_data[2] - quartile_data[0]) * 1.5;
 
@@ -36,20 +36,6 @@ const boxData = (label, values) => {
     outliers
   };
 }
-
-const categoryGroups = (category, value)=>{
-  let category_names = [...new Set(category.values)];
-
-    return category_names.map((category_name, index)=>{
-
-      let indexes = category.which(c => (c == category_name)).filter(i => (i!= null));
-
-      let category_values = value(indexes).sort((a,b)=> a-b ).filter(i => i!=null);
-
-      return boxData(category_name, category_values);
-
-    });
-};
 
 const Outlier = ({x,y,outlier, text_position, color}) =>
   <g className='outlier'>
@@ -100,7 +86,7 @@ class Boxes extends Component{
 
     if (category.size != value.size) return null;
 
-    let groups = categoryGroups(category, value);
+    let groups = categoryGroups(category, value, boxData);
     console.log('======= groups ===========', groups);
 
     let boxes = groups.map( (group,index_group) => {
