@@ -75,23 +75,5 @@ describe('Plot Selector', () => {
       const selected_plot = selectPlot(fake_state, fake_plot_id, {});
       expect(selected_plot.plotScript).toEqual('\n' + plot.script + series_variables + plot_variables);
     });
-
-    it('adds series variables for the beeswarm series to the end of the plotScript', () => {
-      let plot_series_obj = {
-        name: "test_category",
-        series_type: 'beeswarm',
-        variables: {
-          category: "@x",
-          value: "@y"
-        }
-      };
-      plot.configuration.plot_series.push(plot_series_obj);
-      plot.plot_type = 'category';
-      const series_variables = '\n@series0____category = @x\n@series0____value = @y\n';
-      const series_computed_variables = '@series0____beeswarm = beeswarm(@series0____value)\n';
-      const plot_variables = '@category____domain = [ min( concat( @series0____value)), max( concat( @series0____value)) ]';
-      const selected_plot = selectPlot(fake_state, fake_plot_id, {});
-      expect(selected_plot.plotScript).toEqual('\n' + plot.script + series_variables + series_computed_variables + plot_variables);
-    });
   });
 });

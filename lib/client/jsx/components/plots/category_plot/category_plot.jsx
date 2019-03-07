@@ -3,7 +3,7 @@ import { flatten } from '../../../utils/types';
 import * as d3 from 'd3';
 import Bars from './bars';
 import Boxes from './boxes';
-import Beeswarms from './beeswarms';
+import Swarms from './swarms';
 import PlotCanvas from '../plot_canvas';
 import { seriesVars, varName } from '../../../selectors/plot_selector';
 
@@ -32,11 +32,11 @@ export const CategoryConfig = {
       },
       component: Boxes
     },
-    beeswarm: {
+    swarm: {
       variables: {
         value: 'expression', category: 'expression', color: 'color_type'
-      }
-      component: Beeswarms
+      },
+      component: Swarms
     }
   }
 };
