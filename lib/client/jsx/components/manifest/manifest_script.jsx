@@ -42,6 +42,7 @@ export default class ManifestScript extends React.Component {
         options={{
           readOnly: is_editing ? false : 'nocursor',
           lineNumbers: is_editing,
+          lineWrapping: true,
           mode: 'timur_lang'
         }}
         value={script}
