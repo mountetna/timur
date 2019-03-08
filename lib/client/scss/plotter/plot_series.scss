@@ -1,0 +1,68 @@
+
+.ps-card-container {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #bdc3c7;
+  &:first-child {
+    border-top: 1px solid #bdc3c7;
+  }
+
+  &:hover {
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,.2);
+  }
+
+  i {
+    cursor: pointer;
+    display: block;
+    float: right;
+    color: #767676;
+    font-weight: normal;
+    padding: 1px;
+
+    &:hover {
+      color: red;
+      font-weight: bolder;
+    }
+  }
+
+  .ps-header {
+    text-align: left;
+    font-size: 16px;
+    color: #767676;
+    text-transform: capitalize;
+    min-width: 380px;
+    margin-right: 0px;
+    padding: 0px 10px 0px 10px;
+  }
+
+  .ti-group {
+    .ti-label {
+      display: inline-block;
+      min-width: 80px;
+      text-align: right;
+      margin-right: 20px;
+      color: #767676;
+      font-size: 15px;
+      font-weight: 400;
+    }
+    .ti-input {
+      -webkit-font-smoothing: antialiased;
+      background-color: #fff;
+      border: none;
+      border-bottom: 1px solid #dfdfdf;
+      border-left: 1px solid #dfdfdf;
+      cursor: text;
+      margin-right: 5px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-width: 280px;
+      font-size: 15px;
+      padding-left: 10px;
+      line-height: 26px;
+
+      &:focus {
+        border-bottom: 1px solid forestgreen;
+        outline: 0;
+      }
+    }
+  }
+}

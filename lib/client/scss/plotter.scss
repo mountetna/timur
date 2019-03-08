@@ -1,4 +1,6 @@
 @import 'globals';
+@import 'plotter/plot_series';
+@import 'plotter/plot_layout';
 
 .plot-window {
   .CodeMirror {
