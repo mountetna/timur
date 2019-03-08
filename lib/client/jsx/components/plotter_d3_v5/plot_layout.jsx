@@ -1,48 +1,41 @@
 import * as React from 'react';
 
+const LayoutInput = ({header, value, onChange}) =>
+  <div className='pl-group' key={`${header}`}>
+    <label className='sub-label'>{header}</label>
+    <input
+      className='pl-input'
+      onChange={(e) => onChange(e.target.value)} 
+      value={value}
+      type='number'
+      min='0'/>
+      <span className='unit'>px</span>
+  </div>;
+
+const Spacer = () => <div style={{clear:'both'}}/>;
+
 class PlotLayout extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  renderInput(label_header, value, onChange) {
-    return (
-      <div className='pl-group' key={`${label_header}`}>
-        <label className='sub-label'>{label_header}</label>
-        <input 
-          className='pl-input'
-          onChange={(e) => onChange(e.target.value)} 
-          value={value}
-          type='number'
-          min='0'
-          />
-          <span className='unit'>px</span>
-      </div>
-    );
-  }
-
   render(){
     let {layout, onChange} = this.props;
-    let {margin, height, width} = layout;
+    let { margin, height, width } = layout;
     return(
        <div className='pl-container'>
           <div>
-          <label className='type-label'>Size</label>
-          {this.renderInput('height', height, (new_height)=>onChange({...layout, height: new_height}))}
-          {this.renderInput('width', width, (new_width)=>onChange({...layout, width: new_width}))}
+            <label className='type-label'>Size</label>
+            <LayoutInput header='height' value={height} onChange={ new_height => onChange({...layout, height: new_height}) } />
+            <LayoutInput header='width' value={width} onChange={ new_width => onChange({...layout, width: new_width}) } />
           </div>
-          <div style={{clear:'both'}}></div>
+          <Spacer/>
           <div>
-          <label className='type-label'>Margin</label>
-          {['top', 'bottom', 'left', 'right'].map((name) => this.renderInput(
-            name,
-            margin[name], 
-            (new_value)=>onChange({...layout, margin: {...margin, [name]: new_value}})
-          ))}
+            <label className='type-label'>Margin</label>
+            {
+              ['top', 'bottom', 'left', 'right'].map(name =>
+                <LayoutInput header={name} value={margin[name]}
+                  onChange={ new_value => onChange({...layout, margin: {...margin, [name]: new_value}}) }/>
+              )
+            }
           </div>
-          <div style={{clear:'both'}}></div>
-          <br />
+          <Spacer/>
       </div>
     );
 
