@@ -187,17 +187,19 @@ class TimelineGraph extends React.Component{
     };
 
     return(
-      <svg {...svg_dimensions} ref='svg'>
+      <div className='timeline-graph'>
+        <svg {...svg_dimensions} ref='svg'>
 
-        <Axis {...xProps} />
-        <Axis {...yProps} />
-        <clipPath id='clip'>
+          <Axis {...xProps} />
+          <Axis {...yProps} />
+          <clipPath id='clip'>
 
-          <rect {...rect_props}  />
-        </clipPath>
-        <TimelineEvents {...events_props} />
-        <Tooltip {...this.state.tooltip} />
-      </svg>
+            <rect {...rect_props}  />
+          </clipPath>
+          <TimelineEvents {...events_props} />
+          <Tooltip {...this.state.tooltip} />
+        </svg>
+      </div>
     );
   }
 }

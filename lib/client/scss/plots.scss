@@ -1,17 +1,52 @@
 @import 'globals';
 
-.plot-container {
-  display: flex;
-  font-family: $body_font;
-  a {
-    color: black
+// Axis component styling
+.axis {
+  path, line {
+    stroke: #E0E0E0;
+  }
+
+  &.axis-Left line {
+    stroke-dasharray: 2, 2;
+  }
+
+  text {
+    fill: black;
+  }
+
+  &.axis-Bottom text, .axis-timeline-bottom text {
+    transform: rotate(-45deg);
+    text-anchor: end;
   }
 }
 
-.plot-form-container {
-  flex: 1;
+// Legend component styling
+.legend-container {
+  width: 75%;
+  margin-top: 25px;
+  margin-left: auto;
+
+  .category-group {
+    display: inline-block;
+    margin-right: 24px;
+    vertical-align: middle;
+
+    .label-rect {
+      display: inline-block;
+      margin-right: 8px;
+      width: 16px;
+      height: 8px;
+      vertical-align: middle;
+    }
+
+    .label-text {
+      display: inline;
+      font-size: 11px;
+    }
+  }
 }
 
+// Box series in category plot
 .box-series {
   .box-group {
     rect {
@@ -43,8 +78,44 @@
   }
 }
 
+// Bar series in category plot
 .bar-series {
   rect {
     opacity: 0.5;
+  }
+}
+
+
+// Timeline plot
+.timeline-graph {
+  .axis.axis-Left text {
+    display: none;
+  }
+
+  .clip_path_obj{
+    clip-path: url(#clip);
+  }
+
+  .resize-wrapper{
+    margin-right: 100px;
+  }
+
+  .tooltip-bg{
+    stroke: $dark-grey;
+    stroke-width: 1px;
+    fill: $med-grey-2;
+    pointer-events: none;
+  }
+
+  .tooltip-arrow{
+    fill: $med-grey-2;
+    pointer-events: none;
+  }
+
+  .tooltip-text{
+    display: inline;
+    font-size: 0.8em;
+    fill: $light-grey;
+    font-family: $body_font;
   }
 }

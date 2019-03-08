@@ -4,202 +4,75 @@
 
 .plot-window {
   .CodeMirror {
-    max-height: 100px;
-  }
-}
-
-.plotter-group {
-  position: relative;
-  font-family: $body_font;
-}
-
-.plotter-add-btn {
-  float: right;
-  cursor: pointer;
-  margin-right: 0px
-}
-
-.plotter-form-title {
-  border-bottom: 1px solid #666666;
-  margin-top: 5px;
-  padding-bottom: 10px;
-}
-
-.plotter-form-title-input {
-  border: none;
-  font-size: 1em;
-  margin-left: 10px;
-  width: 300px;
-  outline: 1px solid #333;
-}
-
-.plotter-series-data-group{
-  margin-top: 20px;
-  border-bottom: 1px solid #666;
-}
-
-.plotter-form-details,
-.plotter-specific-form-group{
-  margin-top: -6px;
-  margin-bottom: 15px;
-  line-height: 25px;
-  padding-bottom: 10px;
-}
-
-.plotter-form-details{
-  border-bottom: 1px solid #666666;
-  font-size: 0.8em;
-}
-
-.plotter-form-input{
-  border: 0px;
-  margin-left: 10px;
-  outline: 1px solid #333;
-}
-
-.plotter-series-data-header{
-  margin-bottom: 10px;
-}
-
-.plotter-series-text{
-  font-size: 0.8em;
-}
-
-.series-name{
-  margin-bottom: 5px;
-}
-
-.plotter-remove-btn{
-  float: right;
-}
-
-.plotter-series-entry{
-  margin-bottom: 15px;
-}
-
-.plotter-selector{
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-/* Button Styling, as opposed to positioning/layout ***************************/
-.plotter-action-btn-group button,
-.plotter-add-btn,
-.plotter-remove-btn{
-  padding:5px;
-  border: 1px solid #333;
-  outline: none;
-  background: #eee;
-  font-size: 0.6em;
-}
-
-.plotter-action-btn-group button:hover:enabled,
-.plotter-add-btn:hover:enabled,
-.plotter-remove-btn:hover:enabled{
-  color: #fff;
-  background: #22a778;
-  border: 1px solid #22a778;
-}
-
-.plotter-action-btn-group button:disabled,
-.plotter-add-btn:disabled,
-.plotter-remove-btn:disabled{
-  cursor: default;
-  border: 1px solid #ccc;
-}
-
-.axis {
-  path, line {
-    stroke: #E0E0E0;
+    max-height: 800px;
+    width: 100%;
   }
 
-  &.axis-Left line {
-    stroke-dasharray: 2, 2;
-  }
-
-  text {
-    fill: black;
-  }
-
-  &.axis-Bottom text, .axis-timeline-bottom text {
-    transform: rotate(-45deg);
-    text-anchor: end;
-  }
-}
-
-.legend-container {
-  width: 75%;
-  margin-top: 25px;
-  margin-left: auto;
-}
-
-.category-group {
-  display: inline-block;
-  margin-right: 24px;
-  vertical-align: middle
-}
-
-.label-rect {
-  display: inline-block;
-  margin-right: 8px;
-  width: 16px;
-  height: 8px;
-  vertical-align: middle;
-}
-
-.label-text {
-  display: inline;
-  font-size: 11px;
-}
-
-#timeline_group_chart .axis.axis-Left text {
-  display: none;
-}
-
-.clip_path_obj{
-  clip-path: url(#clip);
-}
-
-#timeline_group_chart .resize-wrapper{
-  margin-right: 100px;
-}
-
-.tooltip-bg{
-  stroke: $dark-grey;
-  stroke-width: 1px;
-  fill: $med-grey-2;
-  pointer-events: none;
-}
-
-.tooltip-arrow{
-  fill: $med-grey-2;
-  pointer-events: none;
-}
-
-.tooltip-text{
-  display: inline;
-  font-size: 0.8em;
-  fill: $light-grey;
-  font-family: $body_font;
-}
-
-.pc-wrapper{
-  display: flex;
-
-  div {
-    flex: 1 1 0;
-  }
-
-  &.right div i{
-    flex: 1 1 0;
-    margin-right: 10px;
-    padding-top: 10px;
-  }
-  .pc-header-title-text {
+  .section-header{
+    font-size: 115%;
+    letter-spacing: 0.03em;
     text-transform: capitalize;
-    font-size: 18px;
-    font-weight: normal;
-    margin: 2px 20px;
-    margin-right: 30px;
+    line-height: 40px;
+  }
+
+  // the editor component
+  .plotter-editor {
+    display: flex;
+    width: 100%;
+
+    .plotter-left {
+      flex-grow: 2;
+      padding-right: 10px;
+      border-right: 1px solid lightgray;
+      margin-right: 10px;
+    }
+
+    .plotter-right {
+      flex-basis: 500px;
+    }
+
+    .select-plot {
+      background-color: #eee;
+      padding: 10px;
+    }
+
+    .plot-series-config {
+      padding: 8px;
+      display: flex;
+      justify-content: space-between;
+
+      .pc-wrapper{
+        display: flex;
+
+        div {
+          flex: 1 1 0;
+        }
+
+        .pc-close {
+          margin-right: 10px;
+          padding-top: 10px;
+          cursor: pointer;
+          &:hover {
+            color: red;
+          }
+        }
+        .pc-header-title-text {
+          text-transform: capitalize;
+          font-size: 18px;
+          font-weight: normal;
+          margin: 2px 10px;
+          margin-right: 30px;
+        }
+      }
+    }
+
+    .ps-list-container {
+      padding: 5px 5px 5px 5px;
+
+      &:empty {
+        border: none;
+        padding: 0px;
+      }
+    }
   }
 }

@@ -71,7 +71,7 @@ const SelectPlot = ({update, selected}) =>
   </div>;
 
 const SeriesConfig = ({ label, series_types, updateType, updateSeries, plot_series }) =>
-  <div className='wrapper'>
+  <div className='plot-series-config'>
     <div className='pc-wrapper left'>
       <div className='pc-header-title-text'>{label}</div>
       <div>
@@ -100,7 +100,7 @@ const SeriesConfig = ({ label, series_types, updateType, updateSeries, plot_seri
             updateType(null);
             updateSeries([]);
           }}
-          className='fa fa-lg'
+          className='pc-close fa fa-lg'
         >
           &times;
         </i>
@@ -246,55 +246,57 @@ class Plotter extends React.Component {
     let plot_config = PLOTS[plot.plot_type];
 
     return (
-      <div>
-        Manifest
-        <ManifestScript
-          script={plot.script}
-          is_editing={true}
-          onChange={this.updateField.bind(this)('script')}
-        />
-        <br />
-        <span className='section-header'>layout </span>
-        <br />
-        <PlotLayout
-          layout={plot.configuration.layout}
-          onChange={this.updatePlotConfiguration('layout')}
-        />
-        <br />
-        <span className='section-header'>Plot Type </span>
-        <br />
-        {plot_config ? (
-          <SeriesConfig
-            label={plot_config.label}
-            series_types={ plot_config.series_types }
-            updateType={this.updatePlotField('plot_type')}
-            updateSeries={ this.updatePlotConfiguration('plot_series')}
-            plot_series={plot.configuration.plot_series}
+      <div className='plotter-editor'>
+        <div className='plotter-left'>
+          <span className='section-header'>manifest</span>
+          <ManifestScript
+            script={plot.script}
+            is_editing={true}
+            onChange={this.updateField.bind(this)('script')}
           />
-        ) : (
-          <SelectPlot update={ this.updatePlotField('plot_type') } selected={ plot.plot_type }/>
-        )}
-        { plot_config &&
-        <div className='ps-list-container'>
-          {plot.configuration.plot_series && plot.configuration.plot_series.map((series, index) => (
-            <PlotSeries
-              key={`ps-card-container-${index}`}
-              plot_series={series}
-              series_config={plot_config.series_types[ series.series_type]}
-              onDelete={() => {
-                let new_plot_series = plot.configuration.plot_series.slice(0);
-                new_plot_series.splice(index, 1);
-                this.updatePlotConfiguration('plot_series')(new_plot_series);
-              }}
-              onChange={(name, value) => {
-                let new_plot_series = plot.configuration.plot_series.slice(0);
-                new_plot_series[index] = { ...series, [name]: value };
-                this.updatePlotConfiguration('plot_series')(new_plot_series);
-              }}
-            />
-          ))}
         </div>
-        }
+
+        <div className='plotter-right'>
+          <span className='section-header'>layout </span>
+          <PlotLayout
+            layout={plot.configuration.layout}
+            onChange={this.updatePlotConfiguration('layout')}
+          />
+
+          <span className='section-header'>Plot Type </span>
+          {plot_config ? (
+            <SeriesConfig
+              label={plot_config.label}
+              series_types={ plot_config.series_types }
+              updateType={this.updatePlotField('plot_type')}
+              updateSeries={ this.updatePlotConfiguration('plot_series')}
+              plot_series={plot.configuration.plot_series}
+            />
+          ) : (
+            <SelectPlot update={ this.updatePlotField('plot_type') } selected={ plot.plot_type }/>
+          )}
+          { plot_config &&
+          <div className='ps-list-container'>
+            {plot.configuration.plot_series && plot.configuration.plot_series.map((series, index) => (
+              <PlotSeries
+                key={`ps-card-container-${index}`}
+                plot_series={series}
+                series_config={plot_config.series_types[ series.series_type]}
+                onDelete={() => {
+                  let new_plot_series = plot.configuration.plot_series.slice(0);
+                  new_plot_series.splice(index, 1);
+                  this.updatePlotConfiguration('plot_series')(new_plot_series);
+                }}
+                onChange={(name, value) => {
+                  let new_plot_series = plot.configuration.plot_series.slice(0);
+                  new_plot_series[index] = { ...series, [name]: value };
+                  this.updatePlotConfiguration('plot_series')(new_plot_series);
+                }}
+              />
+            ))}
+          </div>
+          }
+        </div>
       </div>
     );
   }
