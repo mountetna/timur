@@ -37,11 +37,16 @@
     }
   }
   select {
-    border: 1px solid forestgreen;
+    border: 1px solid #f0f0f0;
+    padding: 3px;
+    border-radius: 2px;
     color: #33333c;
     font-family: $value_font;
     font-size: 16px;
-    background: white;
+    background: #f9f9f9;
+    &:focus {
+      border: 1px solid forestgreen;
+    }
   }
   .label {
     padding: 4px;
@@ -52,16 +57,41 @@
       border: none;
       .rt-thead {
         box-shadow: none;
-        border-bottom: 1px solid darkgray;
+        border-bottom: 3px solid forestgreen;
+        color: forestgreen;
         font-family: $body_font;
+        .rt-tr {
+          text-align: left;
+        }
       }
       .-pagination {
         .-previous,.-next {
           flex: 0;
-          .-btn {
-            @include green_button;
-            padding: 0px 20px 3px 20px;
-            font-size: 1.6em;
+          display: flex;
+          align-items: center;
+          font-size: 25px;
+          padding: 0px 5px;
+
+          &:hover {
+            color: limegreen;
+            background-color: rgba(limegreen, 0.3);
+          }
+
+          .pagination-nav {
+            color: forestgreen;
+            cursor: pointer;
+            display: flex;
+
+            &.disabled {
+              color: #dfdfdf;
+            }
+          }
+        }
+        .-center {
+          input {
+            padding: 3px;
+            border: 1px solid #f0f0f0;
+            background: #f9f9f9;
           }
         }
         box-shadow: none;

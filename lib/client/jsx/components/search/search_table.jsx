@@ -12,6 +12,16 @@ const displayedAttributes = (template) =>
     && template.attributes[attribute_name].attribute_class != 'Magma::TableAttribute'
   )
 
+const Prev = ({children,disabled,...props}) => <div className={
+  `pagination-nav ${disabled ? 'disabled' : ''}`
+} {...props } disabled={disabled}>
+    <i className='fas fa-chevron-left'/>
+    </div>;
+
+  const Next = ({children,...props}) => <div className='pagination-nav' {...props}>
+    <i className='fas fa-chevron-right'/>
+  </div>;
+
 class SearchTable extends Component {
   render() {
     let { record_names, documents, template, attribute_names, page, pages, page_size, setPage } = this.props;
@@ -41,12 +51,14 @@ class SearchTable extends Component {
         showPaginationBottom={ false }
         showPaginationTop={ true }
         onPageChange={ setPage }
+        sortable={ false }
         page={ page }
         pages={ pages }
         pageSize={ page_size }
+        showPageSizeOptions={ false }
+        PreviousComponent={ Prev }
+        NextComponent={ Next }
         columns={columns}
-        nextText={'›'}
-        previousText={'‹'}
         data={ data }/>
     </div>;
   }

@@ -7,8 +7,12 @@ $quote_font: 'Lora', serif;
 
 @mixin text_defaults {
   color: darkorchid;
-  border: 0px none black;
-  border-bottom: 1px solid forestgreen;
+  border: none;
+  border-bottom: 1px solid #dfdfdf;
+  &:focus {
+    border-bottom: 1px solid forestgreen;
+  }
+  background: none;
   font-family: $value_font;
   font-size: 16px;
   margin: 0;
@@ -66,7 +70,7 @@ $thin_rule: 1px solid rgba(forestgreen,0.1);
 }
 
 @mixin green_button {
-  @include basic-button(forestgreen, #5c5);
+  @include basic-button(forestgreen, forestgreen);
 }
 
 @mixin header_button {

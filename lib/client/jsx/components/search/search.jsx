@@ -71,7 +71,7 @@ class Search extends Component {
         onChange={ (page_size) => this.setState({ page_size }) }
         showNone='disabled'/>
       <input type='text' className='filter' 
-        placeholder='filter query'
+        placeholder='Filter query'
         onChange={ (e) => this.setState({ current_filter: e.target.value }) }/>
 
       <input type='button' className='button' value='Search' 
