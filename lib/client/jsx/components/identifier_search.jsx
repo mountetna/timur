@@ -6,6 +6,29 @@ import MagmaLink from './magma_link';
 import { requestIdentifiers } from '../actions/magma_actions';
 import { selectIdentifiers } from '../selectors/magma';
 
+const IdentifierList = ({matches}) =>
+  matches && <div className='drop_down'>
+    {
+      Object.keys(matches).map(modelName=>
+        <div key={modelName}>
+          <div className='title'>
+            {modelName}
+          </div>
+          <div className='list'>
+          {
+            matches[modelName].map(
+              identifier=>
+                <div key={identifier} className='identifier'>
+                  <MagmaLink link={identifier} model={modelName} />
+                </div>
+            )
+          }
+          </div>
+        </div>
+      )
+    }
+  </div>;
+
 class IdentifierSearch extends React.Component{
   constructor(props){
     super(props);
@@ -42,38 +65,11 @@ class IdentifierSearch extends React.Component{
     return Object.keys(matches).length == 0 ? null : matches;
   }
 
-  renderIdentifiers(matches, model){
-    return matches.map(identifier=>
-      <div key={identifier} className='identifier'>
-        <MagmaLink link={identifier} model={model} />
-      </div>
-    );
-  }
-
-  renderMatchingIdentifiers() {
-    let matchingIdents = this.findMatches();
-
-    if (!matchingIdents) return null;
-
-    return(
-      <div className='drop_down'>
-        {
-          Object.keys(matchingIdents).map(modelName=>
-            <div key={modelName}>
-              <div className='title'>
-                {modelName}
-              </div>
-              <div className='list'>
-                {this.renderIdentifiers(matchingIdents[modelName], modelName)}
-              </div>
-            </div>
-          )
-        }
-      </div>
-    );
-  }
+  setMatch(match_string) { this.setState({match_string}); }
 
   render(){
+    let matches = this.findMatches();
+
     return(
       <div id='identifier_search'
         onBlur={ () => setTimeout(() => this.setState({has_focus: true}), 200) }
@@ -84,11 +80,11 @@ class IdentifierSearch extends React.Component{
           <input
             type='text'
             value={ this.state.match_string }
-            onChange={ (e) => this.setState({match_string: e.target.value}) }
+            onChange={ e => this.setMatch(e.target.value) }
           />
+          { matches && <i className='dismiss fa fa-times' onClick={ e => this.setMatch('') }/> }
         </div>
-
-        {this.renderMatchingIdentifiers()}
+        <IdentifierList matches={matches}/>
       </div>
     );
   }

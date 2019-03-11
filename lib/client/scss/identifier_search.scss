@@ -23,6 +23,13 @@
       width: 200px;
       font-family: $body_font;
     }
+    .dismiss {
+      cusor: pointer;
+      color: gray;
+      &:hover {
+        color: forestgreen;
+      }
+    }
   }
   .drop_down {
     display: block;
