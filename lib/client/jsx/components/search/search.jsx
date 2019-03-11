@@ -6,7 +6,7 @@ import Magma from '../../magma';
 import SelectInput from '../inputs/select_input';
 import { requestTSV, requestModels, requestDocuments } from '../../actions/magma_actions';
 import { selectSearchCache } from '../../selectors/search_cache';
-import { cacheSearchPage, setSearchPageSize, setSearchPage } from '../../actions/search_actions';
+import { cacheSearchPage, setSearchPageSize, setSearchPage, emptySearchCache } from '../../actions/search_actions';
 
 import SearchTable from './search_table';
 
@@ -41,6 +41,7 @@ class Search extends Component {
 
   componentDidMount() {
     this.props.requestModels()
+    this.props.emptySearchCache();
   }
 
   makePageCache(page, page_size, payload) {
@@ -140,6 +141,7 @@ export default connect(
     cacheSearchPage,
     setSearchPage,
     setSearchPageSize,
+    emptySearchCache,
     requestDocuments,
     requestTSV,
   }
