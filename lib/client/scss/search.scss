@@ -37,13 +37,13 @@
     }
   }
   select {
-    border: 1px solid #f0f0f0;
+    border: 1px solid $input_border_color;
     padding: 3px;
-    border-radius: 2px;
+    border-radius: 1px;
     color: #33333c;
     font-family: $value_font;
     font-size: 16px;
-    background: #f9f9f9;
+    background: $input_background_color;
     &:focus {
       border: 1px solid forestgreen;
     }
@@ -90,8 +90,8 @@
         .-center {
           input {
             padding: 3px;
-            border: 1px solid #f0f0f0;
-            background: #f9f9f9;
+            border: 1px solid $input_border_color;
+            background: $input_background_color;
           }
         }
         box-shadow: none;

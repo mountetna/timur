@@ -4,6 +4,8 @@ $value_font: 'Cousine', monospace;
 $talk_font: 'Crimson Text', serif;
 $quote_font: 'Lora', serif;
 
+$input_border_color: #c0c0c0;
+$input_background_color: #f9f9f9;
 
 @mixin text_defaults {
   color: darkorchid;
