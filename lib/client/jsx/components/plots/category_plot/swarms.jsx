@@ -34,7 +34,7 @@ class Swarms extends Component{
 
       if (!values.length) return null;
 
-      let x_position = xScale(label) + offset;
+      let x_position = xScale(label) + offset + width / 2;
       let text_position = xScale(label) + offset;
 
       return(
@@ -42,7 +42,7 @@ class Swarms extends Component{
         {
           values.map( (value, index) =>
             <Dot
-              x={ x_position + ((1000*value) % width) - width/2}
+              x={ x_position + (((1000*value) % 12) - 6)*width/12 }
               y={ yScale(value) }
               color={ color }
               text_position={ x_position }

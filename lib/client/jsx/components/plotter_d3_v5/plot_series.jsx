@@ -12,7 +12,9 @@ class PlotSeries extends React.Component {
           {series_type}
           <i onClick={onDelete} className='right fa fa-lg'>&times;</i>
         </div>
-        <TextInput header='name' value={name} onChange={onChange}/>
+        <TextInput header='name' value={name} onChange={
+           new_value => onChange('name', new_value)
+        }/>
         {
           Object.keys(series_config.variables).map(var_name =>
             <TextInput key={var_name}
