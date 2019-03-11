@@ -37,6 +37,24 @@ const Logo = ({exchanges, logo_id}) =>
     </a>
   </div>;
 
+const ICONS = {
+  administrator: 'user-astronaut',
+  editor: 'user-edit',
+  viewer: 'user'
+};
+
+const Login = ({user}) => {
+  let {first, last, permissions} = user;
+
+  let project_perm = permissions.find(({project_name}) => project_name == TIMUR_CONFIG.project_name);
+  let role = project_perm ? project_perm.role : '';
+  if (!user) return null;
+  return <div id='login'>
+      { first } { last }
+      <i className={ `fa fa-${ICONS[role]}` } title={role}/>
+  </div>;
+}
+
 class TimurNav extends React.Component{
   constructor(props){
     super(props);
@@ -67,8 +85,6 @@ class TimurNav extends React.Component{
   render(){
 
     let { exchanges, mode, environment, user } = this.props;
-    let login = user ? `${user.first} ${user.last}` : '';
-
     let isDev = false; //environment == 'development';
     let heading = <span>{'Timur'}<b>{' : '}</b>{
        isDev ? 'Development' : 'Data Browser'
@@ -82,9 +98,7 @@ class TimurNav extends React.Component{
         <div id='nav'>
           {mode !== 'home' && this.renderTabs()}
         </div>
-        <div id='login'>
-          {login}
-        </div>
+        <Login user={user}/>
       </div>
     );
   }

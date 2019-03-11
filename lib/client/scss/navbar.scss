@@ -31,6 +31,10 @@
     color: forestgreen;
     flex-basis: 10%;
     font-family: $body_font;
+    i {
+      padding: 5px;
+      color: gray;
+    }
   }
   #nav {
     flex-grow: 1;
