@@ -28,8 +28,9 @@
   }
 
   #login {
+    display: flex;
+    justify-content: flex-end;
     color: forestgreen;
-    flex-basis: 10%;
     font-family: $body_font;
     i {
       padding: 5px;
