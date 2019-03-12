@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
 
-import Magma from '../magma';
+import { selectTemplate, selectDocuments, displayAttributes } from '../selectors/magma';
 import { requestTSV } from '../actions/magma_actions';
 
 import Pager from './pager';
@@ -83,15 +83,12 @@ class TableViewer extends React.Component {
 
 export default connect(
   function(state,props) {
-    let magma = new Magma(state);
-    let template = magma.template(props.model_name);
-    let documents = magma.documents( props.model_name, props.record_names, props.filter );
-    let record_names = Object.keys(documents).sort();
-    let pages = Math.ceil(record_names.length / props.page_size);
-    let attribute_names = template ? Object.keys(template.attributes).filter(
-      att_name => template.attributes[att_name].shown && template.attributes[att_name].attribute_class != 'Magma::TableAttribute'
-    ) : null;
-    return { template, documents, record_names, pages, attribute_names };
+    let { model_name, record_names, filter } = props;
+
+    let template = selectTemplate(state, model_name);
+    let documents = selectDocuments( state, model_name, record_names, filter );
+    let attribute_names = displayAttributes(template);
+    return { template, documents, record_names, attribute_names };
   },
   { requestTSV }
 )(TableViewer);

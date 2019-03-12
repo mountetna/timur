@@ -2,8 +2,8 @@ import Pager from '../pager';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import Magma from '../../magma';
 import SelectInput from '../inputs/select_input';
+import { selectModelNames } from '../../selectors/magma';
 import { requestTSV, requestModels, requestDocuments } from '../../actions/magma_actions';
 import { selectSearchCache } from '../../selectors/search_cache';
 import { cacheSearchPage, setSearchPageSize, setSearchPage, emptySearchCache } from '../../actions/search_actions';
@@ -36,7 +36,8 @@ class Search extends Component {
   }
 
   pageCached(page) {
-    return this.props.page_cache.isCached(page.toString())
+    let { cache } = this.props;
+    return cache.isCached(page.toString())
   }
 
   componentDidMount() {
@@ -89,7 +90,8 @@ class Search extends Component {
   }
 
   render() {
-    let { model_name, record_names, page_size, current_page } = this.props;
+    let { cache } = this.props;
+    let { current_page, page_size, model_name, record_names } = cache;
     let { results } = this.state;
     let pages = model_name ? Math.ceil(results / page_size) : -1;
 
@@ -124,18 +126,10 @@ class Search extends Component {
 }
 
 export default connect(
-  function(state, props) {
-    var magma = new Magma(state)
-    var cache = selectSearchCache(state)
-    return {
-      model_names: magma.modelNames(),
-      page_cache: cache,
-      current_page: cache.current_page,
-      page_size: cache.page_size,
-      model_name: cache.model_name,
-      record_names: cache.record_names
-    }
-  },
+  (state, props) => ({
+    model_names: selectModelNames(state),
+    cache: selectSearchCache(state)
+  }),
   {
     requestModels,
     cacheSearchPage,
