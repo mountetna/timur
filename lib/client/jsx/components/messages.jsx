@@ -58,7 +58,7 @@ class Messages extends React.Component{
     return <div id="messages">
             <div id="quote">
               <svg width="31" height="40">
-                <path d="M 2,40 20,0 18,40"/>
+                <path d="M 2,40 20,25 18,40"/>
               </svg>
             </div>
             <div id="dismiss" onClick={ this.dismissMessages.bind(this) }>
