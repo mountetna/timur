@@ -69,3 +69,21 @@
     }
   }
 }
+
+
+.attribute {
+  .value {
+    .filter {
+      border: none;
+      border-bottom: 1px solid $input_border_color;
+      &:focus {
+        border-bottom: 1px solid forestgreen;
+      }
+      margin: 0px 10px;
+      width: 300px;
+    }
+    .export {
+      @include green_button;
+    }
+  }
+}

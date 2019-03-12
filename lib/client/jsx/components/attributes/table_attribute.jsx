@@ -1,4 +1,4 @@
-import TableViewer from '../table_viewer'
+import ModelViewer from '../model_viewer'
 import React from 'react'
 
 export default class TableAttribute extends React.Component {
@@ -8,17 +8,26 @@ export default class TableAttribute extends React.Component {
   }
 
   render() {
-    if (this.props.mode != 'browse') return <div className="value"></div>
+    let { mode, attribute, value } = this.props;
+    let { current_page, filter } = this.state;
+
+    if (mode != 'browse') return <div className="value"></div>;
+
+    if (!value || !value.length) return <div className='value'>No data</div>;
 
     return <div className="value">
-      <TableViewer 
+      <input placeholder='Filter query' className='filter' type='text' onChange={
+        e => this.setState({ current_page: 0, filter: e.target.value })
+      }/>
+      <input className='export' type='button' value={'\u21af TSV'} onClick={
+        () => requestTSV(model_name, record_names)
+      }/>
+      <ModelViewer
         page_size={ 10 }
-        current_page={ this.state.current_page }
-        setPage={ (page) => this.setState({ current_page: page-1 }) }
-        filter={ this.state.filter }
-        onFilter={ (filter) => this.setState({ current_page: 0, filter }) }
-        model_name={ this.props.attribute.model_name }
-        record_names={ this.props.value }/>
+        pages={ -1 }
+        filter={ filter }
+        model_name={ attribute.model_name }
+        record_names={ value }/>
     </div>
   }
 }

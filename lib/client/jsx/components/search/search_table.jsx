@@ -1,26 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Magma from '../../magma';
-import AttributeViewer from '../attributes/attribute_viewer';
 import ReactTable from 'react-table';
 
-// exclude things not shown and tables
-const displayedAttributes = (template) =>
-  Object.keys(template.attributes).filter(
-    (attribute_name) =>
-    template.attributes[attribute_name].shown
-    && template.attributes[attribute_name].attribute_class != 'Magma::TableAttribute'
-  )
+import AttributeViewer from '../attributes/attribute_viewer';
+import { selectDocuments, selectTemplate } from '../../selectors/magma';
 
-const Prev = ({children,disabled,...props}) => <div className={
-  `pagination-nav ${disabled ? 'disabled' : ''}`
-} {...props } disabled={disabled}>
-    <i className='fas fa-chevron-left'/>
-    </div>;
-
-  const Next = ({children,...props}) => <div className='pagination-nav' {...props}>
-    <i className='fas fa-chevron-right'/>
+const TableButton = ({direction,children,disabled,...props}) =>
+  <div className={ `pagination-nav ${disabled ? 'disabled' : ''}` } {...props } disabled={disabled}>
+    <i className={ `fas fa-chevron-${direction}`}/>
   </div>;
+
+const Prev = (props) => <TableButton direction='left' {...props}/>
+const Next = (props) => <TableButton direction='right' {...props}/>
 
 class SearchTable extends Component {
   render() {
@@ -28,20 +19,6 @@ class SearchTable extends Component {
 
     if (!record_names) return <div className='table'></div>;
 
-    let columns = attribute_names.map(
-      att_name => (
-        {
-          Header: att_name,
-          accessor: att_name,
-          Cell: ({value}) => <AttributeViewer
-            template={template}
-            document={document}
-            value={value}
-            attribute={ template.attributes[att_name] }
-          />
-        }
-      )
-    );
 
     let data = record_names.map(record_name => documents[record_name]);
 
@@ -66,11 +43,11 @@ class SearchTable extends Component {
 
 export default connect(
   function(state,props) {
-    if (!props.model_name) return {}
+    let { model_name, record_names } = props;
+    if (!model_name || !record_names) return {}
 
-    let magma = new Magma(state)
-    let documents = magma.documents(props.model_name, props.record_names)
-    let template = magma.template(props.model_name)
+    let documents = selectDocuments(state, model_name, record_names);
+    let template = selectTemplate(state, model_name);
     let attribute_names = displayedAttributes(template)
 
     return {

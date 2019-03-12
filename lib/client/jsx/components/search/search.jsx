@@ -8,7 +8,7 @@ import { requestTSV, requestModels, requestDocuments } from '../../actions/magma
 import { selectSearchCache } from '../../selectors/search_cache';
 import { cacheSearchPage, setSearchPageSize, setSearchPage, emptySearchCache } from '../../actions/search_actions';
 
-import SearchTable from './search_table';
+import ModelViewer from '../model_viewer';
 
 class Search extends Component {
   constructor(props) {
@@ -101,17 +101,14 @@ class Search extends Component {
           this.renderQuery()
         }
         {
-          pages != -1 ?
-            <div className='pages'>
-              <div className='results'>
-                Found { results } records in <span className='model_name'>{ model_name }</span>
-              </div>
-            </div> : null
+          results && <div className='results'>
+            Found { results } records in <span className='model_name'>{ model_name }</span>
+          </div>
         }
       </div>
       {
         model_name ? <div className='documents'>
-          <SearchTable
+          <ModelViewer
             model_name={ model_name }
             record_names={ record_names }
             page={ current_page-1 }
