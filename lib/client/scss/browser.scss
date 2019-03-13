@@ -51,6 +51,9 @@
       display: inline-block;
       padding: 5px 20px;
       cursor: pointer;
+      &:hover {
+        color: mix(gray,forestgreen,50);
+      }
     }
     .revised {
       background-color: rgba(pink,0.3);
@@ -69,7 +72,7 @@
           border-bottom: $thin_rule;
         }
         font-family: $body_font;
-        background-color: rgba(tan,0.3);
+        border-bottom: 1px solid rgba(tan,0.3);
         border-right: 1px solid forestgreen;
         color: indianred;
         width: 15%;

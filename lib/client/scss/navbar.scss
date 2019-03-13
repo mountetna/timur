@@ -30,7 +30,7 @@
   #login {
     display: flex;
     justify-content: flex-end;
-    color: forestgreen;
+    color: darkgoldenrod;
     font-family: $body_font;
     i {
       padding: 5px;
@@ -52,11 +52,15 @@
         color: gray;
         cursor: pointer;
         outline: 0;
+
+        &:hover {
+          color: mix(gray,forestgreen,50);
+        }
       }
     }
     .selected {
       a {
-        color: darkgoldenrod;
+        color: forestgreen;
       }
     }
   }
