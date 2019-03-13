@@ -13,8 +13,10 @@ export default class ConsignmentView extends React.Component {
         Object.keys(consignment).map(
           (name,i) =>
             <div key={i} className='consignment-variable-group'>
-              <div className='consignment-variable-name'>@{name}:</div>
-              <ConsignmentResult name={name} data={consignment[name]}/>
+              <div className='consignment-variable-name'>{name}</div>
+              <div className='consignment-variable-result'>
+                <ConsignmentResult name={name} data={consignment[name]}/>
+              </div>
             </div>
         )
       }

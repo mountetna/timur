@@ -1,21 +1,11 @@
 // Framework libraries.
 import * as React from 'react';
 import * as TSV from '../../utils/tsv';
-import ConsignmentTable from './consignment_table';
 import ConsignmentResult from './consignment_result';
-import { isPrimitiveType } from '../../utils/types'
+import ResultTable from './result_table';
 
 class MatrixResult extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = { hidden: true };
-  }
-
-  toggle() {
-    this.setState({hidden: !this.state.hidden});
-  }
-
-  downloadMatrix(){
+  downloadMatrix() {
     let {name, matrix} = this.props;
     let matrix_map = matrix.map('row', (row, _, row_name)=>{
       return matrix.col_names.reduce(
@@ -33,36 +23,40 @@ class MatrixResult extends React.Component{
     );
   }
 
-  table() {
-    let { matrix } = this.props;
-    let headers = [ 'Row Names', ...matrix.col_names ];
-    let rows = matrix.map('row', (row, index, row_name)=>[ row_name, ...row.map(
-      value => isPrimitiveType(value) ? value : <ConsignmentResult data={ value } />
-    )]);
-
-    return <ConsignmentTable headers={ headers } rows={ rows }/>
-  }
-
   render(){
     let {matrix} = this.props;
-    let {hidden} = this.state;
-    return(
-      <div className='consignment-matrix'>
-        <i className='matrix-icon fas fa-table'/>
 
-        {` ${matrix.num_rows} rows x ${matrix.num_cols} cols`}
+    let columns = [
+      {
+        Header: 'Row Names',
+        accessor: 'row_name'
+      }, ...matrix.col_names.map(
+        header => (
+          {
+            Header: header,
+            accessor: header,
+            Cell: ({value}) => <ConsignmentResult data={ value } />
+          }
+        )
+      )
+    ];
 
-        <button className='consignment-btn' onClick={this.downloadMatrix.bind(this)}>
-          <i className='download-icon fas fa-download' aria-hidden='true' ></i>
-          {'DOWNLOAD'}
-        </button>
-        <button className='consignment-btn' onClick={this.toggle.bind(this)}>
-          <i className='fas fa-table' aria-hidden='true'></i>
-          { hidden ? 'SHOW' : 'HIDE'}
-        </button>
-        { !hidden && this.table() }
-      </div>
-    );
+    let data = matrix.map('row', (row, index, row_name) => (
+      {
+        row_name, ...row.reduce(
+          (row_data, value, col_index) => {
+            row_data[matrix.col_names[col_index]] = value; return row_data
+          }, {}
+        )
+      }
+    ));
+
+    return <ResultTable
+      data={ data }
+      columns={ columns }
+      onDownload={this.downloadMatrix.bind(this)}
+      className='matrix-icon fas fa-table'
+      text={` ${matrix.num_rows} rows x ${matrix.num_cols} cols`} />;
   }
 }
 
