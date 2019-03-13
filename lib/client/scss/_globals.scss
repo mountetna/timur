@@ -1,12 +1,20 @@
-$body_font: 'Oxygen', sans-serif;
+$body_font: 'Open Sans', sans-serif;
+$title_font: 'Montserrat', sans-serif;
 $value_font: 'Cousine', monospace;
-$talk_font: 'Lora', serif;
-$quote_font: 'Crimson Text', serif;
+$talk_font: 'Crimson Text', serif;
+$quote_font: 'Lora', serif;
+
+$input_border_color: #c0c0c0;
+$input_background_color: #f9f9f9;
 
 @mixin text_defaults {
   color: darkorchid;
-  border: 0px none black;
-  border-bottom: 1px solid forestgreen;
+  border: none;
+  border-bottom: 1px solid #dfdfdf;
+  &:focus {
+    border-bottom: 1px solid forestgreen;
+  }
+  background: none;
   font-family: $value_font;
   font-size: 16px;
   margin: 0;
@@ -36,22 +44,35 @@ $quote_font: 'Crimson Text', serif;
   }
 }
 
-@mixin green_button {
+$thin_rule: 1px solid rgba(forestgreen,0.1);
+
+@mixin basic_button($color, $background) {
   cursor: pointer;
   font-family: $body_font;
-  color: forestgreen;
-  margin-left: 4px;
-  padding: 2px;
+  color: white;
+  padding: 4px;
   font-size: 14px;
-  background-color: rgba(forestgreen,0.2);
+  background-color: $background;
+  border: 1px solid $background;
+  border-radius: 2px;
+  transition-duration: 0.2s;
   &:disabled {
     color: grey;
-    border: darkgrey;
-    background-color: rgba(grey,0.2);
+    border: 1px solid #eee;
+    background-color: #eee;
+    &:hover {
+      background-color: #eee;
+      color: grey;
+    }
   }
   &:hover {
-    background-color: rgba(forestgreen,0.3);
+    background-color: rgba($background,0.3);
+    color: $color;
   }
+}
+
+@mixin green_button {
+  @include basic-button(forestgreen, forestgreen);
 }
 
 @mixin header_button {
@@ -60,6 +81,19 @@ $quote_font: 'Crimson Text', serif;
   color: forestgreen;
 }
 
+@mixin icon_button {
+  cursor: pointer;
+  color: gray;
+  padding: 2px;
+  &:hover {
+    color: forestgreen;
+  }
+  &.download {
+    &:hover {
+      color: dodgerblue;
+    }
+  }
+}
 /* NEW GLOBALS ****************************************************************/
 
 .left-column-group{

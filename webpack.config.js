@@ -7,7 +7,8 @@ module.exports = env => ({
   resolve: {
     extensions: [ '.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg' ],
     alias: {
-      'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib')
+      'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib'),
+      'react-table': path.join(__dirname, 'node_modules/react-table')
     }
   },
   entry: ['./jsx/timur.jsx', './scss/application.scss' ],

@@ -1,70 +1,89 @@
 @mixin default_attribute {
-	.revised {
-		background-color: pink;
-	}
-	> .value {
-		color: #33333c;
-		font-family: $value_font;
+  .revised {
+    background-color: pink;
+  }
+  > .value {
+    color: #33333c;
+    font-family: $value_font;
 
-		.delete_link {
+    .delete_link {
                   &.empty {
                     color: red;
                   }
-			&:hover {
-				text-decoration: line-through;
-				color: gray;
-				cursor: pointer;
-			}
-		}
+      &:hover {
+        text-decoration: line-through;
+        color: gray;
+        cursor: pointer;
+      }
+    }
 
-		.collection_item, .list_item {
-			border-bottom: 1px solid rgba(forestgreen,0.1);
-			padding-top: 3px;
-			.add_item {
-				cursor: pointer;
-				color: green;
-				font-weight: bold;
-			}
-		}
+    .collection_item, .list_item {
+      &:not(:last-child) {
+        border-bottom: $thin_rule;
+      }
+      padding-top: 3px;
+      .add_item {
+        cursor: pointer;
+        color: green;
+        font-weight: bold;
+      }
+    }
 
-		.button {
-			@include green_button;
-			margin-left: 0px;
-		}
-		
-		.selection {
-			border: 1px solid forestgreen;
-			color: #33333c;
-			font-family: $value_font;
-			font-size: 16px;
-			background: transparent;
-		}
+    .button {
+      @include green_button;
+    }
 
-		.at_spacer {
-			padding-left: 5px;
-			padding-right: 5px;
-			color: forestgreen;
-		}
-		input[type="text"].date_text {
-			@include text_defaults;
-			width: 100px;
-		}
-		input[type="text"].time_text {
-			@include text_defaults;
-			width: 50px;
-		}
-		input[type="text"].full_text {
-			@include text_defaults;
-			width: 70%;
-		}
-		input[type="text"].link_text {
-			@include text_defaults;
-			border-left: 1px solid rgba(forestgreen,0.2);
-		}
-		textarea.text_box {
-			@include text_box;
-			height: 70px;
-			width: 70%;
-		}
-	}
+    .selection {
+      border: 1px solid forestgreen;
+      color: #33333c;
+      font-family: $value_font;
+      font-size: 16px;
+      background: transparent;
+    }
+
+    .at_spacer {
+      padding-left: 5px;
+      padding-right: 5px;
+      color: forestgreen;
+    }
+    input[type="text"].date_text {
+      @include text_defaults;
+      width: 100px;
+    }
+    input[type="text"].time_text {
+      @include text_defaults;
+      width: 50px;
+    }
+    input[type="text"].full_text {
+      @include text_defaults;
+      width: 70%;
+    }
+    input[type="text"].link_text {
+      @include text_defaults;
+      border-left: 1px solid rgba(forestgreen,0.2);
+    }
+    textarea.text_box {
+      @include text_box;
+      height: 70px;
+      width: 70%;
+    }
+  }
+}
+
+
+.attribute {
+  .value {
+    .filter {
+      border: none;
+      border-bottom: 1px solid $input_border_color;
+      &:focus {
+        border-bottom: 1px solid forestgreen;
+      }
+      margin: 0px 10px;
+      width: 300px;
+    }
+    .export {
+      @include green_button;
+    }
+  }
 }

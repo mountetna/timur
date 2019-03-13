@@ -14,7 +14,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 // Class imports.
-import Magma from '../../magma';
 import Header from '../header';
 import {TabBarContainer as TabBar} from '../tab_bar';
 import BrowserTab from './browser_tab';
@@ -33,6 +32,9 @@ import {
   getDefaultTab,
   selectView
 } from '../../selectors/tab_selector';
+import {
+  selectTemplate, selectDocument, selectRevision
+} from '../../selectors/magma';
 import { selectUserProjectRole } from '../../selectors/user_selector';
 
 class Browser extends React.Component{
@@ -229,10 +231,9 @@ class Browser extends React.Component{
 export default connect(
   // map state
   (state = {}, {model_name, record_name})=>{
-    let magma = new Magma(state);
-    let template = magma.template(model_name);
-    let record = magma.document(model_name, record_name);
-    let revision = magma.revision(model_name, record_name) || {};
+    let template = selectTemplate(state,model_name);
+    let record = selectDocument(state, model_name, record_name);
+    let revision = selectRevision(state, model_name, record_name) || {};
     let view = selectView(state, model_name);
     let role = selectUserProjectRole(state);
 

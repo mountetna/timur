@@ -1,63 +1,63 @@
 @import "globals";
 
 .project {
-	.header {
-		>span {
-			display: none;
-		}
-		.model_name {
-			display: none;
-		}
-		.record_name {
-			color: darkorchid
-		}
-		padding: 0;
-		margin-left: 50px;
-	}
+  .header {
+    >span {
+      display: none;
+    }
+    .model_name {
+      display: none;
+    }
+    .record_name {
+      color: darkorchid
+    }
+    padding: 0;
+    margin-left: 15px;
+  }
 
-	#tab {
-		&.overview {
-			.pane {
-				.attributes { 
-					.attribute {
-						&:first-of-type {
-							.name { 
-								display: none; 
-							}
-							.value {
-									background-color: transparent;
-									padding: 20px 0px;
-									margin: 0px;
-									color: seagreen;
-									font-size: 20px;
-							}
-						}
-					}
-				}
-			}
-		}
-		.pane {
-			.attributes {
-				font-family: $body_font;
-				.attribute {
-					padding-left: 50px;
-					display: block;
-					.name {
-						font-family: $body_font;
-						display: block;
-						border: none;
-						width: 100%;
-						margin-top: 10px;
-						text-align: unset;
-					}
-					.value {
-						font-family: $body_font;
-						display: block;
-						width: auto;
-						border: none;
-					}
-				}
-			}
-		}
-	}
+  #tab {
+    &.overview {
+      .pane {
+        .attributes { 
+          .attribute {
+            &:first-of-type {
+              .name { 
+                display: none; 
+              }
+              .value {
+                  background-color: transparent;
+                  padding: 20px 0px;
+                  margin: 0px;
+                  color: seagreen;
+                  font-size: 20px;
+              }
+            }
+          }
+        }
+      }
+    }
+    .pane {
+      .attributes {
+        font-family: $body_font;
+        .attribute {
+          padding-left: 50px;
+          display: block;
+          .name {
+            font-family: $body_font;
+            display: block;
+            border: none;
+            width: 100%;
+            margin-top: 10px;
+            text-align: unset;
+          }
+          .value {
+            font-family: $body_font;
+            display: block;
+            width: auto;
+            border: none;
+          }
+        }
+      }
+    }
+  }
 }

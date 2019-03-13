@@ -7,11 +7,11 @@
 
 .browser {
   position: relative;
-  padding-top: 30px;
   .header {
     font-family: $body_font;
     position: relative;
-    padding-left: 5%;
+    padding: 3px;
+    margin-top: 5px;
     @keyframes fade {
       0% { color: forestgreen; }
       50% { color: midnightblue; }
@@ -20,7 +20,7 @@
     .edit, .approve, .cancel, .submit {
       @include header_button;
       display: inline-block;
-      font-size: 25px;
+      font-size: 15px;
       padding-left: 5px;
     }
     .submit {
@@ -38,80 +38,67 @@
     }
     .record-name {
       display: inline-block;
-      font-size: 25px;
     }
   }
   .tabbar {
+    margin-top: 10px;
     font-family: $body_font;
     display: flex;
     margin-bottom: 3px;
-    .spacer1 {
-      padding: 5px;
-      border-bottom: 1px solid forestgreen;
-    }
-    .spacer2 {
-      flex-grow: 1;
-      border-bottom: 1px solid forestgreen;
-    }
+    border-bottom: 2px solid #ccc;
     .tab {
-      color: mediumvioletred;
-      background-color: rgba(skyblue,0.2);
-      border: 1px solid forestgreen;
+      color: gray;
       display: inline-block;
-      margin-right: -1px;
       padding: 5px 20px;
       cursor: pointer;
+      &:hover {
+        color: mix(gray,forestgreen,50);
+      }
     }
     .revised {
       background-color: rgba(pink,0.3);
     }
     .selected {
-      color: sienna;
-      background-color: rgba(wheat,0.3);
+      color: forestgreen;
+      background-color: white;
+      border-bottom: 3px solid forestgreen;
       cursor: default;
-      border-bottom: none;
     }
   }
   #tab {
     .pane {
-      margin-bottom: 1px;
       .title {
+        &:after {
+          border-bottom: $thin_rule;
+        }
         font-family: $body_font;
-        background-color: rgba(tan,0.3);
-        border: 1px solid tan;
-        border-bottom: none;
+        border-bottom: 1px solid rgba(tan,0.3);
+        border-right: 1px solid forestgreen;
         color: indianred;
         width: 15%;
-        padding-right: 7px;
+        padding-right: 5px;
         text-align: right;
       }
       .attribute {
         display: flex;
         @include default_attribute;
         .name {
-          border-bottom: 1px solid rgba(forestgreen,0.1);
-          border-right: 1px solid forestgreen;
+          border-bottom: $thin_rule;
           display: inline-block;
           width: 15%;
           padding-right: 8px;
           text-align: right;
           font-family: $body_font;
-          color: midnightblue;
+          color: darkblue;
         }
         > .value {
-          border-bottom: 1px solid rgba(forestgreen,0.1);
+          border-bottom: $thin_rule;
           flex-grow: 1;
           display: inline-block;
           border-left: 1px solid forestgreen;
           padding-left: 9px;
-          margin-left: 2px;
           padding-top: 3px;
           width: 85%;
-        }
-        &:first-of-type {
-          .name, > .value {
-            border-top: 2px solid forestgreen;
-          }
         }
       }
     }

@@ -30,7 +30,7 @@ export class ManifestView extends React.Component{
       copy: {
         click: ()=>{this.props.copy();},
         icon: 'files-o',
-        label: 'COPY'
+        label: 'copy'
       },
       remove: {
         click: ()=>{
@@ -39,27 +39,27 @@ export class ManifestView extends React.Component{
           }
         },
         icon: 'trash-o',
-        label: 'DELETE'
+        label: 'delete'
       },
       edit: {
         click: this.toggleEdit.bind(this),
         icon: 'pencil-square-o',
-        label: 'EDIT'
+        label: 'edit'
       },
       run: {
         icon: 'play',
-        label: 'RUN',
+        label: 'run',
         click: this.runManifest.bind(this)
       },
       save: {
         click: this.updateManifest.bind(this),
         icon: 'floppy-o',
-        label: 'SAVE'
+        label: 'save'
       },
       cancel: {
         click: this.cancelEdit.bind(this),
         icon: 'ban',
-        label: 'CANCEL'
+        label: 'cancel'
       }
     };
   }

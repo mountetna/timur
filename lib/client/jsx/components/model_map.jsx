@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 
 import { easeQuadIn } from 'd3-ease';
-import React, { Component } from 'react'
-import { requestModels } from '../actions/magma_actions'
-import Magma from '../magma'
-import { Animate } from 'react-move'
+import React, { Component } from 'react';
+import { requestModels } from '../actions/magma_actions';
+import { selectModelNames, selectTemplate } from '../selectors/magma';
+import { Animate } from 'react-move';
 
 class ModelLink extends Component {
   render() {
@@ -49,7 +49,7 @@ class ModelAttribute extends Component {
     let attribute = template.attributes[att_name]
     return <div className="attribute" key={ att_name }>
       <span>{att_name}</span>
-      <span className="type">({this.type()})</span>
+      <span className="type"> ({this.type()}) </span>
       { attribute.desc ?
       <span className="description">{ attribute.desc }</span>
           : null
@@ -77,12 +77,9 @@ class ModelReport extends Component {
 }
 
 ModelReport = connect(
-  (state,props) => {
-    let magma = new Magma(state)
-    return {
-      template: magma.template(props.model_name)
-    }
-  }
+  (state,{ model_name }) => ({
+    template: selectTemplate(state,model_name)
+  })
 )(ModelReport)
 
 class LayoutNode {
@@ -307,11 +304,10 @@ class ModelMap extends Component {
 
 export default connect(
   (state) => {
-    let magma = new Magma(state);
-    let model_names = magma.modelNames();
+    let model_names = selectModelNames(state);
     return {
       model_names,
-      templates: model_names.map(model_name => magma.template(model_name))
+      templates: model_names.map(model_name => selectTemplate(state,model_name))
     }
   },
   {

@@ -2,9 +2,58 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import {IdentifierSearchContainer as IdentifierSearch} from './identifier_search';
+import IdentifierSearch from './identifier_search';
 import Link from './link';
 import { selectUser } from '../selectors/user_selector';
+
+const Halo = ({radius}) =>
+  <div className='halo'>
+    <svg>
+      <circle r={`${radius*0.7}px`} cx={`${radius}px`} cy={`${radius}px`}/>
+      {
+        Array(36).fill().map((_,i) => {
+          let deg = i * 10;
+          let rad = radius * (i % 2 == 0 ? 1.0 : 0.9);
+          let x = (r) => Math.cos(Math.PI * deg / 180) * r + radius;
+          let y = (r) => Math.sin(Math.PI * deg / 180) * r + radius;
+          return <path
+            className={ i%2==0 ? 'long' : 'short'}
+            key={i}
+            d={ `M ${x(rad)}, ${y(rad) } L ${x(radius*0.7)}, ${y(radius*0.7)}` }/>
+        })
+      }
+    </svg>
+  </div>;
+
+const Logo = ({exchanges, logo_id}) =>
+  <div id='logo'>
+    <a href='/'>
+      <div id={logo_id} className={Object.keys(exchanges).length > 0 ? 'throb' : null }>
+
+        <div className='image'>
+        </div>
+        <Halo radius={27.5}/>
+      </div>
+    </a>
+  </div>;
+
+const ICONS = {
+  administrator: 'user-astronaut',
+  editor: 'user-edit',
+  viewer: 'user'
+};
+
+const Login = ({user}) => {
+  let {first, last, permissions} = user;
+
+  let project_perm = permissions.find(({project_name}) => project_name == TIMUR_CONFIG.project_name);
+  let role = project_perm ? project_perm.role : '';
+  if (!user) return null;
+  return <div id='login'>
+      { first } { last }
+      <i className={ `fa fa-${ICONS[role]}` } title={role}/>
+  </div>;
+}
 
 class TimurNav extends React.Component{
   constructor(props){
@@ -32,63 +81,24 @@ class TimurNav extends React.Component{
     );
   }
 
-  renderHalo(){
-    return <div className='halo'>
-      <svg>
-        <circle r='25px' cx='35' cy='35'/>
-        {
-          Array(36).fill().map((_,i) => {
-            let deg = i * 10;
-            let rad = i % 2 == 0 ? 42 : 32;
-            let x = (r) => Math.cos(Math.PI * deg / 180) * r + 35;
-            let y = (r) => Math.sin(Math.PI * deg / 180) * r + 35;
-            return <path
-              className={ i%2==0 ? 'long' : 'short'}
-              key={i}
-              d={ `M ${x(rad)}, ${y(rad) } L ${x(25)}, ${y(25)}` }/>
-          })
-        }
-      </svg>
-    </div>
-  }
 
   render(){
 
-    let { user } = this.props;
-    let login = user ? `${user.first} ${user.last}` : '';
-    let heading = <span>{'Timur'}<b>{' : '}</b>{'Data Browser'}</span>;
-    let logo_id = 'normal';
-
-    if(this.props.environment == 'development'){
-      heading = <span>{'Timur Development'}</span>;
-      logo_id = 'dev';
-    }
+    let { exchanges, mode, environment, user } = this.props;
+    let isDev = false; //environment == 'development';
+    let heading = <span>{'Timur'}<b>{' : '}</b>{
+       isDev ? 'Development' : 'Data Browser'
+    }</span>;
+    let logo_id = isDev ? 'dev' : 'normal';
 
     return(
       <div id='header'>
-
-        <div id='logo'>
-
-          <a href='/'>
-
-            <div id={logo_id} className={Object.keys(this.props.exchanges).length > 0 ? 'throb' : null}>
-
-              <div className='image' />
-              {this.renderHalo()}
-            </div>
-          </a>
-        </div>
-        <div id='heading'>
-          {heading}
-        </div>
+        <Logo exchanges={exchanges} logo_id={logo_id}/>
+        {mode !== 'home' && <IdentifierSearch />}
         <div id='nav'>
-
-          {this.props.mode !== 'home' && this.renderTabs()}
-          <div id='login'>
-            {login}
-          </div>
-          {this.props.mode !== 'home' && <IdentifierSearch />}
+          {mode !== 'home' && this.renderTabs()}
         </div>
+        <Login user={user}/>
       </div>
     );
   }

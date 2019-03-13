@@ -13,6 +13,7 @@
 
 @import "globals";
 @import "navbar";
+@import "identifier_search";
 @import "messages";
 @import "browser";
 @import "plotter";
@@ -31,7 +32,13 @@
 @import "predicate";
 
 @import "~code-mirror/codemirror";
-@import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen:400,700);
+@import "~react-table/react-table";
+@import url(https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Lora|Crimson+Text|Cousine);
+
+body {
+  padding: 0px;
+  margin: 0px;
+}
 
 #main {
 	padding-left: 40px;
@@ -40,7 +47,7 @@
 
 a {
 	text-decoration: none;
-	color: olive;
+	color: darkgoldenrod;
 }
 
 #browse {

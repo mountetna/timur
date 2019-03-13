@@ -7,7 +7,9 @@ const ConsignmentResult = ({name, data}) =>
   <div className='consignment-result'>
     {
       isPrimitiveType(data) ?
-        String(data)
+        <div className='primitive-value'>
+          { String(data) }
+        </div>
       : isVector(data) ?
         <VectorResult vector={data} name={name} />
       : isMatrix(data) ?
