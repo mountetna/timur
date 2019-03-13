@@ -31,8 +31,8 @@ class VectorResult extends React.Component{
       data={ data }
       columns={ columns }
       onDownload={this.downloadVector.bind(this)}
-      className='vector-icon fas fa-list'
-      text={` ${vector.size} elements`}/>;
+      className='fas fa-list'
+      text={`(${vector.size})`}/>;
   }
 }
 

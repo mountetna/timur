@@ -178,21 +178,23 @@
       box-shadow: 1px 0 0 0 forestgreen;
     }
     .consignment-variable-result {
-      padding-left: 10px;
+      padding-left: 0px;
       border-bottom: $thin_rule;
     }
     .consignment-result {
       width: 100%;
       display: block;
+      .size {
+        font-weight: bold;
+        color: #444;
+      }
       .primitive-value {
         font-family: $value_font;
         color: darkorchid;
+        padding-left: 6px;
       }
-      .vector-icon {
-        color: goldenrod;
-      }
-      .matrix-icon {
-        color: salmon;
+      .icon {
+        @include icon_button;
       }
       .download-icon {
         color: blue;

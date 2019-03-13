@@ -55,8 +55,8 @@ class MatrixResult extends React.Component{
       data={ data }
       columns={ columns }
       onDownload={this.downloadMatrix.bind(this)}
-      className='matrix-icon fas fa-table'
-      text={` ${matrix.num_rows} rows x ${matrix.num_cols} cols`} />;
+      className='fas fa-table'
+      text={`(${matrix.num_rows}x${matrix.num_cols})`} />;
   }
 }
 

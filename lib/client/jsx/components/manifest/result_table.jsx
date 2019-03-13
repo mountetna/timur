@@ -31,19 +31,23 @@ export default class ResultTable extends React.Component {
     );
   }
 
-  render(){
-    let {className, text, data, onDownload } = this.props;
-    let {hidden} = this.state;
+  render() {
+    let { className, text, data, onDownload } = this.props;
+    let { hidden } = this.state;
+    let icon = hidden ? 'chevron-right' : 'chevron-down';
     return(
       <div className='consignment-item'>
-        <i className={ className } aria-hidden='true'/>
-        {text}
-        <button className='consignment-btn' onClick={ onDownload }>
-          {'download'}
-        </button>
-        <button className='consignment-btn' onClick={this.toggle.bind(this)}>
-          {hidden ? 'show' : 'hide'}
-        </button>
+        <i className={ `table-visibility icon fa fa-fw fa-${icon}` }
+          title={ hidden ? 'Show' : 'Hide' }
+          onClick={ this.toggle.bind(this)}/>
+        <i className={ `list icon ${className}` } aria-hidden='true'
+          title={ hidden ? 'Show' : 'Hide' }
+          onClick={ this.toggle.bind(this)}
+        />
+        <i className='download icon fa fa-fw fa-download'
+          title='Download'
+          onClick={ onDownload }/>
+        <span className='size'>{text}</span>
         { !hidden && this.table() }
       </div>
     );
