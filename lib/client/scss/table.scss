@@ -18,6 +18,7 @@
     }
     .-pagination {
       font-size: 0.75em;
+      justify-content: flex-start;
       .-previous,.-next {
         flex: 0;
         display: flex;
@@ -39,9 +40,6 @@
             color: #dfdfdf;
           }
         }
-      }
-      .-next {
-        flex: 1.5;
       }
       .-center {
         flex: 0;
