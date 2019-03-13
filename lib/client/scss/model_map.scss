@@ -1,47 +1,57 @@
 @import "globals";
 
 #map {
-	.report {
-		display: inline-block;
-		vertical-align: top;
-		font-family: $body_font;
-		padding-left: 40px;
-		.title {
-			color: salmon;
-			font-size: 2em;
-		}
-		.attribute {
-			color: dodgerblue;
-			.type {
-				color: goldenrod;
-			}
-			.description {
-				color: forestgreen;
-				font-size: 0.8em;
-				padding-left: 2px;
-				&:before {
-					content: " - ";
-				}
-			}
-		}
-	}
-	svg {
-		overflow: visible;
-		.model_node {
-			cursor: pointer;
-			circle {
-				fill: skyblue;
-				stroke-width: 2px;
-				stroke: palegreen;
-			}
-			text {
-				font-family: $body_font;
-				fill: purple;
-			}
-		}
-		line {
-			stroke-width: 3px;
-			stroke: pink;
-		}
-	}
+  display: flex;
+  margin-top: 10px;
+  .report {
+    display: block;
+    flex: 1;
+    vertical-align: top;
+    font-family: $body_font;
+    padding: 0px 10px;
+    border-left: 1px solid lightgray;
+    .title {
+      color: forestgreen;
+      font-size: 1.4em;
+    }
+    .attribute {
+      border-bottom: $thin_rule;
+      color: darkgoldenrod;
+      .type {
+        color: gray;
+      }
+      .description {
+        color: #131;
+        font-size: 0.8em;
+        padding-left: 2px;
+        &:before {
+          content: " - ";
+        }
+      }
+    }
+  }
+  svg {
+    overflow: visible;
+    .model_node {
+      cursor: pointer;
+      &:hover {
+        circle {
+          fill: #afa;
+        }
+      }
+      circle {
+        fill: #cfc;
+        stroke-width: 1.5px;
+        stroke: lightgray;
+      }
+      text {
+        font-family: $body_font;
+        fill: #222;
+      }
+    }
+    line {
+      stroke-width: 3px;
+      stroke: pink;
+    }
+  }
 }

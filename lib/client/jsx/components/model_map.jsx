@@ -49,7 +49,7 @@ class ModelAttribute extends Component {
     let attribute = template.attributes[att_name]
     return <div className="attribute" key={ att_name }>
       <span>{att_name}</span>
-      <span className="type">({this.type()})</span>
+      <span className="type"> ({this.type()}) </span>
       { attribute.desc ?
       <span className="description">{ attribute.desc }</span>
           : null
