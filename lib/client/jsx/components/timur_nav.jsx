@@ -13,7 +13,7 @@ const Halo = ({radius}) =>
       {
         Array(36).fill().map((_,i) => {
           let deg = i * 10;
-          let rad = radius * (i % 2 == 0 ? 0.95 : 0.9);
+          let rad = radius * (i % 2 == 0 ? 1.0 : 0.9);
           let x = (r) => Math.cos(Math.PI * deg / 180) * r + radius;
           let y = (r) => Math.sin(Math.PI * deg / 180) * r + radius;
           return <path
