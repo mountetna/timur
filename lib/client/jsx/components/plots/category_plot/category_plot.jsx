@@ -54,9 +54,12 @@ export const categoryGroups = (category, value, groupFunc)=>{
 const SeriesComponent = ({ series, index, count, xScale, ...props}) => {
   let { component: Component } = CategoryConfig.series_types[series.series_type] || {};
 
-  let width = (xScale.bandwidth() - (4 * count-1))/ count;
-  let offset = (width + 4) * index;
+  // the basic width cuts the bandwidth into even strips for each series
 
+  // we allow a 4-pixel gap for each series, minus 1 for his nibs, and two
+  // 8-pixel gutters on either side
+  let width = xScale.bandwidth() / count - (4 * (count-1) + 8 + 8)/ count;
+  let offset = 8 + (width + 4) * index;
   return (
     Component && <Component
       xScale={xScale}

@@ -59,7 +59,7 @@ const Whisker = ({x, y_min, y_max, color}) => <line
       />;
 
 const Box = ({x,y,width,height,color}) => <rect
-  x={ x }
+  x={ x - width/2 }
   y={ y }
   height={ height }
   width={ width }
@@ -98,12 +98,14 @@ class Boxes extends Component{
 
       if (!values.length) return null;
 
-      let x_position = xScale(label) + (width / 2) + offset;
+      let x_position = xScale(label) + width / 2 + offset;
       let text_position = xScale(label) + offset;
 
       let median = yScale(quartile_data[1]);
       let y_min_scale = yScale(whisker_min);
       let y_max_scale = yScale(whisker_max);
+
+      let boxwidth = Math.min(width,20)
 
       return(
         <g key={index_group}>
@@ -115,16 +117,16 @@ class Boxes extends Component{
               y_max={ y_max_scale }/>
 
             <Box
-              x={ x_position - (width / 2) }
+              x={ x_position }
               y={ yScale(quartile_data[2]) }
               height={ yScale(quartile_data[0]) - yScale(quartile_data[2]) }
-              width={ width }
+              width={ boxwidth }
               color={ color }
             />
 
-            <WhiskerTip color={color} x={ x_position } width={ width } y={ y_max_scale }/>
-            <WhiskerTip color={color} x={ x_position } width={ width } y={ median }/>
-            <WhiskerTip color={color} x={ x_position } width={ width } y={ y_min_scale }/>
+            <WhiskerTip color={color} x={ x_position } width={ boxwidth } y={ y_max_scale }/>
+            <WhiskerTip color={color} x={ x_position } width={ boxwidth } y={ median }/>
+            <WhiskerTip color={color} x={ x_position } width={ boxwidth } y={ y_min_scale }/>
 
             <WhiskerText x={text_position+width} anchor='start' q={quartile_data[2]} scale={yScale}/>
             <WhiskerText x={text_position+width} anchor='start' q={quartile_data[1]} scale={yScale}/>
