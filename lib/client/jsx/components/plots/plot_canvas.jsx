@@ -21,7 +21,7 @@ export default class PlotCanvas extends React.Component {
   }
 
   render() {
-    let { layout, parent_width, xdomain, ydomain, plot_series, component } = this.props;
+    let { layout, parent_width, xdomain, ydomain, plot_series, component, className } = this.props;
     let { margin } = layout;
 
     let defaultColor = d3.scaleOrdinal(d3.schemeCategory10);
@@ -54,7 +54,7 @@ export default class PlotCanvas extends React.Component {
 
     let SeriesComponent = component;
 
-    return <div>
+    return <div className={ className }>
       <Legend labels={labels} />
       <svg
         width={ svg_dimensions.width }

@@ -48,16 +48,15 @@ export default class XYPlot extends Component {
     if (!xdomain || !ydomain) return null;
 
     return (
-      <div>
-        <PlotCanvas
-          component={ SeriesComponent }
-          layout={ layout }
-          parent_width={ parent_width }
-          xdomain={ xdomain.values }
-          ydomain={ ydomain.values }
-          plot_series={ plot_series }
-        />
-      </div>
+      <PlotCanvas
+        className='xy-plot'
+        component={ SeriesComponent }
+        layout={ layout }
+        parent_width={ parent_width }
+        xdomain={ xdomain.values }
+        ydomain={ ydomain.values }
+        plot_series={ plot_series }
+      />
     );
   }
 }

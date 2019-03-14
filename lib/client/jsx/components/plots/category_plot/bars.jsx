@@ -18,6 +18,7 @@ class Bars extends Component{
         height={ yScale.range()[0]-yScale(value(index)) }
         width={ width }
         fill={ color }
+        stroke={ color }
         datavalue={ value(index) }
       />
     );

@@ -89,16 +89,14 @@ export default class CategoryPlot extends Component{
     if (!domain || !categories) return null;
 
     return(
-      <div>
-        <PlotCanvas
-          component={ SeriesComponent }
-          layout={ layout }
-          parent_width={ parent_width }
-          xdomain={ categories }
-          ydomain={ domain.values }
-          plot_series={ plot_series }
-        />
-     </div>
+      <PlotCanvas className='category-plot'
+        component={ SeriesComponent }
+        layout={ layout }
+        parent_width={ parent_width }
+        xdomain={ categories }
+        ydomain={ domain.values }
+        plot_series={ plot_series }
+      />
     );
   }
 }

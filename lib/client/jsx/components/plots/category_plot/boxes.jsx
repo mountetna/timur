@@ -64,6 +64,7 @@ const Box = ({x,y,width,height,color}) => <rect
   height={ height }
   width={ width }
   fill={ color }
+  stroke={ color }
 />;
 
 const WhiskerTip = ({x,y,width,color}) =><line
