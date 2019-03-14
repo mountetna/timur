@@ -11,6 +11,8 @@ $dark-grey: #222;
 $med-grey-2: #888;
 $light-grey: #ccc;
 
+$link_hover_color: #518651;
+
 @mixin text_defaults {
   color: darkorchid;
   font-family: $value_font;
@@ -25,7 +27,7 @@ $light-grey: #ccc;
   border: none;
   cursor: text;
   border-bottom: 1px solid #dfdfdf;
-  background: none;
+  background: rgba(gray,0.05);
   &:focus {
     border-bottom: 1px solid forestgreen;
   }
@@ -115,19 +117,6 @@ $thin_rule: 1px solid rgba(forestgreen,0.1);
   }
 }
 /* NEW GLOBALS ****************************************************************/
-
-.left-column-group{
-  display: inline-block;
-  width: 175px;
-  overflow: hidden;
-}
-
-.right-column-group{
-  position: absolute;
-  top: 10px;
-  left: 175px;
-  right: 0px;
-}
 
 .disabled{
   background: none;

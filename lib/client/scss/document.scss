@@ -4,6 +4,14 @@
 .document-window {
   position: relative;
   font-family: $body_font;
+  margin-top: 10px;
+  display: flex;
+  .left-column-group{
+    flex-basis: 175px;
+  }
+  .right-column-group{
+    flex-grow: 1;
+  }
   .document-view {
     padding-left: 15px;
     padding-right: 15px;
@@ -17,7 +25,7 @@
           border: none;
           border-bottom: 1px solid rgba(0,0,0,0);
           font-size: 1em;
-          width: auto;
+          width: 50%;
           color: darkblue;
           &.editing {
             @include text_basics;
@@ -89,6 +97,7 @@
           resize: vertical;
           border: 0px;
           outline: 1px solid lightgray;
+          color: black;
           &:disabled {
             @extend .disabled;
             resize: none;

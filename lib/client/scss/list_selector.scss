@@ -1,23 +1,24 @@
 .list-selector-group{
   padding: 0px 10px;
   border-right: 1px solid lightgray;
+  height: 100%;
 
   .list-selector-new-btn {
-    height: 30px;
     border: none;
     background: none;
-    padding-left: 15px;
+    padding-left: 5px;
     padding-right: 15px;
     margin: auto;
-    margin-top: 10px;
     font-size: 0.8em;
     color: #333;
     cursor: pointer;
-    text-transform: uppercase;
+    text-transform: capitalize;
+    i {
+      padding-right: 5px;
+    }
 
     &:hover{
-      background: #22a778;
-      color: #fff;
+      color: $link_hover_color;
     }
     &:focus{
       border: none;
@@ -47,8 +48,7 @@
       border-bottom: $thin_rule;
 
       &:hover{
-        text-decoration: underline;
-        color: #22a778;
+        color: $link_hover_color;
       }
     }
 
