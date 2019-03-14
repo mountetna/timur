@@ -4,9 +4,8 @@ import ButtonBar from '../button_bar';
 
 const DocumentTitle = ({ name, editing, onChange, buttons }) => (
   <div className='document-title'>
-    {'Name: '}
     <input
-      className={ `${editing ? 'disabled' : ''} document-title-input` }
+      className={ `${!editing ? 'disabled' : 'editing'} document-title-input` }
       type='text'
       onChange={ onChange }
       disabled={ (!editing) ? 'disabled' : null }

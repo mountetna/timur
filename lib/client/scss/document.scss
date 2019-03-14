@@ -10,15 +10,19 @@
 
     .document-view-header {
       .document-title {
-        border-bottom: 1px solid #666666;
-        padding-bottom: 10px;
+        border-bottom: $thin_rule;
+        padding-bottom: 5px;
 
         .document-title-input{
           border: none;
+          border-bottom: 1px solid rgba(0,0,0,0);
           font-size: 1em;
-          width: 300px;
-          color: #111;
-          outline: 1px solid #333;
+          width: auto;
+          color: darkblue;
+          &.editing {
+            @include text_basics;
+            color: black;
+          }
           &:disabled {
             @extend .disabled;
           }
@@ -27,8 +31,10 @@
         .document-action-btn-group{
           float: right;
 
-          button {
-            @include timur-button;
+          i {
+            @include icon-button;
+            padding-left: 20px;
+            font-size: 20px;
           }
         }
 
@@ -40,6 +46,39 @@
       .document-details {
         font-size: 0.8em;
         line-height: 25px;
+        .document-edit-details {
+          display: inline-block;
+          color: gray;
+          i, span {
+            padding-right: 5px;
+          }
+        }
+        .document-access {
+          display: inline-block;
+          .access-radio-group {
+            display: inline-block;
+          };
+        }
+
+        .label {
+          padding: 1px 3px;
+          border-radius: 2px;
+          font-size: 12px;
+          height: 20px;
+          font-weight: 600;
+          line-height: 15px;
+          cursor: default;
+
+          &.public {
+            background: gold;
+            color: black;
+          }
+
+          &.private {
+            background: #444;
+            color: white;
+          }
+        }
 
         .document-description {
           text-align: justify;

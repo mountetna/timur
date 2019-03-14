@@ -45,12 +45,9 @@
       font-weight: 400;
     }
     .ti-input {
+      @include text_basics;
+
       -webkit-font-smoothing: antialiased;
-      background-color: #fff;
-      border: none;
-      border-bottom: 1px solid #dfdfdf;
-      border-left: 1px solid #dfdfdf;
-      cursor: text;
       margin-right: 5px;
       overflow-x: hidden;
       overflow-y: auto;
@@ -58,11 +55,6 @@
       font-size: 15px;
       padding-left: 10px;
       line-height: 26px;
-
-      &:focus {
-        border-bottom: 1px solid forestgreen;
-        outline: 0;
-      }
     }
   }
 }

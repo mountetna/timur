@@ -13,7 +13,7 @@ export default class DocumentView extends React.Component{
     let buttons = (editing ?
       [ 'run', 'save', 'cancel' ]
       :
-      [ 'run', 'copy', 'remove', 'edit' ]
+      [ 'run', 'remove', 'copy', 'edit' ]
     ).map(
       button_name => {
         let callback = this.props['on'+capitalize(button_name)];

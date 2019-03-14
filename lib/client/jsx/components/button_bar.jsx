@@ -10,48 +10,44 @@ import * as React from 'react';
 const BUTTONS = {
   copy: {
     icon: 'fas fa-copy',
-    label: 'COPY'
+    label: 'copy'
   },
   remove: {
     icon: 'fas fa-trash-alt',
-    label: 'DELETE'
+    label: 'delete'
   },
   edit: {
-    icon: 'fas fa-edit',
-    label: 'EDIT'
+    icon: 'fas fa-pencil-alt',
+    label: 'edit'
   },
   run: {
     icon: 'fas fa-play',
-    label: 'RUN',
+    label: 'run',
   },
   save: {
-    icon: 'far fa-save',
-    label: 'SAVE'
+    icon: 'fas fa-save',
+    label: 'save'
   },
   cancel: {
     icon: 'fas fa-ban',
-    label: 'CANCEL'
+    label: 'cancel'
   }
 };
 
-export default class ButtonBar extends React.Component{
-  render(){
-    return(
-      <div className={this.props.className}>
+const ButtonBar =({ className, buttons }) =>
+  <div className={className}>
+    {buttons.map(button => <BarButton key={button.type} {...button}/>)}
+  </div>;
 
-        {this.props.buttons.map(BarButton)}
-      </div>
-    );
-  }
-};
-
+export default ButtonBar;
 /*
  * A single button, which displays a text 'label', a Font Awesome 'icon' and
  * responds to 'click'.
  */
-const BarButton = (button)=>(
-  <button key={button.type} onClick={button.click}>
-    <i className={`${ BUTTONS[button.type].icon }`} aria-hidden='true'></i>
-    {BUTTONS[button.type].label}
-  </button>
-);
+const BarButton = ({type,click})=>{
+  let { label, icon } = BUTTONS[type];
+  return <i onClick={click}
+    title={label}
+    className={`${label} ${icon}`}
+    aria-hidden='true'/>
+};

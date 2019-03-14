@@ -13,16 +13,22 @@ $light-grey: #ccc;
 
 @mixin text_defaults {
   color: darkorchid;
-  border: none;
-  border-bottom: 1px solid #dfdfdf;
-  &:focus {
-    border-bottom: 1px solid forestgreen;
-  }
-  background: none;
   font-family: $value_font;
   font-size: 16px;
   margin: 0;
   padding: 0;
+
+  @include text_basics;
+}
+
+@mixin text_basics {
+  border: none;
+  cursor: text;
+  border-bottom: 1px solid #dfdfdf;
+  background: none;
+  &:focus {
+    border-bottom: 1px solid forestgreen;
+  }
 }
 
 @mixin text_box {
@@ -95,6 +101,16 @@ $thin_rule: 1px solid rgba(forestgreen,0.1);
   &.download {
     &:hover {
       color: dodgerblue;
+    }
+  }
+  &.delete {
+    &:hover {
+      color: red;
+    }
+  }
+  &.save {
+    &:hover {
+      color: red;
     }
   }
 }
