@@ -20,6 +20,10 @@ export default class Axis extends Component{
       .ticks(5)
       .tickPadding([12]);
 
+    if (scale.type == 'linear') {
+      axis.tickFormat(d3.format('.2g'));
+    }
+
     if(timeformat){
       axis.tickFormat(d3.timeFormat(timeformat));
     }

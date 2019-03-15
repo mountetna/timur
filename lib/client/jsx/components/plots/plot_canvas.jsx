@@ -10,9 +10,18 @@ import Legend from './legend';
 
 export default class PlotCanvas extends React.Component {
   scale(domain, range) {
-    let s = domain[0] instanceof Date ? d3.scaleTime() :
-      typeof domain[0] === 'string' ? d3.scaleBand().padding(.2) :
-      d3.scaleLinear();
+    let s;
+    
+    if (domain[0] instanceof Date) {
+      s = d3.scaleTime();
+      s.type = 'time';
+    } else if (typeof domain[0] === 'string') {
+      s = d3.scaleBand().padding(.2);
+      s.type = 'band';
+    } else {
+      s = d3.scaleLinear();
+      s.type = 'linear';
+    }
 
     s = s.domain(domain).range(range);
     if (s.nice) s = s.nice();
