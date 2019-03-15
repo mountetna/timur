@@ -46,7 +46,7 @@ export const categoryGroups = (category, value, groupFunc)=>{
 
   return category_names.map((category_name, index)=>{
     let indexes = category.which(c => c == category_name).filter(i=>i!= null);
-    let category_values = value(indexes).sort((a,b)=>a-b).filter(i=>i!=null);
+    let category_values = value(indexes).filter(i=>i!=null).sort((a,b)=>a-b);
     return groupFunc(category_name, category_values);
   });
 };
