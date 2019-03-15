@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-const Legend = ({labels}) =>
-  <div className='legend-container'>
+const Legend = ({labels, width}) =>
+  <div className='legend-container' style={ { width } } >
     {
       Object.keys(labels).map(label =>
         <div key={ label } className='category-group'>

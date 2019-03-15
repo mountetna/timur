@@ -28,8 +28,8 @@
 
 // Legend component styling
 .legend-container {
-  width: 75%;
-  margin-left: auto;
+  display: flex;
+  justify-content: center;
 
   .category-group {
     display: inline-block;

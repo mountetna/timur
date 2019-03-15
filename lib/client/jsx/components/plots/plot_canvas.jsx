@@ -55,7 +55,7 @@ export default class PlotCanvas extends React.Component {
     let SeriesComponent = component;
 
     return <div className={ className }>
-      <Legend labels={labels} />
+      <Legend width={ svg_dimensions.width } labels={labels} />
       <svg
         width={ svg_dimensions.width }
         height={ svg_dimensions.height }>
