@@ -21,8 +21,9 @@ class ManifestWindow extends React.Component {
   }
 
   render() {
+    let { consignment } = this.props;
     return <DocumentWindow
-      onRun={ this.runManifest.bind(this) }
+      onRun={ consignment ? null : this.runManifest.bind(this) }
       { ...this.props }
     />
   }

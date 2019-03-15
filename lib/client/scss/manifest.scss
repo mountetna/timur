@@ -7,14 +7,9 @@
 .manifest-script {
   &.editing {
     border: 1px solid lightgray;
-    .CodeMirror {
-      background: #fffafa;
-    }
   }
   border-top: 1px solid #888;
-  .CodeMirror {
-    background: #fafffa;
-  }
+  border-bottom: 1px solid #888;
   .cm-comment { color: #888; }
   .cm-macro { color: #f40; }
   .cm-variable { color: #b40; }
