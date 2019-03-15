@@ -2,32 +2,20 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { capitalize } from '../../utils/format';
 import DocumentTitle from './document_title';
 import DocumentDetails from './document_details';
+import { buttonsWithCallbacks } from '../button_bar';
 
-export default class DocumentView extends React.Component{
+export default class DocumentView extends React.Component {
   getButtons() {
     let { editing } = this.props;
 
-    let buttons = (editing ?
+    return buttonsWithCallbacks(editing ?
       [ 'run', 'save', 'cancel' ]
       :
-      [ 'run', 'remove', 'copy', 'edit' ]
-    ).map(
-      button_name => {
-        let callback = this.props['on'+capitalize(button_name)];
-
-        if (!callback) return null;
-
-        return {
-          type: button_name,
-          click: callback
-        };
-      }
-    ).filter(button => button);
-
-    return buttons;
+      [ 'run', 'remove', 'copy', 'edit' ],
+      this.props
+    );
   }
 
   render(){

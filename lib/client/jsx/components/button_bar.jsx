@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { capitalize } from '../utils/format';
 
 /*
  * A component that displays a set of buttons with Font Awesome icon and a label
@@ -28,11 +29,23 @@ const BUTTONS = {
     icon: 'fas fa-save',
     label: 'save'
   },
+  load: {
+    icon: 'fas fa-spinner fa-pulse',
+    label: 'load'
+  },
   cancel: {
     icon: 'fas fa-ban',
     label: 'cancel'
   }
 };
+
+export const buttonsWithCallbacks = (types, callbacks) => types.map(
+  type => {
+    let click = callbacks['on'+capitalize(type)];
+
+    return !click ? null : { type, click };
+  }
+).filter(button => button);
 
 const ButtonBar =({ className, buttons }) =>
   <div className={className}>

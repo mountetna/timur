@@ -12,21 +12,21 @@
     position: relative;
     padding: 3px;
     margin-top: 5px;
+    margin-left: 12px;
     @keyframes fade {
       0% { color: forestgreen; }
       50% { color: midnightblue; }
       100% { color: forestgreen; }
     }
-    .edit, .approve, .cancel, .submit {
-      @include header_button;
+    .buttons {
       display: inline-block;
-      font-size: 15px;
-      padding-left: 5px;
-    }
-    .submit {
-      animation-name: fade;
-      animation-duration: 1s;
-      animation-iteration-count: infinite;
+
+      i {
+        @include icon-button;
+        margin-left: 5px;
+        margin-right: 10px;
+        font-size: 20px;
+      }
     }
     .inline {
       display: inline-block;

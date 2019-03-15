@@ -96,23 +96,18 @@ $thin_rule: 1px solid rgba(forestgreen,0.1);
 @mixin icon_button {
   cursor: pointer;
   color: gray;
-  padding: 2px;
+  margin: 2px;
   &:hover {
     color: forestgreen;
   }
-  &.download {
-    &:hover {
-      color: dodgerblue;
-    }
-  }
   &.delete {
     &:hover {
-      color: red;
+      color: indianred;
     }
   }
-  &.save {
+  &.save, &.download, &.copy {
     &:hover {
-      color: red;
+      color: dodgerblue;
     }
   }
 }

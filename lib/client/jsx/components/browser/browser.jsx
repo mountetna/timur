@@ -203,7 +203,7 @@ class Browser extends React.Component{
       <div className={skin}>
         <Header
           onEdit={ mode == 'browse' && can_edit && this.editMode.bind(this) }
-          onApprove={mode == 'edit' && this.approveEdits.bind(this) }
+          onSave={mode == 'edit' && this.approveEdits.bind(this) }
           onCancel={ mode == 'edit' && this.cancelEdits.bind(this) }
           onLoad={mode=='submit'}>
           <div className='model-name'>
