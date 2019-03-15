@@ -58,7 +58,10 @@ const SeriesComponent = ({ series, index, count, xScale, ...props}) => {
 
   // we allow a 4-pixel gap for each series, minus 1 for his nibs, and two
   // 8-pixel gutters on either side
-  let width = xScale.bandwidth() / count - (4 * (count-1) + 8 + 8)/ count;
+  let width = Math.max(
+    4,
+    xScale.bandwidth() / count - (4 * (count-1) + 8 + 8)/ count
+  );
   let offset = 8 + (width + 4) * index;
   return (
     Component && <Component

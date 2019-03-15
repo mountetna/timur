@@ -105,7 +105,7 @@ class Boxes extends Component{
       let y_min_scale = yScale(whisker_min);
       let y_max_scale = yScale(whisker_max);
 
-      let boxwidth = Math.min(width,20)
+      let boxwidth = Math.max(4,Math.min(width,20))
 
       return(
         <g key={index_group}>

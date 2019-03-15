@@ -9,14 +9,16 @@ class Bars extends Component{
     let { series, xScale, yScale, width, offset } = this.props;
     let { variables: { category, value, color } } = series;
 
+    let boxwidth = Math.max(4,Math.min(width,20));
+
     let bars = category.values.map((label, index) =>
       validPoint(label, value(index)) &&
       <rect
         key={`bar_${index}`}
-        x={ xScale(label)+offset }
+        x={ xScale(label)+ offset + width / 2 - boxwidth / 2 }
         y={ yScale(value(index)) }
         height={ yScale.range()[0]-yScale(value(index)) }
-        width={ width }
+        width={ boxwidth }
         fill={ color }
         stroke={ color }
         datavalue={ value(index) }
