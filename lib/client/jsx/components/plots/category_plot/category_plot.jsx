@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { flatten } from '../../../utils/types';
 import * as d3 from 'd3';
 import Bars from './bars';
+import StackedBars from './stacked_bars';
 import Boxes from './boxes';
 import Swarms from './swarms';
 import PlotCanvas from '../plot_canvas';
@@ -25,6 +26,15 @@ export const CategoryConfig = {
         color: 'color_type'
       },
       component: Bars
+    },
+    stackedbar: {
+      variables: {
+        value: 'expression',
+        category: 'expression',
+        subcategory: 'expression',
+        color: 'color_type'
+      },
+      component: StackedBars
     },
     box: {
       variables: {
@@ -56,13 +66,13 @@ const SeriesComponent = ({ series, index, count, xScale, ...props}) => {
 
   // the basic width cuts the bandwidth into even strips for each series
 
-  // we allow a 4-pixel gap for each series, minus 1 for his nibs, and two
-  // 8-pixel gutters on either side
+  let gutter_size = 8;
+  let gap_size = 4;
   let width = Math.max(
     4,
-    xScale.bandwidth() / count - (4 * (count-1) + 8 + 8)/ count
+    xScale.bandwidth() / count - (gap_size * (count-1) + 2*gutter_size)/ count
   );
-  let offset = 8 + (width + 4) * index;
+  let offset = gutter_size + (width + gap_size) * index;
   return (
     Component && <Component
       xScale={xScale}
