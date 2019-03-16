@@ -16,6 +16,7 @@ import ModelMap from './components/model_map';
 import Search from './components/search/search';
 import Activity from './components/activity';
 import Noauth from './components/noauth';
+import { selectUser } from './selectors/user_selector';
 
 const ROUTES = [
   {
@@ -169,7 +170,7 @@ class TimurRouter extends React.Component {
   }
 
   render() {
-    let { location, showMessages, environment } = this.props;
+    let { location, showMessages, environment, user } = this.props;
 
     let route = ROUTES.find(route => matchRoute(location,route));
     let params = {};
@@ -186,6 +187,9 @@ class TimurRouter extends React.Component {
       params = routeParams(location, route);
     }
 
+    // wait until the user loads to avoid race conditions
+    if (!user) return null;
+
     // this key allows us to remount the component when the params change
     let key = JSON.stringify(params);
 
@@ -198,6 +202,6 @@ class TimurRouter extends React.Component {
 }
 
 export default connect(
-  ({location}) => ({ location }),
+  (state) => ({ location: state.location, user: selectUser(state) }),
   { showMessages, updateLocation }
 )(TimurRouter);
