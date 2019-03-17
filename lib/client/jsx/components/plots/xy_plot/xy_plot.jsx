@@ -18,13 +18,31 @@ export const XYConfig = {
       return `[ min( concat( ${all_y})), max( concat( ${all_y})) ]`;
     }
   },
+  variables: {
+    x_label: { type: 'string', required: true },
+    y_label: { type: 'string', required: true },
+    xmin: { type: 'number', required: false },
+    xmax: { type: 'number', required: false },
+    ymin: { type: 'number', required: false },
+    ymax: { type: 'number', required: false }
+  },
   series_types: {
     line: {
-      variables: { x: 'expression', y: 'expression', color: 'color_type' },
+      variables: {
+        x: { type: 'expression', required: true },
+        y: { type: 'expression', required: true },
+        label: { type: 'expression', required: false },
+        color: { type: 'color', required: false }
+      },
       component: Line
     },
     scatter: {
-      variables: { x: 'expression', y: 'expression', color: 'color_type' },
+      variables: {
+        x: { type: 'expression', required: true },
+        y: { type: 'expression', required: true },
+        label: { type: 'expression', required: false },
+        color: { type: 'color', required: false }
+      },
       component: Scatter
     }
   }

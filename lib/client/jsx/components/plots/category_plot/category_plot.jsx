@@ -11,6 +11,12 @@ import { seriesVars, varName } from '../../../selectors/plot_selector';
 export const CategoryConfig = {
   name: 'category',
   label: 'Category Plot',
+  variables: {
+    category_label: { type: 'string', required: true },
+    value_label: { type: 'string', required: true },
+    value_min: { type: 'number', required: false },
+    value_max: { type: 'number', required: false }
+  },
   computed: {
     domain: plot_series => {
       let all_values = seriesVars(plot_series, 'value').join(', ');
@@ -21,30 +27,36 @@ export const CategoryConfig = {
   series_types: {
     bar: {
       variables: {
-        value: 'expression',
-        category: 'expression',
-        color: 'color_type'
+        value: { type: 'expression', required: true },
+        category: { type: 'expression', required: true },
+        color: { type: 'color', required: false }
       },
       component: Bars
     },
     stackedbar: {
       variables: {
-        value: 'expression',
-        category: 'expression',
-        subcategory: 'expression',
-        color: 'color_type'
+        value: { type: 'expression', required: true },
+        category: { type: 'expression', required: true },
+        subcategory: { type: 'expression', required: true },
+        color: { type: 'color', required: false }
       },
       component: StackedBars
     },
     box: {
       variables: {
-        value: 'expression', category: 'expression', color: 'color_type'
+        value: { type: 'expression', required: true },
+        category: { type: 'expression', required: true },
+        label: { type: 'expression', required: false },
+        color: { type: 'color', required: false }
       },
       component: Boxes
     },
     swarm: {
       variables: {
-        value: 'expression', category: 'expression', color: 'color_type'
+        value: { type: 'expression', required: true },
+        category: { type: 'expression', required: true },
+        label: { type: 'expression', required: false },
+        color: { type: 'color', required: false }
       },
       component: Swarms
     }
