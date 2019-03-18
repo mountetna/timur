@@ -2,29 +2,51 @@
 .ps-card-container {
   padding-bottom: 10px;
   border-bottom: 1px solid #bdc3c7;
+  position: relative;
   &:first-child {
     border-top: 1px solid #bdc3c7;
   }
 
   &:hover {
     background: rgba(goldenrod,0.02);
+    .show {
+      display: flex;
+    }
   }
 
   i {
     cursor: pointer;
     display: block;
-    float: right;
-    color: #767676;
-    font-weight: normal;
-    padding: 1px;
-
-    &:hover {
-      color: red;
-      font-weight: bolder;
-    }
   }
 
+  .show {
+    display: none;
+    color: #767676;
+    align-items: center;
+    position: absolute;
+    bottom: 5px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 10px;
+    &:hover {
+      color: forestgreen;
+    }
+    i {
+      padding-right: 2px;
+    }
+  }
   .ps-header {
+    i {
+      float: right;
+      color: #767676;
+      padding: 1px;
+
+      &:hover {
+        color: red;
+        font-weight: bolder;
+      }
+    }
+
     text-align: left;
     font-size: 16px;
     color: #767676;
