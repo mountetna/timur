@@ -81,8 +81,8 @@ const WhiskerText = ({x,q,scale,anchor}) =>
 const DEFAULT_COLOR = '#333333';
 class Boxes extends Component{
   render(){
-    let { series, xScale, yScale, offset, width } = this.props;
-    let { variables: { category, value, color } } = series;
+    let { series, xScale, yScale, offset, width, color } = this.props;
+    let { variables: { category, value } } = series;
 
 
     if (category.size != value.size) return null;

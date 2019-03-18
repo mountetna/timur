@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as d3 from 'd3';
 import Axis from './axis';
 import Legend from './legend';
+import { autoColors } from '../../utils/colors';
 
 // The PlotCanvas renders the svg pane and determines
 // its width, etc.
@@ -33,11 +34,13 @@ export default class PlotCanvas extends React.Component {
     let { layout, parent_width, xdomain, ydomain, plot_series, component, className } = this.props;
     let { margin } = layout;
 
-    let defaultColor = d3.scaleOrdinal(d3.schemeCategory10);
+    let defaultColor = d3.scaleOrdinal(autoColors(plot_series.length));
 
-    let labels = plot_series.map(({name, variables: { color }}) => (
+    let colors = plot_series.map(({name, variables: { color }}) => color || defaultColor(name));
+
+    let labels = plot_series.map(({name}, i) => (
       {
-        color: color || defaultColor(name),
+        color: colors[i],
         text: name
       }
     ));

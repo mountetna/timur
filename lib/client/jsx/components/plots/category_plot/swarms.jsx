@@ -86,8 +86,8 @@ class Swarms extends Component{
   }
 
   render(){
-    let { series, xScale, yScale, offset, width } = this.props;
-    let { variables: { category, value, color } } = series;
+    let { series, xScale, yScale, offset, width, color } = this.props;
+    let { variables: { category, value } } = series;
 
     if (category.size != value.size) return null;
 

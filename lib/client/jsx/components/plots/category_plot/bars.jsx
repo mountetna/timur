@@ -6,8 +6,8 @@ const validPoint = (label,value) => label != null && value != null
 
 class Bars extends Component{
   render(){
-    let { series, xScale, yScale, width, offset } = this.props;
-    let { variables: { category, value, color } } = series;
+    let { series, xScale, yScale, width, offset, color } = this.props;
+    let { variables: { category, value } } = series;
 
     let boxwidth = Math.max(4,Math.min(width,20));
 
