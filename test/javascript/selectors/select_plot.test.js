@@ -35,6 +35,11 @@ describe('Plot Selector', () => {
     fake_plot_id = 1;
   });
 
+  const addPlotSeries = (plot, plot_type, series) => {
+    plot.configuration.plot_series.push(series);
+    plot.plot_type = plot_type;
+  }
+
   it('adds input variables to the beginning of the plotScript', () => {
     const fake_inputs = { name: 'test_record_1', name2: 'test_record_2' };
     const input_variables = "@name = 'test_record_1'\n@name2 = 'test_record_2'\n"
@@ -44,15 +49,15 @@ describe('Plot Selector', () => {
 
   describe('XY Plot', () => {
     it('adds plot variables for the xy plot to the end of the plotScript', () => {
-      let plot_series_obj = {
+      addPlotSeries(plot, 'xy', {
         name: "test_line",
+        series_type: 'line',
         variables: {
           x: "@x",
-          y: "@y"
+          y: "@y",
+          color: '#ffffff'
         }
-      };
-      plot.configuration.plot_series.push(plot_series_obj);
-      plot.plot_type = 'xy';
+      });
       const series_variables = '\n@series0____x = @x\n@series0____y = @y\n';
       const plot_variables = '@xy____xdomain = [ min( concat( @series0____x)), max( concat( @series0____x)) ]\n@xy____ydomain = [ min( concat( @series0____y)), max( concat( @series0____y)) ]';
       const selected_plot = selectPlot(fake_state, fake_plot_id, {});
@@ -61,15 +66,14 @@ describe('Plot Selector', () => {
   });
   describe('Category Plot', () => {
     it('adds plot variables for the category plot to the end of the plotScript', () => {
-      let plot_series_obj = {
+      addPlotSeries(plot, 'category', {
         name: "test_category",
+        series_type: 'bar',
         variables: {
           category: "@x",
           value: "@y"
         }
-      };
-      plot.configuration.plot_series.push(plot_series_obj);
-      plot.plot_type = 'category';
+      });
       const series_variables = '\n@series0____category = @x\n@series0____value = @y\n';
       const plot_variables = '@category____domain = [ min( concat( @series0____value)), max( concat( @series0____value)) ]';
       const selected_plot = selectPlot(fake_state, fake_plot_id, {});

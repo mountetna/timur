@@ -9,13 +9,13 @@ import ManifestScript from '../manifest/manifest_script';
 import ConsignmentView from '../manifest/consignment_view';
 import PlotLayout from './plot_layout';
 import PlotSeries from './plot_series';
-import Plot, {PLOTS} from '../plots/plot';
+import Plot from '../plots/plot';
+import { plotTypes, plotConfig } from '../../plots/plot_config';
 import Resize from '../resize';
 
 import { pushLocation } from '../../actions/location_actions';
 import {
   requestPlots,
-  selectPlot,
   saveNewPlot,
   savePlot,
   deletePlot
@@ -23,8 +23,8 @@ import {
 
 import {
   newPlot,
+  selectPlot,
   getAllPlots,
-  getSelectedPlot,
   plotWithScript
 } from '../../selectors/plot_selector';
 import {
@@ -56,7 +56,7 @@ import {
 //  - remove
 //  type
 //  series vars, e.g. x y color
-const PLOT_TYPES = Object.keys(PLOTS).sort();
+const PLOT_TYPES = plotTypes();
 
 const SelectPlot = ({update, selected}) =>
   <div className='select-plot'>
@@ -69,6 +69,18 @@ const SelectPlot = ({update, selected}) =>
       selected_index={PLOT_TYPES.indexOf(selected)}
     />
   </div>;
+
+const Chart = connect(
+  (state,{plot}) => ({ plot: selectPlot(state,plot?plot.id:null) })
+)(
+  ({plot}) => <div className='chart'>
+    <Resize
+      render={width => (
+        <Plot plot={plot} width={width} />
+      )}
+    />
+  </div>
+);
 
 const SeriesConfig = ({ label, series_types, updateType, updateSeries, plot_series }) =>
   <div className='plot-series-config'>
@@ -243,7 +255,7 @@ class Plotter extends React.Component {
 
   renderEditor() {
     let { plot } = this.state;
-    let plot_config = PLOTS[plot.plot_type];
+    let plot_config = plotConfig(plot.plot_type);
 
     return (
       <div className='plotter-editor'>
@@ -305,13 +317,7 @@ class Plotter extends React.Component {
     let { plot } = this.state;
 
     return (
-      <div className='chart'>
-        <Resize
-          render={width => (
-            <Plot plot={plotWithScript([plot, {}])} width={width} />
-          )}
-        />
-      </div>
+      <Chart plot={ plot }/>
     );
   }
   render() {
@@ -347,7 +353,6 @@ export default connect(
   }),
   {
     requestPlots,
-    selectPlot,
     saveNewPlot,
     savePlot,
     deletePlot,

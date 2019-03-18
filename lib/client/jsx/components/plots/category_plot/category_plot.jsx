@@ -6,61 +6,12 @@ import StackedBars from './stacked_bars';
 import Boxes from './boxes';
 import Swarms from './swarms';
 import PlotCanvas from '../plot_canvas';
-import { seriesVars, varName } from '../../../selectors/plot_selector';
 
-export const CategoryConfig = {
-  name: 'category',
-  label: 'Category Plot',
-  variables: {
-    category_label: { type: 'string', required: true },
-    value_label: { type: 'string', required: true },
-    value_min: { type: 'number', required: false },
-    value_max: { type: 'number', required: false }
-  },
-  computed: {
-    domain: plot_series => {
-      let all_values = seriesVars(plot_series, 'value').join(', ');
-      return `[ min( concat( ${all_values})), max( concat( ${all_values})) ]`;
-    }
-  },
-
-  series_types: {
-    bar: {
-      variables: {
-        value: { type: 'expression', required: true },
-        category: { type: 'expression', required: true },
-        color: { type: 'color', required: false }
-      },
-      component: Bars
-    },
-    stackedbar: {
-      variables: {
-        value: { type: 'expression', required: true },
-        category: { type: 'expression', required: true },
-        subcategory: { type: 'expression', required: true },
-        color: { type: 'color', required: false }
-      },
-      component: StackedBars
-    },
-    box: {
-      variables: {
-        value: { type: 'expression', required: true },
-        category: { type: 'expression', required: true },
-        label: { type: 'expression', required: false },
-        color: { type: 'color', required: false }
-      },
-      component: Boxes
-    },
-    swarm: {
-      variables: {
-        value: { type: 'expression', required: true },
-        category: { type: 'expression', required: true },
-        label: { type: 'expression', required: false },
-        color: { type: 'color', required: false }
-      },
-      component: Swarms
-    }
-  }
+const COMPONENTS = {
+  bar: Bars,
+  stackedbar: StackedBars,
+  box: Boxes,
+  swarm: Swarms
 };
 
 export const categoryGroups = (category, value, groupFunc)=>{
@@ -74,7 +25,7 @@ export const categoryGroups = (category, value, groupFunc)=>{
 };
 
 const SeriesComponent = ({ series, index, count, xScale, ...props}) => {
-  let { component: Component } = CategoryConfig.series_types[series.series_type] || {};
+  let Component = COMPONENTS[series.series_type];
 
   // the basic width cuts the bandwidth into even strips for each series
 
