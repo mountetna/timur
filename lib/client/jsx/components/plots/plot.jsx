@@ -8,6 +8,12 @@ import { requestConsignments } from '../../actions/manifest_actions';
 import XYPlot from './xy_plot/xy_plot';
 import CategoryPlot from './category_plot/category_plot';
 
+export const empty = (i) => i==null||i==undefined||i=='';
+
+export const validDomain = (min,max,vector) =>
+  !empty(min) && !empty(max) ? [ parseFloat(min), parseFloat(max) ] :
+    vector.values;
+
 class Plot extends React.Component {
   componentDidMount() {
     let { data, requestConsignments, plot, inputs } = this.props;
@@ -24,7 +30,7 @@ class Plot extends React.Component {
 
     let {
       plot_type,
-      configuration: { layout }
+      configuration: { layout, variables }
     } = plot;
     let PlotComponent;
     switch (plot_type) {
@@ -38,7 +44,7 @@ class Plot extends React.Component {
         return null;
     }
 
-    return <PlotComponent data={data} layout={layout} parent_width={width} />;
+    return <PlotComponent data={data} config_variables={ variables } layout={layout} parent_width={width} />;
   }
 }
 
