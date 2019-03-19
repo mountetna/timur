@@ -4,7 +4,7 @@ import {interpolateLab} from 'd3-interpolate';
 import { categoryGroups } from './category_plot';
 import { createWorker, terminateWorker } from '../../../web-workers'
 
-const Dots = (label, values) => ({[label]: { label, values }});
+const Dots = (label, values) => ({ label, values });
 
 const Dot = ({x,y, text_position, color}) =>
   <g className='dot'>
@@ -22,14 +22,6 @@ class Swarms extends Component{
   constructor(props) {
     super(props)
     this.state = { groups: {} }
-  }
-
-  componentDidMount() {
-    this.calculateSwarmPoints();
-  }
-
-  componentWillUnmount() {
-    this.killWorker();
   }
 
   killWorker() {
@@ -90,26 +82,28 @@ class Swarms extends Component{
     let { variables: { category, value } } = series;
 
     if (category.size != value.size) return null;
+    let groups = categoryGroups(category, value, Dots);
 
-    let { groups } = this.state;
+    let swarms = groups.map( (group,index_group) => {
+      let { label, values } = group;
 
-    let swarms = Object.values(groups).map( (group,index_group) => {
-      let { label, values, xvalues } = group;
-
-      if (!values.length || !xvalues) return null;
+      if (!values.length) return null;
 
       let x_position = xScale(label) + offset + width / 2;
       let text_position = xScale(label) + offset;
+
+      const jitter = (value) =>
+        ((((1000*value)%12)+12)%12 - 6)*width/12;
 
       return(
         <g className='swarm-group' key={index_group}>
         {
           values.map( (value, index) =>
             <Dot
-              x={ xvalues[index] + offset + width / 2 }
+              x={ x_position + jitter(value) }
               y={ yScale(value) }
               color={ color }
-              text_position={ xvalues[index] }
+              text_position={ x_position }
               key={ `dot_${index}` }/>
           )
         }
