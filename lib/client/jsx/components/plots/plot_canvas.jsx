@@ -12,7 +12,7 @@ import { autoColors } from '../../utils/colors';
 export default class PlotCanvas extends React.Component {
   scale(domain, range) {
     let s;
-    
+
     if (domain[0] instanceof Date) {
       s = d3.scaleTime();
       s.type = 'time';
@@ -31,7 +31,8 @@ export default class PlotCanvas extends React.Component {
   }
 
   render() {
-    let { layout, parent_width, xdomain, ydomain, plot_series, component, className } = this.props;
+    let { layout, parent_width, xdomain, ydomain, plot_series,
+      component, className, ...other_props } = this.props;
     let { margin } = layout;
 
     let defaultColor = d3.scaleOrdinal(autoColors(plot_series.length));
@@ -93,6 +94,7 @@ export default class PlotCanvas extends React.Component {
                 color={ labels[index].color }
                 xScale={xScale}
                 yScale={yScale}
+                {...other_props}
               />
           )
         }

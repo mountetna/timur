@@ -6,6 +6,7 @@ import StackedBars from './stacked_bars';
 import Boxes from './boxes';
 import Swarms from './swarms';
 import PlotCanvas from '../plot_canvas';
+import { empty, validDomain } from '../plot';
 
 const COMPONENTS = {
   bar: Bars,
@@ -24,13 +25,14 @@ export const categoryGroups = (category, value, groupFunc)=>{
   });
 };
 
-const SeriesComponent = ({ series, index, count, xScale, ...props}) => {
+
+const SeriesComponent = ({ series, index, count, gutter, gap, xScale, ...props}) => {
   let Component = COMPONENTS[series.series_type];
 
   // the basic width cuts the bandwidth into even strips for each series
-
-  let gutter_size = 8;
-  let gap_size = 4;
+  //
+  let gutter_size = empty(gutter) ? 8 : parseInt(gutter);
+  let gap_size = empty(gap) ? 4 : parseInt(gap);
   let width = Math.max(
     4,
     xScale.bandwidth() / count - (gap_size * (count-1) + 2*gutter_size)/ count
@@ -60,8 +62,9 @@ export default class CategoryPlot extends Component{
 
   render(){
 
-    let {parent_width, layout, data}=this.props;
+    let {parent_width, layout, config_variables={}, data}=this.props;
     let { domain, plot_series } = data;
+    let { value_min, value_max, gap, gutter } = config_variables;
 
     let categories = flatten(plot_series.map(s => s.variables.category.values));
 
@@ -73,8 +76,10 @@ export default class CategoryPlot extends Component{
         layout={ layout }
         parent_width={ parent_width }
         xdomain={ categories }
-        ydomain={ domain.values }
+        ydomain={ validDomain(value_min,value_max,domain) }
         plot_series={ plot_series }
+        gutter={ gutter }
+        gap={ gap }
       />
     );
   }
