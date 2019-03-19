@@ -37,7 +37,7 @@ describe PlotsController do
       plot = create(:plot, :private, :scatter, user: viewer)
 
       get_document(:plot, plot.id, :viewer)
-      expect(json_body[:name]).to eq(plot.name)
+      expect(json_body[:plot][:name]).to eq(plot.name)
     end
   end
   context '#fetch' do

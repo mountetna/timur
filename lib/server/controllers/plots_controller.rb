@@ -11,7 +11,7 @@ class PlotsController < Timur::Controller
     )
     plot.save
 
-    success('Plot created')
+    success_json(plot: plot.to_hash)
   end
 
   def fetch
@@ -32,7 +32,7 @@ class PlotsController < Timur::Controller
   def get
     plot = Plot[@params[:id]]
     raise Etna::BadRequest, 'No such plot!' unless plot
-    success_json(plot.to_hash)
+    success_json(plot: plot.to_hash)
   end
 
   def update
@@ -43,7 +43,7 @@ class PlotsController < Timur::Controller
 
     plot.update_allowed(@params)
 
-    success_json(plot.to_hash)
+    success_json(plot: plot.to_hash)
   end
 
   def destroy
@@ -51,6 +51,8 @@ class PlotsController < Timur::Controller
     raise Etna::BadRequest, 'No such plot!' unless plot
     raise Etna::Forbidden, 'Cannot destroy plot!' unless plot.is_editable?(current_user)
     plot.destroy
-    success('Plot destroyed')
+    success_json(
+      plot: {id: @params[:id]}
+    )
   end
 end
