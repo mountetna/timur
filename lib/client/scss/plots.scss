@@ -87,6 +87,20 @@
   }
 }
 
+.scatter-series {
+  .circle-group {
+    text {
+      visibility: hidden;
+      font-size: 8px;
+      dominant-baseline: middle;
+      cursor: default;
+    }
+    &:hover text {
+      visibility: visible;
+    }
+  }
+}
+
 // Bar series in category plot
 .bar-series {
   rect {

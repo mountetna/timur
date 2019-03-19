@@ -46,7 +46,7 @@ const Outlier = ({x,y,outlier, text_position, color}) =>
       fill={ color }
       stroke='none'
     />
-    <text textAnchor='end' x={ text_position - 4 } y={y} >{outlier.toFixed(2)}</text>
+    <text textAnchor='start' x={ text_position + 4 } y={y} >{outlier.toFixed(2)}</text>
   </g>;
 
 const Whisker = ({x, y_min, y_max, color}) => <line
