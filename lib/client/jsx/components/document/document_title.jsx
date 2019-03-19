@@ -10,7 +10,7 @@ const DocumentTitle = ({ name, editing, onChange, buttons }) => (
       onChange={ onChange }
       disabled={ (!editing) ? 'disabled' : null }
       placeholder='No name'
-      value={name}
+      value={name||''}
       data-field='name' />
     <ButtonBar className='document-action-btn-group' buttons={buttons} />
     <span className='document-status'>

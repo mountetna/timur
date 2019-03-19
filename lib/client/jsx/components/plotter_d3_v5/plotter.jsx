@@ -19,6 +19,7 @@ import {
   requestPlots,
   saveNewPlot,
   savePlot,
+  copyPlot,
   deletePlot
 } from '../../actions/plot_actions';
 
@@ -110,7 +111,7 @@ class Plotter extends React.Component {
     this.selectPlot('new', true);
   }
 
-  setPlot({ plot }) {
+  setPlot(plot) {
     this.selectPlot(plot.id);
   }
 
@@ -184,9 +185,10 @@ class Plotter extends React.Component {
     let { plot, editing } = this.state;
     // A new plot should have an id set to 0.
     if (plot.id <= 0) this.props.saveNewPlot(plot, this.setPlot.bind(this));
-    else this.props.savePlot(plot);
-
-    if (editing) this.toggleEdit();
+    else {
+      this.props.savePlot(plot);
+      if (editing) this.toggleEdit();
+    }
   }
 
   toggleEdit() {
@@ -196,14 +198,14 @@ class Plotter extends React.Component {
   }
 
   copyPlot() {
-    let { manifest } = this.state;
-    this.props.copyManifest(manifest, this.setManifest.bind(this));
+    let { plot } = this.state;
+    this.props.copyPlot(plot, this.setPlot.bind(this));
   }
 
   deletePlot() {
     let { plot } = this.state;
     if (confirm('Are you sure you want to remove this plot?')) {
-      this.props.deletePlot(plot, () => this.selectPlot(0));
+      this.props.deletePlot(plot, () => this.selectPlot(null));
     }
   }
 
@@ -323,6 +325,7 @@ export default connect(
     requestPlots,
     saveNewPlot,
     savePlot,
+    copyPlot,
     deletePlot,
     pushLocation
   }
