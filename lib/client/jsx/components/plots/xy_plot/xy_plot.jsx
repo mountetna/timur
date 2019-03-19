@@ -25,7 +25,7 @@ export default class XYPlot extends Component {
   render() {
     let { parent_width, layout, config_variables={}, data } = this.props;
     let { xdomain, ydomain, plot_series } = data;
-    let { xmin, xmax, ymin, ymax } = config_variables;
+    let { x_label, y_label, x_min, x_max, y_min, y_max } = config_variables;
 
     if (!xdomain || !ydomain) return null;
 
@@ -34,9 +34,11 @@ export default class XYPlot extends Component {
         className='xy-plot'
         component={ SeriesComponent }
         layout={ layout }
+        xlabel={ x_label }
+        ylabel={ y_label }
         parent_width={ parent_width }
-        xdomain={ validDomain(xmin,xmax,xdomain) }
-        ydomain={ validDomain(ymin,ymax,ydomain) }
+        xdomain={ validDomain(x_min,x_max,xdomain) }
+        ydomain={ validDomain(y_min,y_max,ydomain) }
         plot_series={ plot_series }
       />
     );

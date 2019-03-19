@@ -31,8 +31,8 @@ export default class PlotCanvas extends React.Component {
   }
 
   render() {
-    let { layout, parent_width, xdomain, ydomain, plot_series,
-      component, className, ...other_props } = this.props;
+    let { layout, parent_width, xdomain, ydomain, xlabel, ylabel,
+      plot_series, component, className, ...other_props } = this.props;
     let { margin } = layout;
 
     let defaultColor = d3.scaleOrdinal(autoColors(plot_series.length));
@@ -67,22 +67,34 @@ export default class PlotCanvas extends React.Component {
 
     let SeriesComponent = component;
 
+    let xsize = svg_dimensions.width - margin.left - margin.right;
+    let ysize = svg_dimensions.height - margin.top - margin.bottom;
+
     return <div className={ className }>
       <Legend width={ svg_dimensions.width } labels={labels} />
       <svg
         width={ svg_dimensions.width }
         height={ svg_dimensions.height }>
+        { xlabel && <text x={xsize/2+parseInt(margin.left)}
+          y={parseInt(margin.top) + ysize + 50}
+          fontSize='12px'
+          textAnchor='middle'>{xlabel}</text> }
         <Axis
           orient='Bottom'
           scale={ xScale }
           translate={ `translate(0, ${svg_dimensions.height - margin.bottom})` }
-          tickSize={ svg_dimensions.height - margin.top - margin.bottom }
+          tickSize={ ysize }
         />
+        { ylabel && <text x={-ysize/2-parseInt(margin.top)}
+          y={margin.left - 50}
+          fontSize='12px'
+          transform='rotate(-90)'
+          textAnchor='middle'>{ylabel}</text> }
         <Axis
           orient='Left'
           scale={ yScale }
           translate={ `translate(${margin.left}, 0)` }
-          tickSize={ svg_dimensions.width - margin.left - margin.right }
+          tickSize={ xsize }
         />
         {
           plot_series.map((series, index) =>

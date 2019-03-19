@@ -64,7 +64,7 @@ export default class CategoryPlot extends Component{
 
     let {parent_width, layout, config_variables={}, data}=this.props;
     let { domain, plot_series } = data;
-    let { value_min, value_max, gap, gutter } = config_variables;
+    let { value_min, value_max, gap, gutter, category_label, value_label } = config_variables;
 
     let categories = flatten(plot_series.map(s => s.variables.category.values));
 
@@ -75,6 +75,8 @@ export default class CategoryPlot extends Component{
         component={ SeriesComponent }
         layout={ layout }
         parent_width={ parent_width }
+        xlabel={ category_label }
+        ylabel={ value_label }
         xdomain={ categories }
         ydomain={ validDomain(value_min,value_max,domain) }
         plot_series={ plot_series }
