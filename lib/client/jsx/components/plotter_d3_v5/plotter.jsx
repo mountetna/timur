@@ -8,6 +8,7 @@ import Dropdown from '../dropdown';
 import ManifestScript from '../manifest/manifest_script';
 import ConsignmentView from '../manifest/consignment_view';
 import PlotLayout from './plot_layout';
+import PlotConfig from './plot_config';
 import PlotSeries from './plot_series';
 import Plot from '../plots/plot';
 import { plotTypes, plotConfig } from '../../plots/plot_config';
@@ -81,44 +82,6 @@ const Chart = connect(
     />
   </div>
 );
-
-const SeriesConfig = ({ label, series_types, updateType, updateSeries, plot_series }) =>
-  <div className='plot-series-config'>
-    <div className='pc-wrapper left'>
-      <div className='pc-header-title-text'>{label}</div>
-      <div>
-        <Dropdown
-          default_text='Add Series'
-          list={Object.keys(series_types)}
-          onSelect={index => {
-            let new_series = {
-              series_type: Object.keys(series_types)[index],
-              variables: {},
-              name: null
-            };
-            updateSeries([
-              new_series,
-              ...(plot_series || [])
-            ]);
-          }}
-          selected_index={null}
-        />
-      </div>
-    </div>
-    <div className='pc-wrapper right'>
-      <div>
-        <i
-          onClick={() => {
-            updateType(null);
-            updateSeries([]);
-          }}
-          className='pc-close fa fa-lg'
-        >
-          &times;
-        </i>
-      </div>
-    </div>
-  </div>;
 
 class Plotter extends React.Component {
   constructor(props) {
@@ -275,13 +238,18 @@ class Plotter extends React.Component {
             onChange={this.updatePlotConfiguration('layout')}
           />
 
-          <span className='section-header'>Plot Type </span>
+          <span className='section-header'>Plot Configuration</span>
           {plot_config ? (
-            <SeriesConfig
+            <PlotConfig
+              config={plot_config}
               label={plot_config.label}
               series_types={ plot_config.series_types }
               updateType={this.updatePlotField('plot_type')}
               updateSeries={ this.updatePlotConfiguration('plot_series')}
+              onChange={(name, value) => {
+                this.updatePlotConfiguration('variables')(value);
+              } }
+              variables={ plot.configuration.variables }
               plot_series={plot.configuration.plot_series}
             />
           ) : (

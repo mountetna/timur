@@ -19,22 +19,6 @@
     display: block;
   }
 
-  .show {
-    display: none;
-    color: #767676;
-    align-items: center;
-    position: absolute;
-    bottom: 5px;
-    right: 20px;
-    cursor: pointer;
-    font-size: 10px;
-    &:hover {
-      color: forestgreen;
-    }
-    i {
-      padding-right: 2px;
-    }
-  }
   .ps-header {
     i {
       float: right;
@@ -56,27 +40,4 @@
     padding: 0px 10px 0px 10px;
   }
 
-  .ti-group {
-    .ti-label {
-      display: inline-block;
-      min-width: 80px;
-      text-align: right;
-      margin-right: 20px;
-      color: #767676;
-      font-size: 15px;
-      font-weight: 400;
-    }
-    .ti-input {
-      @include text_basics;
-
-      -webkit-font-smoothing: antialiased;
-      margin-right: 5px;
-      overflow-x: hidden;
-      overflow-y: auto;
-      min-width: 280px;
-      font-size: 15px;
-      padding-left: 10px;
-      line-height: 26px;
-    }
-  }
 }
