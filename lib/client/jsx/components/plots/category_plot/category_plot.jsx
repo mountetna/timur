@@ -15,13 +15,21 @@ const COMPONENTS = {
   swarm: Swarms
 };
 
-export const categoryGroups = (category, value, groupFunc)=>{
+export const categoryGroups = (category, value, label, groupFunc)=>{
   let category_names = [...new Set(category.values)];
 
   return category_names.map((category_name, index)=>{
     let indexes = category.which(c => c == category_name).filter(i=>i!= null);
-    let category_values = value(indexes).filter(i=>i!=null).sort((a,b)=>a-b);
-    return groupFunc(category_name, category_values);
+    let category_values = value(indexes);
+    let category_labels = label ? label(indexes) : [];
+
+    let vl = category_values.map((_,i) => category_values[i] != null ? [ category_values[i], category_labels[i] ] : null)
+      .filter(_=>_).sort((a,b) => a[0]-b[0]);
+
+    category_values = vl.map(([v,l]) => v);
+    category_labels = vl.map(([v,l]) => l);
+
+    return groupFunc(category_name, category_values, category_labels);
   });
 };
 
@@ -53,6 +61,9 @@ export default class CategoryPlot extends Component{
   constructor(props){
     super(props);
     this.xScale = d3.scaleBand();
+    this.state = {
+      highlighted_label: null
+    };
   }
 
   scale(axis) {
@@ -80,6 +91,8 @@ export default class CategoryPlot extends Component{
         xdomain={ categories }
         ydomain={ validDomain(value_min,value_max,domain) }
         plot_series={ plot_series }
+        onHighlight={ new_label => this.setState({ highlighted_label: new_label }) }
+        highlighted_label={ this.state.highlighted_label }
         gutter={ gutter }
         gap={ gap }
       />

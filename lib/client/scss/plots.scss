@@ -51,6 +51,22 @@
   }
 }
 
+.swarm-series {
+  .dot {
+    text {
+      font-size: 8px;
+      dominant-baseline: middle;
+      cursor: default;
+    }
+    &:hover {
+      circle {
+        stroke: gold;
+        stroke-width: 2px;
+      }
+    }
+  }
+}
+
 // Box series in category plot
 .box-series {
   .box-group {
@@ -88,15 +104,21 @@
 }
 
 .scatter-series {
-  .circle-group {
+  .dot {
     text {
       visibility: hidden;
       font-size: 8px;
       dominant-baseline: middle;
       cursor: default;
     }
-    &:hover text {
-      visibility: visible;
+    &:hover {
+      text {
+        visibility: visible;
+      }
+      circle {
+        stroke: gold;
+        stroke-width: 2px;
+      }
     }
   }
 }

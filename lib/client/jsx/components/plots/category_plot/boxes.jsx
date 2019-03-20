@@ -14,7 +14,7 @@ let quantile = (values, p) => {
   return values[ id ]
 };
 
-const boxData = (label, values) => {
+const boxData = (category_name, values) => {
   let quartile_data = [
     quantile(values, 0.25),
     quantile(values, 0.5),
@@ -30,7 +30,7 @@ const boxData = (label, values) => {
   let outliers = values.filter(v => v < whisker_min  || v > whisker_max);
 
   return {
-    label,
+    category_name,
     values,
     inliers: { quartile_data, whisker_min, whisker_max },
     outliers
@@ -82,24 +82,24 @@ const DEFAULT_COLOR = '#333333';
 class Boxes extends Component{
   render(){
     let { series, xScale, yScale, offset, width, color } = this.props;
-    let { variables: { category, value } } = series;
+    let { variables: { category, value, label } } = series;
 
 
     if (category.size != value.size) return null;
 
-    let groups = categoryGroups(category, value, boxData);
+    let groups = categoryGroups(category, value, label, boxData);
     console.log('======= groups ===========', groups);
 
     let boxes = groups.map( (group,index_group) => {
 
-      let { label, values, inliers } = group;
+      let { category_name, values, inliers } = group;
       let { whisker_min, whisker_max, quartile_data } = inliers;
 
 
       if (!values.length) return null;
 
-      let x_position = xScale(label) + width / 2 + offset;
-      let text_position = xScale(label) + offset;
+      let x_position = xScale(category_name) + width / 2 + offset;
+      let text_position = xScale(category_name) + offset;
 
       let median = yScale(quartile_data[1]);
       let y_min_scale = yScale(whisker_min);
