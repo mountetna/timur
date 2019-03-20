@@ -34,7 +34,7 @@ class PlotAttribute extends React.Component {
 export default connect(
   // map state
   (state, props) => {
-    let {document: { name: record_name }, attribute: { plot_id }} = props;
+    let { record_name, attribute: { plot_id }} = props;
     let plot = selectPlot(state, plot_id, { record_name });
     return { plot };
   },

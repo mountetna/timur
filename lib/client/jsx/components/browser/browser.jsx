@@ -221,7 +221,7 @@ class Browser extends React.Component{
           onClick={this.selectTab.bind(this)}
         />
         <BrowserTab {
-            ...{ template, record, revision, mode, tab }
+            ...{ model_name, record_name, template, record, revision, mode, tab }
           } />
       </div>
     );
