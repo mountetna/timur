@@ -58,6 +58,14 @@
         font-weight: 400;
       }
       .ti-input {
+        &::placeholder {
+          color: #dfdfdf;
+        }
+        &:hover {
+          &::placeholder {
+            color: gray;
+          }
+        }
         @include text_basics;
 
         -webkit-font-smoothing: antialiased;

@@ -1,8 +1,10 @@
 import * as React from 'react';
 import TextInput from '../inputs/text_input';
 
-const SeriesInput = ({name,config,value,onChange}) =>
-  <TextInput header={name.replace('_',' ')} value={value} onChange={onChange}/>;
+const Variable = ({name,config,value,onChange}) =>
+  <TextInput header={name.replace('_',' ')} value={value}
+    placeholder={ config.hint || config.type }
+    onChange={onChange}/>;
 
 export default class PlotVariables extends React.Component {
   constructor(props) {
@@ -24,7 +26,7 @@ export default class PlotVariables extends React.Component {
     return <div className='plot-variables'>
       {
         required_variables.map(var_name =>
-          <SeriesInput key={ var_name }
+          <Variable key={ var_name }
             config={config_variables[var_name]}
             value={variables[var_name]}
             name={var_name}
@@ -41,7 +43,7 @@ export default class PlotVariables extends React.Component {
       }
       {
         show_optional && optional_variables.map(var_name =>
-          <SeriesInput key={ var_name }
+          <Variable key={ var_name }
             config={config_variables[var_name]}
             value={variables[var_name]}
             name={var_name}
