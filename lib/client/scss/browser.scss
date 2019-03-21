@@ -77,8 +77,8 @@
         border-bottom: 1px solid rgba(tan,0.3);
         border-right: 1px solid forestgreen;
         color: indianred;
-        margin-right: 85%;
-        padding-right: 5px;
+        width: 200px;
+        padding-right: 8px;
         text-align: right;
       }
       .attributes {
@@ -91,7 +91,7 @@
             border-bottom: $thin_rule;
             border-right: 1px solid forestgreen;
             display: inline-block;
-            flex-grow: 1;
+            flex: 0 0 200px;
             padding-right: 8px;
             text-align: right;
             font-family: $body_font;
@@ -99,11 +99,11 @@
           }
           > .value {
             border-bottom: $thin_rule;
-            flex-basis: 85%;
             display: inline-block;
             padding-left: 9px;
             padding-top: 3px;
             box-sizing: border-box;
+            flex: 1;
           }
         }
       }
