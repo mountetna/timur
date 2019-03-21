@@ -1,0 +1,111 @@
+// Styles governing a reusable Document
+// view
+
+.document-window {
+  position: relative;
+  font-family: $body_font;
+  margin-top: 10px;
+  display: flex;
+  .left-column-group{
+    flex-basis: 175px;
+  }
+  .right-column-group{
+    flex-grow: 1;
+  }
+  .document-view {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    .document-view-header {
+      .document-title {
+        border-bottom: $thin_rule;
+        padding-bottom: 5px;
+
+        .document-title-input{
+          border: none;
+          border-bottom: 1px solid rgba(0,0,0,0);
+          font-size: 1em;
+          width: 50%;
+          color: darkblue;
+          &.editing {
+            @include text_basics;
+            color: black;
+          }
+          &:disabled {
+            @extend .disabled;
+          }
+        }
+
+        .document-action-btn-group{
+          float: right;
+
+          i {
+            @include icon-button;
+            margin-left: 20px;
+            font-size: 20px;
+          }
+        }
+
+        .document-status {
+          float: right;
+        }
+      }
+
+      .document-details {
+        font-size: 0.8em;
+        line-height: 25px;
+        .document-edit-details {
+          display: inline-block;
+          color: gray;
+          i, span {
+            padding-right: 5px;
+          }
+        }
+        .document-access {
+          display: inline-block;
+          .access-radio-group {
+            display: inline-block;
+          };
+        }
+
+        .label {
+          padding: 1px 3px;
+          border-radius: 2px;
+          font-size: 12px;
+          height: 20px;
+          font-weight: 600;
+          line-height: 15px;
+          cursor: default;
+
+          &.public {
+            background: gold;
+            color: black;
+          }
+
+          &.private {
+            background: #444;
+            color: white;
+          }
+        }
+
+        .document-description {
+          text-align: justify;
+          font-size: 1.2em;
+          margin-left: 0px;
+          margin-top: 0px;
+          width: 100%;
+          resize: vertical;
+          border: 0px;
+          outline: 1px solid lightgray;
+          color: black;
+          &:disabled {
+            @extend .disabled;
+            resize: none;
+          }
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+}
+

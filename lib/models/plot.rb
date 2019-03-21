@@ -8,7 +8,7 @@ class Plot < Sequel::Model
     validates_presence :name
     validates_presence :plot_type
     validates_presence :configuration
-    validates_presence :manifest
+    validates_presence :script
   end
 
   def before_validation
@@ -25,7 +25,7 @@ class Plot < Sequel::Model
   end
 
   EDITABLE_ATTRIBUTES = [
-    :manifest_id, :access, :name, :plot_type,
+    :script, :access, :name, :plot_type,
     :configuration, :access
   ]
 
@@ -35,5 +35,16 @@ class Plot < Sequel::Model
     end.compact.to_h
 
     update(plot_params)
+  end
+
+
+  def to_hash
+    [ :id, :name, :access, :configuration, :created_at,
+      :plot_type, :project, :script ].map do |key|
+      [ key, self[key] ]
+    end.to_h.merge(
+      updated_at: self.updated_at.iso8601,
+      user: user.name
+    )
   end
 end

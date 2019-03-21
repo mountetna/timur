@@ -1,6 +1,6 @@
 import * as actions from '../../../lib/client/jsx/actions/manifest_actions';
-import allManifestsResp, { plot } from '../fixtures/all_manifests_response';
-import manifestStore, { manifest } from '../fixtures/manifests_store';
+import { plot } from '../fixtures/all_manifests_response';
+import { manifestStore, manifest } from '../fixtures/manifests_store';
 import manifestResp from '../fixtures/manifest_response';
 import { mockStore, mockDate, mockFetch, setConfig, stubUrl, cleanStubs } from '../helpers';
 
@@ -28,7 +28,7 @@ describe('async actions', () => {
     stubUrl({
       verb: 'get',
       path: `/${PROJECT_NAME}/manifests`,
-      response: allManifestsResp
+      response: { manifests: manifestStore }
     });
 
     const expectedActions = [
@@ -47,7 +47,7 @@ describe('async actions', () => {
       },
       {
         type: 'LOAD_MANIFESTS',
-        manifestsById: manifestStore
+        manifests: manifestStore
       }
     ];
 

@@ -1,0 +1,57 @@
+// the PlotLayout subcomponent
+.plot-layout-container {
+  min-width: 500px;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 10px;
+
+  .type-label {
+    letter-spacing: 0.03em;
+    text-transform: capitalize;
+    float: left;
+    width: 60px;
+    position: relative;
+    top: 30px;
+    margin-left: 30px;
+  }
+
+  .ni-group {
+    float: left;
+
+    .ni-label {
+      font-size: 55%;
+      letter-spacing: 0.03em;
+      text-transform: capitalize;
+      display: block;
+      position: relative;
+      top: 10px;
+      left: 24px;
+      font-weight: 800;
+      color: #767676;
+    }
+
+    .ni-input {
+      @include text_basics;
+
+      width: 40px;
+      display: inline-block;
+
+      margin-right: 20px;
+      margin-left: 20px;
+      margin-top: 10px;
+
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      font-size: 15px;
+      padding-left: 10px;
+      line-height: 26px;
+
+    }
+
+    .ni-unit {
+      margin-left: -16px;
+      font-size: 85%;
+      letter-spacing: 0.03em;
+    }
+  }
+}

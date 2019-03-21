@@ -1,107 +1,23 @@
-@import 'globals';
-
-.manifest-group{
-  position: relative;
-  font-family: $body_font;
-}
-
-.manifest-elements{
-  padding-left: 15px;
-  padding-right: 15px;
-  .manifest-form-group {
-    .manifest-form-header {
-    }
-    .manifest-script {
-      &.editing {
-        border: 1px solid #333;
-        .CodeMirror {
-          background: #fffafa;
-        }
-      }
-      border-top: 1px solid #888;
-      .CodeMirror {
-        max-height: 200px;
-        background: #fafffa;
-        font-family: $value_font;
-      }
-      .cm-comment { color: #888; }
-      .cm-macro { color: #f40; }
-      .cm-variable { color: #b40; }
-      .cm-string { color: #a0f; }
-      .cm-function { color: #04d; }
-      .cm-label, &.column { color: #090; }
-      .cm-template { color: #f00; font-weight: bold; }
-      .cm-vector { color: #000; font-weight: bold; }
-    }
-
-  }
-
-  .manifest-form-title {
-    border-bottom: 1px solid #666666;
-    padding-bottom: 10px;
-
-    .manifest-form-title-input{
-      border: none;
-      font-size: 1em;
-      width: 300px;
-      color: #111;
-      outline: 1px solid #333;
-      &:disabled {
-        @extend .disabled;
-      }
-    }
-
-    .manifest-action-btn-group{
-      float: right;
-
-      button{
-        margin-left: 10px;
-        cursor: pointer;
-      }
-    }
-
-  }
-  .manifest-form-details{
-    font-size: 0.8em;
-    line-height: 25px;
-  }
-
-  .manifest-form-description{
-    text-align: justify;
-    font-size: 1.2em;
-    margin-left: 0px;
-    margin-top: 0px;
-    width: 100%;
-    resize: vertical;
-    border: 0px;
-    outline: 1px solid #333;
-    &:disabled {
-      @extend .disabled;
-      resize: none;
-    }
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
+.manifest-window {
+  .CodeMirror {
+    max-height: 200px;
   }
 }
 
-
-
-.consignment-btn{
-  margin-left: 10px;
-  cursor: pointer;
-  i {
-    padding-right: 4px;
+.manifest-script {
+  &.editing {
+    border: 1px solid lightgray;
   }
-}
-
-/* Button Styling, as opposed to positioning/layout ***************************/
-.manifest-action-btn-group button,
-.manifest-query-btn,
-.consignment-btn,
-.manifest-form-control-btn{
-  @include green_button;
-  text-transform: capitalize;
+  border-top: 1px solid #888;
+  border-bottom: 1px solid #888;
+  .cm-comment { color: #888; }
+  .cm-macro { color: #f40; }
+  .cm-variable { color: #b40; }
+  .cm-string { color: #a0f; }
+  .cm-function { color: #04d; }
+  .cm-label, &.column { color: #090; }
+  .cm-template { color: #f00; font-weight: bold; }
+  .cm-vector { color: #000; font-weight: bold; }
 }
 
 /******************************************************************************/
@@ -164,6 +80,9 @@
   .consignment-view-label {
     font-weight: bold;
     font-size: 0.8em;
+  }
+  .consignment-btn {
+    @include timur-button;
   }
   .consignment-variable-group {
     display: table-row;

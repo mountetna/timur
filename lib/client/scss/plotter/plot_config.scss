@@ -1,0 +1,50 @@
+.plot-series-config {
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    .show {
+      display: flex;
+    }
+  }
+
+  .pc-wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    div {
+      flex: 1 1 0;
+    }
+
+    .pc-close {
+      margin-right: 10px;
+      padding-top: 10px;
+      cursor: pointer;
+      &:hover {
+        color: red;
+      }
+    }
+    .pc-header-title-text {
+      text-transform: capitalize;
+      font-size: 18px;
+      font-weight: normal;
+      margin-bottom: 5px;
+      i {
+        float: right;
+        color: #767676;
+        padding: 1px;
+
+        &:hover {
+          color: red;
+          font-weight: bolder;
+        }
+      }
+
+    }
+    .pc-series {
+      margin-top: 10px;
+    }
+  }
+}

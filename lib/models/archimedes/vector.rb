@@ -48,6 +48,10 @@ module Archimedes
       @vector = list_items || []
     end
 
+    def self.from_array(array)
+      self.new((array||[]).map{|v| [ nil, v ]})
+    end
+
     def each
       @vector.each do |label, value|
         yield label, value

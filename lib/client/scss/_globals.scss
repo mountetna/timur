@@ -7,18 +7,30 @@ $quote_font: 'Lora', serif;
 $input_border_color: #c0c0c0;
 $input_background_color: #f9f9f9;
 
+$dark-grey: #222;
+$med-grey-2: #888;
+$light-grey: #ccc;
+
+$link_hover_color: #518651;
+
 @mixin text_defaults {
   color: darkorchid;
-  border: none;
-  border-bottom: 1px solid #dfdfdf;
-  &:focus {
-    border-bottom: 1px solid forestgreen;
-  }
-  background: none;
   font-family: $value_font;
   font-size: 16px;
   margin: 0;
   padding: 0;
+
+  @include text_basics;
+}
+
+@mixin text_basics {
+  border: none;
+  cursor: text;
+  border-bottom: 1px solid #dfdfdf;
+  background: rgba(gray,0.05);
+  &:focus {
+    border-bottom: 1px solid forestgreen;
+  }
 }
 
 @mixin text_box {
@@ -84,30 +96,22 @@ $thin_rule: 1px solid rgba(forestgreen,0.1);
 @mixin icon_button {
   cursor: pointer;
   color: gray;
-  padding: 2px;
+  margin: 2px;
   &:hover {
     color: forestgreen;
   }
-  &.download {
+  &.delete {
+    &:hover {
+      color: indianred;
+    }
+  }
+  &.save, &.download, &.copy {
     &:hover {
       color: dodgerblue;
     }
   }
 }
 /* NEW GLOBALS ****************************************************************/
-
-.left-column-group{
-  display: inline-block;
-  width: 175px;
-  overflow: hidden;
-}
-
-.right-column-group{
-  position: absolute;
-  top: 10px;
-  left: 175px;
-  right: 0px;
-}
 
 .disabled{
   background: none;

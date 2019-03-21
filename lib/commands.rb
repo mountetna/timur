@@ -29,6 +29,21 @@ class Timur
     end
   end
 
+  class Schema < Etna::Command
+    usage 'Show the current database schema.'
+
+    def execute
+      Timur.instance.db.tap do |db|
+        db.extension(:schema_dumper)
+        puts db.dump_schema_migration
+      end
+    end
+
+    def setup(config)
+      super
+      Timur.instance.setup_db
+    end
+  end
   class Migrate < Etna::Command
     usage 'Run migrations for the current environment.'
 

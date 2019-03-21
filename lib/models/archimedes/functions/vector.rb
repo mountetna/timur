@@ -53,7 +53,17 @@ module Archimedes
     end
 
     def labels(vector)
-      Vector.new(vector.map {|l,v| [ nil, l ]})
+      Vector.from_array(vector.to_labels)
+    end
+
+    def group(data, factors)
+      Vector.new(
+        data.group_by.with_index do |value, index|
+          factors[index]
+        end.map do |label, values|
+          [ label, Vector.new(values) ]
+        end
+      )
     end
 
     def rep(vector,times)

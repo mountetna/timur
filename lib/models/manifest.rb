@@ -25,11 +25,9 @@ class Manifest < Sequel::Model
   end
 
   def to_hash(other_user)
-    self_obj = [:id, :name, :description, :project, :access, :script].map do |k|
-      [k, self[k]]
-    end
-
-    return self_obj.to_h.merge(
+    [:id, :name, :description, :project, :access, :script].map do |key|
+      [ key, self[key] ]
+    end.to_h.merge(
       updated_at: self.updated_at.iso8601,
       user: user.name,
       is_editable: is_editable?(other_user),

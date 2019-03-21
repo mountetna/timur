@@ -1,0 +1,53 @@
+/* Button Styling, as opposed to positioning/layout ***************************/
+@mixin green_button {
+  cursor: pointer;
+  font-family: $body_font;
+  color: forestgreen;
+  margin-left: 10px;
+  cursor: pointer;
+  padding: 2px;
+  font-size: 14px;
+  background-color: rgba(forestgreen,0.2);
+  &:disabled {
+    color: grey;
+    border: darkgrey;
+    background-color: rgba(grey,0.2);
+  }
+  &:hover {
+    background-color: rgba(forestgreen,0.3);
+  }
+}
+
+@mixin header_button {
+  cursor: pointer;
+  font-size: 20px;
+  color: forestgreen;
+}
+
+@mixin timur-button {
+  padding:5px;
+  border: 1px solid #333;
+  margin-left: 10px;
+  cursor: pointer;
+  outline: none;
+  background: #eee;
+  font-size: 0.6em;
+
+  i {
+    padding-right: 4px;
+  }
+
+  &:hover:enabled,
+  {
+    color: #fff;
+    background: #22a778;
+    border: 1px solid #22a778;
+  }
+
+  &:disabled,
+  {
+    cursor: default;
+    border: 1px solid #ccc;
+  }
+}
+

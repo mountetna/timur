@@ -18,21 +18,15 @@ import * as React from 'react';
 export default class ListMenu extends React.Component{
 
   listSelection({id, title, name}, index){
-      var btn_props = {
-        'className': 'list-selection',
-        'title': title,
-        'key': 'list-'+id,
-        'onClick': ()=>{
-          this.props.select(id);
-        }
-      };
-
-    return <button {...btn_props}>{name}</button>;
+    return <div className={ 'list-selection' }
+        title={ title }
+        key={ 'list-'+id }
+        onClick={ ()=>this.props.select(id) }>{name}</div>;
   }
 
   listSection(section_name, section, id){
     return (
-      <div className='list-selector-panel' key={id}>
+      <div className='list-selector-section' key={id}>
 
         {section_name && <div className='list-selector-header'>{section_name}</div>}
         {section.map((item, index) => this.listSelection(item, index))}
@@ -59,9 +53,8 @@ export default class ListMenu extends React.Component{
 
     return (
       <button onClick={()=>create()} className='list-selector-new-btn'>
-
         <i className='fas fa-plus' aria-hidden='true' />
-        {` NEW ${name}`}
+        {`new ${name}`}
       </button>
     );
   }
@@ -69,10 +62,8 @@ export default class ListMenu extends React.Component{
   render() {
     return (
       <div className='list-selector-group'>
-
         {this.renderCreate(name)}
         <div className='list-selector-panel'>
-
           {this.renderList()}
         </div>
       </div>

@@ -96,42 +96,43 @@ FactoryBot.define do
 
   factory :manifest do
     to_create(&:save)
-    project 'labors'
+    project { 'labors' }
     sequence :name do |n|
       "manifest #{n}"
     end
 
     trait :script do
-      script '@value = 1 + 1'
+      script { '@value = 1 + 1' }
     end
 
     trait :public do
-      access 'public'
+      access { 'public' }
     end
 
     trait :private do
-      access 'private'
+      access { 'private' }
     end
   end
 
   factory :plot do
     to_create(&:save)
-    project 'labors'
+    project { 'labors' }
+    script { '@test = 1' }
     sequence :name do |n|
       "plot #{n}"
     end
 
     trait :scatter do
-      plot_type 'scatter'
-      configuration(plot: 'ok')
+      plot_type { 'scatter' }
+      configuration { {plot: 'ok'} }
     end
 
     trait :public do
-      access 'public'
+      access { 'public' }
     end
 
     trait :private do
-      access 'private'
+      access { 'private' }
     end
   end
 
@@ -140,11 +141,40 @@ FactoryBot.define do
 
     AUTH_USERS.each do |user_type, template|
       trait user_type do
-        email template[:email]
-        name "#{template[:first]} #{template[:last]}"
+        email { template[:email] }
+        name { "#{template[:first]} #{template[:last]}" }
       end
     end
   end
+end
+
+def get_document doc_type, id, user=:viewer
+  auth_header(user)
+  get("#{document_path(doc_type)}/#{id}")
+end
+
+def fetch_documents doc_type, user=:viewer
+  auth_header(user)
+  get("#{document_path(doc_type)}/fetch")
+end
+
+def create_document doc_type, request, user=:viewer
+  auth_header(user)
+  json_post("#{document_path(doc_type)}/create", request)
+end
+
+def update_document doc_type, id, update={}, user=:viewer
+  auth_header(user)
+  json_post("#{document_path(doc_type)}/update/#{id}", update)
+end
+
+def destroy_document doc_type, id, user=:viewer
+  auth_header(user)
+  delete("#{document_path(doc_type)}/destroy/#{id}")
+end
+
+def document_path(doc_type)
+  "api/#{doc_type}s/labors"
 end
 
 def json_body

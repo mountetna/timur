@@ -54,7 +54,7 @@
         outline: 0;
 
         &:hover {
-          color: mix(gray,forestgreen,50);
+          color: $link_hover_color;
         }
       }
     }

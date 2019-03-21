@@ -1,0 +1,43 @@
+
+.ps-card-container {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #bdc3c7;
+  position: relative;
+  &:first-child {
+    border-top: 1px solid #bdc3c7;
+  }
+
+  &:hover {
+    background: rgba(goldenrod,0.02);
+    .show {
+      display: flex;
+    }
+  }
+
+  i {
+    cursor: pointer;
+    display: block;
+  }
+
+  .ps-header {
+    i {
+      float: right;
+      color: #767676;
+      padding: 1px;
+
+      &:hover {
+        color: red;
+        font-weight: bolder;
+      }
+    }
+
+    text-align: left;
+    font-size: 16px;
+    color: #767676;
+    text-transform: capitalize;
+    min-width: 380px;
+    margin-right: 0px;
+    padding: 0px 10px 0px 10px;
+  }
+
+}

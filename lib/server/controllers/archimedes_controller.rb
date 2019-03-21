@@ -29,7 +29,7 @@ class ArchimedesController <  Timur::Controller
         Archimedes::Manifest.new(
           token,
           @params[:project_name],
-          with_record_name(script)
+          script
         ).payload
       ]
     end.to_h

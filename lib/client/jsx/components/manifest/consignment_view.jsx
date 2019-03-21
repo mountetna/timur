@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import ConsignmentResult from './consignment_result';
+import { selectConsignment } from '../../selectors/consignment_selector';
 
-export default class ConsignmentView extends React.Component {
+class ConsignmentView extends React.Component {
   render() {
     let { consignment } = this.props;
 
@@ -23,3 +25,9 @@ export default class ConsignmentView extends React.Component {
     </div>
   }
 }
+
+export default connect(
+  (state, {md5sum}) => ({
+    consignment: md5sum && selectConsignment(state, md5sum)
+  })
+)(ConsignmentView);

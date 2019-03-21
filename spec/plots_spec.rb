@@ -5,6 +5,11 @@ describe PlotsController do
     OUTER_APP
   end
 
+  def get_plot id, user
+    auth_header(user)
+    get("/labors/plot/#{id}")
+  end
+
   def get_plots endpoint, user
     auth_header(user)
     get("/labors/plots/#{endpoint}")
@@ -20,16 +25,24 @@ describe PlotsController do
     delete("/labors/plots/destroy/#{plot.id}")
   end
 
-  context '#index' do
+  context '#get' do
     it 'must be a project viewer' do
-      get_plots(nil, :non_user)
+      get_document(:plot, 1, :non_user)
       expect(last_response.status).to eq(403)
     end
-  end
 
+    it 'retrieves a single plot' do
+      viewer = create(:user, :viewer)
+
+      plot = create(:plot, :private, :scatter, user: viewer)
+
+      get_document(:plot, plot.id, :viewer)
+      expect(json_body[:plot][:name]).to eq(plot.name)
+    end
+  end
   context '#fetch' do
     it 'must be a project viewer' do
-      post_plots(:fetch, :non_user)
+      fetch_documents(:plot, :non_user)
       expect(last_response.status).to eq(403)
     end
 
@@ -38,13 +51,11 @@ describe PlotsController do
       friend = create(:user, :editor)
       viewer = create(:user, :viewer)
 
-      manifest = create(:manifest, :public, :script, user: admin)
+      public_plots = create_list(:plot, 3, :public, :scatter, user: admin)
+      friend_private_plots = create_list(:plot, 3, :private,:scatter, user: friend)
+      user_private_plots = create_list(:plot, 3, :private, :scatter, user: viewer)
 
-      public_plots = create_list(:plot, 3, :public, :scatter, user: admin, manifest: manifest)
-      friend_private_plots = create_list(:plot, 3, :private,:scatter, user: friend, manifest: manifest)
-      user_private_plots = create_list(:plot, 3, :private, :scatter, user: viewer, manifest: manifest)
-
-      post_plots(:fetch, :viewer)
+      fetch_documents(:plot, :viewer)
       plot_names = json_body[:plots].map{|plot| plot[:name]}
 
       expect(plot_names).to include(*public_plots.map(&:name))
@@ -57,37 +68,33 @@ describe PlotsController do
     before(:each) do
       @user = create(:user, :viewer)
 
-      @manifest = create(
-        :manifest, :public, :script,
-        user: @user
-      )
-
       @plot = {
         name: 'test plot',
         plot_type: 'scatter',
         project_name: 'ipi',
         access: 'private',
-        configuration: { data: 'xyz' },
-        manifest_id: @manifest.id
+        script: '@test = 1',
+        configuration: { data: 'xyz' }
       }
     end
 
     it 'must be a project viewer' do
-      post_plots(:create, :non_user, @plot)
+      create_document(:plot, @plot, :non_user)
       expect(last_response.status).to eq(403)
     end
 
     it 'creates a plot' do
-      post_plots(:create, :viewer, @plot)
+      create_document(:plot, @plot, :viewer)
 
       expect(last_response.status).to eq(200)
+
 
       plot = Plot.first
       expect(plot.name).to  eq(@plot[:name])
     end
 
     it 'keeps non admins from creating public plots' do
-      post_plots(:create, :viewer, @plot.merge(access: 'public'))
+      create_document(:plot, @plot.merge(access: 'public'), :viewer)
       expect(last_response.status).to eq(200)
       expect(Plot.first.access).to eq('private')
     end
@@ -97,42 +104,37 @@ describe PlotsController do
     before(:each) do
       @user = create(:user, :viewer)
 
-      @manifest = create(
-        :manifest, :public, :script,
-        user: @user
-      )
-
       @plot = create(
-        :plot, :private, :scatter, user: @user, manifest: @manifest
+        :plot, :private, :scatter, user: @user
       )
     end
 
     it 'must be a project user' do
-      delete_plots(@plot, :non_user)
+      destroy_document(:plot, @plot.id, :non_user)
       expect(last_response.status).to eq(403)
       expect(Plot.count).to eq(1)
     end
 
     it 'destroys the plot if allowed' do
-      delete_plots(@plot, :viewer)
+      destroy_document(:plot, @plot.id, :viewer)
 
       expect(Plot.count).to eq(0)
     end
 
     it 'prevents plot destruction by non-owners' do
-      delete_plots(@plot, :editor)
+      destroy_document(:plot, @plot.id, :editor)
       expect(last_response.status).to eq(403)
 
-      public_plot = create(:plot, :public, :scatter, user: @user, manifest: @manifest)
+      public_plot = create(:plot, :public, :scatter, user: @user)
 
-      delete_plots(public_plot, :editor)
+      destroy_document(:plot, public_plot.id, :editor)
       expect(last_response.status).to eq(403)
 
       expect(Plot.count).to eq(2)
     end
 
     it 'allows admins to destroy public plots' do
-      delete_plots(@plot, :admin)
+      destroy_document(:plot, @plot.id, :admin)
       expect(last_response.status).to eq(200)
       expect(Plot.count).to eq(0)
     end
@@ -142,21 +144,16 @@ describe PlotsController do
     before(:each) do
       @user = create(:user, :viewer)
 
-      @manifest = create(
-        :manifest, :public, :script,
-        user: @user
-      )
-
-      @plot = create(:plot, :private, :scatter, user: @user, manifest: @manifest)
+      @plot = create(:plot, :private, :scatter, user: @user)
     end
 
     it 'requires permission to update' do
-      public_plot = create(:plot, :public, :scatter, user: @user, manifest: @manifest)
+      public_plot = create(:plot, :public, :scatter, user: @user)
 
-      post_plots("update/#{@plot.id}", :editor, plot_type: 'heatmap')
+      update_document(:plot, @plot.id, { plot_type: 'heatmap' }, :editor)
       expect(last_response.status).to eq(403)
 
-      post_plots( "update/#{public_plot.id}", :editor, plot_type: 'heatmap')
+      update_document(:plot, public_plot.id, { plot_type: 'heatmap' }, :editor)
       expect(last_response.status).to eq(403)
 
       @plot.refresh
@@ -167,7 +164,7 @@ describe PlotsController do
     end
 
     it 'allows the owner to change the plot' do
-      post_plots("update/#{@plot.id}", :viewer, plot_type: 'heatmap')
+      update_document(:plot, @plot.id, { plot_type: 'heatmap' }, :viewer)
       @plot.refresh
 
       expect(last_response.status).to eq(200)
@@ -175,7 +172,7 @@ describe PlotsController do
     end
 
     it 'allows admins to update public plots' do
-      post_plots("update/#{@plot.id}", :admin, plot_type: 'heatmap')
+      update_document(:plot, @plot.id, { plot_type: 'heatmap' }, :admin)
 
       @plot.refresh
 
@@ -185,14 +182,14 @@ describe PlotsController do
 
     it 'only lets admins set public access' do
       # when the owner does it, it's no good
-      post_plots("update/#{@plot.id}", :viewer, access: 'public')
+      update_document(:plot, @plot.id, { access: 'public' }, :viewer)
       @plot.refresh
 
       expect(last_response.status).to eq(403)
       expect(@plot.access).to eq('private')
 
       # however, the admin can set public access
-      post_plots("update/#{@plot.id}", :admin, access: 'public')
+      update_document(:plot, @plot.id, { access: 'public' }, :admin)
       @plot.refresh
 
       expect(last_response.status).to eq(200)

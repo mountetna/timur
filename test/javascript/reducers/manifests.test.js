@@ -1,5 +1,5 @@
 import reducer from '../../../lib/client/jsx/reducers/manifests_reducer';
-import manifestStore, { manifest } from '../fixtures/manifests_store'
+import { manifestStore, manifest } from '../fixtures/manifests_store'
 
 describe('manifests reducer', () => {
   it('should return the initial state', () => {
@@ -69,26 +69,5 @@ describe('manifests reducer', () => {
         manifest: updatedManifest
       })
     ).toEqual(expectedStore);
-  });
-
-  it('should handle REMOVE_PLOT', () => {
-    const initialState = { ...manifestStore };
-    const manifestId = 10;
-    const plotId = 3;
-
-    const expected = {
-      ...initialState,
-      [manifestId]: {
-        ...initialState[manifestId],
-      }
-    };
-
-    expect(
-      reducer(initialState, {
-        type: 'REMOVE_PLOT',
-        manifestId,
-        id: plotId
-      })
-    ).toEqual(expected);
   });
 });

@@ -30,6 +30,14 @@ module Archimedes
       Archimedes::Vector.new(matrix.col_names.map{|l| [ nil, l ]})
     end
 
+    def numrows(matrix)
+      matrix.row_names.length
+    end
+
+    def numcols(matrix)
+      matrix.col_names.length
+    end
+
     def bind(dim, inputs)
       raise ArgumentError, 'inputs must be a vector' unless inputs.is_a?(Archimedes::Vector)
       use_rows = dim == 'rows'
