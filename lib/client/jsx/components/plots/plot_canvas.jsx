@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import Axis from './axis';
 import Legend from './legend';
 import { autoColors } from '../../utils/colors';
+import { seriesLegend } from '../../plots/plot_config';
 
 // The PlotCanvas renders the svg pane and determines
 // its width, etc.
@@ -32,19 +33,21 @@ export default class PlotCanvas extends React.Component {
 
   render() {
     let { layout, parent_width, xdomain, ydomain, xlabel, ylabel,
-      plot_series, component, className, ...other_props } = this.props;
+      plot, plot_series, component, className, ...other_props } = this.props;
     let { margin } = layout;
 
     let defaultColor = d3.scaleOrdinal(autoColors(plot_series.length));
 
     let colors = plot_series.map(({name, variables: { color }}) => color || defaultColor(name));
 
-    let labels = plot_series.map(({name}, i) => (
-      {
-        color: colors[i],
-        text: name
+    let labels = plot_series.map(
+      (series, i) => {
+        let legend = seriesLegend(plot.plot_type, series.series_type);
+        let color = colors[i];
+
+        return legend ? legend(series,color) : { color, name: series.name };
       }
-    ));
+    );
 
     let svg_dimensions = {
       width: Math.max(
@@ -61,9 +64,6 @@ export default class PlotCanvas extends React.Component {
     let xScale = this.scale(xdomain, [ margin.left, svg_dimensions.width - margin.right ]);
 
     let yScale = this.scale(ydomain, [ svg_dimensions.height - margin.bottom, margin.top ]);
-    console.log(svg_dimensions);
-    console.log("Xscale has domain", xScale.domain(), "and range", xScale.range() );
-    console.log("Yscale has domain", yScale.domain(), "and range", yScale.range() );
 
     let SeriesComponent = component;
 

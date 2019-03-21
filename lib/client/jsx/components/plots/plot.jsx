@@ -44,7 +44,7 @@ class Plot extends React.Component {
         return null;
     }
 
-    return <PlotComponent data={data} config_variables={ variables } layout={layout} parent_width={width} />;
+    return <PlotComponent data={data} plot={plot} config_variables={ variables } layout={layout} parent_width={width} />;
   }
 }
 

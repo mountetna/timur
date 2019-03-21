@@ -73,7 +73,7 @@ export default class CategoryPlot extends Component{
 
   render(){
 
-    let {parent_width, layout, config_variables={}, data}=this.props;
+    let {parent_width, layout, config_variables={}, plot, data}=this.props;
     let { domain, plot_series } = data;
     let { value_min, value_max, gap, gutter, category_label, value_label } = config_variables;
 
@@ -88,6 +88,7 @@ export default class CategoryPlot extends Component{
         parent_width={ parent_width }
         xlabel={ category_label }
         ylabel={ value_label }
+        plot={ plot }
         xdomain={ categories }
         ydomain={ validDomain(value_min,value_max,domain) }
         plot_series={ plot_series }

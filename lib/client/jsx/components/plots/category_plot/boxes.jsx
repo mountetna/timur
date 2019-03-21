@@ -88,7 +88,6 @@ class Boxes extends Component{
     if (category.size != value.size) return null;
 
     let groups = categoryGroups(category, value, label, boxData);
-    console.log('======= groups ===========', groups);
 
     let boxes = groups.map( (group,index_group) => {
 

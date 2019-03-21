@@ -23,7 +23,7 @@ const SeriesComponent = ({ series, ...props}) => {
 
 export default class XYPlot extends Component {
   render() {
-    let { parent_width, layout, config_variables={}, data } = this.props;
+    let { parent_width, layout, config_variables={}, data, plot } = this.props;
     let { xdomain, ydomain, plot_series } = data;
     let { x_label, y_label, x_min, x_max, y_min, y_max } = config_variables;
 
@@ -33,6 +33,7 @@ export default class XYPlot extends Component {
       <PlotCanvas
         className='xy-plot'
         component={ SeriesComponent }
+        plot={ plot }
         layout={ layout }
         xlabel={ x_label }
         ylabel={ y_label }
