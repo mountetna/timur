@@ -261,7 +261,7 @@ class Plotter extends React.Component {
           <div className='ps-list-container'>
             {plot.configuration.plot_series && plot.configuration.plot_series.map((series, index) => (
               <PlotSeries
-                key={`ps-card-container-${index}-${series.name}`}
+                key={`ps-card-container-${index}`}
                 plot_series={series}
                 series_config={plot_config.series_types[ series.series_type]}
                 onDelete={() => {
