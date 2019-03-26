@@ -13,7 +13,7 @@
 
 @import "~code-mirror/codemirror";
 @import "~react-table/react-table";
-@import url(https://fonts.googleapis.com/css?family=Cinzel|Cousine|Lora|Oxygen:400,700);
+@import url(https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Lora|Crimson+Text|Cousine);
 
 @import "globals";
 @import "button";
@@ -37,10 +37,6 @@
 @import "dropdown";
 @import "list_selector";
 @import "predicate";
-
-@import "~code-mirror/codemirror";
-@import "~react-table/react-table";
-@import url(https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Lora|Crimson+Text|Cousine);
 
 body {
   padding: 0px;
