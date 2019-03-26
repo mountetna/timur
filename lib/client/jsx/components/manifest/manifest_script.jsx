@@ -10,14 +10,21 @@ const timur_lang = [
   { regex: /@[\w]+/, token: 'variable'},
   { regex: /("|')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/, token: 'string' },
   { regex: /[\w]+(?=\s*:)/i, token: 'label'},
-  { regex: /[{}]/, token: 'template'},
+  { regex: /\{/, token: 'template', next: 'template'},
   { regex: /[\w]+(?=\()/i, token: 'function'},
   { regex: /[\[\]]/, token: 'vector'},
   { regex: /\$[\w]+/, token: 'column'}
 ];
 
+const template = [
+  { regex: /\}/, token: 'template', next: 'start'},
+  { regex: /\%[0-9]+/, token: 'template-var'},
+  { regex: /[^}]/, token: 'template-text'}
+];
+
 defineSimpleMode('timur_lang', {
   start: timur_lang,
+  template,
   meta: {
     lineComment: "#"
   }
