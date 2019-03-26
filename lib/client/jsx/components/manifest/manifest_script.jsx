@@ -10,9 +10,6 @@ const timur_lang = [
   { regex: /@[\w]+/, token: 'variable'},
   { regex: /("|')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/, token: 'string' },
   { regex: /[\w]+(?=\s*:)/i, token: 'label'},
-  // single-line template
-  { regex: /\{.*\}/, token: 'template'},
-  // start of multi-line template
   { regex: /\{/, token: 'template', next: 'template'},
   { regex: /[\w]+(?=\()/i, token: 'function'},
   { regex: /[\[\]]/, token: 'vector'},
@@ -21,7 +18,8 @@ const timur_lang = [
 
 const template = [
   { regex: /\}/, token: 'template', next: 'start'},
-  { regex: /.*/, token: 'template'}
+  { regex: /\%[0-9]+/, token: 'template-var'},
+  { regex: /[^}]/, token: 'template-text'}
 ];
 
 defineSimpleMode('timur_lang', {

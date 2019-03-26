@@ -16,7 +16,9 @@
   .cm-string { color: #a0f; }
   .cm-function { color: #04d; }
   .cm-label, &.column { color: #090; }
-  .cm-template { color: #f00; font-weight: bold; }
+  .cm-template { color: #f00; font-weight: bold; background: rgba(red,0.2); }
+  .cm-template-text { color: #c00; background: rgba(red,0.2); }
+  .cm-template-var { color: #00f; font-weight: bold; background: rgba(red,0.2); }
   .cm-vector { color: #000; font-weight: bold; }
 }
 
