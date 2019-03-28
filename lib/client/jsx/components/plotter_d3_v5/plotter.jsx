@@ -14,6 +14,8 @@ import Plot from '../plots/plot';
 import { plotTypes, plotConfig } from '../../plots/plot_config';
 import Resize from '../resize';
 
+import ErrorBoundary from '../error_boundary';
+
 import { pushLocation } from '../../actions/location_actions';
 import {
   requestPlots,
@@ -72,15 +74,22 @@ const SelectPlot = ({update, selected}) =>
     />
   </div>;
 
+const PlotFailed = () => <div className='plot-failed'> <i className='fas fa-car-crash'/>
+  Plot failed.
+</div>;
+
 const Chart = connect(
   (state,{plot}) => ({ plot: selectPlot(state,plot?plot.id:null) })
 )(
   ({plot}) => <div className='chart'>
-    <Resize
-      render={width => (
-        <Plot plot={plot} width={width} />
-      )}
-    />
+
+    <ErrorBoundary replacement={PlotFailed}>
+      <Resize
+        render={width => (
+          <Plot plot={plot} width={width} />
+        )}
+      />
+    </ErrorBoundary>
   </div>
 );
 
