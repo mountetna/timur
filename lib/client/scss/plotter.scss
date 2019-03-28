@@ -5,6 +5,11 @@
 @import 'plotter/plot_config';
 
 .plot-window {
+  .chart {
+    .plot-failed {
+      color: indianred;
+    }
+  }
   .CodeMirror {
     max-height: 800px;
     width: 100%;
