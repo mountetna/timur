@@ -71,8 +71,8 @@ module Archimedes
       clause('SUB .e') { |e| -e }
       clause('.e DIV .e') { |e0, e1| e0 / e1 }
       clause('.e MUL .e') { |e0, e1| e0 * e1 }
-      clause('.e OR .e') { |e0, e1| e0 || e1 }
-      clause('.e AND .e') { |e0, e1| e0 && e1 }
+      clause('.e OR .e') { |e0, e1| Vector.op(e0,e1) { |e0, e1| e0 || e1 } }
+      clause('.e AND .e') { |e0, e1| Vector.op(e0,e1) { |e0, e1| e0 && e1 } }
       clause('.e EQ .e') { |e0, e1| e0 == e1 }
       clause('.e NEQ .e') { |e0, e1| e0 != e1 }
       clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
