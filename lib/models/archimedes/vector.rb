@@ -3,11 +3,26 @@ module Archimedes
     include Enumerable
     class << self
       # A public method that runs some code vector and non-vector alike
-      def op(value, &block)
-        if value.is_a?(Vector)
-          value.op(&block)
+      def op(*values, &block)
+        v1, v2 = values
+        if v1.is_a?(Vector)
+          if values.length == 2
+            v1.op(v2, &block)
+          else
+            v1.op(&block)
+          end
         else
-          block.call(value)
+          if values.length == 2
+            if v2.is_a?(Vector)
+              v2.op(v1) do |value, other|
+                block.call(other, value)
+              end
+            else
+              block.call(v1, v2)
+            end
+          else
+            block.call(v1)
+          end
         end
       end
 
@@ -24,7 +39,7 @@ module Archimedes
         make_operation(symbols) do |value, symbol, other_value|
           !!filter_nan(value.send(symbol, other_value))
         end
-      end 
+      end
       alias_method :comparisons, :comparison
 
       private

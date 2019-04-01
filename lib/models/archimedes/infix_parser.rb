@@ -31,6 +31,11 @@ module Archimedes
       clause('STRING') { |s| s }
       clause('vector') { |v| v }
 
+      # some defined keywords
+      clause('TRUE') { |v| true }
+      clause('FALSE') { |v| false }
+      clause('NIL') { |v| nil }
+
       # A macro definition, in the form of a template string, e.g. "{'time', %1, %2}"
       clause('MACRO') { |m| Archimedes::Macro.new(m) }
 
@@ -66,8 +71,8 @@ module Archimedes
       clause('SUB .e') { |e| -e }
       clause('.e DIV .e') { |e0, e1| e0 / e1 }
       clause('.e MUL .e') { |e0, e1| e0 * e1 }
-      clause('.e OR .e') { |e0, e1| e0 || e1 }
-      clause('.e AND .e') { |e0, e1| e0 && e1 }
+      clause('.e OR .e') { |e0, e1| Vector.op(e0,e1) { |e0, e1| e0 || e1 } }
+      clause('.e AND .e') { |e0, e1| Vector.op(e0,e1) { |e0, e1| e0 && e1 } }
       clause('.e EQ .e') { |e0, e1| e0 == e1 }
       clause('.e NEQ .e') { |e0, e1| e0 != e1 }
       clause('.e MATCH .e') { |e0, e1| e0 =~ /#{e1}/ }
