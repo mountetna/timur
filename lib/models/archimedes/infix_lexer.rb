@@ -3,6 +3,10 @@ module Archimedes
     rule(/\s/)
     rule(/#.*$/)
 
+    rule(/true/) { :TRUE }
+    rule(/false/) { :FALSE }
+    rule(/nil/) { :NIL }
+
     rule(/\{(.*?)\}/m) { |t| [ :MACRO, t[1..-2] ] }
     rule(/[0-9]+\.?[0-9]*/) { |t| [ :NUM, t.to_f ] }
     rule(/[A-Za-z][\.\w]*/) { |t| [ :IDENT, t ] }

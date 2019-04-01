@@ -31,6 +31,11 @@ module Archimedes
       clause('STRING') { |s| s }
       clause('vector') { |v| v }
 
+      # some defined keywords
+      clause('TRUE') { |v| true }
+      clause('FALSE') { |v| false }
+      clause('NIL') { |v| nil }
+
       # A macro definition, in the form of a template string, e.g. "{'time', %1, %2}"
       clause('MACRO') { |m| Archimedes::Macro.new(m) }
 
