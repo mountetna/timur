@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { findRoute, setRoutes } from './router';
 
 // Components.
 import Manifests from './components/manifest/manifests';
@@ -85,79 +86,11 @@ const ROUTES = [
   },
 ];
 
-
-const NAMED_PARAM=/:([\w]+)/g;
-const GLOB_PARAM=/\*([\w]+)$/g;
-const ROUTE_PART=/(:[\w]+|\*[\w]+$)/g;
-
-const UNSAFE=/[^\-_.!~*'()a-zA-Z\d;\/?:@&=+$,]/g;
-
-const route_regexp = (template) => template.
-  // any :params match separator-free strings
-  replace(NAMED_PARAM, '([^\\.\\/\\?\\#]+)').
-  // any *params match arbitrary strings
-  replace(GLOB_PARAM, '(.+?)').
-  // ignore any trailing slashes in the route
-  replace(/\/$/, '');
-
-const routeParts = (template) => {
-  let parts = [];
-  // this does not replace, merely uses replace() to scan
-  if (template) template.replace(
-    ROUTE_PART,
-    (part) => parts.push(part.replace(/^./,''))
-  );
-  return parts;
-};
-
-const routePath = (template, params) => {
-  let index = 0;
-  return '/' + template.replace(
-    ROUTE_PART,
-    part => params[index++]
-  );
-};
-
-const matchRoute = ({ path, hash }, route) => (
-  // match the route part
-  path.match(route.path_regexp) && (!hash || (route.hash_regexp && hash.match(route.hash_regexp)))
-);
-
-const routeParams = ({path,hash}, route) => {
-  let [ _, ...values ] = decodeURIComponent(path).match(route.path_regexp);
-
-  if (hash) {
-    let [ _, ...hash_values ] = hash.match(route.hash_regexp);
-    values = values.concat(hash_values);
-  }
-
-  let params = route.parts.reduce(
-    (map, key, index) => {
-      map[key] = values[index];
-      return map;
-    },
-    {}
-  );
-  return params;
-}
-
-
-window.Routes = window.Routes || {};
-
-ROUTES.forEach(route => {
-  let [ path, hash ] = route.template.split(/#/);
-  route.path_regexp = new RegExp(`^/${ route_regexp(path) }/?$`);
-  route.hash_regexp = hash ? new RegExp(`^#${route_regexp(hash)}$`) : null;
-  route.parts = routeParts(path).concat(routeParts(hash));
-  if (route.name) {
-    window.Routes[`${route.name}_path`] = (...params) =>
-      routePath(route.template, params);
-  }
-});
+setRoutes(ROUTES);
 
 const Empty = () => <div/>;
 
-class TimurRouter extends React.Component {
+class TimurUI extends React.Component {
   constructor(props) {
     super(props);
 
@@ -172,8 +105,7 @@ class TimurRouter extends React.Component {
   render() {
     let { location, showMessages, environment, user } = this.props;
 
-    let route = ROUTES.find(route => matchRoute(location,route));
-    let params = {};
+    let { route, params }  = findRoute(location,ROUTES);
     let Component;
     let mode;
 
@@ -184,7 +116,6 @@ class TimurRouter extends React.Component {
     } else {
       mode = route.mode;
       Component = route.component;
-      params = routeParams(location, route);
     }
 
     // wait until the user loads to avoid race conditions
@@ -204,4 +135,4 @@ class TimurRouter extends React.Component {
 export default connect(
   (state) => ({ location: state.location, user: selectUser(state) }),
   { showMessages, updateLocation }
-)(TimurRouter);
+)(TimurUI);
