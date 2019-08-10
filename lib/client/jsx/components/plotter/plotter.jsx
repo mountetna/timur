@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import DocumentWindow from '../document/document_window';
 import ListMenu from '../list_menu';
-import Dropdown from '../dropdown';
+import Dropdown from '../inputs/dropdown';
 import ManifestScript from '../manifest/manifest_script';
 import ConsignmentView from '../manifest/consignment_view';
 import PlotLayout from './plot_layout';

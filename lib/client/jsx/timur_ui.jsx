@@ -5,7 +5,7 @@ import { findRoute, setRoutes } from './router';
 // Components.
 import Manifests from './components/manifest/manifests';
 import Browser from './components/browser/browser';
-import Plotter from './components/plotter_d3_v5/plotter';
+import Plotter from './components/plotter/plotter';
 import {HomePageContainer as HomePage} from './components/home_page';
 import TimurNav from './components/timur_nav';
 import Messages from './components/messages';
