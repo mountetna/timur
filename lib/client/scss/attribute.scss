@@ -7,9 +7,9 @@
     font-family: $value_font;
 
     .delete_link {
-                  &.empty {
-                    color: red;
-                  }
+      &.empty {
+        color: red;
+      }
       &:hover {
         text-decoration: line-through;
         color: gray;
@@ -33,19 +33,6 @@
       @include green_button;
     }
 
-    .selection {
-      border: 1px solid forestgreen;
-      color: #33333c;
-      font-family: $value_font;
-      font-size: 16px;
-      background: transparent;
-    }
-
-    .at_spacer {
-      padding-left: 5px;
-      padding-right: 5px;
-      color: forestgreen;
-    }
     input[type="text"].date_text {
       @include text_defaults;
       width: 100px;

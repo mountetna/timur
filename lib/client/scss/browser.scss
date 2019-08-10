@@ -84,6 +84,7 @@
       .attributes {
         display: flex;
         flex-direction: column;
+        padding-right: 5px;
         .attribute {
           display: flex;
           @include default_attribute;
@@ -101,9 +102,13 @@
             border-bottom: $thin_rule;
             display: inline-block;
             padding-left: 9px;
+            padding-bottom: 3px;
             padding-top: 3px;
             box-sizing: border-box;
             flex: 1;
+            .table {
+              padding-bottom: 5px;
+            }
           }
         }
       }
