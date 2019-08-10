@@ -4,23 +4,25 @@ import * as React from 'react';
 // Class imports.
 import AttributeViewer from '../attributes/attribute_viewer';
 
-const PaneAttribute = ({attribute, mode, value, revision, model_name, record_name, template, record}) => (
+const PaneAttribute = ({attribute, mode, value, revised_value, model_name, record_name, template, record}) => (
   (attribute.shown != false && (mode != 'edit' || attribute.editable)) ?
-    <div className='attribute'>
-      <div className={ `name ${ (mode == 'edit' && value != revision) ? 'revised' : '' }` }
+    <div className='attribute_row'>
+      <div className={ `attribute_name ${ (mode == 'edit' && value != revised_value) ? 'revised' : '' }` }
         title={attribute.desc}>
         {(attribute.display_name == null) ? attribute.title : attribute.display_name}
       </div>
-      <AttributeViewer
-        model_name={ model_name }
-        record_name={ record_name }
-        template={template}
-        value={value}
-        mode={mode}
-        attribute={ attribute }
-        document={record}
-        revision={revision}
-      />
+      <div className='attribute_value'>
+        <AttributeViewer
+          model_name={ model_name }
+          record_name={ record_name }
+          template={template}
+          value={value}
+          mode={mode}
+          attribute={ attribute }
+          document={record}
+          revised_value={revised_value}
+        />
+      </div>
     </div>
   : null
 );
@@ -39,7 +41,7 @@ const BrowserPane = ({ record, revision, pane, ...other_props}) =>
             key={attribute_name}
             record={record}
             value={ record[attribute_name] }
-            revision={ (attribute_name in revision) ?  revision[attribute_name] : record[attribute_name] }
+            revised_value={ (attribute_name in revision) ?  revision[attribute_name] : record[attribute_name] }
             attribute={pane.attributes[attribute_name]}
             {...other_props}
           />

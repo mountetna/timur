@@ -22,7 +22,7 @@ class PlotAttribute extends React.Component {
     let { plot } = this.props;
     if (!plot) return null;
     return(
-      <div className='value'>
+      <div className='attribute'>
         <Resize render={width => (
           <Plot plot={plot} width={width} />
         )}/>

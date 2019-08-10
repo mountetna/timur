@@ -26,6 +26,8 @@ export default class SlowTextInput extends Component {
     let { onChange, waitTime, defaultValue, ...inputProps } = this.props;
     let { input_value } = this.state;
 
+    if (defaultValue == null || defaultValue == undefined) defaultValue = '';
+
     return(
       <input type='text' 
         ref={ (input) => this.text_input = input }

@@ -4,46 +4,27 @@ import * as ReactRedux from 'react-redux';
 
 import { reviseDocument } from '../../actions/magma_actions';
 
-class ImageAttribute extends React.Component{
-  renderEdit(){
-    let { document, template, attribute, reviseDocument } = this.props;
-    let input_props = {
-      onChange: (e) => reviseDocument(
-        document,
-        template,
-        attribute,
-        e.target.files[0]
-      ),
-      type:"file"
-    };
+const ImageAttribute = ({ mode, value,
+  document, template, attribute, reviseDocument }) => {
 
-    return(
-      <div className="value">
-        <input {...input_props} />
-      </div>
-    );
+  if (mode != "edit") {
+    return <div className='attribute'> {
+      value
+        ? <a href={ value.url } ><img src={ value.thumb }/></a>
+        : <div className="document_empty">No file.</div>
+    } </div>
   }
 
-  render(){
-    let { mode, value } = this.props;
-    if (mode == "edit") return this.renderEdit();
-
-    if (value){
-      return(
-        <div className="value">
-          <a href={ value.url } >
-            <img src={ value.thumb }/>
-          </a>
-        </div>
-      );
-    }
-
-    return(
-      <div className="value">
-        <div className="document_empty">No file.</div>
-      </div>
-    );
-  }
+  return(
+    <div className='attribute'>
+      <input
+        type='file'
+        onChange={
+          e => reviseDocument(document, template, attribute, e.target.files[0])
+        }
+      />
+    </div>
+  );
 }
 
 export default ReactRedux.connect(

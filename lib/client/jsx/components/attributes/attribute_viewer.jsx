@@ -13,7 +13,7 @@ import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
 import TextAttribute from './text_attribute';
 import {MetricsAttributeContainer as MetricsAttribute} from './metrics_attribute';
-import {MarkdownAttributeContainer as MarkdownAttribute} from './markdown_attribute';
+import MarkdownAttribute from './markdown_attribute';
 
 import PlotAttribute from './plot_attribute';
 

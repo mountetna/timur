@@ -5,40 +5,32 @@ import { connect } from 'react-redux';
 import { reviseDocument } from '../../actions/magma_actions';
 import Dropdown from '../inputs/dropdown';
 
-class SelectAttribute extends React.Component{
-  revise(value) {
-    let { document, template, attribute, reviseDocument } = this.props;
+const SelectAttribute = ({ mode, value, revised_value,
+  document, template, attribute, reviseDocument }) => {
 
-    reviseDocument(
-      document,
-      template,
-      attribute,
-      value
-    )
-  }
+  if (mode != 'edit') return <div className='attribute'>{ value }</div>;
 
-  render(){
-    let { attribute, mode, value, revision } = this.props;
+  let { options } = attribute;
 
-    if (mode != 'edit') return <div className="value">{ value }</div>;
+  let selected = options.indexOf(revised_value);
 
-    let { options } = attribute;
-
-    let selected = options.indexOf(revision);
-
-    return(
-      <div className="value">
-        <Dropdown
-          default_text='Select option'
-          list={options}
-          onSelect={index => {
-            this.revise(options[index])
-          }}
-          selected_index={selected}
-        />
-      </div>
-    )
-  }
+  return(
+    <div className='attribute'>
+      <Dropdown
+        default_text='Select option'
+        list={options}
+        onSelect={index =>
+          reviseDocument(
+            document,
+            template,
+            attribute,
+            options[index]
+          )
+        }
+        selected_index={selected}
+      />
+    </div>
+  )
 }
 
 export default connect(

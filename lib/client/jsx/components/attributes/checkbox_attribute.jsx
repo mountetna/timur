@@ -4,39 +4,18 @@ import { connect } from 'react-redux';
 
 import { reviseDocument } from '../../actions/magma_actions';
 
-class CheckboxAttribute extends React.Component{
-  revise(e) {
-    let { document, template, attribute, reviseDocument } = this.props;
+const CheckboxAttribute = ({ mode, value, revised_value,
+  document, template, attribute, reviseDocument }) => {
+  if (mode != 'edit') return <div className='attribute'> { value ? 'yes' : 'no' } </div>;
 
-    reviseDocument(
-      document,
-      template,
-      attribute,
-      e.target.checked ? true : false
-    );
-  }
-
-  renderEdit(){
-    let { revision } = this.props;
-    let input_props = {
-      type:"checkbox",
-      className:"text_box",
-      onChange: this.revise.bind(this),
-      defaultChecked: revision
-    };
-
-    return(
-      <div className="value">
-        <input {...input_props} />
-      </div>
-    );
-  }
-
-  render(){
-    let { mode, value } = this.props;
-    if (mode == "edit") return this.renderEdit();
-    return <div className="value"> { value ? "yes" : "no" } </div>
-  }
+  return(
+    <div className='attribute'>
+      <input type='checkbox'
+        className='text_box'
+        onChange={ e => reviseDocument(document, template, attribute, !!e.target.checked) }
+        defaultChecked={ revised_value } />
+    </div>
+  );
 }
 
 export default connect(

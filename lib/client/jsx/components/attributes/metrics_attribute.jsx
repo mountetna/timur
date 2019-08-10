@@ -260,7 +260,7 @@ export class MetricsAttribute extends React.Component{
     };
 
     return(
-      <div className='value'>
+      <div className='attribute'>
 
         <CategoryControl {...category_props} />
         <div className='metrics_view'>

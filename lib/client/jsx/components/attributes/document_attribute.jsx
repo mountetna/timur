@@ -1,54 +1,30 @@
 // Framework libraries.
 import * as React from 'react';
-
 import { connect } from 'react-redux';
+
 import { reviseDocument } from '../../actions/magma_actions';
 
-class DocumentAttribute extends React.Component{
-  revise(e) {
-    let { document, template, attribute, reviseDocument } = this.props;
+const DocumentAttribute = ({ mode, value,
+  document, template, attribute, reviseDocument }) => {
+  if (mode != "edit") return(
+    <div className='attribute'>
+      {
+        value
+          ? <a href={ value.url } > { value.path } </a>
+          : <div className="document_empty"> No file.  </div>
+      }
+    </div>
+  );
 
-    reviseDocument(
-      document,
-      template,
-      attribute,
-      e.target.files[0]
-    )
-  }
-  renderEdit(){
-    let input_props = {
-      onChange: this.revise.bind(this),
-      type:"file"
-    };
-
-    return(
-      <div className="value">
-        <input {...input_props}/>
-      </div>
-    )
-  }
-
-  render(){
-    let { mode, value } = this.props;
-
-    if (mode == "edit") return this.renderEdit();
-
-    if (value){
-      return(
-        <div className="value">
-          <a href={ value.url } > { value.path } </a>
-        </div>
-      );
-    }
-
-    return(
-      <div className="value">
-        <div className="document_empty">
-          No file.
-        </div>
-      </div>
-    );
-  }
+  return(
+    <div className='attribute'>
+      <input
+        type='file'
+        onChange={ e => reviseDocument(
+          document, template, attribute, e.target.files[0]
+        ) } />
+    </div>
+  )
 }
 
 export default connect(
