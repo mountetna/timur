@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { reviseDocument } from '../../actions/magma_actions';
-import SelectInput from '../inputs/select_input';
+import Dropdown from '../inputs/dropdown';
 
 class SelectAttribute extends React.Component{
   revise(value) {
@@ -17,28 +17,27 @@ class SelectAttribute extends React.Component{
     )
   }
 
-  renderEdit(){
-    let { attribute, value } = this.props;
-    let input_props = {
-      className:"selection",
-      onChange: this.revise.bind(this),
-      defaultValue: value,
-      showNone:"disabled",
-      values: attribute.options
-    }
+  render(){
+    let { attribute, mode, value, revision } = this.props;
+
+    if (mode != 'edit') return <div className="value">{ value }</div>;
+
+    let { options } = attribute;
+
+    let selected = options.indexOf(revision);
 
     return(
       <div className="value">
-
-        <SelectInput {...input_props} />
+        <Dropdown
+          default_text='Select option'
+          list={options}
+          onSelect={index => {
+            this.revise(options[index])
+          }}
+          selected_index={selected}
+        />
       </div>
     )
-  }
-
-  render(){
-    let { mode, value } = this.props;
-    if (mode == "edit") return this.renderEdit();
-    return <div className="value">{ value }</div>;
   }
 }
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import FontAwesome from 'react-fontawesome';
-import WithBounds from './with_bounds';
+import WithBounds from '../with_bounds';
 
 const offScreen = (bounds) => {
   return bounds.top + 215 > document.documentElement.clientHeight + window.scrollY;
