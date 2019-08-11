@@ -12,10 +12,12 @@ const MarkdownAttribute = ({ value, revised_value, mode,
     if (!value) return <div className='attribute' />;
 
     return <div
-      className='attribute'
+      className='attribute'>
+      <div className='markdown'
       dangerouslySetInnerHTML={
         {__html: markdown(value) }
-      }/>;
+      }/>
+    </div>;
   }
 
   return(

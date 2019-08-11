@@ -10,13 +10,13 @@
   #tab {
     &.overview {
       .pane {
-        .attributes { 
-          .attribute {
+        .attributes {
+          .attribute_row {
             &:first-of-type {
-              .name { 
-                display: none; 
+              .attribute_name {
+                display: none;
               }
-              .value {
+              .attribute_value {
                   background-color: transparent;
                   padding: 20px 0px;
                   margin: 0px;
@@ -31,10 +31,10 @@
     .pane {
       .attributes {
         font-family: $body_font;
-        .attribute {
+        .attribute_row {
           padding-left: 50px;
           display: block;
-          .name {
+          .attribute_name {
             font-family: $body_font;
             display: block;
             border: none;
@@ -42,8 +42,10 @@
             margin-top: 10px;
             text-align: unset;
           }
-          .value {
-            font-family: $body_font;
+          .attribute_value {
+            .attribute {
+              font-family: $body_font;
+            }
             display: block;
             width: auto;
             border: none;
