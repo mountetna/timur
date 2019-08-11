@@ -26,7 +26,7 @@ class Plot < Sequel::Model
 
   EDITABLE_ATTRIBUTES = [
     :script, :access, :name, :plot_type,
-    :configuration, :access
+    :description, :configuration, :access
   ]
 
   def update_allowed(params)
@@ -39,7 +39,7 @@ class Plot < Sequel::Model
 
 
   def to_hash
-    [ :id, :name, :access, :configuration, :created_at,
+    [ :id, :name, :access, :description, :configuration, :created_at,
       :plot_type, :project, :script ].map do |key|
       [ key, self[key] ]
     end.to_h.merge(
