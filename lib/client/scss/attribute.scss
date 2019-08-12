@@ -13,6 +13,16 @@
     }
   }
 
+  .filter {
+    border: none;
+    border-bottom: 1px solid $input_border_color;
+    &:focus {
+      border-bottom: 1px solid forestgreen;
+    }
+    margin: 0px 10px;
+    width: 300px;
+  }
+
   .collection_item, .list_item {
     &:not(:last-child) {
       border-bottom: $thin_rule;
