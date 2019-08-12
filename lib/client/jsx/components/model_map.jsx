@@ -47,7 +47,7 @@ class ModelAttribute extends Component {
   render() {
     let { att_name, template } = this.props
     let attribute = template.attributes[att_name]
-    return <div className="attribute" key={ att_name }>
+    return <div className="map_attribute" key={ att_name }>
       <span>{att_name}</span>
       <span className="type"> ({this.type()}) </span>
       { attribute.desc ?

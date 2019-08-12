@@ -84,10 +84,13 @@
       .attributes {
         display: flex;
         flex-direction: column;
-        .attribute {
+        padding-right: 5px;
+        .attribute_row {
           display: flex;
-          @include default_attribute;
-          .name {
+          .attribute_name {
+            &.revised {
+              background-color: pink;
+            }
             border-bottom: $thin_rule;
             border-right: 1px solid forestgreen;
             display: inline-block;
@@ -97,10 +100,11 @@
             font-family: $body_font;
             color: darkblue;
           }
-          > .value {
+          .attribute_value {
             border-bottom: $thin_rule;
             display: inline-block;
             padding-left: 9px;
+            padding-bottom: 3px;
             padding-top: 3px;
             box-sizing: border-box;
             flex: 1;

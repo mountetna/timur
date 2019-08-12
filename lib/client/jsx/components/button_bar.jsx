@@ -47,20 +47,21 @@ export const buttonsWithCallbacks = (types, callbacks) => types.map(
   }
 ).filter(button => button);
 
-const ButtonBar =({ className, buttons }) =>
-  <div className={className}>
-    {buttons.map(button => <BarButton key={button.type} {...button}/>)}
-  </div>;
-
-export default ButtonBar;
 /*
  * A single button, which displays a text 'label', a Font Awesome 'icon' and
  * responds to 'click'.
  */
 const BarButton = ({type,click})=>{
   let { label, icon } = BUTTONS[type];
-  return <i onClick={click}
+  return <i onClick={(click instanceof Function) ? click : null }
     title={label}
     className={`${label} ${icon}`}
     aria-hidden='true'/>
 };
+
+const ButtonBar =({ className, buttons }) =>
+  <div className={className}>
+    {buttons.map(button => <BarButton key={button.type} {...button}/>)}
+  </div>;
+
+export default ButtonBar;

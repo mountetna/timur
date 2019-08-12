@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import {Provider} from 'react-redux';
-import TimurRouter from './timur_router';
+import TimurUI from './timur_ui';
 import {timurStore} from './timur_store';
 import {addTokenUser} from './actions/user_actions'
 import * as Cookies from './utils/cookies';
@@ -32,10 +32,10 @@ class TimurApplication{
   createUI({environment}, container_id) {
     ReactDOM.render(
       <Provider store={this.store}>
-        <TimurRouter
+        <TimurUI
           environment={environment}
           path={ decodeURI(window.location.pathname) }>
-        </TimurRouter>
+        </TimurUI>
       </Provider>,
       document.getElementById(container_id)
     );

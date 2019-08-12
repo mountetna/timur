@@ -15,12 +15,9 @@ export default class TableAttribute extends React.Component {
 
     if (!value || !value.length) return <div className='value'>No data</div>;
 
-    return <div className="value">
+    return <div className='attribute'>
       <input placeholder='Filter query' className='filter' type='text' onChange={
         e => this.setState({ current_page: 0, filter: e.target.value })
-      }/>
-      <input className='export' type='button' value={'\u21af TSV'} onClick={
-        () => requestTSV(model_name, record_names)
       }/>
       <ModelViewer
         page_size={ 10 }

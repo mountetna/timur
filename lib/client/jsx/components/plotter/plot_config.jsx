@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Dropdown from '../dropdown';
+import Dropdown from '../inputs/dropdown';
 import PlotVariables from './plot_variables';
 
 const PlotConfig = ({ config: { variables: config_variables, label, series_types }, onChange, updateType, updateSeries, plot_series, variables: plot_variables }) =>

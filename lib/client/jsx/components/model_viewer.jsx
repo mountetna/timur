@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import TableViewer from './table_viewer';
 
 import { selectTemplate, selectDocuments, displayAttributes } from '../selectors/magma';
-import { requestTSV } from '../actions/magma_actions';
 import AttributeViewer from './attributes/attribute_viewer';
 
 const ModelViewer = ({ record_names, documents, template, attribute_names, page, pages, page_size, setPage }) => {
@@ -46,6 +45,5 @@ export default connect(
     let documents = selectDocuments( state, model_name, record_names, filter );
     let attribute_names = displayAttributes(template);
     return { template, documents, attribute_names };
-  },
-  { requestTSV }
+  }
 )(ModelViewer);

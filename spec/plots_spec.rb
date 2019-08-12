@@ -164,11 +164,12 @@ describe PlotsController do
     end
 
     it 'allows the owner to change the plot' do
-      update_document(:plot, @plot.id, { plot_type: 'heatmap' }, :viewer)
+      update_document(:plot, @plot.id, { plot_type: 'heatmap', description: 'A basic heatmap' }, :viewer)
       @plot.refresh
 
       expect(last_response.status).to eq(200)
       expect(@plot.plot_type).to eq('heatmap')
+      expect(@plot.description).to eq('A basic heatmap')
     end
 
     it 'allows admins to update public plots' do
