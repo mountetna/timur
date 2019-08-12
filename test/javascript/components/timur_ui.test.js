@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import TimurRouter from '../../../lib/client/jsx/timur_router';
+import TimurUI from '../../../lib/client/jsx/timur_ui';
 import { mockStore } from '../helpers';
 
 jest.mock('../../../lib/client/jsx/components/browser/browser',
@@ -17,7 +17,7 @@ jest.mock('../../../lib/client/jsx/components/messages',
   }
 );
 
-describe('TimurRouter', () => {
+describe('TimurUI', () => {
   it('displays the component for a matching route', () => {
     const store=mockStore({
       location: {
@@ -25,7 +25,7 @@ describe('TimurRouter', () => {
       }
     });
 
-    let component = mount(<TimurRouter store={store}/>);
+    let component = mount(<TimurUI store={store}/>);
 
     let p = component.find('mock-browser').first();
     expect(p.prop('project_name')).toEqual('labors');
@@ -34,7 +34,7 @@ describe('TimurRouter', () => {
   });
 
   it('can deal with encoded slashes params', () => {
-    let component = mount(<TimurRouter store={
+    let component = mount(<TimurUI store={
       mockStore({
         location: {
           path: '/labors/browse/monster/Nemean Lion%2FLioness'
@@ -55,7 +55,7 @@ describe('TimurRouter', () => {
     });
 
     let component = mount(
-      <TimurRouter store={store}/>
+      <TimurUI store={store}/>
     );
 
     let p = component.find('mock-browser').first();
@@ -73,7 +73,7 @@ describe('TimurRouter', () => {
     });
 
     let component = mount(
-      <TimurRouter store={store}/>
+      <TimurUI store={store}/>
     );
     expect(store.getActions()).toEqual([
       {
