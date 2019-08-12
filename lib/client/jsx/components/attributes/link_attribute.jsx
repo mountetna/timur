@@ -18,10 +18,8 @@ const LinkAttribute = ({ mode, value, revised_value,
   if (revised_value && revised_value == value) {
     return(
       <div className='attribute'>
-        <span
-          className='delete_link'
-          onClick={ e => reviseDocument(document, template, attribute, null) }
-        >
+        <span className='delete_link'
+          onClick={ e => reviseDocument(document, template, attribute, null) }>
           {revised_value}
         </span>
       </div>
@@ -30,8 +28,7 @@ const LinkAttribute = ({ mode, value, revised_value,
 
   return(
     <div className='attribute'>
-      <SlowTextInput
-        className='link_text'
+      <SlowTextInput className='link_text'
         waitTime={500}
         onChange={ v => reviseDocument(document, template, attribute, v) }
         placeholder='New or existing ID' />

@@ -11,19 +11,15 @@ const MarkdownAttribute = ({ value, revised_value, mode,
   if (mode != 'edit') {
     if (!value) return <div className='attribute' />;
 
-    return <div
-      className='attribute'>
+    return <div className='attribute'>
       <div className='markdown'
-      dangerouslySetInnerHTML={
-        {__html: markdown(value) }
-      }/>
+        dangerouslySetInnerHTML={ {__html: markdown(value) } }/>
     </div>;
   }
 
   return(
     <div className='attribute'>
-      <textarea
-        className='text_box'
+      <textarea className='text_box'
         onChange={ (e) => reviseDocument(document, template, attribute, e.target.value) }
         defaultValue={ revised_value } />
     </div>

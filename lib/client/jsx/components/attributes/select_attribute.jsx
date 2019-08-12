@@ -12,22 +12,15 @@ const SelectAttribute = ({ mode, value, revised_value,
 
   let { options } = attribute;
 
-  let selected = options.indexOf(revised_value);
-
   return(
     <div className='attribute'>
       <Dropdown
         default_text='Select option'
         list={options}
-        onSelect={index =>
-          reviseDocument(
-            document,
-            template,
-            attribute,
-            options[index]
-          )
+        onSelect={
+          i => reviseDocument(document, template, attribute, options[i])
         }
-        selected_index={selected}
+        selected_index={ options.indexOf(revised_value) }
       />
     </div>
   )
