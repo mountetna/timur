@@ -11,9 +11,9 @@ export default class TableAttribute extends React.Component {
     let { mode, attribute, value } = this.props;
     let { current_page, filter } = this.state;
 
-    if (mode != 'browse') return <div className="value"></div>;
+    if (mode != 'browse') return <div className='attribute'/>;
 
-    if (!value || !value.length) return <div className='value'>No data</div>;
+    if (!value || !value.length) return <div className='attribute'>No data</div>;
 
     return <div className='attribute'>
       <input placeholder='Filter query' className='filter' type='text' onChange={
