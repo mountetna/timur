@@ -6,7 +6,7 @@ module Archimedes
     def from_row_query(row_query, column_queries)
       row_query.concat(Vector.new([[ nil, '::all'], [ nil, column_queries ]]))
     end
-   
+
     def initialize *args
       super
       query, @opts, opts2 = @args
@@ -60,7 +60,9 @@ module Archimedes
 
     def rows
       answer.map do |(row_name, row)|
-        Vector.new(col_names.zip(row.map{|l| l.is_a?(Numeric) ? l.to_f : l}))
+        Vector.new(col_names.zip(
+          row.map{|l| l.is_a?(Numeric) ? l.to_f : l}.flatten(1)
+        ))
       end
     end
 
@@ -69,19 +71,27 @@ module Archimedes
     end
 
     def col_names
-      @column_queries.to_labels
+      @col_names ||= begin
+        _, column_formats = format
+        @column_queries.to_labels.map.with_index do |label, i|
+          column_formats[i].is_a?(Array) ? column_formats[i][1] : label
+        end.flatten
+      end
+    end
+
+    def response
+      @response ||= JSON.parse(
+        client.query(@token, @project_name, @query).body,
+        symbolize_names: true
+      )
     end
 
     def answer
-      @answer ||= 
-        begin
-          response = client.query(
-            @token, @project_name,
-            @query
-          )
-          json = JSON.parse(response.body, symbolize_names: true)
-          json[:answer]
-        end
+      response[:answer]
+    end
+
+    def format
+      response[:format]
     end
 
     def client
