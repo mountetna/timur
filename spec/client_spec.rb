@@ -31,7 +31,7 @@ describe "View Client" do
       get("/labors")
 
       expect(last_response.status).to eq(403)
-      expect(last_response.body).to eq('You are forbidden from performing this action.')
+      expect(json_body[:error]).to eq('You are forbidden from performing this action.')
     end
   end
 end

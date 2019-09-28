@@ -16,12 +16,14 @@ require 'rack/test'
 require_relative '../lib/server'
 require_relative '../lib/timur'
 
+Timur.instance.configure(YAML.load(File.read('config.yml')))
+
 OUTER_APP = Rack::Builder.new do
   use Etna::ParseBody
   use Etna::SymbolizeParams
-
   use Etna::TestAuth
-  run Timur::Server.new(YAML.load(File.read('config.yml')))
+  use Etna::DescribeRoutes
+  run Timur::Server.new
 end
 Magma.instance.configure(Timur.instance.config(:magma))
 

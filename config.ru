@@ -7,8 +7,11 @@ Bundler.require(:default)
 require_relative 'lib/timur'
 require_relative 'lib/server'
 
+Timur.instance.configure(YAML.load(File.read('config.yml')))
+
 use Etna::ParseBody
 use Etna::SymbolizeParams
 use Etna::Auth
+use Etna::DescribeRoutes
 
-run Timur::Server.new(YAML.load(File.read('config.yml')))
+run Timur::Server.new
