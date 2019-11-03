@@ -46,7 +46,7 @@ class Timur
       end
     end
 
-    def initialize(config)
+    def initialize
       super
       application.setup_db
       application.setup_magma

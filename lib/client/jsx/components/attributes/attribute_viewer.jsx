@@ -8,6 +8,7 @@ import DocumentAttribute from './document_attribute';
 import CheckboxAttribute from './checkbox_attribute';
 import DateTimeAttribute from './date_time_attribute';
 import TableAttribute from './table_attribute';
+import MatrixAttribute from './matrix_attribute';
 import LinkAttribute from './link_attribute';
 import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
@@ -61,6 +62,8 @@ export default class AttributeViewer extends React.Component{
         return <DocumentAttribute {...this.props} />;
       case 'Magma::ImageAttribute':
         return <ImageAttribute {...this.props} />;
+      case 'Magma::MatrixAttribute':
+        return <MatrixAttribute {...this.props} />;
 
       case 'Magma::Attribute':
         if(attribute.options) return <SelectAttribute {...this.props} />;
