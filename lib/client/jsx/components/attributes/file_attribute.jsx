@@ -1,0 +1,103 @@
+// Framework libraries.
+import * as React from 'react';
+import { connect } from 'react-redux';
+
+import { reviseDocument } from '../../actions/magma_actions';
+import ButtonBar from '../button_bar';
+import Icon from '../icon';
+
+const STUB = '::stub';
+const FILENAME_MATCH='[^<>:;,?"*\\|\\/\\x00-\\x1f]+';
+const METIS_PATH_MATCH = (path) => new RegExp(
+  '\\A' + 
+  // project_name
+  '\\w+/' +
+  // bucket_name
+  '\\w+/' +
+  // folder path
+  `(${FILENAME_MATCH}/)*` +
+  // file name
+  FILENAME_MATCH +
+  '\\z'
+).test(path);
+
+const FileValue = ({value}) =>
+  !value ? <span className="file-missing"> No file  </span>
+    : value instanceof File ? <span className='file-upload'> { value.name } ({value.type}) </span>
+    : value == STUB || value.path == STUB ? <span className="file-blank"> Blank file  </span>
+    : <a href={ value.url } > { value.path } </a>;
+
+class FileAttribute extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { metis: false }
+  }
+
+  render() {
+    let { mode, value, revised_value, document, template, attribute,
+      reviseDocument } = this.props;
+    let { metis } = this.state;
+
+    if (mode != "edit") return(
+      <div className='attribute file'>
+        <FileValue value={value}/>
+      </div>
+    );
+
+    let buttons = [
+      { type: 'upload', click: () => this.input.click(), title: 'Upload a file from your computer' },
+      { type: 'cloud', click: () => this.setState({ metis: true }), title: 'Link a file from Metis' },
+      { type: 'stub', click: () => reviseDocument(document, template, attribute, '::stub'), title: 'Mark this file as blank' },
+      { type: 'remove', click: () => reviseDocument(document, template, attribute, null), title: 'Remove this file link' }
+    ];
+
+    return(
+      <div className='attribute file'>
+        <input type='file'
+          style={{ display: 'none' }}
+          ref={ input => this.input = input }
+          onChange={ e => reviseDocument(
+            document, template, attribute, e.target.files[0]
+          ) } />
+        { metis && this.metisSelector() }
+        <ButtonBar className='file-buttons' buttons={buttons} />
+        <FileValue value={revised_value}/>
+      </div>
+    )
+  }
+
+  metisSelector() {
+    return <div className='file-metis-select'>
+      <input type='text'
+        ref={ metis_file => this.metis_file = metis_file }
+        placeholder='Enter Metis path'/>
+      <ButtonBar className='file-buttons' buttons={[
+        { type: 'check', click: () => this.selectMetisFile() }
+      ]} />
+    </div>;
+  }
+
+  selectMetisFile() {
+    let { document, template, attribute, reviseDocument } = this.props;
+    let { value } = this.metis_file;
+
+    let error = validMetisPath(value);
+
+    if (error) {
+      this.setState({error: 'Invalid metis path'});
+      return;
+    } else {
+      this.setState({error: false, metis: false})
+    }
+
+    this.metis_file.value = '';
+
+    reviseDocument(document, template, attribute, value);
+  }
+}
+
+
+export default connect(
+  null,
+  { reviseDocument }
+)(FileAttribute);

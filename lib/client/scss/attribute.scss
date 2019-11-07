@@ -82,4 +82,47 @@
   .export {
     @include green_button;
   }
+
+  &.file {
+    display: flex;
+    .file-blank {
+      color: gray;
+    }
+
+    .file-missing {
+      color: red;
+    }
+
+    .file-buttons {
+      display: flex;
+      padding-right: 5px;
+      width: 100px;
+      justify-content: space-between;
+      font-size: 0.5em;
+      color: gray;
+      .icon {
+        cursor: pointer;
+      }
+      .upload {
+        &:hover {
+          color: #eab;
+        }
+      }
+      .cloud {
+        &:hover {
+          color: #15788f;
+        }
+      }
+      .stub {
+        &:hover {
+          color: #ccc;
+        }
+      }
+      .remove {
+        &:hover {
+          color: red;
+        }
+      }
+    }
+  }
 }
