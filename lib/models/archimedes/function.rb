@@ -41,6 +41,7 @@ module Archimedes
 end
 
 require_relative 'functions/rtemis'
+require_relative 'functions/pythia'
 require_relative 'functions/question'
 require_relative 'functions/spread'
 require_relative 'functions/table'
