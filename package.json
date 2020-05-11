@@ -66,6 +66,10 @@
   "scripts": {
     "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./lib/client/jsx/** ",
     "lintfile": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ",
-    "test": "jest"
+    "test": "jest",
+    "build": "./node_modules/webpack/bin/webpack.js --env.NODE_ENV=production",
+    "build-dev": "./node_modules/webpack/bin/webpack.js --env.NODE_ENV=development",
+    "webpack": "./node_modules/webpack/bin/webpack.js --env.NODE_ENV=production --watch",
+    "webpack-dev": "./node_modules/webpack/bin/webpack.js --env.NODE_ENV=development --watch"
   }
 }
