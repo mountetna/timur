@@ -61,7 +61,10 @@
     "collectCoverageFrom": [
       "lib/client/jsx/**/*.js?(x)"
     ],
-    "setupTestFrameworkScriptFile": "./test/setup.js"
+    "setupTestFrameworkScriptFile": "./test/setup.js",
+    "setupFiles": [
+      "raf/polyfill"
+    ]
   },
   "scripts": {
     "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./lib/client/jsx/** ",
