@@ -93,12 +93,12 @@ class LayoutNode {
     let template = this.template
     this.links = Object.keys(template.attributes).map((att_name) => {
       let attribute = template.attributes[att_name]
-      if (!attribute.model_name) return null
-      let other = this.layout.nodes[ attribute.model_name ]
+      if (!attribute.link_model_name) return null
+      let other = this.layout.nodes[ attribute.link_model_name ]
       if (!other) return null
 
       // the link exists if - you are the other model's parents
-      if (!(template.parent == attribute.model_name
+      if (!(template.parent == attribute.link_model_name
         || other.template.parent == this.model_name 
         || (!template.parent && other.template.parent)
         || (!other.template.parent && template.parent))) return null
@@ -109,7 +109,7 @@ class LayoutNode {
   unplacedLinks() {
     // there should only be a single placed link. Return
     // links in circular order after that
-    let index = this.links.findIndex(link => link.other.model_name == this.parent_name)
+    let index = this.links.findIndex(link => link.other.link_model_name == this.parent_name)
     return Array(this.links.length-(index >= 0 ? 1 : 0)).fill().map((_,i) => this.links[(index + i + 1)%this.links.length])
   }
 

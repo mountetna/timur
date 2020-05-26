@@ -11,7 +11,7 @@ const LinkAttribute = ({ mode, value, revised_value,
   document, template, attribute, reviseDocument }) => {
   if (mode != 'edit') return(
     <div className='attribute'>
-      { value && <MagmaLink link={value} model={ attribute.model_name } /> }
+      { value && <MagmaLink link={value} model={ attribute.link_model_name } /> }
     </div>
   );
 
