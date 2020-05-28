@@ -14,7 +14,7 @@ const CollectionAttribute = ({ mode, value, revised_value,
         {
           (value || []).map( link =>
             <div key={ link } className='collection_item'>
-              <MagmaLink link={ link } model={ attribute.model_name }/>
+              <MagmaLink link={ link } model={ attribute.link_model_name }/>
             </div>
           )
         }
