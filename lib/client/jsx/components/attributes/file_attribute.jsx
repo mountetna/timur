@@ -6,19 +6,18 @@ import { reviseDocument } from '../../actions/magma_actions';
 import ButtonBar from '../button_bar';
 import Icon from '../icon';
 
-const STUB = '::stub';
+const STUB = '::blank';
 const FILENAME_MATCH='[^<>:;,?"*\\|\\/\\x00-\\x1f]+';
+
+// metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
 const METIS_PATH_MATCH = (path) => new RegExp(
-  '\\A' + 
+  '^metis:\/\/' +
   // project_name
-  '\\w+/' +
+  '([^\/]*?)\/' +
   // bucket_name
-  '\\w+/' +
-  // folder path
-  `(${FILENAME_MATCH}/)*` +
-  // file name
-  FILENAME_MATCH +
-  '\\z'
+  '([^\/]*?)\/' +
+  // folder path + filename
+  '(.*)$'
 ).test(path);
 
 const FileValue = ({value}) =>
@@ -67,6 +66,7 @@ class FileAttribute extends React.Component {
   }
 
   metisSelector() {
+    // TODO: would be nice to make this like a folder / file search
     return <div className='file-metis-select'>
       <input type='text'
         ref={ metis_file => this.metis_file = metis_file }
@@ -81,7 +81,7 @@ class FileAttribute extends React.Component {
     let { document, template, attribute, reviseDocument } = this.props;
     let { value } = this.metis_file;
 
-    let error = validMetisPath(value);
+    let error = !METIS_PATH_MATCH(value);
 
     if (error) {
       this.setState({error: 'Invalid metis path'});
