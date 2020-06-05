@@ -29,7 +29,7 @@ const FileValue = ({value}) =>
 class FileAttribute extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { metis: false }
+    this.state = { metis: false, error: false }
   }
 
   render() {
@@ -67,6 +67,8 @@ class FileAttribute extends React.Component {
 
   metisSelector() {
     // TODO: would be nice to make this like a folder / file search
+    let { error } = this.state;
+
     return <div className='file-metis-select'>
       <input type='text'
         ref={ metis_file => this.metis_file = metis_file }
@@ -74,6 +76,9 @@ class FileAttribute extends React.Component {
       <ButtonBar className='file-buttons' buttons={[
         { type: 'check', click: () => this.selectMetisFile() }
       ]} />
+      { error
+          ? <p className='file-metis-error'>Invalid Metis path</p>
+          : '' }
     </div>;
   }
 
@@ -81,10 +86,8 @@ class FileAttribute extends React.Component {
     let { document, template, attribute, reviseDocument } = this.props;
     let { value } = this.metis_file;
 
-    let error = !METIS_PATH_MATCH(value);
-
-    if (error) {
-      this.setState({error: 'Invalid metis path'});
+    if (!METIS_PATH_MATCH(value)) {
+      this.setState({error: true});
       return;
     } else {
       this.setState({error: false, metis: false})

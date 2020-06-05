@@ -5,7 +5,7 @@ import { renderer } from 'react-test-renderer';
 import FileAttribute from '../../../../lib/client/jsx/components/attributes/file_attribute';
 import ButtonBar from '../../../../lib/client/jsx/components/button_bar';
 
-import { reviseDocument } from '../../../../lib/client/jsx/actions/magma_actions';
+import * as magmaActions from '../../../../lib/client/jsx/actions/magma_actions';
 
 describe('FileAttribute', () => {
   const store=mockStore({
@@ -129,30 +129,58 @@ describe('FileAttribute', () => {
     expect(component.text().trim()).toEqual("conquest.txt (text/plain)");
   });
 
-  it('calls reviseDocument when user provides a valid Metis path', () => {
+  it('accepts a valid Metis path', () => {
     const component = mount(
       <FileAttribute
         model_name='conquests'
         record_name='Persia'
-        template={null}
+        template={{name: 'Conquests', identifier: 1}}
         value={null}
-        mode="view"
-        attribute="gravatar"
-        document="Timur"
+        mode="edit"
+        attribute={{name: 'ExpansionPlans'}}
+        document={{'1': 'Timur'}}
         revised_value=""
         store={store} />
     );
-    component.state.metis = true;
-    expect(component.state.error).toBeUndefined();
-    component.metis_file = {
-      value: 'metis://project/bucket/file_name.txt'
-    };
 
-    component.selectMetisFile();
+    const cloudButton = component.find('.cloud').first();
+    cloudButton.simulate('click');
 
-    expect(reviseDocument).toHaveBeenCalled();
+    const metisPathInput = component.find('.file-metis-select').find('input');
+    metisPathInput.instance().value = 'metis://project/bucket/file_name.txt';
 
-    expect(component.state.error).toEqual(false);
-    expect(component.state.metis).toEqual(false);
+    const checkButton = component.find('.check').first();
+    checkButton.simulate('click');
+
+    expect(component.find('file-metis-error').exists()).toBeFalsy();
+  });
+
+  it('shows an error message when given an invalid Metis path', () => {
+    const component = mount(
+      <FileAttribute
+        model_name='conquests'
+        record_name='Persia'
+        template={{name: 'Conquests', identifier: 1}}
+        value={null}
+        mode="edit"
+        attribute={{name: 'ExpansionPlans'}}
+        document={{'1': 'Timur'}}
+        revised_value=""
+        store={store} />
+    );
+
+    const cloudButton = component.find('.cloud').first();
+    cloudButton.simulate('click');
+
+    const metisPathInput = component.find('.file-metis-select').find('input');
+    metisPathInput.instance().value = 'project/bucket/file_name.txt';
+
+    const checkButton = component.find('.check').first();
+    checkButton.simulate('click');
+
+    component.instance().forceUpdate();
+    component.update();
+
+    expect(component.find('.file-metis-error').exists()).toBeTruthy();
   });
 })
