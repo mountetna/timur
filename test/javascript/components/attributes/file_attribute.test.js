@@ -8,10 +8,14 @@ import ButtonBar from '../../../../lib/client/jsx/components/button_bar';
 import * as magmaActions from '../../../../lib/client/jsx/actions/magma_actions';
 
 describe('FileAttribute', () => {
-  const store=mockStore({
-    location: {
-      path: '/labors/browse/monster/Nemean Lion'
-    }
+  let store;
+
+  beforeEach(() => {
+    store = mockStore({
+      location: {
+        path: '/labors/browse/monster/Nemean Lion'
+      }
+    });
   });
 
   it('renders the button bar while editing', () => {
@@ -153,6 +157,16 @@ describe('FileAttribute', () => {
     checkButton.simulate('click');
 
     expect(component.find('file-metis-error').exists()).toBeFalsy();
+
+    const actions = store.getActions();
+    expect(actions).toEqual([{
+      type: 'REVISE_DOCUMENT',
+      model_name: 'Conquests',
+      record_name: 'Timur',
+      revision: {
+        ['ExpansionPlans']: 'metis://project/bucket/file_name.txt'
+      }
+    }])
   });
 
   it('shows an error message when given an invalid Metis path', () => {
@@ -177,9 +191,6 @@ describe('FileAttribute', () => {
 
     const checkButton = component.find('.check').first();
     checkButton.simulate('click');
-
-    component.instance().forceUpdate();
-    component.update();
 
     expect(component.find('.file-metis-error').exists()).toBeTruthy();
   });

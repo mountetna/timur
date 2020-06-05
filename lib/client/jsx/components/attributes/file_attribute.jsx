@@ -46,7 +46,7 @@ class FileAttribute extends React.Component {
     let buttons = [
       { type: 'upload', click: () => this.input.click(), title: 'Upload a file from your computer' },
       { type: 'cloud', click: () => this.setState({ metis: true }), title: 'Link a file from Metis' },
-      { type: 'stub', click: () => reviseDocument(document, template, attribute, '::stub'), title: 'Mark this file as blank' },
+      { type: 'stub', click: () => reviseDocument(document, template, attribute, STUB), title: 'Mark this file as blank' },
       { type: 'remove', click: () => reviseDocument(document, template, attribute, null), title: 'Remove this file link' }
     ];
 
