@@ -2,8 +2,9 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { mockStore } from '../../helpers';
 import { renderer } from 'react-test-renderer';
-import FileAttribute from '../../../../lib/client/jsx/components/attributes/file_attribute';
 import ButtonBar from '../../../../lib/client/jsx/components/button_bar';
+import { STUB } from '../../../../lib/client/jsx/components/attributes/file_attribute';
+import FileAttribute from '../../../../lib/client/jsx/components/attributes/file_attribute';
 
 import * as magmaActions from '../../../../lib/client/jsx/actions/magma_actions';
 
@@ -166,7 +167,7 @@ describe('FileAttribute', () => {
       revision: {
         ['ExpansionPlans']: 'metis://project/bucket/file_name.txt'
       }
-    }])
+    }]);
   });
 
   it('shows an error message when given an invalid Metis path', () => {
@@ -193,5 +194,64 @@ describe('FileAttribute', () => {
     checkButton.simulate('click');
 
     expect(component.find('.file-metis-error').exists()).toBeTruthy();
+
+    const actions = store.getActions();
+    expect(actions).toEqual([]);
+  });
+
+  it('dispatches an action to mark a file as blank', () => {
+    const component = mount(
+      <FileAttribute
+        model_name='conquests'
+        record_name='Persia'
+        template={{name: 'Conquests', identifier: 1}}
+        value={null}
+        mode="edit"
+        attribute={{name: 'ExpansionPlans'}}
+        document={{'1': 'Timur'}}
+        revised_value=""
+        store={store} />
+    );
+
+    const stubButton = component.find('.stub').first();
+    stubButton.simulate('click');
+
+    const actions = store.getActions();
+    expect(actions).toEqual([{
+      type: 'REVISE_DOCUMENT',
+      model_name: 'Conquests',
+      record_name: 'Timur',
+      revision: {
+        ['ExpansionPlans']: STUB
+      }
+    }]);
+  });
+
+  it('dispatches an action to remove a file', () => {
+    const component = mount(
+      <FileAttribute
+        model_name='conquests'
+        record_name='Persia'
+        template={{name: 'Conquests', identifier: 1}}
+        value={null}
+        mode="edit"
+        attribute={{name: 'ExpansionPlans'}}
+        document={{'1': 'Timur'}}
+        revised_value=""
+        store={store} />
+    );
+
+    const removeButton = component.find('.remove').first();
+    removeButton.simulate('click');
+
+    const actions = store.getActions();
+    expect(actions).toEqual([{
+      type: 'REVISE_DOCUMENT',
+      model_name: 'Conquests',
+      record_name: 'Timur',
+      revision: {
+        ['ExpansionPlans']: null
+      }
+    }]);
   });
 })

@@ -6,7 +6,7 @@ import { reviseDocument } from '../../actions/magma_actions';
 import ButtonBar from '../button_bar';
 import Icon from '../icon';
 
-const STUB = '::blank';
+export const STUB = '::blank';
 const FILENAME_MATCH='[^<>:;,?"*\\|\\/\\x00-\\x1f]+';
 
 // metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
