@@ -67,4 +67,48 @@ describe('async actions', () => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
+
+  it('posts simple update revisions to the magma /update endpoint', () => {
+    let revisions = {
+      monster: {
+        stats: {
+          path: '::temp'
+        }
+      }
+    };
+
+    const expectedBody = {
+      revisions: {
+        labors: {
+          monster: {
+            stats: {
+              path: '::temp'
+            }
+          }
+        }
+      }
+    }
+
+    stubUrl({
+      verb: 'post',
+      path: '/update',
+      request: expectedBody,
+      response: monsters,
+      host: TIMUR_CONFIG.magma_host
+    });
+
+    const store = mockStore({});
+
+    return store.dispatch(actions.sendRevisions(
+      'labors',
+      revisions,
+      () => {
+        // should call success function in this case
+        expect(true).toEqual(true);
+      },
+      () => {
+        fail('should not have called the error function')
+      }
+    ));
+  });
 });
