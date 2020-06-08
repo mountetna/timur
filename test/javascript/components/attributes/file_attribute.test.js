@@ -165,7 +165,7 @@ describe('FileAttribute', () => {
       model_name: 'Conquests',
       record_name: 'Timur',
       revision: {
-        ['ExpansionPlans']: 'metis://project/bucket/file_name.txt'
+        ['ExpansionPlans']: { path: 'metis://project/bucket/file_name.txt' }
       }
     }]);
   });
@@ -222,7 +222,7 @@ describe('FileAttribute', () => {
       model_name: 'Conquests',
       record_name: 'Timur',
       revision: {
-        ['ExpansionPlans']: STUB
+        ['ExpansionPlans']: { path: STUB }
       }
     }]);
   });
@@ -250,8 +250,12 @@ describe('FileAttribute', () => {
       model_name: 'Conquests',
       record_name: 'Timur',
       revision: {
-        ['ExpansionPlans']: null
+        ['ExpansionPlans']: { path: null }
       }
     }]);
   });
+
+  // TODO: test for dispatching action when file uploaded
+  //   * This has to talk to both Metis and Magma, so a little more
+  //      involved.
 })

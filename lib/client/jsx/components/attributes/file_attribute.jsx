@@ -44,10 +44,18 @@ class FileAttribute extends React.Component {
     );
 
     let buttons = [
-      { type: 'upload', click: () => this.input.click(), title: 'Upload a file from your computer' },
-      { type: 'cloud', click: () => this.setState({ metis: true }), title: 'Link a file from Metis' },
-      { type: 'stub', click: () => reviseDocument(document, template, attribute, STUB), title: 'Mark this file as blank' },
-      { type: 'remove', click: () => reviseDocument(document, template, attribute, null), title: 'Remove this file link' }
+      { type: 'upload',
+        click: () => this.input.click(),
+        title: 'Upload a file from your computer' },
+      { type: 'cloud',
+        click: () => this.setState({ metis: true }),
+        title: 'Link a file from Metis' },
+      { type: 'stub',
+        click: () => reviseDocument(document, template, attribute, this.formatFileRevision(STUB)),
+        title: 'Mark this file as blank' },
+      { type: 'remove',
+        click: () => reviseDocument(document, template, attribute, this.formatFileRevision(null)),
+        title: 'Remove this file link' }
     ];
 
     return(
@@ -56,7 +64,7 @@ class FileAttribute extends React.Component {
           style={{ display: 'none' }}
           ref={ input => this.input = input }
           onChange={ e => reviseDocument(
-            document, template, attribute, e.target.files[0]
+            document, template, attribute, this.formatFileRevision(e.target.files[0])
           ) } />
         { metis && this.metisSelector() }
         <ButtonBar className='file-buttons' buttons={buttons} />
@@ -95,7 +103,11 @@ class FileAttribute extends React.Component {
 
     this.metis_file.value = '';
 
-    reviseDocument(document, template, attribute, value);
+    reviseDocument(document, template, attribute, this.formatFileRevision(value));
+  }
+
+  formatFileRevision(value) {
+    return {path: value};
   }
 }
 
