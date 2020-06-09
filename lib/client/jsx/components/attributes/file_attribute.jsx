@@ -2,11 +2,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions';
+import {
+  reviseDocument,
+  getRevisionTempUrl,
+  fetchTempUrl
+} from '../../actions/magma_actions';
 import ButtonBar from '../button_bar';
 import Icon from '../icon';
 
 export const STUB = '::blank';
+export const TEMP = '::temp';
 const FILENAME_MATCH='[^<>:;,?"*\\|\\/\\x00-\\x1f]+';
 
 // metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
@@ -63,9 +68,7 @@ class FileAttribute extends React.Component {
         <input type='file'
           style={{ display: 'none' }}
           ref={ input => this.input = input }
-          onChange={ e => reviseDocument(
-            document, template, attribute, this.formatFileRevision(e.target.files[0])
-          ) } />
+          onChange={e => this.getTempUrl(e)} />
         { metis && this.metisSelector() }
         <ButtonBar className='file-buttons' buttons={buttons} />
         <FileValue value={revised_value}/>
@@ -109,10 +112,22 @@ class FileAttribute extends React.Component {
   formatFileRevision(value) {
     return {path: value};
   }
+
+  getTempUrl(e) {
+    e.preventDefault();
+    let { document, template, attribute, getRevisionTempUrl } = this.props;
+
+    getRevisionTempUrl(
+      document, template, attribute, this.formatFileRevision(TEMP)
+    ).then( res => {
+      console.log(res);
+      // Here upload file to Metis, then call reviseDocument
+    });
+  }
 }
 
 
 export default connect(
   null,
-  { reviseDocument }
+  { reviseDocument, getRevisionTempUrl }
 )(FileAttribute);
