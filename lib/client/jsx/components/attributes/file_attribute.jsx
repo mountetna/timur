@@ -85,7 +85,8 @@ class FileAttribute extends React.Component {
         ref={ metis_file => this.metis_file = metis_file }
         placeholder='Enter Metis path'/>
       <ButtonBar className='file-buttons' buttons={[
-        { type: 'check', click: () => this.selectMetisFile() }
+        { type: 'check', click: () => this.selectMetisFile() },
+        { type: 'cancel', click: () => this.setState({metis: false}) }
       ]} />
       { error
           ? <p className='file-metis-error'>Invalid Metis path</p>
