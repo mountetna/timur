@@ -4,11 +4,6 @@ import * as ReactRedux from 'react-redux';
 
 import FileAttribute from './file_attribute';
 
-import { reviseDocument } from '../../actions/magma_actions';
-
-// const ImageAttribute = ({ mode, value,
-//   document, template, attribute, reviseDocument }) => {
-
 const ImageAttribute = (props) => {
   // When we get thumbnails working, we can put this back into
   //   expose those.
@@ -21,19 +16,6 @@ const ImageAttribute = (props) => {
   // }
 
   return <FileAttribute {...props} />;
-  // return(
-  //   <div className='attribute'>
-  //     <input
-  //       type='file'
-  //       onChange={
-  //         e => reviseDocument(document, template, attribute, e.target.files[0])
-  //       }
-  //     />
-  //   </div>
-  // );
 };
 
-export default ReactRedux.connect(
-  null,
-  null // {reviseDocument}
-)(ImageAttribute);
+export default ReactRedux.connect(null, null)(ImageAttribute);
