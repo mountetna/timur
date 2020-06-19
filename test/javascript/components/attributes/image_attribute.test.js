@@ -4,11 +4,11 @@ import { mockStore } from '../../helpers';
 import renderer from 'react-test-renderer';
 import ButtonBar from '../../../../lib/client/jsx/components/button_bar';
 import { STUB } from '../../../../lib/client/jsx/components/attributes/file_attribute';
-import FileAttribute from '../../../../lib/client/jsx/components/attributes/file_attribute';
+import ImageAttribute from '../../../../lib/client/jsx/components/attributes/image_attribute';
 
 import * as magmaActions from '../../../../lib/client/jsx/actions/magma_actions';
 
-describe('FileAttribute', () => {
+describe('ImageAttribute', () => {
   let store;
 
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('FileAttribute', () => {
 
   it('renders the button bar while editing', () => {
     const component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={null}
@@ -39,7 +39,7 @@ describe('FileAttribute', () => {
 
     const tree = renderer
       .create(
-        <FileAttribute
+        <ImageAttribute
           model_name="conquests"
           record_name="Persia"
           template={null}
@@ -60,7 +60,7 @@ describe('FileAttribute', () => {
     const value = null;
 
     const component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={null}
@@ -78,7 +78,7 @@ describe('FileAttribute', () => {
 
     const tree = renderer
       .create(
-        <FileAttribute
+        <ImageAttribute
           model_name="conquests"
           record_name="Persia"
           template={null}
@@ -99,7 +99,7 @@ describe('FileAttribute', () => {
     let value = { path: '::blank' };
 
     let component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={null}
@@ -117,7 +117,7 @@ describe('FileAttribute', () => {
     value = '::blank';
 
     component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={null}
@@ -134,7 +134,7 @@ describe('FileAttribute', () => {
 
     const tree = renderer
       .create(
-        <FileAttribute
+        <ImageAttribute
           model_name="conquests"
           record_name="Persia"
           template={null}
@@ -155,7 +155,7 @@ describe('FileAttribute', () => {
     const value = null;
 
     const component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={null}
@@ -172,7 +172,7 @@ describe('FileAttribute', () => {
 
     const tree = renderer
       .create(
-        <FileAttribute
+        <ImageAttribute
           model_name="conquests"
           record_name="Persia"
           template={null}
@@ -197,7 +197,7 @@ describe('FileAttribute', () => {
     );
 
     const component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={null}
@@ -214,7 +214,7 @@ describe('FileAttribute', () => {
 
     const tree = renderer
       .create(
-        <FileAttribute
+        <ImageAttribute
           model_name="conquests"
           record_name="Persia"
           template={null}
@@ -233,7 +233,7 @@ describe('FileAttribute', () => {
 
   it('accepts a valid Metis path', () => {
     const component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={{ name: 'Conquests', identifier: 1 }}
@@ -272,7 +272,7 @@ describe('FileAttribute', () => {
 
   it('shows an error message when given an invalid Metis path', () => {
     const component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={{ name: 'Conquests', identifier: 1 }}
@@ -302,7 +302,7 @@ describe('FileAttribute', () => {
 
   it('dispatches an action to mark a file as blank', () => {
     const component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={{ name: 'Conquests', identifier: 1 }}
@@ -333,7 +333,7 @@ describe('FileAttribute', () => {
 
   it('dispatches an action to remove a file', () => {
     const component = mount(
-      <FileAttribute
+      <ImageAttribute
         model_name="conquests"
         record_name="Persia"
         template={{ name: 'Conquests', identifier: 1 }}
