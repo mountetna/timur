@@ -2,16 +2,17 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var webpack = require('webpack');
 
-module.exports = env => ({
-  context: path.resolve(__dirname, 'lib/client'),
+module.exports = (env) => ({
+  context: path.resolve(__dirname),
   resolve: {
-    extensions: [ '.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg' ],
+    extensions: ['.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg'],
     alias: {
       'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib'),
       'react-table': path.join(__dirname, 'node_modules/react-table')
-    }
+    },
+    symlinks: false
   },
-  entry: ['./jsx/timur.jsx', './scss/application.scss' ],
+  entry: ['./lib/client/jsx/timur.jsx', './lib/client/scss/application.scss'],
   output: {
     filename: 'public/js/timur.bundle.js',
     path: __dirname
@@ -20,28 +21,31 @@ module.exports = env => ({
     rules: [
       {
         loader: 'babel-loader',
+        include: [path.resolve(__dirname, 'node_modules/etna/')],
+        test: /\.jsx?$/,
+        query: {
+          presets: ['@babel/env', '@babel/react']
+        }
+      },
+      {
+        loader: 'babel-loader',
 
         // Skip any files outside of your project's `src` directory
-        include: [
-          path.resolve(__dirname, 'lib/client/jsx'),
-        ],
+        include: [path.resolve(__dirname, 'lib/client/jsx')],
 
         // Only run `.js` and `.jsx` files through Babel
         test: /\.jsx?$/,
 
         // Options to configure babel with
         query: {
-          presets: ['env', 'react'],
-          plugins: ['transform-object-rest-spread']
+          presets: ['@babel/env', '@babel/react']
         }
       },
 
       {
         test: /\.(jpe?g|png|svg)$/i,
 
-        include: [
-          path.resolve(__dirname, 'lib/client/img'),
-        ],
+        include: [path.resolve(__dirname, 'lib/client/img')],
 
         loader: 'file-loader',
 
@@ -61,14 +65,15 @@ module.exports = env => ({
     ]
   },
   plugins: [
-    new ExtractTextPlugin({ // define where to save the file
+    new ExtractTextPlugin({
+      // define where to save the file
       filename: 'public/css/timur.bundle.css',
-      allChunks: true,
+      allChunks: true
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(env.NODE_ENV),
+        NODE_ENV: JSON.stringify(env.NODE_ENV)
       }
     })
-  ],
+  ]
 });
