@@ -17,9 +17,9 @@ import exchanges from './reducers/exchanges_reducer';
 import predicates from './reducers/predicates_reducer';
 import location from './reducers/location_reducer';
 
-import * as uploadActions from 'etna/actions/upload_actions';
+import directory from './reducers/directory_reducer';
 
-import workDispatcher from 'etna/dispatchers/work-dispatcher';
+import workDispatcher from 'etna-js/dispatchers/work-dispatcher';
 
 export const timurStore = () => {
   let reducers = combineReducers({
@@ -34,7 +34,8 @@ export const timurStore = () => {
     consignments,
     exchanges,
     predicates,
-    location
+    location,
+    directory
   });
 
   let middlewares = [thunk, workDispatcher()];
@@ -42,11 +43,5 @@ export const timurStore = () => {
   if (process.env.NODE_ENV == 'development')
     middlewares.push(createLogger({ collapsed: true }));
 
-  return createStore(
-    reducers,
-    {
-      ...uploadActions
-    },
-    applyMiddleware(...middlewares)
-  );
+  return createStore(reducers, applyMiddleware(...middlewares));
 };
