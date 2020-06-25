@@ -1,10 +1,10 @@
 /*
  * The Browser presents views of a record/model. The views are organized into
  * tabs/panes.
- * 
+ *
  * The Browser should request data for a record/model/tab - this comes with an
  * associated payload and any extra data required to draw this tab.
- * 
+ *
  * The Browser has state in the form of mode (edit or not) and tab (which one is
  * shown).
  */
@@ -15,8 +15,9 @@ import { connect } from 'react-redux';
 
 // Class imports.
 import Header from '../header';
-import {TabBarContainer as TabBar} from '../tab_bar';
+import { TabBarContainer as TabBar } from '../tab_bar';
 import BrowserTab from './browser_tab';
+import UploadDashboard from './upload_dashboard';
 
 // Module imports.
 import { requestManifests } from '../../actions/manifest_actions';
@@ -24,7 +25,10 @@ import { requestPlots } from '../../actions/plot_actions';
 import { setLocation } from '../../actions/location_actions';
 import { requestView } from '../../actions/view_actions';
 import {
-  sendRevisions, discardRevision, requestDocuments, requestAnswer
+  sendRevisions,
+  discardRevision,
+  requestDocuments,
+  requestAnswer
 } from '../../actions/magma_actions';
 import {
   interleaveAttributes,
@@ -33,18 +37,20 @@ import {
   selectView
 } from '../../selectors/tab_selector';
 import {
-  selectTemplate, selectDocument, selectRevision
+  selectTemplate,
+  selectDocument,
+  selectRevision
 } from '../../selectors/magma';
 import { selectUserProjectRole } from '../../selectors/user_selector';
 
-class Browser extends React.Component{
-  constructor(props){
+class Browser extends React.Component {
+  constructor(props) {
     super(props);
 
     this.state = { mode: 'loading' };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     let { requestManifests, requestPlots } = this.props;
 
     requestManifests();
@@ -54,30 +60,33 @@ class Browser extends React.Component{
 
   requestData() {
     let {
-      model_name, record_name, view, tab_name,
-      setLocation, requestAnswer, requestView
+      model_name,
+      record_name,
+      view,
+      tab_name,
+      setLocation,
+      requestAnswer,
+      requestView
     } = this.props;
 
     if (!model_name && !record_name) {
       // ask magma for the project name
       requestAnswer(
-        { query: [ 'project', '::first', '::identifier' ] },
+        { query: ['project', '::first', '::identifier'] },
 
         // redirect there
-        ({answer}) => setLocation(
-          Routes.browse_model_path(
-            TIMUR_CONFIG.project_name,
-            'project',
-            answer
+        ({ answer }) =>
+          setLocation(
+            Routes.browse_model_path(
+              TIMUR_CONFIG.project_name,
+              'project',
+              answer
+            )
           )
-        )
       );
     } else if (!view) {
       // we are told the model and record name, get the view
-      requestView(
-        model_name,
-        this.selectOrShowTab.bind(this)
-      )
+      requestView(model_name, this.selectOrShowTab.bind(this));
     } else if (!tab_name) {
       this.selectDefaultTab(view);
     } else {
@@ -94,10 +103,8 @@ class Browser extends React.Component{
 
   selectOrShowTab(view) {
     let { tab_name } = this.props;
-    if (tab_name)
-      this.showTab();
-    else
-      this.selectDefaultTab(view);
+    if (tab_name) this.showTab();
+    else this.selectDefaultTab(view);
   }
 
   selectDefaultTab(view) {
@@ -106,26 +113,38 @@ class Browser extends React.Component{
 
   selectTab(tab_name) {
     let { setLocation } = this.props;
-    setLocation(window.location.href.replace(/#.*/,'') + `#${ tab_name }`);
+    setLocation(window.location.href.replace(/#.*/, '') + `#${tab_name}`);
   }
 
   requestTabDocuments(tab) {
     if (!tab) return;
 
-    let { requestDocuments, model_name, record_name, record, template } = this.props;
+    let {
+      requestDocuments,
+      model_name,
+      record_name,
+      record,
+      template
+    } = this.props;
     let exchange_name = `tab ${tab.name} for ${model_name} ${record_name}`;
 
     let attribute_names = getAttributes(tab);
 
-    let hasAttributes = record && template && Array.isArray(attribute_names) && attribute_names.every(
-      attr_name => !(attr_name in template.attributes) || (attr_name in record)
-    );
+    let hasAttributes =
+      record &&
+      template &&
+      Array.isArray(attribute_names) &&
+      attribute_names.every(
+        (attr_name) =>
+          !(attr_name in template.attributes) || attr_name in record
+      );
 
     // ensure attribute data is present in the document
     if (!hasAttributes) {
       // or else make a new request
       requestDocuments({
-        model_name, record_names: [record_name],
+        model_name,
+        record_names: [record_name],
         attribute_names,
         exchange_name,
         success: this.browseMode.bind(this)
@@ -134,23 +153,28 @@ class Browser extends React.Component{
   }
 
   camelize(str) {
-    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index){
-      return letter.toUpperCase();
-    }).replace(/\s+/g, '');
+    return str
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
+        return letter.toUpperCase();
+      })
+      .replace(/\s+/g, '');
   }
 
-  setMode(mode) { this.setState({mode}) }
-  editMode() { this.setMode('edit') }
-  browseMode() { this.setMode('browse') }
+  setMode(mode) {
+    this.setState({ mode });
+  }
+  editMode() {
+    this.setMode('edit');
+  }
+  browseMode() {
+    this.setMode('browse');
+  }
 
   cancelEdits() {
     let { discardRevision, record_name, model_name } = this.props;
 
     this.browseMode();
-    discardRevision(
-      record_name,
-      model_name
-    );
+    discardRevision(record_name, model_name);
   }
 
   postEdits() {
@@ -158,7 +182,7 @@ class Browser extends React.Component{
     this.setMode('submit');
     sendRevisions(
       model_name,
-      {[record_name] : revision},
+      { [record_name]: revision },
       this.browseMode.bind(this),
       this.editMode.bind(this)
     );
@@ -170,48 +194,51 @@ class Browser extends React.Component{
     else this.cancelEdits();
   }
 
-  renderEmptyView(){
-    return(
-      <div className='browser'>
-        <div id='loader-container'>
-          <div className='loader'>
-            {'Loading...'}
-          </div>
+  renderEmptyView() {
+    return (
+      <div className="browser">
+        <div id="loader-container">
+          <div className="loader">{'Loading...'}</div>
         </div>
       </div>
     );
   }
 
-  render(){
-    let {mode} = this.state;
-    let {role, revision, view, template, record, model_name, record_name, tab_name} = this.props;
+  render() {
+    let { mode } = this.state;
+    let {
+      role,
+      revision,
+      view,
+      template,
+      record,
+      model_name,
+      record_name,
+      tab_name,
+      directory
+    } = this.props;
     let can_edit = role == 'administrator' || role == 'editor';
-
+    let { uploads } = directory;
     // Render an empty view if there is no view data yet.
-    if(!view || !template || !record || !tab_name) return this.renderEmptyView();
+    if (!view || !template || !record || !tab_name)
+      return this.renderEmptyView();
 
-    let tab = interleaveAttributes(
-      view.tabs[tab_name],
-      template
-    );
+    let tab = interleaveAttributes(view.tabs[tab_name], template);
 
     // Set at 'skin' on the browser styling.
     let skin = 'browser';
-    if(mode == 'browse') skin = 'browser '+model_name;
+    if (mode == 'browse') skin = 'browser ' + model_name;
 
-    return(
+    return (
       <div className={skin}>
         <Header
-          onEdit={ mode == 'browse' && can_edit && this.editMode.bind(this) }
-          onSave={mode == 'edit' && this.approveEdits.bind(this) }
-          onCancel={ mode == 'edit' && this.cancelEdits.bind(this) }
-          onLoad={mode=='submit'}>
-          <div className='model-name'>
-            {this.camelize(model_name)}
-          </div>
-          <div className='record-name'>
-            {record_name}
-          </div>
+          onEdit={mode == 'browse' && can_edit && this.editMode.bind(this)}
+          onSave={mode == 'edit' && this.approveEdits.bind(this)}
+          onCancel={mode == 'edit' && this.cancelEdits.bind(this)}
+          onLoad={mode == 'submit'}
+        >
+          <div className="model-name">{this.camelize(model_name)}</div>
+          <div className="record-name">{record_name}</div>
         </Header>
         <TabBar
           mode={mode}
@@ -220,9 +247,26 @@ class Browser extends React.Component{
           current_tab={tab_name}
           onClick={this.selectTab.bind(this)}
         />
-        <BrowserTab {
-            ...{ model_name, record_name, template, record, revision, mode, tab }
-          } />
+        <BrowserTab
+          {...{
+            model_name,
+            record_name,
+            template,
+            record,
+            revision,
+            mode,
+            tab
+          }}
+        />
+        {Object.keys(uploads).length > 0 ? (
+          <UploadDashboard
+            {...{
+              uploads
+            }}
+          />
+        ) : (
+          ''
+        )}
       </div>
     );
   }
@@ -230,8 +274,8 @@ class Browser extends React.Component{
 
 export default connect(
   // map state
-  (state = {}, {model_name, record_name})=>{
-    let template = selectTemplate(state,model_name);
+  (state = {}, { model_name, record_name }) => {
+    let template = selectTemplate(state, model_name);
     let record = selectDocument(state, model_name, record_name);
     let revision = selectRevision(state, model_name, record_name) || {};
     let view = selectView(state, model_name);
@@ -242,12 +286,19 @@ export default connect(
       revision,
       view,
       record,
-      role
+      role,
+      directory: state.directory
     };
   },
   // map dispatch
   {
-    requestPlots, requestManifests, requestView, requestAnswer,
-    requestDocuments, discardRevision, sendRevisions, setLocation
+    requestPlots,
+    requestManifests,
+    requestView,
+    requestAnswer,
+    requestDocuments,
+    discardRevision,
+    sendRevisions,
+    setLocation
   }
 )(Browser);
