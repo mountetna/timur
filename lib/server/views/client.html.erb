@@ -13,7 +13,9 @@
   <body>
     <div id='root'></div>
     <script type='text/javascript'>
-      var TIMUR_CONFIG = <%= config_json %>;
+      // Need to also set CONFIG here because it is used
+      //    by the upload code, instead of an app-specific CONFIG var
+      var CONFIG = TIMUR_CONFIG = <%= config_json %>;
       const timur = new TimurApp(
         {
           environment: '<%= Timur.instance.environment %>'
