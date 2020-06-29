@@ -7,7 +7,7 @@ exports[`FileAttribute does not render action buttons while not editing 1`] = `
   <span
     className="file-missing"
   >
-     No file  
+     No file 
   </span>
 </div>
 `;
@@ -19,7 +19,7 @@ exports[`FileAttribute renders "missing file" correctly while not editing 1`] = 
   <span
     className="file-missing"
   >
-     No file  
+     No file 
   </span>
 </div>
 `;
@@ -31,7 +31,7 @@ exports[`FileAttribute renders blank paths correctly while not editing 1`] = `
   <span
     className="file-blank"
   >
-     Blank file  
+     Blank file 
   </span>
 </div>
 `;
@@ -47,7 +47,8 @@ exports[`FileAttribute renders existing files correctly when not editing 1`] = `
     conquest.txt
      (
     text/plain
-    ) 
+    )
+     
   </span>
 </div>
 `;
@@ -68,15 +69,6 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
   <div
     className="file-buttons"
   >
-    <span
-      className="fa-stack fa-fw"
-      onClick={[Function]}
-      title="Upload a file from your computer"
-    >
-      <i
-        className="icon upload upload fa fa-2x fa-upload"
-      />
-    </span>
     <span
       className="fa-stack fa-fw"
       onClick={[Function]}
@@ -108,7 +100,7 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
   <span
     className="file-missing"
   >
-     No file  
+     No file 
   </span>
 </div>
 `;
