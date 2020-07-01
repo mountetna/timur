@@ -109,7 +109,7 @@ class LayoutNode {
   unplacedLinks() {
     // there should only be a single placed link. Return
     // links in circular order after that
-    let index = this.links.findIndex(link => link.other.link_model_name == this.parent_name)
+    let index = this.links.findIndex(link => link.other.model_name == this.parent_name)
     return Array(this.links.length-(index >= 0 ? 1 : 0)).fill().map((_,i) => this.links[(index + i + 1)%this.links.length])
   }
 

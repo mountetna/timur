@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModelMap renders 1`] = `
+<div
+  id="map"
+>
+  <svg
+    height={500}
+    width={500}
+  />
+  <div />
+</div>
+`;
