@@ -67,9 +67,9 @@ class ModelReport extends Component {
       <span className="description">{template.description}</span>
       {
         Object.keys(template.attributes).map((att_name,i) =>
-          template.attributes[att_name].shown ? 
-          <ModelAttribute key={i} att_name={att_name} template={template}/>
-          : null
+          template.attributes[att_name].hidden
+          ? null
+          : <ModelAttribute key={i} att_name={att_name} template={template}/>
         )
       }
     </div>
