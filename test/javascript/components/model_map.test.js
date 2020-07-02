@@ -5,26 +5,18 @@ import renderer from 'react-test-renderer';
 import { mockStore } from '../helpers';
 import ModelMap from '../../../lib/client/jsx/components/model_map';
 
+const models = {
+  monster: { template: require('../fixtures/template_monster.json') },
+  labor: { template: require('../fixtures/template_labor.json') },
+  project: { template: require('../fixtures/template_project.json') }
+};
+
 describe('ModelMap', () => {
   let store;
 
   beforeEach(() => {
     store = mockStore({
-      location: {
-        path: '/labors/browse/monster/Nemean Lion'
-      },
-      magma: {
-        models: {
-          patients: {
-            template: {
-              name: 'patients',
-              attributes: {
-                link_model_name: 'experiment'
-              }
-            }
-          }
-        }
-      }
+      magma: { models }
     });
   });
 
