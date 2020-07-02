@@ -1,0 +1,132 @@
+{
+  "name": "labor",
+  "attributes": {
+    "created_at": {
+      "name": "created_at",
+      "attribute_name": "created_at",
+      "type": "DateTime",
+      "attribute_class": "Magma::Attribute",
+      "display_name": "Created At",
+      "hidden": true,
+      "validation": null,
+      "attribute_type": "date_time"
+    },
+    "updated_at": {
+      "name": "updated_at",
+      "attribute_name": "updated_at",
+      "type": "DateTime",
+      "attribute_class": "Magma::Attribute",
+      "display_name": "Updated At",
+      "hidden": true,
+      "validation": null,
+      "attribute_type": "date_time"
+    },
+    "project": {
+      "name": "project",
+      "attribute_name": "project",
+      "model_name": "project",
+      "link_model_name": "project",
+      "attribute_class": "Magma::ForeignKeyAttribute",
+      "display_name": "Project",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "parent"
+    },
+    "name": {
+      "name": "name",
+      "attribute_name": "name",
+      "type": "String",
+      "attribute_class": "Magma::Attribute",
+      "display_name": "Name",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "identifier"
+    },
+    "monster": {
+      "name": "monster",
+      "attribute_name": "monster",
+      "model_name": "monster",
+      "link_model_name": "monster",
+      "attribute_class": "Magma::ChildAttribute",
+      "display_name": "Monster",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "child"
+    },
+    "number": {
+      "name": "number",
+      "attribute_name": "number",
+      "type": "Integer",
+      "attribute_class": "Magma::Attribute",
+      "display_name": "Number",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "integer"
+    },
+    "completed": {
+      "name": "completed",
+      "attribute_name": "completed",
+      "type": "TrueClass",
+      "attribute_class": "Magma::Attribute",
+      "display_name": "Completed",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "boolean"
+    },
+    "year": {
+      "name": "year",
+      "attribute_name": "year",
+      "type": "DateTime",
+      "attribute_class": "Magma::Attribute",
+      "display_name": "Year",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "date_time"
+    },
+    "prize": {
+      "name": "prize",
+      "attribute_name": "prize",
+      "model_name": "prize",
+      "link_model_name": "prize",
+      "attribute_class": "Magma::TableAttribute",
+      "display_name": "Prize",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "table"
+    },
+    "contributions": {
+      "name": "contributions",
+      "attribute_name": "contributions",
+      "type": "json",
+      "attribute_class": "Magma::MatrixAttribute",
+      "display_name": "Contributions",
+      "options": [
+        "Athens",
+        "Sparta",
+        "Sidon",
+        "Thebes"
+      ],
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": {"type":"Array","value":["Athens","Sparta","Sidon","Thebes"]},
+      "attribute_type": "matrix"
+    }
+  },
+  "identifier": "name",
+  "parent": "project"
+}

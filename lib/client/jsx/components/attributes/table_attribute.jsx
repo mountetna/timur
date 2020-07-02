@@ -23,7 +23,7 @@ export default class TableAttribute extends React.Component {
         page_size={ 10 }
         pages={ -1 }
         filter={ filter }
-        model_name={ attribute.model_name }
+        model_name={ attribute.link_model_name }
         record_names={ value }/>
     </div>
   }

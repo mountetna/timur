@@ -67,9 +67,9 @@ class ModelReport extends Component {
       <span className="description">{template.description}</span>
       {
         Object.keys(template.attributes).map((att_name,i) =>
-          template.attributes[att_name].shown ? 
-          <ModelAttribute key={i} att_name={att_name} template={template}/>
-          : null
+          template.attributes[att_name].hidden
+          ? null
+          : <ModelAttribute key={i} att_name={att_name} template={template}/>
         )
       }
     </div>
@@ -93,12 +93,12 @@ class LayoutNode {
     let template = this.template
     this.links = Object.keys(template.attributes).map((att_name) => {
       let attribute = template.attributes[att_name]
-      if (!attribute.model_name) return null
-      let other = this.layout.nodes[ attribute.model_name ]
+      if (!attribute.link_model_name) return null
+      let other = this.layout.nodes[ attribute.link_model_name ]
       if (!other) return null
 
       // the link exists if - you are the other model's parents
-      if (!(template.parent == attribute.model_name
+      if (!(template.parent == attribute.link_model_name
         || other.template.parent == this.model_name 
         || (!template.parent && other.template.parent)
         || (!other.template.parent && template.parent))) return null
