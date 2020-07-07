@@ -21,7 +21,7 @@ jobs:
           git clone https://github.com/mountetna/magma.git
           cd magma/gem
           gem build magma
-          gem install magma
+          gem install --install-dir ../../vendor/bundle magma
       - name: Bundle install Gems
         run: |
           gem install bundler -v 2.1.4
