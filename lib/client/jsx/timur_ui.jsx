@@ -104,10 +104,6 @@ class TimurUI extends React.Component {
     updateLocation(location);
   }
 
-  componentWillMount() {
-    Modal.setAppElement('#root');
-  }
-
   render() {
     let {location, showMessages, environment, user} = this.props;
 

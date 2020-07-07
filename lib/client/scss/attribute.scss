@@ -66,6 +66,9 @@
     @include text_defaults;
     border-left: 1px solid rgba(forestgreen, 0.2);
   }
+  label {
+    margin-right: 1rem;
+  }
   textarea.text_box {
     @include text_box;
     height: 70px;
@@ -82,6 +85,45 @@
   }
   .export {
     @include green_button;
+  }
+
+  &.modal {
+    .file-metis-error {
+      color: red;
+    }
+
+    .modal-buttons {
+      display: flex;
+      padding-top: 1rem;
+      padding-right: 5px;
+      width: 100px;
+      justify-content: space-between;
+      font-size: 0.5em;
+      color: gray;
+      .icon {
+        cursor: pointer;
+      }
+      .upload {
+        &:hover {
+          color: #eab;
+        }
+      }
+      .cloud {
+        &:hover {
+          color: #15788f;
+        }
+      }
+      .stub {
+        &:hover {
+          color: #ccc;
+        }
+      }
+      .remove {
+        &:hover {
+          color: red;
+        }
+      }
+    }
   }
 
   &.file {
@@ -127,22 +169,4 @@
       }
     }
   }
-}
-
-// This is in a modal for FileAttribute, so styling is separate
-.metis-path-input {
-  @include text_defaults;
-  width: 70%;
-  margin-bottom: 1rem;
-  margin-left: 1rem;
-}
-
-.input-box-wrapper {
-  margin-top: 1rem;
-}
-
-.input-box-wrapper span {
-  margin-left: 1rem;
-  margin-right: 1rem;
-  cursor: pointer;
 }

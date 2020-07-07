@@ -11,8 +11,6 @@ import {
 import ButtonBar from '../button_bar';
 import Icon from '../icon';
 
-import CopyMetisPath from '../../../img/file-dropdown-copy-path.png';
-
 export const STUB = '::blank';
 export const TEMP = '::temp';
 
@@ -27,6 +25,18 @@ const METIS_PATH_MATCH = (path) =>
       // folder path + filename
       '(.*)$'
   ).test(path);
+
+// We don't have a lot of content, so let's get a smaller Modal
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
 
 const FileValue = ({value}) =>
   !value ? (
@@ -123,34 +133,32 @@ class FileAttribute extends React.Component {
       <Modal
         isOpen={this.state.metis}
         contentLabel="Enter Metis path"
+        style={customStyles}
         onRequestClose={this.closeModal}
+        appElement={document.querySelector('#root')}
       >
-        <div className="file-metis-select">
+        <div className="attribute modal file-metis-select">
           <h2>Enter a Metis path</h2>
-          <p>Paste in the Metis path for the desired file.</p>
+          <p>Enter the Metis path for the desired file.</p>
           <p>
             The format should be
             "metis://&lt;project&gt;/&lt;bucket&gt;/&lt;file-path&gt;"
           </p>
           <p>
-            You can also grab this from the Metis UI, by clicking the dropdown
-            menu for the file.
+            For help with this, please refer to the{' '}
+            <a href="https://mountetna.github.io/timur.html">documentation</a>.
           </p>
-          <img
-            src={CopyMetisPath}
-            alt="Metis dropdown menu with 'copy metis path' option."
-          ></img>
           <div className="input-box-wrapper">
             <label htmlFor="metis-path-input">Metis path:</label>
             <input
               id="metis-path-input"
-              className="metis-path-input"
+              className="full_text metis-path-input"
               type="text"
               ref={(metis_file) => (this.metis_file = metis_file)}
               placeholder="Enter Metis path"
             />
             <ButtonBar
-              className="file-buttons"
+              className="modal-buttons"
               buttons={[
                 {type: 'check', click: () => this.selectMetisFile()},
                 {type: 'cancel', click: () => this.setState({metis: false})}
