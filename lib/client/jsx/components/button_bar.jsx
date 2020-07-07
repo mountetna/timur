@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { capitalize } from '../utils/format';
+import Icon from './icon';
 
 /*
  * A component that displays a set of buttons with Font Awesome icon and a label
@@ -9,34 +10,13 @@ import { capitalize } from '../utils/format';
  */
 
 const BUTTONS = {
-  copy: {
-    icon: 'fas fa-copy',
-    label: 'copy'
-  },
-  remove: {
-    icon: 'fas fa-trash-alt',
-    label: 'delete'
-  },
-  edit: {
-    icon: 'fas fa-pencil-alt',
-    label: 'edit'
-  },
-  run: {
-    icon: 'fas fa-play',
-    label: 'run',
-  },
-  save: {
-    icon: 'fas fa-save',
-    label: 'save'
-  },
-  load: {
-    icon: 'fas fa-spinner fa-pulse',
-    label: 'load'
-  },
-  cancel: {
-    icon: 'fas fa-ban',
-    label: 'cancel'
-  }
+  copy: { icon: 'copy' },
+  remove: { icon: 'trash-alt', label: 'delete' },
+  edit: { icon: 'pencil-alt' },
+  run: { icon: 'play' },
+  load: { icon: 'spinner' },
+  cancel: { icon: 'ban' },
+  stub: { icon: 'meh-blank' }
 };
 
 export const buttonsWithCallbacks = (types, callbacks) => types.map(
@@ -51,12 +31,13 @@ export const buttonsWithCallbacks = (types, callbacks) => types.map(
  * A single button, which displays a text 'label', a Font Awesome 'icon' and
  * responds to 'click'.
  */
-const BarButton = ({type,click})=>{
-  let { label, icon } = BUTTONS[type];
-  return <i onClick={(click instanceof Function) ? click : null }
-    title={label}
-    className={`${label} ${icon}`}
-    aria-hidden='true'/>
+const BarButton = ({type,click,title})=>{
+  let { label=type, icon=type } = BUTTONS[type] || {};
+  return <Icon onClick={(click instanceof Function) ? click : null }
+    className={ type }
+    title={title || label }
+    icon={ icon }
+  />
 };
 
 const ButtonBar =({ className, buttons }) =>

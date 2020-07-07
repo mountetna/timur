@@ -274,13 +274,13 @@ exports[`ModelViewer renders 1`] = `
               }
             >
               <div
-                className="attribute"
+                className="attribute file"
               >
-                <div
-                  className="document_empty"
+                <span
+                  className="file-missing"
                 >
-                   No file.  
-                </div>
+                   No file 
+                </span>
               </div>
             </div>
             <div
@@ -399,13 +399,13 @@ exports[`ModelViewer renders 1`] = `
               }
             >
               <div
-                className="attribute"
+                className="attribute file"
               >
-                <div
-                  className="document_empty"
+                <span
+                  className="file-missing"
                 >
-                   No file.  
-                </div>
+                   No file 
+                </span>
               </div>
             </div>
             <div
