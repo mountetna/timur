@@ -23,7 +23,8 @@
     width: 300px;
   }
 
-  .collection_item, .list_item {
+  .collection_item,
+  .list_item {
     &:not(:last-child) {
       border-bottom: $thin_rule;
     }
@@ -49,21 +50,21 @@
     @include green_button;
   }
 
-  input[type="text"].date_text {
+  input[type='text'].date_text {
     @include text_defaults;
     width: 100px;
   }
-  input[type="text"].time_text {
+  input[type='text'].time_text {
     @include text_defaults;
     width: 50px;
   }
-  input[type="text"].full_text {
+  input[type='text'].full_text {
     @include text_defaults;
     width: 70%;
   }
-  input[type="text"].link_text {
+  input[type='text'].link_text {
     @include text_defaults;
-    border-left: 1px solid rgba(forestgreen,0.2);
+    border-left: 1px solid rgba(forestgreen, 0.2);
   }
   textarea.text_box {
     @include text_box;
@@ -126,4 +127,22 @@
       }
     }
   }
+}
+
+// This is in a modal for FileAttribute, so styling is separate
+.metis-path-input {
+  @include text_defaults;
+  width: 70%;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+.input-box-wrapper {
+  margin-top: 1rem;
+}
+
+.input-box-wrapper span {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  cursor: pointer;
 }

@@ -1,6 +1,7 @@
 // Framework libraries.
 import * as React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
+import Modal from 'react-modal';
 
 import {
   reviseDocument,
@@ -10,9 +11,10 @@ import {
 import ButtonBar from '../button_bar';
 import Icon from '../icon';
 
+import CopyMetisPath from '../../../img/file-dropdown-copy-path.png';
+
 export const STUB = '::blank';
 export const TEMP = '::temp';
-const FILENAME_MATCH = '[^<>:;,?"*\\|\\/\\x00-\\x1f]+';
 
 // metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
 const METIS_PATH_MATCH = (path) =>
@@ -26,7 +28,7 @@ const METIS_PATH_MATCH = (path) =>
       '(.*)$'
   ).test(path);
 
-const FileValue = ({ value }) =>
+const FileValue = ({value}) =>
   !value ? (
     <span className="file-missing"> No file </span>
   ) : value instanceof File ? (
@@ -43,7 +45,7 @@ const FileValue = ({ value }) =>
 class FileAttribute extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { metis: false, error: false };
+    this.state = {metis: false, error: false};
   }
 
   render() {
@@ -56,7 +58,7 @@ class FileAttribute extends React.Component {
       attribute,
       reviseDocument
     } = this.props;
-    let { metis } = this.state;
+    let {metis} = this.state;
 
     if (mode != 'edit')
       return (
@@ -71,7 +73,7 @@ class FileAttribute extends React.Component {
       //   title: 'Upload a file from your computer' },
       {
         type: 'cloud',
-        click: () => this.setState({ metis: true }),
+        click: () => this.setState({metis: true}),
         title: 'Link a file from Metis'
       },
       {
@@ -102,7 +104,7 @@ class FileAttribute extends React.Component {
       <div className="attribute file">
         <input
           type="file"
-          style={{ display: 'none' }}
+          style={{display: 'none'}}
           ref={(input) => (this.input = input)}
           onChange={(e) => this.getTempUrl(e)}
         />
@@ -115,36 +117,69 @@ class FileAttribute extends React.Component {
 
   metisSelector() {
     // TODO: would be nice to make this like a folder / file search
-    let { error } = this.state;
+    let {error} = this.state;
 
     return (
-      <div className="file-metis-select">
-        <input
-          type="text"
-          ref={(metis_file) => (this.metis_file = metis_file)}
-          placeholder="Enter Metis path"
-        />
-        <ButtonBar
-          className="file-buttons"
-          buttons={[
-            { type: 'check', click: () => this.selectMetisFile() },
-            { type: 'cancel', click: () => this.setState({ metis: false }) }
-          ]}
-        />
-        {error ? <p className="file-metis-error">Invalid Metis path</p> : ''}
-      </div>
+      <Modal
+        isOpen={this.state.metis}
+        contentLabel="Enter Metis path"
+        onRequestClose={this.closeModal}
+      >
+        <div className="file-metis-select">
+          <h2>Enter a Metis path</h2>
+          <p>Paste in the Metis path for the desired file.</p>
+          <p>
+            The format should be
+            "metis://&lt;project&gt;/&lt;bucket&gt;/&lt;file-path&gt;"
+          </p>
+          <p>
+            You can also grab this from the Metis UI, by clicking the dropdown
+            menu for the file.
+          </p>
+          <img
+            src={CopyMetisPath}
+            alt="Metis dropdown menu with 'copy metis path' option."
+          ></img>
+          <div className="input-box-wrapper">
+            <label htmlFor="metis-path-input">Metis path:</label>
+            <input
+              id="metis-path-input"
+              className="metis-path-input"
+              type="text"
+              ref={(metis_file) => (this.metis_file = metis_file)}
+              placeholder="Enter Metis path"
+            />
+            <ButtonBar
+              className="file-buttons"
+              buttons={[
+                {type: 'check', click: () => this.selectMetisFile()},
+                {type: 'cancel', click: () => this.setState({metis: false})}
+              ]}
+            />
+            {error ? (
+              <p className="file-metis-error">Invalid Metis path</p>
+            ) : (
+              ''
+            )}
+          </div>
+        </div>
+      </Modal>
     );
   }
 
+  closeModal() {
+    this.setState({metis: false});
+  }
+
   selectMetisFile() {
-    let { document, template, attribute, reviseDocument } = this.props;
-    let { value } = this.metis_file;
+    let {document, template, attribute, reviseDocument} = this.props;
+    let {value} = this.metis_file;
 
     if (!METIS_PATH_MATCH(value)) {
-      this.setState({ error: true });
+      this.setState({error: true});
       return;
     } else {
-      this.setState({ error: false, metis: false });
+      this.setState({error: false, metis: false});
     }
 
     this.metis_file.value = '';
@@ -158,12 +193,12 @@ class FileAttribute extends React.Component {
   }
 
   formatFileRevision(value) {
-    return { path: value };
+    return {path: value};
   }
 
   getTempUrl(e) {
     e.preventDefault();
-    let { document, template, attribute, getRevisionTempUrl } = this.props;
+    let {document, template, attribute, getRevisionTempUrl} = this.props;
 
     getRevisionTempUrl(
       document,
@@ -177,6 +212,6 @@ class FileAttribute extends React.Component {
   }
 }
 
-export default connect(null, { reviseDocument, getRevisionTempUrl })(
+export default connect(null, {reviseDocument, getRevisionTempUrl})(
   FileAttribute
 );
