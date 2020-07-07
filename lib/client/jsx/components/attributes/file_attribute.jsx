@@ -34,6 +34,7 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
+    minWidth: '40%',
     transform: 'translate(-50%, -50%)'
   }
 };
@@ -139,14 +140,6 @@ class FileAttribute extends React.Component {
       >
         <div className="attribute modal file-metis-select">
           <h2>Enter a Metis path</h2>
-          <p>
-            The path format should be
-            "metis://&lt;project&gt;/&lt;bucket&gt;/&lt;file-path&gt;"
-          </p>
-          <p>
-            For help, please refer to the
-            <a href="https://mountetna.github.io/timur.html">documentation</a>.
-          </p>
           <div className="input-box-wrapper">
             <label htmlFor="metis-path-input">Metis path:</label>
             <input
@@ -154,20 +147,28 @@ class FileAttribute extends React.Component {
               className="full_text metis-path-input"
               type="text"
               ref={(metis_file) => (this.metis_file = metis_file)}
-              placeholder="Enter Metis path"
+              placeholder="metis://<project>/<bucket>/<file-path>"
             />
-            <ButtonBar
-              className="modal-buttons"
-              buttons={[
-                {type: 'check', click: () => this.selectMetisFile()},
-                {type: 'cancel', click: () => this.setState({metis: false})}
-              ]}
-            />
-            {error ? (
-              <p className="file-metis-error">Invalid Metis path</p>
-            ) : (
-              ''
-            )}
+            <div className="modal-button-wrapper">
+              <ButtonBar
+                className="modal-buttons"
+                buttons={[
+                  {type: 'check', click: () => this.selectMetisFile()},
+                  {type: 'cancel', click: () => this.setState({metis: false})}
+                ]}
+              />
+              {error ? (
+                <p className="file-metis-error">Invalid Metis path</p>
+              ) : (
+                ''
+              )}
+              <a
+                className="modal-help"
+                href="https://mountetna.github.io/timur.html"
+              >
+                Help
+              </a>
+            </div>
           </div>
         </div>
       </Modal>

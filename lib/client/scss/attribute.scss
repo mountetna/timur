@@ -92,6 +92,16 @@
       color: red;
     }
 
+    .modal-button-wrapper {
+      display: flex;
+    }
+
+    .modal-help {
+      flex: 1;
+      padding-top: 1rem;
+      text-align: right;
+    }
+
     .modal-buttons {
       display: flex;
       padding-top: 1rem;
