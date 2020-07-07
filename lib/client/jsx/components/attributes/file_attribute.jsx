@@ -139,13 +139,12 @@ class FileAttribute extends React.Component {
       >
         <div className="attribute modal file-metis-select">
           <h2>Enter a Metis path</h2>
-          <p>Enter the Metis path for the desired file.</p>
           <p>
-            The format should be
+            The path format should be
             "metis://&lt;project&gt;/&lt;bucket&gt;/&lt;file-path&gt;"
           </p>
           <p>
-            For help with this, please refer to the{' '}
+            For help, please refer to the
             <a href="https://mountetna.github.io/timur.html">documentation</a>.
           </p>
           <div className="input-box-wrapper">
