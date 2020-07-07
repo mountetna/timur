@@ -33,7 +33,7 @@ jobs:
           git clone https://github.com/mountetna/magma.git
           cd magma/gem
           gem build magma
-          export GEM_HOME="$GITHUB_WORKSPACE/vendor/bundle"
+          export GEM_HOME="$GITHUB_WORKSPACE/vendor/bundle/2.5.0"
           gem install magma
           gem env
       - name: Bundle install Gems
