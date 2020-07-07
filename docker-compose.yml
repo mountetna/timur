@@ -1,0 +1,63 @@
+version: "3.4"
+volumes:
+  app-gems:
+    driver: local
+  db-data:
+    driver: local
+  node-modules:
+    driver: local
+  log-dir:
+    driver: local
+  tmp-dir:
+    driver: local
+  public-dir:
+    driver: local
+
+x-timur_base: &timur_base
+  build:
+    context: .
+    dockerfile: docker/app/Dockerfile.development
+  volumes:
+    - .:/app:cached
+    - app-gems:/app/vendor/bundle:rw
+    - ./node_modules:/app/node_modules:cached
+    - log-dir:/app/log:rw
+    - tmp-dir:/app/tmp:rw
+    - public-dir:/app/public:rw
+    - ../etna:/etna:cached
+    - ../magma:/magma:cached
+  environment: &app_environment
+    COVERAGE: "true"
+    DATABASE_HOST: "db"
+    TIMUR_ENV: "development"
+
+services:
+  timur_app:
+    <<: *timur_base
+    ports:
+      - 3000:3000
+    command: ./docker/app/puma.sh
+    depends_on:
+      - timur_db
+
+  timur_webpack:
+    <<: *timur_base
+    environment:
+      <<: *app_environment
+      RUN_NPM_INSTALL: "true"
+      SKIP_RUBY_SETUP: "true"
+    command: npm run webpack
+
+  timur_db:
+    build:
+      context: .
+      dockerfile: docker/db/Dockerfile
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: timur_development
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: developer
+    ports:
+      - 5432
+    container_name: timur_db_1

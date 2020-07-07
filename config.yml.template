@@ -1,0 +1,42 @@
+default: &default
+  :host: timur_db
+  :adapter: postgresql
+  :encoding: unicode
+  :user: developer
+  :password: password
+  :pool: 5
+  :timeout: 5000
+
+:development:
+  :magma:
+    :host: https://magma.development.local
+  :rtemis:
+    :host: http://rtemis.development.local
+  :metis:
+    :host: https://metis.development.local
+  :auth_redirect: https://janus.development.local
+  :token_algo: RS256
+  :token_name: JANUS_DEV_TOKEN
+  :log_level: info
+  :log_file: /dev/stdout
+  :rsa_public: |
+    -----BEGIN PUBLIC KEY-----
+    -----END PUBLIC KEY-----
+  :db:
+    <<: *default
+    :database: timur_development
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+:test:
+  :db:
+    <<: *default
+    :database: timur_test
+  :magma:
+    :host: https://magma.test
+  :rtemis:
+    :host: https://rtemis.test
+  :metis:
+    :host: https://metis.test
+  :log_file: /dev/null
