@@ -21,8 +21,9 @@ jobs:
           git clone https://github.com/mountetna/magma.git
           cd magma/gem
           gem build magma
-          mkdir -p ../../vendor/bundle
-          mv magma-*.gem ../../vendor/bundle/
+          export GEM_HOME="$GITHUB_WORKSPACE/vendor/bundle"
+          gem install magma
+          gem env
       - name: Bundle install Gems
         run: |
           gem install bundler -v 2.1.4
