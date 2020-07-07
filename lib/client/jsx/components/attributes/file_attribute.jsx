@@ -6,6 +6,7 @@ import { reviseDocument } from '../../actions/magma_actions';
 import ButtonBar from '../button_bar';
 
 export const STUB = '::blank';
+export const TEMP = '::temp';
 
 // metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
 const METIS_PATH_MATCH = (path) =>
