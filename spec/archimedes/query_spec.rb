@@ -3,7 +3,7 @@ require_relative '../../lib/models/archimedes'
 describe Archimedes::Table do
   it 'should retrieve a table of data from Magma' do
     route_payload = JSON.generate([
-      {:method=>"POST", :route=>"/query", :name=>"query"}
+      {:method=>"POST", :route=>"/query", :name=>"query", :params=>[]}
     ])
     stub_request(:options, Timur.instance.config(:magma)[:host]).
       to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
@@ -67,7 +67,7 @@ describe Archimedes::Table do
 
   it 'should unpack a matrix column into separate columns' do
     route_payload = JSON.generate([
-      {:method=>"POST", :route=>"/query", :name=>"query"}
+      {:method=>"POST", :route=>"/query", :name=>"query", :params=>[]}
     ])
     stub_request(:options, Timur.instance.config(:magma)[:host]).
       to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
