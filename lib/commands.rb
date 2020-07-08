@@ -122,4 +122,37 @@ EOT
       end
     end
   end
+
+  class CreateDb < Etna::Command
+    usage '# create the initial database per config.yml'
+
+    def execute
+      if @no_db
+        create_db if @no_db
+
+        puts "Database is setup. Please run `bin/timur migrate #{@project_name}`."
+      else
+        puts "Database already exists."
+      end
+    end
+
+    def create_db
+      # Create the database only
+
+      puts "Creating database #{@db_config[:database]}"
+      %x{ PGPASSWORD=#{@db_config[:password]} createdb -w -U #{@db_config[:user]} #{@db_config[:database]} }
+
+      Timur.instance.setup_db
+    end
+
+    def setup(config)
+      super
+      @db_config = Timur.instance.config(:db)
+      begin
+        Timur.instance.setup_db
+      rescue Sequel::DatabaseConnectionError
+        @no_db = true
+      end
+    end
+  end
 end
