@@ -7,9 +7,6 @@ gem 'etna'
 gem 'rltk'
 gem 'filigree', '0.3.3'
 
-# client to get data from Magma
-# gem 'magma'
-
 # used by sequel
 gem 'pg', '~> 0.21'
 
