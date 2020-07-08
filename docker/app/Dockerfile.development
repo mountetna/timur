@@ -35,9 +35,6 @@ ENV BUNDLE_BIN="$BUNDLE_PATH/bin"
 ENV BUNDLE_SILENCE_ROOT_WARNING=0
 ENV BUNDLE_APP_CONFIG="/app/.bundle"
 
-# Create and install the Magma gem
-RUN cd /magma/gem/ && gem build magma && gem install magma
-
 RUN gem install puma
 RUN gem install bundler --default -v "=$BUNDLER_VERSION"
 RUN gem update --system
@@ -45,6 +42,9 @@ RUN gem update --system
 # We also the GEM_PATH to be this BUNDLE_PATH so that ides (Rubymine) will find gems easier.
 ENV GEM_HOME="$BUNDLE_PATH"
 ENV GEM_PATH="/root/.gem/ruby/2.5.0:/usr/local/lib/ruby/gems/2.5.0:/usr/local/bundle:$BUNDLE_PATH/ruby/2.5.0"
+
+# Create and install the Magma gem
+CMD cd /magma/gem/ && gem build magma && gem install magma
 
 # bash improvements for developer environment
 RUN git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \

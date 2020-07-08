@@ -35,7 +35,7 @@ services:
   timur_app:
     <<: *timur_base
     ports:
-      - 3000:3000
+      - 3002:3000
     command: ./docker/app/puma.sh
     depends_on:
       - timur_db
