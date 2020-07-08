@@ -8,7 +8,7 @@ gem 'rltk'
 gem 'filigree', '0.3.3'
 
 # client to get data from Magma
-gem 'magma'
+# gem 'magma'
 
 # used by sequel
 gem 'pg', '~> 0.21'
@@ -20,6 +20,7 @@ group :development, :test do
   gem 'rspec'
   gem 'simplecov'
   gem 'pry'
+  gem 'pry-byebug'
   gem 'webmock'
   gem 'factory_bot'
   gem 'database_cleaner'
