@@ -80,10 +80,7 @@ module Archimedes
     end
 
     def response
-      @response ||= JSON.parse(
-        query_response,
-        symbolize_names: true
-      )
+      @response ||= query_response
     end
 
     def answer
@@ -105,6 +102,7 @@ module Archimedes
         project_name: @project_name,
         query: @query
       }
+      
       client.query(query_params)
     end
   end

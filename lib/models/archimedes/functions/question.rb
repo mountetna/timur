@@ -14,12 +14,10 @@ module Archimedes
         query: query.to_values
       }
 
-      response = client.query(query_params)
-
-      query_answer = JSON.parse(response)
+      query_answer = client.query(query_params)
 
       # Loop the data and set the data types returned from Magma.
-      recursive_parse(query_answer['answer']) do |item|
+      recursive_parse(query_answer[:answer]) do |item|
         case item
         when /^(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
           DateTime.parse(item)
