@@ -1,0 +1,28 @@
+---
+
+:test:
+  :db:
+    :database: timur_test
+    :host: localhost
+    :adapter: postgres
+    :user: developer
+    :password: password
+  :host: https://timur.test
+  :log_file: /dev/null
+  :log_level: error
+  :hmac_keys:
+    :timur: haggis
+    :archimedes: pudding
+  :secret_key:
+  :upload_expiration: 60
+  :download_expiration: 60
+  :timur_uid_name: TIMUR_TEST_UID
+  :token_domain: example.org
+  :token_life: 31536000
+  :backup:
+    :directory: 'timur-test-athena'
+    :credentials:
+      :aws_access_key_id: 'SOMEID'
+      :aws_secret_access_key: 'someKey'
+      #:aws_access_key_id:
+      #:aws_secret_access_key:
