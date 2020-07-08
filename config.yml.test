@@ -28,3 +28,7 @@
       #:aws_secret_access_key:
   :magma:
     :host: https://magma.test
+  :rtemis:
+    :host: https://rtemis.test
+  :metis:
+    :host: https://metis.test
