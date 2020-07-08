@@ -5,7 +5,7 @@ describe Archimedes::Table do
     route_payload = JSON.generate([
       {:method=>"POST", :route=>"/query", :name=>"query"}
     ])
-    stub_request(:options, 'https://' + Timur.instance.config(:magma)[:host]).
+    stub_request(:options, Timur.instance.config(:magma)[:host]).
       to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
 
     # Need a RegEx for the URL match here because of the query params
@@ -69,7 +69,7 @@ describe Archimedes::Table do
     route_payload = JSON.generate([
       {:method=>"POST", :route=>"/query", :name=>"query"}
     ])
-    stub_request(:options, 'https://' + Timur.instance.config(:magma)[:host]).
+    stub_request(:options, Timur.instance.config(:magma)[:host]).
       to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
 
     # Need a RegEx for the URL match here because of the query params

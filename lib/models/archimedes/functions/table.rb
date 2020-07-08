@@ -98,7 +98,7 @@ module Archimedes
       host = Timur.instance.config(:magma).fetch(:host)
 
       client = Etna::Client.new(
-        "https://#{host}",
+        host,
         @token)
       
       query_route = client.routes.find { |r| r[:name] == 'query' }

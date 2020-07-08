@@ -6,7 +6,7 @@ module Archimedes
       host = Timur.instance.config(:magma).fetch(:host)
 
       client = Etna::Client.new(
-        "https://#{host}",
+        host,
         @token)
       
       query_route = client.routes.find { |r| r[:name] == 'query' }
@@ -16,7 +16,7 @@ module Archimedes
       
       query_params = {
         project_name: @project_name,
-        query: @query
+        query: query.to_values
       }
 
       # Now populate the standard headers
