@@ -2,7 +2,14 @@ require_relative '../../lib/models/archimedes'
 
 describe Archimedes::Table do
   it 'should retrieve a table of data from Magma' do
-    stub_request(:post, Timur.instance.config(:magma)[:host]+'/query')
+    route_payload = JSON.generate([
+      {:method=>"POST", :route=>"/query", :name=>"query"}
+    ])
+    stub_request(:options, 'https://' + Timur.instance.config(:magma)[:host]).
+      to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
+
+    # Need a RegEx for the URL match here because of the query params
+    stub_request(:post, /https:\/\/magma.test\/query?/)
       .with(
         body: {
           project_name:'timur', 
@@ -59,7 +66,14 @@ describe Archimedes::Table do
   end
 
   it 'should unpack a matrix column into separate columns' do
-    stub_request(:post, Timur.instance.config(:magma)[:host]+'/query')
+    route_payload = JSON.generate([
+      {:method=>"POST", :route=>"/query", :name=>"query"}
+    ])
+    stub_request(:options, 'https://' + Timur.instance.config(:magma)[:host]).
+      to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
+
+    # Need a RegEx for the URL match here because of the query params
+    stub_request(:post, /https:\/\/magma.test\/query?/)
       .with(
         body: {
           project_name:'timur',

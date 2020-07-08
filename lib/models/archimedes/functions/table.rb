@@ -81,7 +81,7 @@ module Archimedes
 
     def response
       @response ||= JSON.parse(
-        client.query(@token, @project_name, @query).body,
+        query_response.body,
         symbolize_names: true
       )
     end
@@ -94,8 +94,46 @@ module Archimedes
       response[:format]
     end
 
-    def client
-      Magma::Client.instance
+    def query_response
+      host = Timur.instance.config(:magma).fetch(:host)
+
+      client = Etna::Client.new(
+        "https://#{host}",
+        @token)
+      
+      query_route = client.routes.find { |r| r[:name] == 'query' }
+      
+      path = client.route_path(
+        query_route, {})
+
+      query_params = {
+        project_name: @project_name,
+        query: @query
+      }
+
+      # Now populate the standard headers
+      hmac_params = {
+        method: 'POST',
+        host: host,
+        path: path,
+
+        expiration: (DateTime.now + 10).iso8601,
+        id: 'archimedes',
+        nonce: SecureRandom.hex,
+        headers: query_params,
+      }
+
+      hmac = Etna::Hmac.new(Timur.instance, hmac_params)
+
+      cgi_hash = CGI.parse(hmac.url_params[:query])
+      cgi_hash.delete('X-Etna-Query') # this could be too long for URI
+
+      hmac_params_hash = Hash[cgi_hash.map {|key,values| [key.to_sym, values[0]||true]}]
+      client.send(
+        'body_request',
+        Net::HTTP::Post,
+        hmac.url_params[:path] + '?' + URI.encode_www_form(cgi_hash),
+        query_params)
     end
   end
 end

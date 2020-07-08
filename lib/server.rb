@@ -49,7 +49,6 @@ class Timur
     def initialize
       super
       application.setup_db
-      application.setup_magma
     end
   end
 end
