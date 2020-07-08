@@ -64,7 +64,7 @@ module Archimedes
       position = current_position.line_offset
       raise Archimedes::LanguageError, "Syntax error in #{line_fragment(line,position)}"
     rescue Etna::Error => e
-      raise Archimedes::LanguageError, e.body
+      raise Archimedes::LanguageError, e.message
     rescue ArgumentError => e
       raise Archimedes::LanguageError, "#{e.message} in #{current_fragment}"
     rescue TypeError => e
