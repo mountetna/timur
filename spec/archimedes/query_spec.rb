@@ -9,15 +9,18 @@ describe Archimedes::Table do
       to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
 
     # Need a RegEx for the URL match here because of the query params
-    stub_request(:post, /https:\/\/magma.test\/query?/)
+    stub_request(:post, /https:\/\/magma.test\/query/)
       .with(
         body: {
-          project_name:'timur', 
+          project_name:'timur',
           query: ['match', ['games', 'patron', 'name', '::equals', 'Zeus'], '::all', [['contestant', 'city'], ['event'], ['score']]]
         }.to_json
       ).to_return(
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: {
-          answer: [ 
+          answer: [
             [ 1, [ 'athens', 'shot put', 4 ] ],
             [ 2, [ 'athens', 'pankration', 3 ] ],
             [ 3, [ 'sparta', 'shot put', 2 ] ],
@@ -80,6 +83,9 @@ describe Archimedes::Table do
           query: ['contestant', '::all', [ [ 'city' ], ['scores']]]
         }.to_json
       ).to_return(
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: {
           answer: [
             [ 'Hercules', [ 'Thebes', [ 3, 3, 4 ] ] ],

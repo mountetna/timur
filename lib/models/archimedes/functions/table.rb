@@ -97,12 +97,12 @@ module Archimedes
       client = Etna::Client.new(
         host,
         @token)
-      
+
       query_params = {
         project_name: @project_name,
         query: @query
       }
-      
+
       client.query(query_params)
     end
   end
