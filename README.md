@@ -1,3 +1,5 @@
+https://github.com/mountetna/timur/workflows/Run%20JavaScript%20tests/badge.svg https://github.com/mountetna/timur/workflows/Run%20Ruby%20tests/badge.svg
+
 # README
 
 Timur is a data browser. It is primarily intended to consume data from Magma, a data warehouse.
@@ -44,6 +46,6 @@ data for use in plots with Timur.
 
 Plots allow data retrieved using a manifest to be graphed in the browser. Timur features a few basic plot types:
 
-1) XY scatter - plot two numerical variables against each other
+1. XY scatter - plot two numerical variables against each other
 
-2) Cluster/heatmap - Plot N numerical variables against each other.
+2. Cluster/heatmap - Plot N numerical variables against each other.

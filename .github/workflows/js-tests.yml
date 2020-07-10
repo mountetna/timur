@@ -1,0 +1,24 @@
+name: Run JavaScript tests
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node
+      - name: Set up Node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: NPM install
+        run: |
+          npm install
+      - name: Run UI test suite
+        run: |
+          npm run test

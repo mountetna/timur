@@ -23,7 +23,8 @@
     width: 300px;
   }
 
-  .collection_item, .list_item {
+  .collection_item,
+  .list_item {
     &:not(:last-child) {
       border-bottom: $thin_rule;
     }
@@ -49,21 +50,24 @@
     @include green_button;
   }
 
-  input[type="text"].date_text {
+  input[type='text'].date_text {
     @include text_defaults;
     width: 100px;
   }
-  input[type="text"].time_text {
+  input[type='text'].time_text {
     @include text_defaults;
     width: 50px;
   }
-  input[type="text"].full_text {
+  input[type='text'].full_text {
     @include text_defaults;
     width: 70%;
   }
-  input[type="text"].link_text {
+  input[type='text'].link_text {
     @include text_defaults;
-    border-left: 1px solid rgba(forestgreen,0.2);
+    border-left: 1px solid rgba(forestgreen, 0.2);
+  }
+  label {
+    margin-right: 1rem;
   }
   textarea.text_box {
     @include text_box;
@@ -81,5 +85,98 @@
   }
   .export {
     @include green_button;
+  }
+
+  &.modal {
+    .file-metis-error {
+      color: red;
+    }
+
+    .modal-button-wrapper {
+      display: flex;
+    }
+
+    .modal-help {
+      flex: 1;
+      padding-top: 1rem;
+      text-align: right;
+    }
+
+    .modal-buttons {
+      display: flex;
+      padding-top: 1rem;
+      padding-right: 5px;
+      width: 100px;
+      justify-content: space-between;
+      font-size: 0.5em;
+      color: gray;
+      .icon {
+        cursor: pointer;
+      }
+      .upload {
+        &:hover {
+          color: #eab;
+        }
+      }
+      .cloud {
+        &:hover {
+          color: #15788f;
+        }
+      }
+      .stub {
+        &:hover {
+          color: #ccc;
+        }
+      }
+      .remove {
+        &:hover {
+          color: red;
+        }
+      }
+    }
+  }
+
+  &.file {
+    display: flex;
+    .file-blank {
+      color: gray;
+    }
+
+    .file-missing,
+    .file-metis-error {
+      color: red;
+    }
+
+    .file-buttons {
+      display: flex;
+      padding-right: 5px;
+      width: 100px;
+      justify-content: space-between;
+      font-size: 0.5em;
+      color: gray;
+      .icon {
+        cursor: pointer;
+      }
+      .upload {
+        &:hover {
+          color: #eab;
+        }
+      }
+      .cloud {
+        &:hover {
+          color: #15788f;
+        }
+      }
+      .stub {
+        &:hover {
+          color: #ccc;
+        }
+      }
+      .remove {
+        &:hover {
+          color: red;
+        }
+      }
+    }
   }
 }

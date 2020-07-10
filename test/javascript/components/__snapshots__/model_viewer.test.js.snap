@@ -1,0 +1,446 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModelViewer renders 1`] = `
+<div
+  className="table"
+>
+  <div
+    className="ReactTable"
+    style={Object {}}
+  >
+    <div
+      className="rt-table"
+      role="grid"
+      style={undefined}
+    >
+      <div
+        className="rt-thead -header"
+        style={
+          Object {
+            "minWidth": "600px",
+          }
+        }
+      >
+        <div
+          className="rt-tr"
+          role="row"
+          style={undefined}
+        >
+          <div
+            className="rt-th rt-resizable-header"
+            onClick={[Function]}
+            role="columnheader"
+            style={
+              Object {
+                "flex": "100 0 auto",
+                "maxWidth": null,
+                "width": "100px",
+              }
+            }
+            tabIndex="-1"
+          >
+            <div
+              className="rt-resizable-header-content"
+            >
+              aspect
+            </div>
+            <div
+              className="rt-resizer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
+            />
+          </div>
+          <div
+            className="rt-th rt-resizable-header"
+            onClick={[Function]}
+            role="columnheader"
+            style={
+              Object {
+                "flex": "100 0 auto",
+                "maxWidth": null,
+                "width": "100px",
+              }
+            }
+            tabIndex="-1"
+          >
+            <div
+              className="rt-resizable-header-content"
+            >
+              labor
+            </div>
+            <div
+              className="rt-resizer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
+            />
+          </div>
+          <div
+            className="rt-th rt-resizable-header"
+            onClick={[Function]}
+            role="columnheader"
+            style={
+              Object {
+                "flex": "100 0 auto",
+                "maxWidth": null,
+                "width": "100px",
+              }
+            }
+            tabIndex="-1"
+          >
+            <div
+              className="rt-resizable-header-content"
+            >
+              name
+            </div>
+            <div
+              className="rt-resizer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
+            />
+          </div>
+          <div
+            className="rt-th rt-resizable-header"
+            onClick={[Function]}
+            role="columnheader"
+            style={
+              Object {
+                "flex": "100 0 auto",
+                "maxWidth": null,
+                "width": "100px",
+              }
+            }
+            tabIndex="-1"
+          >
+            <div
+              className="rt-resizable-header-content"
+            >
+              species
+            </div>
+            <div
+              className="rt-resizer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
+            />
+          </div>
+          <div
+            className="rt-th rt-resizable-header"
+            onClick={[Function]}
+            role="columnheader"
+            style={
+              Object {
+                "flex": "100 0 auto",
+                "maxWidth": null,
+                "width": "100px",
+              }
+            }
+            tabIndex="-1"
+          >
+            <div
+              className="rt-resizable-header-content"
+            >
+              stats
+            </div>
+            <div
+              className="rt-resizer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
+            />
+          </div>
+          <div
+            className="rt-th rt-resizable-header"
+            onClick={[Function]}
+            role="columnheader"
+            style={
+              Object {
+                "flex": "100 0 auto",
+                "maxWidth": null,
+                "width": "100px",
+              }
+            }
+            tabIndex="-1"
+          >
+            <div
+              className="rt-resizable-header-content"
+            >
+              victim
+            </div>
+            <div
+              className="rt-resizer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="rt-tbody"
+        style={
+          Object {
+            "minWidth": "600px",
+          }
+        }
+      >
+        <div
+          className="rt-tr-group"
+          role="rowgroup"
+        >
+          <div
+            className="rt-tr -odd"
+            role="row"
+            style={undefined}
+          >
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              >
+                <div
+                  className="collection"
+                />
+              </div>
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              />
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              >
+                Lernean Hydra
+              </div>
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              >
+                hydra
+              </div>
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute file"
+              >
+                <span
+                  className="file-missing"
+                >
+                   No file 
+                </span>
+              </div>
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              >
+                <div
+                  className="collection"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="rt-tr-group"
+          role="rowgroup"
+        >
+          <div
+            className="rt-tr -even"
+            role="row"
+            style={undefined}
+          >
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              >
+                <div
+                  className="collection"
+                />
+              </div>
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              />
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              >
+                Nemean Lion
+              </div>
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              >
+                lion
+              </div>
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute file"
+              >
+                <span
+                  className="file-missing"
+                >
+                   No file 
+                </span>
+              </div>
+            </div>
+            <div
+              className="rt-td"
+              onClick={[Function]}
+              role="gridcell"
+              style={
+                Object {
+                  "flex": "100 0 auto",
+                  "maxWidth": null,
+                  "width": "100px",
+                }
+              }
+            >
+              <div
+                className="attribute"
+              >
+                <div
+                  className="collection"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="-loading"
+    >
+      <div
+        className="-loading-inner"
+      >
+        Loading...
+      </div>
+    </div>
+  </div>
+</div>
+`;
