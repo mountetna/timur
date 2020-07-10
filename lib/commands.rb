@@ -153,7 +153,6 @@ EOT
         exit 0
       end
       Process.wait
-
     end
 
     def setup(config)
