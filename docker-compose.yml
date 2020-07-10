@@ -43,6 +43,7 @@ services:
     <<: *timur_base
     environment:
       <<: *app_environment
+      RUN_NPM_INSTALL: "true"
     command: >
       sh -c "./bin/timur create_routes && npm run webpack"
 
