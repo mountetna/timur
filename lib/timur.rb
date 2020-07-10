@@ -12,8 +12,4 @@ class Timur
 
     require_relative 'models'
   end
-
-  def setup_magma
-    Magma.instance.configure(config(:magma))
-  end
 end

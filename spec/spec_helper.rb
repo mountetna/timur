@@ -25,7 +25,6 @@ OUTER_APP = Rack::Builder.new do
   use Etna::DescribeRoutes
   run Timur::Server.new
 end
-Magma.instance.configure(Timur.instance.config(:magma))
 
 AUTH_USERS = {
   admin: {

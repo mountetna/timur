@@ -80,10 +80,7 @@ module Archimedes
     end
 
     def response
-      @response ||= JSON.parse(
-        client.query(@token, @project_name, @query).body,
-        symbolize_names: true
-      )
+      @response ||= query_response
     end
 
     def answer
@@ -94,8 +91,19 @@ module Archimedes
       response[:format]
     end
 
-    def client
-      Magma::Client.instance
+    def query_response
+      host = Timur.instance.config(:magma).fetch(:host)
+
+      client = Etna::Client.new(
+        host,
+        @token)
+
+      query_params = {
+        project_name: @project_name,
+        query: @query
+      }
+
+      client.query(query_params)
     end
   end
 end

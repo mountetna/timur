@@ -2,15 +2,25 @@ require_relative '../../lib/models/archimedes'
 
 describe Archimedes::Table do
   it 'should retrieve a table of data from Magma' do
-    stub_request(:post, Timur.instance.config(:magma)[:host]+'/query')
+    route_payload = JSON.generate([
+      {:method=>"POST", :route=>"/query", :name=>"query", :params=>[]}
+    ])
+    stub_request(:options, Timur.instance.config(:magma)[:host]).
+      to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
+
+    # Need a RegEx for the URL match here because of the query params
+    stub_request(:post, /https:\/\/magma.test\/query/)
       .with(
         body: {
-          project_name:'timur', 
+          project_name:'timur',
           query: ['match', ['games', 'patron', 'name', '::equals', 'Zeus'], '::all', [['contestant', 'city'], ['event'], ['score']]]
         }.to_json
       ).to_return(
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: {
-          answer: [ 
+          answer: [
             [ 1, [ 'athens', 'shot put', 4 ] ],
             [ 2, [ 'athens', 'pankration', 3 ] ],
             [ 3, [ 'sparta', 'shot put', 2 ] ],
@@ -59,13 +69,23 @@ describe Archimedes::Table do
   end
 
   it 'should unpack a matrix column into separate columns' do
-    stub_request(:post, Timur.instance.config(:magma)[:host]+'/query')
+    route_payload = JSON.generate([
+      {:method=>"POST", :route=>"/query", :name=>"query", :params=>[]}
+    ])
+    stub_request(:options, Timur.instance.config(:magma)[:host]).
+      to_return(status: 200, body: route_payload, headers: {'Content-Type': 'application/json'})
+
+    # Need a RegEx for the URL match here because of the query params
+    stub_request(:post, /https:\/\/magma.test\/query?/)
       .with(
         body: {
           project_name:'timur',
           query: ['contestant', '::all', [ [ 'city' ], ['scores']]]
         }.to_json
       ).to_return(
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: {
           answer: [
             [ 'Hercules', [ 'Thebes', [ 3, 3, 4 ] ] ],
