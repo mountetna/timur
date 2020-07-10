@@ -139,10 +139,21 @@ EOT
     def create_db
       # Create the database only
 
-      puts "Creating database #{@db_config[:database]}"
-      %x{ PGPASSWORD=#{@db_config[:password]} createdb -w -U #{@db_config[:user]} #{@db_config[:database]} }
+      # We can't set environment vars for the executing shell,
+      #   but we can set env vars for subshells that we open
+      # https://stackoverflow.com/a/2660833
+      fork do
+        puts "Creating database #{@db_config[:database]}"
+        ENV['PGPASSWORD'] = @db_config[:password]
+        ENV['PGUSER'] = @db_config[:user]
+        ENV['PGDB'] = @db_config[:database]
+        %x{ createdb -w -U "$PGUSER" "$PGDB" }
 
-      Timur.instance.setup_db
+        Timur.instance.setup_db
+        exit 0
+      end
+      Process.wait
+
     end
 
     def setup(config)
