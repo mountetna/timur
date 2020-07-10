@@ -43,9 +43,6 @@ RUN gem update --system
 ENV GEM_HOME="$BUNDLE_PATH"
 ENV GEM_PATH="/root/.gem/ruby/2.5.0:/usr/local/lib/ruby/gems/2.5.0:/usr/local/bundle:$BUNDLE_PATH/ruby/2.5.0"
 
-# Create and install the Magma gem
-CMD cd /magma/gem/ && gem build magma && gem install magma
-
 # bash improvements for developer environment
 RUN git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
     bash ~/.bash_it/install.sh --silent && \
