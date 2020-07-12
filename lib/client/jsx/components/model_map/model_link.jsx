@@ -16,4 +16,13 @@ const ModelLink = ({ center, parent, size }) => {
   </g>;
 }
 
+export const Arrowhead = () => <marker id="arrow"
+              markerWidth="3"
+              markerHeight="3"
+              refX="0" refY="1"
+              orient="auto"
+              markerUnits="strokeWidth">
+              <path d="M0,0 L0,2 L3,1 z"/>
+            </marker>
+
 export default ModelLink;

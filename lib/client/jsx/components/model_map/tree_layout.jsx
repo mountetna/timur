@@ -52,11 +52,13 @@ class LayoutNode {
   }
 
   place(grid, selected_model) {
+    let maxpos = grid[this.depth].length;
+    let maxdepth = grid.length;
     this.center = {
-      x: (this.pos) / (grid[this.depth].length+1) * this.layout.width,
-      y: this.depth / (grid.length) * this.layout.height
+      x: (this.pos) / (maxpos+1) * this.layout.width,
+      y: this.depth / (maxdepth) * this.layout.height
     };
-    this.size = 30;
+    this.size = 40;
   }
 }
 

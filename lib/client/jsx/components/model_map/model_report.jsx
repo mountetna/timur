@@ -2,27 +2,14 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { selectTemplate } from '../../selectors/magma';
 
-class ModelAttribute extends Component {
-  type() {
-    let attribute = this.props.template.attributes[this.props.att_name]
-
-    if (attribute.type) return attribute.type
-
-    return attribute.attribute_class.replace(/Magma::/,'').replace('Attribute','')
-  }
-
-  render() {
-    let { att_name, template } = this.props
-    let attribute = template.attributes[att_name]
-    return <div className="map_attribute" key={ att_name }>
-      <span>{att_name}</span>
-      <span className="type"> ({this.type()}) </span>
-      { attribute.desc ?
-      <span className="description">{ attribute.desc }</span>
-          : null
-      }
-    </div>
-  }
+const ModelAttribute = ({ attribute: { attribute_name, attribute_type, desc }}) => {
+  return <div className="map_attribute" key={ attribute_name }>
+    <span>{attribute_name}</span>
+    <span className="type"> {attribute_type} </span>
+    {
+      desc && <span className="description">{ desc }</span>
+    }
+  </div>
 }
 
 const ModelReport = ({ model_name, template }) =>
@@ -31,10 +18,9 @@ const ModelReport = ({ model_name, template }) =>
       <span className="title">{model_name}</span>
       <span className="description">{template.description}</span>
       {
-        Object.keys(template.attributes).map((att_name,i) =>
-          template.attributes[att_name].hidden
-          ? null
-          : <ModelAttribute key={i} att_name={att_name} template={template}/>
+        Object.values(template.attributes).map(attribute =>
+          attribute.hidden ? null
+          : <ModelAttribute key={attribute.attribute_name} attribute={attribute} />
         )
       }
     </div>;
