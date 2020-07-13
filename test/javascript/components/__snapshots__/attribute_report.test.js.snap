@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AttributeReport renders 1`] = `
+<div
+  className="attribute_report"
+>
+  <div
+    className="heading report_row"
+  >
+    <span
+      className="name"
+    >
+      Attribute
+    </span>
+     
+    <span
+      className="title"
+    >
+      name
+    </span>
+  </div>
+  <div
+    className="report_row"
+  >
+    <div
+      className="type"
+    >
+      attribute_type
+    </div>
+    <div
+      className="value"
+    >
+      identifier
+    </div>
+  </div>
+  <div
+    className="report_row"
+  >
+    <div
+      className="type"
+    >
+      display_name
+    </div>
+    <div
+      className="value"
+    >
+      Name
+    </div>
+  </div>
+</div>
+`;
