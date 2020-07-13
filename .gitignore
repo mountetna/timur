@@ -42,3 +42,4 @@ tmp
 # Ignore jest reporting files
 /coverage
 /spec/examples.txt
+.npm-packages
