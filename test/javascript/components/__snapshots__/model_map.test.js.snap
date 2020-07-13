@@ -15,7 +15,7 @@ exports[`ModelMap renders 1`] = `
         x1={149.54948730521113}
         x2={250}
         y1={250}
-        y2={250}
+        y2={50}
       />
     </g>
     <g
@@ -83,7 +83,7 @@ exports[`ModelMap renders 1`] = `
     >
       <g
         onClick={[Function]}
-        transform="translate(250,250)"
+        transform="translate(250,50)"
       >
         <circle
           cx={0}
