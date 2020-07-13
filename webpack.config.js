@@ -1,5 +1,6 @@
 var path = require("path");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+const EventHooksPlugin = require("event-hooks-webpack-plugin");
 var webpack = require("webpack");
 
 module.exports = (env) => ({
