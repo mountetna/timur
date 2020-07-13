@@ -1,6 +1,5 @@
 var path = require("path");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-const EventHooksPlugin = require("event-hooks-webpack-plugin");
 var webpack = require("webpack");
 
 module.exports = (env) => ({
@@ -28,12 +27,6 @@ module.exports = (env) => ({
 
         // Only run `.js` and `.jsx` files through Babel
         test: /\.jsx?$/,
-
-        // Options to configure babel with
-        query: {
-          presets: ["env", "react"],
-          plugins: ["transform-object-rest-spread"],
-        },
       },
 
       {
@@ -67,12 +60,6 @@ module.exports = (env) => ({
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify(env ? env.NODE_ENV : "development"),
-      },
-    }),
-    new EventHooksPlugin({
-      "after-emit": (compilation, done) => {
-        console.log("\n\nCopying routes file to compiled\n\n");
-        fs.copy("downzip-sw.js", "public/js/downzip-sw.js", done);
       },
     }),
   ],
