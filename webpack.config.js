@@ -65,7 +65,13 @@ module.exports = (env) => ({
     }),
     new webpack.DefinePlugin({
       "process.env": {
-        NODE_ENV: JSON.stringify(env.NODE_ENV),
+        NODE_ENV: JSON.stringify(env ? env.NODE_ENV : "development"),
+      },
+    }),
+    new EventHooksPlugin({
+      "after-emit": (compilation, done) => {
+        console.log("\n\nCopying routes file to compiled\n\n");
+        fs.copy("downzip-sw.js", "public/js/downzip-sw.js", done);
       },
     }),
   ],
