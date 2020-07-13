@@ -79,7 +79,7 @@ exports[`ModelMap renders 1`] = `
       </g>
     </g>
     <g
-      className="model_node"
+      className="model_node selected"
     >
       <g
         onClick={[Function]}

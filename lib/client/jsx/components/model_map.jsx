@@ -1,10 +1,9 @@
 import {connect} from 'react-redux';
 
-import {easeQuadIn} from 'd3-ease';
 import React, {Component} from 'react';
 import {requestModels} from '../actions/magma_actions';
 import {selectModelNames, selectTemplate} from '../selectors/magma';
-import {Animate} from 'react-move';
+import ModelReport from './model_report';
 
 class ModelLink extends Component {
   render() {
@@ -43,53 +42,6 @@ class ModelNode extends Component {
     );
   }
 }
-
-class ModelAttribute extends Component {
-  type() {
-    let attribute = this.props.template.attributes[this.props.att_name];
-
-    if (attribute.type) return attribute.type;
-
-    return attribute.attribute_class
-      .replace(/Magma::/, '')
-      .replace('Attribute', '');
-  }
-  render() {
-    let {att_name, template} = this.props;
-    let attribute = template.attributes[att_name];
-    return (
-      <div className="map_attribute" key={att_name}>
-        <span>{att_name}</span>
-        <span className="type"> ({this.type()}) </span>
-        {attribute.desc ? (
-          <span className="description">{attribute.desc}</span>
-        ) : null}
-      </div>
-    );
-  }
-}
-
-class ModelReport extends Component {
-  render() {
-    let {model_name, template} = this.props;
-    if (!template) return <div />;
-    return (
-      <div className="report">
-        <span className="title">{model_name}</span>
-        <span className="description">{template.description}</span>
-        {Object.keys(template.attributes).map((att_name, i) =>
-          template.attributes[att_name].hidden ? null : (
-            <ModelAttribute key={i} att_name={att_name} template={template} />
-          )
-        )}
-      </div>
-    );
-  }
-}
-
-ModelReport = connect((state, {model_name}) => ({
-  template: selectTemplate(state, model_name)
-}))(ModelReport);
 
 class LayoutNode {
   constructor(template, layout) {
