@@ -20,11 +20,12 @@ class ModelLink extends Component {
 
 class ModelNode extends Component {
   render() {
-    let {model_name, center, size} = this.props;
+    let {model_name, center, size, selected} = this.props;
     if (!center) return null;
     let [x, y] = center;
+    const className = selected ? 'model_node selected' : 'model_node';
     return (
-      <g className="model_node">
+      <g className={className}>
         <g
           transform={`translate(${x},${y})`}
           onClick={() => this.props.handler(this.props.model_name)}
@@ -190,63 +191,6 @@ class Layout {
   }
 }
 
-class ModelAnimation extends Component {
-  nodeCenter(node, parent_name, layout) {
-    return {
-      size: node.size,
-      center_x: node.center && node.center[0],
-      center_y: node.center && node.center[1],
-      parent_x: parent_name ? layout.nodes[parent_name].center[0] : null,
-      parent_y: parent_name ? layout.nodes[parent_name].center[1] : null
-    };
-  }
-  render() {
-    let {
-      model_name,
-      layout,
-      layout2,
-      onRest,
-      handler,
-      ModelElement
-    } = this.props;
-
-    let node = layout.nodes[model_name];
-    let node2 = layout2.nodes[model_name];
-
-    let center = this.nodeCenter(node, node2.parent_name, layout);
-    let center2 = this.nodeCenter(node2, node2.parent_name, layout2);
-
-    return (
-      <Animate
-        start={center}
-        enter={{
-          size: [center2.size],
-          center_x: [center2.center_x],
-          center_y: [center2.center_y],
-          parent_x: [center2.parent_x],
-          parent_y: [center2.parent_y],
-          timing: {duration: 400, ease: easeQuadIn},
-          events: onRest ? {end: onRest} : {}
-        }}
-        key={model_name}
-      >
-        {(data) => {
-          return (
-            <ModelElement
-              handler={handler}
-              key={model_name}
-              size={data.size}
-              center={data.center_x ? [data.center_x, data.center_y] : null}
-              parent={data.parent_x ? [data.parent_x, data.parent_y] : null}
-              model_name={model_name}
-            />
-          );
-        }}
-      </Animate>
-    );
-  }
-}
-
 class ModelMap extends Component {
   constructor() {
     super();
@@ -273,13 +217,6 @@ class ModelMap extends Component {
       );
     });
   }
-  setNewModel(model_name) {
-    let {new_model} = this.state;
-    this.setState({
-      new_model: null,
-      current_model: new_model
-    });
-  }
   renderModels(new_model, model_names, layout) {
     return model_names.map((model_name) => {
       let node = layout.nodes[model_name];
@@ -291,6 +228,7 @@ class ModelMap extends Component {
           size={node.size}
           handler={this.showModel.bind(this)}
           model_name={model_name}
+          selected={model_name === new_model}
         />
       );
     });
@@ -301,13 +239,15 @@ class ModelMap extends Component {
     let {new_model, current_model} = this.state;
     let layout = new Layout(current_model, templates, width, height);
 
+    const selected_model = new_model ? new_model : current_model;
+
     return (
       <div id="map">
         <svg width={width} height={height}>
           {this.renderLinks(model_names, layout)}
-          {this.renderModels(new_model, model_names, layout)}
+          {this.renderModels(selected_model, model_names, layout)}
         </svg>
-        <ModelReport model_name={new_model ? new_model : current_model} />
+        <ModelReport model_name={selected_model} />
       </div>
     );
   }

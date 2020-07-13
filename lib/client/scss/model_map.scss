@@ -1,4 +1,4 @@
-@import "globals";
+@import 'globals';
 
 #map {
   display: flex;
@@ -25,7 +25,7 @@
         font-size: 0.8em;
         padding-left: 2px;
         &:before {
-          content: " - ";
+          content: ' - ';
         }
       }
     }
@@ -47,6 +47,13 @@
       text {
         font-family: $body_font;
         fill: #222;
+      }
+    }
+    .model_node.selected {
+      circle {
+        fill: lightcoral;
+        stroke-width: 4px;
+        stroke: gray;
       }
     }
     line {
