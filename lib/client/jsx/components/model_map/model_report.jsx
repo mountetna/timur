@@ -17,8 +17,14 @@ const ModelAttribute = ({ attribute: { attribute_name, attribute_type, desc }, s
 
 const order = ({attribute_type}) => ({
   parent: 1,
-  identifier: 2
-}[attribute_type] || 3)
+  identifier: 2,
+  collection: 3,
+  table: 4,
+  child: 5,
+  link: 6,
+  file: 7,
+  image: 8
+}[attribute_type] || 9)
 
 const ModelReport = ({ model_name, attribute_name, template, showAttribute }) =>
     (!template) ? <div/> :
@@ -31,7 +37,9 @@ const ModelReport = ({ model_name, attribute_name, template, showAttribute }) =>
           <span className="name">Attributes</span>
         </div>
         {
-          Object.values(template.attributes).sort((a,b) => order(a)-order(b)).map( attribute =>
+          Object.values(template.attributes).sort(
+            (a,b) => (order(a)-order(b)) || a.attribute_name.localeCompare(b.attribute_name)
+          ).map( attribute =>
             attribute.hidden
               ? null
               : <ModelAttribute key={attribute.attribute_name} showAttribute={ showAttribute } attribute={attribute} />
