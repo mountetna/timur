@@ -15,6 +15,7 @@ const ATT_ATTS = [
 ];
 
 const AttributeReport = ({attribute}) =>
+  !attribute ? <div className="attribute_report"/> :
   <div className="attribute_report">
     <div className="heading report_row">
       <span className="name">Attribute</span> <span className="title">{attribute.attribute_name}</span>

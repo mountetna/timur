@@ -35,6 +35,9 @@
       flex-basis: 500px;
       height: min-content;
       background: #eee;
+      &:empty {
+        background: none;
+      }
       padding: 20px;
       margin-right: 20px;
       .report_row {

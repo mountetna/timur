@@ -198,6 +198,9 @@ exports[`ModelMap renders 1`] = `
         </span>
       </div>
     </div>
+    <div
+      className="attribute_report"
+    />
   </div>
 </div>
 `;

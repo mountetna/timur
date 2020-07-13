@@ -46,9 +46,7 @@ const ModelReport = ({ model_name, attribute_name, template, showAttribute }) =>
           )
         }
       </div>
-      {
-        attribute_name && <AttributeReport attribute={ template.attributes[attribute_name] }/>
-      }
+      <AttributeReport attribute={ attribute_name && template.attributes[attribute_name] }/>
     </div>;
 
 export default connect(
