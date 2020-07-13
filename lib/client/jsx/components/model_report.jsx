@@ -1,14 +1,18 @@
 import {connect} from 'react-redux';
 
 import React, {Component} from 'react';
-
+import * as _ from 'lodash';
 import {selectTemplate} from '../selectors/magma';
 
 class ModelAttribute extends Component {
   type() {
     let attribute = this.props.template.attributes[this.props.att_name];
 
-    if (attribute.type) return attribute.type;
+    if (
+      attribute.attribute_class.includes('ForeignKey') &&
+      attribute.attribute_type
+    )
+      return _.upperFirst(attribute.attribute_type);
 
     return attribute.attribute_class
       .replace(/Magma::/, '')
@@ -33,6 +37,7 @@ class ModelReport extends Component {
   render() {
     let {model_name, template} = this.props;
     if (!template) return <div />;
+
     return (
       <div className="report">
         <span className="title">{model_name}</span>
