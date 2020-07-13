@@ -162,12 +162,19 @@ class FileAttribute extends React.Component {
               ) : (
                 ''
               )}
-              <a
-                className="modal-help"
-                href="https://mountetna.github.io/timur.html"
-              >
-                Help
-              </a>
+              <div className="modal-buttons pull-right">
+                <Icon
+                  className=""
+                  icon="question-circle"
+                  title="Help"
+                  onClick={() =>
+                    window.open(
+                      'https://mountetna.github.io/timur.html#managing-data-files',
+                      '_blank'
+                    )
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>
