@@ -11,7 +11,6 @@ exports[`ModelViewer renders 1`] = `
     <div
       className="rt-table"
       role="grid"
-      style={undefined}
     >
       <div
         className="rt-thead -header"
@@ -24,7 +23,6 @@ exports[`ModelViewer renders 1`] = `
         <div
           className="rt-tr"
           role="row"
-          style={undefined}
         >
           <div
             className="rt-th rt-resizable-header"
@@ -187,7 +185,6 @@ exports[`ModelViewer renders 1`] = `
           <div
             className="rt-tr -odd"
             role="row"
-            style={undefined}
           >
             <div
               className="rt-td"
@@ -312,7 +309,6 @@ exports[`ModelViewer renders 1`] = `
           <div
             className="rt-tr -even"
             role="row"
-            style={undefined}
           >
             <div
               className="rt-td"
