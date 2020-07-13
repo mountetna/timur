@@ -100,7 +100,6 @@ class LayoutNode {
     this.parent_name = parent_name;
 
     if (depth == 1) this.center = [this.layout.width / 2, this.size + 10];
-    // this.center = [ this.layout.width/2, this.layout.height/2 ]
     else {
       let th = (arc[1] + arc[0]) / 2;
 
