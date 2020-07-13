@@ -29,6 +29,7 @@ x-timur_base: &timur_base
     COVERAGE: "true"
     DATABASE_HOST: "timur_db"
     TIMUR_ENV: "development"
+    MASTER_BUILD: "${MASTER_BUILD}"
 
 services:
   timur_app:
