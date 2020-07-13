@@ -4,35 +4,95 @@
   display: flex;
   margin-top: 10px;
   position: relative;
-  .report {
-    display: block;
-    flex: 1;
-    vertical-align: top;
-    font-family: $body_font;
-    padding: 0px 10px;
-    border-left: 1px solid lightgray;
+  font-family: $body_font;
+
+  .heading {
+    &:first-of-type {
+      border-bottom: $thin_rule;
+    }
+    .name {
+      color: gray;
+      font-size: 1.2em;
+    }
     .title {
       color: forestgreen;
-      font-size: 1.4em;
+      font-size: 1.2em;
     }
-    .map_attribute {
-      border-bottom: $thin_rule;
-      color: darkgoldenrod;
+  }
+
+  .report {
+    display: flex;
+    flex: 1;
+    vertical-align: top;
+
+    .model_report {
+      flex: 1;
+      border-left: 1px solid lightgray;
+      padding: 20px 10px;
+    }
+
+    .attribute_report {
+      flex-basis: 500px;
+      height: min-content;
+      background: #eee;
+      padding: 20px;
+      margin-right: 20px;
+      .report_row {
+        border-bottom: 0px;
+      }
+    }
+    .report_row {
+      display: flex;
+
+      :first-child {
+        text-align: right;
+        padding-right: 5px;
+        flex-basis: 130px;
+      }
+      :not(:first-child) {
+        word-wrap: anywhere;
+        flex: 1;
+      }
+
       .type {
         color: gray;
       }
+
+      .value {
+        color: #131;
+        border-bottom: $thin_rule;
+      }
+
       .description {
         color: #131;
-        font-size: 0.8em;
-        padding-left: 2px;
         &:before {
           content: " - ";
         }
       }
     }
+    .heading:first-of-type {
+      margin-bottom: 10px;
+    }
+    .heading:not(:first-of-type) {
+      .name {
+        font-size: 1.1em;
+      }
+    }
+    .map_attribute {
+      .name {
+        cursor: pointer;
+      }
+    }
   }
+
   .map {
     flex-basis: 600px;
+    .heading {
+      position: absolute;
+      left: 15px;
+      top: 20px;
+      border-bottom: $thin_rule;
+    }
     svg {
       overflow: visible;
       line {

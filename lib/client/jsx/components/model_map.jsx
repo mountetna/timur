@@ -13,22 +13,28 @@ import Layout from './model_map/tree_layout';
 class ModelMap extends React.Component {
   constructor() {
     super()
-    this.state = { current_model: "project" }
+    this.state = { current_model: "project", current_attribute: null }
   }
   componentDidMount() {
     this.props.requestModels();
   }
-  showModel(model_name) {
-    this.setState( { current_model: model_name } )
+  showModel(current_model) {
+    this.setState( { current_model, current_attribute: null } )
+  }
+  showAttribute(current_attribute) {
+    this.setState( { current_attribute } )
   }
   render() {
     let [ width, height ] = [ 600, 600 ];
     let { templates, model_names } = this.props;
-    let { current_model } = this.state;
+    let { current_model, current_attribute } = this.state;
     let layout = new Layout(current_model, templates, width, height);
 
     return <div id="model_map">
       <div className="map">
+        <div className="heading report_row">
+        <span className="name">Project</span> <span className="title">{TIMUR_CONFIG.project_name}</span>
+        </div>
         <svg width={width} height={height}>
           <defs>
             <Arrowhead/>
@@ -61,7 +67,9 @@ class ModelMap extends React.Component {
            )
          }
       </div>
-      <ModelReport model_name={ current_model }/>
+      <ModelReport
+        showAttribute={ this.showAttribute.bind(this) }
+        model_name={ current_model } attribute_name={ current_attribute }/>
     </div>
   }
 }
