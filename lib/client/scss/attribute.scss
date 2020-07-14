@@ -133,6 +133,10 @@
           color: red;
         }
       }
+      &.pull-right {
+        flex: 1;
+        justify-content: flex-end;
+      }
     }
   }
 
