@@ -2,166 +2,205 @@
 
 exports[`ModelMap renders 1`] = `
 <div
-  id="map"
+  id="model_map"
 >
-  <svg
-    height={500}
-    width={500}
+  <div
+    className="map"
   >
-    <g
-      className="model_link"
+    <div
+      className="heading report_row"
     >
-      <line
-        x1={149.54948730521113}
-        x2={250}
-        y1={250}
-        y2={250}
+      <span
+        className="name"
+      >
+        Project
+      </span>
+       
+      <span
+        className="title"
       />
-    </g>
-    <g
-      className="model_link"
+    </div>
+    <svg
+      height={600}
+      width={600}
     >
-      <line
-        x1={93.93768976114325}
-        x2={149.54948730521113}
-        y1={250.00000000000003}
-        y2={250}
-      />
-    </g>
-    <g
-      className="model_node"
-    >
-      <g
-        onClick={[Function]}
-        transform="translate(149.54948730521113,250)"
-      >
-        <circle
-          cx={0}
-          cy={0}
-          r={20}
-        />
-        <text
-          dy="0.4em"
-          style={
-            Object {
-              "fontSize": 12.699501833152231,
-            }
-          }
-          textAnchor="middle"
+      <defs>
+        <marker
+          id="arrow"
+          markerHeight="3"
+          markerUnits="strokeWidth"
+          markerWidth="3"
+          orient="auto"
+          refX="0"
+          refY="1"
         >
-          labor
-        </text>
-      </g>
-    </g>
-    <g
-      className="model_node"
-    >
+          <path
+            d="M0,0 L0,2 L3,1 z"
+          />
+        </marker>
+      </defs>
       <g
-        onClick={[Function]}
-        transform="translate(93.93768976114325,250.00000000000003)"
+        className="model_link"
       >
-        <circle
-          cx={0}
-          cy={0}
-          r={13.333333333333334}
+        <line
+          markerEnd="url(#arrow)"
+          x1={300}
+          x2={300}
+          y1={150}
+          y2={280}
         />
-        <text
-          dy="0.4em"
-          style={
-            Object {
-              "fontSize": 11.094186655831054,
-            }
-          }
-          textAnchor="middle"
-        >
-          monster
-        </text>
       </g>
-    </g>
-    <g
-      className="model_node"
-    >
       <g
-        onClick={[Function]}
-        transform="translate(250,250)"
+        className="model_link"
       >
-        <circle
-          cx={0}
-          cy={0}
-          r={40}
+        <line
+          markerEnd="url(#arrow)"
+          x1={300}
+          x2={300}
+          y1={300}
+          y2={430}
         />
-        <text
-          dy="0.4em"
-          style={
-            Object {
-              "fontSize": 16,
-            }
-          }
-          textAnchor="middle"
-        >
-          project
-        </text>
       </g>
-    </g>
-  </svg>
+    </svg>
+    <div
+      className="model_node "
+      onClick={[Function]}
+      style={
+        Object {
+          "left": 300,
+          "top": 300,
+        }
+      }
+    >
+      labor
+    </div>
+    <div
+      className="model_node "
+      onClick={[Function]}
+      style={
+        Object {
+          "left": 300,
+          "top": 450,
+        }
+      }
+    >
+      monster
+    </div>
+    <div
+      className="model_node selected"
+      onClick={[Function]}
+      style={
+        Object {
+          "left": 300,
+          "top": 150,
+        }
+      }
+    >
+      project
+    </div>
+  </div>
   <div
     className="report"
   >
-    <span
-      className="title"
+    <div
+      className="model_report"
     >
-      project
-    </span>
-    <span
-      className="description"
+      <div
+        className="heading report_row"
+      >
+        <span
+          className="name"
+        >
+          Model
+        </span>
+         
+        <span
+          className="title"
+        >
+          project
+        </span>
+      </div>
+      <div
+        className="heading report_row"
+      >
+        <span
+          className="name"
+        >
+          Attributes
+        </span>
+      </div>
+      <div
+        className="map_attribute report_row"
+      >
+        <span
+          className="type"
+        >
+           
+          identifier
+           
+        </span>
+        <span
+          className="value"
+        >
+          <a
+            className="name"
+            onClick={[Function]}
+          >
+            name
+          </a>
+          <span
+            className="description"
+          >
+            Name for this project
+          </span>
+        </span>
+      </div>
+      <div
+        className="map_attribute report_row"
+      >
+        <span
+          className="type"
+        >
+           
+          collection
+           
+        </span>
+        <span
+          className="value"
+        >
+          <a
+            className="name"
+            onClick={[Function]}
+          >
+            labor
+          </a>
+        </span>
+      </div>
+      <div
+        className="map_attribute report_row"
+      >
+        <span
+          className="type"
+        >
+           
+          table
+           
+        </span>
+        <span
+          className="value"
+        >
+          <a
+            className="name"
+            onClick={[Function]}
+          >
+            codex
+          </a>
+        </span>
+      </div>
+    </div>
+    <div
+      className="attribute_report"
     />
-    <div
-      className="map_attribute"
-    >
-      <span>
-        name
-      </span>
-      <span
-        className="type"
-      >
-         (
-        String
-        ) 
-      </span>
-      <span
-        className="description"
-      >
-        Name for this project
-      </span>
-    </div>
-    <div
-      className="map_attribute"
-    >
-      <span>
-        labor
-      </span>
-      <span
-        className="type"
-      >
-         (
-        Collection
-        ) 
-      </span>
-    </div>
-    <div
-      className="map_attribute"
-    >
-      <span>
-        codex
-      </span>
-      <span
-        className="type"
-      >
-         (
-        Table
-        ) 
-      </span>
-    </div>
   </div>
 </div>
 `;
