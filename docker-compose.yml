@@ -13,6 +13,14 @@ volumes:
   timur-public-dir:
     driver: local
 
+networks:
+  edge_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"
+        - subnet: "2001:3984:3989::/64"
+
 x-timur_base: &timur_base
   build:
     context: .
@@ -30,6 +38,14 @@ x-timur_base: &timur_base
     DATABASE_HOST: "timur_db"
     TIMUR_ENV: "development"
     MASTER_BUILD: "${MASTER_BUILD}"
+  # Maps external facing host names to the internal ip for development-apache.
+  extra_hosts:
+    - "magma.development.local:172.16.238.10"
+    - "metis.development.local:172.16.238.10"
+    - "rtemis.development.local:172.16.238.10"
+  networks:
+    edge_net:
+    default:
 
 services:
   timur_app:

@@ -11,7 +11,7 @@ default: &default
   :magma:
     :host: https://magma.development.local
   :rtemis:
-    :host: http://rtemis.development.local
+    :host: https://rtemis.development.local
   :metis:
     :host: https://metis.development.local
   :auth_redirect: https://janus.development.local
