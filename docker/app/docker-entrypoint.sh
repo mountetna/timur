@@ -3,6 +3,7 @@ set -e
 
 export PATH="/app/node_modules/.bin:/app/vendor/bundle/$RUBY_VERSION/bin:$PATH"
 cp npmrc ~/.npmrc || true
+mkdir -p public/js
 
 if [ -z "$SKIP_RUBY_SETUP" ]; then
   bundle check || bundle install -j "$(nproc)"
@@ -22,6 +23,8 @@ if [ -n "$RUN_NPM_INSTALL" ]; then
     echo 'Not master build, performing link to local etna-js...'
     npm link ../etna/packages/etna-js
   fi
+
+  ./bin/timur create_routes
 fi
 
 exec "$@"
