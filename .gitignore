@@ -23,8 +23,6 @@ config.yml
 /public/img
 /public/coverage
 
-package-lock.json
-
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep

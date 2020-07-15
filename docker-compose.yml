@@ -62,7 +62,7 @@ services:
       <<: *app_environment
       RUN_NPM_INSTALL: "true"
     command: >
-      npm run webpack
+      npm run webpack-dev
 
   timur_db:
     build:
