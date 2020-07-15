@@ -52,6 +52,8 @@ class LayoutNode {
   }
 
   place(grid, selected_model) {
+    if (!this.depth) return;
+
     let maxpos = grid[this.depth].length;
     let maxdepth = grid.length;
     this.center = {
