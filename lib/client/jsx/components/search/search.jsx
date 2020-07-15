@@ -38,14 +38,16 @@ class Search extends Component {
   }
 
   getPage = (page, newSearch = false) => {
+    let {attributes} = this.props;
+
     page = page + 1;
-    console.log('getting a new page');
+
     if (!this.pageCached(page) || newSearch) {
       this.setState({loading: true});
       this.props.requestDocuments({
         model_name: this.state.selected_model,
         record_names: 'all',
-        attribute_names: this.props.attributes,
+        attribute_names: attributes,
         filter: this.state.current_filter,
         page: page,
         page_size: this.state.page_size,
@@ -101,6 +103,7 @@ class Search extends Component {
   };
 
   renderQuery() {
+    let {attributes} = this.props;
     const buttonDisabled = !this.state.selected_model || this.state.loading;
     const buttonClasses = buttonDisabled ? 'button disabled' : 'button';
 
@@ -146,7 +149,7 @@ class Search extends Component {
             this.props.requestTSV(
               this.state.selected_model,
               this.state.current_filter,
-              this.props.attributes
+              attributes
             )
           }
         />

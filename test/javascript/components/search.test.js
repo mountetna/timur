@@ -51,13 +51,18 @@ describe('Search', () => {
       </Provider>
     );
 
-    expect(component.find('#search-pg-search-btn.disabled').length).toEqual(1);
-    expect(component.find('#search-pg-tsv-btn.disabled').length).toEqual(1);
+    expect(component.find('.button.disabled').length).toEqual(2);
 
     const tableSelect = component.find(SelectInput).first();
-    tableSelect.simulate('change', 'monster');
+    tableSelect.simulate('change', {
+      target: {
+        value: '0'
+      }
+    });
 
-    expect(component.find('#search-pg-search-btn.disabled').length).toEqual(0);
-    expect(component.find('#search-pg-tsv-btn.disabled').length).toEqual(0);
+    // Trigger a re-render so that the buttons are updated
+    component.update();
+
+    expect(component.find('.button.disabled').length).toEqual(0);
   });
 });
