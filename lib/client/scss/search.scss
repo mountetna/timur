@@ -1,11 +1,14 @@
-@import "globals";
-@import "attribute";
+@import 'globals';
+@import 'attribute';
 
 #search {
   font-family: $body_font;
   .button {
     @include green_button;
     margin-left: 4px;
+  }
+  .button.disabled {
+    cursor: not-allowed;
   }
   .filter {
     @include text_defaults;
@@ -14,7 +17,6 @@
   .control {
     padding-top: 10px;
     padding-bottom: 4px;
-
   }
   .query {
   }

@@ -74,3 +74,26 @@ describe('setSearchPageSize', () => {
     ]);
   });
 });
+
+describe('setSearchAttributes', () => {
+  it('sets the attributes to "all"', () => {
+    const store = mockStore({});
+
+    store.dispatch(actions.setSearchAttributes('all'));
+
+    expect(store.getActions()).toEqual([
+      {attributes: 'all', type: actions.SET_SEARCH_ATTRIBUTES}
+    ]);
+  });
+
+  it('sets the attributes to a list of attributes', () => {
+    const store = mockStore({});
+    const attributes = ['stats', 'name', 'avatar'];
+
+    store.dispatch(actions.setSearchAttributes(attributes));
+
+    expect(store.getActions()).toEqual([
+      {attributes, type: actions.SET_SEARCH_ATTRIBUTES}
+    ]);
+  });
+});

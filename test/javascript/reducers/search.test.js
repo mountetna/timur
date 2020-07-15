@@ -3,7 +3,8 @@ import {
   CACHE_SEARCH_PAGE,
   EMPTY_SEARCH_CACHE,
   SET_SEARCH_PAGE,
-  SET_SEARCH_PAGE_SIZE
+  SET_SEARCH_PAGE_SIZE,
+  SET_SEARCH_ATTRIBUTES
 } from '../../../lib/client/jsx/actions/search_actions';
 
 describe('search reducer', () => {
@@ -47,6 +48,27 @@ describe('search reducer', () => {
     });
   });
 
+  it('sets the search attributes', () => {
+    expect(
+      reducer(
+        {
+          current_page: {
+            number: 1
+          }
+        },
+        {
+          type: SET_SEARCH_ATTRIBUTES,
+          attributes: 'all'
+        }
+      )
+    ).toEqual({
+      current_page: {
+        number: 1
+      },
+      attributes: 'all'
+    });
+  });
+
   it('caches the given page if clear_cache flag is false', () => {
     expect(
       reducer(
@@ -79,7 +101,7 @@ describe('search reducer', () => {
     });
   });
 
-  it('empties the cache with CACHE_SEARCH_PAGE action if clear_cache flag is true', () => {
+  it('empties the cache of other pages with CACHE_SEARCH_PAGE action, if clear_cache flag is true', () => {
     expect(
       reducer(
         {
