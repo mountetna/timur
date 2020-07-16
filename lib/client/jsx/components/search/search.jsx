@@ -44,24 +44,31 @@ class Search extends Component {
 
     if (!this.pageCached(page) || newSearch) {
       this.setState({loading: true});
-      this.props.requestDocuments({
-        model_name: this.state.selected_model,
-        record_names: 'all',
-        attribute_names: attribute_names,
-        filter: this.state.current_filter,
-        page: page,
-        page_size: this.state.page_size,
-        collapse_tables: true,
-        exchange_name: `request-${this.state.selected_model}`,
-        success: this.makePageCache.bind(
-          this,
-          page,
-          newSearch ? this.state.page_size : null
-        ),
-        error: this.handleError
-      });
+      this.props
+        .requestDocuments({
+          model_name: this.state.selected_model,
+          record_names: 'all',
+          attribute_names: attribute_names,
+          filter: this.state.current_filter,
+          page: page,
+          page_size: this.state.page_size,
+          collapse_tables: true,
+          exchange_name: `request-${this.state.selected_model}`
+        })
+        .then((response) => {
+          this.handleRequestDocumentsSuccess(page, newSearch, response);
+        })
+        .catch(this.handleRequestDocumentsError);
     }
     this.props.setSearchPage(page);
+  };
+
+  handleRequestDocumentsSuccess = (page, newSearch, response) => {
+    this.makePageCache(page, newSearch ? this.state.page_size : null, response);
+  };
+
+  handleRequestDocumentsError = (e) => {
+    this.setState({loading: false});
   };
 
   pageCached(page) {
@@ -81,7 +88,7 @@ class Search extends Component {
     this.props.setSearchAttributeNames('all');
   }
 
-  makePageCache(page, page_size, payload) {
+  makePageCache = (page, page_size, payload) => {
     let model = payload.models[this.state.selected_model];
     if (model.count) this.setState({results: model.count});
     if (page_size) this.props.setSearchPageSize(page_size);
@@ -92,10 +99,6 @@ class Search extends Component {
       Object.keys(model.documents),
       page == 1
     );
-  }
-
-  handleError = () => {
-    this.setState({loading: false});
   };
 
   onSelectTableChange = (model_name) => {
