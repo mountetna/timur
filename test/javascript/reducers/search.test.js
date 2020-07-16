@@ -4,7 +4,7 @@ import {
   EMPTY_SEARCH_CACHE,
   SET_SEARCH_PAGE,
   SET_SEARCH_PAGE_SIZE,
-  SET_SEARCH_ATTRIBUTES
+  SET_SEARCH_ATTRIBUTE_NAMES
 } from '../../../lib/client/jsx/actions/search_actions';
 
 describe('search reducer', () => {
@@ -48,7 +48,7 @@ describe('search reducer', () => {
     });
   });
 
-  it('sets the search attributes', () => {
+  it('sets the search attribute_names', () => {
     expect(
       reducer(
         {
@@ -57,15 +57,15 @@ describe('search reducer', () => {
           }
         },
         {
-          type: SET_SEARCH_ATTRIBUTES,
-          attributes: 'all'
+          type: SET_SEARCH_ATTRIBUTE_NAMES,
+          attribute_names: 'all'
         }
       )
     ).toEqual({
       current_page: {
         number: 1
       },
-      attributes: 'all'
+      attribute_names: 'all'
     });
   });
 

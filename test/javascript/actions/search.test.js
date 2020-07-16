@@ -75,25 +75,25 @@ describe('setSearchPageSize', () => {
   });
 });
 
-describe('setSearchAttributes', () => {
-  it('sets the attributes to "all"', () => {
+describe('setSearchAttributeNames', () => {
+  it('sets the attribute names to "all"', () => {
     const store = mockStore({});
 
-    store.dispatch(actions.setSearchAttributes('all'));
+    store.dispatch(actions.setSearchAttributeNames('all'));
 
     expect(store.getActions()).toEqual([
-      {attributes: 'all', type: actions.SET_SEARCH_ATTRIBUTES}
+      {attribute_names: 'all', type: actions.SET_SEARCH_ATTRIBUTE_NAMES}
     ]);
   });
 
-  it('sets the attributes to a list of attributes', () => {
+  it('sets the attribute_names to a list of attribute names', () => {
     const store = mockStore({});
-    const attributes = ['stats', 'name', 'avatar'];
+    const attribute_names = ['stats', 'name', 'avatar'];
 
-    store.dispatch(actions.setSearchAttributes(attributes));
+    store.dispatch(actions.setSearchAttributeNames(attribute_names));
 
     expect(store.getActions()).toEqual([
-      {attributes, type: actions.SET_SEARCH_ATTRIBUTES}
+      {attribute_names, type: actions.SET_SEARCH_ATTRIBUTE_NAMES}
     ]);
   });
 });
