@@ -14,14 +14,14 @@ import {
 } from '../../actions/magma_actions';
 import {
   selectSearchCache,
-  selectSearchAttributes
+  selectSearchAttributeNames
 } from '../../selectors/search_cache';
 import {
   cacheSearchPage,
   setSearchPageSize,
   setSearchPage,
   emptySearchCache,
-  setSearchAttributes
+  setSearchAttributeNames
 } from '../../actions/search_actions';
 
 import ModelViewer from '../model_viewer';
@@ -38,7 +38,7 @@ class Search extends Component {
   }
 
   getPage = (page, newSearch = false) => {
-    let {attributes} = this.props;
+    let {attribute_names} = this.props;
 
     page = page + 1;
 
@@ -47,7 +47,7 @@ class Search extends Component {
       this.props.requestDocuments({
         model_name: this.state.selected_model,
         record_names: 'all',
-        attribute_names: attributes,
+        attribute_names: attribute_names,
         filter: this.state.current_filter,
         page: page,
         page_size: this.state.page_size,
@@ -73,12 +73,12 @@ class Search extends Component {
     this.props.requestModels();
     this.props.emptySearchCache();
 
-    // @Zach -- This sets the search attributes to the default.
+    // @Zach -- This sets the search attribute_names to the default.
     // When we have UI widgets to control this, we
     //   will need to tie the setSearchAttributes() action
     //   into those widgets and remove this.
     // setSearchAttributes() expects 'all' or a list of attribute names.
-    this.props.setSearchAttributes('all');
+    this.props.setSearchAttributeNames('all');
   }
 
   makePageCache(page, page_size, payload) {
@@ -103,7 +103,7 @@ class Search extends Component {
   };
 
   renderQuery() {
-    let {attributes} = this.props;
+    let {attribute_names} = this.props;
     const buttonDisabled = !this.state.selected_model || this.state.loading;
     const buttonClasses = buttonDisabled ? 'button disabled' : 'button';
 
@@ -149,7 +149,7 @@ class Search extends Component {
             this.props.requestTSV(
               this.state.selected_model,
               this.state.current_filter,
-              attributes
+              attribute_names
             )
           }
         />
@@ -202,14 +202,14 @@ export default connect(
   (state, props) => ({
     model_names: selectModelNames(state),
     cache: selectSearchCache(state),
-    attributes: selectSearchAttributes(state)
+    attribute_names: selectSearchAttributeNames(state)
   }),
   {
     requestModels,
     cacheSearchPage,
     setSearchPage,
     setSearchPageSize,
-    setSearchAttributes,
+    setSearchAttributeNames,
     emptySearchCache,
     requestDocuments,
     requestTSV
