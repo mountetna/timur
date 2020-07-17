@@ -126,6 +126,7 @@ class Search extends Component {
 
   onSelectTableChange = (model_name) => {
     this.props.setSearchAttributeNames('all');
+    this.props.emptySearchCache();
     this.setState({selected_model: model_name});
   };
 
