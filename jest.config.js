@@ -9,7 +9,8 @@ module.exports = {
   transformIgnorePatterns: ['node_modules/(?!(etna-js)/)'],
   moduleNameMapper: {
     '^service-worker-loader!': '<rootDir>/__mocks__/service-worker-loader.js',
-    '^.*[.](css|CSS)$': 'identity-obj-proxy'
+    '^.*[.](css|CSS)$': 'identity-obj-proxy',
+    '^react$': '<rootDir>/node_modules/react'
   },
   testMatch: ['**/test/**/?(*.)(spec|test).js?(x)'],
   collectCoverageFrom: ['**/*.js?(x)'],
