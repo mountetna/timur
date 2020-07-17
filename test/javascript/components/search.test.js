@@ -3,7 +3,9 @@ import {Provider} from 'react-redux';
 import {mount, shallow} from 'enzyme';
 import renderer from 'react-test-renderer';
 import {mockStore, stubUrl, cleanStubs} from '../helpers';
-import Search from '../../../lib/client/jsx/components/search/search';
+import Search, {
+  Search as RawSearchComponent
+} from '../../../lib/client/jsx/components/search/search';
 import SelectInput from '../../../lib/client/jsx/components/inputs/select_input';
 
 const models = {
@@ -64,5 +66,65 @@ describe('Search', () => {
     component.update();
 
     expect(component.find('.button.disabled').length).toEqual(0);
+  });
+
+  it('resets the displayed attributes when a new table (model) is selected', () => {
+    const component = mount(
+      <Provider store={store}>
+        <Search />
+      </Provider>
+    );
+
+    const tableSelect = component.find(SelectInput).first();
+    tableSelect.simulate('change', {
+      target: {
+        value: '0'
+      }
+    });
+
+    // Trigger a re-render so that state and props are updated
+    component.update();
+
+    const first_attrs = component.find('.etna-checkbox');
+
+    tableSelect.simulate('change', {
+      target: {
+        value: '1'
+      }
+    });
+
+    component.update();
+
+    const second_attrs = component.find('.etna-checkbox');
+    expect(first_attrs.length).not.toEqual(second_attrs.length);
+  });
+
+  it('resets the cache when a new table (model) is selected', () => {
+    const mockEmptySearchCache = jest.fn();
+
+    const component = shallow(
+      <RawSearchComponent
+        magma_state={{models}}
+        cache={{}}
+        emptySearchCache={mockEmptySearchCache}
+        requestModels={jest.fn()}
+        setSearchAttributeNames={jest.fn()}
+      />
+    );
+
+    expect(mockEmptySearchCache).toHaveBeenCalled();
+
+    const tableSelect = component.find(SelectInput).first();
+    // Different for shallow and mount?
+    tableSelect.simulate('change', 'monster');
+
+    component.update();
+
+    tableSelect.simulate('change', 'labor');
+
+    component.update();
+
+    // One time was on mounting
+    expect(mockEmptySearchCache).toHaveBeenCalled();
   });
 });

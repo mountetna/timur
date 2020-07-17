@@ -50,7 +50,7 @@ const spinnerCss = css`
   margin: 2rem auto;
 `;
 
-class Search extends Component {
+export class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {page_size: 10, loading: false};
@@ -202,8 +202,27 @@ class Search extends Component {
     return _.filter(Object.keys(tree_state), (key) => tree_state[key]);
   };
 
+  getDisplayAttributeOptions = () => {
+    let {selected_model} = this.state;
+    let {magma_state} = this.props;
+
+    if (!selected_model) return;
+
+    // Have to use the selector here instead of in connect()
+    //   because the selected_model is in component state instead
+    //   of global state.
+    const template = selectTemplate({magma: magma_state}, selected_model);
+    let display_attribute_options = displayAttributes(template);
+
+    // display_attribute_options is currently just a flat list of strings
+    // To support nesting, we need to re-format it into a list of 1-item lists.
+    display_attribute_options = display_attribute_options.map((opt) => [opt]);
+
+    return display_attribute_options;
+  };
+
   render() {
-    let {cache, magma_state, attribute_names} = this.props;
+    let {cache, attribute_names} = this.props;
     let {
       current_page,
       page_size,
@@ -215,19 +234,12 @@ class Search extends Component {
     let pages = model_name ? Math.ceil(results / page_size) : -1;
     const _this = this; // for use in ModelBody
 
-    // Have to use the selector here instead of in connect()
-    //   because the selected_model is in component state instead
-    //   of global state.
-    const template = selectTemplate({magma: magma_state}, selected_model);
-    let display_attribute_options = displayAttributes(template);
+    const display_attribute_options = this.getDisplayAttributeOptions();
 
-    // display_attribute_options is currently just a flat list of strings
-    // To support nesting, we need to re-format it into a list of 1-item lists.
-    // Also, we need to
     if (display_attribute_options) {
       // We should attempt to re-order the ModelViewer's cached_attribute_names
       //    in the same order as the template's display_attribute_options.
-      // This may change in the future once we finalize what a global
+      // This will change in the future once we finalize what a global
       //    attribute ordering should be.
       cached_attribute_names = cached_attribute_names
         ? display_attribute_options.filter(
@@ -236,7 +248,6 @@ class Search extends Component {
               cached_attribute_names === 'all'
           )
         : null;
-      display_attribute_options = display_attribute_options.map((opt) => [opt]);
     }
 
     // Initialize the TreeView state, if not "all"
