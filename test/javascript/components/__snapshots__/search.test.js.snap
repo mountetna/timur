@@ -102,11 +102,15 @@ exports[`Search renders 1`] = `
     </div>
   </div>
   <div
-    className="documents"
+    className="body"
   >
     <div
-      className="table"
-    />
+      className="documents"
+    >
+      <div
+        className="table"
+      />
+    </div>
   </div>
 </div>
 `;

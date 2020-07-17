@@ -17,9 +17,16 @@ describe('cacheSearchPage', () => {
     const model_name = 'monsters';
     const record_names = ['Nemean Lion', 'Lernean Hydra', 'Augean Stables'];
     const clear_cache = false;
+    const attribute_names = ['name', 'species'];
 
     store.dispatch(
-      actions.cacheSearchPage(page, model_name, record_names, clear_cache)
+      actions.cacheSearchPage(
+        page,
+        model_name,
+        record_names,
+        attribute_names,
+        clear_cache
+      )
     );
 
     expect(store.getActions()).toEqual([
@@ -28,6 +35,7 @@ describe('cacheSearchPage', () => {
         model_name,
         record_names,
         clear_cache,
+        attribute_names,
         type: actions.CACHE_SEARCH_PAGE
       }
     ]);

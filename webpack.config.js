@@ -28,7 +28,8 @@ module.exports = (env) => ({
         // Skip any files outside of your project's `src` directory
         include: [
           path.resolve(__dirname, 'lib/client/jsx'),
-          path.resolve(__dirname, 'node_modules/etna-js/')
+          path.resolve(__dirname, 'node_modules/etna-js/'),
+          '/etna/packages/etna-js'
         ],
 
         // Only run `.js` and `.jsx` files through Babel
@@ -36,7 +37,10 @@ module.exports = (env) => ({
       },
       {
         loader: ['style-loader', 'css-loader'],
-        include: [path.resolve(__dirname, 'node_modules/etna-js/')],
+        include: [
+          path.resolve(__dirname, 'node_modules/etna-js/'),
+          '/etna/packages/etna-js'
+        ],
         test: /\.css$/
       },
 

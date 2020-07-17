@@ -69,23 +69,6 @@
     "sass-loader": "^6.0.7",
     "webpack": "^3.12.0"
   },
-  "jest": {
-    "testMatch": [
-      "**/test/javascript/**/?(*.)(spec|test).js?(x)"
-    ],
-    "testURL": "http://www.fake.com",
-    "collectCoverageFrom": [
-      "lib/client/jsx/**/*.js?(x)"
-    ],
-    "setupTestFrameworkScriptFile": "./test/setup.js",
-    "setupFiles": [
-      "raf/polyfill"
-    ],
-    "transformIgnorePatterns": [
-      "/node_modules/(?!etna-js)",
-      "/etna/packages"
-    ]
-  },
   "scripts": {
     "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./lib/client/jsx/** ",
     "lintfile": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ",
