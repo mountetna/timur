@@ -131,9 +131,7 @@ export class Search extends Component {
   };
 
   handleTreeViewSelectionsChange = (new_state) => {
-    this.props.setSearchAttributeNames(
-      this.convertTreeStateToAttributeNameList(new_state)
-    );
+    this.props.setSearchAttributeNames(getSelectedLeaves(new_state));
   };
 
   renderQuery() {
@@ -198,10 +196,6 @@ export class Search extends Component {
     }, {});
   };
 
-  convertTreeStateToAttributeNameList = (tree_state) => {
-    return _.filter(Object.keys(tree_state), (key) => tree_state[key]);
-  };
-
   getDisplayAttributeOptions = () => {
     let {selected_model} = this.state;
     let {magma_state} = this.props;
@@ -242,10 +236,13 @@ export class Search extends Component {
       // This will change in the future once we finalize what a global
       //    attribute ordering should be.
       cached_attribute_names = cached_attribute_names
-        ? display_attribute_options.filter(
-            (opt) =>
-              cached_attribute_names.includes(opt) ||
-              cached_attribute_names === 'all'
+        ? _.flatten(
+            display_attribute_options.filter(
+              (opt) =>
+                // This will certainly change when it's an array of items
+                cached_attribute_names.includes(_.last(opt)) ||
+                cached_attribute_names === 'all'
+            )
           )
         : null;
     }

@@ -127,4 +127,47 @@ describe('Search', () => {
     // One time was on mounting
     expect(mockEmptySearchCache).toHaveBeenCalled();
   });
+
+  it('returns no attribute_names if no model selected', () => {
+    const component = shallow(
+      <RawSearchComponent
+        magma_state={{models}}
+        cache={{}}
+        emptySearchCache={jest.fn()}
+        requestModels={jest.fn()}
+        setSearchAttributeNames={jest.fn()}
+      />
+    );
+
+    expect(component.instance().getDisplayAttributeOptions()).toEqual(
+      undefined
+    );
+  });
+
+  it('nests attribute_names in arrays', () => {
+    const component = shallow(
+      <RawSearchComponent
+        magma_state={{models}}
+        cache={{}}
+        emptySearchCache={jest.fn()}
+        requestModels={jest.fn()}
+        setSearchAttributeNames={jest.fn()}
+      />
+    );
+
+    const tableSelect = component.find(SelectInput).first();
+    // Different for shallow and mount?
+    tableSelect.simulate('change', 'monster');
+
+    component.update();
+
+    expect(component.instance().getDisplayAttributeOptions()).toEqual([
+      ['aspect'],
+      ['labor'],
+      ['name'],
+      ['species'],
+      ['stats'],
+      ['victim']
+    ]);
+  });
 });
