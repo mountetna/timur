@@ -204,3 +204,162 @@ exports[`ModelMap renders 1`] = `
   </div>
 </div>
 `;
+
+exports[`ModelMap renders an incomplete graph 1`] = `
+<div
+  id="model_map"
+>
+  <div
+    className="map"
+  >
+    <div
+      className="heading report_row"
+    >
+      <span
+        className="name"
+      >
+        Project
+      </span>
+       
+      <span
+        className="title"
+      />
+    </div>
+    <svg
+      height={600}
+      width={600}
+    >
+      <defs>
+        <marker
+          id="arrow"
+          markerHeight="3"
+          markerUnits="strokeWidth"
+          markerWidth="3"
+          orient="auto"
+          refX="0"
+          refY="1"
+        >
+          <path
+            d="M0,0 L0,2 L3,1 z"
+          />
+        </marker>
+      </defs>
+    </svg>
+    <div
+      className="model_node selected"
+      onClick={[Function]}
+      style={
+        Object {
+          "left": 300,
+          "top": 300,
+        }
+      }
+    >
+      project
+    </div>
+  </div>
+  <div
+    className="report"
+  >
+    <div
+      className="model_report"
+    >
+      <div
+        className="heading report_row"
+      >
+        <span
+          className="name"
+        >
+          Model
+        </span>
+         
+        <span
+          className="title"
+        >
+          project
+        </span>
+      </div>
+      <div
+        className="heading report_row"
+      >
+        <span
+          className="name"
+        >
+          Attributes
+        </span>
+      </div>
+      <div
+        className="map_attribute report_row"
+      >
+        <span
+          className="type"
+        >
+           
+          identifier
+           
+        </span>
+        <span
+          className="value"
+        >
+          <a
+            className="name"
+            onClick={[Function]}
+          >
+            name
+          </a>
+          <span
+            className="description"
+          >
+            Name for this project
+          </span>
+        </span>
+      </div>
+      <div
+        className="map_attribute report_row"
+      >
+        <span
+          className="type"
+        >
+           
+          collection
+           
+        </span>
+        <span
+          className="value"
+        >
+          <a
+            className="name"
+            onClick={[Function]}
+          >
+            labor
+          </a>
+        </span>
+      </div>
+      <div
+        className="map_attribute report_row"
+      >
+        <span
+          className="type"
+        >
+           
+          table
+           
+        </span>
+        <span
+          className="value"
+        >
+          <a
+            className="name"
+            onClick={[Function]}
+          >
+            codex
+          </a>
+        </span>
+      </div>
+    </div>
+    <div
+      className="attribute_report"
+    />
+  </div>
+</div>
+`;

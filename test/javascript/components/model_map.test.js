@@ -14,13 +14,34 @@ const models = {
 describe('ModelMap', () => {
   let store;
 
-  beforeEach(() => {
+  it('renders', () => {
     store = mockStore({
       magma: { models }
     });
+
+    global.TIMUR_CONFIG = {
+      magma_host: 'magma.test'
+    };
+
+    // Wrap with Provider here so store gets passed down to child components in Context
+    const tree = renderer
+      .create(
+        <Provider store={store}>
+          <ModelMap />
+        </Provider>
+      )
+      .toJSON();
+
+    expect(tree).toMatchSnapshot();
   });
 
-  it('renders', () => {
+  it('renders an incomplete graph', () => {
+    let { monster, project } = models;
+
+    store = mockStore({
+      magma: { models: { monster, project } }
+    });
+
     global.TIMUR_CONFIG = {
       magma_host: 'magma.test'
     };
