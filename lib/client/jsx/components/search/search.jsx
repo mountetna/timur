@@ -57,7 +57,13 @@ class Search extends Component {
   }
 
   getPage = (page, newSearch = false) => {
-    let {attribute_names} = this.props;
+    let {attribute_names, cache} = this.props;
+    let {cached_attribute_names} = cache;
+
+    // Need to re-fetch a page if the user has clicked a new set of
+    //    attribute names from the TreeView
+    newSearch =
+      newSearch || !_.isEqual(cached_attribute_names, attribute_names);
 
     page = page + 1;
 
@@ -114,7 +120,7 @@ class Search extends Component {
       this.state.selected_model,
       Object.keys(model.documents),
       attribute_names,
-      page == 1
+      page == 1 // clears the cache if you return to page 1
     );
   };
 
@@ -220,6 +226,8 @@ class Search extends Component {
     if (display_attribute_options) {
       // We should attempt to re-order the ModelViewer's cached_attribute_names
       //    in the same order as the template's display_attribute_options.
+      // This may change in the future once we finalize what a global
+      //    attribute ordering should be.
       cached_attribute_names = cached_attribute_names
         ? display_attribute_options.filter(
             (opt) =>
