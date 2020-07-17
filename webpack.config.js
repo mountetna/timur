@@ -34,6 +34,13 @@ module.exports = (env) => ({
         // Only run `.js` and `.jsx` files through Babel
         test: /\.jsx?$/,
       },
+      {
+        loader: ['style-loader', 'css-loader'],
+        include: [
+          path.resolve(__dirname, 'node_modules/etna-js/'),
+        ],
+        test: /\.css$/,
+      },
 
       {
         test: /\.(jpe?g|png|svg)$/i,

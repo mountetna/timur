@@ -11,10 +11,23 @@ import {cacheSearchPage, setSearchPageSize, setSearchPage, emptySearchCache} fro
 import ModelViewer from '../model_viewer';
 import TreeView from 'etna-js/components/TreeView';
 
+const attributeOptions = [
+  ['Top Level 1', [
+    ['Inner 1'],
+    ['Inner 2', [
+      ['Inner Inner 1'],
+      ['Inner Inner 2'],
+      ['Inner Inner 3'],
+    ]],
+    ['Inner 3'],
+  ]],
+  ['Top Level 2'],
+];
+
 class Search extends Component {
   constructor(props) {
     super(props)
-    this.state = {page_size: 10}
+    this.state = { page_size: 10 }
   }
 
   getPage(page, newSearch = false) {
@@ -37,7 +50,7 @@ class Search extends Component {
   }
 
   pageCached(page) {
-    let {cache} = this.props;
+    let { cache } = this.props;
     return cache.isCached(page.toString())
   }
 
@@ -48,7 +61,7 @@ class Search extends Component {
 
   makePageCache(page, page_size, payload) {
     let model = payload.models[this.state.selected_model]
-    if (model.count) this.setState({results: model.count})
+    if (model.count) this.setState({ results: model.count })
     if (page_size) this.props.setSearchPageSize(page_size)
     this.props.cacheSearchPage(
       page,
@@ -63,18 +76,18 @@ class Search extends Component {
       <span className='label'>Show table</span>
       <SelectInput name='model'
                    values={this.props.model_names}
-                   onChange={(model_name) => this.setState({selected_model: model_name})}
+                   onChange={(model_name) => this.setState({ selected_model: model_name })}
                    showNone='enabled'/>
 
       <span className='label'>Page size</span>
       <SelectInput
         values={[10, 25, 50, 200]}
         defaultValue={this.state.page_size}
-        onChange={(page_size) => this.setState({page_size})}
+        onChange={(page_size) => this.setState({ page_size })}
         showNone='disabled'/>
       <input type='text' className='filter'
              placeholder='Filter query'
-             onChange={(e) => this.setState({current_filter: e.target.value})}/>
+             onChange={(e) => this.setState({ current_filter: e.target.value })}/>
 
       <input type='button' className='button' value='Search'
              disabled={!this.state.selected_model}
@@ -91,10 +104,12 @@ class Search extends Component {
   }
 
   render() {
-    let {cache} = this.props;
-    let {current_page, page_size, model_name, record_names} = cache;
-    let {results} = this.state;
+    let { cache } = this.props;
+    let { current_page, page_size, model_name, record_names } = cache;
+    let { results, selected_model } = this.state;
     let pages = model_name ? Math.ceil(results / page_size) : -1;
+
+
 
     return <div id='search'>
       <div className='control'>
@@ -107,24 +122,27 @@ class Search extends Component {
           </div>
         }
       </div>
-      <div className='body'>
-        <div class='attributes'>
-          Hello
-        </div>
-        <div className='documents'>
-          <TreeView/>
-          { model_name &&
-              <ModelViewer
-                model_name={model_name}
-                record_names={record_names}
-                page={current_page - 1}
-                pages={pages}
-                page_size={page_size}
-                setPage={this.getPage.bind(this)}
-              /> }
-        </div>
-      </div>
+      <ModelBody/>
     </div>
+
+    function ModelBody() {
+      return <div className='body'>
+        { selected_model && <div className='attributes'>
+          <h3>{selected_model} attributes</h3>
+          { /* <TreeView options={attributeOptions}/> */ }
+        </div> }
+        <div className='documents'>
+          { model_name && <ModelViewer
+            model_name={model_name}
+            record_names={record_names}
+            page={current_page - 1}
+            pages={pages}
+            page_size={page_size}
+            setPage={this.getPage.bind(this)}
+          /> }
+        </div>
+      </div>;
+    }
   }
 }
 

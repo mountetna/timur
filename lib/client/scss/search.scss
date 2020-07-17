@@ -4,26 +4,19 @@
 #search {
   font-family: $body_font;
   width: 100%;
-  margin: 5px 10px;
+  margin: 5px 3%;
 
   .body {
     display: flex;
     flex-direction: row;
     align-items: stretch;
+    margin-top: 10px;
 
     .attributes {
-      border: 1px solid black;
-      //display: flex;
-      //flex-direction: column;
-      //flex-basis: 100%;
-      //flex: 1;
-      width: 400px;
+      width: 300px;
     }
 
     .documents {
-      border: 1px solid black;
-      //display: flex;
-      //flex-direction: column;
     }
   }
 
