@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import * as _ from 'lodash';
 
 import {css} from '@emotion/core';
-import GridLoader from 'react-spinners/GridLoader';
+import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader';
 
 import SelectInput from '../inputs/select_input';
 import {
@@ -32,18 +32,6 @@ import {
 
 import ModelViewer from '../model_viewer';
 import TreeView, {getSelectedLeaves} from 'etna-js/components/TreeView';
-
-const attributeOptions = [
-  [
-    'Top Level 1',
-    [
-      ['Inner 1'],
-      ['Inner 2', [['Inner Inner 1'], ['Inner Inner 2'], ['Inner Inner 3']]],
-      ['Inner 3']
-    ]
-  ],
-  ['Top Level 2']
-];
 
 const spinnerCss = css`
   display: block;
@@ -298,7 +286,7 @@ export class Search extends Component {
               />
             </div>
           ) : (
-            <GridLoader
+            <ClimbingBoxLoader
               css={spinnerCss}
               color='green'
               size={20}
