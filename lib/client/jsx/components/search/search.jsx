@@ -228,7 +228,7 @@ export class Search extends Component {
     const _this = this; // for use in ModelBody
 
     const display_attribute_options = this.getDisplayAttributeOptions();
-    console.log('display_attribute_options', display_attribute_options);
+
     if (display_attribute_options) {
       // We should attempt to re-order the ModelViewer's cached_attribute_names
       //    in the same order as the template's display_attribute_options.
@@ -254,8 +254,6 @@ export class Search extends Component {
             display_attribute_options
           )
         : null;
-
-    console.log('selected_options', selected_options);
 
     return (
       <div id='search'>
