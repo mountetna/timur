@@ -79,7 +79,7 @@ exports[`Search renders 1`] = `
       </select>
       <input
         className="filter"
-        onChange={[Function]}
+        onBlur={[Function]}
         placeholder="Filter query"
         type="text"
       />
