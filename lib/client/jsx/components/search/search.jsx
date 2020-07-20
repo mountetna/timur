@@ -119,7 +119,6 @@ export class Search extends Component {
   };
 
   handleTreeViewSelectionsChange = (new_state) => {
-    console.log('new_state', new_state);
     this.props.setSearchAttributeNames(getSelectedLeaves(new_state));
   };
 

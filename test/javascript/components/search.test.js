@@ -170,4 +170,32 @@ describe('Search', () => {
       ['victim']
     ]);
   });
+
+  it('calculates tree state with selected and unselected attribute names', () => {
+    const component = shallow(
+      <RawSearchComponent
+        magma_state={{models}}
+        cache={{}}
+        emptySearchCache={jest.fn()}
+        requestModels={jest.fn()}
+        setSearchAttributeNames={jest.fn()}
+      />
+    );
+
+    const result = component
+      .instance()
+      .convertAttributeNameListToTreeState(
+        ['labor', 'species', 'stats'],
+        [['aspect'], ['labor'], ['name'], ['species'], ['stats'], ['victim']]
+      );
+
+    expect(result).toEqual({
+      aspect: false,
+      labor: true,
+      name: false,
+      species: true,
+      stats: true,
+      victim: false
+    });
+  });
 });
