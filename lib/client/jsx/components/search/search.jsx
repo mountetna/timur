@@ -1,4 +1,3 @@
-import Pager from '../pager';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
@@ -20,14 +19,18 @@ import {
 } from '../../actions/magma_actions';
 import {
   selectSearchCache,
-  selectSearchAttributeNames
-} from '../../selectors/search_cache';
+  selectSearchAttributeNames,
+  constructSingleFilterString,
+  selectSearchFilterParams,
+  selectSearchFilterString
+} from '../../selectors/search';
 import {
   cacheSearchPage,
   setSearchPageSize,
   setSearchPage,
   emptySearchCache,
-  setSearchAttributeNames
+  setSearchAttributeNames,
+  setFilterString
 } from '../../actions/search_actions';
 
 import ModelViewer from '../model_viewer';
@@ -45,8 +48,9 @@ export class Search extends Component {
   }
 
   getPage = (page, newSearch = false) => {
-    let {attribute_names, cache} = this.props;
+    let {attribute_names, cache, current_filter} = this.props;
     let {cached_attribute_names} = cache;
+    let {selected_model, page_size} = this.state;
 
     // Need to re-fetch a page if the user has clicked a new set of
     //    attribute names from the TreeView
@@ -59,14 +63,14 @@ export class Search extends Component {
       this.setState({loading: true});
       this.props
         .requestDocuments({
-          model_name: this.state.selected_model,
+          model_name: selected_model,
           record_names: 'all',
           attribute_names: attribute_names,
-          filter: this.state.current_filter,
+          filter: current_filter,
           page: page,
-          page_size: this.state.page_size,
+          page_size: page_size,
           collapse_tables: true,
-          exchange_name: `request-${this.state.selected_model}`
+          exchange_name: `request-${selected_model}`
         })
         .then((response) => {
           // Should clear the cache, especially if the attribute_names changed
@@ -148,7 +152,7 @@ export class Search extends Component {
           type='text'
           className='filter'
           placeholder='Filter query'
-          onChange={(e) => this.setState({current_filter: e.target.value})}
+          onBlur={(e) => this.props.setFilterString(e.target.value)}
         />
 
         <input
@@ -258,7 +262,7 @@ export class Search extends Component {
       <div id='search'>
         <div className='control'>
           {this.renderQuery()}
-          {results && (
+          {results && !loading && (
             <div className='results'>
               Found {results} records in{' '}
               <span className='model_name'>{model_name}</span>
@@ -317,6 +321,9 @@ export default connect(
     model_names: selectModelNames(state),
     cache: selectSearchCache(state),
     attribute_names: selectSearchAttributeNames(state),
+    current_filter: constructSingleFilterString(state),
+    filter_string: selectSearchFilterString(state),
+    filter_params: selectSearchFilterParams(state),
     magma_state: state.magma
   }),
   {
@@ -325,6 +332,7 @@ export default connect(
     setSearchPage,
     setSearchPageSize,
     setSearchAttributeNames,
+    setFilterString,
     emptySearchCache,
     requestDocuments,
     requestTSV

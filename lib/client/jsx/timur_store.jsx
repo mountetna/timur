@@ -1,6 +1,4 @@
-import {
-  combineReducers, createStore, applyMiddleware
-} from 'redux';
+import {combineReducers, createStore, applyMiddleware} from 'redux';
 
 import thunk from 'redux-thunk';
 import {createLogger} from 'redux-logger';
@@ -35,15 +33,10 @@ export const timurStore = () => {
     location
   });
 
-  let middlewares = [
-    thunk
-  ];
+  let middlewares = [thunk];
 
-  if (process.env.NODE_ENV == 'development') middlewares.push(createLogger({collapsed: true}));
+  if (process.env.NODE_ENV != 'production')
+    middlewares.push(createLogger({collapsed: true}));
 
-  return createStore(
-    reducers,
-    {},
-    applyMiddleware(...middlewares)
-  );
-}
+  return createStore(reducers, {}, applyMiddleware(...middlewares));
+};
