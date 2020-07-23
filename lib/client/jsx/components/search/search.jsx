@@ -1,16 +1,14 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {connect} from 'react-redux';
 
+import 'regenerator-runtime/runtime';
 import * as _ from 'lodash';
 
 import {css} from '@emotion/core';
 import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader';
 
-import SelectInput from '../inputs/select_input';
 import {
   selectModelNames,
-  selectTemplate,
-  displayAttributes
 } from '../../selectors/magma';
 import {
   requestTSV,
@@ -20,9 +18,8 @@ import {
 import {
   selectSearchCache,
   selectSearchAttributeNames,
-  constructSingleFilterString,
   selectSearchFilterParams,
-  selectSearchFilterString
+  selectSearchFilterString, selectSelectedModel, selectExpandedDisplayAttributeNames
 } from '../../selectors/search';
 import {
   cacheSearchPage,
@@ -30,289 +27,141 @@ import {
   setSearchPage,
   emptySearchCache,
   setSearchAttributeNames,
-  setFilterString
+  setFilterString,
+  setSelectedModel,
 } from '../../actions/search_actions';
 
 import ModelViewer from '../model_viewer';
-import TreeView, {getSelectedLeaves} from 'etna-js/components/TreeView';
+import useAsyncWork from "etna-js/hooks/useAsyncWork";
+import SearchQuery from "./search_query";
+import {Loading} from "etna-js/components/Loading";
 
 const spinnerCss = css`
   display: block;
   margin: 2rem auto;
 `;
 
-export class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {page_size: 10, loading: false};
-  }
+const loadingSpinner =
+  <ClimbingBoxLoader
+    css={spinnerCss}
+    color='green'
+    size={20}
+    loading={true}
+  />
 
-  getPage = (page, newSearch = false) => {
-    let {attribute_names, cache, current_filter} = this.props;
-    let {cached_attribute_names} = cache;
-    let {selected_model, page_size} = this.state;
 
-    // Need to re-fetch a page if the user has clicked a new set of
-    //    attribute names from the TreeView
-    newSearch =
-      newSearch || !_.isEqual(cached_attribute_names, attribute_names);
+export function Search({
+  attribute_names, cache, requestDocuments, setSearchPageSize, cacheSearchPage, setSearchPage,
+  selectedModel, requestModels, emptySearchCache, setSearchAttributeNames, filter_string,
+  setSelectedModel, display_attributes,
+}) {
+  const [pageSize, setPageSize] = useState(10);
+  const [results, setResults] = useState(0);
+  const { current_page, model_name, record_names, } = cache;
+  let { cached_attribute_names } = cache;
 
-    page = page + 1;
+  // On mount, essentially.
+  useEffect(() => {
+    requestModels();
+    emptySearchCache();
+    setSearchAttributeNames('all');
+  }, [])
 
-    if (!this.pageCached(page) || newSearch) {
-      this.setState({loading: true});
-      this.props
-        .requestDocuments({
-          model_name: selected_model,
-          record_names: 'all',
-          attribute_names: attribute_names,
-          filter: current_filter,
-          page: page,
-          page_size: page_size,
-          collapse_tables: true,
-          exchange_name: `request-${selected_model}`
-        })
-        .then((response) => {
-          // Should clear the cache, especially if the attribute_names changed
-          if (newSearch) this.props.emptySearchCache();
-          this.handleRequestDocumentsSuccess(page, newSearch, response);
-        })
-        .catch(this.handleRequestDocumentsError);
-    }
-    this.props.setSearchPage(page);
-  };
+  const onSelectTableChange = useCallback((model_name) => {
+    setSearchAttributeNames('all');
+    emptySearchCache();
+    setSelectedModel(model_name);
+    setResults(0);
+  }, [setSearchAttributeNames, emptySearchCache, setSelectedModel]);
 
-  handleRequestDocumentsSuccess = (page, newSearch, response) => {
-    this.makePageCache(page, newSearch ? this.state.page_size : null, response);
-  };
+  const [loading, loadDocuments] = useAsyncWork(function* loadDocuments(page, newSearch) {
+    const payload = yield requestDocuments({
+      model_name: selectedModel,
+      record_names: 'all',
+      attribute_names: attribute_names,
+      filter: filter_string,
+      page: page,
+      page_size: pageSize,
+      collapse_tables: true,
+      exchange_name: `request-${selectedModel}`
+    });
 
-  handleRequestDocumentsError = (e) => {
-    this.setState({loading: false});
-  };
+    if (newSearch) emptySearchCache();
 
-  pageCached(page) {
-    let {cache} = this.props;
-    return cache.isCached(page.toString());
-  }
-
-  componentDidMount() {
-    this.props.requestModels();
-    this.props.emptySearchCache();
-    this.props.setSearchAttributeNames('all');
-  }
-
-  makePageCache = (page, page_size, payload) => {
-    let {attribute_names} = this.props;
-    let model = payload.models[this.state.selected_model];
-    if (model.count) this.setState({results: model.count});
-    if (page_size) this.props.setSearchPageSize(page_size);
-    this.setState({loading: false});
-    this.props.cacheSearchPage(
+    let model = payload.models[selectedModel];
+    if ('count' in model) setResults(model.count);
+    if (!newSearch) setSearchPageSize(pageSize);
+    cacheSearchPage(
       page,
-      this.state.selected_model,
+      selectedModel,
       Object.keys(model.documents),
       attribute_names,
-      page == 1 // clears the cache if you return to page 1
+      page === 1 // clears the cache if you return to page 1
     );
-  };
+    // Cancel only when multiple consecutive invocations are run.
+  }, { cancelWhenChange: [] });
 
-  onSelectTableChange = (model_name) => {
-    this.props.setSearchAttributeNames('all');
-    this.props.emptySearchCache();
-    this.setState({selected_model: model_name});
-  };
+  let pages = model_name ? Math.ceil(results / pageSize) : -1;
 
-  handleTreeViewSelectionsChange = (new_state) => {
-    this.props.setSearchAttributeNames(getSelectedLeaves(new_state));
-  };
+  // We should attempt to re-order the ModelViewer's cached_attribute_names
+  //    in the same order as the template's display_attribute_options.
+  // This will change in the future once we finalize what a global
+  //    attribute ordering should be.
+  cached_attribute_names = cached_attribute_names
+    ? _.flatten(
+      display_attributes.filter(
+        (opt) =>
+          // This will certainly change when it's an array of items
+          cached_attribute_names.includes(opt) ||
+          cached_attribute_names === 'all'
+      )
+    )
+    : null;
 
-  renderQuery() {
-    let {attribute_names} = this.props;
-    const buttonDisabled = !this.state.selected_model || this.state.loading;
-    const buttonClasses = buttonDisabled ? 'button disabled' : 'button';
-
-    return (
-      <div className='query'>
-        <span className='label'>Show table</span>
-        <SelectInput
-          name='model'
-          values={this.props.model_names}
-          onChange={this.onSelectTableChange}
-          showNone='enabled'
-        />
-
-        <span className='label'>Page size</span>
-        <SelectInput
-          values={[10, 25, 50, 200]}
-          defaultValue={this.state.page_size}
-          onChange={(page_size) => this.setState({page_size})}
-          showNone='disabled'
-        />
-        <input
-          type='text'
-          className='filter'
-          placeholder='Filter query'
-          onBlur={(e) => this.props.setFilterString(e.target.value)}
-        />
-
-        <input
-          id='search-pg-search-btn'
-          type='button'
-          className={buttonClasses}
-          value='Search'
-          disabled={buttonDisabled}
-          onClick={() => this.getPage(0, true)}
-        />
-        <input
-          id='search-pg-tsv-btn'
-          className={buttonClasses}
-          type='button'
-          value={'\u21af TSV'}
-          disabled={buttonDisabled}
-          onClick={() =>
-            this.props.requestTSV(
-              this.state.selected_model,
-              this.state.current_filter,
-              attribute_names
-            )
-          }
-        />
+  return (
+    <div id='search'>
+      <div className='control'>
+        <SearchQuery loading={loading} onSelectTableChange={onSelectTableChange} pageSize={pageSize}
+                     display_attributes={display_attributes}
+                     selectedModel={selectedModel} setPage={setPage} setPageSize={setPageSize} />
+        <Loading loading={results === 0 || loading} delay={500} cacheLastView={true}>
+          <div className='results'>
+            Found {results} records in{' '}
+            <span className='model_name'>{model_name}</span>
+          </div>
+        </Loading>
       </div>
-    );
-  }
-
-  convertAttributeNameListToTreeState = (
-    selected_attribute_names,
-    all_attribute_names
-  ) => {
-    return all_attribute_names.reduce(
-      (result, attribute_name, index, array) => {
-        const leaf_attribute_name = _.last(attribute_name);
-        result[leaf_attribute_name] = _.includes(
-          selected_attribute_names,
-          leaf_attribute_name
-        );
-        return result;
-      },
-      {}
-    );
-  };
-
-  getDisplayAttributeOptions = () => {
-    let {selected_model} = this.state;
-    let {magma_state} = this.props;
-
-    if (!selected_model) return;
-
-    // Have to use the selector here instead of in connect()
-    //   because the selected_model is in component state instead
-    //   of global state.
-    const template = selectTemplate({magma: magma_state}, selected_model);
-    let display_attribute_options = displayAttributes(template);
-
-    // display_attribute_options is currently just a flat list of strings
-    // To support nesting, we need to re-format it into a list of 1-item lists.
-    display_attribute_options = display_attribute_options.map((opt) => [opt]);
-
-    return display_attribute_options;
-  };
-
-  render() {
-    let {cache, attribute_names} = this.props;
-    let {
-      current_page,
-      page_size,
-      model_name,
-      record_names,
-      cached_attribute_names
-    } = cache;
-    let {results, selected_model, loading} = this.state;
-    let pages = model_name ? Math.ceil(results / page_size) : -1;
-    const _this = this; // for use in ModelBody
-
-    const display_attribute_options = this.getDisplayAttributeOptions();
-
-    if (display_attribute_options) {
-      // We should attempt to re-order the ModelViewer's cached_attribute_names
-      //    in the same order as the template's display_attribute_options.
-      // This will change in the future once we finalize what a global
-      //    attribute ordering should be.
-      cached_attribute_names = cached_attribute_names
-        ? _.flatten(
-            display_attribute_options.filter(
-              (opt) =>
-                // This will certainly change when it's an array of items
-                cached_attribute_names.includes(_.last(opt)) ||
-                cached_attribute_names === 'all'
-            )
-          )
-        : null;
-    }
-
-    // Initialize the TreeView state, if not "all"
-    const selected_options =
-      attribute_names && attribute_names !== 'all'
-        ? this.convertAttributeNameListToTreeState(
-            attribute_names,
-            display_attribute_options
-          )
-        : null;
-
-    return (
-      <div id='search'>
-        <div className='control'>
-          {this.renderQuery()}
-          {results && !loading && (
-            <div className='results'>
-              Found {results} records in{' '}
-              <span className='model_name'>{model_name}</span>
-            </div>
-          )}
-        </div>
-        <ModelBody />
-      </div>
-    );
-
-    function ModelBody() {
-      return (
-        <div className='body'>
-          {selected_model && (
-            <div className='attributes'>
-              <h3>{selected_model} attributes</h3>
-              <TreeView
-                selected={selected_options}
-                options={display_attribute_options}
-                onSelectionsChange={_this.handleTreeViewSelectionsChange}
-              />
-            </div>
-          )}
-          {model_name && !loading ? (
-            <div className='documents'>
-              <ModelViewer
-                model_name={model_name}
-                record_names={record_names}
-                page={current_page - 1}
-                pages={pages}
-                page_size={page_size}
-                setPage={_this.getPage}
-                restricted_attribute_names={
-                  cached_attribute_names !== 'all'
-                    ? cached_attribute_names
-                    : null
-                }
-              />
-            </div>
-          ) : (
-            <ClimbingBoxLoader
-              css={spinnerCss}
-              color='green'
-              size={20}
-              loading={loading}
+      <div className='body'>
+        <Loading loading={!model_name || (loading && loadingSpinner)} delay={500} cacheLastView={true}>
+          <div className='documents'>
+            <ModelViewer
+              model_name={model_name}
+              record_names={record_names}
+              page={current_page - 1}
+              pages={pages}
+              page_size={pageSize}
+              setPage={setPage}
+              restricted_attribute_names={
+                cached_attribute_names !== 'all'
+                  ? cached_attribute_names
+                  : null
+              }
             />
-          )}
-        </div>
-      );
+          </div>
+        </Loading>
+      </div>
+    </div>
+  );
+
+  function setPage(page, newSearch) {
+    // The page model offset + 1
+    page++;
+    // Need to re-fetch a page if the user has clicked a new set of
+    //    attribute names from the TreeView
+    if (!cache.isCached(page.toString()) || newSearch) {
+      loadDocuments(page, newSearch)
     }
+    setSearchPage(page)
   }
 }
 
@@ -321,7 +170,8 @@ export default connect(
     model_names: selectModelNames(state),
     cache: selectSearchCache(state),
     attribute_names: selectSearchAttributeNames(state),
-    current_filter: constructSingleFilterString(state),
+    selectedModel: selectSelectedModel(state),
+    display_attributes: selectExpandedDisplayAttributeNames(state),
     filter_string: selectSearchFilterString(state),
     filter_params: selectSearchFilterParams(state),
     magma_state: state.magma
@@ -335,6 +185,7 @@ export default connect(
     setFilterString,
     emptySearchCache,
     requestDocuments,
-    requestTSV
+    requestTSV,
+    setSelectedModel,
   }
 )(Search);

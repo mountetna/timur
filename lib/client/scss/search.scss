@@ -1,23 +1,85 @@
 @import 'globals';
 @import 'attribute';
 
-#search {
-  font-family: $body_font;
-  width: 100%;
-  margin: 5px 3%;
+.search-filters-modal {
+  width: 600px;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 4px;
+  background: white;
+  max-height: 70vh;
+  line-height: 200%;
 
-  .body {
+  .actions {
+    text-align: right;
+
+    button {
+      @include green_button;
+    }
+  }
+
+  .filters {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    margin: 5px 0px;
+  }
+
+  .filter {
+    @include text_defaults;
+    margin: 0 5px;
+  }
+
+  .attribute {
+    flex-grow: 1;
+  }
+
+  .operator {
+    flex-grow: 0;
+    width: 130px;
+  }
+
+  .operand {
+    flex-grow: 1;
+  }
+}
+
+
+.search-attribute-filters-modal {
+  width: 600px;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 4px;
+  background: white;
+  max-height: 70vh;
+
+
+  .actions {
+    text-align: right;
+
+    button {
+      @include green_button;
+    }
+  }
+}
+
+#search {
+  font-family: $body_font;
+  margin: 5px 3%;
+
+  .query-builder {
+    line-height: 200%;
+
+    .pointer {
+      margin: 0 10px;
+    }
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+
+  .body {
     margin-top: 10px;
-
-    .attributes {
-      width: 300px;
-    }
-
-    .documents {
-    }
   }
 
   .button {
@@ -36,6 +98,11 @@
     padding-bottom: 4px;
     text-align: center;
   }
+
+  select {
+    margin-right: 8px;
+  }
+
   .query {
   }
   .pages {
@@ -70,5 +137,6 @@
   }
   .label {
     padding: 4px;
+    margin-right: 4px;
   }
 }
