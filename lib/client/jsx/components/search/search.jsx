@@ -19,7 +19,11 @@ import {
   selectSearchCache,
   selectSearchAttributeNames,
   selectSearchFilterParams,
-  selectSearchFilterString, selectSelectedModel, selectExpandedDisplayAttributeNames
+  selectSearchFilterString,
+  selectSelectedModel,
+  selectSortedAttributeNames,
+  selectExpandedDisplayAttributeNames,
+  selectSortedDisplayAttributeNames
 } from '../../selectors/search';
 import {
   cacheSearchPage,
@@ -51,12 +55,13 @@ const loadingSpinner =
 
 
 export function Search({
-  attribute_names, cache, requestDocuments, setSearchPageSize, cacheSearchPage, setSearchPage,
+  queryableAttributes, cache, requestDocuments, setSearchPageSize, cacheSearchPage, setSearchPage,
   selectedModel, requestModels, emptySearchCache, setSearchAttributeNames, filter_string,
-  setSelectedModel, display_attributes,
+  setSelectedModel, display_attributes, attributesNamesState,
 }) {
   const [pageSize, setPageSize] = useState(10);
   const [results, setResults] = useState(0);
+  const [lastLoadedAttributeState, setLastLoadedAttributeState] = useState(attributesNamesState);
   const { current_page, model_name, record_names, } = cache;
   let { cached_attribute_names } = cache;
 
@@ -78,7 +83,7 @@ export function Search({
     const payload = yield requestDocuments({
       model_name: selectedModel,
       record_names: 'all',
-      attribute_names: attribute_names,
+      attribute_names: queryableAttributes,
       filter: filter_string,
       page: page,
       page_size: pageSize,
@@ -87,15 +92,16 @@ export function Search({
     });
 
     if (newSearch) emptySearchCache();
+    if (!newSearch) setSearchPageSize(pageSize);
 
     let model = payload.models[selectedModel];
     if ('count' in model) setResults(model.count);
-    if (!newSearch) setSearchPageSize(pageSize);
+    setLastLoadedAttributeState(attributesNamesState);
     cacheSearchPage(
       page,
       selectedModel,
       Object.keys(model.documents),
-      attribute_names,
+      queryableAttributes,
       page === 1 // clears the cache if you return to page 1
     );
     // Cancel only when multiple consecutive invocations are run.
@@ -111,7 +117,6 @@ export function Search({
     ? _.flatten(
       display_attributes.filter(
         (opt) =>
-          // This will certainly change when it's an array of items
           cached_attribute_names.includes(opt) ||
           cached_attribute_names === 'all'
       )
@@ -158,6 +163,7 @@ export function Search({
     page++;
     // Need to re-fetch a page if the user has clicked a new set of
     //    attribute names from the TreeView
+    newSearch = newSearch || attributesNamesState !== lastLoadedAttributeState;
     if (!cache.isCached(page.toString()) || newSearch) {
       loadDocuments(page, newSearch)
     }
@@ -169,9 +175,10 @@ export default connect(
   (state, props) => ({
     model_names: selectModelNames(state),
     cache: selectSearchCache(state),
-    attribute_names: selectSearchAttributeNames(state),
+    queryableAttributes: selectSortedAttributeNames(state),
+    attributesNamesState: selectSearchAttributeNames(state),
     selectedModel: selectSelectedModel(state),
-    display_attributes: selectExpandedDisplayAttributeNames(state),
+    display_attributes: selectSortedDisplayAttributeNames(state),
     filter_string: selectSearchFilterString(state),
     filter_params: selectSearchFilterParams(state),
     magma_state: state.magma

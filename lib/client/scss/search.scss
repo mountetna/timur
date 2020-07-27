@@ -62,20 +62,20 @@
   }
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 #search {
   font-family: $body_font;
   margin: 5px 3%;
 
-  .query-builder {
-    line-height: 200%;
-
-    .pointer {
-      margin: 0 10px;
-    }
+  .pointer {
+    margin: 0 10px;
   }
 
-  .pointer {
-    cursor: pointer;
+  .query-builder {
+    line-height: 200%;
   }
 
   .body {
