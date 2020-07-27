@@ -20,6 +20,7 @@ import Search from './components/search/search';
 import Activity from './components/activity';
 import Noauth from './components/noauth';
 import {selectUser} from './selectors/user_selector';
+import {ModalDialogContainer} from "etna-js/components/ModalDialogContainer";
 
 const ROUTES = [
   {
@@ -127,11 +128,13 @@ class TimurUI extends React.Component {
     let key = JSON.stringify(params);
 
     return (
-      <div id="ui-container">
-        <TimurNav environment={environment} mode={mode} />
-        <Messages />
-        <Component key={key} {...params} />
-      </div>
+      <ModalDialogContainer>
+        <div id="ui-container">
+          <TimurNav environment={environment} mode={mode} />
+          <Messages />
+          <Component key={key} {...params} />
+        </div>
+      </ModalDialogContainer>
     );
   }
 }

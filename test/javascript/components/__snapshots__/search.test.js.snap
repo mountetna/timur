@@ -10,95 +10,99 @@ exports[`Search renders 1`] = `
     <div
       className="query"
     >
-      <span
-        className="label"
-      >
-        Show table
-      </span>
-      <select
-        defaultValue=""
-        onChange={[Function]}
-      >
-        <option
-          disabled={false}
-          value=""
-        >
-           --- 
-        </option>
-        <option
-          value={0}
-        >
-          labor
-        </option>
-        <option
-          value={1}
-        >
-          monster
-        </option>
-        <option
-          value={2}
-        >
-          project
-        </option>
-      </select>
-      <span
-        className="label"
-      >
-        Page size
-      </span>
-      <select
-        defaultValue={10}
-        onChange={[Function]}
-      >
-        <option
-          disabled={true}
-          value=""
-        >
-           --- 
-        </option>
-        <option
-          value={0}
-        >
-          10
-        </option>
-        <option
-          value={1}
-        >
-          25
-        </option>
-        <option
-          value={2}
-        >
-          50
-        </option>
-        <option
-          value={3}
-        >
-          200
-        </option>
-      </select>
-      <input
-        className="filter"
-        onBlur={[Function]}
-        placeholder="Filter query"
-        type="text"
-      />
-      <input
-        className="button disabled"
-        disabled={true}
-        id="search-pg-search-btn"
-        onClick={[Function]}
-        type="button"
-        value="Search"
-      />
-      <input
-        className="button disabled"
-        disabled={true}
-        id="search-pg-tsv-btn"
-        onClick={[Function]}
-        type="button"
-        value="↯ TSV"
-      />
+      <div>
+        <div>
+          <div
+            className="etna-collapsible-arrow"
+            onClick={[Function]}
+          />
+           
+          <span
+            className="label"
+          >
+            Show table
+          </span>
+          <select
+            defaultValue=""
+            name="model"
+            onChange={[Function]}
+          >
+            <option
+              disabled={false}
+              value=""
+            >
+               --- 
+            </option>
+            <option
+              value={0}
+            >
+              labor
+            </option>
+            <option
+              value={1}
+            >
+              monster
+            </option>
+            <option
+              value={2}
+            >
+              project
+            </option>
+          </select>
+          <span
+            className="label"
+          >
+            Page size
+          </span>
+          <select
+            defaultValue={0}
+            onChange={[Function]}
+          >
+            <option
+              disabled={true}
+              value=""
+            >
+               --- 
+            </option>
+            <option
+              value={0}
+            >
+              10
+            </option>
+            <option
+              value={1}
+            >
+              25
+            </option>
+            <option
+              value={2}
+            >
+              50
+            </option>
+            <option
+              value={3}
+            >
+              200
+            </option>
+          </select>
+          <input
+            className="button disabled"
+            disabled={true}
+            id="search-pg-search-btn"
+            onClick={[Function]}
+            type="button"
+            value="Search"
+          />
+          <input
+            className="button disabled"
+            disabled={true}
+            id="search-pg-tsv-btn"
+            onClick={[Function]}
+            type="button"
+            value="↯ TSV"
+          />
+        </div>
+      </div>
     </div>
   </div>
   <div

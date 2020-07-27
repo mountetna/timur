@@ -1,55 +1,103 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
+import {connect} from 'react-redux';
 import SelectInput from '../inputs/select_input';
+import {selectModelNames} from "../../selectors/magma";
+import {
+  selectSearchFilterString,
+  selectSortedAttributeNames,
+} from "../../selectors/search";
+import {requestTSV} from "../../actions/magma_actions";
+import {
+  setFilterString, setSearchAttributeNames,
+} from "../../actions/search_actions";
+import CollapsibleArrow from "etna-js/components/CollapsibleArrow";
+import QueryBuilder from "./query_builder";
 
-export default class SearchQuery extends Component{
+export function SearchQuery({
+  selectedModel, setFilterString, loading, requestTSV, model_names, onSelectTableChange,
+  pageSize, setPageSize, setPage, attribute_names, display_attributes, filter_string,
+}) {
+  const buttonDisabled = !selectedModel || loading;
+  const buttonClasses = buttonDisabled ? 'button disabled' : 'button';
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
-  constructor(props){
-    super(props);
-    this['state'] = {};
-  }
+  const tableOptionsLine = <React.Fragment>
+    <span className='label'>Show table</span>
+    <SelectInput
+      name='model'
+      values={model_names}
+      value={selectedModel}
+      onChange={onSelectTableChange}
+      showNone='enabled'
+    />
 
-  render(){
+    <span className='label'>Page size</span>
+    <SelectInput
+      values={[10, 25, 50, 200]}
+      defaultValue={pageSize}
+      onChange={setPageSize}
+      showNone='disabled'
+    />
 
-    var selector_props = {
-      'name': 'model',
-      'values': this.props.model_names,
-      'onChange': (model_name)=>{
-        this.setState({'selected_model': model_name});
-      },
-      'showNone': 'enabled'
-    };
-
-    var filter_input_props = {
-      'type': 'text',
-      'className': 'filter',
-      'placeholder': 'filter query',
-      'onChange': (e)=>{
-        this.setState({'current_filter': e.target.value})
+    <input
+      id='search-pg-search-btn'
+      type='button'
+      className={buttonClasses}
+      value='Search'
+      disabled={buttonDisabled}
+      onClick={() => setPage(0, true)}
+    />
+    <input
+      id='search-pg-tsv-btn'
+      className={buttonClasses}
+      type='button'
+      value={'\u21af TSV'}
+      disabled={buttonDisabled}
+      onClick={() =>
+        requestTSV(
+          selectedModel,
+          filter_string,
+          attribute_names
+        )
       }
-    };
+    />
+  </React.Fragment>;
 
-    var button_input_props = {
+  const advancedSearch = <div>
+    <input
+      type='text'
+      className='filter'
+      placeholder='Filter query'
+      defaultValue={filter_string}
+      onBlur={(e) => setFilterString(e.target.value)}
+    />
+    <a className='pointer' onClick={() => setShowAdvanced(false)}>
+      Basic Search
+    </a>
+  </div>;
 
-      'type': 'button',
-      'className': 'button',
-      'value': 'Search',
-      'disabled': !this.state.selected_model,
-      'onClick': ()=>{
-        this.props.postQuery(this.state.selected_model, this.state.current_filter);
-      }
-    };
-
-    return(
-      <div className='query'>
-
-        <span className='label'>
-
-          {'Show table'}
-        </span>
-        <SelectInput {...selector_props} />
-        <input {...filter_input_props} />
-        <input {...button_input_props} />
-      </div>
-    );
-  }
+  return (
+    <div className='query'>
+      <CollapsibleArrow label={tableOptionsLine}>
+        { selectedModel && <div>
+          {showAdvanced ? advancedSearch : <QueryBuilder setShowAdvanced={setShowAdvanced} selectedModel={selectedModel} display_attributes={display_attributes} /> }
+        </div> }
+      </CollapsibleArrow>
+    </div>
+  );
 }
+
+
+export default connect(
+  (state) => ({
+    model_names: selectModelNames(state),
+    attribute_names: selectSortedAttributeNames(state),
+    filter_string: selectSearchFilterString(state),
+  }),
+  {
+    setSearchAttributeNames,
+    setFilterString,
+    requestTSV,
+  }
+)(SearchQuery);
+

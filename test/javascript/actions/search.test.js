@@ -106,50 +106,6 @@ describe('setSearchAttributeNames', () => {
   });
 });
 
-describe('addFilterParam', () => {
-  it('dispatches action to add hash filter param', () => {
-    const store = mockStore({});
-    const filter_param = {
-      attribute: 'stats',
-      operator: 'contains',
-      value: '/[a-z]/'
-    };
-
-    store.dispatch(actions.addFilterParam(filter_param));
-
-    expect(store.getActions()).toEqual([
-      {filter_param, type: actions.ADD_FILTER_PARAM}
-    ]);
-  });
-});
-
-describe('removeFilterParam', () => {
-  it('dispatches action to remove hash filter param', () => {
-    const store = mockStore({});
-    const filter_param = {
-      attribute: 'stats',
-      operator: 'contains',
-      value: '/[a-z]/'
-    };
-
-    store.dispatch(actions.removeFilterParam(filter_param));
-
-    expect(store.getActions()).toEqual([
-      {filter_param, type: actions.REMOVE_FILTER_PARAM}
-    ]);
-  });
-});
-
-describe('clearFilterParams', () => {
-  it('dispatches action to clear all filter params', () => {
-    const store = mockStore({});
-
-    store.dispatch(actions.clearFilterParams());
-
-    expect(store.getActions()).toEqual([{type: actions.CLEAR_FILTER_PARAMS}]);
-  });
-});
-
 describe('setFilterString', () => {
   it('dispatches action to set an advanced filter string', () => {
     const store = mockStore({});

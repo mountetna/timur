@@ -16,6 +16,11 @@
         }
       }
     }
+
+    .rt-tbody {
+      overflow: unset;
+    }
+
     .-pagination {
       font-size: 0.75em;
       justify-content: flex-start;

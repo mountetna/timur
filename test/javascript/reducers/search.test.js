@@ -7,9 +7,6 @@ import {
   SET_SEARCH_ATTRIBUTE_NAMES,
   SET_FILTER_STRING,
   CLEAR_FILTER_STRING,
-  ADD_FILTER_PARAM,
-  REMOVE_FILTER_PARAM,
-  CLEAR_FILTER_PARAMS
 } from '../../../lib/client/jsx/actions/search_actions';
 
 describe('search reducer', () => {
@@ -175,92 +172,6 @@ describe('search reducer', () => {
     ).toEqual({
       other: 'data',
       filter_string: null
-    });
-  });
-
-  it('adds a basic filter param', () => {
-    expect(
-      reducer(
-        {
-          filter_string: 'all',
-          filter_params: [{attribute: 'species', operator: '==', value: 'lion'}]
-        },
-        {
-          type: ADD_FILTER_PARAM,
-          filter_param: {attribute: 'stats', operator: '~', value: 'dexterity'}
-        }
-      )
-    ).toEqual({
-      filter_string: null,
-      filter_params: [
-        {attribute: 'species', operator: '==', value: 'lion'},
-        {attribute: 'stats', operator: '~', value: 'dexterity'}
-      ]
-    });
-  });
-
-  it('returns original search object if no existing params, on REMOVE_FILTER_PARAM action', () => {
-    expect(
-      reducer(
-        {filter_string: 'all'},
-        {type: REMOVE_FILTER_PARAM, filter_param: 'all'}
-      )
-    ).toEqual({
-      filter_string: 'all'
-    });
-
-    expect(
-      reducer(
-        {other: 'data', filter_params: []},
-        {
-          type: REMOVE_FILTER_PARAM,
-          filter_param: {attribute: 'species', operator: '=', value: 'lion'}
-        }
-      )
-    ).toEqual({
-      other: 'data',
-      filter_params: []
-    });
-  });
-
-  it('returns same filter_params list if no match, on REMOVE_FILTER_PARAM', () => {
-    expect(
-      reducer(
-        {
-          filter_params: [{attribute: 'species', operator: '=', value: 'lion'}]
-        },
-        {
-          type: REMOVE_FILTER_PARAM,
-          filter_param: {attribute: 'species', operator: '~', value: 'hydra'}
-        }
-      )
-    ).toEqual({
-      filter_params: [{attribute: 'species', operator: '=', value: 'lion'}]
-    });
-  });
-
-  it('removes the specified filter param from existing ones', () => {
-    expect(
-      reducer(
-        {
-          filter_params: [
-            {attribute: 'species', operator: '=', value: 'lion'},
-            {attribute: 'species', operator: '~', value: 'hydra'},
-            {attribute: 'species', operator: '>', value: 'boar'},
-            {attribute: 'species', operator: '<', value: 'hydra'}
-          ]
-        },
-        {
-          type: REMOVE_FILTER_PARAM,
-          filter_param: {attribute: 'species', operator: '~', value: 'hydra'}
-        }
-      )
-    ).toEqual({
-      filter_params: [
-        {attribute: 'species', operator: '=', value: 'lion'},
-        {attribute: 'species', operator: '>', value: 'boar'},
-        {attribute: 'species', operator: '<', value: 'hydra'}
-      ]
     });
   });
 });

@@ -99,7 +99,6 @@ class QueryBuilder extends Component {
 
   render() {
     let { query, shown } = this.state;
-    console.log(query);
     return <div id='query'>
       <div className='visibility'>
         <button onClick={ this.toggleShown.bind(this) }>
