@@ -16,7 +16,7 @@ const DateTimeAttribute = ({value, mode, revised_value,
         new_date => reviseDocument(
           document, template, attribute, new_date && new_date.toISOString()
         )
-      } />;
+      } />
   </div>
 }
 
