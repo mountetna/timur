@@ -36,6 +36,7 @@ class ArchimedesController <  Timur::Controller
 
     success_json(consignments)
   rescue Archimedes::LanguageError => e
+    Timur.instance.logger.log_error(e)
     raise Etna::BadRequest, e.message.to_s
   end
 

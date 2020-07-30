@@ -59,23 +59,29 @@ module Archimedes
     def fill_manifest
       resolve(@manifest)
     rescue RLTK::NotInLanguage => e
+      Timur.instance.logger.log_error(e)
       current_position = e.current.position
       line = current_position.line_number
       position = current_position.line_offset
       raise Archimedes::LanguageError, "Syntax error in #{line_fragment(line,position)}"
     rescue Etna::Error => e
+      Timur.instance.logger.log_error(e)
       raise Archimedes::LanguageError, e.message
     rescue ArgumentError => e
+      Timur.instance.logger.log_error(e)
       raise Archimedes::LanguageError, "#{e.message} in #{current_fragment}"
     rescue TypeError => e
+      Timur.instance.logger.log_error(e)
       if e.message =~ /nil/
         raise Archimedes::LanguageError, "Nil value error in #{current_fragment}"
       else
         raise Archimedes::LanguageError, "Type error in #{current_fragment}"
       end
     rescue ZeroDivisionError
+      Timur.instance.logger.log_error(e)
       raise Archimedes::LanguageError, "Divided by zero in #{current_fragment}"
     rescue Exception => e
+      Timur.instance.logger.log_error(e)
       puts e.message
       puts e.backtrace
       raise Archimedes::LanguageError, "Unspecified error in #{current_fragment}"
