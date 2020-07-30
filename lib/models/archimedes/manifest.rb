@@ -77,7 +77,7 @@ module Archimedes
       else
         raise Archimedes::LanguageError, "Type error in #{current_fragment}"
       end
-    rescue ZeroDivisionError
+    rescue ZeroDivisionError => e
       Timur.instance.logger.log_error(e)
       raise Archimedes::LanguageError, "Divided by zero in #{current_fragment}"
     rescue Exception => e
