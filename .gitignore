@@ -41,3 +41,4 @@ tmp
 /coverage
 /spec/examples.txt
 .npm-packages
+.npmrc

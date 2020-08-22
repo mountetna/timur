@@ -1,16 +1,97 @@
+
 version: "3.4"
+
+x-base-etna-service: &base-etna-service
+  # Base configuration used by most etna services.
+  image: etna-base
+  volumes: &base-etna-service-volumes
+    - .:/app:cached
+    - timur-app-gems:/app/vendor/bundle:rw
+    - timur-log-dir:/app/log:rw
+    - timur-tmp-dir:/app/tmp:rw
+    - timur-public-dir:/app/public:rw
+    - timur-data-dir:/app/data:rw
+    - timur-opt-dir:/usr/opt:rw
+    - ../etna:/etna:cached
+  environment: &base-etna-env
+    "TIMUR_ENV": "development"
+    APP_NAME: "timur"
+  entrypoint: /entrypoints/development.sh
+
+  networks:
+    default:
+    edge_net:
+  extra_hosts:
+    - 'metis.development.local:172.16.238.10'
+    - 'magma.development.local:172.16.238.10'
+    - 'janus.development.local:172.16.238.10'
+    - 'timur.development.local:172.16.238.10'
+
+x-base-etna-services: &base-etna-services
+  # Default list of services an etna app may have.
+  "timur_app": &base-etna-app
+    # The ruby webserver
+    <<: *base-etna-service
+    command: ./bin/puma.sh
+    depends_on:
+      - "timur_db"
+
+  "timur_webpack": &base-etna-webpack
+    # The ruby webpack server watching for changes
+    <<: *base-etna-service
+    environment:
+      <<: *base-etna-env
+      RUN_NPM_INSTALL: "true"
+      SKIP_RUBY_SETUP: "true"
+    command: npm run webpack
+
+  "timur_db": &base-etna-db
+    # The application specific database.  Overwrite with development-psql-9 to use psql 9 instead.
+    image: development-psql
+    volumes:
+      - timur-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "timur_development"
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: developer
+      APP_NAME: "timur"
+    container_name: "timur_db_1"
+
+  "timur_app_fe": &base-etna-fe
+    # The application level apache frontend serving static assets, data, and proxying the main app.
+    image: etna-apache
+    volumes:
+      - timur-public-dir:/app/public:ro
+      - timur-opt-dir:/usr/opt:ro
+      - ../docker/etna-base/entrypoints:/entrypoints:ro
+    depends_on:
+      - "timur_app"
+    entrypoint: /entrypoints/development.sh
+    command: ["httpd", "-DFOREGROUND"]
+    environment:
+      SKIP_BUILD: "1"
+      WAIT_FOR_APP: "1"
+      APP_NAME: "timur"
+
 volumes:
-  app-gems:
-    driver: local
   timur-db-data:
     driver: local
-  timur-node-modules:
-    driver: local
+    name: "timur-db-data"
   timur-log-dir:
     driver: local
+    name: "timur-log-dir"
   timur-tmp-dir:
     driver: local
+    name: "timur-tmp-dir"
   timur-public-dir:
+    driver: local
+    name: "timur-public-dir"
+  timur-app-gems:
+    driver: local
+  timur-data-dir:
+    driver: local
+    name: "timur-data-dir"
+  timur-opt-dir:
     driver: local
 
 networks:
@@ -18,62 +99,8 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: "172.16.238.0/24"
-        - subnet: "2001:3984:3989::/64"
-
-x-timur_base: &timur_base
-  build:
-    context: .
-    dockerfile: docker/app/Dockerfile.development
-  volumes:
-    - .:/app:cached
-    - app-gems:/app/vendor/bundle:rw
-    - ./node_modules:/app/node_modules:cached
-    - timur-log-dir:/app/log:rw
-    - timur-tmp-dir:/app/tmp:rw
-    - timur-public-dir:/app/public:rw
-    - ../etna:/etna:cached
-  environment: &app_environment
-    COVERAGE: "true"
-    DATABASE_HOST: "timur_db"
-    TIMUR_ENV: "development"
-    MASTER_BUILD: "${MASTER_BUILD}"
-  # Maps external facing host names to the internal ip for development-apache.
-  extra_hosts:
-    - "magma.development.local:172.16.238.10"
-    - "metis.development.local:172.16.238.10"
-    - "rtemis.development.local:172.16.238.10"
-  networks:
-    edge_net:
-    default:
+        - subnet: '172.16.238.0/24'
+        - subnet: '2001:3984:3989::/64'
 
 services:
-  timur_app:
-    <<: *timur_base
-    ports:
-      - 3002:3000
-    command: ./docker/app/puma.sh
-    depends_on:
-      - timur_db
-
-  timur_webpack:
-    <<: *timur_base
-    environment:
-      <<: *app_environment
-      RUN_NPM_INSTALL: "true"
-    command: >
-      npm run webpack-dev
-
-  timur_db:
-    build:
-      context: .
-      dockerfile: docker/db/Dockerfile
-    volumes:
-      - timur-db-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: timur_development
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: developer
-    ports:
-      - 5432
-    container_name: timur_db_1
+  <<: *base-etna-services

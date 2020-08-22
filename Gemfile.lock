@@ -1,3 +1,15 @@
+GIT
+  remote: https://github.com/mountetna/monoetna.git
+  revision: 15c184bd9d695136974f00b387367b324f4c7b9e
+  branch: refs/artifacts/gem-etna/df79a48e618dd4150e302e4260f75ce1baf30bb2
+  specs:
+    etna (0.1.16)
+      jwt
+      multipart-post
+      net-http-persistent
+      rack
+      rollbar
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -18,11 +30,6 @@ GEM
     database_cleaner (1.8.5)
     diff-lcs (1.4.3)
     docile (1.3.2)
-    etna (0.1.13)
-      jwt
-      multipart-post
-      net-http-persistent
-      rack
     factory_bot (6.0.2)
       activesupport (>= 5.0.0)
     ffi (1.13.1)
@@ -30,7 +37,7 @@ GEM
     hashdiff (1.0.1)
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
-    jwt (2.2.1)
+    jwt (2.2.2)
     method_source (1.0.0)
     minitest (5.14.1)
     multipart-post (2.1.1)
@@ -50,6 +57,7 @@ GEM
     rltk (3.0.1)
       ffi (>= 1.0.0)
       filigree (>= 0.2.0)
+    rollbar (2.27.0)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -83,7 +91,7 @@ PLATFORMS
 
 DEPENDENCIES
   database_cleaner
-  etna
+  etna!
   factory_bot
   filigree (= 0.3.3)
   pg (~> 0.21)
