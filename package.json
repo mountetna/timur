@@ -14,7 +14,7 @@
     "d3": "^5.5.0",
     "d3-ease": "^1.0.3",
     "downloadjs": "^1.4.7",
-    "etna-js": "git+https://git@github.com/mountetna/monoetna.git#aad24c9e8417b57b5103892d526003807a35c658",
+    "etna-js": "git+https://git@github.com/mountetna/monoetna.git#1fa21d30444bd97f3a7d679288620f0eb06b7cbd",
     "identity-obj-proxy": "^3.0.0",
     "js-cookie": "^2.2.0",
     "json2csv": "^4.0.1",
