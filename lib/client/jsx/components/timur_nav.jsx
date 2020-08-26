@@ -54,9 +54,7 @@ const ICONS = {
 const Login = ({user}) => {
   let {first, last, permissions} = user;
 
-  let project_perm = permissions.find(
-    ({project_name}) => project_name == TIMUR_CONFIG.project_name
-  );
+  let project_perm = permissions[TIMUR_CONFIG.project_name];
   let role = project_perm ? project_perm.role : '';
   if (!user) return null;
   return (

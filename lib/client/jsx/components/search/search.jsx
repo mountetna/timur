@@ -13,7 +13,6 @@ import {
 import {
   requestTSV,
   requestModels,
-  requestDocuments
 } from '../../actions/magma_actions';
 import {
   selectSearchCache,
@@ -39,6 +38,8 @@ import ModelViewer from '../model_viewer';
 import useAsyncWork from "etna-js/hooks/useAsyncWork";
 import SearchQuery from "./search_query";
 import {Loading} from "etna-js/components/Loading";
+import {showMessages} from "../../actions/message_actions";
+import {useRequestDocuments} from "../../hooks/useRequestDocuments";
 
 const spinnerCss = css`
   display: block;
@@ -53,16 +54,16 @@ const loadingSpinner =
     loading={true}
   />
 
-
 export function Search({
-  queryableAttributes, cache, requestDocuments, setSearchPageSize, cacheSearchPage, setSearchPage,
+  queryableAttributes, cache, setSearchPageSize, cacheSearchPage, setSearchPage,
   selectedModel, requestModels, emptySearchCache, setSearchAttributeNames, filter_string,
-  setSelectedModel, display_attributes, attributesNamesState,
+  setSelectedModel, display_attributes, attributesNamesState, showMessages
 }) {
   const [pageSize, setPageSize] = useState(10);
   const [results, setResults] = useState(0);
   const [lastLoadedAttributeState, setLastLoadedAttributeState] = useState(attributesNamesState);
   const { current_page, model_name, record_names, } = cache;
+  const requestDocuments = useRequestDocuments();
   let { cached_attribute_names } = cache;
 
   // On mount, essentially.
@@ -96,6 +97,7 @@ export function Search({
 
     let model = payload.models[selectedModel];
     if ('count' in model) setResults(model.count);
+
     setLastLoadedAttributeState(attributesNamesState);
     cacheSearchPage(
       page,
@@ -191,8 +193,8 @@ export default connect(
     setSearchAttributeNames,
     setFilterString,
     emptySearchCache,
-    requestDocuments,
     requestTSV,
     setSelectedModel,
+    showMessages,
   }
 )(Search);

@@ -10,7 +10,8 @@ module.exports = {
   moduleNameMapper: {
     '^service-worker-loader!': '<rootDir>/__mocks__/service-worker-loader.js',
     '^.*[.](css|CSS)$': 'identity-obj-proxy',
-    '^react$': '<rootDir>/node_modules/react'
+    '^react$': '<rootDir>/node_modules/react',
+    '^react-redux$': '<rootDir>/node_modules/react-redux',
   },
   testMatch: ['**/test/**/?(*.)(spec|test).js?(x)'],
   collectCoverageFrom: ['**/*.js?(x)'],

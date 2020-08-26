@@ -10,7 +10,8 @@ module.exports = (env) => ({
       'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib'),
       'react-table': path.join(__dirname, 'node_modules/react-table'),
       react: path.join(__dirname, 'node_modules/react'),
-      'react-dom': path.join(__dirname, 'node_modules/react-dom')
+      'react-dom': path.join(__dirname, 'node_modules/react-dom'),
+      'react-redux': path.join(__dirname, 'node_modules/react-redux'),
     },
     symlinks: false
   },

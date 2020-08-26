@@ -10,8 +10,8 @@
  */
 
 // Framework libraries.
-import * as React from 'react';
-import { connect } from 'react-redux';
+import React, {useState, useCallback, useEffect, useMemo} from 'react';
+import {connect} from 'react-redux';
 
 // Class imports.
 import Header from '../header';
@@ -19,12 +19,12 @@ import {TabBarContainer as TabBar} from '../tab_bar';
 import BrowserTab from './browser_tab';
 
 // Module imports.
-import { requestManifests } from '../../actions/manifest_actions';
-import { requestPlots } from '../../actions/plot_actions';
-import { setLocation } from '../../actions/location_actions';
-import { requestView } from '../../actions/view_actions';
+import {requestManifests} from '../../actions/manifest_actions';
+import {requestPlots} from '../../actions/plot_actions';
+import {setLocation} from '../../actions/location_actions';
+import {requestView} from '../../actions/view_actions';
 import {
-  sendRevisions, discardRevision, requestDocuments, requestAnswer
+  sendRevisions, discardRevision, requestAnswer
 } from '../../actions/magma_actions';
 import {
   interleaveAttributes,
@@ -35,86 +35,204 @@ import {
 import {
   selectTemplate, selectDocument, selectRevision
 } from '../../selectors/magma';
-import { selectUserProjectRole } from '../../selectors/user_selector';
+import {selectUserProjectRole} from '../../selectors/user_selector';
+import {showMessages} from "../../actions/message_actions";
+import {useReduxState} from "../../../../../../etna/packages/etna-js/hooks/useReduxState";
+import {useActionInvoker} from "../../../../../../etna/packages/etna-js/hooks/useActionInvoker";
+import {useRequestDocuments} from "../../hooks/useRequestDocuments";
 
-class Browser extends React.Component{
-  constructor(props){
-    super(props);
+const loadingDiv =
+  <div className='browser'>
+    <div id='loader-container'>
+      <div className='loader'>
+        Loading...
+      </div>
+    </div>
+  </div>;
 
-    this.state = { mode: 'loading' };
-  }
+function camelize(str) {
+  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
+    return letter.toUpperCase();
+  }).replace(/\s+/g, '');
+}
 
-  componentDidMount(){
-    let { requestManifests, requestPlots } = this.props;
+export default function Browser({ model_name, record_name, tab_name }) {
+  const invoke = useActionInvoker();
+  const browserState = useReduxState(browserStateOf({ model_name, record_name, tab_name }));
+  const { view, record, tab, revision, template, can_edit } = browserState;
+  const [mode, setMode] = useState('loading');
+  const loading = !view || !template || !record || !tab_name;
+  const { cancelEdits, approveEdits, postEdits } = useEditActions(setMode, browserState);
+  const { selectOrShowTab, selectDefaultTab, selectTab, showTab } = useTabActions(browserState, setMode);
 
-    requestManifests();
-    requestPlots();
-    this.requestData();
-  }
+  // Set at 'skin' on the browser styling.
+  let skin = 'browser';
+  if (mode === 'browse') skin = 'browser ' + model_name;
+  const editMode = useCallback(() => setMode('edit'), [setMode]);
 
-  requestData() {
-    let {
-      model_name, record_name, view, tab_name,
-      setLocation, requestAnswer, requestView
-    } = this.props;
 
+  // On mount
+  useEffect(() => {
+    invoke(requestManifests());
+    invoke(requestPlots());
+
+    // Decide data that should be loaded immediately.
     if (!model_name && !record_name) {
       // ask magma for the project name
-      requestAnswer(
-        { query: [ 'project', '::first', '::identifier' ] },
+      invoke(requestAnswer(
+        { query: ['project', '::first', '::identifier'] },
 
         // redirect there
-        ({answer}) => setLocation(
-          Routes.browse_model_path(
-            TIMUR_CONFIG.project_name,
-            'project',
-            answer
+        ({ answer }) => invoke(
+          setLocation(
+            Routes.browse_model_path(
+              TIMUR_CONFIG.project_name,
+              'project',
+              answer
+            )
           )
         )
-      );
+      ));
     } else if (!view) {
       // we are told the model and record name, get the view
-      requestView(
+      invoke(requestView(
         model_name,
-        this.selectOrShowTab.bind(this)
-      )
+        selectOrShowTab
+      ));
     } else if (!tab_name) {
-      this.selectDefaultTab(view);
+      selectDefaultTab(view);
     } else {
-      this.showTab();
+      showTab();
     }
+  }, [])
+
+  if (loading) {
+    return loadingDiv;
   }
 
-  showTab() {
-    let { view, tab_name } = this.props;
+  return (
+    <div className={skin}>
+      <Header
+        onEdit={mode === 'browse' && can_edit && editMode}
+        onSave={mode === 'edit' && approveEdits}
+        onCancel={mode === 'edit' && cancelEdits}
+        onLoad={mode === 'submit'}>
+        <div className='model-name'>
+          {camelize(model_name)}
+        </div>
+        <div className='record-name'>
+          {record_name}
+        </div>
+      </Header>
+      <TabBar
+        mode={mode}
+        revision={revision}
+        view={view}
+        current_tab={tab_name}
+        onClick={selectTab}
+      />
+      <BrowserTab {
+                    ...{ model_name, record_name, template, record, revision, mode, tab }
+                  } />
+    </div>
+  );
+}
 
-    this.requestTabDocuments(view.tabs[tab_name]);
-    this.browseMode();
+function browserStateOf({ model_name, record_name, tab_name }) {
+  return (state) => {
+    const template = selectTemplate(state, model_name);
+    const record = selectDocument(state, model_name, record_name);
+    const revision = selectRevision(state, model_name, record_name) || {};
+    const view = selectView(state, model_name);
+    const role = selectUserProjectRole(state);
+
+    const tab = view && tab_name && template && view.tabs[tab_name] && interleaveAttributes(
+      view.tabs[tab_name],
+      template
+    );
+
+    const can_edit = role === 'administrator' || role === 'editor';
+
+    return {
+      template,
+      revision,
+      view,
+      record,
+      role,
+      tab,
+      can_edit,
+      tab_name,
+      record_name,
+      model_name
+    };
+  }
+}
+
+function useEditActions(setMode, browserState) {
+  const invoke = useActionInvoker();
+  const { revision, model_name, record_name } = browserState;
+
+  return {
+    cancelEdits,
+    postEdits,
+    approveEdits,
   }
 
-  selectOrShowTab(view) {
-    let { tab_name } = this.props;
-    if (tab_name)
-      this.showTab();
-    else
-      this.selectDefaultTab(view);
+
+  function cancelEdits() {
+    setMode('browse');
+    invoke(discardRevision(
+      record_name,
+      model_name
+    ));
   }
 
-  selectDefaultTab(view) {
-    this.selectTab(getDefaultTab(view));
+  function postEdits() {
+    setMode('submit');
+    sendRevisions(
+      model_name,
+      { [record_name]: revision },
+      () => setMode('browse'),
+      () => setMode('edit'),
+    );
   }
 
-  selectTab(tab_name) {
-    let { setLocation } = this.props;
-    setLocation(window.location.href.replace(/#.*/,'') + `#${ tab_name }`);
+  function approveEdits() {
+    if (Object.keys(revision).length > 0) postEdits();
+    else cancelEdits();
+  }
+}
+
+function useTabActions(browserState, setMode) {
+  const { record, view, template, tab_name: currentTabName, model_name, record_name } = browserState;
+  const invoke = useActionInvoker();
+  const requestDocuments = useRequestDocuments();
+
+  return {
+    selectTab, selectDefaultTab, selectOrShowTab, showTab
   }
 
-  requestTabDocuments(tab) {
+  function selectTab(tabName) {
+    invoke(setLocation(window.location.href.replace(/#.*/, '') + `#${tabName}`));
+  }
+
+  function selectDefaultTab(view) {
+    selectTab(getDefaultTab(view));
+  }
+
+  function selectOrShowTab(view) {
+    if (currentTabName) showTab();
+    else selectDefaultTab(view);
+  }
+
+  function showTab() {
+    requestTabDocuments(view.tabs[currentTabName]);
+    setMode('browse');
+  }
+
+  function requestTabDocuments(tab) {
     if (!tab) return;
-
-    let { requestDocuments, model_name, record_name, record, template } = this.props;
     let exchange_name = `tab ${tab.name} for ${model_name} ${record_name}`;
-
     let attribute_names = getAttributes(tab);
 
     let hasAttributes = record && template && Array.isArray(attribute_names) && attribute_names.every(
@@ -128,126 +246,8 @@ class Browser extends React.Component{
         model_name, record_names: [record_name],
         attribute_names,
         exchange_name,
-        success: this.browseMode.bind(this)
-      });
+        success: () => setMode('browse'),
+      })
     }
   }
-
-  camelize(str) {
-    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index){
-      return letter.toUpperCase();
-    }).replace(/\s+/g, '');
-  }
-
-  setMode(mode) { this.setState({mode}) }
-  editMode() { this.setMode('edit') }
-  browseMode() { this.setMode('browse') }
-
-  cancelEdits() {
-    let { discardRevision, record_name, model_name } = this.props;
-
-    this.browseMode();
-    discardRevision(
-      record_name,
-      model_name
-    );
-  }
-
-  postEdits() {
-    let { revision, model_name, record_name, sendRevisions } = this.props;
-    this.setMode('submit');
-    sendRevisions(
-      model_name,
-      {[record_name] : revision},
-      this.browseMode.bind(this),
-      this.editMode.bind(this)
-    );
-  }
-
-  approveEdits() {
-    let { revision, model_name, record_name, sendRevisions } = this.props;
-    if (Object.keys(revision).length > 0) this.postEdits();
-    else this.cancelEdits();
-  }
-
-  renderEmptyView(){
-    return(
-      <div className='browser'>
-        <div id='loader-container'>
-          <div className='loader'>
-            {'Loading...'}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  render(){
-    let {mode} = this.state;
-    let {role, revision, view, template, record, model_name, record_name, tab_name} = this.props;
-    let can_edit = role == 'administrator' || role == 'editor';
-
-    // Render an empty view if there is no view data yet.
-    if(!view || !template || !record || !tab_name) return this.renderEmptyView();
-
-    let tab = interleaveAttributes(
-      view.tabs[tab_name],
-      template
-    );
-
-    // Set at 'skin' on the browser styling.
-    let skin = 'browser';
-    if(mode == 'browse') skin = 'browser '+model_name;
-
-    return(
-      <div className={skin}>
-        <Header
-          onEdit={ mode == 'browse' && can_edit && this.editMode.bind(this) }
-          onSave={mode == 'edit' && this.approveEdits.bind(this) }
-          onCancel={ mode == 'edit' && this.cancelEdits.bind(this) }
-          onLoad={mode=='submit'}>
-          <div className='model-name'>
-            {this.camelize(model_name)}
-          </div>
-          <div className='record-name'>
-            {record_name}
-          </div>
-        </Header>
-        <TabBar
-          mode={mode}
-          revision={revision}
-          view={view}
-          current_tab={tab_name}
-          onClick={this.selectTab.bind(this)}
-        />
-        <BrowserTab {
-            ...{ model_name, record_name, template, record, revision, mode, tab }
-          } />
-      </div>
-    );
-  }
 }
-
-export default connect(
-  // map state
-  (state = {}, {model_name, record_name})=>{
-    let template = selectTemplate(state,model_name);
-    let record = selectDocument(state, model_name, record_name);
-    let revision = selectRevision(state, model_name, record_name) || {};
-    let view = selectView(state, model_name);
-    let role = selectUserProjectRole(state);
-
-    return {
-      template,
-      revision,
-      view,
-      record,
-      role
-    };
-  },
-  // map dispatch
-  {
-    requestPlots, requestManifests, requestView, requestAnswer,
-    requestDocuments, discardRevision, sendRevisions, setLocation
-  }
-)(Browser);

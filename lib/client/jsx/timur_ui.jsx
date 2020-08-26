@@ -17,10 +17,9 @@ import {updateLocation} from './actions/location_actions';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
-import Activity from './components/activity';
-import Noauth from './components/noauth';
 import {selectUser} from './selectors/user_selector';
 import {ModalDialogContainer} from "etna-js/components/ModalDialogContainer";
+import {Notifications} from "etna-js/components/Notifications";
 
 const ROUTES = [
   {
@@ -91,7 +90,7 @@ const ROUTES = [
 
 setRoutes(ROUTES);
 
-const Empty = () => <div />;
+const Empty = () => <div/>;
 
 class TimurUI extends React.Component {
   constructor(props) {
@@ -101,14 +100,14 @@ class TimurUI extends React.Component {
   }
 
   updateLocation() {
-    let {updateLocation} = this.props;
+    let { updateLocation } = this.props;
     updateLocation(location);
   }
 
   render() {
-    let {location, showMessages, environment, user} = this.props;
+    let { location, showMessages, environment, user } = this.props;
 
-    let {route, params} = findRoute(location, ROUTES);
+    let { route, params } = findRoute(location, ROUTES);
     let Component;
     let mode;
 
@@ -128,18 +127,21 @@ class TimurUI extends React.Component {
     let key = JSON.stringify(params);
 
     return (
-      <ModalDialogContainer>
-        <div id="ui-container">
-          <TimurNav environment={environment} mode={mode} />
-          <Messages />
-          <Component key={key} {...params} />
-        </div>
-      </ModalDialogContainer>
+      <React.Fragment>
+        <ModalDialogContainer>
+          <div id="ui-container">
+            <Notifications/>
+            <TimurNav environment={environment} mode={mode}/>
+            <Messages/>
+            <Component key={key} {...params} />
+          </div>
+        </ModalDialogContainer>
+      </React.Fragment>
     );
   }
 }
 
 export default connect(
-  (state) => ({location: state.location, user: selectUser(state)}),
-  {showMessages, updateLocation}
+  (state) => ({ location: state.location, user: selectUser(state) }),
+  { showMessages, updateLocation }
 )(TimurUI);

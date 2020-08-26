@@ -56,7 +56,7 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
   }, [setFilterString, filtersState]);
 
   const onOpenAttributeFilter = () => {
-    openModal(<FilterAttributesModal display_attributes={display_attributes} />);
+    openModal(<FilterAttributesModal display_attributes={display_attributes} selectedModel={selectedModel} />);
   };
 
   const onOpenFilters = () => {
@@ -81,14 +81,18 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
   </div>;
 }
 
-function FilterAttributesModal({ setSearchAttributeNames, display_attributes, attributeNames, attributeNamesAndTypes }) {
+function disabledAttributeForProject(projectName, modelName) {
+  return ([name, type]) => type === 'identifier' || type === 'parent'
+}
+
+function FilterAttributesModal({ setSearchAttributeNames, display_attributes, attributeNames, attributeNamesAndTypes, selectedModel }) {
   const displayAttributeOptions = [['All', display_attributes.map(e => [e])]];
   const { dismissModal } = useModal();
   const [selectedState, setSelectedState] = useState(() => attributeNamesToSelected(attributeNames));
 
   const disabledAttributeNames = useMemo(() => {
     return attributeNamesAndTypes
-      .filter(([_, type]) => type === 'identifier' || type === 'parent')
+      .filter(disabledAttributeForProject(TIMUR_CONFIG.project_name, selectedModel))
       .map(([name]) => name);
   }, [attributeNamesAndTypes]);
 
