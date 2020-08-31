@@ -15,6 +15,35 @@ exports[`HomePage renders 1`] = `
   </div>
   <div
     className="browser-tab"
-  />
+  >
+    <a
+      className="home-page-project-link"
+      href="/labors"
+    >
+      labors
+        
+      <span
+        className="home-page-project-role"
+      >
+        (
+        viewer
+        )
+      </span>
+    </a>
+    <a
+      className="home-page-project-link"
+      href="/wisdom"
+    >
+      wisdom
+        
+      <span
+        className="home-page-project-role"
+      >
+        (
+        viewer
+        )
+      </span>
+    </a>
+  </div>
 </div>
 `;
