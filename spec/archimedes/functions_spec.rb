@@ -8,6 +8,17 @@ describe Archimedes::VectorFunctions do
     )
     expect(payload['length']).to eq(3)
   end
+
+  it 'computes unique vector' do
+    payload = run_script(
+     '@vec = [ 2, 1, 3, 4, 3, 2, 3, 4 ]
+      @unique = unique(@vec)'
+    )
+    vector = payload['unique']
+    expect(vector).to be_a(Archimedes::Vector)
+    expect(vector.to_values).to eq([2,1,3,4])
+  end
+
   it 'computes vector max' do
     payload = run_script(
      '@vec = [ 1, 2, 3 ]
