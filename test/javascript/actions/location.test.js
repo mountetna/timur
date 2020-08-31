@@ -6,7 +6,7 @@ const PROJECT_NAME = 'labors';
 describe('setLocation', () => {
   it('adds a new state to the history and updates the store', () => {
     const store = mockStore({ });
-    const link = 'http://www.fake.com/new_location';
+    const link = 'http://localhost/new_location';
 
     store.dispatch(actions.setLocation(link));
 
@@ -22,7 +22,7 @@ describe('setLocation', () => {
 describe('pushLocation', () => {
   it('adds a new state to the history and updates the store', () => {
     const store = mockStore({ });
-    const link = 'http://www.fake.com/new_location';
+    const link = 'http://localhost/new_location';
 
     store.dispatch(actions.pushLocation(link));
 

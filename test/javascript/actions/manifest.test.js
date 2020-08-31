@@ -17,10 +17,10 @@ describe('async actions', () => {
   });
 
   global.Routes = {
-    manifests_fetch_path: (projectName) => `http://www.fake.com/${projectName}/manifests`,
-    manifests_destroy_path: (projectName, manifestId) => `http://www.fake.com/${projectName}/manifests/destroy/${manifestId}`,
-    manifests_create_path: (projectName) => `http://www.fake.com/${projectName}/manifests/create`,
-    manifests_update_path: (projectName, manifestId)=> `http://www.fake.com/${projectName}/manifests/update/${manifestId}`
+    manifests_fetch_path: (projectName) => `http://localhost/${projectName}/manifests`,
+    manifests_destroy_path: (projectName, manifestId) => `http://localhost/${projectName}/manifests/destroy/${manifestId}`,
+    manifests_create_path: (projectName) => `http://localhost/${projectName}/manifests/create`,
+    manifests_update_path: (projectName, manifestId)=> `http://localhost/${projectName}/manifests/update/${manifestId}`
   };
 
 
@@ -35,7 +35,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"request-manifest",
-          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests`,
+          exchange_path:`http://localhost/${PROJECT_NAME}/manifests`,
           start_time: Date()
         },
         exchange_name:"request-manifest",
@@ -71,7 +71,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"delete-manifest",
-          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/destroy/${manifest.id}`,
+          exchange_path:`http://localhost/${PROJECT_NAME}/manifests/destroy/${manifest.id}`,
           start_time: Date()
         },
         exchange_name:"delete-manifest",
@@ -105,7 +105,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"save-new-manifest",
-          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/create`,
+          exchange_path:`http://localhost/${PROJECT_NAME}/manifests/create`,
           start_time: Date()
         },
         exchange_name:"save-new-manifest",
@@ -140,7 +140,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"save-manifest",
-          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/update/${manifestResp.manifest.id}`,
+          exchange_path:`http://localhost/${PROJECT_NAME}/manifests/update/${manifestResp.manifest.id}`,
           start_time: Date()
         },
         exchange_name:"save-manifest",
@@ -183,7 +183,7 @@ describe('async actions', () => {
       {
         exchange:{
           exchange_name:"copy-manifest",
-          exchange_path:`http://www.fake.com/${PROJECT_NAME}/manifests/create`,
+          exchange_path:`http://localhost/${PROJECT_NAME}/manifests/create`,
           start_time: Date()
         },
         exchange_name:"copy-manifest",
