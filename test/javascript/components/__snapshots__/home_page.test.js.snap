@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HomePage renders 1`] = `
+<div
+  className="browser project"
+>
+  <div
+    className="home-page-header-group"
+  >
+    <div
+      className="page-detail-group"
+    >
+      Available Projects
+    </div>
+  </div>
+  <div
+    className="browser-tab"
+  />
+</div>
+`;

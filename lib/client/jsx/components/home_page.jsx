@@ -1,24 +1,31 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import * as _ from 'lodash';
+
 // Module imports.
 import { selectUserPermissions } from '../selectors/user_selector';
 
-export class HomePage extends React.Component{
+export default class HomePage extends React.Component{
   renderProjects(){
     let { permissions } = this.props;
-    if(permissions.length <= 0){
+
+    if(_.keys(permissions).length <= 0){
       return <span>{'No available projects.'}</span>;
     }
 
-    return permissions.map(({project_name,role})=>
-        <a className='home-page-project-link'
-          key={project_name}
-          href={`/${project_name}`}>
-          {project_name} &nbsp;
-          <span className='home-page-project-role'>({role})</span>
-        </a>
-    );
+    return <React.Fragment>
+      {_.keys(permissions).map( key => {
+          let {project_name, role} = permissions[key];
+          return <a className='home-page-project-link'
+            key={project_name}
+            href={`/${project_name}`}>
+            {project_name} &nbsp;
+            <span className='home-page-project-role'>({role})</span>
+          </a>
+      })}
+    </React.Fragment>
+
   }
 
   render(){
