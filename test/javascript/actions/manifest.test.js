@@ -2,7 +2,7 @@ import * as actions from '../../../lib/client/jsx/actions/manifest_actions';
 import { plot } from '../fixtures/all_manifests_response';
 import { manifestStore, manifest } from '../fixtures/manifests_store';
 import manifestResp from '../fixtures/manifest_response';
-import { mockStore, mockDate, mockFetch, setConfig, stubUrl, cleanStubs } from '../helpers';
+import { mockStore, mockDate, mockFetch, stubUrl, cleanStubs } from '../helpers';
 
 const PROJECT_NAME = 'labors';
 
@@ -10,19 +10,6 @@ describe('async actions', () => {
   afterEach(cleanStubs);
   mockDate();
   mockFetch();
-
-  setConfig({
-    project_name: PROJECT_NAME,
-    magma_host: 'https://magma.test',
-  });
-
-  global.Routes = {
-    manifests_fetch_path: (projectName) => `http://localhost/${projectName}/manifests`,
-    manifests_destroy_path: (projectName, manifestId) => `http://localhost/${projectName}/manifests/destroy/${manifestId}`,
-    manifests_create_path: (projectName) => `http://localhost/${projectName}/manifests/create`,
-    manifests_update_path: (projectName, manifestId)=> `http://localhost/${projectName}/manifests/update/${manifestId}`
-  };
-
 
   it('creates ADD_EXCHANGE, REMOVE_EXCHANGE, LOAD_MANIFESTS, and ADD_PLOT when fetching user manifests has been done', () => {
     stubUrl({

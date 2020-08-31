@@ -3,7 +3,6 @@ import {
   mockStore,
   mockDate,
   mockFetch,
-  setConfig,
   stubUrl,
   cleanStubs
 } from '../helpers';
