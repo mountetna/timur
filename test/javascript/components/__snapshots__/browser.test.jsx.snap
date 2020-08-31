@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Browser renders 1`] = `
+<div
+  className="browser"
+>
+  <div
+    id="loader-container"
+  >
+    <div
+      className="loader"
+    >
+      Loading...
+    </div>
+  </div>
+</div>
+`;
