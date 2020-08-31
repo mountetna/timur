@@ -10,6 +10,12 @@ module Archimedes
       vector.max
     end
 
+    def unique(vector)
+      Vector.new(vector.to_a.uniq do |(label, value)|
+        value
+      end)
+    end
+
     def min(vector)
       vector.min
     end

@@ -174,7 +174,6 @@ function useEditActions(setMode, browserState) {
 
   return {
     cancelEdits,
-    postEdits,
     approveEdits,
   }
 

@@ -25,8 +25,6 @@ export const mockStore = configureMockStore([
   thunk
 ]);
 
-export const setConfig = (config) => global.TIMUR_CONFIG = config;
-
 export const mockDate = () => {
   const currentDate = new Date();
   global.Date = jest.fn(() => currentDate);
