@@ -30,7 +30,7 @@ module.exports = (env) => ({
         include: [
           path.resolve(__dirname, 'lib/client/jsx'),
           path.resolve(__dirname, 'node_modules/etna-js/'),
-          '/etna/packages/etna-js'
+          '/etna/packages/etna-js',
         ],
 
         // Only run `.js` and `.jsx` files through Babel

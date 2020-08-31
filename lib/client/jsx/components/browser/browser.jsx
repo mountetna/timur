@@ -62,14 +62,13 @@ export default function Browser({ model_name, record_name, tab_name }) {
   const { view, record, tab, revision, template, can_edit } = browserState;
   const [mode, setMode] = useState('loading');
   const loading = !view || !template || !record || !tab_name;
-  const { cancelEdits, approveEdits, postEdits } = useEditActions(setMode, browserState);
+  const { cancelEdits, approveEdits } = useEditActions(setMode, browserState);
   const { selectOrShowTab, selectDefaultTab, selectTab, showTab } = useTabActions(browserState, setMode);
 
   // Set at 'skin' on the browser styling.
   let skin = 'browser';
   if (mode === 'browse') skin = 'browser ' + model_name;
   const editMode = useCallback(() => setMode('edit'), [setMode]);
-
 
   // On mount
   useEffect(() => {
@@ -102,7 +101,7 @@ export default function Browser({ model_name, record_name, tab_name }) {
     } else if (!tab_name) {
       selectDefaultTab(view);
     } else {
-      showTab();
+      showTab(view);
     }
   }, [])
 
@@ -174,7 +173,6 @@ function useEditActions(setMode, browserState) {
 
   return {
     cancelEdits,
-    postEdits,
     approveEdits,
   }
 
@@ -189,12 +187,12 @@ function useEditActions(setMode, browserState) {
 
   function postEdits() {
     setMode('submit');
-    sendRevisions(
+    invoke(sendRevisions(
       model_name,
       { [record_name]: revision },
       () => setMode('browse'),
       () => setMode('edit'),
-    );
+    ));
   }
 
   function approveEdits() {
@@ -204,7 +202,7 @@ function useEditActions(setMode, browserState) {
 }
 
 function useTabActions(browserState, setMode) {
-  const { record, view, template, tab_name: currentTabName, model_name, record_name } = browserState;
+  const { record, template, tab_name: currentTabName, model_name, record_name } = browserState;
   const invoke = useActionInvoker();
   const requestDocuments = useRequestDocuments();
 
@@ -221,11 +219,11 @@ function useTabActions(browserState, setMode) {
   }
 
   function selectOrShowTab(view) {
-    if (currentTabName) showTab();
+    if (currentTabName) showTab(view);
     else selectDefaultTab(view);
   }
 
-  function showTab() {
+  function showTab(view) {
     requestTabDocuments(view.tabs[currentTabName]);
     setMode('browse');
   }

@@ -42,7 +42,7 @@ const BarButton = ({type,click,title})=>{
 
 const ButtonBar =({ className, buttons }) =>
   <div className={className}>
-    {buttons.map(button => <BarButton key={button.type} {...button}/>)}
+    {buttons.map(button => <BarButton className={'test-bar-button-' + button.type} key={button.type} {...button}/>)}
   </div>;
 
 export default ButtonBar;

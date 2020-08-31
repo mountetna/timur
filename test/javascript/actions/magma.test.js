@@ -1,19 +1,12 @@
 import monsters from '../fixtures/monsters';
 import * as actions from '../../../lib/client/jsx/actions/magma_actions';
-import { mockStore, mockDate, mockFetch, setConfig, stubUrl, cleanStubs } from '../helpers';
-
-const PROJECT_NAME = 'labors';
+import { mockStore, mockDate, mockFetch, stubUrl, cleanStubs } from '../helpers';
 
 describe('async actions', () => {
   afterEach(cleanStubs);
 
   mockDate();
   mockFetch();
-
-  setConfig({
-    project_name: PROJECT_NAME,
-    magma_host: 'https://magma.test',
-  });
 
   it('requests documents from the magma /retrieve endpoint', () => {
     let request = {

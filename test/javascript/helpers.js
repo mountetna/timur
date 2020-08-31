@@ -4,7 +4,7 @@ import configureMockStore from 'redux-mock-store';
 import fetch from 'isomorphic-fetch';
 
 export const stubUrl = ({
-  verb='get', path, response, request, status=200, headers={}, host='http://www.fake.com'
+  verb='get', path, response, request, status=200, headers={}, host='http://localhost'
 }) => {
   nock(host)[verb](path, request)
     .reply(
@@ -24,8 +24,6 @@ export const cleanStubs = () => nock.cleanAll();
 export const mockStore = configureMockStore([
   thunk
 ]);
-
-export const setConfig = (config) => global.TIMUR_CONFIG = config;
 
 export const mockDate = () => {
   const currentDate = new Date();
