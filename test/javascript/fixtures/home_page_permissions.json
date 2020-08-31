@@ -1,7 +1,7 @@
 {
   "labors": {
-    "role": "administrator",
-    "privileged": true,
+    "role": "viewer",
+    "privileged": false,
     "project_name": "labors"
   },
   "wisdom": {
