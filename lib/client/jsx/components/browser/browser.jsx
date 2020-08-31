@@ -36,9 +36,8 @@ import {
   selectTemplate, selectDocument, selectRevision
 } from '../../selectors/magma';
 import {selectUserProjectRole} from '../../selectors/user_selector';
-import {showMessages} from "../../actions/message_actions";
-import {useReduxState} from "../../../../../../etna/packages/etna-js/hooks/useReduxState";
-import {useActionInvoker} from "../../../../../../etna/packages/etna-js/hooks/useActionInvoker";
+import {useReduxState} from "etna-js/hooks/useReduxState";
+import {useActionInvoker} from "etna-js/hooks/useActionInvoker";
 import {useRequestDocuments} from "../../hooks/useRequestDocuments";
 
 const loadingDiv =
