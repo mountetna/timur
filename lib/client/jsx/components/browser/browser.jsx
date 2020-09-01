@@ -36,9 +36,8 @@ import {
   selectTemplate, selectDocument, selectRevision
 } from '../../selectors/magma';
 import {selectUserProjectRole} from '../../selectors/user_selector';
-import {showMessages} from "../../actions/message_actions";
-import {useReduxState} from "../../../../../../etna/packages/etna-js/hooks/useReduxState";
-import {useActionInvoker} from "../../../../../../etna/packages/etna-js/hooks/useActionInvoker";
+import {useReduxState} from "etna-js/hooks/useReduxState";
+import {useActionInvoker} from "etna-js/hooks/useActionInvoker";
 import {useRequestDocuments} from "../../hooks/useRequestDocuments";
 
 const loadingDiv =
@@ -69,7 +68,6 @@ export default function Browser({ model_name, record_name, tab_name }) {
   let skin = 'browser';
   if (mode === 'browse') skin = 'browser ' + model_name;
   const editMode = useCallback(() => setMode('edit'), [setMode]);
-
 
   // On mount
   useEffect(() => {
@@ -102,7 +100,7 @@ export default function Browser({ model_name, record_name, tab_name }) {
     } else if (!tab_name) {
       selectDefaultTab(view);
     } else {
-      showTab();
+      showTab(view);
     }
   }, [])
 
@@ -203,7 +201,7 @@ function useEditActions(setMode, browserState) {
 }
 
 function useTabActions(browserState, setMode) {
-  const { record, view, template, tab_name: currentTabName, model_name, record_name } = browserState;
+  const { record, template, tab_name: currentTabName, model_name, record_name } = browserState;
   const invoke = useActionInvoker();
   const requestDocuments = useRequestDocuments();
 
@@ -220,11 +218,11 @@ function useTabActions(browserState, setMode) {
   }
 
   function selectOrShowTab(view) {
-    if (currentTabName) showTab();
+    if (currentTabName) showTab(view);
     else selectDefaultTab(view);
   }
 
-  function showTab() {
+  function showTab(view) {
     requestTabDocuments(view.tabs[currentTabName]);
     setMode('browse');
   }

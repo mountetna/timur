@@ -30,7 +30,7 @@ const PaneAttribute = ({attribute, mode, value, revised_value, model_name, recor
 const BrowserPane = ({ record, revision, pane, ...other_props}) =>
   Object.keys(pane.attributes).length == 0
   ? <div style={{'display': 'none'}} />
-  : <div className='pane'>
+  : console.log('rendering',  record) || <div className='pane'>
     {
       pane.title && <div className='title' title={pane.name}>{pane.title}</div>
     }
