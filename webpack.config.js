@@ -40,6 +40,8 @@ module.exports = (env) => ({
         loader: ['style-loader', 'css-loader'],
         include: [
           path.resolve(__dirname, 'node_modules/etna-js/'),
+          path.resolve(__dirname, 'node_modules/animate.css/'),
+          path.resolve(__dirname, 'node_modules/react-notifications-component'),
           '/etna/packages/etna-js'
         ],
         test: /\.css$/
@@ -61,7 +63,7 @@ module.exports = (env) => ({
 
       {
         // sass / scss loader for webpack
-        test: /\.(sass|scss|css)$/,
+        test: /\.(sass|scss)$/,
         include: [
           path.resolve(
             __dirname,
