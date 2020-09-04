@@ -42,3 +42,6 @@ tmp
 /spec/examples.txt
 .npm-packages
 .npmrc
+
+view.rb
+*-view.json
