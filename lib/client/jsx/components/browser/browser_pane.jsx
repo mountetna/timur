@@ -4,6 +4,8 @@ import * as React from 'react';
 // Class imports.
 import AttributeViewer from '../attributes/attribute_viewer';
 
+import {sortAttributes} from '../../utils/attributes';
+
 const PaneAttribute = ({
   attribute,
   mode,
@@ -47,57 +49,39 @@ const getAttributeNamesByType = (attributes, type) => {
   });
 };
 
-const BrowserPane = ({record, revision, pane, ...other_props}) => {
-  const attribute_names = Object.keys(pane.attributes);
-
-  if (attribute_names.length === 0) {
-    return <div style={{display: 'none'}} />;
-  }
-
-  let sorted_attribute_names = new Set();
-
-  getAttributeNamesByType(pane.attributes, 'parent').forEach((attribute_name) =>
-    sorted_attribute_names.add(attribute_name)
-  );
-  getAttributeNamesByType(
-    pane.attributes,
-    'identifier'
-  ).forEach((attribute_name) => sorted_attribute_names.add(attribute_name));
-
-  attribute_names.forEach((attribute_name) =>
-    sorted_attribute_names.add(attribute_name)
-  );
-
-  console.log('rendering', record);
-  return (
-    <div className='pane'>
-      {pane.title && (
-        <div className='title' title={pane.name}>
-          {pane.title}
+const BrowserPane = ({record, revision, pane, ...other_props}) =>
+  Object.keys(pane.attributes).length === 0 ? (
+    <div style={{display: 'none'}} />
+  ) : (
+    console.log('rendering', record) || (
+      <div className='pane'>
+        {pane.title && (
+          <div className='title' title={pane.name}>
+            {pane.title}
+          </div>
+        )}
+        <div className='attributes'>
+          {sortAttributes(pane.attributes)
+            .map((attribute) => {
+              return (
+                <PaneAttribute
+                  key={attribute.name}
+                  record={record}
+                  value={record[attribute.name]}
+                  revised_value={
+                    attribute.name in revision
+                      ? revision[attribute.name]
+                      : record[attribute.name]
+                  }
+                  attribute={pane.attributes[attribute.name]}
+                  {...other_props}
+                />
+              );
+            })
+            .filter((_) => _)}
         </div>
-      )}
-      <div className='attributes'>
-        {Array.from(sorted_attribute_names)
-          .map((attribute_name) => {
-            return (
-              <PaneAttribute
-                key={attribute_name}
-                record={record}
-                value={record[attribute_name]}
-                revised_value={
-                  attribute_name in revision
-                    ? revision[attribute_name]
-                    : record[attribute_name]
-                }
-                attribute={pane.attributes[attribute_name]}
-                {...other_props}
-              />
-            );
-          })
-          .filter((_) => _)}
       </div>
-    </div>
+    )
   );
-};
 
 export default BrowserPane;
