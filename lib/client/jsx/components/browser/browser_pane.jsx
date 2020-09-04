@@ -43,12 +43,6 @@ const PaneAttribute = ({
     </div>
   ) : null;
 
-const getAttributeNamesByType = (attributes, type) => {
-  return Object.keys(attributes).filter((attribute_name) => {
-    return attributes[attribute_name].attribute_type === type;
-  });
-};
-
 const BrowserPane = ({record, revision, pane, ...other_props}) =>
   Object.keys(pane.attributes).length === 0 ? (
     <div style={{display: 'none'}} />
