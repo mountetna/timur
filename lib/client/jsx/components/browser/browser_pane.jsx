@@ -38,7 +38,8 @@ const BrowserPane = ({ record, revision, pane, ...other_props}) => {
   const orderedViewAttributes = Object.values(pane.attributes)
     .sort((a, b) => a.index_order - b.index_order);
 
-  return console.log('rendering',  pane) || <div className='pane'>
+  console.log('rendering',  record);
+  return <div className='pane'>
     {
       pane.title && <div className='title' title={pane.name}>{pane.title}</div>
     }
