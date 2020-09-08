@@ -1,8 +1,15 @@
 import {
   selectSearchAttributeNames,
   selectSearchFilterParams,
-  selectSearchFilterString
+  selectSearchFilterString,
+  selectSortedDisplayAttributeNames
 } from '../../../lib/client/jsx/selectors/search';
+
+const models = {
+  monster: {template: require('../fixtures/template_monster.json')},
+  labor: {template: require('../fixtures/template_labor.json')},
+  project: {template: require('../fixtures/template_project.json')}
+};
 
 describe('selectSearchAttributeNames', () => {
   it('returns the attribute_names from the search state', () => {
@@ -51,3 +58,22 @@ describe('selectSearchFilterString', () => {
   });
 });
 
+describe('selectSortedDisplayAttributeNames', () => {
+  it('returns the sorted names of all attributes', () => {
+    let state = {
+      magma: {models},
+      search: {selected_model: 'monster'}
+    };
+
+    let attribute_names = selectSortedDisplayAttributeNames(state);
+
+    expect(attribute_names).toEqual([
+      'name',
+      'labor',
+      'aspect',
+      'victim',
+      'stats',
+      'species'
+    ]);
+  });
+});
