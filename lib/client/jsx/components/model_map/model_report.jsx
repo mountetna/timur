@@ -27,7 +27,7 @@ const ModelReport = ({ model_name, attribute_name, template, showAttribute }) =>
           <span className="name">Attributes</span>
         </div>
         {
-          sortAttributes(template.attributes).map( attribute =>
+          Object.values(sortAttributes(template.attributes)).map( attribute =>
             attribute.hidden
               ? null
               : <ModelAttribute key={attribute.attribute_name} showAttribute={ showAttribute } attribute={attribute} />
