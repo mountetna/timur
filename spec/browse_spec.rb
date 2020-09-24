@@ -63,9 +63,13 @@ describe BrowseController do
 
       expect(last_response.status).to eq(200)
 
+      # the new panes are in place
       panes = json_body[:view][:tabs][:statistics][:panes]
       expect(panes[:appearance][:attributes].keys).to eq([:height, :mass])
       expect(panes[:mien][:attributes].keys).to eq([:odor])
+
+      # the old pane is gone
+      expect(panes[:default]).to be_nil
     end
   end
 end
