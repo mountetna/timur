@@ -28,4 +28,44 @@ describe BrowseController do
       ).to eq([:weight, :size, :odor])
     end
   end
+
+  context '#update' do
+    it 'updates the view' do
+      view_tab = create(:view_tab, project: 'labors', model: 'monster', index_order: 1, name: 'stats')
+      view_pane = create(:view_pane, view_tab: view_tab, name: 'default')
+      size = create(:view_attribute, view_pane: view_pane, index_order: 2, name: 'size')
+      weight = create(:view_attribute, view_pane: view_pane, index_order: 1, name: 'weight')
+      odor = create(:view_attribute, view_pane: view_pane, index_order: 3, name: 'odor')
+
+      tabs = [
+        {
+          name: 'statistics',
+          panes: [
+            {
+              name: 'appearance',
+              attributes: [
+                { name: 'height' },
+                { name: 'mass' },
+              ]
+            },
+            {
+              name: 'mien',
+              attributes: [
+                { name: 'odor' }
+              ]
+            }
+          ]
+        }
+      ]
+
+      auth_header(:admin)
+      post('/api/view/labors/monster', tabs: tabs)
+
+      expect(last_response.status).to eq(200)
+
+      panes = json_body[:view][:tabs][:statistics][:panes]
+      expect(panes[:appearance][:attributes].keys).to eq([:height, :mass])
+      expect(panes[:mien][:attributes].keys).to eq([:odor])
+    end
+  end
 end

@@ -16,6 +16,8 @@ class Timur
       erb_view(:client)
     end
 
+    post 'api/view/:project_name/:model_name', action: 'browse#update', as: :update_view, auth: { user: { is_admin?: :project_name } }
+
     with auth: { user: { can_view?: :project_name } } do
       # browse_controller.rb
       get 'api/view/:project_name/:model_name', action: 'browse#view', as: :view
