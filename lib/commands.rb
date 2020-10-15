@@ -2,17 +2,6 @@ require 'date'
 require 'logger'
 
 class Timur
-  class Help < Etna::Command
-    usage 'List this help'
-
-    def execute
-      puts 'Commands:'
-      Timur.instance.commands.each do |name,cmd|
-        puts cmd.usage
-      end
-    end
-  end
-
   class Schema < Etna::Command
     usage 'Show the current database schema.'
 
