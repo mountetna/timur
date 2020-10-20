@@ -22,7 +22,7 @@ import BrowserTab from './browser_tab';
 import {requestManifests} from '../../actions/manifest_actions';
 import {requestPlots} from '../../actions/plot_actions';
 import {setLocation} from '../../actions/location_actions';
-import {requestView} from '../../actions/view_actions';
+import {applyView} from '../../actions/view_actions';
 import {
   sendRevisions, discardRevision, requestAnswer
 } from '../../actions/magma_actions';
@@ -93,7 +93,7 @@ export default function Browser({ model_name, record_name, tab_name }) {
       ));
     } else if (!view) {
       // we are told the model and record name, get the view
-      invoke(requestView(
+      invoke(applyView(
         model_name,
         selectOrShowTab
       ));

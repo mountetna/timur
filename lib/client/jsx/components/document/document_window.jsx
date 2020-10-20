@@ -1,5 +1,3 @@
-
-// Framework libraries.
 import * as React from 'react';
 
 import DocumentView from './document_view';

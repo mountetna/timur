@@ -11,6 +11,7 @@ import Plotter from './components/plotter/plotter';
 import {HomePageContainer as HomePage} from './components/home_page';
 import TimurNav from './components/timur_nav';
 import Messages from './components/messages';
+import ViewEditor from './components/view_editor/view_editor';
 
 import {showMessages} from './actions/message_actions';
 import {updateLocation} from './actions/location_actions';
@@ -85,7 +86,14 @@ const ROUTES = [
     template: ':project_name/plot/:plot_id',
     component: Plotter,
     mode: 'plots'
+  },
+  {
+    name: 'view',
+    template: ':project_name/view/:view_id',
+    component: ViewEditor,
+    mode: 'views'
   }
+
 ];
 
 setRoutes(ROUTES);
