@@ -11,5 +11,7 @@ global.Routes = {
     `http://localhost/${projectName}/manifests/update/${manifestId}`,
   plots_fetch_path: (project_name) => `http://localhost/${project_name}/plots`,
   view_path: (project_name, model_name) =>
-    `http://localhost/${project_name}/view/${model_name}`
+    `http://localhost/${project_name}/view/${model_name}`,
+  views_create_path: (project_name) => `http://localhost/${project_name}/views`,
+  update_view_json_path: (project_name, view_id) => `http://localhost/${project_name}/views/update/${view_id}`,
 };
