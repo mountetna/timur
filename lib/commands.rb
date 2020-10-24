@@ -35,8 +35,9 @@ class Timur
   end
   class Migrate < Etna::Command
     usage 'Run migrations for the current environment.'
+    string_flags << '--version'
 
-    def execute(version=nil)
+    def execute(version: nil)
       Sequel.extension(:migration)
       db = Timur.instance.db
 
