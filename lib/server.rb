@@ -21,6 +21,7 @@ class Timur
     with auth: { user: { can_view?: :project_name } } do
       # browse_controller.rb
       get 'api/view/:project_name/:model_name', action: 'browse#view', as: :view
+      get 'api/view/:project_name', action: 'browse#fetch_view', as: :fetch_view
 
       # archimedes_controller.rb
       post 'api/consignment/:project_name', action: 'archimedes#consignment', as: :consignment

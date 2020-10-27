@@ -88,10 +88,10 @@ const ROUTES = [
     mode: 'plots'
   },
   {
-    name: 'view',
-    template: ':project_name/view/:view_id',
+    name: 'views',
+    template: ':project_name/views',
     component: ViewEditor,
-    mode: 'views'
+    mode: 'view editor'
   }
 
 ];

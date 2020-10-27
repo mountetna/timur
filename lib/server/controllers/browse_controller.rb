@@ -18,5 +18,17 @@ class BrowseController < Timur::Controller
       ViewTab.retrieve_view(@params[:project_name], @params[:model_name])
     )
   end
+
+
+  def fetch_view
+    model_names = ViewTab.where(project: @params[:project_name])
+      .select_map(:model).uniq
+
+    success_json(
+      views: model_names.map do |model_name|
+        ViewTab.retrieve_view(@params[:project_name], model_name)[:view]
+      end
+    )
+  end
 end
 
