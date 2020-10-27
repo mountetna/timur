@@ -1,33 +1,78 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, connect } from 'react-redux';
+//import pushid from 'pushid';
 
 import {
     requestViews, saveNewView, copyView, saveView,
     deleteView,
 } from '../../actions/view_actions';
+import ViewScript from './views_script'
 import { pushLocation } from '../../actions/location_actions';
 import { getAllViews } from '../../selectors/view_selector';
 import { MD5 } from '../../selectors/consignment_selector';
 
-import {
-    copyManifest, deleteManifest,
-    requestConsignments,
-    requestManifests,
-    saveManifest,
-    saveNewManifest
-} from '../../actions/manifest_actions';
+// func for ??
+const selectView = (id) => {
+    let { views, pushLocation } = props;
+    let view;
+
+    switch(id) {
+        case 'new':
+            view = {
+                id: 'new',
+                script: 'Paste formatting configuration in JSON here',
+            };
+            break;
+        case null:
+            view = null;
+            break;
+        default:
+            // find it in the existing views
+            view = views && views.find(m=>m.id ===id);
+            if (!views) return;
+
+            // copy it so you don't modify the store
+            view = { ...views };
+            break;
+    }
+    const [vies, setView] = view;
+    setEditing(id === 'new');
+
+    if (push) pushLocation(
+        id == null ?
+            Routes.view_path(TIMUR_CONFIG.project_name) :
+            Routes.view_path(TIMUR_CONFIG.project_name, id)
+    );
+};
 
 // Main component for viewing/editing views.
-/*
+
 function ViewEditor(props) {
-    const [editing, setEditing] = useState(false)
-    useEffect(()=>requestViews())
+    const [editing, setEditing] = useState(false);
+
+    const [id, setId] = useState('new');
+
+
+
+    return(
+        <div>Hello</div>
+
+        <ViewScript
+            script={view && view.script}
+            is_editing={editing}
+            onChange={ updateField('script') }/>
+
+    )
+
 
 }
 export default ViewEditor;
- */
 
 
+
+
+
+/*
 
 // Main component for viewing/editing views.
 class ViewEditor extends React.Component{
@@ -58,48 +103,7 @@ class ViewEditor extends React.Component{
         this.selectView(view.id);
     }
 
-    selectView(id, push=true) {
-        let { views, pushLocation } = this.props;
-        let view;
 
-        switch(id) {
-            case 'new':
-                let date = new Date;
-                view = {
-                    id: 0,
-                    access: 'private',
-                    name: '',
-                    description: '',
-                    script: '',
-                    created_at: date.toString(),
-                    updated_at: date.toString()
-                }
-                break;
-            case null:
-                view = null;
-                break;
-            default:
-                // find it in the existing views
-                view = views && views.find(m=>m.id ===id);
-                if (!views) return;
-
-                // copy it so you don't modify the store
-                view = { ...views };
-                break;
-        }
-
-        this.setState({
-            view,
-            md5sum: view ? MD5(view.script) : null,
-            editing: id === 'new'
-        });
-
-        if (push) pushLocation(
-            id == null ?
-                Routes.view_path(TIMUR_CONFIG.project_name) :
-                Routes.view_path(TIMUR_CONFIG.project_name, id)
-        );
-    }
 
     updateField(field_name){
         return (event)=>{
@@ -178,3 +182,4 @@ export default connect(
         requestViews, saveNewView, saveView, copyView, deleteView, pushLocation
     }
 )(ViewEditor);
+*/
