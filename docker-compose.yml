@@ -45,7 +45,7 @@ x-base-etna-services: &base-etna-services
       <<: *base-etna-env
       RUN_NPM_INSTALL: "true"
       SKIP_RUBY_SETUP: "true"
-    command: npm run webpack
+    command: npm run webpack-dev
 
   "timur_db": &base-etna-db
     # The application specific database.  Overwrite with development-psql-9 to use psql 9 instead.

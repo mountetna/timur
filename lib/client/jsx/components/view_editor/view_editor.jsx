@@ -1,185 +1,67 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, connect } from 'react-redux';
-//import pushid from 'pushid';
-
+import { pushLocation } from '../../actions/location_actions';
+import md5 from 'md5';
 import {
     requestViews, saveNewView, copyView, saveView,
     deleteView,
 } from '../../actions/view_actions';
-import ViewScript from './views_script'
-import { pushLocation } from '../../actions/location_actions';
+import ViewScript from './views_script';
 import { getAllViews } from '../../selectors/view_selector';
 import { MD5 } from '../../selectors/consignment_selector';
+/*
+const AvailableViews = (props) => {
+    const [view, setView] = useState({
+        script: '',
+        md5: ''
+    });
 
-// func for ??
-const selectView = (id) => {
-    let { views, pushLocation } = props;
-    let view;
+    const handleChange = (e) => {
+        setView(prev => ({...prev, [e.target.script] : e.target.value ,
+        [e.target.md5] : md5(e.target.value)}));
+    };
+    console.log(view);
 
-    switch(id) {
-        case 'new':
-            view = {
-                id: 'new',
-                script: 'Paste formatting configuration in JSON here',
-            };
-            break;
-        case null:
-            view = null;
-            break;
-        default:
-            // find it in the existing views
-            view = views && views.find(m=>m.id ===id);
-            if (!views) return;
-
-            // copy it so you don't modify the store
-            view = { ...views };
-            break;
-    }
-    const [vies, setView] = view;
-    setEditing(id === 'new');
-
-    if (push) pushLocation(
-        id == null ?
-            Routes.view_path(TIMUR_CONFIG.project_name) :
-            Routes.view_path(TIMUR_CONFIG.project_name, id)
-    );
 };
 
+
+ */
 // Main component for viewing/editing views.
+function ViewEditor() {
+    //let view = useSelector(state => state.view);
+    const [view, setView] = useState({
+        script: '',
+        md5: ''
+    });
 
-function ViewEditor(props) {
-    const [editing, setEditing] = useState(false);
+    const handleChange = (e) => {
+        setView(prev => ({...prev, [e.target.script] : e.target.value ,
+            [e.target.md5] : md5(e.target.value)}));
+    };
+    console.log(view);
 
-    const [id, setId] = useState('new');
+    let new_md5sum;
+/*
+    const handleChange = (view_field, event) => {
+        if (view_field === 'script') {
+            new_md5sum = MD5(view.script);
+        } else {
+            view[view_field] = event.target.value;
+        }
+    };
 
-
+ */
+    const [editing, setEditing] = useState(true);
+    //const updatedField = handleChange('script', view, md5sum);
 
     return(
-        <div>Hello</div>
-
-        <ViewScript
-            script={view && view.script}
-            is_editing={editing}
-            onChange={ updateField('script') }/>
-
-    )
-
-
-}
-export default ViewEditor;
-
-
-
-
-
-/*
-
-// Main component for viewing/editing views.
-class ViewEditor extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            editing: false,
-        };
-    }
-
-    componentDidMount(){
-        // load all views for the selector
-        this.props.requestViews();
-    }
-
-    componentDidUpdate() {
-        let { view_id, views } = this.props;
-        let { view } = this.state;
-
-        if (view_id && views && !view) this.selectView(view_id, false);
-    }
-
-    create() {
-        this.selectView('new', true);
-    }
-
-    setView(view) {
-        this.selectView(view.id);
-    }
-
-
-
-    updateField(field_name){
-        return (event)=>{
-            let { view, md5sum } = this.state;
-            let new_md5sum;
-
-            if (field_name === 'script') {
-                // the code editor does not emit an event, just the new value
-                view.script = event;
-                new_md5sum = MD5(view.script);
-            } else {
-                view[field_name] = event.target.value;
-            }
-            this.setState({view, md5sum: new_md5sum || md5sum});
-        }
-    }
-
-    saveView() {
-        let { view, editing } = this.state;
-        // A new view should have an id set to 0.
-        if(view.id <= 0)
-            this.props.saveNewView(view, this.setView.bind(this));
-        else
-            this.props.saveView(view);
-
-        if (editing) this.toggleEdit();
-    }
-
-    copyView() {
-        let { view } = this.state;
-        this.props.copyView(view, this.setView.bind(this));
-    }
-
-    deleteView() {
-        let { view } = this.state;
-        if(confirm('Are you sure you want to remove this view?')){
-            this.props.deleteView(view, () => this.selectView(0));
-        }
-    }
-
-    revertView() {
-        let { view: { id }, editing } = this.state;
-
-        if (id > 0) this.selectView(id);
-        else this.selectView(null);
-
-        if (editing) this.toggleEdit();
-    }
-
-    toggleEdit(){
-        this.setState({
-            editing: (!this.state.editing)
-        });
-    }
-
-    render(){
-        let { views, is_admin, component_name } = this.props;
-        let { view, md5sum, editing } = this.state;
-
-        return(
+        <div>
             <ViewScript
                 script={view && view.script}
                 is_editing={editing}
-                onChange={ this.updateField.bind(this)('script') }/>
-        );
-    }
+                onChange={ e => handleChange(e) }/>
+        </div>
+    );
 }
+export default ViewEditor;
 
-export default connect(
-    // map state
-    (state)=>({
-        views: getAllViews(state)
-    }),
-    // map dispatch
-    {
-        requestViews, saveNewView, saveView, copyView, deleteView, pushLocation
-    }
-)(ViewEditor);
-*/

@@ -59,7 +59,7 @@ class Manifests extends React.Component{
 
     if (manifest_id && manifests && !manifest) this.selectManifest(manifest_id, false);
   }
-
+// TODO add warning message if no name provided
   create() {
     this.selectManifest('new', true);
   }
