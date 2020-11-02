@@ -13,10 +13,12 @@ import MD5 from '../../selectors/consignment_selector';
 
 // Main component for viewing/editing views.
 const ViewEditor = (props) => {
+
     const [editing, setEditing] = useState(false);
     let [view, setView] = useState('');
     let [md5sum, setMd5sum] = useState('');
     const dispatch = useDispatch();
+
 
     // initial request for all views
     useEffect(() => {
@@ -121,6 +123,7 @@ const ViewEditor = (props) => {
     };
 
     return(
+
         <DocumentWindow
             md5sum={ md5sum }
             documentType='view'
@@ -140,7 +143,9 @@ const ViewEditor = (props) => {
                 onChange={ updateField('script') }
             />
         </DocumentWindow>
+
     );
 };
 export default ViewEditor;
+
 
