@@ -65,18 +65,15 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
                                 setFiltersState={setFiltersState} />);
   };
 
-  const columnsText = attribute_names.length === display_attributes.length ? '' : `(${attribute_names.length} / ${display_attributes.length})`;
-  const filtersText = filtersState.length === 0 ? '' : `${filtersState.length} filters`;
+  const columnsText = attribute_names.length === display_attributes.length ? 'All' : `${attribute_names.length} / ${display_attributes.length}`;
+  const filtersText = filtersState.length === 0 ? 'No filters' : filtersState.length === 1 ? '1 filter' : `${filtersState.length} filters`;
 
   return <div className='query-builder'>
     <a className='pointer' onClick={onOpenAttributeFilter}>
-      Add/Remove Columns { columnsText }
+      { columnsText } columns
     </a>
     <a className='pointer' onClick={onOpenFilters}>
-      Add/Remove Filters { filtersText }
-    </a>
-    <a className='pointer' onClick={() => setShowAdvanced(true)}>
-      Advanced Searched
+      { filtersText }
     </a>
   </div>;
 }
@@ -202,8 +199,8 @@ function QueryFilterModal({
           onBlur={(e) => onFilterOperandChange(idx)(e.target.value)}
         />
 
-        <a className='pointer' onClick={() => onFilterOperandChange(idx)('')}>
-          X
+        <a className='pointer delete' onClick={() => onFilterOperandChange(idx)('')}>
+          <i className='fas fa-times'/>
         </a>
       </div>)}
       <div>
@@ -239,5 +236,5 @@ export default connect(
   (state) => ({ attribute_names: selectSortedAttributeNames(state), }),
   {
     setFilterString,
-  }
+ }
 )(QueryBuilder);

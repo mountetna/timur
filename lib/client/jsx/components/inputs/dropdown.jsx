@@ -53,7 +53,7 @@ class Dropdown extends Component{
   }
 
   render() {
-    const {list, selected_index, default_text} = this.props;
+    const {list, selected_index, default_text, className} = this.props;
     const {list_open} = this.state;
     let selected_item = selected_index == null || selected_index == -1 ? null : list[selected_index];
     let header_text = selected_item || default_text;
@@ -62,7 +62,7 @@ class Dropdown extends Component{
       <WithBounds
         render={
           bounds =>
-            <div className='dd-container'>
+            <div className={ `dd-container ${className}` }>
               <div className='dd-header' onClick={this.toggleList}>
                 <div className='dd-header-text'>{header_text}</div>
                 <i className={list_open ? 'fa fa-angle-up' : 'fa fa-angle-down'}></i>

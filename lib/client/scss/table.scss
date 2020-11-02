@@ -1,71 +1,176 @@
 @import "globals";
 
-.table {
-  font-family: $value_font;
-  .ReactTable {
-    border: none;
-    .rt-thead {
-      box-shadow: none;
-      border-bottom: 3px solid forestgreen;
+.table-viewer {
+  border-spacing: 0;
+  height: 100%;
+
+  .pager {
+
+    display: flex;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    background-color: #f8f8f8;
+
+    .pages {
+      width: 200px;
+      margin: 0px 50px;
+
+      .page-label {
+        padding: 0px 10px;
+        margin: 0px;
+      }
+
+      input {
+        width: 50px;
+        padding: 2px;
+        border-radius: 1px;
+        border: 1px solid $input_border_color;
+        background: $input_background_color;
+      }
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pagination-nav {
       color: forestgreen;
-      font-family: $body_font;
-      .rt-tr {
-        text-align: left;
-        .rt-th {
-          padding: 2px 2px;
+      cursor: pointer;
+      display: flex;
+      font-size: 25px;
+
+      &.disabled {
+        color: #dfdfdf;
+      }
+    }
+  }
+
+  .thead {
+    /* These styles are required for a scrollable body to align with the header properly */
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: forestgreen;
+    .tr {
+      border-bottom: 3px solid forestgreen;
+      .th {
+        padding: 3px 5px;
+        .content {
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
+        user-select: none;
+      }
+    }
+  }
+
+  .tbody {
+    /* These styles are required for a scrollable table body */
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+  }
+
+  .tr {
+    border-bottom: thin-rule(0.3);
+  }
+
+  .th,
+  .td {
+    margin: 0;
+    padding: 0.5rem;
+    border-right: thin-rule(0.3);
+    white-space: nowrap;
+
+    /* In this example we use an absolutely position resizer,
+     so this is required. */
+    position: relative;
+
+    overflow-x: hidden;
+
+    :last-child {
+      border-right: 0;
+    }
+
+    &:hover {
+      .resizer {
+      	background: rgba(forestgreen,0.1);
       }
     }
 
-    .rt-tbody {
-      overflow: unset;
-    }
+    .resizer {
+      right: 0;
+      width: 10px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      /* prevents from scrolling while dragging on touch devices */
+      touch-action :none;
 
-    .-pagination {
-      font-size: 0.75em;
-      justify-content: flex-start;
-      .-previous,.-next {
-        flex: 0;
-        display: flex;
-        align-items: center;
-        font-size: 25px;
-        padding: 0px 5px;
-
-        &:hover {
-          color: limegreen;
-          background-color: rgba(limegreen, 0.3);
-        }
-
-        .pagination-nav {
-          color: forestgreen;
-          cursor: pointer;
-          display: flex;
-
-          &.disabled {
-            color: #dfdfdf;
-          }
-        }
+      &.isResizing {
+        background: rgba(forestgreen,0.2);
       }
-      .-center {
-        flex: 0;
-        padding: 0px 50px;
-        input {
-          padding: 2px;
-          border-radius: 1px;
-          border: 1px solid $input_border_color;
-          background: $input_background_color;
-        }
-      }
-      box-shadow: none;
-      border-top: none;
-      padding: 0px;
     }
-    .rt-tbody {
-      .rt-tr-group {
-        border-bottom: $thin_rule;
-        .rt-td {
-          border-right: $thin_rule;
-        }
+  }
+}
+
+.tarble-viewer {
+  font-family: $value_font;
+  overflow: auto;
+
+  thead {
+    box-shadow: none;
+    border-top: thin-rule(0.4);
+    font-family: $body_font;
+      border-bottom: 3px solid forestgreen;
+    tr {
+      text-align: left;
+      th {
+        padding: 2px 4px;
+        border-right: thin-rule(0.4);
+      }
+    }
+  }
+
+  tbody {
+    overflow: unset;
+  }
+
+  .-pagination {
+    font-size: 0.75em;
+    justify-content: flex-start;
+    .-previous,.-next {
+      flex: 0;
+      display: flex;
+      align-items: center;
+      font-size: 25px;
+      padding: 0px 5px;
+
+      &:hover {
+        color: limegreen;
+        background-color: rgba(limegreen, 0.3);
+      }
+
+    }
+    .-center {
+      flex: 0;
+      padding: 0px 50px;
+      input {
+        padding: 2px;
+        border-radius: 1px;
+        border: 1px solid $input_border_color;
+        background: $input_background_color;
+      }
+    }
+    box-shadow: none;
+    border-top: none;
+    padding: 0px;
+  }
+  tbody {
+    tr {
+      border-bottom: thin-rule(0.3);
+      td {
+        border-right: thin-rule(0.3);
       }
     }
   }

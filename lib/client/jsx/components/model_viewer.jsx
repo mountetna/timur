@@ -18,6 +18,7 @@ const ModelViewer = ({
   pages,
   page_size,
   setPage,
+  children,
   restricted_attribute_names = null
 }) => {
   if (!template || !record_names) return <div className='table' />;
@@ -50,7 +51,7 @@ const ModelViewer = ({
       setPage={setPage}
       columns={columns}
       data={data}
-    />
+    >{children}</TableViewer>
   );
 };
 

@@ -12,7 +12,6 @@
  */
 
 @import "~code-mirror/codemirror";
-@import "~react-table/react-table";
 @import url(https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Lora|Crimson+Text|Cousine);
 
 @import "globals";
@@ -37,6 +36,7 @@
 @import "model_map";
 @import "dropdown";
 @import "list_selector";
+@import "toggle";
 @import "predicate";
 @import "list";
 @import "home_page";
@@ -44,11 +44,20 @@
 body {
   padding: 0px;
   margin: 0px;
+  height: 100%;
 }
 
-#main {
-	padding-left: 40px;
-	padding-right: 40px;
+#root {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+
+  #ui-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+  }
 }
 
 a {

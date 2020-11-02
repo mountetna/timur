@@ -131,31 +131,26 @@ export function Search({
         <SearchQuery loading={loading} onSelectTableChange={onSelectTableChange} pageSize={pageSize}
                      display_attributes={display_attributes}
                      selectedModel={selectedModel} setPage={setPage} setPageSize={setPageSize} />
-        <Loading loading={results === 0 || loading} delay={500} cacheLastView={true}>
-          <div className='results'>
-            Found {results} records in{' '}
-            <span className='model_name'>{model_name}</span>
-          </div>
-        </Loading>
       </div>
       <div className='body'>
-        <Loading loading={!model_name || (loading && loadingSpinner)} delay={500} cacheLastView={true}>
-          <div className='documents'>
-            <ModelViewer
-              model_name={model_name}
-              record_names={record_names}
-              page={current_page - 1}
-              pages={pages}
-              page_size={pageSize}
-              setPage={setPage}
-              restricted_attribute_names={
-                cached_attribute_names !== 'all'
-                  ? cached_attribute_names
-                  : null
-              }
-            />
+        <ModelViewer
+          model_name={model_name}
+          record_names={record_names}
+          page={current_page - 1}
+          pages={pages}
+          page_size={pageSize}
+          setPage={setPage}
+          restricted_attribute_names={
+            cached_attribute_names !== 'all'
+              ? cached_attribute_names
+              : null
+          }
+        >
+          <div className='results'>
+            {results} records in {' '}
+            <span className='model_name'>{model_name}</span>
           </div>
-        </Loading>
+        </ModelViewer>
       </div>
     </div>
   );

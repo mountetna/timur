@@ -69,7 +69,11 @@ $timur-color: #15788f;
   }
 }
 
-$thin_rule: 1px solid rgba(forestgreen,0.1);
+@function thin-rule($alpha, $color: forestgreen) {
+  @return 1px solid rgba($color,$alpha)
+}
+
+$thin_rule: thin-rule(0.1);
 
 @mixin basic_button($color, $background) {
   cursor: pointer;
