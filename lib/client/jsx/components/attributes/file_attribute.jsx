@@ -18,16 +18,17 @@ export const STUB = '::blank';
 export const TEMP = '::temp';
 
 // metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
-const METIS_PATH_MATCH = (path) =>
-  new RegExp(
-    '^metis://' +
-      // project_name
-      '([^/]*?)/' +
-      // bucket_name
-      '([^/]*?)/' +
-      // folder path + filename
-      '(.*)$'
-  ).test(path);
+export const METIS_PATH_REGEX = new RegExp(
+  '^metis://' +
+    // project_name
+    '([^/]*?)/' +
+    // bucket_name
+    '([^/]*?)/' +
+    // folder path + filename
+    '(.*)$'
+);
+
+const METIS_PATH_MATCH = (path) => METIS_PATH_REGEX.test(path);
 
 // We don't have a lot of content, so let's get a smaller Modal
 const customStyles = {
