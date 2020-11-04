@@ -186,7 +186,7 @@ function useEditActions(setMode, browserState) {
 
   function postEdits() {
     setMode('submit');
-    debugger;
+
     invoke(sendRevisions(
       model_name,
       { [record_name]: revision },
