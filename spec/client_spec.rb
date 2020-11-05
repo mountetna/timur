@@ -11,7 +11,7 @@ describe "View Client" do
       get("/")
 
       expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/TIMUR_CONFIG/)
+      expect(last_response.body).to match(/CONFIG/)
       expect(last_response.body).to match(/"project_name":null/)
     end
   end
@@ -22,7 +22,7 @@ describe "View Client" do
       get("/labors")
 
       expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/TIMUR_CONFIG/)
+      expect(last_response.body).to match(/CONFIG/)
       expect(last_response.body).to match(/"project_name":"labors"/)
     end
 
