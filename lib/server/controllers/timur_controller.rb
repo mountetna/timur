@@ -17,7 +17,8 @@ class Timur
       {
         project_name: @params[:project_name],
         token_name: Timur.instance.config(:token_name),
-        magma_host: Timur.instance.config(:magma)[:host]
+        magma_host: Timur.instance.config(:magma)[:host],
+        metis_uid_name: Timur.instance.config(:metis_uid_name)
       }.to_json
     end
 
