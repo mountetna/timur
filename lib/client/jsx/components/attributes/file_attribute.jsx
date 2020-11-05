@@ -18,17 +18,16 @@ export const STUB = '::blank';
 export const TEMP = '::temp';
 
 // metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
-export const METIS_PATH_REGEX = new RegExp(
-  '^metis://' +
-    // project_name
-    '([^/]*?)/' +
-    // bucket_name
-    '([^/]*?)/' +
-    // folder path + filename
-    '(.*)$'
-);
-
-const METIS_PATH_MATCH = (path) => METIS_PATH_REGEX.test(path);
+const METIS_PATH_MATCH = (path) =>
+  new RegExp(
+    '^metis://' +
+      // project_name
+      '([^/]*?)/' +
+      // bucket_name
+      '([^/]*?)/' +
+      // folder path + filename
+      '(.*)$'
+  ).test(path);
 
 // We don't have a lot of content, so let's get a smaller Modal
 const customStyles = {
@@ -65,15 +64,25 @@ export default function FileAttribute(props) {
   const [error, setError] = useState(false);
   const fileInputRef = useRef(null);
 
-  const {
-    metisSelector,
-    closeModal,
-    selectMetisFile,
-    formatFileRevision,
-    setTempRevision
-  } = useFileActions(metis, error, setMetis, setError, props);
+  const {metisSelector, formatFileRevision, setTempRevision} = useFileActions(
+    metis,
+    error,
+    setMetis,
+    setError,
+    props
+  );
 
-  let {mode, value, revised_value, document, template, attribute} = props;
+  let {
+    mode,
+    value,
+    revised_value,
+    document,
+    template,
+    attribute,
+    uploads
+  } = props;
+
+  if (uploads) debugger;
 
   if (mode != 'edit')
     return (
@@ -325,7 +334,7 @@ function useFileActions(metis, error, setMetis, setError, props) {
 
   function setTempRevision(e) {
     e.preventDefault();
-    console.log('about to call reviseDocument');
+
     let {document, template, attribute} = props;
     invoke(
       reviseDocument(

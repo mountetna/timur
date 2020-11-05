@@ -26,7 +26,7 @@ const Dot = ({x,y, xmedian, onHighlight, highlighted_label, label, color, model}
      (model && label) ?
        <Link link={
          Routes.browse_model_path(
-           TIMUR_CONFIG.project_name,
+           CONFIG.project_name,
            model,
            label
          )}>{dot}</Link> : dot

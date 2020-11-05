@@ -92,7 +92,7 @@ function FilterAttributesModal({ setSearchAttributeNames, display_attributes, at
 
   const disabledAttributeNames = useMemo(() => {
     return attributeNamesAndTypes
-      .filter(disabledAttributeForProject(TIMUR_CONFIG.project_name, selectedModel))
+      .filter(disabledAttributeForProject(CONFIG.project_name, selectedModel))
       .map(([name]) => name);
   }, [attributeNamesAndTypes]);
 

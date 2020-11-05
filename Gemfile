@@ -13,6 +13,8 @@ gem 'pg', '~> 0.21'
 # provides database models
 gem 'sequel', '4.49.0'
 
+gem 'puma', '5.0.2'
+
 group :development, :test do
   gem 'rspec'
   gem 'simplecov'

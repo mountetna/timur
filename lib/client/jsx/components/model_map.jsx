@@ -33,7 +33,7 @@ class ModelMap extends React.Component {
     return <div id="model_map">
       <div className="map">
         <div className="heading report_row">
-        <span className="name">Project</span> <span className="title">{TIMUR_CONFIG.project_name}</span>
+        <span className="name">Project</span> <span className="title">{CONFIG.project_name}</span>
         </div>
         <svg width={width} height={height}>
           <defs>

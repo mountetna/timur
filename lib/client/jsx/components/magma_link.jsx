@@ -11,7 +11,7 @@ export default class MagmaLink extends React.Component{
       <Link
         link={
           Routes.browse_model_path(
-            TIMUR_CONFIG.project_name,
+            CONFIG.project_name,
             model,
             encodeURIComponent(link)
           )
