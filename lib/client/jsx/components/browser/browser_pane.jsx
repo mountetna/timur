@@ -47,7 +47,7 @@ const BrowserPane = ({ record, revision, pane, ...other_props}) => {
       {
         orderedViewAttributes.map(attribute => {
           let {attribute_name} = attribute;
-          console.log(revision);
+
           return <PaneAttribute
             key={attribute_name}
             record={record}

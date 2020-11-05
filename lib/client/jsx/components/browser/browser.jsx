@@ -43,7 +43,6 @@ import {selectUserProjectRole} from '../../selectors/user_selector';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {useRequestDocuments} from '../../hooks/useRequestDocuments';
-import {selectUploads} from 'etna-js/selectors/directory-selector';
 
 const loadingDiv = (
   <div className='browser'>
@@ -66,15 +65,7 @@ export default function Browser({model_name, record_name, tab_name}) {
   const browserState = useReduxState(
     browserStateOf({model_name, record_name, tab_name})
   );
-  const {
-    view,
-    record,
-    tab,
-    revision,
-    template,
-    can_edit,
-    uploads
-  } = browserState;
+  const {view, record, tab, revision, template, can_edit} = browserState;
   const [mode, setMode] = useState('loading');
   const loading = !view || !template || !record || !tab_name;
   const {cancelEdits, approveEdits} = useEditActions(setMode, browserState);
@@ -104,11 +95,7 @@ export default function Browser({model_name, record_name, tab_name}) {
           ({answer}) =>
             invoke(
               setLocation(
-                Routes.browse_model_path(
-                  CONFIG.project_name,
-                  'project',
-                  answer
-                )
+                Routes.browse_model_path(CONFIG.project_name, 'project', answer)
               )
             )
         )
@@ -153,8 +140,7 @@ export default function Browser({model_name, record_name, tab_name}) {
           record,
           revision,
           mode,
-          tab,
-          uploads
+          tab
         }}
       />
     </div>
@@ -168,7 +154,6 @@ function browserStateOf({model_name, record_name, tab_name}) {
     const revision = selectRevision(state, model_name, record_name) || {};
     const view = selectView(state, model_name);
     const role = selectUserProjectRole(state);
-    const uploads = selectUploads(state);
 
     const tab =
       view &&
@@ -189,8 +174,7 @@ function browserStateOf({model_name, record_name, tab_name}) {
       can_edit,
       tab_name,
       record_name,
-      model_name,
-      uploads
+      model_name
     };
   };
 }

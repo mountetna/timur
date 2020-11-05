@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 
+import {selectUploads} from 'etna-js/selectors/directory-selector';
 import {
   reviseDocument,
   getRevisionTempUrl,
@@ -72,17 +73,12 @@ export default function FileAttribute(props) {
     props
   );
 
-  let {
-    mode,
-    value,
-    revised_value,
-    document,
-    template,
-    attribute,
-    uploads
-  } = props;
+  const browserState = useReduxState(browserStateOf());
+  const {uploads} = browserState;
 
-  if (uploads) debugger;
+  let {mode, value, revised_value, document, template, attribute} = props;
+
+  console.log('uploads', uploads);
 
   if (mode != 'edit')
     return (
@@ -143,95 +139,17 @@ export default function FileAttribute(props) {
       <FileValue value={revised_value} />
     </div>
   );
-
-  // const browserState = useReduxState(
-  //   browserStateOf({model_name, record_name, tab_name})
-  // );
-  // const {view, record, tab, revision, template, can_edit} = browserState;
-  // const [mode, setMode] = useState('loading');
-  // const loading = !view || !template || !record || !tab_name;
-  // const {cancelEdits, approveEdits} = useEditActions(setMode, browserState);
-  // const {selectOrShowTab, selectDefaultTab, selectTab, showTab} = useTabActions(
-  //   browserState,
-  //   setMode
-  // );
 }
 
-// class FileAttribute extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {metis: false, error: false};
-//   }
+function browserStateOf() {
+  return (state) => {
+    const uploads = selectUploads(state);
 
-//   render() {
-//     let {
-//       mode,
-//       value,
-//       revised_value,
-//       document,
-//       template,
-//       attribute,
-//       reviseDocument
-//     } = this.props;
-//     let {metis} = this.state;
-//     console.log('revised value', revised_value);
-//     if (mode != 'edit')
-//       return (
-//         <div className='attribute file'>
-//           <FileValue value={value} />
-//         </div>
-//       );
-
-//     let buttons = [
-//       {
-//         type: 'upload',
-//         click: () => this.input.click(),
-//         title: 'Upload a file from your computer'
-//       },
-//       {
-//         type: 'cloud',
-//         click: () => this.setState({metis: true}),
-//         title: 'Link a file from Metis'
-//       },
-//       {
-//         type: 'stub',
-//         click: () =>
-//           reviseDocument(
-//             document,
-//             template,
-//             attribute,
-//             this.formatFileRevision(STUB)
-//           ),
-//         title: 'Mark this file as blank'
-//       },
-//       {
-//         type: 'remove',
-//         click: () =>
-//           reviseDocument(
-//             document,
-//             template,
-//             attribute,
-//             this.formatFileRevision(null)
-//           ),
-//         title: 'Remove this file link'
-//       }
-//     ];
-
-//     return (
-//       <div className='attribute file'>
-//         <input
-//           type='file'
-//           style={{display: 'none'}}
-//           ref={(input) => (this.input = input)}
-//           onChange={this.setTempRevision}
-//         />
-//         {metis && this.metisSelector()}
-//         <ButtonBar className='file-buttons' buttons={buttons} />
-//         <FileValue value={revised_value} />
-//       </div>
-//     );
-//   }
-// }
+    return {
+      uploads
+    };
+  };
+}
 
 function useFileActions(metis, error, setMetis, setError, props) {
   const invoke = useActionInvoker();
