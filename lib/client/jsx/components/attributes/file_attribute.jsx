@@ -6,14 +6,16 @@ import Modal from 'react-modal';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 
-import {selectUploads} from 'etna-js/selectors/directory-selector';
 import {
-  reviseDocument,
-  getRevisionTempUrl,
-  fetchTempUrl
-} from '../../actions/magma_actions';
+  selectUploadForRevision,
+  selectUploads
+} from 'etna-js/selectors/directory-selector';
+import ListUpload from 'etna-js/upload/components/list-upload';
+import {reviseDocument, sendRevisions} from '../../actions/magma_actions';
 import ButtonBar from '../button_bar';
 import Icon from '../icon';
+import {dispatch} from 'd3';
+import {filePathComponents} from '../../selectors/magma';
 
 export const STUB = '::blank';
 export const TEMP = '::temp';
@@ -43,6 +45,20 @@ const customStyles = {
   }
 };
 
+const COLUMNS = [
+  {name: 'type', width: '60px'},
+  {name: 'name', width: '60%'},
+  {name: 'status', width: '90px', hide: true},
+  {name: 'updated', width: '30%'},
+  {name: 'size', width: '10%'},
+  {name: 'control', width: '100px', hide: true}
+];
+
+const COLUMN_WIDTHS = COLUMNS.reduce((widths, column) => {
+  widths[column.name] = column.width;
+  return widths;
+}, {});
+
 const FileValue = ({value}) =>
   !value ? (
     <span className='file-missing'> No file </span>
@@ -63,6 +79,7 @@ export default function FileAttribute(props) {
   const invoke = useActionInvoker();
   const [metis, setMetis] = useState(false);
   const [error, setError] = useState(false);
+  const [upload, setUpload] = useState(null);
   const fileInputRef = useRef(null);
 
   const {metisSelector, formatFileRevision, setTempRevision} = useFileActions(
@@ -73,19 +90,67 @@ export default function FileAttribute(props) {
     props
   );
 
+  let {
+    mode,
+    value,
+    revised_value,
+    document,
+    template,
+    attribute,
+    model_name,
+    record_name
+  } = props;
+
   const browserState = useReduxState(browserStateOf());
   const {uploads} = browserState;
 
-  let {mode, value, revised_value, document, template, attribute} = props;
-
-  console.log('uploads', uploads);
-
-  if (mode != 'edit')
-    return (
-      <div className='attribute file'>
-        <FileValue value={value} />
-      </div>
+  useEffect(() => {
+    const updatedUpload = selectUploadForRevision(
+      uploads,
+      model_name,
+      record_name,
+      attribute.attribute_name
     );
+    if (!updatedUpload) return;
+
+    if (updatedUpload.status !== 'complete') {
+      setUpload(updatedUpload);
+    } else {
+      let {project_name, bucket_name, file_name} = filePathComponents(
+        upload.url
+      );
+      invoke(
+        sendRevisions(model_name, {
+          [record_name]: {
+            [attribute.attribute_name]: {
+              path: `metis://${project_name}/${bucket_name}/${file_name}`,
+              original_filename: upload.original_filename
+            }
+          }
+        })
+      );
+      setUpload(null);
+    }
+  }, [uploads]);
+
+  if (mode != 'edit') {
+    if (upload) {
+      // TODO: Copy upload here and give it the original filename, so it
+      //   presents pretty to the user? May not be able to do that,
+      //   because the "cancel" action ties to the Metis temp file_name...
+      return (
+        <div className='attribute file'>
+          <ListUpload widths={COLUMN_WIDTHS} upload={upload} />
+        </div>
+      );
+    } else {
+      return (
+        <div className='attribute file'>
+          <FileValue value={value} />
+        </div>
+      );
+    }
+  }
 
   let buttons = [
     {
@@ -144,7 +209,6 @@ export default function FileAttribute(props) {
 function browserStateOf() {
   return (state) => {
     const uploads = selectUploads(state);
-
     return {
       uploads
     };

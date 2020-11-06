@@ -13,6 +13,19 @@ $light-grey: #ccc;
 
 $link_hover_color: #518651;
 
+$dialog-border: 1px solid #888;
+$timur-color: #15788f;
+
+.dark-text {
+  color: #000;
+  font-family: $body_font;
+}
+
+.light-text {
+  color: #999;
+  font-family: $body_font;
+}
+
 @mixin text_defaults {
   color: darkorchid;
   font-family: $value_font;
