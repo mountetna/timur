@@ -80,13 +80,20 @@ export default function FileAttribute(props) {
   const [metis, setMetis] = useState(false);
   const [error, setError] = useState(false);
   const [upload, setUpload] = useState(null);
+  const [uploadingMessage, setUploadingMessage] = useState(null);
   const fileInputRef = useRef(null);
 
-  const {metisSelector, formatFileRevision, setTempRevision} = useFileActions(
+  const {
+    metisSelector,
+    formatFileRevision,
+    setTempRevision,
+    isTempRevision
+  } = useFileActions(
     metis,
     error,
     setMetis,
     setError,
+    setUploadingMessage,
     props
   );
 
@@ -111,11 +118,16 @@ export default function FileAttribute(props) {
       record_name,
       attribute.attribute_name
     );
-    if (!updatedUpload) return;
+
+    if (!updatedUpload) {
+      setUpload(null);
+      setUploadingMessage('Upload cancelled or completed.');
+      return;
+    }
 
     if (updatedUpload.status !== 'complete') {
       setUpload(updatedUpload);
-    } else {
+    } else if (upload) {
       let {project_name, bucket_name, file_name} = filePathComponents(
         upload.url
       );
@@ -135,14 +147,17 @@ export default function FileAttribute(props) {
 
   if (mode != 'edit') {
     if (upload) {
-      // TODO: Copy upload here and give it the original filename, so it
-      //   presents pretty to the user? May not be able to do that,
-      //   because the "cancel" action ties to the Metis temp file_name...
       return (
         <div className='attribute file'>
-          <ListUpload widths={COLUMN_WIDTHS} upload={upload} />
+          <ListUpload
+            widths={COLUMN_WIDTHS}
+            upload={upload}
+            override_name={upload.original_filename}
+          />
         </div>
       );
+    } else if (isTempRevision(revised_value)) {
+      return <div className='attribute file'>{uploadingMessage}</div>;
     } else {
       return (
         <div className='attribute file'>
@@ -215,7 +230,14 @@ function browserStateOf() {
   };
 }
 
-function useFileActions(metis, error, setMetis, setError, props) {
+function useFileActions(
+  metis,
+  error,
+  setMetis,
+  setError,
+  setUploadingMessage,
+  props
+) {
   const invoke = useActionInvoker();
   const metisPathRef = useRef(null);
 
@@ -224,8 +246,18 @@ function useFileActions(metis, error, setMetis, setError, props) {
     closeModal,
     selectMetisFile,
     formatFileRevision,
-    setTempRevision
+    setTempRevision,
+    isTempRevision
   };
+
+  function isTempRevision(revision) {
+    if (!revision) return false;
+
+    return (
+      revision.path.indexOf('/upload/') > -1 &&
+      revision.path.indexOf('X-Etna-Signature') > -1
+    );
+  }
 
   function metisSelector() {
     // TODO: would be nice to make this like a folder / file search
@@ -316,6 +348,7 @@ function useFileActions(metis, error, setMetis, setError, props) {
 
   function setTempRevision(e) {
     e.preventDefault();
+    setUploadingMessage('');
 
     let {document, template, attribute} = props;
     invoke(
