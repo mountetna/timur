@@ -20,7 +20,7 @@ describe('async actions', () => {
       path: '/retrieve',
       request,
       response: monsters,
-      host: TIMUR_CONFIG.magma_host
+      host: CONFIG.magma_host
     });
 
     const expectedActions = [
@@ -87,7 +87,7 @@ describe('async actions', () => {
       path: '/update',
       request: expectedBody,
       response: monsters,
-      host: TIMUR_CONFIG.magma_host
+      host: CONFIG.magma_host
     });
 
     const store = mockStore({});

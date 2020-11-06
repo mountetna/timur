@@ -19,7 +19,7 @@ describe('ModelMap', () => {
       magma: { models }
     });
 
-    global.TIMUR_CONFIG = {
+    global.CONFIG = {
       magma_host: 'magma.test'
     };
 
@@ -42,7 +42,7 @@ describe('ModelMap', () => {
       magma: { models: { monster, project } }
     });
 
-    global.TIMUR_CONFIG = {
+    global.CONFIG = {
       magma_host: 'magma.test'
     };
 
