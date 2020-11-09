@@ -1,9 +1,11 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
-import { mockStore } from '../../helpers';
+import {Provider} from 'react-redux';
+import {mount, shallow} from 'enzyme';
+import {mockStore} from '../../helpers';
 import renderer from 'react-test-renderer';
+import ReactModal from 'react-modal';
 import ButtonBar from '../../../../lib/client/jsx/components/button_bar';
-import { STUB } from '../../../../lib/client/jsx/components/attributes/file_attribute';
+import {STUB} from '../../../../lib/client/jsx/components/attributes/file_attribute';
 import FileAttribute from '../../../../lib/client/jsx/components/attributes/file_attribute';
 
 import * as magmaActions from '../../../../lib/client/jsx/actions/magma_actions';
@@ -15,23 +17,27 @@ describe('FileAttribute', () => {
     store = mockStore({
       location: {
         path: '/labors/browse/monster/Nemean Lion'
+      },
+      directory: {
+        uploads: {}
       }
     });
   });
 
   it('renders the button bar while editing', () => {
     const component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={null}
-        value={null}
-        mode="edit"
-        attribute="gravatar"
-        document="Timur"
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={null}
+          value={null}
+          mode='edit'
+          attribute='gravatar'
+          document='Timur'
+          revised_value=''
+        />
+      </Provider>
     );
 
     const buttons = component.find(ButtonBar);
@@ -39,17 +45,18 @@ describe('FileAttribute', () => {
 
     const tree = renderer
       .create(
-        <FileAttribute
-          model_name="conquests"
-          record_name="Persia"
-          template={null}
-          value={null}
-          mode="edit"
-          attribute="gravatar"
-          document="Timur"
-          revised_value=""
-          store={store}
-        />
+        <Provider store={store}>
+          <FileAttribute
+            model_name='conquests'
+            record_name='Persia'
+            template={null}
+            value={null}
+            mode='edit'
+            attribute='gravatar'
+            document='Timur'
+            revised_value=''
+          />
+        </Provider>
       )
       .toJSON();
 
@@ -60,17 +67,18 @@ describe('FileAttribute', () => {
     const value = null;
 
     const component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={null}
-        value={value}
-        mode="view"
-        attribute="gravatar"
-        document="Timur"
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={null}
+          value={value}
+          mode='view'
+          attribute='gravatar'
+          document='Timur'
+          revised_value=''
+        />
+      </Provider>
     );
 
     const buttons = component.find('file-buttons');
@@ -78,17 +86,18 @@ describe('FileAttribute', () => {
 
     const tree = renderer
       .create(
-        <FileAttribute
-          model_name="conquests"
-          record_name="Persia"
-          template={null}
-          value={value}
-          mode="view"
-          attribute="gravatar"
-          document="Timur"
-          revised_value=""
-          store={store}
-        />
+        <Provider store={store}>
+          <FileAttribute
+            model_name='conquests'
+            record_name='Persia'
+            template={null}
+            value={value}
+            mode='view'
+            attribute='gravatar'
+            document='Timur'
+            revised_value=''
+          />
+        </Provider>
       )
       .toJSON();
 
@@ -96,20 +105,21 @@ describe('FileAttribute', () => {
   });
 
   it('renders blank paths correctly while not editing', () => {
-    let value = { path: '::blank' };
+    let value = {path: '::blank'};
 
     let component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={null}
-        value={value}
-        mode="view"
-        attribute="gravatar"
-        document="Timur"
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={null}
+          value={value}
+          mode='view'
+          attribute='gravatar'
+          document='Timur'
+          revised_value=''
+        />
+      </Provider>
     );
 
     expect(component.text().trim()).toEqual('Blank file');
@@ -117,34 +127,36 @@ describe('FileAttribute', () => {
     value = '::blank';
 
     component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={null}
-        value={value}
-        mode="view"
-        attribute="gravatar"
-        document="Timur"
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={null}
+          value={value}
+          mode='view'
+          attribute='gravatar'
+          document='Timur'
+          revised_value=''
+        />
+      </Provider>
     );
 
     expect(component.text().trim()).toEqual('Blank file');
 
     const tree = renderer
       .create(
-        <FileAttribute
-          model_name="conquests"
-          record_name="Persia"
-          template={null}
-          value={value}
-          mode="view"
-          attribute="gravatar"
-          document="Timur"
-          revised_value=""
-          store={store}
-        />
+        <Provider store={store}>
+          <FileAttribute
+            model_name='conquests'
+            record_name='Persia'
+            template={null}
+            value={value}
+            mode='view'
+            attribute='gravatar'
+            document='Timur'
+            revised_value=''
+          />
+        </Provider>
       )
       .toJSON();
 
@@ -155,34 +167,36 @@ describe('FileAttribute', () => {
     const value = null;
 
     const component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={null}
-        value={value}
-        mode="view"
-        attribute="gravatar"
-        document="Timur"
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={null}
+          value={value}
+          mode='view'
+          attribute='gravatar'
+          document='Timur'
+          revised_value
+        />
+      </Provider>
     );
 
     expect(component.text().trim()).toEqual('No file');
 
     const tree = renderer
       .create(
-        <FileAttribute
-          model_name="conquests"
-          record_name="Persia"
-          template={null}
-          value={value}
-          mode="view"
-          attribute="gravatar"
-          document="Timur"
-          revised_value=""
-          store={store}
-        />
+        <Provider store={store}>
+          <FileAttribute
+            model_name='conquests'
+            record_name='Persia'
+            template={null}
+            value={value}
+            mode='view'
+            attribute='gravatar'
+            document='Timur'
+            revised_value=''
+          />
+        </Provider>
       )
       .toJSON();
 
@@ -193,38 +207,40 @@ describe('FileAttribute', () => {
     const value = new File(
       ['Believe me, you are but pismire ant:'],
       'conquest.txt',
-      { type: 'text/plain' }
+      {type: 'text/plain'}
     );
 
     const component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={null}
-        value={value}
-        mode="view"
-        attribute="gravatar"
-        document="Timur"
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={null}
+          value={value}
+          mode='view'
+          attribute='gravatar'
+          document='Timur'
+          revised_value=''
+        />
+      </Provider>
     );
 
     expect(component.text().trim()).toEqual('conquest.txt (text/plain)');
 
     const tree = renderer
       .create(
-        <FileAttribute
-          model_name="conquests"
-          record_name="Persia"
-          template={null}
-          value={value}
-          mode="view"
-          attribute="gravatar"
-          document="Timur"
-          revised_value=""
-          store={store}
-        />
+        <Provider store={store}>
+          <FileAttribute
+            model_name='conquests'
+            record_name='Persia'
+            template={null}
+            value={value}
+            mode='view'
+            attribute='gravatar'
+            document='Timur'
+            revised_value=''
+          />
+        </Provider>
       )
       .toJSON();
 
@@ -233,29 +249,33 @@ describe('FileAttribute', () => {
 
   it('accepts a valid Metis path', () => {
     const component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={{ name: 'Conquests', identifier: 1 }}
-        value={null}
-        mode="edit"
-        attribute={{ name: 'ExpansionPlans' }}
-        document={{ '1': 'Timur' }}
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={{name: 'Conquests', identifier: 1}}
+          value={null}
+          mode='edit'
+          attribute={{name: 'ExpansionPlans'}}
+          document={{'1': 'Timur'}}
+          revised_value=''
+        />
+      </Provider>
     );
 
     const cloudButton = component.find('.cloud').first();
     cloudButton.simulate('click');
 
-    const metisPathInput = component.find('.file-metis-select').find('input');
+    let modal = component.find(ReactModal);
+    const metisPathInput = modal.find('.file-metis-select').find('input');
     metisPathInput.instance().value = 'metis://project/bucket/file_name.txt';
 
-    const checkButton = component.find('.check').first();
+    const checkButton = modal.find('.check').first();
     checkButton.simulate('click');
 
-    expect(component.find('file-metis-error').exists()).toBeFalsy();
+    // refresh the modal contents
+    modal = component.find(ReactModal);
+    expect(modal.find('file-metis-error').exists()).toBeFalsy();
 
     const actions = store.getActions();
     expect(actions).toEqual([
@@ -264,7 +284,7 @@ describe('FileAttribute', () => {
         model_name: 'Conquests',
         record_name: 'Timur',
         revision: {
-          ['ExpansionPlans']: { path: 'metis://project/bucket/file_name.txt' }
+          ['ExpansionPlans']: {path: 'metis://project/bucket/file_name.txt'}
         }
       }
     ]);
@@ -272,29 +292,34 @@ describe('FileAttribute', () => {
 
   it('shows an error message when given an invalid Metis path', () => {
     const component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={{ name: 'Conquests', identifier: 1 }}
-        value={null}
-        mode="edit"
-        attribute={{ name: 'ExpansionPlans' }}
-        document={{ '1': 'Timur' }}
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={{name: 'Conquests', identifier: 1}}
+          value={null}
+          mode='edit'
+          attribute={{name: 'ExpansionPlans'}}
+          document={{'1': 'Timur'}}
+          revised_value=''
+        />
+      </Provider>
     );
 
     const cloudButton = component.find('.cloud').first();
     cloudButton.simulate('click');
 
-    const metisPathInput = component.find('.file-metis-select').find('input');
+    let modal = component.find(ReactModal);
+    const metisPathInput = modal.find('.file-metis-select').find('input');
     metisPathInput.instance().value = 'project/bucket/file_name.txt';
 
-    const checkButton = component.find('.check').first();
+    const checkButton = modal.find('.check').first();
     checkButton.simulate('click');
 
-    expect(component.find('.file-metis-error').exists()).toBeTruthy();
+    // refresh the modal contents
+    modal = component.find(ReactModal);
+
+    expect(modal.find('.file-metis-error').exists()).toBeTruthy();
 
     const actions = store.getActions();
     expect(actions).toEqual([]);
@@ -302,17 +327,18 @@ describe('FileAttribute', () => {
 
   it('dispatches an action to mark a file as blank', () => {
     const component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={{ name: 'Conquests', identifier: 1 }}
-        value={null}
-        mode="edit"
-        attribute={{ name: 'ExpansionPlans' }}
-        document={{ '1': 'Timur' }}
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={{name: 'Conquests', identifier: 1}}
+          value={null}
+          mode='edit'
+          attribute={{name: 'ExpansionPlans'}}
+          document={{'1': 'Timur'}}
+          revised_value=''
+        />
+      </Provider>
     );
 
     const stubButton = component.find('.stub').first();
@@ -325,7 +351,7 @@ describe('FileAttribute', () => {
         model_name: 'Conquests',
         record_name: 'Timur',
         revision: {
-          ['ExpansionPlans']: { path: STUB }
+          ['ExpansionPlans']: {path: STUB}
         }
       }
     ]);
@@ -333,17 +359,18 @@ describe('FileAttribute', () => {
 
   it('dispatches an action to remove a file', () => {
     const component = mount(
-      <FileAttribute
-        model_name="conquests"
-        record_name="Persia"
-        template={{ name: 'Conquests', identifier: 1 }}
-        value={null}
-        mode="edit"
-        attribute={{ name: 'ExpansionPlans' }}
-        document={{ '1': 'Timur' }}
-        revised_value=""
-        store={store}
-      />
+      <Provider store={store}>
+        <FileAttribute
+          model_name='conquests'
+          record_name='Persia'
+          template={{name: 'Conquests', identifier: 1}}
+          value={null}
+          mode='edit'
+          attribute={{name: 'ExpansionPlans'}}
+          document={{'1': 'Timur'}}
+          revised_value=''
+        />
+      </Provider>
     );
 
     const removeButton = component.find('.remove').first();
@@ -356,7 +383,7 @@ describe('FileAttribute', () => {
         model_name: 'Conquests',
         record_name: 'Timur',
         revision: {
-          ['ExpansionPlans']: { path: null }
+          ['ExpansionPlans']: {path: null}
         }
       }
     ]);

@@ -138,7 +138,6 @@ export default function FileAttribute(props) {
   }, [uploads]);
 
   useEffect(() => {
-    console.log('previousValue', value);
     setPreviousValue(value);
   }, []);
 
@@ -252,7 +251,7 @@ function useFileActions(
   };
 
   function isTempRevision(revision) {
-    if (!revision) return false;
+    if (!(revision && revision.path)) return false;
 
     return (
       revision.path.indexOf('/upload/') > -1 &&

@@ -72,6 +72,15 @@ exports[`ImageAttribute renders the button bar while editing 1`] = `
     <span
       className="fa-stack fa-fw"
       onClick={[Function]}
+      title="Upload a file from your computer"
+    >
+      <i
+        className="icon upload upload fa fa-2x fa-upload"
+      />
+    </span>
+    <span
+      className="fa-stack fa-fw"
+      onClick={[Function]}
       title="Link a file from Metis"
     >
       <i
