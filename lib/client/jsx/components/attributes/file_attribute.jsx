@@ -80,7 +80,7 @@ export default function FileAttribute(props) {
   const [metis, setMetis] = useState(false);
   const [error, setError] = useState(false);
   const [upload, setUpload] = useState(null);
-  const [uploadingMessage, setUploadingMessage] = useState(null);
+  const [previousValue, setPreviousValue] = useState(null);
   const fileInputRef = useRef(null);
 
   const {
@@ -88,14 +88,7 @@ export default function FileAttribute(props) {
     formatFileRevision,
     setTempRevision,
     isTempRevision
-  } = useFileActions(
-    metis,
-    error,
-    setMetis,
-    setError,
-    setUploadingMessage,
-    props
-  );
+  } = useFileActions(metis, error, setMetis, setError, setPreviousValue, props);
 
   let {
     mode,
@@ -121,7 +114,6 @@ export default function FileAttribute(props) {
 
     if (!updatedUpload) {
       setUpload(null);
-      setUploadingMessage('Upload cancelled or completed.');
       return;
     }
 
@@ -145,6 +137,11 @@ export default function FileAttribute(props) {
     }
   }, [uploads]);
 
+  useEffect(() => {
+    console.log('previousValue', value);
+    setPreviousValue(value);
+  }, []);
+
   if (mode != 'edit') {
     if (upload) {
       return (
@@ -156,8 +153,12 @@ export default function FileAttribute(props) {
           />
         </div>
       );
-    } else if (isTempRevision(revised_value)) {
-      return <div className='attribute file'>{uploadingMessage}</div>;
+    } else if (isTempRevision(revised_value) && previousValue) {
+      return (
+        <div className='attribute file'>
+          <FileValue value={previousValue} />
+        </div>
+      );
     } else {
       return (
         <div className='attribute file'>
@@ -235,7 +236,7 @@ function useFileActions(
   error,
   setMetis,
   setError,
-  setUploadingMessage,
+  setPreviousValue,
   props
 ) {
   const invoke = useActionInvoker();
@@ -348,7 +349,6 @@ function useFileActions(
 
   function setTempRevision(e) {
     e.preventDefault();
-    setUploadingMessage('');
 
     let {document, template, attribute} = props;
     invoke(
