@@ -1,5 +1,8 @@
 require('etna-js/spec/setup');
 
+import ReactModal from 'react-modal';
+ReactModal.setAppElement('*'); // suppresses modal-related test warnings.
+
 global.Routes = {
   manifests_fetch_path: (projectName) =>
     `http://localhost/${projectName}/manifests`,

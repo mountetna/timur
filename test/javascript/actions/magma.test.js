@@ -8,7 +8,7 @@ describe('async actions', () => {
   mockDate();
   mockFetch();
 
-  it('requests documents from the magma /retrieve endpoint', () => {
+  it('requests documents from the magma /retrieve endpoint', (done) => {
     let request = {
       model_name: 'monster',
       project_name: 'labors',
@@ -58,10 +58,11 @@ describe('async actions', () => {
       }
     )).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
+      done();
     });
   });
 
-  it('posts simple update revisions to the magma /update endpoint', () => {
+  it('posts simple update revisions to the magma /update endpoint', (done) => {
     let revisions = {
       monster: {
         stats: {
@@ -79,7 +80,8 @@ describe('async actions', () => {
             }
           }
         }
-      }
+      },
+      project_name: 'labors'
     }
 
     stubUrl({
@@ -98,6 +100,7 @@ describe('async actions', () => {
       () => {
         // should call success function in this case
         expect(true).toEqual(true);
+        done();
       },
       () => {
         fail('should not have called the error function')

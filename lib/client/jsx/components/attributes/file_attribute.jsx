@@ -80,7 +80,7 @@ export default function FileAttribute(props) {
   const [metis, setMetis] = useState(false);
   const [error, setError] = useState(false);
   const [upload, setUpload] = useState(null);
-  const [previousValue, setPreviousValue] = useState(null);
+  const [previous_value, setPreviousValue] = useState(null);
   const fileInputRef = useRef(null);
 
   const {
@@ -88,7 +88,7 @@ export default function FileAttribute(props) {
     formatFileRevision,
     setTempRevision,
     isTempRevision
-  } = useFileActions(metis, error, setMetis, setError, setPreviousValue, props);
+  } = useFileActions(metis, error, setMetis, setError, props);
 
   let {
     mode,
@@ -138,6 +138,7 @@ export default function FileAttribute(props) {
   }, [uploads]);
 
   useEffect(() => {
+    // console.log('previous_value being set to', value);
     setPreviousValue(value);
   }, []);
 
@@ -152,10 +153,10 @@ export default function FileAttribute(props) {
           />
         </div>
       );
-    } else if (isTempRevision(revised_value) && previousValue) {
+    } else if (isTempRevision(revised_value) && previous_value) {
       return (
         <div className='attribute file'>
-          <FileValue value={previousValue} />
+          <FileValue value={previous_value} />
         </div>
       );
     } else {
@@ -230,14 +231,7 @@ function browserStateOf() {
   };
 }
 
-function useFileActions(
-  metis,
-  error,
-  setMetis,
-  setError,
-  setPreviousValue,
-  props
-) {
+function useFileActions(metis, error, setMetis, setError, props) {
   const invoke = useActionInvoker();
   const metisPathRef = useRef(null);
 
