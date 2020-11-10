@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, shallowEqual} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {pushLocation} from '../../actions/location_actions';
 import {
@@ -12,16 +12,22 @@ import ViewScript from './views_script';
 import {getAllViews} from '../../selectors/view_selector';
 import {MD5} from '../../selectors/consignment_selector';
 
+
+// shallow selector
+export const useShallowEqualSelector = (selector) => {
+  return useSelector(selector, shallowEqual)
+}
+
+
 // Main component for viewing/editing views.
 const ViewEditor = (props) => {
-  const [editing, setEditing] = useState(false);
-  let [view, setView] = useState('');
-  let [md5sum, setMd5sum] = useState('');
+  let [editing, setEditing] = useState(useSelector(state => state.editing));
+  let [view, setView] = useState(useShallowEqualSelector(state => state.view));
+  let [md5sum, setMd5sum] = useState(useSelector(state => state.md5sum));
   const dispatch = useDispatch();
-
   let {view_id, views} = props;
 
-  // Initia
+  // Initial render
   useEffect(() => {
     requestViews(dispatch, () => {});
   }, []);
@@ -64,13 +70,13 @@ const ViewEditor = (props) => {
     setEditing(id === 'new');
 
     if (push)
-      dispatch(
-        pushLocation(
-          id == null
-            ? Routes.views_path(TIMUR_CONFIG.project_name)
-            : Routes.view_path(TIMUR_CONFIG.project_name, id)
-        )
-      );
+
+      pushLocation(
+        id == null
+          ? Routes.views_path(TIMUR_CONFIG.project_name)
+          : Routes.view_path(TIMUR_CONFIG.project_name, id)
+      )(dispatch);
+
   };
 
   const create = () => selectView('new', true);
@@ -78,10 +84,7 @@ const ViewEditor = (props) => {
   const activateView = (view) => selectView(view.id);
 
   const updateField = (field_name) => (event) => {
-    let view = useSelector((state) => state.view);
-    let md5sum = useSelector((state) => state.md5sum);
     let new_md5sum;
-
     if (field_name === 'script') {
       // the code editor does not emit an event, just the new value
       view.script = event;
@@ -94,26 +97,21 @@ const ViewEditor = (props) => {
   };
 
   const saveView = () => {
-    let view = useSelector((state) => state.view);
-    let editing = useSelector((state) => state.editing);
     // A new view should have an id set to 0.
     if (view.id <= 0) {
-      dispatch(saveNewViewAction(view, activateView()));
+      saveNewViewAction(dispatch, view, activateView());
     } else {
-      dispatch(saveViewAction(view));
+      dispatch(saveViewAction(dispatch, view));
     }
 
     if (editing) toggleEdit();
   };
 
   const copyView = () => {
-    let view = useSelector((state) => state.view);
     dispatch(copyViewAction(view, activateView()));
   };
 
   const revertView = () => {
-    let view = useSelector((state) => state.view);
-    let editing = useSelector((state) => state.editing);
 
     let {id} = view;
 
@@ -133,7 +131,7 @@ const ViewEditor = (props) => {
       documentType='view'
       editing={editing}
       document={view}
-      documents={props.views}
+      documents={views}
       onCreate={create}
       onSelect={activateView}
       onUpdate={updateField}
