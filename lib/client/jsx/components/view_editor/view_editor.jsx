@@ -15,7 +15,7 @@ import {MD5} from '../../selectors/consignment_selector';
 
 // shallow selector
 export const useShallowEqualSelector = (selector) => {
-  return useSelector(selector, shallowEqual)
+  return useSelector(selector, shallowEqual);
 };
 
 
@@ -23,7 +23,7 @@ export const useShallowEqualSelector = (selector) => {
 const ViewEditor = (props) => {
   let [editing, setEditing] = useState(useSelector(state => state.editing));
   let [view, setView] = useState(useShallowEqualSelector(state => state.view));
-  let [md5sum, setMd5sum] = useState(useSelector(state => state.md5sum));
+  let md5sum = '';
   const dispatch = useDispatch();
   let {view_id, views} = props;
 
@@ -47,6 +47,7 @@ const ViewEditor = (props) => {
           name: '',
           description: '',
           script: '',
+          md5sum: '',
           created_at: date.toString(),
           updated_at: date.toString()
         };
@@ -66,7 +67,7 @@ const ViewEditor = (props) => {
 
     setView({...view});
     const md5sum = view ? MD5(view.script) : null;
-    setMd5sum(md5sum);
+    setView({...view, });
     setEditing(id === 'new');
 
     if (push)
@@ -82,9 +83,7 @@ const ViewEditor = (props) => {
   const create = () => selectView('new', true);
 
   const activateView = (view) => {
-    console.log({view});
-
-    selectView(view.id)
+    selectView(view.id);
   };
 
   const updateField = (field_name) => (event) => {
@@ -96,8 +95,7 @@ const ViewEditor = (props) => {
     } else {
       view[field_name] = event.target.value;
     }
-    setView({...view});
-    setMd5sum(new_md5sum || md5sum);
+    setView({...view, md5sum: new_md5sum || md5sum});
   };
 
   const saveView = () => {
