@@ -23,7 +23,6 @@ export default class DocumentView extends React.Component {
     let buttons = this.getButtons();
 
     if (!document) return null;
-
     return(
       <div className='document-view'>
         <div className='document-view-header'>

@@ -94,7 +94,7 @@ const ROUTES = [
     mode: 'view_editor'
   },
   {
-    name: 'view',
+    name: 'curr_view',
     template: ':project_name/views/:view_id',
     component: ViewEditor,
     mode: 'view_editor'

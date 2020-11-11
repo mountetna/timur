@@ -16,7 +16,7 @@ import {MD5} from '../../selectors/consignment_selector';
 // shallow selector
 export const useShallowEqualSelector = (selector) => {
   return useSelector(selector, shallowEqual)
-}
+};
 
 
 // Main component for viewing/editing views.
@@ -64,7 +64,7 @@ const ViewEditor = (props) => {
         break;
     }
 
-    setView(view);
+    setView({...view});
     const md5sum = view ? MD5(view.script) : null;
     setMd5sum(md5sum);
     setEditing(id === 'new');
@@ -74,14 +74,18 @@ const ViewEditor = (props) => {
       pushLocation(
         id == null
           ? Routes.views_path(TIMUR_CONFIG.project_name)
-          : Routes.view_path(TIMUR_CONFIG.project_name, id)
+          : Routes.curr_view_path(TIMUR_CONFIG.project_name, id)
       )(dispatch);
 
   };
 
   const create = () => selectView('new', true);
 
-  const activateView = (view) => selectView(view.id);
+  const activateView = (view) => {
+    console.log({view});
+
+    selectView(view.id)
+  };
 
   const updateField = (field_name) => (event) => {
     let new_md5sum;
@@ -92,28 +96,29 @@ const ViewEditor = (props) => {
     } else {
       view[field_name] = event.target.value;
     }
-    setView(view);
+    setView({...view});
     setMd5sum(new_md5sum || md5sum);
   };
 
   const saveView = () => {
     // A new view should have an id set to 0.
     if (view.id <= 0) {
-      saveNewViewAction(dispatch, view, activateView());
+      console.log({view})
+      saveNewViewAction(dispatch, view);
     } else {
-      dispatch(saveViewAction(dispatch, view));
+      saveViewAction(dispatch, activateView(view));
     }
 
     if (editing) toggleEdit();
   };
 
   const copyView = () => {
-    dispatch(copyViewAction(view, activateView()));
+    dispatch(copyViewAction(view, activateView(view)));
   };
 
   const revertView = () => {
 
-    let {id} = view;
+    let {id} = view.id;
 
     if (id > 0) selectView(id);
     else selectView(null);
