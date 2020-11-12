@@ -56,7 +56,7 @@ class Manifests extends React.Component{
   componentDidUpdate() {
     let { manifest_id, manifests } = this.props;
     let { manifest } = this.state;
-
+    console.log({manifests})
     if (manifest_id && manifests && !manifest) this.selectManifest(manifest_id, false);
   }
 // TODO add warning message if no name provided

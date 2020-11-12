@@ -1,5 +1,5 @@
 import React, {useState, useEffect, shallowEqual} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch, useStore} from 'react-redux';
 import {pushLocation} from '../../actions/location_actions';
 import {
   requestViews,
@@ -25,7 +25,14 @@ const ViewEditor = (props) => {
   let [view, setView] = useState(useShallowEqualSelector(state => state.view));
   let md5sum = '';
   const dispatch = useDispatch();
-  let {view_id, views} = props;
+  //let [views, setViews] = useState(useShallowEqualSelector(state => state.views));
+  let views = null;
+  let view_id = props.view_id;
+  let state = useState(useShallowEqualSelector(state => state));
+  let theStore = useStore();
+  console.log({theStore})
+
+
 
   // Initial render
   useEffect(() => {
@@ -39,6 +46,7 @@ const ViewEditor = (props) => {
 
   const selectView = (id, push = true) => {
     let {views} = props;
+    console.log({props})
     switch (id) {
       case 'new':
         let date = new Date();
