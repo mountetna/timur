@@ -18,35 +18,34 @@ export const useShallowEqualSelector = (selector) => {
   return useSelector(selector, shallowEqual);
 };
 
+// TODO just run - no save. List of current views. all views route
+// ToDo Private/Public tabs - remove them
 
 // Main component for viewing/editing views.
 const ViewEditor = (props) => {
   let [editing, setEditing] = useState(useSelector(state => state.editing));
   let [view, setView] = useState(useShallowEqualSelector(state => state.view));
-  let md5sum = '';
   const dispatch = useDispatch();
   //let [views, setViews] = useState(useShallowEqualSelector(state => state.views));
   let views = null;
   let view_id = props.view_id;
   let state = useState(useShallowEqualSelector(state => state));
-  let theStore = useStore();
-  console.log({theStore})
-
-
 
   // Initial render
   useEffect(() => {
     requestViews(dispatch, () => {});
-  }, []);
+    console.log({views})
+  }, [views]);
 
   // Update
   useEffect(() => {
     if (view_id && views && !view) selectView(view_id, false);
+    console.log({view})
+
   }, [view_id, views, view]);
 
   const selectView = (id, push = true) => {
     let {views} = props;
-    console.log({props})
     switch (id) {
       case 'new':
         let date = new Date();
@@ -109,7 +108,6 @@ const ViewEditor = (props) => {
   const saveView = () => {
     // A new view should have an id set to 0.
     if (view.id <= 0) {
-      console.log({view})
       saveNewViewAction(dispatch, view);
     } else {
       saveViewAction(dispatch, activateView(view));
