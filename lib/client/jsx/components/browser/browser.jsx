@@ -15,8 +15,8 @@ import {connect} from 'react-redux';
 
 // Class imports.
 import Header from '../header';
-import {TabBarContainer as TabBar} from '../tab_bar';
-import BrowserTab from './browser_tab';
+import ViewTabBar from './view_tab_bar';
+import ViewTab from './view_tab';
 
 // Module imports.
 import {requestManifests} from '../../actions/manifest_actions';
@@ -125,24 +125,16 @@ export default function Browser({model_name, record_name, tab_name}) {
         <div className='model-name'>{camelize(model_name)}</div>
         <div className='record-name'>{record_name}</div>
       </Header>
-      <TabBar
+      <ViewTabBar
         mode={mode}
         revision={revision}
         view={view}
         current_tab={tab_name}
         onClick={selectTab}
       />
-      <BrowserTab
-        {...{
-          model_name,
-          record_name,
-          template,
-          record,
-          revision,
-          mode,
-          tab
-        }}
-      />
+      <ViewTab {
+        ...{ model_name, record_name, template, record, revision, mode, tab }
+      } />
     </div>
   );
 }

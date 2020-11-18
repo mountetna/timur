@@ -2,14 +2,14 @@
 import * as React from 'react';
 
 // Class imports.
-import BrowserPane from './browser_pane';
+import ViewPane from './view_pane';
 
-const BrowserTab = ({ tab, ...pane_props }) =>
+const ViewTab = ({ tab, ...pane_props }) =>
   tab ?
     <div id='tab'>
       {
         Object.keys(tab.panes).map(pane_name=>
-          <BrowserPane
+          <ViewPane
             { ...pane_props }
             pane={ tab.panes[pane_name] }
             key={ pane_name }
@@ -19,4 +19,4 @@ const BrowserTab = ({ tab, ...pane_props }) =>
     </div>
   : <span className='fas fa-spinner fa-pulse' />;
 
-export default BrowserTab;
+export default ViewTab;
