@@ -1,6 +1,5 @@
 // Framework libraries.
 import React, {useState, useEffect, useRef} from 'react';
-import {connect} from 'react-redux';
 import Modal from 'react-modal';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
@@ -14,36 +13,7 @@ import ListUpload from 'etna-js/upload/components/list-upload';
 import {reviseDocument, sendRevisions} from '../../actions/magma_actions';
 import ButtonBar from '../button_bar';
 import Icon from '../icon';
-import {dispatch} from 'd3';
 import {filePathComponents} from '../../selectors/magma';
-
-export const STUB = '::blank';
-export const TEMP = '::temp';
-
-// metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
-const METIS_PATH_MATCH = (path) =>
-  new RegExp(
-    '^metis://' +
-      // project_name
-      '([^/]*?)/' +
-      // bucket_name
-      '([^/]*?)/' +
-      // folder path + filename
-      '(.*)$'
-  ).test(path);
-
-// We don't have a lot of content, so let's get a smaller Modal
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    minWidth: '40%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
 
 const COLUMNS = [
   {name: 'type', width: '60px'},
@@ -58,6 +28,34 @@ const COLUMN_WIDTHS = COLUMNS.reduce((widths, column) => {
   widths[column.name] = column.width;
   return widths;
 }, {});
+
+export const STUB = '::blank';
+export const TEMP = '::temp';
+
+// We don't have a lot of content, so let's get a smaller Modal
+export const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    minWidth: '40%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
+// metis:\/\/([^\/]*?)\/([^\/]*?)\/(.*)$
+export const METIS_PATH_MATCH = (path) =>
+  new RegExp(
+    '^metis://' +
+      // project_name
+      '([^/]*?)/' +
+      // bucket_name
+      '([^/]*?)/' +
+      // folder path + filename
+      '(.*)$'
+  ).test(path);
 
 const FileValue = ({value}) =>
   !value ? (
@@ -337,7 +335,14 @@ function useFileActions(metis, error, setMetis, setError, props) {
   }
 
   function formatFileRevision(value) {
-    return {path: value};
+    let file_parts = value.split('/');
+    let revision = {path: value};
+
+    if (STUB !== value && TEMP !== value) {
+      revision['original_filename'] = file_parts[file_parts.length - 1];
+    }
+
+    return revision;
   }
 
   function setTempRevision(e) {

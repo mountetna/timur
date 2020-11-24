@@ -5,6 +5,7 @@ import Attribute from './attribute';
 import SelectAttribute from './select_attribute';
 import ImageAttribute from './image_attribute';
 import FileAttribute from './file_attribute';
+import FileCollectionAttribute from './file_collection_attribute';
 import CheckboxAttribute from './checkbox_attribute';
 import DateTimeAttribute from './date_time_attribute';
 import TableAttribute from './table_attribute';
@@ -60,6 +61,8 @@ export default class AttributeViewer extends React.Component{
         return <TableAttribute {...this.props} />;
       case 'Magma::FileAttribute':
         return <FileAttribute {...this.props} />;
+      case 'Magma::FileCollectionAttribute':
+        return <FileCollectionAttribute {...this.props} />;
       case 'Magma::ImageAttribute':
         return <ImageAttribute {...this.props} />;
       case 'Magma::MatrixAttribute':

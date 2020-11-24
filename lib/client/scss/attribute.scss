@@ -140,7 +140,8 @@
     }
   }
 
-  &.file {
+  &.file,
+  &.file-collection {
     display: flex;
     .file-blank {
       color: gray;
