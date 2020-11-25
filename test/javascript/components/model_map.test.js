@@ -17,7 +17,7 @@ describe('ModelMap', () => {
   it('renders', () => {
     store = mockStore({
       magma: { models },
-      janus: { projects: [] }
+      janus: { projects: require('../fixtures/project_names.json') }
     });
 
     global.CONFIG = {
