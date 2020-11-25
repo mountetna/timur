@@ -9,6 +9,7 @@ import {TEMP} from './file_attribute';
 import {reviseDocument} from '../../actions/magma_actions';
 
 import FileListInput from '../inputs/file_list_input';
+import ListInput from '../inputs/list_input';
 import FileInput from '../inputs/file_input';
 
 const FileCollectionValue = ({value}) =>
@@ -116,7 +117,7 @@ export default function FileCollectionAttribute(props) {
   return (
     <div className='attribute file-collection list_input'>
       <div>
-        <FileListInput
+        <ListInput
           placeholder='Upload or Link File'
           className='link_text'
           values={sortedRevisedCollection || []}

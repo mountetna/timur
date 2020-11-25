@@ -10,7 +10,7 @@ import {
   TEMP
 } from '../attributes/file_attribute';
 
-const FileInput = ({header, onChange}) => {
+const FileInput = ({header, onBlur, onChange}) => {
   const [metis, setMetis] = useState(false);
   const [error, setError] = useState(false);
   const fileInputRef = useRef(null);
@@ -20,7 +20,7 @@ const FileInput = ({header, onChange}) => {
     formatFileRevision,
     setTempRevision,
     isTempRevision
-  } = useFileInputActions(metis, error, setMetis, setError, onChange);
+  } = useFileInputActions(metis, error, setMetis, setError, onChange, onBlur);
 
   let buttons = [
     {
@@ -50,7 +50,14 @@ const FileInput = ({header, onChange}) => {
   );
 };
 
-function useFileInputActions(metis, error, setMetis, setError, onChange) {
+function useFileInputActions(
+  metis,
+  error,
+  setMetis,
+  setError,
+  onChange,
+  onBlur
+) {
   const metisPathRef = useRef(null);
 
   return {
@@ -141,6 +148,7 @@ function useFileInputActions(metis, error, setMetis, setError, onChange) {
     }
 
     onChange(formatFileRevision(metisPath));
+    onBlur();
 
     metisPathRef.current.value = null;
   }
@@ -163,6 +171,7 @@ function useFileInputActions(metis, error, setMetis, setError, onChange) {
     e.preventDefault();
 
     onChange(formatFileRevision(TEMP, e.target.files));
+    onBlur();
   }
 }
 
