@@ -45,7 +45,7 @@ const FileInput = ({header, onChange}) => {
         onChange={setTempRevision}
       />
       {metis && metisSelector()}
-      <ButtonBar className='fi-buttons' buttons={buttons} />
+      <ButtonBar className='fi-buttons file-buttons' buttons={buttons} />
     </div>
   );
 };
@@ -156,7 +156,6 @@ function useFileInputActions(metis, error, setMetis, setError, onChange) {
       revision['original_files'] = files;
     }
 
-    console.log('revision', revision);
     return revision;
   }
 

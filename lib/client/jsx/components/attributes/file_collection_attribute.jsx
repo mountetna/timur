@@ -11,7 +11,7 @@ import {reviseDocument} from '../../actions/magma_actions';
 import FileListInput from '../inputs/file_list_input';
 import FileInput from '../inputs/file_input';
 
-const FileValue = ({value}) =>
+const FileCollectionValue = ({value}) =>
   value instanceof File ? (
     <span className='list_item file-upload'>
       {' '}
@@ -93,7 +93,7 @@ export default function FileCollectionAttribute(props) {
         <div className='collection'>
           {sortedCollection.map((single_file) => (
             <div key={single_file} className='collection_item'>
-              <FileValue value={single_file} />
+              <FileCollectionValue value={single_file} />
             </div>
           ))}
         </div>

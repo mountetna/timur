@@ -4,7 +4,6 @@ import React, {Component} from 'react';
 export default class FileListInput extends Component {
   constructor() {
     super();
-    this.state = {edit_link: false};
   }
 
   listItem = (list_item, pos) => {
@@ -26,21 +25,13 @@ export default class FileListInput extends Component {
     );
   };
 
-  removeValue(pos) {
+  removeValue = (pos) => {
     let {values, onChange} = this.props;
 
     let new_values = values.slice(0, pos).concat(values.slice(pos + 1));
 
     onChange(new_values);
-  }
-
-  addValue() {
-    let {values, onChange} = this.props;
-
-    let new_values = values.concat('');
-
-    onChange(new_values);
-  }
+  };
 
   editValue = (new_value) => {
     if (new_value == null || new_value == undefined || new_value == '') return;
@@ -54,15 +45,7 @@ export default class FileListInput extends Component {
     onChange(new_values);
   };
 
-  addListItem = () => {
-    // add a new value to the list
-    this.addValue();
-
-    // turn on editing
-    this.setState({editNewValue: true});
-  };
-
-  renderEdit(ItemInput, inputProps) {
+  renderAdd(ItemInput, inputProps) {
     return (
       <div className='list_item'>
         <ItemInput
@@ -74,25 +57,13 @@ export default class FileListInput extends Component {
     );
   }
 
-  renderAdd() {
-    return (
-      <div className='list_item'>
-        <span className='add_item' onClick={this.addListItem}>
-          +
-        </span>
-      </div>
-    );
-  }
-
   render() {
     let {values, itemInput, onChange, ...inputProps} = this.props;
-    let {editNewValue} = this.state;
 
     return (
       <div className='list_input'>
         {values.map(this.listItem)}
-        {editNewValue ? this.renderEdit(itemInput, inputProps) : null}
-        {this.renderAdd()}
+        {this.renderAdd(itemInput, inputProps)}
       </div>
     );
   }
