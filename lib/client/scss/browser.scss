@@ -69,13 +69,14 @@
     .pane {
       display: flex;
       flex-direction: column;
+      margin: 5px;
       .title {
-        &:after {
-          border-bottom: $thin_rule;
-        }
-        font-family: $body_font;
-        border-bottom: 1px solid rgba(tan,0.3);
+        background: rgb(251,248,244);
+        border: 1px solid #ccc;
         border-right: 1px solid forestgreen;
+        border-bottom: none;
+        position: relative;
+        font-family: $body_font;
         color: indianred;
         width: 200px;
         padding-right: 8px;
@@ -84,14 +85,23 @@
       .attributes {
         display: flex;
         flex-direction: column;
+        border: 1px solid #ccc;
         padding-right: 5px;
         .attribute_row {
           display: flex;
+          &:not(:last-of-type) {
+            .attribute_name {
+              border-bottom: $thin_rule;
+            }
+            .attribute_value {
+              border-bottom: $thin_rule;
+            }
+          }
           .attribute_name {
+            cursor: default;
             &.revised {
               background-color: pink;
             }
-            border-bottom: $thin_rule;
             border-right: 1px solid forestgreen;
             display: inline-block;
             flex: 0 0 200px;
@@ -101,7 +111,6 @@
             color: darkblue;
           }
           .attribute_value {
-            border-bottom: $thin_rule;
             display: inline-block;
             padding-left: 9px;
             padding-bottom: 3px;

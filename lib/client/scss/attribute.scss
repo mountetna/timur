@@ -23,6 +23,10 @@
     width: 300px;
   }
 
+  .collection {
+    column-count: 3;
+  }
+
   .collection_item,
   .list_item {
     &:not(:last-child) {

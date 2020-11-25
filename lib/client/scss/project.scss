@@ -34,6 +34,14 @@
         .attribute_row {
           padding-left: 50px;
           display: block;
+          &:not(:last-of-type) {
+            .attribute_name {
+              border: none;
+            }
+            .attribute_value {
+              border: none;
+            }
+          }
           .attribute_name {
             font-family: $body_font;
             display: block;
