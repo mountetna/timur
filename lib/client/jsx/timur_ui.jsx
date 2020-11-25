@@ -14,6 +14,7 @@ import Messages from './components/messages';
 
 import {showMessages} from './actions/message_actions';
 import {updateLocation} from './actions/location_actions';
+import {fetchProjectsAction} from 'etna-js/actions/janus-actions';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
@@ -97,6 +98,9 @@ class TimurUI extends React.Component {
     super(props);
 
     window.onpopstate = this.updateLocation.bind(this);
+
+    // Fetch the projects from Janus
+    props.fetchProjectsAction();
   }
 
   updateLocation() {
@@ -143,5 +147,5 @@ class TimurUI extends React.Component {
 
 export default connect(
   (state) => ({ location: state.location, user: selectUser(state) }),
-  { showMessages, updateLocation }
+  { showMessages, updateLocation, fetchProjectsAction }
 )(TimurUI);
