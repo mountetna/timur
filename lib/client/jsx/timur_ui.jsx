@@ -99,8 +99,13 @@ class TimurUI extends React.Component {
 
     window.onpopstate = this.updateLocation.bind(this);
 
+  }
+
+  componentDidMount() {
+    let { fetchProjectsAction } = this.props;
+
     // Fetch the projects from Janus
-    props.fetchProjectsAction();
+    fetchProjectsAction();
   }
 
   updateLocation() {
