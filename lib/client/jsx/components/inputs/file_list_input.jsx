@@ -16,7 +16,7 @@ export default class FileListInput extends Component {
     ) {
       list_item = list_item.original_filename;
     }
-    console.log('list_item', list_item);
+
     return (
       <div key={pos} className='list_item'>
         <span className={className} onClick={() => this.removeValue(pos)}>
@@ -87,7 +87,7 @@ export default class FileListInput extends Component {
   render() {
     let {values, itemInput, onChange, ...inputProps} = this.props;
     let {editNewValue} = this.state;
-    console.log('values', values);
+
     return (
       <div className='list_input'>
         {values.map(this.listItem)}

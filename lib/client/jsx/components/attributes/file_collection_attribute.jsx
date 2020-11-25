@@ -23,7 +23,7 @@ const FileValue = ({value}) =>
       {value.original_files[0].name}{' '}
     </span>
   ) : (
-    <span className='list_item file-original'> {value.original_filename} </span>
+    <a href={value.url}> {value.original_filename} </a>
   );
 
 export default function FileCollectionAttribute(props) {
@@ -86,11 +86,17 @@ export default function FileCollectionAttribute(props) {
         }),
       [value]
     );
+    console.log('value', value);
+    console.log('sortedCollection', sortedCollection);
     return (
-      <div className='attribute file-collection list_input'>
-        {sortedCollection.map((single_file) => {
-          return <FileValue value={single_file} />;
-        })}
+      <div className='attribute'>
+        <div className='collection'>
+          {sortedCollection.map((single_file) => (
+            <div key={single_file} className='collection_item'>
+              <FileValue value={single_file} />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
