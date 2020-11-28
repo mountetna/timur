@@ -8,11 +8,11 @@ const ViewTab = ({ tab, ...pane_props }) =>
   tab ?
     <div id='tab'>
       {
-        Object.keys(tab.panes).map(pane_name=>
+        tab.panes.map(pane=>
           <ViewPane
             { ...pane_props }
-            pane={ tab.panes[pane_name] }
-            key={ pane_name }
+            pane={ pane }
+            key={ pane.name }
           />
         )
       }

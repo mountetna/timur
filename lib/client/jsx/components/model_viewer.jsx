@@ -34,9 +34,8 @@ const ModelViewer = ({
     Cell: ({value, original}) => (
       <AttributeViewer
         template={template}
-        document={original}
-        value={value}
-        attribute={template.attributes[att_name]}
+        record={original}
+        attribute_name={att_name}
       />
     )
   }));

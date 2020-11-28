@@ -1,7 +1,6 @@
 @import "globals";
-@import "attribute";
 
-.loader{
+.loader {
   font-family: $body_font;
 }
 
@@ -69,7 +68,7 @@
     .pane {
       display: flex;
       flex-direction: column;
-      margin: 5px;
+      margin: 10px;
       .title {
         background: rgb(251,248,244);
         border: 1px solid #ccc;
@@ -82,22 +81,22 @@
         padding-right: 8px;
         text-align: right;
       }
-      .attributes {
+      .items {
         display: flex;
         flex-direction: column;
         border: 1px solid #ccc;
         padding-right: 5px;
-        .attribute_row {
+        .view_item {
           display: flex;
           &:not(:last-of-type) {
-            .attribute_name {
+            .item_name {
               border-bottom: $thin_rule;
             }
-            .attribute_value {
+            .item_view {
               border-bottom: $thin_rule;
             }
           }
-          .attribute_name {
+          .item_name {
             cursor: default;
             &.revised {
               background-color: pink;
@@ -110,7 +109,7 @@
             font-family: $body_font;
             color: darkblue;
           }
-          .attribute_value {
+          .item_view {
             display: inline-block;
             padding-left: 9px;
             padding-bottom: 3px;

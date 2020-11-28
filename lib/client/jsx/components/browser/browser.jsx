@@ -29,7 +29,6 @@ import {
   requestAnswer
 } from '../../actions/magma_actions';
 import {
-  interleaveAttributes,
   getAttributes,
   getDefaultTab,
   selectView
@@ -150,9 +149,7 @@ function browserStateOf({model_name, record_name, tab_name}) {
     const tab =
       view &&
       tab_name &&
-      template &&
-      view.tabs[tab_name] &&
-      interleaveAttributes(view.tabs[tab_name], template);
+      view.tabs.find(t => t.name == tab_name);
 
     const can_edit = role === 'administrator' || role === 'editor';
 
@@ -239,7 +236,7 @@ function useTabActions(browserState, setMode) {
   }
 
   function showTab(view) {
-    requestTabDocuments(view.tabs[currentTabName]);
+    requestTabDocuments(view.tabs.find(t=>t.name == currentTabName));
     setMode('browse');
   }
 
@@ -248,14 +245,12 @@ function useTabActions(browserState, setMode) {
     let exchange_name = `tab ${tab.name} for ${model_name} ${record_name}`;
     let attribute_names = getAttributes(tab);
 
+    console.log({attribute_names});
+
     let hasAttributes =
       record &&
       template &&
-      Array.isArray(attribute_names) &&
-      attribute_names.every(
-        (attr_name) =>
-          !(attr_name in template.attributes) || attr_name in record
-      );
+      attribute_names.every(attr_name => attr_name in record);
 
     // ensure attribute data is present in the document
     if (!hasAttributes) {

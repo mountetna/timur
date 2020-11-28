@@ -4,13 +4,13 @@ import { selectTemplate } from '../../selectors/magma';
 import { sortAttributes } from '../../utils/attributes';
 import AttributeReport from './attribute_report';
 
-const ModelAttribute = ({ attribute: { attribute_name, attribute_type, desc }, showAttribute }) => {
+const ModelAttribute = ({ attribute: { attribute_name, attribute_type, description }, showAttribute }) => {
   return <div className="map_attribute report_row" key={ attribute_name }>
     <span className="type"> {attribute_type} </span>
     <span className="value">
     <a onClick={ () => showAttribute(attribute_name) } className="name">{attribute_name}</a>
     {
-      desc && <span className="description">{ desc }</span>
+      description && <span className="description">{ description }</span>
     }
     </span>
   </div>
