@@ -16,20 +16,3 @@ export const getAttributes = ({panes})=> panes.map(
     item => item.attribute_name
   )
 ).flat();
-
-export const getPlotIds = (tab)=>{
-  let { panes } = tab;
-
-  // Loop down on the tab object and extract the manifest ids.
-  let plot_ids = Object.values(panes).reduce(
-    ({attributes})=> Object.values(attributes).map(attr=>attr.plot_ids)
-  );
-
-  // Flatten.
-  plot_ids = [].concat.apply([], plot_ids);
-
-  // Compact.
-  plot_ids = plot_ids.filter(item=>(item != undefined && item != null));
-
-  return plot_ids;
-};
