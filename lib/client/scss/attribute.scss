@@ -19,7 +19,7 @@
     &:focus {
       border-bottom: 1px solid forestgreen;
     }
-    margin: 0px 10px;
+    margin: 0px;
     width: 300px;
   }
 
@@ -78,15 +78,6 @@
     @include text_box;
     height: 70px;
     width: 70%;
-  }
-  .filter {
-    border: none;
-    border-bottom: 1px solid $input_border_color;
-    &:focus {
-      border-bottom: 1px solid forestgreen;
-    }
-    margin: 0px 10px;
-    width: 300px;
   }
   .export {
     @include green_button;
