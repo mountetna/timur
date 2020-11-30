@@ -181,7 +181,7 @@ function browserStateOf({model_name, record_name, tab_name}) {
 
 function useEditActions(setMode, browserState) {
   const invoke = useActionInvoker();
-  const {revision, model_name, record_name} = browserState;
+  const {revision, model_name, template, record_name} = browserState;
 
   return {
     cancelEdits,
@@ -199,6 +199,7 @@ function useEditActions(setMode, browserState) {
     invoke(
       sendRevisions(
         model_name,
+        template,
         {[record_name]: revision},
         () => setMode('browse'),
         () => setMode('edit')

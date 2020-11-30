@@ -4,11 +4,11 @@ import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 
 import {selectUploads} from 'etna-js/selectors/directory-selector';
-import {TEMP} from './file_attribute';
 
+import {TEMP} from '../../actions/file_actions';
 import {reviseDocument} from '../../actions/magma_actions';
+import {filePathComponents} from '../../selectors/magma';
 
-import FileListInput from '../inputs/file_list_input';
 import ListInput from '../inputs/list_input';
 import FileInput from '../inputs/file_input';
 
@@ -78,6 +78,7 @@ export default function FileCollectionAttribute(props) {
   });
 
   if (mode != 'edit') {
+    console.log('value', value);
     const sortedCollection = useMemo(
       () =>
         [...(value || [])].sort((a, b) => {
@@ -87,7 +88,6 @@ export default function FileCollectionAttribute(props) {
         }),
       [value]
     );
-    console.log('value', value);
     console.log('sortedCollection', sortedCollection);
     return (
       <div className='attribute'>
@@ -148,20 +148,40 @@ function useFileCollectionActions(props) {
   };
 
   function callReviseDocument(files) {
-    // ListInput automatically calls onChange with [""] when the user clicks
-    //    the + button to add a new entry, to create a stub entry.
-    // We don't need that behavior here, because we only create
-    //    entries if the user subsequently clicks either the
-    //    upload button or the Metis path button. So we remove
-    //    all "" entries from `files`.
-    console.log('files', files);
-
-    files = files.filter((file) => {
-      return '' !== file;
-    });
-
     let {document, template, attribute} = props;
 
+    // The record format for files is different than the
+    //   update format, so we have to account for that here.
+    files = formatFileCollectionRevisions(files);
+
     invoke(reviseDocument(document, template, attribute, files));
+  }
+
+  function formatFileCollectionRevisions(files) {
+    // Need to reformat {original_filename: '', path: '', url: ''} to
+    //   {original_filename: '', path: 'metis://<path>'} while taking
+    //   the bucket and project information for the new `path`
+    //   from the download URL.
+    let updatedFiles = [];
+    files.forEach((file) => {
+      if ('' === file) {
+        // Don't re-calculate for new element stub
+        updatedFiles.push(file);
+      } else if (!file.hasOwnProperty('url')) {
+        // Also for newly input files, they already have a valid Metis Path
+        updatedFiles.push(file);
+      } else {
+        let {project_name, bucket_name, file_name} = filePathComponents(
+          file.url
+        );
+
+        updatedFiles.push({
+          original_filename: file.original_filename,
+          path: `metis://${project_name}/${bucket_name}/${file_name}`
+        });
+      }
+    });
+
+    return updatedFiles;
   }
 }

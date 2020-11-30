@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileCollectionAttribute does not render action buttons while not editing 1`] = `
+<div
+  className="attribute file"
+>
+  <span
+    className="file-missing"
+  >
+     No file 
+  </span>
+</div>
+`;
+
+exports[`FileCollectionAttribute renders existing files correctly when not editing 1`] = `
+<div
+  className="attribute file"
+>
+  <span
+    className="file-upload"
+  >
+     
+    conquest.txt
+     (
+    text/plain
+    )
+     
+  </span>
+</div>
+`;
+
+exports[`FileCollectionAttribute renders the button bar while editing 1`] = `
+<div
+  className="attribute file"
+>
+  <input
+    onChange={[Function]}
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+    type="file"
+  />
+  <div
+    className="file-buttons"
+  >
+    <span
+      className="fa-stack fa-fw"
+      onClick={[Function]}
+      title="Upload a file from your computer"
+    >
+      <i
+        className="icon upload upload fa fa-2x fa-upload"
+      />
+    </span>
+    <span
+      className="fa-stack fa-fw"
+      onClick={[Function]}
+      title="Link a file from Metis"
+    >
+      <i
+        className="icon cloud cloud fa fa-2x fa-cloud"
+      />
+    </span>
+    <span
+      className="fa-stack fa-fw"
+      onClick={[Function]}
+      title="Mark this file as blank"
+    >
+      <i
+        className="icon stub meh-blank fa fa-2x fa-meh-blank"
+      />
+    </span>
+    <span
+      className="fa-stack fa-fw"
+      onClick={[Function]}
+      title="Remove this file link"
+    >
+      <i
+        className="icon remove trash-alt fa fa-2x fa-trash-alt"
+      />
+    </span>
+  </div>
+  <span
+    className="file-missing"
+  >
+     No file 
+  </span>
+</div>
+`;

@@ -8,7 +8,7 @@ import ReactModal from 'react-modal';
 import nock from 'nock';
 
 import ButtonBar from '../../../../lib/client/jsx/components/button_bar';
-import {STUB} from '../../../../lib/client/jsx/components/attributes/file_attribute';
+import {STUB} from '../../../../lib/client/jsx/actions/file_actions';
 import ImageAttribute from '../../../../lib/client/jsx/components/attributes/image_attribute';
 
 import ListUpload from 'etna-js/upload/components/list-upload';
@@ -561,7 +561,10 @@ describe('ImageAttribute', () => {
         model_name: 'Conquests',
         record_name: 'Timur',
         revision: {
-          ['ExpansionPlans']: {path: 'metis://project/bucket/file_name.txt'}
+          ['ExpansionPlans']: {
+            original_filename: 'file_name.txt',
+            path: 'metis://project/bucket/file_name.txt'
+          }
         }
       }
     ]);

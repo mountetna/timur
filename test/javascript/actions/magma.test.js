@@ -63,6 +63,8 @@ describe('async actions', () => {
   });
 
   it('posts simple update revisions to the magma /update endpoint', (done) => {
+    const template = require('../fixtures/template_monster.json');
+
     let revisions = {
       monster: {
         stats: {
@@ -96,6 +98,7 @@ describe('async actions', () => {
 
     return store.dispatch(actions.sendRevisions(
       'labors',
+      template,
       revisions,
       () => {
         // should call success function in this case
@@ -106,5 +109,39 @@ describe('async actions', () => {
         fail('should not have called the error function')
       }
     ));
+  });
+
+  it('removes empty strings from FileCollection revisions', () => {
+    const template = require('../fixtures/template_monster.json');
+
+    let revisions = {
+      monster: {
+        certificates: ["", {
+          path: '::temp'
+        }, ""]
+      }
+    };
+
+    const expected = {
+      revisions: {
+        monsters: {
+          monster: {
+            certificates: [{
+              path: '::temp'
+            }]
+          }
+        }
+      }
+    };
+
+    const results = actions.formatRevisions(
+      revisions,
+      'monsters',
+      template,
+      () => {},
+      () => {}
+    );
+
+    expect(results).toEqual(expected);
   });
 });

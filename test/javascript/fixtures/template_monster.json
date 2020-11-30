@@ -69,7 +69,7 @@
       "restricted": false,
       "read_only": false,
       "hidden": false,
-      "validation": {"type":"Regexp","value":"^[a-z\\s]+$"},
+      "validation": {"type": "Regexp", "value": "^[a-z\\s]+$"},
       "attribute_type": "string"
     },
     "stats": {
@@ -83,6 +83,18 @@
       "hidden": false,
       "validation": null,
       "attribute_type": "file"
+    },
+    "certificates": {
+      "name": "certificates",
+      "attribute_name": "certificates",
+      "type": "Array",
+      "attribute_class": "Magma::FileCollectionAttribute",
+      "display_name": "Certificates",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "file_collection"
     },
     "victim": {
       "name": "victim",
