@@ -20,7 +20,7 @@ exports[`HomePage renders 1`] = `
       className="home-page-project-link"
       href="/labors"
     >
-      labors
+      The Twelve Labors of Hercules
         
       <span
         className="home-page-project-role"
@@ -34,7 +34,7 @@ exports[`HomePage renders 1`] = `
       className="home-page-project-link"
       href="/wisdom"
     >
-      wisdom
+      Athena's Wisdom
         
       <span
         className="home-page-project-role"

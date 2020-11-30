@@ -16,7 +16,8 @@ describe('ModelMap', () => {
 
   it('renders', () => {
     store = mockStore({
-      magma: { models }
+      magma: { models },
+      janus: { projects: require('../fixtures/project_names.json') }
     });
 
     global.CONFIG = {
@@ -39,7 +40,8 @@ describe('ModelMap', () => {
     let { monster, project } = models;
 
     store = mockStore({
-      magma: { models: { monster, project } }
+      magma: { models: { monster, project } },
+      janus: { projects: [] }
     });
 
     global.CONFIG = {

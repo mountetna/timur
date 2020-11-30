@@ -17,6 +17,7 @@ import exchanges from './reducers/exchanges_reducer';
 import predicates from './reducers/predicates_reducer';
 import location from './reducers/location_reducer';
 import directory from './reducers/directory_reducer';
+import janus from 'etna-js/reducers/janus-reducer';
 
 import * as uploadActions from 'etna-js/upload/actions/upload_actions';
 
@@ -37,7 +38,8 @@ export const timurStore = () => {
     exchanges,
     predicates,
     location,
-    directory
+    directory,
+    janus
   });
 
   let middlewares = [

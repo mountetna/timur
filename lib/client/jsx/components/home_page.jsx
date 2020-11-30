@@ -5,11 +5,13 @@ import * as _ from 'lodash';
 
 // Module imports.
 import { selectUserPermissions } from '../selectors/user_selector';
+import { selectProjects } from 'etna-js/selectors/janus-selector';
+import { projectNameFull } from 'etna-js/utils/janus';
 
 export default class HomePage extends React.Component{
   renderProjects(){
-    let { permissions } = this.props;
-
+    let { permissions, projects } = this.props;
+    
     if(_.keys(permissions).length <= 0){
       return <span>{'No available projects.'}</span>;
     }
@@ -20,7 +22,7 @@ export default class HomePage extends React.Component{
           return <a className='home-page-project-link'
             key={project_name}
             href={`/${project_name}`}>
-            {project_name} &nbsp;
+            {projectNameFull(projects, project_name)} &nbsp;
             <span className='home-page-project-role'>({role})</span>
           </a>
       })}
@@ -51,7 +53,8 @@ export default class HomePage extends React.Component{
 export const HomePageContainer = connect(
   (state = {}, own_props)=>(
     {
-      permissions: selectUserPermissions(state)
+      permissions: selectUserPermissions(state),
+      projects: selectProjects(state)
     }
   )
 )(HomePage);
