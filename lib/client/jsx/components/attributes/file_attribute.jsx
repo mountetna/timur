@@ -11,9 +11,8 @@ import {
 } from 'etna-js/selectors/directory-selector';
 import ListUpload from 'etna-js/upload/components/list-upload';
 import {STUB, TEMP, useFileInputActions} from '../../actions/file_actions';
-import {reviseDocument, sendRevisions} from '../../actions/magma_actions';
+import {reviseDocument, finalizeUpload} from '../../actions/magma_actions';
 import ButtonBar from '../button_bar';
-import {filePathComponents} from '../../selectors/magma';
 
 const COLUMNS = [
   {name: 'type', width: '60px'},
@@ -98,18 +97,14 @@ export default function FileAttribute(props) {
     if (updatedUpload.status !== 'complete') {
       setUpload(updatedUpload);
     } else if (upload) {
-      let {project_name, bucket_name, file_name} = filePathComponents(
-        upload.url
-      );
       invoke(
-        sendRevisions(model_name, {
-          [record_name]: {
-            [attribute.attribute_name]: {
-              path: `metis://${project_name}/${bucket_name}/${file_name}`,
-              original_filename: upload.original_filename
-            }
-          }
-        })
+        finalizeUpload(
+          model_name,
+          template,
+          record_name,
+          attribute.attribute_name,
+          upload
+        )
       );
       setUpload(null);
     }
