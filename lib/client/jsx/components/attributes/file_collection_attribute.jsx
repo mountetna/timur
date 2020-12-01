@@ -24,7 +24,7 @@ const FileCollectionValue = ({value}) =>
       {value.original_files[0].name}{' '}
     </span>
   ) : (
-    <a href={value.url}> {value.original_filename} </a>
+    <a href={value.url}> {value.original_filename || value.path} </a>
   );
 
 export default function FileCollectionAttribute(props) {
@@ -78,7 +78,6 @@ export default function FileCollectionAttribute(props) {
   });
 
   if (mode != 'edit') {
-    console.log('value', value);
     const sortedCollection = useMemo(
       () =>
         [...(value || [])].sort((a, b) => {
@@ -88,12 +87,12 @@ export default function FileCollectionAttribute(props) {
         }),
       [value]
     );
-    console.log('sortedCollection', sortedCollection);
+
     return (
       <div className='attribute'>
         <div className='collection'>
           {sortedCollection.map((single_file) => (
-            <div key={single_file} className='collection_item'>
+            <div key={single_file.url} className='collection_item'>
               <FileCollectionValue value={single_file} />
             </div>
           ))}
@@ -112,13 +111,11 @@ export default function FileCollectionAttribute(props) {
     [revised_value]
   );
 
-  console.log('sortedRevisedCollection', sortedRevisedCollection);
-
   return (
     <div className='attribute file-collection list_input'>
       <div>
         <ListInput
-          placeholder='Upload or Link File'
+          placeholder='Link Files'
           className='link_text'
           values={sortedRevisedCollection || []}
           itemInput={FileInput}

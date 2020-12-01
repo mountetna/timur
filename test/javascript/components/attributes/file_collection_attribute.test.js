@@ -1,20 +1,17 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import {mount, shallow} from 'enzyme';
-import {act} from 'react-dom/test-utils';
+import {mount} from 'enzyme';
+import ReactModal from 'react-modal';
+
 import {mockStore} from '../../helpers';
 import renderer from 'react-test-renderer';
-import ReactModal from 'react-modal';
-import nock from 'nock';
 
-import ButtonBar from '../../../../lib/client/jsx/components/button_bar';
-import {STUB} from '../../../../lib/client/jsx/components/attributes/file_attribute';
-import FileAttribute from '../../../../lib/client/jsx/components/attributes/file_attribute';
-
-import ListUpload from 'etna-js/upload/components/list-upload';
+import FileCollectionAttribute from '../../../../lib/client/jsx/components/attributes/file_collection_attribute';
+import ListInput from '../../../../lib/client/jsx/components/inputs/list_input';
 
 describe('FileCollectionAttribute', () => {
   let store;
+  const template = require('../../fixtures/template_monster.json');
 
   beforeEach(() => {
     store = mockStore({
@@ -27,36 +24,36 @@ describe('FileCollectionAttribute', () => {
     });
   });
 
-  it('renders the button bar while editing', () => {
+  it('renders the ListInput while editing', () => {
     const component = mount(
       <Provider store={store}>
-        <FileAttribute
-          model_name='conquests'
-          record_name='Persia'
-          template={null}
+        <FileCollectionAttribute
+          model_name='monsters'
+          record_name='Nemean Lion'
+          template={template}
           value={null}
           mode='edit'
-          attribute='gravatar'
-          document='Timur'
+          attribute='certificates'
+          document='Nemean Lion'
           revised_value=''
         />
       </Provider>
     );
 
-    const buttons = component.find(ButtonBar);
-    expect(buttons.exists()).toBeTruthy();
+    const list_input = component.find(ListInput);
+    expect(list_input.exists()).toBeTruthy();
 
     const tree = renderer
       .create(
         <Provider store={store}>
-          <FileAttribute
-            model_name='conquests'
-            record_name='Persia'
-            template={null}
+          <FileCollectionAttribute
+            model_name='monsters'
+            record_name='Nemean Lion'
+            template={template}
             value={null}
             mode='edit'
-            attribute='gravatar'
-            document='Timur'
+            attribute='certificates'
+            document='Nemean Lion'
             revised_value=''
           />
         </Provider>
@@ -66,38 +63,116 @@ describe('FileCollectionAttribute', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('does not render action buttons while not editing', () => {
-    const value = null;
-
+  it('can add file via Metis Paths', () => {
     const component = mount(
       <Provider store={store}>
-        <FileAttribute
-          model_name='conquests'
-          record_name='Persia'
-          template={null}
-          value={value}
-          mode='view'
-          attribute='gravatar'
-          document='Timur'
+        <FileCollectionAttribute
+          model_name='monster'
+          record_name='Nemean Lion'
+          template={template}
+          value={null}
+          mode='edit'
+          attribute={{
+            name: 'certificates'
+          }}
+          document={{
+            name: 'Nemean Lion'
+          }}
           revised_value=''
         />
       </Provider>
     );
 
-    const buttons = component.find('file-buttons');
-    expect(buttons.exists()).toBeFalsy();
+    const list_input = component.find(ListInput);
+    expect(list_input.exists()).toBeTruthy();
+
+    const addButton = component.find('.add_item').first();
+    addButton.simulate('click');
+
+    let actions = store.getActions();
+    expect(actions).toEqual([
+      {
+        type: 'REVISE_DOCUMENT',
+        model_name: 'monster',
+        record_name: 'Nemean Lion',
+        revision: {
+          certificates: ['']
+        }
+      }
+    ]);
+
+    let cloudButton = component.find('.cloud').first();
+    cloudButton.simulate('click');
+
+    let modal = component.find(ReactModal);
+    let metisPathInput = modal.find('.file-metis-select').find('input');
+    metisPathInput.instance().value = 'metis://labors/bucket/file_name1.txt';
+
+    let checkButton = modal.find('.check').first();
+    checkButton.simulate('click');
+
+    // refresh the modal contents
+    modal = component.find(ReactModal);
+    expect(modal.find('file-metis-error').exists()).toBeFalsy();
+
+    actions = store.getActions();
+    expect(actions).toEqual([
+      {
+        type: 'REVISE_DOCUMENT',
+        model_name: 'monster',
+        record_name: 'Nemean Lion',
+        revision: {
+          certificates: ['']
+        }
+      },
+      {
+        type: 'REVISE_DOCUMENT',
+        model_name: 'monster',
+        record_name: 'Nemean Lion',
+        revision: {
+          certificates: [
+            {
+              original_filename: 'file_name1.txt',
+              path: 'metis://labors/bucket/file_name1.txt'
+            }
+          ]
+        }
+      }
+    ]);
+  });
+
+  it('does not render action buttons while not editing', () => {
+    const value = null;
+
+    const component = mount(
+      <Provider store={store}>
+        <FileCollectionAttribute
+          model_name='monsters'
+          record_name='Nemean Lion'
+          template={template}
+          value={value}
+          mode='view'
+          attribute='certificates'
+          document='Nemean Lion'
+          revised_value=''
+        />
+      </Provider>
+    );
+
+    const list_input = component.find(ListInput);
+    expect(list_input.exists()).toBeFalsy();
 
     const tree = renderer
       .create(
         <Provider store={store}>
-          <FileAttribute
-            model_name='conquests'
-            record_name='Persia'
-            template={null}
+          <FileCollectionAttribute
+            model_name='monsters'
+            record_name='Nemean Lion'
+            template={template}
             value={value}
             mode='view'
-            attribute='gravatar'
-            document='Timur'
+            attribute='certificates'
+            document='Nemean Lion'
             revised_value=''
           />
         </Provider>
@@ -108,40 +183,45 @@ describe('FileCollectionAttribute', () => {
   });
 
   it('renders existing files correctly when not editing', () => {
-    const value = new File(
-      ['Believe me, you are but pismire ant:'],
-      'conquest.txt',
-      {type: 'text/plain'}
-    );
+    const value = [
+      {
+        original_filename: 'test1.txt',
+        url: 'https://metis.test/test/download/test1.txt?X-Etna-Signature=foo'
+      },
+      {
+        original_filename: 'test2.png',
+        url: 'https://metis.test/test/download/test2.png?X-Etna-Signature=foo'
+      }
+    ];
 
     const component = mount(
       <Provider store={store}>
-        <FileAttribute
-          model_name='conquests'
-          record_name='Persia'
-          template={null}
+        <FileCollectionAttribute
+          model_name='monsters'
+          record_name='Nemean Lion'
+          template={template}
           value={value}
           mode='view'
           attribute='gravatar'
-          document='Timur'
+          document='Nemean Lion'
           revised_value=''
         />
       </Provider>
     );
 
-    expect(component.text().trim()).toEqual('conquest.txt (text/plain)');
+    expect(component.text().trim()).toEqual('test1.txt  test2.png');
 
     const tree = renderer
       .create(
         <Provider store={store}>
-          <FileAttribute
-            model_name='conquests'
-            record_name='Persia'
-            template={null}
+          <FileCollectionAttribute
+            model_name='monsters'
+            record_name='Nemean Lion'
+            template={template}
             value={value}
             mode='view'
             attribute='gravatar'
-            document='Timur'
+            document='Nemean Lion'
             revised_value=''
           />
         </Provider>
@@ -151,33 +231,107 @@ describe('FileCollectionAttribute', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('dispatches an action to remove a file', () => {
+  it('renders existing files in edit mode', () => {
+    const value = [
+      {
+        original_filename: 'test1.txt',
+        url: 'https://metis.test/test/download/test1.txt?X-Etna-Signature=foo'
+      },
+      {
+        original_filename: 'test2.png',
+        url: 'https://metis.test/test/download/test2.png?X-Etna-Signature=foo'
+      }
+    ];
+
     const component = mount(
       <Provider store={store}>
-        <FileAttribute
-          model_name='conquests'
-          record_name='Persia'
-          template={{name: 'Conquests', identifier: 1}}
-          value={null}
+        <FileCollectionAttribute
+          model_name='monsters'
+          record_name='Nemean Lion'
+          template={template}
+          value={value}
           mode='edit'
-          attribute={{name: 'ExpansionPlans'}}
-          document={{'1': 'Timur'}}
-          revised_value=''
+          attribute='gravatar'
+          document='Nemean Lion'
+          revised_value={value}
         />
       </Provider>
     );
 
-    const removeButton = component.find('.remove').first();
-    removeButton.simulate('click');
+    expect(component.text().trim()).toEqual('test1.txttest2.png+');
+
+    const tree = renderer
+      .create(
+        <Provider store={store}>
+          <FileCollectionAttribute
+            model_name='monsters'
+            record_name='Nemean Lion'
+            template={template}
+            value={value}
+            mode='edit'
+            attribute='gravatar'
+            document='Nemean Lion'
+            revised_value={value}
+          />
+        </Provider>
+      )
+      .toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('can remove existing files when editing', () => {
+    const value = [
+      {
+        original_filename: 'test1.txt',
+        url:
+          'https://metis.test/labors/download/bucket/test1.txt?X-Etna-Signature=foo'
+      },
+      {
+        original_filename: 'test2.png',
+        url:
+          'https://metis.test/labors/download/bucket/test2.png?X-Etna-Signature=foo'
+      }
+    ];
+
+    const component = mount(
+      <Provider store={store}>
+        <FileCollectionAttribute
+          model_name='monsters'
+          record_name='Nemean Lion'
+          template={template}
+          value={value}
+          mode='edit'
+          attribute={{
+            name: 'certificates'
+          }}
+          document={{
+            name: 'Nemean Lion'
+          }}
+          revised_value={value}
+        />
+      </Provider>
+    );
+
+    const list_input = component.find(ListInput);
+    expect(list_input.exists()).toBeTruthy();
+
+    const removeFile = component.find('.delete_link').first();
+    removeFile.simulate('click');
 
     const actions = store.getActions();
     expect(actions).toEqual([
       {
         type: 'REVISE_DOCUMENT',
-        model_name: 'Conquests',
-        record_name: 'Timur',
+        model_name: 'monster',
+        record_name: 'Nemean Lion',
         revision: {
-          ['ExpansionPlans']: {path: null}
+          certificates: [
+            {
+              original_filename: 'test2.png',
+              path: 'metis://labors/bucket/test2.png'
+            }
+          ]
         }
       }
     ]);

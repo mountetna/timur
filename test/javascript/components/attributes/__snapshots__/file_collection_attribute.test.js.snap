@@ -2,90 +2,109 @@
 
 exports[`FileCollectionAttribute does not render action buttons while not editing 1`] = `
 <div
-  className="attribute file"
+  className="attribute"
 >
-  <span
-    className="file-missing"
-  >
-     No file 
-  </span>
+  <div
+    className="collection"
+  />
 </div>
 `;
 
 exports[`FileCollectionAttribute renders existing files correctly when not editing 1`] = `
 <div
-  className="attribute file"
+  className="attribute"
 >
-  <span
-    className="file-upload"
+  <div
+    className="collection"
   >
-     
-    conquest.txt
-     (
-    text/plain
-    )
-     
-  </span>
+    <div
+      className="collection_item"
+    >
+      <a
+        href="https://metis.test/test/download/test1.txt?X-Etna-Signature=foo"
+      >
+         
+        test1.txt
+         
+      </a>
+    </div>
+    <div
+      className="collection_item"
+    >
+      <a
+        href="https://metis.test/test/download/test2.png?X-Etna-Signature=foo"
+      >
+         
+        test2.png
+         
+      </a>
+    </div>
+  </div>
 </div>
 `;
 
-exports[`FileCollectionAttribute renders the button bar while editing 1`] = `
+exports[`FileCollectionAttribute renders existing files in edit mode 1`] = `
 <div
-  className="attribute file"
+  className="attribute file-collection list_input"
 >
-  <input
-    onChange={[Function]}
-    style={
-      Object {
-        "display": "none",
-      }
-    }
-    type="file"
-  />
-  <div
-    className="file-buttons"
-  >
-    <span
-      className="fa-stack fa-fw"
-      onClick={[Function]}
-      title="Upload a file from your computer"
+  <div>
+    <div
+      className="list_input"
     >
-      <i
-        className="icon upload upload fa fa-2x fa-upload"
-      />
-    </span>
-    <span
-      className="fa-stack fa-fw"
-      onClick={[Function]}
-      title="Link a file from Metis"
-    >
-      <i
-        className="icon cloud cloud fa fa-2x fa-cloud"
-      />
-    </span>
-    <span
-      className="fa-stack fa-fw"
-      onClick={[Function]}
-      title="Mark this file as blank"
-    >
-      <i
-        className="icon stub meh-blank fa fa-2x fa-meh-blank"
-      />
-    </span>
-    <span
-      className="fa-stack fa-fw"
-      onClick={[Function]}
-      title="Remove this file link"
-    >
-      <i
-        className="icon remove trash-alt fa fa-2x fa-trash-alt"
-      />
-    </span>
+      <div
+        className="list_item"
+      >
+        <span
+          className="delete_link"
+          onClick={[Function]}
+        >
+          test1.txt
+        </span>
+      </div>
+      <div
+        className="list_item"
+      >
+        <span
+          className="delete_link"
+          onClick={[Function]}
+        >
+          test2.png
+        </span>
+      </div>
+      <div
+        className="list_item"
+      >
+        <span
+          className="add_item"
+          onClick={[Function]}
+        >
+          +
+        </span>
+      </div>
+    </div>
   </div>
-  <span
-    className="file-missing"
-  >
-     No file 
-  </span>
+</div>
+`;
+
+exports[`FileCollectionAttribute renders the ListInput while editing 1`] = `
+<div
+  className="attribute file-collection list_input"
+>
+  <div>
+    <div
+      className="list_input"
+    >
+      <div
+        className="list_item"
+      >
+        <span
+          className="add_item"
+          onClick={[Function]}
+        >
+          +
+        </span>
+      </div>
+    </div>
+  </div>
 </div>
 `;
