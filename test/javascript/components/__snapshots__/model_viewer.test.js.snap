@@ -261,7 +261,13 @@ exports[`ModelViewer renders 1`] = `
               <div
                 className="attribute"
               >
-                Lernean Hydra
+                <a
+                  className="link"
+                  href="http://localhost/undefined/browse/monster/Lernean%20Hydra"
+                  onClick={null}
+                >
+                  Lernean Hydra
+                </a>
               </div>
             </div>
             <div
@@ -405,7 +411,13 @@ exports[`ModelViewer renders 1`] = `
               <div
                 className="attribute"
               >
-                Nemean Lion
+                <a
+                  className="link"
+                  href="http://localhost/undefined/browse/monster/Nemean%20Lion"
+                  onClick={null}
+                >
+                  Nemean Lion
+                </a>
               </div>
             </div>
             <div

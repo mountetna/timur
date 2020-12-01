@@ -245,8 +245,6 @@ function useTabActions(browserState, setMode) {
     let exchange_name = `tab ${tab.name} for ${model_name} ${record_name}`;
     let attribute_names = getAttributes(tab);
 
-    console.log({attribute_names});
-
     let hasAttributes =
       record &&
       template &&
