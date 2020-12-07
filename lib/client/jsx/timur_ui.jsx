@@ -8,13 +8,12 @@ import Modal from 'react-modal';
 import Manifests from './components/manifest/manifests';
 import Browser from './components/browser/browser';
 import Plotter from './components/plotter/plotter';
-import {HomePageContainer as HomePage} from './components/home_page';
+import HomePage from './components/home_page';
 import TimurNav from './components/timur_nav';
 import Messages from './components/messages';
 
 import {showMessages} from './actions/message_actions';
 import {updateLocation} from './actions/location_actions';
-import {fetchProjectsAction} from 'etna-js/actions/janus-actions';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
@@ -101,13 +100,6 @@ class TimurUI extends React.Component {
 
   }
 
-  componentDidMount() {
-    let { fetchProjectsAction } = this.props;
-
-    // Fetch the projects from Janus
-    fetchProjectsAction();
-  }
-
   updateLocation() {
     let { updateLocation } = this.props;
     updateLocation(location);
@@ -152,5 +144,5 @@ class TimurUI extends React.Component {
 
 export default connect(
   (state) => ({ location: state.location, user: selectUser(state) }),
-  { showMessages, updateLocation, fetchProjectsAction }
+  { showMessages, updateLocation }
 )(TimurUI);

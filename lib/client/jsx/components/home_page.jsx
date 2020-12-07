@@ -1,60 +1,65 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-
-import * as _ from 'lodash';
+import React, {useEffect} from 'react';
+import {useReduxState} from 'etna-js/hooks/useReduxState';
 
 // Module imports.
 import { selectUserPermissions } from '../selectors/user_selector';
 import { selectProjects } from 'etna-js/selectors/janus-selector';
 import { projectNameFull } from 'etna-js/utils/janus';
+import {fetchProjectsAction} from 'etna-js/actions/janus-actions';
+import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 
-export default class HomePage extends React.Component{
-  renderProjects(){
-    let { permissions, projects } = this.props;
-    
-    if(_.keys(permissions).length <= 0){
-      return <span>{'No available projects.'}</span>;
+const Project = ({project_name, full_name, role, privileged}) =>
+  <div className='project'>
+    <div className='project_name'>
+        <a className='home-page-project-link' href={`/${project_name}`}>
+        { project_name }
+      </a>
+    </div>
+    <div className='role'>
+        {role}{ privileged ? ', privileged access' : '' }
+    </div>
+    <div className='full_name'>
+      { full_name }
+    </div>
+  </div>;
+
+const HomePage = () => {
+  const invoke = useActionInvoker();
+  const { my_projects } = useReduxState(
+    state => {
+      let permissions = selectUserPermissions(state);
+      let projects = selectProjects(state);
+
+      let my_projects = Object.values(permissions).map(
+        ({project_name,...perms})=>({
+          project_name, ...perms,
+          full_name: projectNameFull(projects, project_name)
+        })
+      ).sort(({project_name: n1},{project_name: n2}) => n1 < n2 ? -1 : n1 > n2 ? 1 : 0);
+
+      return { my_projects };
     }
+  );
 
-    return <React.Fragment>
-      {_.keys(permissions).map( key => {
-          let {project_name, role} = permissions[key];
-          return <a className='home-page-project-link'
-            key={project_name}
-            href={`/${project_name}`}>
-            {projectNameFull(projects, project_name)} &nbsp;
-            <span className='home-page-project-role'>({role})</span>
-          </a>
-      })}
-    </React.Fragment>
+  useEffect( () => {
+    invoke(fetchProjectsAction());
+  }, []);
 
-  }
-
-  render(){
-    return(
-      <div className='browser project'>
-
-        <div className='home-page-header-group'>
-
-          <div className='page-detail-group'>
-
-            {'Available Projects'}
-          </div>
-        </div>
-        <div className='browser-tab'>
-
-          {this.renderProjects()}
-        </div>
+  return <div className='home_page'>
+    <div className='title'>Available Projects</div>
+    <div className='projects'>
+      <div className='project header'>
+        <div className='project_name'> project_name </div>
+        <div className='role'> role </div>
+        <div className='full_name'> title </div>
       </div>
-    );
-  }
+      {
+        my_projects.length == 0
+          ? <span>{'No available projects.'}</span>
+          : my_projects.map((project, i) => <Project key={i} {...project} />)
+      }
+    </div>
+  </div>;
 }
 
-export const HomePageContainer = connect(
-  (state = {}, own_props)=>(
-    {
-      permissions: selectUserPermissions(state),
-      projects: selectProjects(state)
-    }
-  )
-)(HomePage);
+export default HomePage;
