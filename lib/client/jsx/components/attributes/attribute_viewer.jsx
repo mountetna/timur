@@ -24,7 +24,7 @@ const AttributeViewer = (props) => {
   let attribute = template.attributes[attribute_name];
 
   if (!attribute) {
-    console.log(`No such attribute ${attribute_name} in template for ${model_name}`);
+    console.error(`No such attribute ${attribute_name} in template for ${model_name}`);
     return null;
   }
 
