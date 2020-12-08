@@ -10,6 +10,10 @@ export const MagmaName = ({item, template, mode, revision, record }) => {
   let { attribute_name, title } = item;
   let attribute = template.attributes[attribute_name];
 
+  if (!attribute) {
+    return <div className='item_name'>{ title || attribute_name }</div>;
+  }
+
   return <div className={ `item_name ${ (mode == 'edit' && isRevised(revision,record,attribute_name)) ? 'revised' : '' }` } title={attribute.desc}>
     {attribute.display_name || title || attribute_name}
   </div>;
