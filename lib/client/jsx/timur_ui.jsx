@@ -8,7 +8,7 @@ import Modal from 'react-modal';
 import Manifests from './components/manifest/manifests';
 import Browser from './components/browser/browser';
 import Plotter from './components/plotter/plotter';
-import HomePage from './components/home_page';
+import RootView from 'etna-js/components/RootView';
 import TimurNav from './components/timur_nav';
 import Messages from './components/messages';
 
@@ -24,7 +24,7 @@ import {Notifications} from "etna-js/components/Notifications";
 const ROUTES = [
   {
     template: '',
-    component: HomePage,
+    component: RootView,
     mode: 'home'
   },
   {
