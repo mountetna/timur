@@ -26,13 +26,12 @@
   .collection {
     column-count: 3;
     column-width: 150px;
+    padding-bottom: 3px;
   }
 
   .collection_item,
   .list_item {
-    &:not(:last-child) {
-      border-bottom: $thin_rule;
-    }
+    border-bottom: $thin_rule;
     padding-top: 3px;
     .add_item {
       cursor: pointer;
