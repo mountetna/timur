@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 // Module imports.
 import { reviseDocument } from '../../actions/magma_actions';
-import markdown from '../../utils/markdown';
+import MarkdownViewer from '../markdown_viewer';
 
 const MarkdownAttribute = ({ value, revised_value, mode,
   reviseDocument, document, template, attribute }) => {
@@ -12,8 +12,7 @@ const MarkdownAttribute = ({ value, revised_value, mode,
     if (!value) return <div className='attribute' />;
 
     return <div className='attribute'>
-      <div className='markdown'
-        dangerouslySetInnerHTML={ {__html: markdown(value) } }/>
+      <MarkdownViewer text={ value }/>
     </div>;
   }
 
