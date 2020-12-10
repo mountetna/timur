@@ -49,7 +49,7 @@ const AttributeViewer = (props) => {
   if (!AttributeComponent) {
       let msg = 'Could not match attribute '+attribute.name;
       msg += ' with class '+attribute.attribute_type+' to a display class!';
-      console.log(msg);
+      console.error(msg);
       return null;
   }
 

@@ -6,6 +6,7 @@ const ATT_ATTS = [
   'description',
   'display_name',
   'format_hint',
+  'attribute_group',
 
   'validation',
 

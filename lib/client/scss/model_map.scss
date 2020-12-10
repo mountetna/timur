@@ -26,13 +26,13 @@
     vertical-align: top;
 
     .model_report {
-      flex: 1;
+      flex: 1 1 50%;
       border-left: 1px solid lightgray;
       padding: 20px 10px;
     }
 
     .attribute_report {
-      flex-basis: 500px;
+      flex: 1 1 50%;
       height: min-content;
       background: #eee;
       &:empty {

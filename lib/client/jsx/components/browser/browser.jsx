@@ -67,7 +67,6 @@ export default function Browser({model_name, record_name, tab_name}) {
   );
   const {view, record, tab, revision, template, can_edit} = browserState;
   const [mode, setMode] = useState('loading');
-  console.log({view, template, record, tab_name});
   const loading = !view || !template || !record || !tab_name;
   const {cancelEdits, approveEdits} = useEditActions(setMode, browserState);
   const {selectOrShowTab, selectDefaultTab, selectTab, showTab} = useTabActions(

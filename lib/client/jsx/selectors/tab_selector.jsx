@@ -1,4 +1,5 @@
 import { sortAttributes } from '../utils/attributes';
+import { defaultMemoize } from 'reselect';
 
 export const selectView = (state, model_name, template) => {
   if (!state.views) return null;
@@ -15,24 +16,26 @@ export const selectView = (state, model_name, template) => {
 const attributeItem = attribute_name => ({ type: 'magma', attribute_name });
 
 const filterAttributes = (attributes, types, exclude=false) => Object.keys(attributes)
-  .filter( attribute_name => types.includes(attributes[attribute_name].attribute_type) ? !exclude : exclude)
+  .filter( attribute_name => !attributes[attribute_name].hidden && (!types || types.includes(attributes[attribute_name].attribute_type) ? !exclude : exclude))
   .sort( (a,b) => a.localeCompare(b));
 
-const basicView = ({attributes,identifier,parent}) => [
-  {
+const overviewItems = (attributes, others=[]) => filterAttributes(attributes, [ 'parent' ]).concat(
+          filterAttributes(attributes, [ 'link', 'collection', 'child' ])
+        ).concat(
+          filterAttributes(attributes, [ 'link', 'collection', 'child', 'parent', 'identifier' ].concat(others), true)
+        ).map(attributeItem)
+
+const basicView = ({attributes}) => {
+  let overview = {
     name: 'overview',
     panes: [
       {
-        items: filterAttributes(attributes, [ 'parent' ]).concat(
-          filterAttributes(attributes, [ 'link', 'collection', 'child' ])
-        ).concat(
-          filterAttributes(attributes, [ 'link', 'collection', 'child', 'parent', 'identifier', 'matrix', 'table' ], true)
-            .filter( n => ![ 'created_at', 'updated_at' ].includes(n))
-        ).map(attributeItem)
+        items: overviewItems(attributes, [ 'matrix', 'table' ])
       }
     ]
-  },
-  {
+  };
+
+  let tables = {
     name: 'tables',
     panes: [
       {
@@ -42,21 +45,53 @@ const basicView = ({attributes,identifier,parent}) => [
       }
     ]
   }
-];
 
-export const defaultView = (template) => {
-  if (!template) return null;
+  return [ overview, tables ].filter( t => t.panes[0].items.length)
 
-  let { attributes } = template;
-
-  let view = { tabs: [ ] };
-
-  let groups = Object.values(attributes).map(a => a.attribute_group).filter(_=>_);
-
-  if (groups.length == 0) view.tabs = basicView(template);
-
-  return view;
 };
+
+const groupView = ({attributes}) => {
+  let groups = Object.keys(attributes).reduce(
+    (groups, attribute_name) => {
+      let { attribute_group='overview', attribute_type } = attributes[attribute_name];
+
+      if (attribute_type == 'parent') attribute_group = 'overview';
+
+      if (attribute_type != 'identifier') {
+        if (!groups[attribute_group]) groups[attribute_group] = {};
+        groups[attribute_group][ attribute_name ] = attributes[attribute_name];
+      }
+
+      return groups;
+    }, {}
+  );
+
+  return Object.keys(groups).sort(
+    (g1, g2) => g1 == 'overview' ? -1 : g2 == 'overview' ? 1 : g1.localeCompare(g2)
+  ).map( group => ({
+    name: group,
+    panes: [
+      {
+        items:  group == 'overview' ? overviewItems(groups[group]) : filterAttributes(groups[group]).map(attributeItem)
+      }
+    ]
+  }));
+}
+
+export const defaultView = defaultMemoize(
+  (template) => {
+    if (!template) return null;
+
+    let view = { tabs: [ ] };
+
+    let groups = Object.values(template.attributes).map(a => a.attribute_group).filter(_=>_);
+
+    if (groups.length == 0) view.tabs = basicView(template);
+    else view.tabs = groupView(template);
+
+    return view;
+  }
+);
 
 export const getDefaultTab = (view) => view.tabs ? view.tabs[0].name : 'default';
 
