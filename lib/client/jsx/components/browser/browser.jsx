@@ -80,9 +80,6 @@ export default function Browser({model_name, record_name, tab_name}) {
 
   // On mount
   useEffect(() => {
-    invoke(requestManifests());
-    invoke(requestPlots());
-
     // Decide data that should be loaded immediately.
     if (!model_name && !record_name) {
       // ask magma for the project name
@@ -143,7 +140,7 @@ function browserStateOf({model_name, record_name, tab_name}) {
     const template = selectTemplate(state, model_name);
     const record = selectDocument(state, model_name, record_name);
     const revision = selectRevision(state, model_name, record_name) || {};
-    const view = selectView(state, model_name);
+    const view = selectView(state, model_name, template);
     const role = selectUserProjectRole(state);
 
     const tab =
