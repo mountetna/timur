@@ -40,6 +40,15 @@ describe BrowseController do
         json_body[:document][:tabs][0][:panes][0][:items].map{|s| s[:name].to_sym }
       ).to eq([:weight, :size, :odor])
     end
+
+    it 'returns 404 for a non-existent view' do
+      auth_header(:viewer)
+      get('/api/view/labors/monster')
+
+      expect(last_response.status).to eq(404)
+
+      expect(json_body[:error]).to eq('No view for monster in project labors')
+    end
   end
 
   context '#update' do

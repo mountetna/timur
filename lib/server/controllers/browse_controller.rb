@@ -2,9 +2,11 @@ require_relative '../view_update'
 
 class BrowseController < Timur::Controller
   def view
-    success_json(
-      View.where(project_name: @params[:project_name], model_name: @params[:model_name]).first.to_hash
-    )
+    view = View.where(project_name: @params[:project_name], model_name: @params[:model_name]).first
+
+    raise Etna::NotFound, "No view for #{@params[:model_name]} in project #{@params[:project_name]}" unless view
+
+    success_json(view.to_hash)
   end
 
   def update
