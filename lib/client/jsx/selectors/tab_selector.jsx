@@ -14,15 +14,21 @@ export const selectView = (state, model_name, template) => {
 
 const attributeItem = attribute_name => ({ type: 'magma', attribute_name });
 
+const filterAttributes = (attributes, types, exclude=false) => Object.keys(attributes)
+  .filter( attribute_name => types.includes(attributes[attribute_name].attribute_type) ? !exclude : exclude)
+  .sort( (a,b) => a.localeCompare(b));
+
 const basicView = ({attributes,identifier,parent}) => [
   {
     name: 'overview',
     panes: [
       {
-        items: [ identifier, parent ].concat(Object.keys(attributes).filter(
-          attribute_name => ![ 'matrix', 'table' ].includes(attributes[attribute_name].attribute_type) &&
-            ![ identifier, parent, 'created_at', 'updated_at' ].includes(attribute_name)
-        )).map(attributeItem)
+        items: filterAttributes(attributes, [ 'parent' ]).concat(
+          filterAttributes(attributes, [ 'link', 'collection', 'child' ])
+        ).concat(
+          filterAttributes(attributes, [ 'link', 'collection', 'child', 'parent', 'identifier', 'matrix', 'table' ], true)
+            .filter( n => ![ 'created_at', 'updated_at' ].includes(n))
+        ).map(attributeItem)
       }
     ]
   },

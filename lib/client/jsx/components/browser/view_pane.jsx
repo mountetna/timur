@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import ViewItem from './view_item';
 
-const empty = () => <div style={{ display: 'none'}} />;
+const Empty = () => <div style={{ display: 'none'}} />;
 
 const ViewPane = ({ pane, ...item_props}) => {
   let { items, name, title } = pane;
-  if (items.length === 0) return <empty/>;
+  if (items.length === 0) return <Empty/>;
 
   return <div className='pane'>
     {
