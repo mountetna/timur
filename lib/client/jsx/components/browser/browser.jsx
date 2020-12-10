@@ -26,6 +26,7 @@ import {requestView} from '../../actions/view_actions';
 import {
   sendRevisions,
   discardRevision,
+  requestModel,
   requestAnswer
 } from '../../actions/magma_actions';
 import {
@@ -66,6 +67,7 @@ export default function Browser({model_name, record_name, tab_name}) {
   );
   const {view, record, tab, revision, template, can_edit} = browserState;
   const [mode, setMode] = useState('loading');
+  console.log({view, template, record, tab_name});
   const loading = !view || !template || !record || !tab_name;
   const {cancelEdits, approveEdits} = useEditActions(setMode, browserState);
   const {selectOrShowTab, selectDefaultTab, selectTab, showTab} = useTabActions(
@@ -96,15 +98,18 @@ export default function Browser({model_name, record_name, tab_name}) {
             )
         )
       );
-    } else if (!view) {
-      // we are told the model and record name, get the view
-      invoke(requestView(model_name, selectOrShowTab));
-    } else if (!tab_name) {
-      selectDefaultTab(view);
     } else {
-      showTab(view);
+      if (!template) requestModel(model_name);
+      if (!view) {
+        // we are told the model and record name, get the view
+        invoke(requestView(model_name, selectOrShowTab));
+      } else if (!tab_name) {
+        selectDefaultTab(view);
+      } else {
+        showTab(view);
+      }
     }
-  }, [template]);
+  }, [template, view]);
 
   if (loading) {
     return loadingDiv;
