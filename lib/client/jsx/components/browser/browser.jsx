@@ -107,7 +107,7 @@ export default function Browser({model_name, record_name, tab_name}) {
     } else {
       showTab(view);
     }
-  }, []);
+  }, [template]);
 
   if (loading) {
     return loadingDiv;
