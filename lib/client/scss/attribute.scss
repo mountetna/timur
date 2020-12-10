@@ -1,6 +1,10 @@
 .attribute {
   color: #33333c;
   font-family: $value_font;
+  min-height: 20px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
 
   .delete_link {
     &.empty {
