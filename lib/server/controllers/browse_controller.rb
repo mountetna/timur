@@ -12,11 +12,11 @@ class BrowseController < Timur::Controller
   def update
     require_params :project_name, :model_name, :document
 
-    view = View.find_or_create(project_name: @params[:project_name], model_name: @params[:model_name])
+    view = View.find_or_create(project_name: @params[:project_name], model_name: @params[:model_name]) do |v|
+      v.document = @params[:document]
+    end
 
-    view.document = @params[:document]
-
-    view.save
+    view.update(document: @params[:document])
 
     success_json(view.to_hash)
   end
