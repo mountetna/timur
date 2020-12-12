@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/mountetna/monoetna.git
-  revision: 86117b10cceabb993ab166d37cce0e664a235436
-  branch: refs/artifacts/gem-etna/a73fe1c69e9c8c49c1e134d548ea3bda90aabea6
+  revision: d8c24e500ced23ac9072d96b98cc5f11c4af62a0
+  branch: refs/artifacts/gem-etna/1a4720c208e579bcb065e7149546d275f3a1b262
   specs:
     etna (0.1.19)
       jwt
@@ -91,6 +91,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   database_cleaner
@@ -109,4 +110,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.1.4
+   2.2.0
