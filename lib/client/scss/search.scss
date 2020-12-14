@@ -76,8 +76,6 @@ $query-sep: 1px solid #ddd;
   display: flex;
   flex-direction: column;
 
-  overflow: hidden;
-
   .pointer {
     margin: 0 10px;
   }
@@ -99,7 +97,6 @@ $query-sep: 1px solid #ddd;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 
   .button {

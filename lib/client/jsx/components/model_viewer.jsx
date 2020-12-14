@@ -32,14 +32,15 @@ const ModelViewer = ({
   let columns = display_attribute_names.map((att_name) => ({
     Header: att_name,
     accessor: att_name,
-    Cell: ({value, original}) => (
+    Cell: ({value, row}) => (
       <AttributeViewer
         template={template}
-        record={original}
+        record={row.original}
         attribute_name={att_name}
       />
     )
   }));
+
 
   let data = record_names.map((record_name) => documents[record_name]);
 

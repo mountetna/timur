@@ -44,19 +44,15 @@
 body {
   padding: 0px;
   margin: 0px;
-  height: 100%;
 }
 
 #root {
-  height: 100vh;
+  height: 100%;
   width: 100%;
-  overflow: hidden;
 
   #ui-container {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
     height: 100%;
+    width: 100%;
   }
 }
 
