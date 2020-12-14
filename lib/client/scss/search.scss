@@ -12,11 +12,22 @@ $query-sep: 1px solid #ddd;
   line-height: 200%;
   font-family: $body_font;
 
-  .actions {
-    text-align: right;
+  .tray {
+    display: flex;
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: $thin-rule;
 
-    button {
-      @include green_button;
+    .show-disconnected {
+      flex: 0 0 auto;
+    }
+    .actions {
+      flex: 1 1 auto;
+      text-align: right;
+
+      button {
+        @include green_button;
+      }
     }
   }
 

@@ -39,7 +39,7 @@ import {
   selectDocument,
   selectRevision
 } from '../../selectors/magma';
-import {selectUserProjectRole} from '../../selectors/user_selector';
+import {selectIsEditor} from '../../selectors/user_selector';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {useRequestDocuments} from '../../hooks/useRequestDocuments';
@@ -145,21 +145,18 @@ function browserStateOf({model_name, record_name, tab_name}) {
     const record = selectDocument(state, model_name, record_name);
     const revision = selectRevision(state, model_name, record_name) || {};
     const view = selectView(state, model_name, template);
-    const role = selectUserProjectRole(state);
+    const can_edit = selectIsEditor(state);
 
     const tab =
       view &&
       tab_name &&
       view.tabs.find(t => t.name == tab_name);
 
-    const can_edit = role === 'administrator' || role === 'editor';
-
     return {
       template,
       revision,
       view,
       record,
-      role,
       tab,
       can_edit,
       tab_name,

@@ -19,6 +19,7 @@ import {
   selectSearchAttributeNames,
   selectSearchFilterParams,
   selectSearchFilterString,
+  selectSearchShowDisconnected,
   selectSelectedModel,
   selectSortedAttributeNames,
   selectExpandedDisplayAttributeNames,
@@ -31,6 +32,7 @@ import {
   emptySearchCache,
   setSearchAttributeNames,
   setFilterString,
+  setSearchShowDisconnected,
   setSelectedModel,
 } from '../../actions/search_actions';
 
@@ -55,8 +57,9 @@ const loadingSpinner =
   />
 
 export function Search({
-  queryableAttributes, cache, setSearchPageSize, cacheSearchPage, setSearchPage,
-  selectedModel, requestModels, emptySearchCache, setSearchAttributeNames, filter_string,
+  queryableAttributes, cache, setSearchPageSize, cacheSearchPage,
+  setSearchPage, selectedModel, requestModels, emptySearchCache,
+  setSearchAttributeNames, filter_string, show_disconnected,
   setSelectedModel, display_attributes, attributesNamesState, showMessages
 }) {
   const [pageSize, setPageSize] = useState(10);
@@ -86,6 +89,7 @@ export function Search({
       record_names: 'all',
       attribute_names: queryableAttributes,
       filter: filter_string,
+      show_disconnected,
       page: page,
       page_size: pageSize,
       collapse_tables: true,
@@ -177,6 +181,7 @@ export default connect(
     selectedModel: selectSelectedModel(state),
     display_attributes: selectSortedDisplayAttributeNames(state),
     filter_string: selectSearchFilterString(state),
+    show_disconnected: selectSearchShowDisconnected(state),
     filter_params: selectSearchFilterParams(state),
     magma_state: state.magma
   }),
@@ -187,6 +192,7 @@ export default connect(
     setSearchPageSize,
     setSearchAttributeNames,
     setFilterString,
+    setSearchShowDisconnected,
     emptySearchCache,
     requestTSV,
     setSelectedModel,
