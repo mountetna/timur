@@ -10,111 +10,109 @@ exports[`Search renders 1`] = `
     <div
       className="query"
     >
-      <div>
-        <div>
-          <div
-            className="etna-collapsible-arrow"
-            onClick={[Function]}
-          />
-           
-          <span
-            className="label"
+      <div
+        className="table-select"
+      >
+        <span
+          className="label"
+        >
+          Search table
+        </span>
+        <select
+          defaultValue=""
+          name="model"
+          onChange={[Function]}
+        >
+          <option
+            disabled={false}
+            value=""
           >
-            Show table
-          </span>
-          <select
-            defaultValue=""
-            name="model"
-            onChange={[Function]}
+             --- 
+          </option>
+          <option
+            value={0}
           >
-            <option
-              disabled={false}
-              value=""
-            >
-               --- 
-            </option>
-            <option
-              value={0}
-            >
-              labor
-            </option>
-            <option
-              value={1}
-            >
-              monster
-            </option>
-            <option
-              value={2}
-            >
-              project
-            </option>
-          </select>
-          <span
-            className="label"
+            labor
+          </option>
+          <option
+            value={1}
           >
-            Page size
-          </span>
-          <select
-            defaultValue={0}
-            onChange={[Function]}
+            monster
+          </option>
+          <option
+            value={2}
           >
-            <option
-              disabled={true}
-              value=""
-            >
-               --- 
-            </option>
-            <option
-              value={0}
-            >
-              10
-            </option>
-            <option
-              value={1}
-            >
-              25
-            </option>
-            <option
-              value={2}
-            >
-              50
-            </option>
-            <option
-              value={3}
-            >
-              200
-            </option>
-          </select>
-          <input
-            className="button disabled"
-            disabled={true}
-            id="search-pg-search-btn"
-            onClick={[Function]}
-            type="button"
-            value="Search"
-          />
-          <input
-            className="button disabled"
-            disabled={true}
-            id="search-pg-tsv-btn"
-            onClick={[Function]}
-            type="button"
-            value="↯ TSV"
-          />
-        </div>
+            project
+          </option>
+        </select>
       </div>
+      <div
+        className="page-select"
+      >
+        <span
+          className="label"
+        >
+          Page size
+        </span>
+        <select
+          defaultValue={0}
+          onChange={[Function]}
+        >
+          <option
+            disabled={true}
+            value=""
+          >
+             --- 
+          </option>
+          <option
+            value={0}
+          >
+            10
+          </option>
+          <option
+            value={1}
+          >
+            25
+          </option>
+          <option
+            value={2}
+          >
+            50
+          </option>
+          <option
+            value={3}
+          >
+            200
+          </option>
+        </select>
+      </div>
+      <div
+        className="query-options"
+      />
+      <input
+        className="button disabled"
+        disabled={true}
+        id="search-pg-search-btn"
+        onClick={[Function]}
+        type="button"
+        value="Search"
+      />
+      <input
+        className="button disabled"
+        disabled={true}
+        id="search-pg-tsv-btn"
+        onClick={[Function]}
+        type="button"
+        value="↯ TSV"
+      />
     </div>
   </div>
   <div
     className="body"
   >
     <div
-      className="documents"
-    >
-      <div
-        className="table"
-      />
-    </div>
+      className="table"
+    />
   </div>
 </div>
 `;
