@@ -3,13 +3,15 @@ import {connect} from 'react-redux';
 import SelectInput from '../inputs/select_input';
 import Toggle from '../inputs/toggle';
 import {selectModelNames} from "../../selectors/magma";
+import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {
   selectSearchFilterString,
-  selectSortedAttributeNames,
+  selectSearchShowDisconnected,
+  selectSortedAttributeNames
 } from "../../selectors/search";
 import {requestTSV} from "../../actions/magma_actions";
 import {
-  setFilterString, setSearchAttributeNames,
+  setFilterString, setSearchAttributeNames
 } from "../../actions/search_actions";
 import CollapsibleArrow from "etna-js/components/CollapsibleArrow";
 import QueryBuilder from "./query_builder";
@@ -54,6 +56,8 @@ export function SearchQuery({
   const buttonDisabled = !selectedModel || loading;
   const [showAdvanced, setShowAdvanced] = useState(false);
 
+  const show_disconnected = useReduxState(state => selectSearchShowDisconnected(state));
+
   const advancedSearch = <div className='advanced-search'>
     <input
       type='text'
@@ -92,11 +96,12 @@ export function SearchQuery({
         label={'\u21af TSV'}
         disabled={buttonDisabled}
         onClick={() =>
-          requestTSV(
-            selectedModel,
-            filter_string,
-            attribute_names
-          )
+          requestTSV({
+            model_name: selectedModel,
+            filter: filter_string,
+            attribute_names,
+            show_disconnected
+          })
         }
       />
     </div>

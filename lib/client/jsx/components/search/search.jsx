@@ -11,7 +11,6 @@ import {
   selectModelNames,
 } from '../../selectors/magma';
 import {
-  requestTSV,
   requestModels,
 } from '../../actions/magma_actions';
 import {
@@ -194,7 +193,6 @@ export default connect(
     setFilterString,
     setSearchShowDisconnected,
     emptySearchCache,
-    requestTSV,
     setSelectedModel,
     showMessages,
   }
