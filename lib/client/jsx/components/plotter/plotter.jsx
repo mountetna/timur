@@ -153,8 +153,8 @@ class Plotter extends React.Component {
 
     if (push) pushLocation(
       id == null ?
-      Routes.plots_path(TIMUR_CONFIG.project_name) :
-      Routes.plot_path(TIMUR_CONFIG.project_name, id)
+      Routes.plots_path(CONFIG.project_name) :
+      Routes.plot_path(CONFIG.project_name, id)
     );
   }
 

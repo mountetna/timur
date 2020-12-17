@@ -6,7 +6,7 @@ import MagmaLink from './magma_link';
 import { requestIdentifiers } from '../actions/magma_actions';
 import { selectIdentifiers } from '../selectors/magma';
 
-const IdentifierList = ({matches}) =>
+const IdentifierList = ({matches, dismiss}) =>
   matches && <div className='drop_down'>
     {
       Object.keys(matches).map(modelName=>
@@ -18,7 +18,7 @@ const IdentifierList = ({matches}) =>
           {
             matches[modelName].map(
               identifier=>
-                <div key={identifier} className='identifier'>
+                <div key={identifier} className='identifier' onClick={() => dismiss()} >
                   <MagmaLink link={identifier} model={modelName} />
                 </div>
             )
@@ -84,7 +84,7 @@ class IdentifierSearch extends React.Component{
           />
           { matches && <i className='dismiss fa fa-times' onClick={ e => this.setMatch('') }/> }
         </div>
-        <IdentifierList matches={matches}/>
+        <IdentifierList matches={matches} dismiss={ () => this.setMatch('') }/>
       </div>
     );
   }

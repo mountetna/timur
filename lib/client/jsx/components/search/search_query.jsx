@@ -1,28 +1,24 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import SelectInput from '../inputs/select_input';
+import Toggle from '../inputs/toggle';
 import {selectModelNames} from "../../selectors/magma";
+import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {
   selectSearchFilterString,
-  selectSortedAttributeNames,
+  selectSearchShowDisconnected,
+  selectSortedAttributeNames
 } from "../../selectors/search";
 import {requestTSV} from "../../actions/magma_actions";
 import {
-  setFilterString, setSearchAttributeNames,
+  setFilterString, setSearchAttributeNames
 } from "../../actions/search_actions";
 import CollapsibleArrow from "etna-js/components/CollapsibleArrow";
 import QueryBuilder from "./query_builder";
 
-export function SearchQuery({
-  selectedModel, setFilterString, loading, requestTSV, model_names, onSelectTableChange,
-  pageSize, setPageSize, setPage, attribute_names, display_attributes, filter_string,
-}) {
-  const buttonDisabled = !selectedModel || loading;
-  const buttonClasses = buttonDisabled ? 'button disabled' : 'button';
-  const [showAdvanced, setShowAdvanced] = useState(false);
-
-  const tableOptionsLine = <React.Fragment>
-    <span className='label'>Show table</span>
+const TableSelect = ({model_names, selectedModel, onSelectTableChange}) =>
+  <div className='table-select'>
+    <span className='label'>Search table</span>
     <SelectInput
       name='model'
       values={model_names}
@@ -30,7 +26,10 @@ export function SearchQuery({
       onChange={onSelectTableChange}
       showNone='enabled'
     />
+  </div>;
 
+const PageSelect = ({pageSize, setPageSize}) =>
+  <div className='page-select'>
     <span className='label'>Page size</span>
     <SelectInput
       values={[10, 25, 50, 200]}
@@ -38,32 +37,28 @@ export function SearchQuery({
       onChange={setPageSize}
       showNone='disabled'
     />
+  </div>;
 
-    <input
-      id='search-pg-search-btn'
-      type='button'
-      className={buttonClasses}
-      value='Search'
-      disabled={buttonDisabled}
-      onClick={() => setPage(0, true)}
-    />
-    <input
-      id='search-pg-tsv-btn'
-      className={buttonClasses}
-      type='button'
-      value={'\u21af TSV'}
-      disabled={buttonDisabled}
-      onClick={() =>
-        requestTSV(
-          selectedModel,
-          filter_string,
-          attribute_names
-        )
-      }
-    />
-  </React.Fragment>;
+const DisabledButton = ({id,disabled,label,onClick}) =>
+  <input
+    id={id}
+    type='button'
+    className={ disabled ? 'button disabled' : 'button' }
+    value={label}
+    disabled={disabled}
+    onClick={onClick}
+  />;
 
-  const advancedSearch = <div>
+export function SearchQuery({
+  selectedModel, setFilterString, loading, requestTSV, model_names, onSelectTableChange,
+  pageSize, setPageSize, setPage, attribute_names, display_attributes, filter_string,
+}) {
+  const buttonDisabled = !selectedModel || loading;
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
+  const show_disconnected = useReduxState(state => selectSearchShowDisconnected(state));
+
+  const advancedSearch = <div className='advanced-search'>
     <input
       type='text'
       className='filter'
@@ -71,18 +66,44 @@ export function SearchQuery({
       defaultValue={filter_string}
       onBlur={(e) => setFilterString(e.target.value)}
     />
-    <a className='pointer' onClick={() => setShowAdvanced(false)}>
-      Basic Search
-    </a>
   </div>;
 
   return (
     <div className='query'>
-      <CollapsibleArrow label={tableOptionsLine}>
-        { selectedModel && <div>
-          {showAdvanced ? advancedSearch : <QueryBuilder setShowAdvanced={setShowAdvanced} selectedModel={selectedModel} display_attributes={display_attributes} /> }
-        </div> }
-      </CollapsibleArrow>
+      <TableSelect { ...{ selectedModel, model_names, onSelectTableChange } }/>
+      <PageSelect { ...{pageSize, setPageSize} }/>
+
+      <div className='query-options'>
+      { selectedModel && <div className='query-mode'>
+          <Toggle
+            label={ showAdvanced ? 'Raw' : 'Basic' }
+            selected={ showAdvanced }
+            onClick={() => setShowAdvanced(!showAdvanced)}/>
+        </div>
+      }
+      { selectedModel &&
+          (showAdvanced ? advancedSearch : <QueryBuilder setShowAdvanced={setShowAdvanced} selectedModel={selectedModel} display_attributes={display_attributes} />)
+      }
+      </div>
+      <DisabledButton
+        id='search-pg-search-btn'
+        label='Search'
+        disabled={buttonDisabled}
+        onClick={() => setPage(0, true)}
+      />
+      <DisabledButton
+        id='search-pg-tsv-btn'
+        label={'\u21af TSV'}
+        disabled={buttonDisabled}
+        onClick={() =>
+          requestTSV({
+            model_name: selectedModel,
+            filter: filter_string,
+            attribute_names,
+            show_disconnected
+          })
+        }
+      />
     </div>
   );
 }

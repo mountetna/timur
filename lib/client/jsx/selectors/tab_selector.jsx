@@ -1,99 +1,105 @@
 import { sortAttributes } from '../utils/attributes';
+import { defaultMemoize } from 'reselect';
 
-export const selectView = (state, model_name) => (
-  state.views
-  ? state.views[model_name]
-  : null
-)
+export const selectView = (state, model_name, template) => {
+  if (!state.views) return null;
 
-export const getDefaultTab = (view) =>
-  Object.keys(view.tabs).sort(
-    (tab1,tab2) => view.tabs[tab1].index_order - view.tabs[tab2].index_order
-  )[0] || 'default';
+  let view = state.views[model_name]
 
-export const getAttributes = (tab)=>{
-  let {panes} = tab;
-  let attributes = Object.values(panes).reduce(
-    (collect,{attributes}) => collect.concat(Object.keys(attributes)),
-    []
-  )
-  return (attributes.length <= 0) ? 'all' : attributes;
-};
+  if (!view) return null;
 
-export const getPlotIds = (tab)=>{
-  let { panes } = tab;
+  if (Object.keys(view).length == 0) return defaultView(template);
 
-  // Loop down on the tab object and extract the manifest ids.
-  let plot_ids = Object.values(panes).reduce(
-    ({attributes})=> Object.values(attributes).map(attr=>attr.plot_ids)
-  );
+  return view;
+}
 
-  // Flatten.
-  plot_ids = [].concat.apply([], plot_ids);
+const attributeItem = attribute_name => ({ type: 'magma', attribute_name });
 
-  // Compact.
-  plot_ids = plot_ids.filter(item=>(item != undefined && item != null));
+const filterAttributes = (attributes, types, exclude=false) => Object.keys(attributes)
+  .filter( attribute_name => !attributes[attribute_name].hidden && (!types || types.includes(attributes[attribute_name].attribute_type) ? !exclude : exclude))
+  .sort( (a,b) => a.localeCompare(b));
 
-  return plot_ids;
-};
+const overviewItems = (attributes, others=[]) => filterAttributes(attributes, [ 'parent' ]).concat(
+          filterAttributes(attributes, [ 'link', 'collection', 'child' ])
+        ).concat(
+          filterAttributes(attributes, [ 'link', 'collection', 'child', 'parent', 'identifier' ].concat(others), true)
+        ).map(attributeItem)
 
-
-/*
- * There is a correlation between the Timur view model attributes and the Magma
- * model attributes. When we want to render the attributes we interleave the two
- * models and then can display the totality of the information they represent.
- * Timur view models keep the layout and order, Magma data models keep the data
- * type and editability.
- *
- * See `/app/models/view_tab.rb` over in the server code for an idea about the 
- * tab structure.
- */
-export const interleaveAttributes = (tab, template)=>{
-  let { panes, ...tab_props } = tab;
-  let attributes = {};
-
-  let new_tab = {
-    ...tab_props,
-
-    panes: Object.keys(panes).reduce((new_panes, pane_name)=>{
-      let pane = panes[pane_name];
-      let { attributes, ...pane_props } = pane;
-
-      attributes = { ...attributes };
-
-      // if there are no pane attributes show the whole template
-      if (Object.keys(pane.attributes).length == 0) {
-        attributes = sortAttributes({ ...Object.keys(template.attributes).reduce((attributes, att_name)=> {
-          attributes[att_name] = {
-            ...template.attributes[att_name],
-            editable: true
-          };
-          return attributes;
-        },{})});
-      } else {
-        // expand any attributes which are in the template
-        Object.keys(pane.attributes).filter(attr_name=>attr_name in template.attributes).forEach(
-          attr_name => {
-            let view_attribute = pane.attributes[attr_name];
-            let template_attribute = template.attributes[attr_name];
-
-            // Interleave the attribute properties and set it back on the pane.
-            attributes[attr_name] = {
-              ...template_attribute,
-              ...view_attribute,
-              attribute_class: view_attribute.attribute_class || template_attribute.attribute_class,
-              editable: true
-            };
-          }
-        );
+const basicView = ({attributes}) => {
+  let overview = {
+    name: 'overview',
+    panes: [
+      {
+        items: overviewItems(attributes, [ 'matrix', 'table' ])
       }
-
-      return {
-        ...new_panes,
-        [pane_name]: { attributes, ...pane_props }
-      }
-    }, {})
+    ]
   };
 
-  return new_tab;
+  let tables = {
+    name: 'tables',
+    panes: [
+      {
+        items: Object.keys(attributes).filter(
+          attribute_name => [ 'matrix', 'table' ].includes(attributes[attribute_name].attribute_type)
+        ).map(attributeItem)
+      }
+    ]
+  }
+
+  return [ overview, tables ].filter( t => t.panes[0].items.length)
+
+};
+
+const groupView = ({attributes}) => {
+  let groups = Object.keys(attributes).reduce(
+    (groups, attribute_name) => {
+      let { attribute_group='overview', attribute_type } = attributes[attribute_name];
+
+      if (attribute_type == 'parent') attribute_group = 'overview';
+
+      if (attribute_type != 'identifier') {
+        if (!groups[attribute_group]) groups[attribute_group] = {};
+        groups[attribute_group][ attribute_name ] = attributes[attribute_name];
+      }
+
+      return groups;
+    }, {}
+  );
+
+  return Object.keys(groups).sort(
+    (g1, g2) => g1 == 'overview' ? -1 : g2 == 'overview' ? 1 : g1.localeCompare(g2)
+  ).map( group => ({
+    name: group,
+    panes: [
+      {
+        items:  group == 'overview' ? overviewItems(groups[group]) : filterAttributes(groups[group]).map(attributeItem)
+      }
+    ]
+  }));
 }
+
+export const defaultView = defaultMemoize(
+  (template) => {
+    if (!template) return null;
+
+    let view = { tabs: [ ] };
+
+    let groups = Object.values(template.attributes).map(a => a.attribute_group).filter(_=>_);
+
+    if (groups.length == 0) view.tabs = basicView(template);
+    else view.tabs = groupView(template);
+
+    return view;
+  }
+);
+
+export const getDefaultTab = (view) => view.tabs ? view.tabs[0].name : 'default';
+
+export const hasMagmaAttribute = item =>
+  item.type == 'magma' || (item.type == 'markdown' && item.attribute_name);
+
+export const getAttributes = ({panes})=> panes.map(
+  ({items}) => items.filter(hasMagmaAttribute).map(
+    item => item.attribute_name
+  )
+).flat();

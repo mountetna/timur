@@ -2,12 +2,15 @@ import React, {useCallback, useState, useEffect, useMemo} from 'react';
 import {connect} from "react-redux";
 import {
   selectDisplayAttributeNamesAndTypes,
+  selectSearchShowDisconnected,
   selectSortedAttributeNames
 } from "../../selectors/search";
-import {setFilterString, setSearchAttributeNames} from "../../actions/search_actions";
+import {setFilterString, setShowDisconnected, setSearchAttributeNames} from "../../actions/search_actions";
 import {useModal} from "etna-js/components/ModalDialogContainer";
+import {useReduxState} from 'etna-js/hooks/useReduxState';
 import TreeView, {getSelectedLeaves} from 'etna-js/components/TreeView';
 import SelectInput from "../inputs/select_input";
+import {selectIsEditor} from '../../selectors/user_selector';
 
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
@@ -17,6 +20,7 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
   const { openModal } = useModal();
   const [filtersState, setFiltersState] = useState([]);
 
+  const show_disconnected = useReduxState(state => selectSearchShowDisconnected(state));
   useEffect(() => {
     setFiltersState([]);
   }, [selectedModel]);
@@ -65,18 +69,16 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
                                 setFiltersState={setFiltersState} />);
   };
 
-  const columnsText = attribute_names.length === display_attributes.length ? '' : `(${attribute_names.length} / ${display_attributes.length})`;
-  const filtersText = filtersState.length === 0 ? '' : `${filtersState.length} filters`;
+  const columnsText = attribute_names.length === display_attributes.length ? 'All' : `${attribute_names.length} / ${display_attributes.length}`;
+  const filtersCount = filtersState.length + (show_disconnected ? 1 : 0);
+  const filtersText = filtersCount === 0 ? 'No filters' : filtersCount === 1 ? '1 filter' : `${filtersCount} filters`;
 
   return <div className='query-builder'>
     <a className='pointer' onClick={onOpenAttributeFilter}>
-      Add/Remove Columns { columnsText }
+      { columnsText } columns
     </a>
     <a className='pointer' onClick={onOpenFilters}>
-      Add/Remove Filters { filtersText }
-    </a>
-    <a className='pointer' onClick={() => setShowAdvanced(true)}>
-      Advanced Searched
+      { filtersText }
     </a>
   </div>;
 }
@@ -92,7 +94,7 @@ function FilterAttributesModal({ setSearchAttributeNames, display_attributes, at
 
   const disabledAttributeNames = useMemo(() => {
     return attributeNamesAndTypes
-      .filter(disabledAttributeForProject(TIMUR_CONFIG.project_name, selectedModel))
+      .filter(disabledAttributeForProject(CONFIG.project_name, selectedModel))
       .map(([name]) => name);
   }, [attributeNamesAndTypes]);
 
@@ -122,7 +124,7 @@ FilterAttributesModal = connect(
     attributeNames: selectSortedAttributeNames(state),
     attributeNamesAndTypes: selectDisplayAttributeNamesAndTypes(state),
   }),
-  { setSearchAttributeNames, }
+  { setSearchAttributeNames }
 )(FilterAttributesModal);
 
 const operators = [
@@ -141,7 +143,8 @@ const defaultFilterRowState = {
 }
 
 function QueryFilterModal({
-  attribute_names,
+  attribute_names, can_edit,
+  show_disconnected, setShowDisconnected, 
   filtersState: initialFiltersState,
   setFiltersState: updateParentFiltersState
 }) {
@@ -202,8 +205,8 @@ function QueryFilterModal({
           onBlur={(e) => onFilterOperandChange(idx)(e.target.value)}
         />
 
-        <a className='pointer' onClick={() => onFilterOperandChange(idx)('')}>
-          X
+        <a className='pointer delete' onClick={() => onFilterOperandChange(idx)('')}>
+          <i className='fas fa-times'/>
         </a>
       </div>)}
       <div>
@@ -215,15 +218,27 @@ function QueryFilterModal({
           onChange={onFilterAttributeChange(-1)}
         />
       </div>
-      <div className='actions'>
-        <button onClick={dismissModal}>Ok</button>
+      <div className='tray'>
+        { can_edit && <div className='show-disconnected'>
+          <input
+            checked={ !!show_disconnected }
+            onChange={ () => setShowDisconnected(!show_disconnected) }
+            type="checkbox"/> Show only disconnected records
+        </div> }
+        <div className='actions'>
+          <button onClick={dismissModal}>Ok</button>
+        </div>
       </div>
     </div>
   );
 }
 
 QueryFilterModal = connect(
-  (state) => ({ attribute_names: selectSortedAttributeNames(state), }),
+  (state) => ({ attribute_names: selectSortedAttributeNames(state),
+    show_disconnected: selectSearchShowDisconnected(state),
+    can_edit: selectIsEditor(state)
+  }),
+  { setShowDisconnected }
 )(QueryFilterModal);
 
 function attributeNamesToSelected(attributeNames) {
@@ -239,5 +254,5 @@ export default connect(
   (state) => ({ attribute_names: selectSortedAttributeNames(state), }),
   {
     setFilterString,
-  }
+ }
 )(QueryBuilder);

@@ -1,0 +1,42 @@
+.root-view {
+  padding: 10px 0px;
+  font-family: $body_font;
+
+  .title {
+    margin-left: 0px;
+    padding: 5px;
+    padding-left: 15px;
+  }
+
+  .projects {
+    width: 100%;
+    .project {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      border-bottom: $thin-rule;
+
+      padding: 4px;
+
+      &.header {
+        font-family: $value_font;
+        background: #eee;
+        color: #333;
+        border-bottom: 1px solid #888;
+        border-top: 1px solid #888;
+      }
+
+      .project_name {
+        font-family: $value_font;
+        padding: 0px 10px;
+        flex: 0 0 200px;
+      }
+      .role{
+        flex: 0 0 200px;
+      }
+      .full_name {
+        flex: 0 1 auto;
+      }
+    }
+  }
+}

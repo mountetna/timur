@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/mountetna/monoetna.git
-  revision: 2c99665e69fad473a4fcb55f6fbda7dd45f49aba
-  branch: refs/artifacts/gem-etna/f5710d118d6e5e9b20760c0865a2c011f4e321a9
+  revision: 51bf8d512c647298c6ec7ab0ea2e58fe003c7b19
+  branch: refs/artifacts/gem-etna/ae373a9dec4d57e09ed2e3749cdbf511e56ff1d5
   specs:
-    etna (0.1.16)
+    etna (0.1.23)
       jwt
       multipart-post
       net-http-persistent
@@ -60,7 +60,7 @@ GEM
     rltk (3.0.1)
       ffi (>= 1.0.0)
       filigree (>= 0.2.0)
-    rollbar (3.0.1)
+    rollbar (3.1.1)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -91,6 +91,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   database_cleaner
@@ -109,4 +110,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.1.4
+   2.2.1

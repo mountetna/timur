@@ -18,7 +18,7 @@ const Dot = ({point, xmedian, label, model, color}) => {
      (model && label) ?
        <Link link={
          Routes.browse_model_path(
-           TIMUR_CONFIG.project_name,
+           CONFIG.project_name,
            model,
            label
          )}>{dot}</Link> : dot

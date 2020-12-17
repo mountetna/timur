@@ -11,16 +11,22 @@ export default class ListInput extends Component {
 
   listItem(list_item, pos) {
     let className = 'delete_link';
+
+    // Clone list_item, but could be simple Object or string
+    let display_item = JSON.parse(JSON.stringify(list_item));
       
-    if (list_item == null || list_item == '') {
-      list_item = 'null';
+    if (display_item == null || display_item == '') {
+      display_item = 'null';
       className = 'delete_link empty';
+    } else if (typeof display_item === 'object' &&
+        display_item.hasOwnProperty('original_filename')) {
+        display_item = display_item.original_filename;
     }
 
     return(
       <div key={ pos } className='list_item'>
         <span className={ className } onClick={ () => this.removeValue(pos) } >
-          { list_item  }
+          { display_item  }
         </span>
       </div>
     );

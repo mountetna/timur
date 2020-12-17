@@ -8,7 +8,6 @@ module.exports = (env) => ({
     extensions: ['.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg'],
     alias: {
       'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib'),
-      'react-table': path.join(__dirname, 'node_modules/react-table'),
       react: path.join(__dirname, 'node_modules/react'),
       'react-dom': path.join(__dirname, 'node_modules/react-dom'),
       'react-redux': path.join(__dirname, 'node_modules/react-redux'),

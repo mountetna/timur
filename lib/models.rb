@@ -1,5 +1,6 @@
 Sequel::Model.plugin :timestamps, update_on_create: true
 
+require_relative 'models/view'
 require_relative 'models/view_tab'
 require_relative 'models/view_pane'
 require_relative 'models/view_attribute'

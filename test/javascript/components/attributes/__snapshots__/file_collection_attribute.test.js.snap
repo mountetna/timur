@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileCollectionAttribute does not render action buttons while not editing 1`] = `
+<div
+  className="attribute"
+>
+  <div
+    className="collection"
+  />
+</div>
+`;
+
+exports[`FileCollectionAttribute renders existing files correctly when not editing 1`] = `
+<div
+  className="attribute"
+>
+  <div
+    className="collection"
+  >
+    <div
+      className="collection_item"
+    >
+      <a
+        href="https://metis.test/test/download/test1.txt?X-Etna-Signature=foo"
+      >
+         
+        test1.txt
+         
+      </a>
+    </div>
+    <div
+      className="collection_item"
+    >
+      <a
+        href="https://metis.test/test/download/test2.png?X-Etna-Signature=foo"
+      >
+         
+        test2.png
+         
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FileCollectionAttribute renders existing files in edit mode 1`] = `
+<div
+  className="attribute file-collection list_input"
+>
+  <div>
+    <div
+      className="list_input"
+    >
+      <div
+        className="list_item"
+      >
+        <span
+          className="delete_link"
+          onClick={[Function]}
+        >
+          test1.txt
+        </span>
+      </div>
+      <div
+        className="list_item"
+      >
+        <span
+          className="delete_link"
+          onClick={[Function]}
+        >
+          test2.png
+        </span>
+      </div>
+      <div
+        className="list_item"
+      >
+        <span
+          className="add_item"
+          onClick={[Function]}
+        >
+          +
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FileCollectionAttribute renders the ListInput while editing 1`] = `
+<div
+  className="attribute file-collection list_input"
+>
+  <div>
+    <div
+      className="list_input"
+    >
+      <div
+        className="list_item"
+      >
+        <span
+          className="add_item"
+          onClick={[Function]}
+        >
+          +
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,7 +1,7 @@
 module.exports = {
   globals: {
     fetch: require('node-fetch'),
-    TIMUR_CONFIG: {
+    CONFIG: {
       project_name: 'labors',
       magma_host: 'https://magma.test'
     }

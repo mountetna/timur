@@ -9,6 +9,9 @@ import ModelNode from './model_map/model_node';
 import ModelReport from './model_map/model_report';
 import Layout from './model_map/tree_layout';
 
+import { selectProjects } from 'etna-js/selectors/janus-selector';
+import { projectNameFull } from 'etna-js/utils/janus';
+import {fetchProjectsAction} from 'etna-js/actions/janus-actions';
 
 class ModelMap extends React.Component {
   constructor() {
@@ -17,6 +20,7 @@ class ModelMap extends React.Component {
   }
   componentDidMount() {
     this.props.requestModels();
+    this.props.fetchProjectsAction();
   }
   showModel(current_model) {
     this.setState( { current_model, current_attribute: null } )
@@ -26,14 +30,16 @@ class ModelMap extends React.Component {
   }
   render() {
     let [ width, height ] = [ 600, 600 ];
-    let { templates, model_names } = this.props;
+    let { templates, model_names, projects } = this.props;
     let { current_model, current_attribute } = this.state;
     let layout = new Layout(current_model, templates, width, height);
+
+    let full_name = projectNameFull(projects, CONFIG.project_name) || CONFIG.project_name
 
     return <div id="model_map">
       <div className="map">
         <div className="heading report_row">
-        <span className="name">Project</span> <span className="title">{TIMUR_CONFIG.project_name}</span>
+        <span className="name">Project</span> <span className="title">{full_name}</span>
         </div>
         <svg width={width} height={height}>
           <defs>
@@ -79,8 +85,9 @@ export default connect(
     let model_names = selectModelNames(state);
     return {
       model_names,
-      templates: model_names.map(model_name => selectTemplate(state,model_name))
+      templates: model_names.map(model_name => selectTemplate(state,model_name)),
+      projects: selectProjects(state)
     }
   },
-  { requestModels }
+  { requestModels, fetchProjectsAction }
 )(ModelMap);

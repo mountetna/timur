@@ -1,0 +1,47 @@
+.toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 50px;
+  border-radius: 2px;
+  background-color: #26bc12;
+  cursor: pointer;
+
+  transition: all 0.2s;
+  .slider {
+    position: absolute;
+    width: 12px;
+    height: 14px;
+    top: 2px;
+    left: 2px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    transition: all 0.2s;
+    background-color: white;
+  }
+  .text {
+    position: absolute;
+    width: 36px;
+    top: 50%;
+    bottom: 0;
+    right: 0px;
+    left: unset;
+    text-align: center;
+    text-transform: lowercase;
+    font-family: sans-serif;
+    color: white;
+    font-size: 0.6em;
+    transform: translate(0,-50%);
+  }
+  &.selected {
+    background-color: #bc2612;
+    .text {
+      left: 0px;
+      right: unset;
+    }
+    .slider {
+      transform: translate(32px);
+    }
+  }
+}

@@ -18,6 +18,7 @@ const ModelViewer = ({
   pages,
   page_size,
   setPage,
+  children,
   restricted_attribute_names = null
 }) => {
   if (!template || !record_names) return <div className='table' />;
@@ -31,15 +32,15 @@ const ModelViewer = ({
   let columns = display_attribute_names.map((att_name) => ({
     Header: att_name,
     accessor: att_name,
-    Cell: ({value, original}) => (
+    Cell: ({value, row}) => (
       <AttributeViewer
         template={template}
-        document={original}
-        value={value}
-        attribute={template.attributes[att_name]}
+        record={row.original}
+        attribute_name={att_name}
       />
     )
   }));
+
 
   let data = record_names.map((record_name) => documents[record_name]);
 
@@ -51,7 +52,7 @@ const ModelViewer = ({
       setPage={setPage}
       columns={columns}
       data={data}
-    />
+    >{children}</TableViewer>
   );
 };
 

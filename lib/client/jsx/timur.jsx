@@ -17,7 +17,7 @@ class TimurApplication{
     this.store.dispatch(
       {
         type: 'ADD_TOKEN_USER',
-        token: Cookies.getItem(TIMUR_CONFIG.token_name)
+        token: Cookies.getItem(CONFIG.token_name)
       }
     );
 

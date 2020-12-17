@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 const ATT_ATTS = [
   'attribute_type',
   'link_model_name',
-  'desc',
+  'description',
   'display_name',
   'format_hint',
+  'attribute_group',
 
   'validation',
 

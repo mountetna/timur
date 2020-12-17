@@ -1,0 +1,56 @@
+.control-btn-group {
+  position: relative;
+  width: 33px;
+  .control {
+    height: 15px;
+    width: 33px;
+    vertical-align: top;
+    border: 1px solid gray;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 12px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    &.selected {
+      display: flex;
+    }
+  }
+
+  .menu-list {
+    border: $dialog-border;
+    font-family: $body_font;
+    position: absolute;
+    width: 175px;
+    right: -2px;
+    z-index: 2000;
+    padding: 5px;
+    background: white;
+
+    &.up {
+      top: 22px;
+    }
+    &.down {
+      bottom: 22px;
+    }
+
+    li {
+      padding: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      color: #888;
+      &:hover {
+        background: #e6fafc;
+        color: $timur-color;
+      }
+    }
+  }
+}
+
+@mixin control-btn-hover {
+  .control-btn-group {
+    .control {
+      display: flex;
+    }
+  }
+}

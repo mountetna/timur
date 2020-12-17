@@ -1,12 +1,19 @@
+
+// Framework libraries.
+import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { reviseDocument } from '../../actions/magma_actions';
-import React, { Component } from 'react';
 import SlowTextInput from '../inputs/slow_text_input';
+import MagmaLink from '../magma_link';
 
-const Attribute = ({ mode, value, revised_value,
+const IdentifierAttribute = ({ mode, value, revised_value,
   document, template, attribute, reviseDocument }) => {
-  if (mode != 'edit') return <div className='attribute'>{ value }</div>;
+  if (mode != 'edit') return(
+    <div className='attribute'>
+      { value && <MagmaLink link={value} model={ template.name } /> }
+    </div>
+  );
 
   return <div className='attribute'>
     <SlowTextInput
@@ -19,5 +26,5 @@ const Attribute = ({ mode, value, revised_value,
 
 export default connect(
   null,
-  {reviseDocument}
-)(Attribute);
+  { reviseDocument }
+)(IdentifierAttribute);
