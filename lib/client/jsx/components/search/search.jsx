@@ -11,7 +11,6 @@ import {
   selectModelNames,
 } from '../../selectors/magma';
 import {
-  requestTSV,
   requestModels,
 } from '../../actions/magma_actions';
 import {
@@ -19,6 +18,7 @@ import {
   selectSearchAttributeNames,
   selectSearchFilterParams,
   selectSearchFilterString,
+  selectSearchShowDisconnected,
   selectSelectedModel,
   selectSortedAttributeNames,
   selectExpandedDisplayAttributeNames,
@@ -31,6 +31,7 @@ import {
   emptySearchCache,
   setSearchAttributeNames,
   setFilterString,
+  setSearchShowDisconnected,
   setSelectedModel,
 } from '../../actions/search_actions';
 
@@ -55,8 +56,9 @@ const loadingSpinner =
   />
 
 export function Search({
-  queryableAttributes, cache, setSearchPageSize, cacheSearchPage, setSearchPage,
-  selectedModel, requestModels, emptySearchCache, setSearchAttributeNames, filter_string,
+  queryableAttributes, cache, setSearchPageSize, cacheSearchPage,
+  setSearchPage, selectedModel, requestModels, emptySearchCache,
+  setSearchAttributeNames, filter_string, show_disconnected,
   setSelectedModel, display_attributes, attributesNamesState, showMessages
 }) {
   const [pageSize, setPageSize] = useState(10);
@@ -86,6 +88,7 @@ export function Search({
       record_names: 'all',
       attribute_names: queryableAttributes,
       filter: filter_string,
+      show_disconnected,
       page: page,
       page_size: pageSize,
       collapse_tables: true,
@@ -131,31 +134,26 @@ export function Search({
         <SearchQuery loading={loading} onSelectTableChange={onSelectTableChange} pageSize={pageSize}
                      display_attributes={display_attributes}
                      selectedModel={selectedModel} setPage={setPage} setPageSize={setPageSize} />
-        <Loading loading={results === 0 || loading} delay={500} cacheLastView={true}>
-          <div className='results'>
-            Found {results} records in{' '}
-            <span className='model_name'>{model_name}</span>
-          </div>
-        </Loading>
       </div>
       <div className='body'>
-        <Loading loading={!model_name || (loading && loadingSpinner)} delay={500} cacheLastView={true}>
-          <div className='documents'>
-            <ModelViewer
-              model_name={model_name}
-              record_names={record_names}
-              page={current_page - 1}
-              pages={pages}
-              page_size={pageSize}
-              setPage={setPage}
-              restricted_attribute_names={
-                cached_attribute_names !== 'all'
-                  ? cached_attribute_names
-                  : null
-              }
-            />
+        <ModelViewer
+          model_name={model_name}
+          record_names={record_names}
+          page={current_page - 1}
+          pages={pages}
+          page_size={pageSize}
+          setPage={setPage}
+          restricted_attribute_names={
+            cached_attribute_names !== 'all'
+              ? cached_attribute_names
+              : null
+          }
+        >
+          <div className='results'>
+            {results} records in {' '}
+            <span className='model_name'>{model_name}</span>
           </div>
-        </Loading>
+        </ModelViewer>
       </div>
     </div>
   );
@@ -182,6 +180,7 @@ export default connect(
     selectedModel: selectSelectedModel(state),
     display_attributes: selectSortedDisplayAttributeNames(state),
     filter_string: selectSearchFilterString(state),
+    show_disconnected: selectSearchShowDisconnected(state),
     filter_params: selectSearchFilterParams(state),
     magma_state: state.magma
   }),
@@ -192,8 +191,8 @@ export default connect(
     setSearchPageSize,
     setSearchAttributeNames,
     setFilterString,
+    setSearchShowDisconnected,
     emptySearchCache,
-    requestTSV,
     setSelectedModel,
     showMessages,
   }

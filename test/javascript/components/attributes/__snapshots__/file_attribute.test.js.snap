@@ -72,6 +72,15 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
     <span
       className="fa-stack fa-fw"
       onClick={[Function]}
+      title="Upload a file from your computer"
+    >
+      <i
+        className="icon upload upload fa fa-2x fa-upload"
+      />
+    </span>
+    <span
+      className="fa-stack fa-fw"
+      onClick={[Function]}
       title="Link a file from Metis"
     >
       <i
@@ -102,5 +111,148 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
   >
      No file 
   </span>
+</div>
+`;
+
+exports[`FileAttribute renders upload meter and controls when uploading 1`] = `
+<div
+  className="attribute file"
+>
+  <div
+    className="list-entry-group upload"
+  >
+    <div
+      className="list-entry-column-group type"
+      style={
+        Object {
+          "flexBasis": "60px",
+        }
+      }
+    >
+      <span
+        className="icon-grp fa-stack fa-fw"
+      >
+        <i
+          className="icon undefined upload fa fa-2x fa-upload"
+        />
+      </span>
+    </div>
+    <div
+      className="list-entry-column-group name"
+      style={
+        Object {
+          "flexBasis": "60%",
+        }
+      }
+    >
+      <span
+        className="list-entry-file-name"
+      >
+        stats.txt
+      </span>
+    </div>
+    <div
+      className="list-entry-column-group status"
+      style={
+        Object {
+          "flexBasis": "90px",
+        }
+      }
+    />
+    <div
+      className="list-entry-column-group updated"
+      style={
+        Object {
+          "flexBasis": "30%",
+        }
+      }
+    >
+      <div
+        className="upload-meter-group"
+      >
+        <div
+          className="upload-meter-tray"
+        >
+          <div
+            className="upload-meter-bar"
+            style={
+              Object {
+                "width": "NaN%",
+              }
+            }
+          />
+        </div>
+        <div
+          className="upload-meter-status"
+        >
+          <span
+            className="icon-grp fa-stack fa-fw"
+          >
+            <i
+              className="icon active upload fa fa-2x fa-upload"
+            />
+          </span>
+        </div>
+        <div
+          className="upload-meter-completion"
+        >
+          <span
+            className="completed"
+            title="kilobytes uploaded"
+          >
+            NaN undefinediB
+          </span>
+           of 
+          NaN undefinediB
+        </div>
+        <div
+          className="upload-meter-speed"
+        >
+          <span
+            title="kilobits per second"
+          >
+            117.2 Kbps
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      className="list-entry-column-group size"
+      style={
+        Object {
+          "flexBasis": "10%",
+        }
+      }
+    />
+    <div
+      className="list-entry-column-group control"
+      style={
+        Object {
+          "flexBasis": "100px",
+        }
+      }
+    >
+      <div
+        className="upload-control-group"
+      >
+        <button
+          className="upload-control-btn"
+          onClick={[Function]}
+        >
+          <span
+            className="fas fa-fw fa-pause"
+          />
+        </button>
+        <button
+          className="upload-control-btn"
+          onClick={[Function]}
+        >
+          <span
+            className="fas fa-fw fa-times"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 `;

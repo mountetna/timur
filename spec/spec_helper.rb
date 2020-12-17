@@ -83,15 +83,7 @@ def run_script script
 end
 
 FactoryBot.define do
-  factory :view_tab do
-    to_create(&:save)
-  end
-
-  factory :view_pane do
-    to_create(&:save)
-  end
-
-  factory :view_attribute do
+  factory :view do
     to_create(&:save)
   end
 

@@ -106,8 +106,8 @@ class Manifests extends React.Component{
 
     if (push) pushLocation(
       id == null ?
-      Routes.manifests_path(TIMUR_CONFIG.project_name) :
-      Routes.manifest_path(TIMUR_CONFIG.project_name, id)
+      Routes.manifests_path(CONFIG.project_name) :
+      Routes.manifest_path(CONFIG.project_name, id)
     );
   }
 

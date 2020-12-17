@@ -1,0 +1,236 @@
+@import 'menu-control';
+
+.list-entry-group {
+  font-family: $body_font;
+
+  position: relative;
+
+  min-height: 40px;
+  margin-top: -1px;
+  height: 50px;
+
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  width: 100%;
+
+  border-bottom: $thin-rule;
+
+  display: flex;
+  justify-content: space-between;
+
+  &:active {
+    background: #eef;
+  }
+
+  &:hover {
+    @include control-btn-hover;
+  }
+
+  .list-entry-column-group {
+    flex: 0 1;
+    overflow: hidden;
+    align-self: center;
+    padding-right: 5px;
+
+    .list-entry-text {
+      font-size: 1em;
+      height: 20px;
+      border: 1px solid #fff;
+      width: 100%;
+    }
+
+    &.type {
+      vertical-align: top;
+      color: #5ab;
+      text-align: center;
+      overflow: unset;
+      flex: 0 0;
+
+      .lock {
+        color: goldenrod;
+        top: 10px;
+        left: 10px;
+      }
+
+      .upload {
+        color: #eab;
+      }
+
+      .trash {
+        color: green;
+      }
+    }
+
+    &.status {
+      font-size: 0.5em;
+      .shield-alt {
+        color: green;
+      }
+      .cubes {
+        margin-left: 5px;
+        color: dodgerblue;
+      }
+    }
+
+    &.control {
+      overflow: unset;
+    }
+
+    &.access {
+      text-overflow: ellipsis;
+    }
+
+    &.description {
+      line-height: 50px;
+    }
+
+    &.size {
+      .list-entry-file-size {
+        @extend .list-entry-text;
+        @extend .dark-text;
+      }
+    }
+
+    &.updated {
+      .list-entry-updated-name {
+        @extend .list-entry-text;
+        @extend .light-text;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+
+    &.name {
+      white-space: nowrap;
+      .list-entry-file-name {
+        a {
+          color: black;
+          text-decoration: none;
+          &:hover {
+            color: #337ab7;
+            text-decoration: underline;
+          }
+        }
+        overflow: hidden;
+        line-height: 50px;
+        text-overflow: ellipsis;
+      }
+      .list-entry-file-name-input {
+        margin-top: 2px;
+      }
+    }
+  }
+}
+
+.list-edit-mode-btn-group {
+  float: right;
+  margin-right: 10px;
+}
+
+.list-entry-edit-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  outline: none;
+  background: none;
+  color: #666;
+  &:hover {
+    color: #000;
+  }
+}
+
+.list-entry-status {
+  @extend .light-text;
+  margin-top: 4px;
+}
+
+#list-empty-group {
+  margin-top: 20px;
+  text-align: center;
+  letter-spacing: 2px;
+  font-family: $body_font;
+  font-size: 1.8em;
+  height: 18px;
+}
+
+.list-project-permission-field {
+  margin-top: 3px;
+}
+
+.list-project-field {
+  font-family: $body_font;
+}
+
+/* Entry Control Elements *****************************************************/
+
+.upload-control-group {
+  height: 100%;
+  width: 115px;
+  vertical-align: top;
+}
+
+.upload-control-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: none;
+  font-size: 1.2em;
+  color: #666;
+  margin-top: 4px;
+  margin-left: 4px;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    color: #5ab;
+  }
+}
+/******************************************************************************/
+
+/* Specific Search Dropdown CSS ***********************************************/
+
+.list-project-search-dd-group {
+  position: relative;
+  width: 325px;
+  margin-top: 1px;
+}
+
+/* BUTTON */
+.list-project-search-dd-btn {
+  position: absolute;
+  top: 3px;
+  right: 1px;
+  height: 14px;
+  width: 18px;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  outline: 0px;
+  background: #fff;
+  border-left: 1px solid #999;
+}
+
+/* TRAY */
+.list-project-search-dd-tray {
+  position: absolute;
+  top: 21px;
+  left: 0px;
+  width: 100%;
+  padding: 5px;
+
+  border: 1px solid #15788f;
+  background: #fff;
+}
+
+/* SPECIFIC OVERRIDES, see global.css */
+.search-dropdown-input {
+  font-size: 1em;
+  height: 18px;
+}
+
+.search-dropdown-input-inactive {
+  margin-left: 1px;
+}
+/******************************************************************************/

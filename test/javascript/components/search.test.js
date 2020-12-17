@@ -30,7 +30,7 @@ describe('Search', () => {
   afterEach(cleanStubs);
 
   it('renders', () => {
-    global.TIMUR_CONFIG = {
+    global.CONFIG = {
       magma_host: 'magma.test'
     };
 

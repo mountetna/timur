@@ -5,7 +5,7 @@ import {act} from 'react-dom/test-utils';
 import {mockStore} from '../helpers';
 import {stubUrl} from 'etna-js/spec/helpers';
 import Browser from '../../../lib/client/jsx/components/browser/browser';
-import {defaultView} from '../../../lib/client/jsx/reducers/view_reducer';
+import {defaultView} from '../../../lib/client/jsx/selectors/tab_selector';
 
 describe('Browser', () => {
   let store;
@@ -35,23 +35,9 @@ describe('Browser', () => {
     const initialStubs = [
       stubUrl({
         verb: 'get',
-        url: Routes.manifests_fetch_path('labors'),
-        status: 200,
-        response: {}
-      }),
-
-      stubUrl({
-        verb: 'get',
-        url: Routes.plots_fetch_path('labors'),
-        status: 200,
-        response: {plots: []}
-      }),
-
-      stubUrl({
-        verb: 'get',
         url: Routes.view_path('labors', 'monster'),
         status: 200,
-        response: {view: defaultView({})}
+        response: {view: defaultView(models.monster.template)}
       })
     ];
 

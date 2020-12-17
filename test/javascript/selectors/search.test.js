@@ -73,6 +73,7 @@ describe('selectSortedDisplayAttributeNames', () => {
       'aspect',
       'victim',
       'stats',
+      'certificates',
       'species'
     ]);
   });

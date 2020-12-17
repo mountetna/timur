@@ -1,6 +1,10 @@
 .attribute {
   color: #33333c;
   font-family: $value_font;
+  min-height: 20px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
 
   .delete_link {
     &.empty {
@@ -19,15 +23,19 @@
     &:focus {
       border-bottom: 1px solid forestgreen;
     }
-    margin: 0px 10px;
+    margin: 0px;
     width: 300px;
+  }
+
+  .collection {
+    column-count: 3;
+    column-width: 150px;
+    padding-bottom: 3px;
   }
 
   .collection_item,
   .list_item {
-    &:not(:last-child) {
-      border-bottom: $thin_rule;
-    }
+    border-bottom: $thin_rule;
     padding-top: 3px;
     .add_item {
       cursor: pointer;
@@ -73,15 +81,6 @@
     @include text_box;
     height: 70px;
     width: 70%;
-  }
-  .filter {
-    border: none;
-    border-bottom: 1px solid $input_border_color;
-    &:focus {
-      border-bottom: 1px solid forestgreen;
-    }
-    margin: 0px 10px;
-    width: 300px;
   }
   .export {
     @include green_button;
@@ -140,7 +139,8 @@
     }
   }
 
-  &.file {
+  &.file,
+  &.file-collection {
     display: flex;
     .file-blank {
       color: gray;

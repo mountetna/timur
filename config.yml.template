@@ -17,6 +17,7 @@ default: &default
   :auth_redirect: https://janus.development.local
   :token_algo: RS256
   :token_name: JANUS_DEV_TOKEN
+  :metis_uid_name: METIS_DEV_UID
   :log_level: info
   :log_file: /dev/stdout
   :rsa_public: |

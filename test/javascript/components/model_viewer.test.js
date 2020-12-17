@@ -16,6 +16,9 @@ describe('ModelViewer', () => {
       location: {
         path: '/labors/browse/monster/Nemean Lion'
       },
+      directory: {
+        uploads: {}
+      },
       magma: {
         models: {
           monster: {
@@ -31,7 +34,7 @@ describe('ModelViewer', () => {
   });
 
   it('renders', () => {
-    global.TIMUR_CONFIG = {
+    global.CONFIG = {
       magma_host: 'magma.test'
     };
 

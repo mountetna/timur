@@ -13,6 +13,19 @@ $light-grey: #ccc;
 
 $link_hover_color: #518651;
 
+$dialog-border: 1px solid #888;
+$timur-color: #15788f;
+
+.dark-text {
+  color: #000;
+  font-family: $body_font;
+}
+
+.light-text {
+  color: #999;
+  font-family: $body_font;
+}
+
 @mixin text_defaults {
   color: darkorchid;
   font-family: $value_font;
@@ -56,7 +69,11 @@ $link_hover_color: #518651;
   }
 }
 
-$thin_rule: 1px solid rgba(forestgreen,0.1);
+@function thin-rule($alpha, $color: forestgreen) {
+  @return 1px solid rgba($color,$alpha)
+}
+
+$thin_rule: thin-rule(0.1);
 
 @mixin basic_button($color, $background) {
   cursor: pointer;
@@ -122,24 +139,3 @@ input:focus{
   outline-offset: 0px;
 }
 
-.home-page-header-group{
-  margin-left: 0px;
-  padding-left: 15px;
-}
-
-.home-page-project-link{
-  color: #333;
-  margin-left: 15px;
-  padding-top: 15px;
-  display: block;
-  font-size: 16px;
-}
-
-.home-page-project-link:hover{
-  text-decoration: underline;
-}
-
-.home-page-project-role{
-  font-size: 12px;
-  opacity: .5;
-}

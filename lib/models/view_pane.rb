@@ -4,11 +4,9 @@ class ViewPane < Sequel::Model
 
   def to_hash
     {
-      id: id,
       name: name,
       title: title,
-      index_order: index_order,
-      attributes: Hash[ view_attributes.map{|a| [ a.name, a.to_hash ] } ]
+      items: view_attributes.sort_by(&:index_order).map(&:to_hash)
     }
   end
 end
