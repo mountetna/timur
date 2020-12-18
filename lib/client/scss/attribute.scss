@@ -28,8 +28,10 @@
   }
 
   .collection {
-    column-count: 3;
-    column-width: 150px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    grid-auto-rows: minmax(5px, auto);
     padding-bottom: 3px;
   }
 
