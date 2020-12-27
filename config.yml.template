@@ -14,6 +14,8 @@ default: &default
     :host: https://rtemis.development.local
   :metis:
     :host: https://metis.development.local
+  :janus:
+    :host: https://janus.development.local
   :auth_redirect: https://janus.development.local
   :token_algo: RS256
   :token_name: JANUS_DEV_TOKEN

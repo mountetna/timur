@@ -55,7 +55,7 @@ const ModeBar = ({mode}) =>
   </div>;
 
 const TimurNav = ({mode, user}) =>
-  <Nav user={user} logo={Logo}>
+  <Nav user={user} logo={Logo} app='timur'>
     {mode !== 'home' && <IdentifierSearch />}
     {mode !== 'home' && <ModeBar mode={mode}/>}
   </Nav>;
