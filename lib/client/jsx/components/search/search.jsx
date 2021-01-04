@@ -31,7 +31,6 @@ import {
   emptySearchCache,
   setSearchAttributeNames,
   setFilterString,
-  setSearchShowDisconnected,
   setSelectedModel,
 } from '../../actions/search_actions';
 
@@ -191,7 +190,6 @@ export default connect(
     setSearchPageSize,
     setSearchAttributeNames,
     setFilterString,
-    setSearchShowDisconnected,
     emptySearchCache,
     setSelectedModel,
     showMessages,
