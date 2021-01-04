@@ -2,7 +2,8 @@ import React, {useState, useEffect, shallowEqual} from 'react';
 import {useSelector, useDispatch, useStore} from 'react-redux';
 import {pushLocation} from '../../actions/location_actions';
 import {
-  requestViews,
+  requestView,
+  requestAllViews,
   saveNewViewAction,
   copyViewAction,
   saveViewAction
@@ -27,19 +28,16 @@ const ViewEditor = (props) => {
   const dispatch = useDispatch();
   let [views, setViews] = useState(useShallowEqualSelector(state => state.views));
   let view_id = props.view_id;
-  let state = useState(useShallowEqualSelector(state => state));
 
   // Initial render
   useEffect(() => {
-    requestViews(dispatch, () => {});
-    console.log({views})
+    requestView(dispatch, () => {});
+    console.log(views)
   }, [views]);
-  /*
+
     // Update
     useEffect(() => {
       if (view_id && views && !view) selectView(view_id, false);
-      console.log({view})
-
     }, [view_id, views, view]);
 
     const selectView = (id, push = true) => {
@@ -70,7 +68,6 @@ const ViewEditor = (props) => {
           break;
       }
 
-      setView({...view});
       const md5sum = view ? MD5(view.script) : null;
       setView({...view, });
       setEditing(id === 'new');
@@ -96,11 +93,10 @@ const ViewEditor = (props) => {
       if (field_name === 'script') {
         // the code editor does not emit an event, just the new value
         view.script = event;
-        new_md5sum = MD5(view.script);
       } else {
         view[field_name] = event.target.value;
       }
-      setView({...view, md5sum: new_md5sum || md5sum});
+      setView({...view,});
     };
 
     const saveView = () => {
@@ -130,17 +126,14 @@ const ViewEditor = (props) => {
 
     const toggleEdit = () => {
       setEditing(!editing);
-    };*/
+    };
 
   return (
-      <div>
-        hello
-      </div>
-    /*<DocumentWindow
+    <DocumentWindow
       documentType='view'
       editing={editing}
       document={view}
-      documents={views}
+      //documents={views}
       onCreate={create}
       onSelect={activateView}
       onUpdate={updateField}
@@ -154,7 +147,7 @@ const ViewEditor = (props) => {
         is_editing={editing}
         onChange={updateField('script')}
       />
-    </DocumentWindow>*/
+    </DocumentWindow>
   );
 };
 export default ViewEditor;
