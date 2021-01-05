@@ -1,9 +1,8 @@
 import React, {useState, useEffect, shallowEqual} from 'react';
 import {useSelector, useDispatch, useStore} from 'react-redux';
-import {pushLocation} from '../../actions/location_actions';
+import {pushLocation, setLocation} from '../../actions/location_actions';
 import {
   requestView,
-  requestAllViews,
   saveNewViewAction,
   copyViewAction,
   saveViewAction
@@ -11,7 +10,9 @@ import {
 import DocumentWindow from '../document/document_window';
 import ViewScript from './views_script';
 import {getAllViews} from '../../selectors/view_selector';
+import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {MD5} from '../../selectors/consignment_selector';
+import {requestAnswer, requestModel} from '../../actions/magma_actions';
 
 
 // shallow selector
@@ -22,18 +23,56 @@ export const useShallowEqualSelector = (selector) => {
 // Main component for viewing/editing views.
 
 const ViewEditor = (props) => {
-
   let [editing, setEditing] = useState(useSelector(state => state.editing));
+  let defaultView = requestView('project')
+
+
+
   let [view, setView] = useState(useShallowEqualSelector(state => state.view));
   const dispatch = useDispatch();
-  let [views, setViews] = useState(useShallowEqualSelector(state => state.views));
+  let [views, setViews] = useState(useShallowEqualSelector(state => state));
+
+  const thisStore = useStore()
+  //const views = getAllViews(thisStore.getState())
+  console.log(thisStore.getState())
   let view_id = props.view_id;
 
   // Initial render
   useEffect(() => {
     requestView(dispatch, () => {});
-    console.log(views)
   }, [views]);
+
+/*  useEffect(() => {
+    // Decide data that should be loaded immediately.
+    if (!model_name && !record_name) {
+      // ask magma for the project name
+      invoke(
+          requestAnswer(
+              {query: ['project', '::first', '::identifier']},
+
+              // redirect there
+              ({answer}) =>
+                  invoke(
+                      setLocation(
+                          Routes.browse_model_path(CONFIG.project_name, 'project', answer)
+                      )
+                  )
+          )
+      );
+    } else {
+      if (!template) requestModel(model_name);
+      if (!view) {
+        // we are told the model and record name, get the view
+        invoke(requestView(model_name, selectOrShowTab));
+      } else if (!tab_name) {
+        selectDefaultTab(view);
+      } else {
+        showTab(view);
+      }
+    }
+  }, [template, view]);*/
+
+
 
     // Update
     useEffect(() => {
