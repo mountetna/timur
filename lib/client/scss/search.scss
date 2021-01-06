@@ -67,6 +67,7 @@ $query-sep: 1px solid #ddd;
   background: white;
   max-height: 70vh;
   font-family: $body_font;
+  overflow-y: auto;
 
 
   .actions {

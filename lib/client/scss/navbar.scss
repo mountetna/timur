@@ -1,67 +1,28 @@
-@import "logo";
+#nav {
+  flex-grow: 1;
+  font-family: $body_font;
 
-#header {
-  position: relative;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid lightgray;
-  #logo {
-    flex-basis: 55px;
-    height: 55px;
-    display: flex;
-    margin-left: 4px;
-    align-items: center;
-    justify-content: center;
+  .nav_tab {
+    height: 100%;
+    display: inline-block;
+    font-size: 18px;
+    padding: 0px 25px;
+    text-transform: capitalize;
 
-    #normal {
-      @include basic_logo(#066306,'../img/Timur.png', 55px);
-    }
-    #dev {
-      @include basic_logo(#630606,'../img/Timur-dev.png', 55px);
-    }
-  }
-
-  #identifier_search {
-    flex-basis: 250px;
-    position: relative;
-  }
-
-  #login {
-    display: flex;
-    justify-content: flex-end;
-    color: darkgoldenrod;
-    font-family: $body_font;
-    i {
-      padding: 5px;
+    a {
       color: gray;
+      cursor: pointer;
+      outline: 0;
+
+      &:hover {
+        color: $link_hover_color;
+      }
     }
   }
-  #nav {
-    flex-grow: 1;
-    font-family: $body_font;
-
-    .nav_tab {
-      height: 100%;
-      display: inline-block;
-      font-size: 18px;
-      padding: 0px 25px;
-      text-transform: capitalize;
-
-      a {
-        color: gray;
-        cursor: pointer;
-        outline: 0;
-
-        &:hover {
-          color: $link_hover_color;
-        }
-      }
-    }
-    .selected {
-      a {
-        color: forestgreen;
-      }
+  .selected {
+    a {
+      color: forestgreen;
     }
   }
 }
+

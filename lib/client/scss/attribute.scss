@@ -44,6 +44,12 @@
     }
   }
 
+  .collection_item:nth-child(1),
+  .list_item:nth-child(1) {
+    display: inline-block;
+    width: 100%;
+  }
+
   .markdown {
     p {
       margin: 2px;
