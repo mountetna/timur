@@ -23,33 +23,44 @@ const AccessRadio = ({onUpdate, access, value, disabled}) =>
 const DocumentDetails = ({
   document: { user, description, updated_at, access },
   onUpdate, editing
-}) => (
-  <div className='document-details'>
-    <div className='document-edit-details'>
-      <i className='fas fa-clock' title='Updated'/>
-      <span>{ formatDate(updated_at) }</span>
-      <i className='fas fa-user' title='Author'/>
-      <span>{user}</span>
+}) => {
+  let accessRadio;
+  if (access) {
+    accessRadio =
+      (<div className='document-access'>
+        <AccessRadio
+          onUpdate={onUpdate('access')}
+          disabled={!editing}
+          access={access}
+          value='private'/>
+        <AccessRadio
+          onUpdate={onUpdate('access')}
+          disabled={!editing}
+          access={access}
+          value='public'/>
+      </div>);
+  } else {
+    accessRadio = null;
+  }
+
+  return (
+    <div className='document-details'>
+      <div className='document-edit-details'>
+        <i className='fas fa-clock' title='Updated'/>
+        <span>{ formatDate(updated_at) }</span>
+        <i className='fas fa-user' title='Author'/>
+        <span>{user}</span>
+      </div>
+      {accessRadio}
+      <textarea className='document-description'
+                onChange={ onUpdate('description') }
+                value={ (description) ? description : '' }
+                placeholder='No description'
+                disabled={ !editing }
+      />
     </div>
-    <div className='document-access'>
-      <AccessRadio
-        onUpdate={ onUpdate('access') }
-        disabled={ !editing }
-        access={ access }
-        value='private'/>
-      <AccessRadio
-        onUpdate={ onUpdate('access') }
-        disabled={ !editing }
-        access={ access }
-        value='public'/>
-    </div>
-    <textarea className='document-description'
-      onChange={ onUpdate('description') }
-      value={ (description) ? description : '' }
-      placeholder='No description'
-      disabled={ !editing }
-    />
-  </div>
-);
+  );
+};
+
 
 export default DocumentDetails;
