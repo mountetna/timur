@@ -17,6 +17,20 @@ export const useShallowEqualSelector = (selector) => {
 	return useSelector(selector, shallowEqual);
 };
 
+// views to the similar format as other documents
+// TODO refactor because generates obscure keys 'list-undefined'
+const unpackViews = (viewsFromStore) => {
+	return viewsFromStore.reduce((allViews, view) => {
+		for (let tab of view.document.tabs) {
+			tab['model_name'] = view.model_name;
+			let newName = [view.model_name, tab.name].join('_');
+			tab['id'] = newName;
+			allViews[newName] = tab;
+		}
+		return allViews;
+	}, {});
+};
+
 // Main component for viewing/editing views.
 
 const ViewEditor = (props) => {
@@ -28,36 +42,40 @@ const ViewEditor = (props) => {
 		requestAllViews(() => {
 		})(dispatch);
 	}, []);
-	let views = useSelector(state => state.views);
+	let viewsFromStore = useSelector(state => Object.values(state.views));
+	let views = unpackViews(viewsFromStore);
 	let [view, setView] = useState(useShallowEqualSelector(state => state.view));
+	console.log(views)
 
-	const selectView = (viewKey, push = true) => {
-		let {views} = props;
-		switch (viewKey) {
+
+	const selectView = (id, push = true) => {
+		switch (id) {
 			case null:
-				view = null;
+				view = setView(null);
 				break;
 			default:
 				// find it in the existing views
-				view = views && views.find((m) => m.viewKey === viewKey);
+				view = setView(views && views.id);
 				if (!view) return;
 
 				// copy it so you don't modify the store
-				view = {...view};
+				view = setView({...view});
+
 				break;
 		}
-		setView({...view,});
+		setView({...view});
+
 		if (push)
 			pushLocation(
-				viewKey == null
-					? Routes.views_path(TIMUR_CONFIG.project_name)
-					: Routes.curr_view_path(TIMUR_CONFIG.project_name, viewKey)
+				id == null
+					? Routes.fetch_view_path(TIMUR_CONFIG.project_name)
+					: Routes.view_path(TIMUR_CONFIG.project_name, id)
 			)(dispatch);
 
 	};
 
 	const activateView = (view) => {
-		selectView(view.model_name);
+		selectView(view.id);
 	};
 
 	const updateField = (field_name) => (event) => {
@@ -77,8 +95,6 @@ const ViewEditor = (props) => {
 	};
 
 
-
-
 	const revertView = () => {
 		let {model_name} = view.model_name;
 		selectView(model_name);
@@ -94,7 +110,7 @@ const ViewEditor = (props) => {
 			documentType='view'
 			editing={editing}
 			document={view}
-			//documents={views}
+			documents={Object.values(views)}
 			//onCreate={create}
 			onSelect={activateView}
 			onUpdate={updateField}
