@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # etna application/server gem
-gem 'etna', git: 'https://github.com/mountetna/monoetna.git', branch: 'refs/artifacts/gem-etna/9fb615c1616039ddc527957a77c1eaeeabba1c78'
+gem 'etna', git: 'https://github.com/mountetna/monoetna.git', branch: 'refs/artifacts/gem-etna/91048bfdb46b22134ad644210cdb94043048ac11'
 
 # provides lexer/parser
 gem 'rltk'
