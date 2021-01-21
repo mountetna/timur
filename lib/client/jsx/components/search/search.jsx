@@ -37,22 +37,8 @@ import {
 import ModelViewer from '../model_viewer';
 import useAsyncWork from "etna-js/hooks/useAsyncWork";
 import SearchQuery from "./search_query";
-import {Loading} from "etna-js/components/Loading";
 import {showMessages} from "../../actions/message_actions";
 import {useRequestDocuments} from "../../hooks/useRequestDocuments";
-
-const spinnerCss = css`
-  display: block;
-  margin: 2rem auto;
-`;
-
-const loadingSpinner =
-  <ClimbingBoxLoader
-    css={spinnerCss}
-    color='green'
-    size={20}
-    loading={true}
-  />
 
 export function Search({
   queryableAttributes, cache, setSearchPageSize, cacheSearchPage,
