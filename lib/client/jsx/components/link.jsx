@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import { pushLocation } from '../actions/location_actions';
+import { pushLocation } from 'etna-js/actions/location_actions';
 
 class Link extends React.Component {
   pushLocation(event) {

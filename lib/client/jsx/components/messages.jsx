@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 
-import {dismissMessages} from '../actions/message_actions';
+import {dismissMessages} from 'etna-js/actions/message_actions';
 import markdown from '../utils/markdown';
 import {useNotifications} from "etna-js/components/Notifications";
 import {useFeatureFlag} from "etna-js/hooks/useFeatureFlag";

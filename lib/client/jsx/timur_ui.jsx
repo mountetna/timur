@@ -12,8 +12,8 @@ import RootView from 'etna-js/components/RootView';
 import TimurNav from './components/timur_nav';
 import Messages from './components/messages';
 
-import {showMessages} from './actions/message_actions';
-import {updateLocation} from './actions/location_actions';
+import {showMessages} from 'etna-js/actions/message_actions';
+import {updateLocation} from 'etna-js/actions/location_actions';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
