@@ -1,7 +1,7 @@
 import MagmaLink from '../magma_link';
 import {connect} from 'react-redux';
 
-import {reviseDocument} from '../../actions/magma_actions';
+import {reviseDocument} from 'etna-js/actions/magma_actions';
 import React, {Component, useMemo} from 'react';
 import ListInput from '../inputs/list_input';
 import SlowTextInput from '../inputs/slow_text_input';

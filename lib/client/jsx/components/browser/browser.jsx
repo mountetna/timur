@@ -27,7 +27,7 @@ import {
   discardRevision,
   requestModel,
   requestAnswer
-} from '../../actions/magma_actions';
+} from 'etna-js/actions/magma_actions';
 import {
   getAttributes,
   getDefaultTab,
@@ -37,7 +37,7 @@ import {
   selectTemplate,
   selectDocument,
   selectRevision
-} from '../../selectors/magma';
+} from 'etna-js/selectors/magma';
 import {selectIsEditor} from '../../selectors/user_selector';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';

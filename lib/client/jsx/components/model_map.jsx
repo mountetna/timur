@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { requestModels } from '../actions/magma_actions';
-import { selectModelNames, selectTemplate } from '../selectors/magma';
+import { requestModels } from 'etna-js/actions/magma_actions';
+import { selectModelNames, selectTemplate } from 'etna-js/selectors/magma';
 
 import ModelLink, { Arrowhead } from './model_map/model_link';
 import ModelNode from './model_map/model_node';

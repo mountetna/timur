@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions'
+import { reviseDocument } from 'etna-js/actions/magma_actions'
 import React, { Component } from 'react';
 import TextAreaInput from '../inputs/text_area_input';
 

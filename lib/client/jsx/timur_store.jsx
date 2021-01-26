@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import {createLogger} from 'redux-logger';
 
 // Reducers.
-import magma from './reducers/magma_reducer';
+import magma from 'etna-js/reducers/magma_reducer';
 import messages from 'etna-js/reducers/message_reducer';
 import plots from './reducers/plots_reducer';
 import views from './reducers/view_reducer';
@@ -13,7 +13,7 @@ import search from './reducers/search_reducer';
 import manifestsUI from './reducers/manifest_ui_reducer';
 import manifests from './reducers/manifests_reducer';
 import consignments from './reducers/consignments_reducer';
-import exchanges from './reducers/exchanges_reducer';
+import exchanges from 'etna-js/reducers/exchanges_reducer';
 import predicates from './reducers/predicates_reducer';
 import location from 'etna-js/reducers/location_reducer';
 import directory from './reducers/directory_reducer';

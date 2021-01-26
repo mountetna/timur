@@ -31,7 +31,7 @@ describe('Search', () => {
 
   it('renders', () => {
     global.CONFIG = {
-      magma_host: 'magma.test'
+      magma_host: 'https://magma.test'
     };
 
     // Wrap with Provider here so store gets passed down to child components in Context

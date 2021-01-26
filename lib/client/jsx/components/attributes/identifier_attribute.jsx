@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions';
+import { reviseDocument } from 'etna-js/actions/magma_actions';
 import SlowTextInput from '../inputs/slow_text_input';
 import MagmaLink from '../magma_link';
 

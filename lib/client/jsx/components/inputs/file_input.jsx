@@ -1,8 +1,8 @@
 import React, {useRef, useState} from 'react';
 
-import {useFileInputActions} from '../../actions/file_actions';
+import {useFileInputActions} from 'etna-js/actions/file_actions';
 
-import ButtonBar from '../button_bar';
+import ButtonBar from 'etna-js/components/button_bar';
 
 const FileInput = ({header, onBlur, onChange}) => {
   const [metis, setMetis] = useState(false);

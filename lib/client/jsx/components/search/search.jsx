@@ -6,10 +6,10 @@ import * as _ from 'lodash';
 
 import {
   selectModelNames,
-} from '../../selectors/magma';
+} from 'etna-js/selectors/magma';
 import {
   requestModels,
-} from '../../actions/magma_actions';
+} from 'etna-js/actions/magma_actions';
 import {
   selectSearchCache,
   selectSearchAttributeNames,
