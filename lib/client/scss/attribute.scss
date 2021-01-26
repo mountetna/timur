@@ -151,6 +151,9 @@
   &.file,
   &.file-collection {
     display: flex;
+    flex-direction: row;
+    justify-content: left;
+    
     .file-blank {
       color: gray;
     }
