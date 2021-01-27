@@ -17,7 +17,7 @@ import {updateLocation} from 'etna-js/actions/location_actions';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
-import {selectUser} from './selectors/user_selector';
+import {selectUser} from 'etna-js/selectors/user-selector';
 import {ModalDialogContainer} from "etna-js/components/ModalDialogContainer";
 import {Notifications} from "etna-js/components/Notifications";
 

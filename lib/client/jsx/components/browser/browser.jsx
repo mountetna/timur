@@ -38,7 +38,7 @@ import {
   selectDocument,
   selectRevision
 } from 'etna-js/selectors/magma';
-import {selectIsEditor} from '../../selectors/user_selector';
+import {selectIsEditor} from 'etna-js/selectors/user-selector';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {useRequestDocuments} from '../../hooks/useRequestDocuments';
