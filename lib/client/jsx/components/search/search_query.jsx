@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import SelectInput from '../inputs/select_input';
-import Toggle from '../inputs/toggle';
+import SelectInput from 'etna-js/components/inputs/select_input';
+import Toggle from 'etna-js/components/inputs/toggle';
 import {selectModelNames} from "etna-js/selectors/magma";
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import DocumentWindow from '../document/document_window';
-import Dropdown from '../inputs/dropdown';
+import Dropdown from 'etna-js/components/inputs/dropdown';
 import ManifestScript from '../manifest/manifest_script';
 import PlotLayout from './plot_layout';
 import PlotConfig from './plot_config';

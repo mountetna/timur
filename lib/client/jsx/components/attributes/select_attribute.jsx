@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { reviseDocument } from 'etna-js/actions/magma_actions';
-import Dropdown from '../inputs/dropdown';
+import Dropdown from 'etna-js/components/inputs/dropdown';
 
 const SelectAttribute = ({ mode, value, revised_value,
   document, template, attribute, reviseDocument }) => {

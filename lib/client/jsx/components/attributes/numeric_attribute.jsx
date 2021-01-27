@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { reviseDocument } from 'etna-js/actions/magma_actions';
 import React, { Component } from 'react';
-import { IntegerInput, FloatInput } from '../inputs/numeric_input';
+import { IntegerInput, FloatInput } from 'etna-js/components/inputs/numeric_input';
 
 let NumericAttribute = ({ mode, value, revised_value,
   document, template, attribute, reviseDocument, NumericInput }) => {

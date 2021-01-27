@@ -9,8 +9,8 @@ import {TEMP} from 'etna-js/actions/file_actions';
 import {reviseDocument} from 'etna-js/actions/magma_actions';
 import {filePathComponents} from 'etna-js/selectors/magma';
 
-import ListInput from '../inputs/list_input';
-import FileInput from '../inputs/file_input';
+import ListInput from 'etna-js/components/inputs/list_input';
+import FileInput from 'etna-js/components/inputs/file_input';
 
 const FileCollectionValue = ({value}) =>
   value instanceof File ? (

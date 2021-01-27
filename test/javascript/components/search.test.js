@@ -6,7 +6,6 @@ import {mockStore, stubUrl, cleanStubs} from '../helpers';
 import Search, {
   Search as RawSearchComponent
 } from '../../../lib/client/jsx/components/search/search';
-import SelectInput from '../../../lib/client/jsx/components/inputs/select_input';
 
 const models = {
   monster: {template: require('../fixtures/template_monster.json')},

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { reviseDocument } from 'etna-js/actions/magma_actions';
 import React, { Component } from 'react';
-import DateTimeInput from '../inputs/date_time_input';
+import DateTimeInput from 'etna-js/components/inputs/date_time_input';
 import { formatDate, formatTime } from '../../utils/dates';
 
 const DateTimeAttribute = ({value, mode, revised_value,

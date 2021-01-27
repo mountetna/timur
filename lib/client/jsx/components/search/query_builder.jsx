@@ -9,7 +9,7 @@ import {setFilterString, setShowDisconnected, setSearchAttributeNames} from "../
 import {useModal} from "etna-js/components/ModalDialogContainer";
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import TreeView, {getSelectedLeaves} from 'etna-js/components/TreeView';
-import SelectInput from "../inputs/select_input";
+import SelectInput from "etna-js/components/inputs/select_input";
 import {selectIsEditor} from '../../selectors/user_selector';
 
 function escapeRegExp(string) {

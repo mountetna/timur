@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { reviseDocument } from 'etna-js/actions/magma_actions'
 import React, { Component } from 'react';
-import TextAreaInput from '../inputs/text_area_input';
+import TextAreaInput from 'etna-js/components/inputs/text_area_input';
 
 const TextAttribute = ({ mode, value, revised_value,
   document, template, attribute, reviseDocument }) => {
