@@ -10,7 +10,7 @@ import Browser from './components/browser/browser';
 import Plotter from './components/plotter/plotter';
 import RootView from 'etna-js/components/RootView';
 import TimurNav from './components/timur_nav';
-import Messages from './components/messages';
+import Messages from 'etna-js/components/messages';
 
 import {showMessages} from 'etna-js/actions/message_actions';
 import {updateLocation} from 'etna-js/actions/location_actions';

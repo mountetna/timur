@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import {interpolateLab} from 'd3-interpolate';
 import { categoryGroups } from './category_plot';
 import { createWorker, terminateWorker } from '../../../web-workers'
-import Link from '../../link';
+import Link from 'etna-js/components/link';
 
 const Dots = (category_name, values, labels) => ({ category_name, values, labels });
 
