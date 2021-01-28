@@ -8,7 +8,7 @@ import magma from 'etna-js/reducers/magma_reducer';
 import messages from 'etna-js/reducers/message_reducer';
 import plots from './reducers/plots_reducer';
 import views from './reducers/view_reducer';
-import user from './reducers/user_reducer';
+import user from 'etna-js/reducers/user_reducer';
 import search from './reducers/search_reducer';
 import manifestsUI from './reducers/manifest_ui_reducer';
 import manifests from './reducers/manifests_reducer';

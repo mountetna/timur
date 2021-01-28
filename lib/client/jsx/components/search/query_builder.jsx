@@ -10,7 +10,7 @@ import {useModal} from "etna-js/components/ModalDialogContainer";
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import TreeView, {getSelectedLeaves} from 'etna-js/components/TreeView';
 import SelectInput from "etna-js/components/inputs/select_input";
-import {selectIsEditor} from '../../selectors/user_selector';
+import {selectIsEditor} from 'etna-js/selectors/user-selector';
 
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
