@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { reviseDocument } from '../../actions/magma_actions';
+import { reviseDocument } from 'etna-js/actions/magma_actions';
 
 const CheckboxAttribute = ({ mode, value, revised_value,
   document, template, attribute, reviseDocument }) => {

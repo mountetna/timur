@@ -70,7 +70,7 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
     className="file-buttons"
   >
     <span
-      className="fa-stack fa-fw"
+      className="icon-grp fa-stack fa-fw"
       onClick={[Function]}
       title="Upload a file from your computer"
     >
@@ -79,7 +79,7 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
       />
     </span>
     <span
-      className="fa-stack fa-fw"
+      className="icon-grp fa-stack fa-fw"
       onClick={[Function]}
       title="Link a file from Metis"
     >
@@ -88,7 +88,7 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
       />
     </span>
     <span
-      className="fa-stack fa-fw"
+      className="icon-grp fa-stack fa-fw"
       onClick={[Function]}
       title="Mark this file as blank"
     >
@@ -97,7 +97,7 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
       />
     </span>
     <span
-      className="fa-stack fa-fw"
+      className="icon-grp fa-stack fa-fw"
       onClick={[Function]}
       title="Remove this file link"
     >

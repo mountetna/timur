@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { selectTemplate } from '../../selectors/magma';
+import { selectTemplate } from 'etna-js/selectors/magma';
 import { sortAttributes } from '../../utils/attributes';
 import AttributeReport from './attribute_report';
 

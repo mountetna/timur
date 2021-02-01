@@ -6,7 +6,7 @@ import {
   selectTemplate,
   selectDocuments,
   displayAttributes
-} from '../selectors/magma';
+} from 'etna-js/selectors/magma';
 import AttributeViewer from './attributes/attribute_viewer';
 
 const ModelViewer = ({
