@@ -17,6 +17,20 @@ export const useShallowEqualSelector = (selector) => {
 	return useSelector(selector, shallowEqual);
 };
 
+// views to the similar format as other documents
+// TODO refactor because generates obscure keys 'list-undefined'
+const unpackViews = (viewsFromStore) => {
+	return viewsFromStore.reduce((allViews, view) => {
+		for (let tab of view.document.tabs) {
+			tab['model_name'] = view.model_name;
+			let newName = [view.model_name, tab.name].join('_');
+			tab['id'] = newName;
+			allViews[newName] = tab;
+		}
+		return allViews;
+	}, {});
+};
+
 // Main component for viewing/editing views.
 
 const ViewEditor = (props) => {
@@ -28,25 +42,14 @@ const ViewEditor = (props) => {
 		requestAllViews(() => {
 		})(dispatch);
 	}, []);
-	let views = useSelector(state => Object.values(state.views));
+	let viewsFromStore = useSelector(state => Object.values(state.views));
+	let views = unpackViews(viewsFromStore);
 	let [view, setView] = useState(useShallowEqualSelector(state => state.view));
 	console.log(views)
 
 
 	const selectView = (id, push = true) => {
 		switch (id) {
-			case 'new':
-				let date = new Date();
-				view = {
-					id: 0,
-					name: '',
-					description: '',
-					script: '',
-					md5sum: '',
-					created_at: date.toString(),
-					updated_at: date.toString()
-				};
-				break;
 			case null:
 				view = setView(null);
 				break;
@@ -65,8 +68,8 @@ const ViewEditor = (props) => {
 		if (push)
 			pushLocation(
 				id == null
-					? Routes.fetch_view_path(CONFIG.project_name)
-					: Routes.view_path(CONFIG.project_name, id)
+					? Routes.fetch_view_path(TIMUR_CONFIG.project_name)
+					: Routes.view_path(TIMUR_CONFIG.project_name, id)
 			)(dispatch);
 
 	};
@@ -91,8 +94,6 @@ const ViewEditor = (props) => {
 		if (editing) toggleEdit();
 	};
 
-	const create = () => selectView('new', true);
-
 
 	const revertView = () => {
 		let {model_name} = view.model_name;
@@ -109,8 +110,8 @@ const ViewEditor = (props) => {
 			documentType='view'
 			editing={editing}
 			document={view}
-			documents={views}
-			onCreate={create}
+			documents={Object.values(views)}
+			//onCreate={create}
 			onSelect={activateView}
 			onUpdate={updateField}
 			onEdit={toggleEdit}
