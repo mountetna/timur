@@ -1,7 +1,7 @@
 import React from 'react';
 import VectorResult from './vector_result';
 import MatrixResult from './matrix_result';
-import { isPrimitiveType, isVector, isMatrix } from '../../utils/types'
+import { isPrimitiveType, isVector, isMatrix } from 'etna-js/utils/types'
 
 const ConsignmentResult = ({name, data}) =>
   <div className='consignment-result'>
