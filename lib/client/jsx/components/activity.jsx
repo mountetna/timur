@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import * as Dates from '../utils/dates';
 import MagmaLink from './magma_link';
-import markdown from '../utils/markdown';
+import markdown from 'etna-js/utils/markdown';
 
 export default class Activity extends React.Component{
   render() {

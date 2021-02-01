@@ -1,19 +1,18 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import SelectInput from '../inputs/select_input';
-import Toggle from '../inputs/toggle';
-import {selectModelNames} from "../../selectors/magma";
+import SelectInput from 'etna-js/components/inputs/select_input';
+import Toggle from 'etna-js/components/inputs/toggle';
+import {selectModelNames} from "etna-js/selectors/magma";
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {
   selectSearchFilterString,
   selectSearchShowDisconnected,
   selectSortedAttributeNames
 } from "../../selectors/search";
-import {requestTSV} from "../../actions/magma_actions";
+import {requestTSV} from "etna-js/actions/magma_actions";
 import {
   setFilterString, setSearchAttributeNames
 } from "../../actions/search_actions";
-import CollapsibleArrow from "etna-js/components/CollapsibleArrow";
 import QueryBuilder from "./query_builder";
 
 const TableSelect = ({model_names, selectedModel, onSelectTableChange}) =>

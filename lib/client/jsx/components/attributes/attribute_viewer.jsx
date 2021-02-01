@@ -13,11 +13,6 @@ import LinkAttribute from './link_attribute';
 import IdentifierAttribute from './identifier_attribute';
 import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
-import TextAttribute from './text_attribute';
-import {MetricsAttributeContainer as MetricsAttribute} from './metrics_attribute';
-import MarkdownAttribute from './markdown_attribute';
-
-import PlotAttribute from './plot_attribute';
 
 const AttributeViewer = (props) => {
   let {attribute_name, record, revision={}, model_name, template, component } = props;
