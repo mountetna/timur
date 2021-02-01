@@ -5,7 +5,8 @@ import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import TimurUI from './timur_ui';
 import {timurStore} from './timur_store';
-import * as Cookies from 'etna-js/utils/cookies';
+import {addTokenUser} from './actions/user_actions'
+import * as Cookies from './utils/cookies';
 
 class TimurApplication{
   constructor(props, container_id){

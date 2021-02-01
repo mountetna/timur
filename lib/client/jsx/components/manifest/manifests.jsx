@@ -9,7 +9,7 @@ import {
   requestManifests, saveNewManifest, saveManifest,
   copyManifest, deleteManifest, requestConsignments
 } from '../../actions/manifest_actions';
-import { pushLocation } from 'etna-js/actions/location_actions';
+import { pushLocation } from '../../actions/location_actions';
 import { getAllManifests } from '../../selectors/manifest_selector';
 import { selectConsignment, MD5 } from '../../selectors/consignment_selector';
 

@@ -10,16 +10,17 @@ import Browser from './components/browser/browser';
 import Plotter from './components/plotter/plotter';
 import RootView from 'etna-js/components/RootView';
 import TimurNav from './components/timur_nav';
-import Messages from 'etna-js/components/messages';
+import Messages from './components/messages';
+import ViewEditor from './components/view_editor/view_editor';
 
-import {showMessages} from 'etna-js/actions/message_actions';
-import {updateLocation} from 'etna-js/actions/location_actions';
+import {showMessages} from './actions/message_actions';
+import {updateLocation} from './actions/location_actions';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
-import {selectUser} from 'etna-js/selectors/user-selector';
-import {ModalDialogContainer} from "etna-js/components/ModalDialogContainer";
-import {Notifications} from "etna-js/components/Notifications";
+import {selectUser} from './selectors/user_selector';
+import {ModalDialogContainer} from 'etna-js/components/ModalDialogContainer';
+import {Notifications} from 'etna-js/components/Notifications';
 
 const ROUTES = [
   {
@@ -85,12 +86,24 @@ const ROUTES = [
     template: ':project_name/plot/:plot_id',
     component: Plotter,
     mode: 'plots'
+  },
+  {
+    name: 'views',
+    template: ':project_name/views',
+    component: ViewEditor,
+    mode: 'view_editor'
+  },
+  {
+    name: 'curr_view',
+    template: ':project_name/views/:view_id',
+    component: ViewEditor,
+    mode: 'view_editor'
   }
 ];
 
 setRoutes(ROUTES);
 
-const Empty = () => <div/>;
+const Empty = () => <div />;
 
 class TimurUI extends React.Component {
   constructor(props) {
@@ -101,14 +114,14 @@ class TimurUI extends React.Component {
   }
 
   updateLocation() {
-    let { updateLocation } = this.props;
+    let {updateLocation} = this.props;
     updateLocation(location);
   }
 
   render() {
-    let { location, showMessages, environment, user } = this.props;
+    let {location, showMessages, environment, user} = this.props;
 
-    let { route, params } = findRoute(location, ROUTES);
+    let {route, params} = findRoute(location, ROUTES);
     let Component;
     let mode;
 
@@ -130,10 +143,10 @@ class TimurUI extends React.Component {
     return (
       <React.Fragment>
         <ModalDialogContainer>
-          <div id="ui-container">
-            <Notifications/>
-            <TimurNav environment={environment} mode={mode}/>
-            <Messages/>
+          <div id='ui-container'>
+            <Notifications />
+            <TimurNav environment={environment} mode={mode} />
+            <Messages />
             <Component key={key} {...params} />
           </div>
         </ModalDialogContainer>
@@ -143,6 +156,6 @@ class TimurUI extends React.Component {
 }
 
 export default connect(
-  (state) => ({ location: state.location, user: selectUser(state) }),
-  { showMessages, updateLocation }
+  (state) => ({location: state.location, user: selectUser(state)}),
+  {showMessages, updateLocation}
 )(TimurUI);

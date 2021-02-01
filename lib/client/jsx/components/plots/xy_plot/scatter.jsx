@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import Link from 'etna-js/components/link';
+import Link from '../../link';
 
 
 const Dot = ({point, xmedian, label, model, color}) => {

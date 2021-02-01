@@ -2,7 +2,7 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
-import * as MessageActions from 'etna-js/actions/message_actions';
+import * as MessageActions from '../actions/message_actions';
 
 export class Noauth extends React.Component{
   componentDidMount() {

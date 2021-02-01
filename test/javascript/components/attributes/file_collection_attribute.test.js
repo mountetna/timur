@@ -7,7 +7,7 @@ import {mockStore} from '../../helpers';
 import renderer from 'react-test-renderer';
 
 import FileCollectionAttribute from '../../../../lib/client/jsx/components/attributes/file_collection_attribute';
-import ListInput from 'etna-js/components/inputs/list_input';
+import ListInput from '../../../../lib/client/jsx/components/inputs/list_input';
 
 describe('FileCollectionAttribute', () => {
   let store;

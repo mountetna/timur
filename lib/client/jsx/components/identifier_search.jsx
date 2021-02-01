@@ -3,8 +3,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import MagmaLink from './magma_link';
-import { requestIdentifiers } from 'etna-js/actions/magma_actions';
-import { selectIdentifiers } from 'etna-js/selectors/magma';
+import { requestIdentifiers } from '../actions/magma_actions';
+import { selectIdentifiers } from '../selectors/magma';
 
 const IdentifierList = ({matches, dismiss}) =>
   matches && <div className='drop_down'>

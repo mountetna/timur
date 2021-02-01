@@ -1,6 +1,12 @@
 // Framework libraries.
 import * as React from 'react';
-import ButtonBar, { buttonsWithCallbacks } from 'etna-js/components/button_bar';
+import ButtonBar, { buttonsWithCallbacks } from './button_bar';
+
+const headerButton = (className, onClick, icons) => (
+  <div className={className} onClick={onClick}>
+    <span className={`fa ${icons.map(icon => `fa-${icon}`).join('')}`} />
+  </div>
+)
 
 class Header extends React.Component{
   render(){

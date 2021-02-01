@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import Nav from 'etna-js/components/Nav';
 import IdentifierSearch from './identifier_search';
-import Link from 'etna-js/components/link';
+import Link from './link';
 import {selectUser} from 'etna-js/selectors/user-selector';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 

@@ -93,7 +93,7 @@ export const defaultView = defaultMemoize(
   }
 );
 
-export const getDefaultTab = (view) => view && view.tabs ? view.tabs[0].name : 'default';
+export const getDefaultTab = (view) => view.tabs ? view.tabs[0].name : 'default';
 
 export const hasMagmaAttribute = item =>
   item.type == 'magma' || (item.type == 'markdown' && item.attribute_name);

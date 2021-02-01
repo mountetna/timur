@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PlotVariables from './plot_variables';
-import TextInput from 'etna-js/components/inputs/text_input';
+import TextInput from '../inputs/text_input';
 
 const PlotSeries = ({
   plot_series: {variables, series_type, name},

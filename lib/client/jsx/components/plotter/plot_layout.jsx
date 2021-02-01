@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NumberInput from 'etna-js/components/inputs/number_input';
+import NumberInput from '../inputs/number_input';
 
 const Spacer = () => <div style={{clear:'both'}}/>;
 

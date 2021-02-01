@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 
-import { reviseDocument } from 'etna-js/actions/magma_actions';
+import { reviseDocument } from '../../actions/magma_actions';
 import React, { Component } from 'react';
-import SlowTextInput from 'etna-js/components/inputs/slow_text_input';
+import SlowTextInput from '../inputs/slow_text_input';
 import SelectAttribute from './select_attribute';
 
 const StringAttribute = (props) => {

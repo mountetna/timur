@@ -4,11 +4,11 @@ import {mount, shallow} from 'enzyme';
 import {act} from 'react-dom/test-utils';
 import {mockStore} from '../../helpers';
 import renderer from 'react-test-renderer';
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
 import nock from 'nock';
 
-import ButtonBar from 'etna-js/components/button_bar';
-import {STUB} from 'etna-js/actions/file_actions';
+import ButtonBar from '../../../../lib/client/jsx/components/button_bar';
+import {STUB} from '../../../../lib/client/jsx/actions/file_actions';
 import FileAttribute from '../../../../lib/client/jsx/components/attributes/file_attribute';
 
 import ListUpload from 'etna-js/upload/components/list-upload';
@@ -543,7 +543,7 @@ describe('FileAttribute', () => {
     const cloudButton = component.find('.cloud').first();
     cloudButton.simulate('click');
 
-    let modal = component.find(Modal);
+    let modal = component.find(ReactModal);
     const metisPathInput = modal.find('.file-metis-select').find('input');
     metisPathInput.instance().value = 'metis://project/bucket/file_name.txt';
 
@@ -551,7 +551,7 @@ describe('FileAttribute', () => {
     checkButton.simulate('click');
 
     // refresh the modal contents
-    modal = component.find(Modal);
+    modal = component.find(ReactModal);
     expect(modal.find('file-metis-error').exists()).toBeFalsy();
 
     const actions = store.getActions();
@@ -589,7 +589,7 @@ describe('FileAttribute', () => {
     const cloudButton = component.find('.cloud').first();
     cloudButton.simulate('click');
 
-    let modal = component.find(Modal);
+    let modal = component.find(ReactModal);
     const metisPathInput = modal.find('.file-metis-select').find('input');
     metisPathInput.instance().value = 'project/bucket/file_name.txt';
 
@@ -597,7 +597,7 @@ describe('FileAttribute', () => {
     checkButton.simulate('click');
 
     // refresh the modal contents
-    modal = component.find(Modal);
+    modal = component.find(ReactModal);
 
     expect(modal.find('.file-metis-error').exists()).toBeTruthy();
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import TextInput from 'etna-js/components/inputs/text_input';
+import TextInput from '../inputs/text_input';
 
 const Variable = ({name,config,value,onChange}) =>
   <TextInput header={name.replace('_',' ')} value={value}

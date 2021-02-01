@@ -3,8 +3,10 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import DocumentWindow from '../document/document_window';
-import Dropdown from 'etna-js/components/inputs/dropdown';
+import ListMenu from '../list_menu';
+import Dropdown from '../inputs/dropdown';
 import ManifestScript from '../manifest/manifest_script';
+import ConsignmentView from '../manifest/consignment_view';
 import PlotLayout from './plot_layout';
 import PlotConfig from './plot_config';
 import PlotSeries from './plot_series';
@@ -14,7 +16,7 @@ import Resize from '../resize';
 
 import ErrorBoundary from '../error_boundary';
 
-import { pushLocation } from 'etna-js/actions/location_actions';
+import { pushLocation } from '../../actions/location_actions';
 import {
   requestPlots,
   saveNewPlot,
@@ -26,11 +28,17 @@ import {
 import {
   newPlot,
   selectPlot,
-  getAllPlots
+  getAllPlots,
+  plotWithScript
 } from '../../selectors/plot_selector';
 import {
-  MD5
+  MD5,
+  getLoadedConsignmentIds
 } from '../../selectors/consignment_selector';
+import {
+  isEmptyManifests,
+  getEditableManifests
+} from '../../selectors/manifest_selector';
 // the basic plotter interface
 //
 // basics:

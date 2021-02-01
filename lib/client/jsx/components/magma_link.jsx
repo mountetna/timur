@@ -1,6 +1,6 @@
 // Framework libraries.
 import * as React from 'react';
-import Link from 'etna-js/components/link';
+import Link from './link';
 
 export default class MagmaLink extends React.Component{
 
