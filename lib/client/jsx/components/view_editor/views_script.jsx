@@ -7,6 +7,7 @@ function ViewScript(props) {
 
   let { is_editing, onChange, script } = props;
   let className = is_editing ? 'view-script editing' : 'view-script';
+  console.log('lol')
   return (
       <div className={className}>
 

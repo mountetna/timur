@@ -31,8 +31,16 @@ const DocumentWindow = (props) => {
   } = props;
 
   let groupKey;
-  if (documentType === 'view') groupKey = 'model_name';
-  else groupKey = 'access';
+
+  switch (documentType) {
+    case 'view':
+      groupKey = 'project_name';
+      break;
+    default:
+      groupKey = 'access';
+      break;
+  }
+
 
   let sections = groupByFeature(documents || [], groupKey);
 
