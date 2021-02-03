@@ -4,7 +4,7 @@ import DocumentView from './document_view';
 import ListMenu from '../list_menu';
 
 const groupByFeature = (documents, featureName) => {
-  return documents.reduce((res, x) => {
+  return Object.values(documents).reduce((res, x) => {
   let key = x[featureName];
   if (!res[key]) res[key] = [x];
   else res[key].push(x);

@@ -16,30 +16,20 @@ export const useShallowEqualSelector = (selector) => {
 	return useSelector(selector, shallowEqual);
 };
 
-// views to the similar format as other documents
-// TODO refactor because generates obscure keys 'list-undefined'
-const addViewName = (viewsFromStore) => {
-	return (
-		viewsFromStore.map((view) => ({...view, name: view['model_name']}))
-	);
-};
 
 // Main component for viewing/editing views.
 
 const ViewEditor = (props) => {
 	let [editing, setEditing] = useState(useSelector(state => state.editing));
 	const dispatch = useDispatch();
+	let [view, setView] = useState(useShallowEqualSelector(state => state.view));
+	let views = useSelector(state => state.views);
 
 	//initial render
 	useEffect(() => {
 		requestAllViews(() => {
 		})(dispatch);
 	}, []);
-	let viewsFromStore = useSelector(state => Object.values(state.views));
-	let views = addViewName(viewsFromStore);
-	let [view, setView] = useState(useShallowEqualSelector(state => state.view));
-	console.log(views)
-
 
 
 	const selectView = (id, push = true) => {
@@ -47,30 +37,28 @@ const ViewEditor = (props) => {
 			case 'new':
 				let date = new Date();
 				view = {
-					id: 0,
+					id: 'new',
 					name: '',
 					description: '',
-					script: '',
+					document: '',
 					created_at: date.toString(),
 					updated_at: date.toString()
 				};
+				setView({...view});
 				break;
 			case null:
 				view = setView(null);
 				break;
 			default:
 				// find it in the existing views
-				view = setView(views && views.name);
-				if (!view) return;
-
+				let curr_view = views[id];
+				if (!curr_view) return;
 				// copy it so you don't modify the store
-				view = setView({...view});
+				setView({...curr_view});
 
 				break;
 		}
-		setView({...view});
 		setEditing(id === 'new');
-
 		if (push)
 			pushLocation(
 				id == null
@@ -79,16 +67,17 @@ const ViewEditor = (props) => {
 			)(dispatch);
 	};
 
-	const activateView = (view) => {
-		selectView(view.id);
+
+	const activateView = (id) => {
+		selectView(id);
 	};
 
 	const create = () => selectView('new', true);
 
 	const updateField = (field_name) => (event) => {
-		if (field_name === 'script') {
+		if (field_name === 'document') {
 			// the code editor does not emit an event, just the new value
-			view.script = event;
+			view.document = event;
 		} else {
 			view[field_name] = event.target.value;
 		}
@@ -97,7 +86,7 @@ const ViewEditor = (props) => {
 
 	const saveView = () => {
 		// A new view should have an id set to 0.
-		saveViewAction(dispatch, activateView(view));
+		saveViewAction(view)(dispatch);
 		if (editing) toggleEdit();
 	};
 
@@ -127,9 +116,9 @@ const ViewEditor = (props) => {
 			//onCopy={copyView}
 		>
 			<ViewScript
-				script={view && view.script}
+				script={view && view.document}
 				is_editing={editing}
-				onChange={updateField('script')}
+				onChange={updateField('document')}
 			/>
 		</DocumentWindow>
 	);
