@@ -9,7 +9,7 @@ import {
   requestManifests, saveNewManifest, saveManifest,
   copyManifest, deleteManifest, requestConsignments
 } from '../../actions/manifest_actions';
-import { pushLocation } from '../../actions/location_actions';
+import { pushLocation } from 'etna-js/actions/location_actions';
 import { getAllManifests } from '../../selectors/manifest_selector';
 import { selectConsignment, MD5 } from '../../selectors/consignment_selector';
 
@@ -56,9 +56,10 @@ class Manifests extends React.Component{
   componentDidUpdate() {
     let { manifest_id, manifests } = this.props;
     let { manifest } = this.state;
+
     if (manifest_id && manifests && !manifest) this.selectManifest(manifest_id, false);
   }
-// TODO add warning message if no name provided
+
   create() {
     this.selectManifest('new', true);
   }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import DocumentTitle from './document_title';
 import DocumentDetails from './document_details';
-import { buttonsWithCallbacks } from '../button_bar';
+import { buttonsWithCallbacks } from 'etna-js/components/button_bar';
 
 export default class DocumentView extends React.Component {
   getButtons() {
@@ -23,6 +23,7 @@ export default class DocumentView extends React.Component {
     let buttons = this.getButtons();
 
     if (!document) return null;
+
     return(
       <div className='document-view'>
         <div className='document-view-header'>

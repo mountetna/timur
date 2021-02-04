@@ -14,6 +14,7 @@ module.exports = {
     '^react$': '<rootDir>/node_modules/react',
     '^react-redux$': '<rootDir>/node_modules/react-redux',
     '^react-dom$': '<rootDir>/node_modules/react-dom',
+    '^react-modal$': '<rootDir>/node_modules/react-modal',
     '^enzyme$': '<rootDir>/node_modules/enzyme',
     '^enzyme-adapter-react-16$':
       '<rootDir>/node_modules/enzyme-adapter-react-16'
