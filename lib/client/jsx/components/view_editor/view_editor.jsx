@@ -1,6 +1,6 @@
 import React, {useState, useEffect, shallowEqual} from 'react';
 import {useSelector, useDispatch, useStore} from 'react-redux';
-import {pushLocation, setLocation} from '../../actions/location_actions';
+import {pushLocation, setLocation} from 'etna-js/actions/location_actions';
 import {
 	requestView,
 	requestAllViews,
