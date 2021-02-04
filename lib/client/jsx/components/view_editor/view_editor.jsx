@@ -114,7 +114,7 @@ const ViewEditor = (props) => {
 			onEdit={toggleEdit}
 			onCancel={revertView}
 			onSave={saveView}
-			onDelete={deleteView}
+			onRemove={deleteView}
 		>
 			<ViewScript
 				script={view && view.document}
