@@ -4,8 +4,7 @@ import {pushLocation, setLocation} from 'etna-js/actions/location_actions';
 import {
 	requestView,
 	requestAllViews,
-	saveNewViewAction,
-	copyViewAction,
+	deleteViewAction,
 	saveViewAction
 } from '../../actions/view_actions';
 import DocumentWindow from '../document/document_window';
@@ -55,7 +54,6 @@ const ViewEditor = (props) => {
 				if (!curr_view) return;
 				// copy it so you don't modify the store
 				setView({...curr_view});
-
 				break;
 		}
 		setEditing(id === 'new');
@@ -66,7 +64,6 @@ const ViewEditor = (props) => {
 					: Routes.curr_view_path(CONFIG.project_name, id)
 			)(dispatch);
 	};
-
 
 	const activateView = (id) => {
 		selectView(id);
@@ -90,13 +87,17 @@ const ViewEditor = (props) => {
 		if (editing) toggleEdit();
 	};
 
-
 	const revertView = () => {
 		let {model_name} = view.model_name;
 		selectView(model_name);
 		if (editing) toggleEdit();
 	};
 
+	const deleteView = () => {
+		if(confirm('Are you sure you want to remove this manifest?')){
+			deleteViewAction(view, () => selectView(0))(dispatch);
+		}
+	}
 	const toggleEdit = () => {
 		setEditing(!editing);
 	};
@@ -113,7 +114,7 @@ const ViewEditor = (props) => {
 			onEdit={toggleEdit}
 			onCancel={revertView}
 			onSave={saveView}
-			//onCopy={copyView}
+			onDelete={deleteView}
 		>
 			<ViewScript
 				script={view && view.document}
