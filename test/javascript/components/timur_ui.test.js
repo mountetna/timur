@@ -11,7 +11,7 @@ jest.mock('../../../lib/client/jsx/components/timur_nav',
     return <div className='timur-nav'/>;
   }
 );
-jest.mock('../../../lib/client/jsx/components/messages',
+jest.mock('etna-js/components/messages',
   () => function() {
     return <div className='messages'/>;
   }
