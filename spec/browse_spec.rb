@@ -23,8 +23,8 @@ describe BrowseController do
     ]
   }
 
-  context '#view' do
-    it 'gets the view json with indexes in order' do
+  context '#get' do
+    it 'gets the view json' do
       view = create(:view,
         project_name: 'labors',
         model_name: 'monster',
@@ -32,50 +32,45 @@ describe BrowseController do
       )
 
       auth_header(:viewer)
-      get('/api/view/labors/monster')
+      get('/api/views/labors/monster')
 
       expect(last_response.status).to eq(200)
 
       expect(
-        json_body[:document][:tabs][0][:panes][0][:items].map{|s| s[:name].to_sym }
+        json_body[:view][:document][:tabs][0][:panes][0][:items].map{|s| s[:name].to_sym }
       ).to eq([:weight, :size, :odor])
     end
 
     it 'returns 404 for a non-existent view' do
       auth_header(:viewer)
-      get('/api/view/labors/monster')
+      get('/api/views/labors/monster')
 
       expect(last_response.status).to eq(404)
 
-      expect(json_body[:error]).to eq('No view for monster in project labors')
+      expect(json_body[:error]).to eq('No such view monster in project labors')
     end
   end
 
-  context '#fetch_view' do
-    it 'gets all the view jsons with indexes in order' do
-      view_tab = create(:view_tab,
-        project: 'labors',
-        model: 'monster',
-        index_order: 1,
-        name: 'stats')
-      view_pane = create(:view_pane, view_tab: view_tab, name: 'default')
-      size = create(:view_attribute, view_pane: view_pane, index_order: 2, name: 'size')
-      weight = create(:view_attribute, view_pane: view_pane, index_order: 1, name: 'weight')
-      odor = create(:view_attribute, view_pane: view_pane, index_order: 3, name: 'odor')
-      view_tab2 = create(:view_tab,
-        project: 'labors',
-        model: 'labor',
-        index_order: 1,
-        name: 'overview'
+  context '#fetch' do
+    it 'gets all the view jsons' do
+      view1 = create(:view,
+        project_name: 'labors',
+        model_name: 'monster',
+        document: DEFAULT_VIEW
+      )
+      view2 = create(:view,
+        project_name: 'labors',
+        model_name: 'victim',
+        document: DEFAULT_VIEW
       )
 
       auth_header(:viewer)
-      get('/api/view/labors')
+      get('/api/views/labors/fetch')
 
       expect(last_response.status).to eq(200)
 
       expect(json_body[:views].size).to eq(2)
-      expect(json_body[:views][0][:tabs][:stats][:panes][:default][:attributes].keys
+      expect(json_body[:views][0][:document][:tabs][0][:panes][0][:items].map{|s| s[:name].to_sym}
       ).to eq([:weight, :size, :odor])
     end
   end
@@ -110,12 +105,12 @@ describe BrowseController do
       ]
 
       auth_header(:admin)
-      post('/api/view/labors/monster', document: { tabs: tabs })
+      post('/api/views/labors/update/monster', document: { tabs: tabs })
 
       expect(last_response.status).to eq(200)
-      expect(View.first.document).to eq(JSON.parse(json_body[:document].to_json))
+      expect(View.first.document).to eq(JSON.parse(json_body[:view][:document].to_json))
 
-      panes = json_body[:document][:tabs][0][:panes]
+      panes = json_body[:view][:document][:tabs][0][:panes]
 
       # the old pane is gone
       expect(panes.map{|p| p[:name].to_sym}).to eq([ :appearance, :mien ])
@@ -125,6 +120,41 @@ describe BrowseController do
       expect(panes[1][:items].map{|i| i[:name].to_sym}).to eq([:odor])
     end
 
+    it 'allows only admins to update the view' do
+      view = create(:view,
+        project_name: 'labors',
+        model_name: 'monster',
+        document: DEFAULT_VIEW
+      )
+
+      auth_header(:viewer)
+      post('/api/views/labors/update/monster', document: { tabs: {} })
+
+      expect(last_response.status).to eq(403)
+      expect(View.first.document).to eq(JSON.parse(DEFAULT_VIEW.to_json))
+    end
+
+    it 'uses a consistent view format' do
+      view = create(:view,
+        project_name: 'labors',
+        model_name: 'monster',
+        document: DEFAULT_VIEW
+      )
+
+      auth_header(:viewer)
+      get('/api/views/labors/monster')
+
+      expect(last_response.status).to eq(200)
+
+      auth_header(:admin)
+      post('/api/views/labors/update/monster', document: json_body[:view][:document])
+
+      expect(last_response.status).to eq(200)
+      expect(View.first.document).to eq(JSON.parse(json_body[:view][:document].to_json))
+    end
+  end
+
+  context '#create' do
     it 'creates the view' do
       tabs = [
         {
@@ -148,36 +178,35 @@ describe BrowseController do
       ]
 
       auth_header(:admin)
-      post('/api/view/labors/monster', document: { tabs: tabs })
+      post('/api/views/labors/create', model_name: 'monster', document: { tabs: tabs })
 
       expect(last_response.status).to eq(200)
-      expect(View.first.document).to eq(JSON.parse(json_body[:document].to_json))
+      expect(View.first.document).to eq(JSON.parse(json_body[:view][:document].to_json))
 
-      panes = json_body[:document][:tabs][0][:panes]
+      panes = json_body[:view][:document][:tabs][0][:panes]
 
       # the new panes are in place
       expect(panes.map{|p| p[:name].to_sym}).to eq([ :appearance, :mien ])
       expect(panes[0][:items].map{|i| i[:name].to_sym}).to eq([:height, :mass])
       expect(panes[1][:items].map{|i| i[:name].to_sym}).to eq([:odor])
     end
+  end
 
-    it 'uses a consistent view format' do
+  context '#destroy' do
+    it 'destroys the view' do
       view = create(:view,
         project_name: 'labors',
         model_name: 'monster',
         document: DEFAULT_VIEW
       )
 
-      auth_header(:viewer)
-      get('/api/view/labors/monster')
-
-      expect(last_response.status).to eq(200)
-
       auth_header(:admin)
-      post('/api/view/labors/monster', document: json_body[:document])
+      delete('/api/views/labors/destroy/monster')
 
       expect(last_response.status).to eq(200)
-      expect(View.first.document).to eq(JSON.parse(json_body[:document].to_json))
+      expect(View.count).to eq(0)
+
+      expect(json_body[:view][:model_name]).to eq('monster')
     end
   end
 end

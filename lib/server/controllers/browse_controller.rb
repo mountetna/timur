@@ -1,5 +1,3 @@
-require_relative '../view_update'
-
 class BrowseController < Timur::Controller
   def view
     view = View.where(project_name: @params[:project_name], model_name: @params[:model_name]).first

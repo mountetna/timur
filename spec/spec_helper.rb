@@ -89,7 +89,7 @@ FactoryBot.define do
 
   factory :manifest do
     to_create(&:save)
-    project { 'labors' }
+    project_name { 'labors' }
     sequence :name do |n|
       "manifest #{n}"
     end
@@ -109,7 +109,7 @@ FactoryBot.define do
 
   factory :plot do
     to_create(&:save)
-    project { 'labors' }
+    project_name { 'labors' }
     script { '@test = 1' }
     sequence :name do |n|
       "plot #{n}"

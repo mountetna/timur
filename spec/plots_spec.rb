@@ -5,26 +5,6 @@ describe PlotsController do
     OUTER_APP
   end
 
-  def get_plot id, user
-    auth_header(user)
-    get("/labors/plot/#{id}")
-  end
-
-  def get_plots endpoint, user
-    auth_header(user)
-    get("/labors/plots/#{endpoint}")
-  end
-
-  def post_plots endpoint, user, hash={}
-    auth_header(user)
-    json_post("labors/plots/#{endpoint}", hash)
-  end
-
-  def delete_plots plot, user
-    auth_header(user)
-    delete("/labors/plots/destroy/#{plot.id}")
-  end
-
   context '#get' do
     it 'must be a project viewer' do
       get_document(:plot, 1, :non_user)
@@ -186,7 +166,7 @@ describe PlotsController do
       update_document(:plot, @plot.id, { access: 'public' }, :viewer)
       @plot.refresh
 
-      expect(last_response.status).to eq(403)
+      expect(last_response.status).to eq(200)
       expect(@plot.access).to eq('private')
 
       # however, the admin can set public access

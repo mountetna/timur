@@ -51,13 +51,12 @@ const loadingDiv = (
   </div>
 );
 
-const errorDiv = (
+const ErrorDiv = ({error}) =>
   <div className='browser'>
     <div id='loader-container'>
-      <div className='loader'>Failed to load.</div>
+      <div className='loader'>Failed to load.{ JSON.stringify(error) }</div>
     </div>
-  </div>
-);
+  </div>;
 
 const notFoundDiv = (
   <div className='browser'>
@@ -76,7 +75,6 @@ function camelize(str) {
 }
 
 export default function Browser({ model_name, record_name, tab_name }) {
-  console.log("rendered...")
   const invoke = useActionInvoker();
   const browserState = useReduxState(
     browserStateOf({ model_name, record_name, tab_name })
@@ -116,7 +114,9 @@ export default function Browser({ model_name, record_name, tab_name }) {
     if (!view) {
       // we are told the model and record name, get the view
       yield invoke(requestView(model_name));
-      ({ view } = yield awaitNextState());
+      let x = yield awaitNextState();
+      console.log({x});
+      ({ view } = x);
     }
 
     if (!tab_name) {
@@ -158,7 +158,7 @@ export default function Browser({ model_name, record_name, tab_name }) {
   }, [])
 
   if (error) {
-    return errorDiv;
+    return <ErrorDiv error={error}/>;
   }
 
   if (mode === 'loading') {
