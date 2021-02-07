@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import DocumentWindow from '../document/document_window';
+import DocumentWindow, { publicPrivateSections } from '../document/document_window';
 import ManifestScript from './manifest_script';
 import ConsignmentView from './consignment_view';
 import {
@@ -12,6 +12,10 @@ import {
 import { pushLocation } from 'etna-js/actions/location_actions';
 import { getAllManifests } from '../../selectors/manifest_selector';
 import { selectConsignment, MD5 } from '../../selectors/consignment_selector';
+
+const accessFilter = (access, documents)=>{
+  return documents.filter(m => m.access == access).sort((a,b) => a > b);
+};
 
 // Wrapper for consignment selection
 class ManifestWindow extends React.Component {
@@ -175,7 +179,7 @@ class Manifests extends React.Component{
         documentType='manifest'
         editing={ editing }
         document={ manifest }
-        documents={manifests}
+        documents={publicPrivateSections(manifests)}
         onCreate={this.create.bind(this)}
         onSelect={this.selectManifest.bind(this)}
         onUpdate={ this.updateField.bind(this) }

@@ -51,12 +51,13 @@ const loadingDiv = (
   </div>
 );
 
-const ErrorDiv = ({error}) =>
+const errorDiv = (
   <div className='browser'>
     <div id='loader-container'>
-      <div className='loader'>Failed to load.{ JSON.stringify(error) }</div>
+      <div className='loader'>Failed to load.</div>
     </div>
-  </div>;
+  </div>
+);
 
 const notFoundDiv = (
   <div className='browser'>
@@ -114,9 +115,7 @@ export default function Browser({ model_name, record_name, tab_name }) {
     if (!view) {
       // we are told the model and record name, get the view
       yield invoke(requestView(model_name));
-      let x = yield awaitNextState();
-      console.log({x});
-      ({ view } = x);
+      ({ view } = yield awaitNextState());
     }
 
     if (!tab_name) {
@@ -158,7 +157,7 @@ export default function Browser({ model_name, record_name, tab_name }) {
   }, [])
 
   if (error) {
-    return <ErrorDiv error={error}/>;
+    return errorDiv;
   }
 
   if (mode === 'loading') {

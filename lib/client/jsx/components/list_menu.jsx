@@ -15,58 +15,42 @@ import * as React from 'react';
  * If there is a 'sections', 'items' is ignored.
  */
 
-export default class ListMenu extends React.Component{
+const ListSelection = ({documentId, documentTitle, documentName, item, select}) => 
+  <div className='list-selection'
+    title={ item[documentTitle || 'title'] }
+    onClick={ ()=> select(item[documentId || 'id']) }>{item[documentName || 'name']}</div>;
 
-  listSelection({id, title, name}, index){
-    return <div className={ 'list-selection' }
-        title={ title }
-        key={ 'list-'+id }
-        onClick={ ()=>this.props.select(id) }>{name}</div>;
-  }
-
-  listSection(section_name, section, id){
-    return (
-      <div className='list-selector-section' key={id}>
-
-        {section_name && <div className='list-selector-header'>{section_name}</div>}
-        {section.map((item, index) => this.listSelection(item, index))}
-      </div>
-    );
-  }
-
-  renderList(){
-    let {sections, items} = this.props;
-    if(sections){
-      return Object.keys(sections).map((section_name, index)=>{
-        return this.listSection(section_name, sections[section_name], index);
-      });
+const ListSection = ({section_name, items, ...props}) => 
+  <div className='list-selector-section'>
+    {section_name && <div className='list-selector-header'>{section_name}</div>}
+    {
+      items.map((item, index) => <ListSelection
+        key={ index }
+        item={item}
+        {...props} />)
     }
-    else if(items){
-      return this.listSection(null, items);
-    }
-    return null;
-  }
+  </div>;
 
-  renderCreate(){
-    let {name, create} = this.props;
-    if(!create) return null;
-
-    return (
-      <button onClick={()=>create()} className='list-selector-new-btn'>
+const ListMenu = ({name, create, sections, items, ...itemProps}) =>
+  <div className='list-selector-group'>
+    {
+      create && <button onClick={()=>create()} className='list-selector-new-btn'>
         <i className='fas fa-plus' aria-hidden='true' />
         {`new ${name}`}
       </button>
-    );
-  }
+    }
+    <div className='list-selector-panel'>
+      {
+        sections ? Object.keys(sections).map(
+          section_name=> <ListSection
+            key={section_name}
+            section_name={section_name}
+            items={sections[section_name]}
+            {...itemProps}
+          />
+        ) : items ? <ListSection items={items} {...itemProps} /> : null
+      }
+    </div>
+  </div>;
 
-  render() {
-    return (
-      <div className='list-selector-group'>
-        {this.renderCreate(name)}
-        <div className='list-selector-panel'>
-          {this.renderList()}
-        </div>
-      </div>
-    );
-  }
-}
+export default ListMenu;
