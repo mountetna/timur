@@ -1,63 +1,74 @@
 // Framework libraries.
 import * as React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 import DocumentWindow from '../document/document_window';
 import ManifestScript from './manifest_script';
-import ConsignmentView from './consignment_view';
+import ConsignmentView from 'etna-js/plots/components/consignment/consignment_view';
 import {
-  requestManifests, saveNewManifest, saveManifest,
-  copyManifest, deleteManifest, requestConsignments
-} from '../../actions/manifest_actions';
-import { pushLocation } from 'etna-js/actions/location_actions';
-import { getAllManifests } from '../../selectors/manifest_selector';
-import { selectConsignment, MD5 } from '../../selectors/consignment_selector';
+  requestManifests,
+  saveNewManifest,
+  saveManifest,
+  copyManifest,
+  deleteManifest,
+  requestConsignments
+} from 'etna-js/plots/actions/manifest_actions';
+import {pushLocation} from 'etna-js/actions/location_actions';
+import {getAllManifests} from '../../selectors/manifest_selector';
+import {
+  selectConsignment,
+  MD5
+} from 'etna-js/plots/selectors/consignment_selector';
 
 // Wrapper for consignment selection
 class ManifestWindow extends React.Component {
   runManifest() {
-    let { consignment, requestConsignments, document } = this.props;
-    if(!consignment) requestConsignments([document.script]);
+    let {consignment, requestConsignments, document} = this.props;
+    if (!consignment) requestConsignments([document.script]);
   }
 
   render() {
-    let { consignment } = this.props;
-    return <DocumentWindow
-      onRun={ consignment ? null : this.runManifest.bind(this) }
-      { ...this.props }
-    />
+    let {consignment} = this.props;
+    console.log(consignment);
+    return (
+      <DocumentWindow
+        onRun={consignment ? null : this.runManifest.bind(this)}
+        {...this.props}
+      />
+    );
   }
 }
 
 ManifestWindow = connect(
   // map state
-  (state = {}, {md5sum})=>({
+  (state = {}, {md5sum}) => ({
     consignment: md5sum && selectConsignment(state, md5sum)
   }),
 
   // map dispatch
-  { requestConsignments }
+  {requestConsignments}
 )(ManifestWindow);
 
 // Main component for viewing/editing manifests.
-class Manifests extends React.Component{
+class Manifests extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editing: false,
+      editing: false
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // load all manifests for the selector
     this.props.requestManifests();
   }
 
   componentDidUpdate() {
-    let { manifest_id, manifests } = this.props;
-    let { manifest } = this.state;
+    let {manifest_id, manifests} = this.props;
+    let {manifest} = this.state;
 
-    if (manifest_id && manifests && !manifest) this.selectManifest(manifest_id, false);
+    if (manifest_id && manifests && !manifest)
+      this.selectManifest(manifest_id, false);
   }
 
   create() {
@@ -65,16 +76,16 @@ class Manifests extends React.Component{
   }
 
   setManifest(manifest) {
-    this.selectManifest(manifest.id)
+    this.selectManifest(manifest.id);
   }
 
-  selectManifest(id, push=true) {
-    let { manifests, pushLocation } = this.props;
+  selectManifest(id, push = true) {
+    let {manifests, pushLocation} = this.props;
     let manifest;
 
-    switch(id) {
+    switch (id) {
       case 'new':
-        let date = new Date;
+        let date = new Date();
         manifest = {
           id: 0,
           access: 'private',
@@ -83,18 +94,18 @@ class Manifests extends React.Component{
           script: '',
           created_at: date.toString(),
           updated_at: date.toString()
-        }
+        };
         break;
       case null:
         manifest = null;
         break;
       default:
         // find it in the existing manifests
-        manifest = manifests && manifests.find(m=>m.id ==id);
+        manifest = manifests && manifests.find((m) => m.id == id);
         if (!manifest) return;
 
         // copy it so you don't modify the store
-        manifest = { ...manifest };
+        manifest = {...manifest};
         break;
     }
 
@@ -104,16 +115,17 @@ class Manifests extends React.Component{
       editing: id == 'new'
     });
 
-    if (push) pushLocation(
-      id == null ?
-      Routes.manifests_path(CONFIG.project_name) :
-      Routes.manifest_path(CONFIG.project_name, id)
-    );
+    if (push)
+      pushLocation(
+        id == null
+          ? Routes.manifests_path(CONFIG.project_name)
+          : Routes.manifest_path(CONFIG.project_name, id)
+      );
   }
 
-  updateField(field_name){
-    return (event)=>{
-      let { manifest, md5sum } = this.state;
+  updateField(field_name) {
+    return (event) => {
+      let {manifest, md5sum} = this.state;
       let new_md5sum;
 
       if (field_name == 'script') {
@@ -124,34 +136,36 @@ class Manifests extends React.Component{
         manifest[field_name] = event.target.value;
       }
       this.setState({manifest, md5sum: new_md5sum || md5sum});
-    }
+    };
   }
 
   saveManifest() {
-    let { manifest, editing } = this.state;
+    let {manifest, editing} = this.state;
     // A new manifest should have an id set to 0.
-    if(manifest.id <= 0)
-      this.props.saveNewManifest(manifest,this.setManifest.bind(this));
-    else
-      this.props.saveManifest(manifest);
+    if (manifest.id <= 0)
+      this.props.saveNewManifest(manifest, this.setManifest.bind(this));
+    else this.props.saveManifest(manifest);
 
     if (editing) this.toggleEdit();
   }
 
   copyManifest() {
-    let { manifest } = this.state;
+    let {manifest} = this.state;
     this.props.copyManifest(manifest, this.setManifest.bind(this));
   }
 
   deleteManifest() {
-    let { manifest } = this.state;
-    if(confirm('Are you sure you want to remove this manifest?')){
+    let {manifest} = this.state;
+    if (confirm('Are you sure you want to remove this manifest?')) {
       this.props.deleteManifest(manifest, () => this.selectManifest(0));
     }
   }
 
   revertManifest() {
-    let { manifest: { id }, editing } = this.state;
+    let {
+      manifest: {id},
+      editing
+    } = this.state;
 
     if (id > 0) this.selectManifest(id);
     else this.selectManifest(null);
@@ -159,36 +173,38 @@ class Manifests extends React.Component{
     if (editing) this.toggleEdit();
   }
 
-  toggleEdit(){
+  toggleEdit() {
     this.setState({
-      editing: (!this.state.editing)
+      editing: !this.state.editing
     });
   }
 
-  render(){
-    let { manifests, is_admin, component_name } = this.props;
-    let { manifest, md5sum, editing } = this.state;
+  render() {
+    let {manifests, is_admin, component_name} = this.props;
+    let {manifest, md5sum, editing} = this.state;
 
-    return(
+    return (
       <ManifestWindow
-        md5sum={ md5sum }
+        md5sum={md5sum}
         documentType='manifest'
-        editing={ editing }
-        document={ manifest }
+        editing={editing}
+        document={manifest}
         documents={manifests}
         onCreate={this.create.bind(this)}
         onSelect={this.selectManifest.bind(this)}
-        onUpdate={ this.updateField.bind(this) }
-        onEdit={ this.toggleEdit.bind(this) }
-        onCancel={ this.revertManifest.bind(this) }
-        onSave={ this.saveManifest.bind(this) }
-        onCopy={ this.copyManifest.bind(this) }
-        onRemove={ this.deleteManifest.bind(this) } >
+        onUpdate={this.updateField.bind(this)}
+        onEdit={this.toggleEdit.bind(this)}
+        onCancel={this.revertManifest.bind(this)}
+        onSave={this.saveManifest.bind(this)}
+        onCopy={this.copyManifest.bind(this)}
+        onRemove={this.deleteManifest.bind(this)}
+      >
         <ManifestScript
           script={manifest && manifest.script}
           is_editing={editing}
-          onChange={ this.updateField.bind(this)('script') }/>
-        <ConsignmentView md5sum={md5sum}/>
+          onChange={this.updateField.bind(this)('script')}
+        />
+        <ConsignmentView md5sum={md5sum} />
       </ManifestWindow>
     );
   }
@@ -196,12 +212,17 @@ class Manifests extends React.Component{
 
 export default connect(
   // map state
-  (state)=>({
+  (state) => ({
     manifests: getAllManifests(state)
   }),
   // map dispatch
   {
-    requestManifests, saveNewManifest, saveManifest, copyManifest, deleteManifest, requestConsignments,
+    requestManifests,
+    saveNewManifest,
+    saveManifest,
+    copyManifest,
+    deleteManifest,
+    requestConsignments,
     pushLocation
   }
 )(Manifests);

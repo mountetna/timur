@@ -30,7 +30,7 @@ import {
 } from '../../selectors/plot_selector';
 import {
   MD5
-} from '../../selectors/consignment_selector';
+} from 'etna-js/plots/selectors/consignment_selector';
 // the basic plotter interface
 //
 // basics:

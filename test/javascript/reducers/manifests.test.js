@@ -1,5 +1,5 @@
 import reducer from '../../../lib/client/jsx/reducers/manifests_reducer';
-import { manifestStore, manifest } from '../fixtures/manifests_store'
+import {manifestStore, manifest} from '../fixtures/manifests_store';
 
 describe('manifests reducer', () => {
   it('should return the initial state', () => {
@@ -7,11 +7,11 @@ describe('manifests reducer', () => {
   });
 
   it('should handle REMOVE_MANIFEST', () => {
-    const initialState = { ...manifestStore };
+    const initialState = {...manifestStore};
 
     const deletedManifestId = 9;
 
-    const expectedStore = { ...initialState };
+    const expectedStore = {...initialState};
     delete expectedStore[deletedManifestId];
 
     expect(
@@ -24,44 +24,45 @@ describe('manifests reducer', () => {
 
   it('should handle ADD_MANIFEST', () => {
     expect(
-      reducer({}, {
-        type: 'ADD_MANIFEST',
-        manifest: manifest
-      })
+      reducer(
+        {},
+        {
+          type: 'ADD_MANIFEST',
+          manifest: manifest
+        }
+      )
     ).toEqual({
       [manifest.id]: manifest
     });
   });
 
   it('should handle UPDATE_MANIFEST', () => {
-    const initialState = { ...manifestStore };
+    const initialState = {...manifestStore};
     const firstManifestId = Object.keys(initialState)[0];
     const updatedManifest = {
-     id:firstManifestId,
-     name:'changed',
-     description:'changed',
-     project:'changed',
-     access:'public',
-     data:{
-       elements:[
+      id: firstManifestId,
+      name: 'changed',
+      description: 'changed',
+      project: 'changed',
+      access: 'public',
+      data: {
+        elements: [
           {
-            name:"var2",
-            description:"",
-            script:"'var2'"
+            name: 'var2',
+            description: '',
+            script: "'var2'"
           }
         ]
       },
-     created_at:'2017-09-19T00:11:12.260Z',
-     updated_at:'2017-09-19T00:11:12.260Z',
-     user:{
-       name:'Darrell Abrau'
+      created_at: '2017-09-19T00:11:12.260Z',
+      updated_at: '2017-09-19T00:11:12.260Z',
+      user: {
+        name: 'Darrell Abrau'
       },
-     plots:[
-
-      ],
-     is_editable:true
+      plots: [],
+      is_editable: true
     };
-    const expectedStore = { ...initialState, [firstManifestId]: updatedManifest };
+    const expectedStore = {...initialState, [firstManifestId]: updatedManifest};
 
     expect(
       reducer(initialState, {
