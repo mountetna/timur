@@ -4,16 +4,16 @@ import ReactModal from 'react-modal';
 ReactModal.setAppElement('*'); // suppresses modal-related test warnings.
 
 global.Routes = {
-  manifests_fetch_path: (projectName) =>
+  fetch_manifests_path: (projectName) =>
     `http://localhost/${projectName}/manifests`,
-  manifests_destroy_path: (projectName, manifestId) =>
+  destroy_manifest_path: (projectName, manifestId) =>
     `http://localhost/${projectName}/manifests/destroy/${manifestId}`,
-  manifests_create_path: (projectName) =>
+  create_manifest_path: (projectName) =>
     `http://localhost/${projectName}/manifests/create`,
-  manifests_update_path: (projectName, manifestId) =>
+  update_manifest_path: (projectName, manifestId) =>
     `http://localhost/${projectName}/manifests/update/${manifestId}`,
   plots_fetch_path: (project_name) => `http://localhost/${project_name}/plots`,
-  view_path: (project_name, model_name) =>
+  get_view_path: (project_name, model_name) =>
     `http://localhost/${project_name}/view/${model_name}`,
   browse_model_path: (project_name, model_name, record_name) =>
     `http://localhost/${project_name}/browse/${model_name}/${record_name}`

@@ -35,7 +35,7 @@ describe('Browser', () => {
     const initialStubs = [
       stubUrl({
         verb: 'get',
-        url: Routes.view_path('labors', 'monster'),
+        url: Routes.get_view_path('labors', 'monster'),
         status: 200,
         response: {view: defaultView(models.monster.template)}
       })
