@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import DocumentWindow, { publicPrivateSections } from '../document/document_window';
+import DocumentWindow from '../document/document_window';
 import Dropdown from 'etna-js/components/inputs/dropdown';
 import ManifestScript from '../manifest/manifest_script';
 import PlotLayout from './plot_layout';
@@ -305,7 +305,7 @@ class Plotter extends React.Component {
       <DocumentWindow
         editing={editing}
         document={plot}
-        documents={publicPrivateSections(plots)}
+        documents={plots}
         documentType='plot'
         onUpdate={this.updateField.bind(this)}
         onEdit={this.toggleEdit.bind(this)}
