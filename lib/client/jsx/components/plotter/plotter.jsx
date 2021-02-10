@@ -85,10 +85,6 @@ const Chart = connect(
   </div>
 );
 
-const accessFilter = (access, documents)=>{
-  return documents.filter(m => m.access == access).sort((a,b) => a > b);
-};
-
 class Plotter extends React.Component {
   constructor(props) {
     super(props);
