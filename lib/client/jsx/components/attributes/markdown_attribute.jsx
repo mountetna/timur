@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 // Module imports.
-import { reviseDocument } from '../../actions/magma_actions';
+import { reviseDocument } from 'etna-js/actions/magma_actions';
 import MarkdownViewer from '../markdown_viewer';
 
 const MarkdownAttribute = ({ value, revised_value, mode,

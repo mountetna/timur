@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import ButtonBar from '../button_bar';
+import ButtonBar from 'etna-js/components/button_bar';
 
 const DocumentTitle = ({ name, editing, onChange, buttons }) => (
   <div className='document-title'>

@@ -10,14 +10,14 @@ import Browser from './components/browser/browser';
 import Plotter from './components/plotter/plotter';
 import RootView from 'etna-js/components/RootView';
 import TimurNav from './components/timur_nav';
-import Messages from './components/messages';
+import Messages from 'etna-js/components/messages';
 
-import {showMessages} from './actions/message_actions';
-import {updateLocation} from './actions/location_actions';
+import {showMessages} from 'etna-js/actions/message_actions';
+import {updateLocation} from 'etna-js/actions/location_actions';
 
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
-import {selectUser} from './selectors/user_selector';
+import {selectUser} from 'etna-js/selectors/user-selector';
 import {ModalDialogContainer} from "etna-js/components/ModalDialogContainer";
 import {Notifications} from "etna-js/components/Notifications";
 

@@ -44,6 +44,12 @@
     }
   }
 
+  .collection_item:nth-child(1),
+  .list_item:nth-child(1) {
+    display: inline-block;
+    width: 100%;
+  }
+
   .markdown {
     p {
       margin: 2px;
@@ -73,6 +79,9 @@
   input[type='text'].link_text {
     @include text_defaults;
     border-left: 1px solid rgba(forestgreen, 0.2);
+  }
+  input[type='checkbox'].text_box {
+    align-self: start;
   }
   label {
     margin-right: 1rem;
@@ -142,6 +151,9 @@
   &.file,
   &.file-collection {
     display: flex;
+    flex-direction: row;
+    justify-content: left;
+    
     .file-blank {
       color: gray;
     }

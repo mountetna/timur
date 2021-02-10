@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactRedux from 'react-redux';
 
 import MagmaLink from '../magma_link';
-import * as MessageActions from '../../actions/message_actions';
+import * as MessageActions from 'etna-js/actions/message_actions';
 import * as ManifestActions from '../../actions/manifest_actions';
 import * as ConsignmentSelector from '../../selectors/consignment_selector';
 

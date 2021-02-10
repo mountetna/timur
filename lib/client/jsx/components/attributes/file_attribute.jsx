@@ -1,6 +1,5 @@
 // Framework libraries.
 import React, {useState, useEffect, useRef} from 'react';
-import Modal from 'react-modal';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
@@ -10,9 +9,9 @@ import {
   selectUploads
 } from 'etna-js/selectors/directory-selector';
 import ListUpload from 'etna-js/upload/components/list-upload';
-import {STUB, TEMP, useFileInputActions} from '../../actions/file_actions';
-import {reviseDocument, finalizeUpload} from '../../actions/magma_actions';
-import ButtonBar from '../button_bar';
+import {STUB, TEMP, useFileInputActions} from 'etna-js/actions/file_actions';
+import {reviseDocument, finalizeUpload} from 'etna-js/actions/magma_actions';
+import ButtonBar from 'etna-js/components/button_bar';
 
 const COLUMNS = [
   {name: 'type', width: '60px'},
