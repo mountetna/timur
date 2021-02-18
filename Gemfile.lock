@@ -1,12 +1,12 @@
 GIT
   remote: https://github.com/mountetna/monoetna.git
-  revision: 608773af6c4936811241c048dc970011d4373276
-  branch: refs/artifacts/gem-etna/9e9d2746302e2e029a79d76870b04cf50aa876eb
+  revision: 71d2992a0b6437f41a32cfcd2d1fa23909e958ac
+  branch: refs/artifacts/gem-etna/f57d85374a85ffc6353f6cf488e0b5f7df6404d8
   specs:
-    etna (0.1.27)
+    etna (0.1.28)
       jwt
       multipart-post
-      net-http-persistent
+      nokogiri
       rack
       rollbar
 
@@ -24,7 +24,6 @@ GEM
     byebug (11.1.3)
     coderay (1.1.3)
     concurrent-ruby (1.1.7)
-    connection_pool (2.2.3)
     crack (0.4.4)
     database_cleaner (1.8.5)
     diff-lcs (1.4.4)
@@ -38,14 +37,15 @@ GEM
       concurrent-ruby (~> 1.0)
     jwt (2.2.2)
     method_source (1.0.0)
-    mini_portile2 (2.4.0)
+    mini_portile2 (2.5.0)
     minitest (5.14.2)
     multipart-post (2.1.1)
-    net-http-persistent (4.0.1)
-      connection_pool (~> 2.2)
     nio4r (2.5.4)
-    nokogiri (1.10.10)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.11.1)
+      mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
+    nokogiri (1.11.1-x86_64-linux)
+      racc (~> 1.4)
     pg (0.21.0)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -56,13 +56,14 @@ GEM
     public_suffix (4.0.6)
     puma (5.0.2)
       nio4r (~> 2.0)
+    racc (1.5.2)
     rack (2.2.3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rltk (3.0.1)
       ffi (>= 1.0.0)
       filigree (>= 0.2.0)
-    rollbar (3.1.1)
+    rollbar (3.1.2)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -113,4 +114,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.2.9
+   2.2.10
