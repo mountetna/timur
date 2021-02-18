@@ -7,7 +7,7 @@ import TimurUI from './timur_ui';
 import {timurStore} from './timur_store';
 import * as Cookies from 'etna-js/utils/cookies';
 
-class TimurApplication{
+class TimurApplication {
   constructor(props, container_id){
     // create the store
     this.createStore();
