@@ -28,16 +28,16 @@ end
 
 AUTH_USERS = {
   admin: {
-    email: 'hera@olympus.org', first: 'Hera', perm: 'a:labors'
+    email: 'hera@olympus.org', name: 'Hera', perm: 'a:labors'
   },
   editor: {
-    email: 'eurystheus@twelve-labors.org', first: 'Eurystheus', perm: 'e:labors' 
+    email: 'eurystheus@twelve-labors.org', name: 'Eurystheus', perm: 'e:labors' 
   },
   viewer: {
-    email: 'hercules@twelve-labors.org', first: 'Hercules', perm: 'v:labors' 
+    email: 'hercules@twelve-labors.org', name: 'Hercules', perm: 'v:labors' 
   },
   non_user: {
-    email: 'nessus@centaurs.org', first: 'Nessus', perm: ''
+    email: 'nessus@centaurs.org', name: 'Nessus', perm: ''
   }
 }
 
@@ -135,7 +135,7 @@ FactoryBot.define do
     AUTH_USERS.each do |user_type, template|
       trait user_type do
         email { template[:email] }
-        name { "#{template[:first]} #{template[:last]}" }
+        name { template[:name] }
       end
     end
   end

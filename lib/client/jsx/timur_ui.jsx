@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {findRoute, setRoutes} from './router';
+import { findRoute, setRoutes } from 'etna-js/dispatchers/router';
 
 import Modal from 'react-modal';
 
