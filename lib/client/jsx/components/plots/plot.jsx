@@ -1,18 +1,11 @@
 // Framework libraries.
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { selectPlot } from '../../selectors/plot_selector';
-import { plotData } from '../../plots/plot_script';
-import { MD5, selectConsignment } from '../../selectors/consignment_selector';
-import { requestConsignments } from '../../actions/manifest_actions';
-import XYPlot from './xy_plot/xy_plot';
-import CategoryPlot from './category_plot/category_plot';
-
-export const empty = (i) => i==null||i==undefined||i=='';
-
-export const validDomain = (min,max,vector) =>
-  !empty(min) && !empty(max) ? [ parseFloat(min), parseFloat(max) ] :
-    vector.values;
+import { plotData } from 'etna-js/plots/plot_script';
+import { MD5, selectConsignment } from 'etna-js/plots/selectors/consignment_selector';
+import { requestConsignments } from 'etna-js/plots/actions/manifest_actions';
+import XYPlot from 'etna-js/plots/components/xy_plot/xy_plot';
+import CategoryPlot from 'etna-js/plots/components/category_plot/category_plot';
 
 class Plot extends React.Component {
   componentDidMount() {

@@ -9,7 +9,7 @@ import PlotLayout from './plot_layout';
 import PlotConfig from './plot_config';
 import PlotSeries from './plot_series';
 import Plot from '../plots/plot';
-import { plotTypes, plotConfig } from '../../plots/plot_config';
+import { plotTypes, plotConfig } from 'etna-js/plots/plot_config';
 import Resize from '../resize';
 
 import ErrorBoundary from '../error_boundary';
@@ -30,7 +30,7 @@ import {
 } from '../../selectors/plot_selector';
 import {
   MD5
-} from '../../selectors/consignment_selector';
+} from 'etna-js/plots/selectors/consignment_selector';
 // the basic plotter interface
 //
 // basics:
