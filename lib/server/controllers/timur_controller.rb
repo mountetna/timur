@@ -30,7 +30,7 @@ class Timur
 
     def current_user
       @current_user ||= User.find_or_create(email: @user.email) do |user|
-        user.name = "#{@user.first} #{@user.last}"
+        user.name = @user.name
       end.tap do |cuser|
         cuser.etna_user = @user
       end

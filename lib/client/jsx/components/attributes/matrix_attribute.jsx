@@ -1,5 +1,5 @@
 import React from 'react'
-import TableViewer from '../table_viewer';
+import TableViewer from 'etna-js/components/table_viewer';
 
 export default class MatrixAttribute extends React.Component {
   constructor(props) {

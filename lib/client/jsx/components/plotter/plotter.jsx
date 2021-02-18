@@ -2,14 +2,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import DocumentWindow, { publicPrivateSections } from '../document/document_window';
+import DocumentWindow from '../document/document_window';
 import Dropdown from 'etna-js/components/inputs/dropdown';
 import ManifestScript from '../manifest/manifest_script';
 import PlotLayout from './plot_layout';
 import PlotConfig from './plot_config';
 import PlotSeries from './plot_series';
 import Plot from '../plots/plot';
-import { plotTypes, plotConfig } from '../../plots/plot_config';
+import { plotTypes, plotConfig } from 'etna-js/plots/plot_config';
 import Resize from '../resize';
 
 import ErrorBoundary from '../error_boundary';
@@ -30,7 +30,7 @@ import {
 } from '../../selectors/plot_selector';
 import {
   MD5
-} from '../../selectors/consignment_selector';
+} from 'etna-js/plots/selectors/consignment_selector';
 // the basic plotter interface
 //
 // basics:
@@ -84,10 +84,6 @@ const Chart = connect(
     </ErrorBoundary>
   </div>
 );
-
-const accessFilter = (access, documents)=>{
-  return documents.filter(m => m.access == access).sort((a,b) => a > b);
-};
 
 class Plotter extends React.Component {
   constructor(props) {
@@ -305,7 +301,7 @@ class Plotter extends React.Component {
       <DocumentWindow
         editing={editing}
         document={plot}
-        documents={publicPrivateSections(plots)}
+        documents={plots}
         documentType='plot'
         onUpdate={this.updateField.bind(this)}
         onEdit={this.toggleEdit.bind(this)}

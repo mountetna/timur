@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import TableViewer from './table_viewer';
+import TableViewer from 'etna-js/components/table_viewer';
 
 import {
   selectTemplate,

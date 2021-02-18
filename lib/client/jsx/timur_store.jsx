@@ -12,7 +12,7 @@ import user from 'etna-js/reducers/user_reducer';
 import search from './reducers/search_reducer';
 import manifestsUI from './reducers/manifest_ui_reducer';
 import manifests from './reducers/manifests_reducer';
-import consignments from './reducers/consignments_reducer';
+import consignments from 'etna-js/plots/reducers/consignments_reducer';
 import exchanges from 'etna-js/reducers/exchanges_reducer';
 import predicates from './reducers/predicates_reducer';
 import location from 'etna-js/reducers/location_reducer';
