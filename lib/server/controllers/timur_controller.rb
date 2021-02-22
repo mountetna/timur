@@ -20,6 +20,7 @@ class Timur
         janus_host: Timur.instance.config(:janus)&.dig(:host),
         magma_host: Timur.instance.config(:magma)&.dig(:host),
         metis_host: Timur.instance.config(:metis)&.dig(:host),
+        vulcan_host: Timur.instance.config(:vulcan)&.dig(:host),
         metis_uid_name: Timur.instance.config(:metis_uid_name)
       }.to_json
     end
