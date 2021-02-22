@@ -1,26 +1,39 @@
-
 // Framework libraries.
 import * as React from 'react';
 
 import DocumentView from './document_view';
 import ListMenu from '../list_menu';
 
-const accessFilter = (access, documents)=>{
-  return documents.filter(m => m.access == access).sort((a,b) => a > b);
+
+const groupByFeature = (documents, featureName) => {
+  return Object.values(documents).reduce((res, x) => {
+  let key = x[featureName];
+  if (!res[key]) res[key] = [x];
+  else res[key].push(x);
+  return res;
+  }, {});
 };
 
-export default class DocumentWindow extends React.Component{
-  render() {
-    let {
-      documentType, document, documents, editing, children,
-      onCreate, onSelect, onEdit, onCancel,
-      onRun, onSave, onCopy, onRemove, onUpdate
-    } = this.props;
+const DocumentWindow = (props) => {
+  let {
+    documentType, document, documents, editing, children,
+    onCreate, onSelect, onEdit, onCancel,
+    onRun, onSave, onCopy, onRemove, onUpdate,
+    documentTitle, documentId, documentName
+  } = props;
+  let groupKey;
 
-    let sections = {
-      Public: accessFilter('public', documents),
-      Private: accessFilter('private', documents)
-    };
+  switch (documentType) {
+    case 'view':
+      groupKey = 'project_name';
+      break;
+    default:
+      groupKey = 'access';
+      break;
+  }
+
+
+  let sections = groupByFeature(documents || [], groupKey);
 
     return(
       <div className={ `document-window ${documentType}-window` }>
@@ -28,10 +41,16 @@ export default class DocumentWindow extends React.Component{
           <ListMenu name={ documentType }
             create={ onCreate }
             select={ onSelect }
-            sections={ sections }/>
+            sections={ sections }
+            items={ Array.isArray(documents) ? documents : null }
+            documentId={documentId}
+            documentTitle={documentTitle}
+            documentName={documentName}
+          />
         </div>
         <div className='right-column-group'>
           <DocumentView
+            documentName={documentName}
             editing={ editing }
             onEdit={ onEdit }
             onCancel={ onCancel }
@@ -46,5 +65,5 @@ export default class DocumentWindow extends React.Component{
         </div>
       </div>
     );
-  }
 }
+export default DocumentWindow;

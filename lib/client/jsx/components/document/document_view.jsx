@@ -19,7 +19,7 @@ export default class DocumentView extends React.Component {
   }
 
   render(){
-    let { document, onUpdate, editing, children } = this.props;
+    let { document, documentName, onUpdate, editing, children } = this.props;
     let buttons = this.getButtons();
 
     if (!document) return null;
@@ -28,9 +28,9 @@ export default class DocumentView extends React.Component {
       <div className='document-view'>
         <div className='document-view-header'>
           <DocumentTitle
-            name={document.name}
+            name={document[documentName]}
             editing={editing}
-            onChange={onUpdate('name')}
+            onChange={onUpdate(documentName)}
             buttons={buttons} />
           <DocumentDetails
             document={ document }

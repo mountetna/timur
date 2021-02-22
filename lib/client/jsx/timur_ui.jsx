@@ -11,6 +11,7 @@ import Plotter from './components/plotter/plotter';
 import RootView from 'etna-js/components/RootView';
 import TimurNav from './components/timur_nav';
 import Messages from 'etna-js/components/messages';
+import ViewEditor from './components/view_editor/view_editor';
 
 import {showMessages} from 'etna-js/actions/message_actions';
 import {updateLocation} from 'etna-js/actions/location_actions';
@@ -18,8 +19,8 @@ import {updateLocation} from 'etna-js/actions/location_actions';
 import ModelMap from './components/model_map';
 import Search from './components/search/search';
 import {selectUser} from 'etna-js/selectors/user-selector';
-import {ModalDialogContainer} from "etna-js/components/ModalDialogContainer";
-import {Notifications} from "etna-js/components/Notifications";
+import {ModalDialogContainer} from 'etna-js/components/ModalDialogContainer';
+import {Notifications} from 'etna-js/components/Notifications';
 
 const ROUTES = [
   {
@@ -85,6 +86,18 @@ const ROUTES = [
     template: ':project_name/plot/:plot_id',
     component: Plotter,
     mode: 'plots'
+  },
+  {
+    name: 'views',
+    template: ':project_name/views',
+    component: ViewEditor,
+    mode: 'view_editor'
+  },
+  {
+    name: 'curr_view',
+    template: ':project_name/view/:view_id',
+    component: ViewEditor,
+    mode: 'view_editor'
   }
 ];
 

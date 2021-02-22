@@ -20,6 +20,7 @@ import {
   MD5
 } from 'etna-js/plots/selectors/consignment_selector';
 
+
 // Wrapper for consignment selection
 class ManifestWindow extends React.Component {
   runManifest() {

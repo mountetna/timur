@@ -3,6 +3,25 @@ class Plot < Sequel::Model
   many_to_one :user
   many_to_one :manifest
 
+  def self.fetch_params(params)
+    (
+      Sequel[user: params[:user]] |
+      Sequel[access: [ 'public', 'view' ]]
+    ) &
+    Sequel[project_name: params[:project_name]]
+  end
+
+  def self.edit_params(params)
+    edit_params = params.slice(
+      :project_name, :name, :script, :plot_type,
+      :configuration, :description, :user
+    )
+    if params[:access] && params[:user].is_admin?(params[:project_name])
+      edit_params[:access] = params[:access]
+    end
+    edit_params
+  end
+
   def validate
     super
     validates_presence :name
@@ -21,7 +40,7 @@ class Plot < Sequel::Model
   end
 
   def is_editable?(other_user)
-    other_user == user || other_user.is_admin?(project)
+    other_user == user || other_user.is_admin?(project_name)
   end
 
   EDITABLE_ATTRIBUTES = [
@@ -40,7 +59,7 @@ class Plot < Sequel::Model
 
   def to_hash
     [ :id, :name, :access, :description, :configuration, :created_at,
-      :plot_type, :project, :script ].map do |key|
+      :plot_type, :project_name, :script ].map do |key|
       [ key, self[key] ]
     end.to_h.merge(
       updated_at: self.updated_at.iso8601,

@@ -27,7 +27,6 @@ x-base-etna-service: &base-etna-service
     - 'janus.development.local:172.16.238.10'
     - 'timur.development.local:172.16.238.10'
     - 'rtemis.development.local:172.16.238.10'
-    - 'archimedes.development.local:172.16.238.10'
     - 'polyphemus.development.local:172.16.238.10'
 
 x-base-etna-services: &base-etna-services
@@ -46,7 +45,7 @@ x-base-etna-services: &base-etna-services
       <<: *base-etna-env
       RUN_NPM_INSTALL: "true"
       SKIP_RUBY_SETUP: "true"
-    command: npm run webpack
+    command: npm run webpack-dev
 
   "timur_db": &base-etna-db
     # The application specific database.  Overwrite with development-psql-9 to use psql 9 instead.

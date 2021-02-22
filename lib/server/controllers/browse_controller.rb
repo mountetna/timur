@@ -1,5 +1,3 @@
-require_relative '../view_update'
-
 class BrowseController < Timur::Controller
   def view
     view = View.where(project_name: @params[:project_name], model_name: @params[:model_name]).first
@@ -19,6 +17,15 @@ class BrowseController < Timur::Controller
     view.update(document: @params[:document])
 
     success_json(view.to_hash)
+  end
+
+
+  def fetch_view
+
+
+    success_json(
+      View.all.map(&:to_hash)
+      )
   end
 end
 

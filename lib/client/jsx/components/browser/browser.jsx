@@ -76,7 +76,6 @@ function camelize(str) {
 }
 
 export default function Browser({ model_name, record_name, tab_name }) {
-  console.log("rendered...")
   const invoke = useActionInvoker();
   const browserState = useReduxState(
     browserStateOf({ model_name, record_name, tab_name })

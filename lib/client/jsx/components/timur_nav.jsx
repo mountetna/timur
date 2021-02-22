@@ -39,6 +39,7 @@ const getTabs = () => ({
   map: Routes.map_path(CONFIG.project_name),
   manifests: Routes.manifests_path(CONFIG.project_name),
   plots: Routes.plots_path(CONFIG.project_name),
+  'views': Routes.views_path(CONFIG.project_name),
   help: 'https://mountetna.github.io/timur.html'
 });
 

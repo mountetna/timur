@@ -14,27 +14,6 @@ class PlotsController < Timur::Controller
     success_json(plot: plot.to_hash)
   end
 
-  def fetch
-    # Pull the plots from the database.
-    plots = Plot.where(
-      (
-        Sequel[user: current_user] |
-        Sequel[access: [ 'public', 'view' ]]
-      ) &
-      Sequel[project: @params[:project_name]]
-    ).all
-
-    success_json(
-      plots: plots.map(&:to_hash)
-    )
-  end
-
-  def get
-    plot = Plot[@params[:id]]
-    raise Etna::BadRequest, 'No such plot!' unless plot
-    success_json(plot: plot.to_hash)
-  end
-
   def update
     plot = Plot[@params[:id]]
     raise Etna::BadRequest, 'No such plot!' unless plot
