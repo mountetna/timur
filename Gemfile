@@ -14,7 +14,6 @@ gem 'pg', '~> 0.21'
 gem 'sequel', '4.49.0'
 
 gem 'puma', '5.0.2'
-gem 'nokogiri'
 gem 'concurrent-ruby'
 
 group :development, :test do
