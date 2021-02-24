@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # etna application/server gem
-gem 'etna', git: 'https://github.com/mountetna/monoetna.git', branch: 'refs/artifacts/gem-etna/60667019a69dda8b6246a241d9962b717081b9bd'
+gem 'etna', git: 'https://github.com/mountetna/monoetna.git', branch: 'refs/artifacts/gem-etna/c5b3582280310610a86b6fe9945543a7d9a5f820'
 
 # provides lexer/parser
 gem 'rltk'
@@ -14,7 +14,6 @@ gem 'pg', '~> 0.21'
 gem 'sequel', '4.49.0'
 
 gem 'puma', '5.0.2'
-gem 'nokogiri'
 gem 'concurrent-ruby'
 
 group :development, :test do
