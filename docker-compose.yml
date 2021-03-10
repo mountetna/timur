@@ -1,9 +1,9 @@
 
 version: "3.4"
 
-x-base-etna-service: &base-etna-service
-  # Base configuration used by most etna services.
-  image: etna-base
+x-base-etna-service:
+  &base-etna-service # Base configuration used by most etna services.
+  image: etna-base-dev
   volumes: &base-etna-service-volumes
     - .:/app:delegated
     - timur-app-gems:/app/vendor/bundle:rw
@@ -14,8 +14,8 @@ x-base-etna-service: &base-etna-service
     - timur-opt-dir:/usr/opt:rw
     - ../etna:/etna:delegated
   environment: &base-etna-env
-    "TIMUR_ENV": "development"
-    APP_NAME: "timur"
+    'TIMUR_ENV': 'development'
+    APP_NAME: 'timur'
   entrypoint: /entrypoints/development.sh
 
   networks:
@@ -27,53 +27,53 @@ x-base-etna-service: &base-etna-service
     - 'janus.development.local:172.16.238.10'
     - 'timur.development.local:172.16.238.10'
     - 'rtemis.development.local:172.16.238.10'
+    - 'archimedes.development.local:172.16.238.10'
     - 'polyphemus.development.local:172.16.238.10'
 
-x-base-etna-services: &base-etna-services
-  # Default list of services an etna app may have.
-  "timur_app": &base-etna-app
-    # The ruby webserver
+x-base-etna-services:
+  &base-etna-services # Default list of services an etna app may have.
+  'timur_app': &base-etna-app # The ruby webserver
     <<: *base-etna-service
     command: ./bin/puma.sh
     depends_on:
-      - "timur_db"
+      - 'timur_db'
 
-  "timur_webpack": &base-etna-webpack
-    # The ruby webpack server watching for changes
+  'timur_webpack':
+    &base-etna-webpack # The ruby webpack server watching for changes
     <<: *base-etna-service
     environment:
       <<: *base-etna-env
-      RUN_NPM_INSTALL: "true"
-      SKIP_RUBY_SETUP: "true"
-    command: npm run webpack-dev
+      RUN_NPM_INSTALL: 'true'
+      SKIP_RUBY_SETUP: 'true'
+    command: npm run webpack
 
-  "timur_db": &base-etna-db
-    # The application specific database.  Overwrite with development-psql-9 to use psql 9 instead.
+  'timur_db':
+    &base-etna-db # The application specific database.  Overwrite with development-psql-9 to use psql 9 instead.
     image: development-psql
     volumes:
       - timur-db-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: "timur_development"
+      POSTGRES_DB: 'timur_development'
       POSTGRES_PASSWORD: password
       POSTGRES_USER: developer
-      APP_NAME: "timur"
-    container_name: "timur_db_1"
+      APP_NAME: 'timur'
+    container_name: 'timur_db_1'
 
-  "timur_app_fe": &base-etna-fe
-    # The application level apache frontend serving static assets, data, and proxying the main app.
+  'timur_app_fe':
+    &base-etna-fe # The application level apache frontend serving static assets, data, and proxying the main app.
     image: etna-apache
     volumes:
       - timur-public-dir:/app/public:ro
       - timur-opt-dir:/usr/opt:ro
-      - ../docker/etna-base/entrypoints:/entrypoints:ro
+      - ../docker/etna-base-dev/entrypoints:/entrypoints:ro
     depends_on:
-      - "timur_app"
+      - 'timur_app'
     entrypoint: /entrypoints/development.sh
-    command: ["httpd", "-DFOREGROUND"]
+    command: ['httpd', '-DFOREGROUND']
     environment:
-      SKIP_BUILD: "1"
-      WAIT_FOR_APP: "1"
-      APP_NAME: "timur"
+      SKIP_BUILD: '1'
+      WAIT_FOR_APP: '1'
+      APP_NAME: 'timur'
 
 volumes:
   timur-db-data:
