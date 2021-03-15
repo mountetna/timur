@@ -44,7 +44,7 @@ GEM
     mini_portile2 (2.5.0)
     minitest (5.14.2)
     multipart-post (2.1.1)
-    nio4r (2.5.4)
+    nio4r (2.5.7)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
@@ -58,7 +58,7 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     public_suffix (4.0.6)
-    puma (5.0.2)
+    puma (5.2.2)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -109,7 +109,7 @@ DEPENDENCIES
   pg (~> 0.21)
   pry
   pry-byebug
-  puma (= 5.0.2)
+  puma (>= 5.0.2)
   rack-test
   rltk
   rspec
@@ -118,4 +118,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.2.11
+   2.2.13
