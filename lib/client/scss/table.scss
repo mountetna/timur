@@ -1,11 +1,11 @@
-@import "globals";
+@import 'globals';
 
 .table-viewer {
   border-spacing: 0;
   height: 100%;
+  overflow-x: auto;
 
   .pager {
-
     display: flex;
     padding: 5px;
     border-bottom: 1px solid #ccc;
@@ -93,7 +93,7 @@
 
     &:hover {
       .resizer {
-      	background: rgba(forestgreen,0.1);
+        background: rgba(forestgreen, 0.1);
       }
     }
 
@@ -105,72 +105,10 @@
       top: 0;
       z-index: 1;
       /* prevents from scrolling while dragging on touch devices */
-      touch-action :none;
+      touch-action: none;
 
       &.isResizing {
-        background: rgba(forestgreen,0.2);
-      }
-    }
-  }
-}
-
-.tarble-viewer {
-  font-family: $value_font;
-  overflow: auto;
-
-  thead {
-    box-shadow: none;
-    border-top: thin-rule(0.4);
-    font-family: $body_font;
-      border-bottom: 3px solid forestgreen;
-    tr {
-      text-align: left;
-      th {
-        padding: 2px 4px;
-        border-right: thin-rule(0.4);
-      }
-    }
-  }
-
-  tbody {
-    overflow: unset;
-  }
-
-  .-pagination {
-    font-size: 0.75em;
-    justify-content: flex-start;
-    .-previous,.-next {
-      flex: 0;
-      display: flex;
-      align-items: center;
-      font-size: 25px;
-      padding: 0px 5px;
-
-      &:hover {
-        color: limegreen;
-        background-color: rgba(limegreen, 0.3);
-      }
-
-    }
-    .-center {
-      flex: 0;
-      padding: 0px 50px;
-      input {
-        padding: 2px;
-        border-radius: 1px;
-        border: 1px solid $input_border_color;
-        background: $input_background_color;
-      }
-    }
-    box-shadow: none;
-    border-top: none;
-    padding: 0px;
-  }
-  tbody {
-    tr {
-      border-bottom: thin-rule(0.3);
-      td {
-        border-right: thin-rule(0.3);
+        background: rgba(forestgreen, 0.2);
       }
     }
   }
