@@ -70,39 +70,39 @@ exports[`FileAttribute renders the button bar while editing 1`] = `
     className="file-buttons"
   >
     <span
-      className="icon-grp fa-stack fa-fw"
+      className="icon-grp icon-grp-upload  fa-stack fa-fw"
       onClick={[Function]}
       title="Upload a file from your computer"
     >
       <i
-        className="icon upload upload fa fa-2x fa-upload"
+        className="icon upload  upload fa fa-2x fa-upload"
       />
     </span>
     <span
-      className="icon-grp fa-stack fa-fw"
+      className="icon-grp icon-grp-cloud  fa-stack fa-fw"
       onClick={[Function]}
       title="Link a file from Metis"
     >
       <i
-        className="icon cloud cloud fa fa-2x fa-cloud"
+        className="icon cloud  cloud fa fa-2x fa-cloud"
       />
     </span>
     <span
-      className="icon-grp fa-stack fa-fw"
+      className="icon-grp icon-grp-stub  fa-stack fa-fw"
       onClick={[Function]}
       title="Mark this file as blank"
     >
       <i
-        className="icon stub meh-blank fa fa-2x fa-meh-blank"
+        className="icon stub  meh-blank fa fa-2x fa-meh-blank"
       />
     </span>
     <span
-      className="icon-grp fa-stack fa-fw"
+      className="icon-grp icon-grp-remove  fa-stack fa-fw"
       onClick={[Function]}
       title="Remove this file link"
     >
       <i
-        className="icon remove trash-alt fa fa-2x fa-trash-alt"
+        className="icon remove  trash-alt fa fa-2x fa-trash-alt"
       />
     </span>
   </div>
@@ -130,10 +130,10 @@ exports[`FileAttribute renders upload meter and controls when uploading 1`] = `
       }
     >
       <span
-        className="icon-grp fa-stack fa-fw"
+        className="icon-grp   fa-stack fa-fw"
       >
         <i
-          className="icon undefined upload fa fa-2x fa-upload"
+          className="icon undefined  upload fa fa-2x fa-upload"
         />
       </span>
     </div>
@@ -186,10 +186,10 @@ exports[`FileAttribute renders upload meter and controls when uploading 1`] = `
           className="upload-meter-status"
         >
           <span
-            className="icon-grp fa-stack fa-fw"
+            className="icon-grp icon-grp-active  fa-stack fa-fw"
           >
             <i
-              className="icon active upload fa fa-2x fa-upload"
+              className="icon active  upload fa fa-2x fa-upload"
             />
           </span>
         </div>
