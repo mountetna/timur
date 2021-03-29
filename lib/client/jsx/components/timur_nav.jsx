@@ -6,7 +6,7 @@ import Nav from 'etna-js/components/Nav';
 import IdentifierSearch from './identifier_search';
 import Link from 'etna-js/components/link';
 import {selectUser} from 'etna-js/selectors/user-selector';
-import {isAdmin, parseToken} from 'etna-js/utils/janus';
+import {isAdmin} from 'etna-js/utils/janus';
 
 const Halo = ({radius}) =>
   <div className="halo">
