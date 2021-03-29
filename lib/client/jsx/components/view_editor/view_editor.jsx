@@ -113,7 +113,7 @@ const ViewEditor = ({view_id}) => {
 
   const onDelete = () => {
     if(confirm('Are you sure you want to remove this view?')){
-      deleteView(view, () => selectView(0))(dispatch);
+      deleteView(view, () => selectView(null))(dispatch);
     }
   }
   const toggleEdit = () => {
