@@ -6,7 +6,7 @@ import { Controlled as CodeMirror } from 'react-codemirror2';
 function ViewScript(props) {
 
   let { is_editing, onChange, script } = props;
-  let className = is_editing ? 'manifest-script editing' : 'manifest-script';
+  let className = is_editing ? 'manifest-script editing view-editor' : 'manifest-script view-editor';
   return (
       <div className={className}>
 
