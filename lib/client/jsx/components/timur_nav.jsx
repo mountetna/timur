@@ -6,7 +6,7 @@ import Nav from 'etna-js/components/Nav';
 import IdentifierSearch from './identifier_search';
 import Link from 'etna-js/components/link';
 import {selectUser} from 'etna-js/selectors/user-selector';
-import {useReduxState} from 'etna-js/hooks/useReduxState';
+import {isAdmin, parseToken} from 'etna-js/utils/janus';
 
 const Halo = ({radius}) =>
   <div className="halo">
@@ -33,20 +33,27 @@ const Logo = connect(({exchanges}) => ({exchanges}))(({exchanges}) =>
   </div>
 );
 
-const getTabs = () => ({
-  browse: Routes.browse_path(CONFIG.project_name),
-  search: Routes.search_path(CONFIG.project_name),
-  map: Routes.map_path(CONFIG.project_name),
-  manifests: Routes.manifests_path(CONFIG.project_name),
-  plots: Routes.plots_path(CONFIG.project_name),
-  'views': Routes.views_path(CONFIG.project_name),
-  help: 'https://mountetna.github.io/timur.html'
-});
+const getTabs = (user) => {
+  let tabs = {
+    browse: Routes.browse_path(CONFIG.project_name),
+    search: Routes.search_path(CONFIG.project_name),
+    map: Routes.map_path(CONFIG.project_name),
+    manifests: Routes.manifests_path(CONFIG.project_name),
+    plots: Routes.plots_path(CONFIG.project_name),
+    help: 'https://mountetna.github.io/timur.html'
+  }
 
-const ModeBar = ({mode}) =>
+  if (isAdmin(user, CONFIG.project_name)) {
+    tabs['views'] = Routes.views_path(CONFIG.project_name);
+  }
+
+  return tabs;
+};
+
+const ModeBar = ({mode, user}) =>
   <div id='nav'>
     {
-      Object.entries(getTabs()).map(([tab_name, route]) =>
+      Object.entries(getTabs(user)).map(([tab_name, route]) =>
         <div key={tab_name}
           className={`nav_tab ${mode == tab_name ? 'selected' : ''}`}>
           <Link link={route}>{tab_name}</Link>
@@ -58,7 +65,7 @@ const ModeBar = ({mode}) =>
 const TimurNav = ({mode, user}) =>
   <Nav user={user} logo={Logo} app='timur'>
     {mode !== 'home' && <IdentifierSearch />}
-    {mode !== 'home' && <ModeBar mode={mode}/>}
+    {mode !== 'home' && <ModeBar mode={mode} user={user} />}
   </Nav>;
 
 export default connect((state) => ({
