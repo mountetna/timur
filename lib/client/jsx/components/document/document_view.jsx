@@ -8,10 +8,12 @@ import { buttonsWithCallbacks } from 'etna-js/components/button_bar';
 
 export default class DocumentView extends React.Component {
   getButtons() {
-    let { editing } = this.props;
+    let { editing, canSave } = this.props;
 
     return buttonsWithCallbacks(editing ?
-      [ 'run', 'save', 'cancel' ]
+      canSave ?
+        [ 'run', 'save', 'cancel' ]
+        : [ 'run', 'cancel' ]
       :
       [ 'run', 'remove', 'copy', 'edit' ],
       this.props

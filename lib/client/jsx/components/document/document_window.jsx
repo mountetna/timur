@@ -19,7 +19,8 @@ const DocumentWindow = (props) => {
     documentType, document, documents, editing, children,
     onCreate, onSelect, onEdit, onCancel,
     onRun, onSave, onCopy, onRemove, onUpdate,
-    documentTitle, documentId, documentName
+    documentTitle, documentId, documentName,
+    canSave
   } = props;
   let groupKey;
 
@@ -59,7 +60,8 @@ const DocumentWindow = (props) => {
             onCopy={ onCopy }
             onRemove={ onRemove }
             onUpdate={ onUpdate }
-            document={ document } >
+            document={ document }
+            canSave={ null == canSave ? true : canSave } >
             { children }
           </DocumentView>
         </div>
