@@ -86,9 +86,13 @@ const ViewEditor = ({view_id}) => {
 
   const create = () => selectView('new', true);
 
-  const numberLintingErrors = (value) => {
+  const hasLintingErrors = (value) => {
     window.JSHINT(value);
-    return JSHINT.data().errors.filter((e) => 'E' === e.code[0]).length;
+
+    return (
+      JSHINT.data().errors &&
+      JSHINT.data().errors.length > 0
+    );
   }
 
   const updateField = (field_name) => (event) => {
@@ -96,8 +100,7 @@ const ViewEditor = ({view_id}) => {
       // the code editor does not emit an event, just the new value
       view.document = event;
       
-      // Let you save with warnings...
-      setCanSave(numberLintingErrors(event) === 0);
+      setCanSave(!hasLintingErrors(event));
     } else {
       view[field_name] = event.target.value;
     }
