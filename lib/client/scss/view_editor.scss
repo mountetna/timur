@@ -1,3 +1,6 @@
+@import '~codemirror/lib/codemirror.css';
+@import '~codemirror/addon/lint/lint.css';
+
 .view-editor {
   .CodeMirror {
     height: 75vh;
