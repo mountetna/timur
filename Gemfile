@@ -23,6 +23,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'webmock'
   gem 'factory_bot'
-  gem 'database_cleaner'
+  gem 'database_cleaner', '1.8.0'
   gem 'rack-test', require: "rack/test"
 end
