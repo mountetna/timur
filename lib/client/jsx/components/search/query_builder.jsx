@@ -56,7 +56,7 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
       }
 
       return `${attribute}${operator}${operand}`;
-    }).join(" "))
+    }))
   }, [setFilterString, filtersState]);
 
   const onOpenAttributeFilter = () => {

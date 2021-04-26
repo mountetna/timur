@@ -13,7 +13,6 @@ import {
 import {
   selectSearchCache,
   selectSearchAttributeNames,
-  selectSearchFilterParams,
   selectSearchFilterString,
   selectSearchShowDisconnected,
   selectSelectedModel,
@@ -163,7 +162,6 @@ export default connect(
     display_attributes: selectSortedDisplayAttributeNames(state),
     filter_string: selectSearchFilterString(state),
     show_disconnected: selectSearchShowDisconnected(state),
-    filter_params: selectSearchFilterParams(state),
     magma_state: state.magma
   }),
   {

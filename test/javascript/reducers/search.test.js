@@ -6,7 +6,7 @@ import {
   SET_SEARCH_PAGE_SIZE,
   SET_SEARCH_ATTRIBUTE_NAMES,
   SET_FILTER_STRING,
-  CLEAR_FILTER_STRING,
+  CLEAR_FILTER_STRING
 } from '../../../lib/client/jsx/actions/search_actions';
 
 describe('search reducer', () => {
@@ -153,13 +153,12 @@ describe('search reducer', () => {
     expect(
       reducer(
         {
-          filter_params: [{attribute: 'species', operator: '==', value: 'lion'}]
+          filter_string: ['something=else']
         },
         {type: SET_FILTER_STRING, filter_string: 'all'}
       )
     ).toEqual({
-      filter_string: 'all',
-      filter_params: null
+      filter_string: 'all'
     });
   });
 
