@@ -53,6 +53,9 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
           operand = `.*${escapeRegExp(operand)}`;
           operator = '~';
           break;
+        case 'In':
+          operator = '[]';
+          break;
       }
 
       return `${attribute}${operator}${operand}`;
@@ -134,6 +137,7 @@ const operators = [
   'Contains',
   'Starts with',
   'Ends with',
+  'In',
 ];
 
 const defaultFilterRowState = {
