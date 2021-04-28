@@ -56,6 +56,10 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
         case 'In':
           operator = '[]';
           break;
+        case 'Is null':
+          operand = null;
+          operator = '^@';
+          break;
       }
 
       return `${attribute}${operator}${operand}`;
@@ -138,6 +142,7 @@ const operators = [
   'Starts with',
   'Ends with',
   'In',
+  'Is null',
 ];
 
 const defaultFilterRowState = {
@@ -202,12 +207,19 @@ function QueryFilterModal({
           className='filter operator'
         />
 
-        <input
-          type='text'
-          className='filter operand'
-          defaultValue={operand}
-          onBlur={(e) => onFilterOperandChange(idx)(e.target.value)}
-        />
+        { "Is null" !== operator ? 
+          <input
+            type='text'
+            className='filter operand'
+            defaultValue={operand}
+            onBlur={(e) => onFilterOperandChange(idx)(e.target.value)}
+          /> : 
+          <input
+            type='text'
+            readOnly={true}
+            className='filter operand'
+            defaultValue="null"
+          /> }
 
         <a className='pointer delete' onClick={() => onFilterOperandChange(idx)('')}>
           <i className='fas fa-times'/>
