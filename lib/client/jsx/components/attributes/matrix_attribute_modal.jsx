@@ -17,8 +17,6 @@ export default function MatrixAttributeModal(props) {
 }
 
 function MatrixDataModal({attribute, row, record, template}) {
-  console.log('record', record);
-  console.log('template', template);
   return (
     <div className='matrix-data-modal'>
       <div className='matrix-data-modal-header'>

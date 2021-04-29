@@ -47,9 +47,6 @@ export default function MatrixAttributeFilter({attribute, row}) {
 
   if (!filteredData || !pageData) return null;
 
-  console.log('pageData', pageData);
-  console.log('filteredData', filteredData);
-
   return (
     <React.Fragment>
       <input
