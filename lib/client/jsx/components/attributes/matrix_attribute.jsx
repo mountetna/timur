@@ -1,46 +1,34 @@
-import React from 'react'
-import TableViewer from 'etna-js/components/table_viewer';
+import React from 'react';
+import MatrixAttributeFilter from './matrix_attribute_filter';
+import MatrixAttributeModal from './matrix_attribute_modal';
 
 export default class MatrixAttribute extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { filter: "", current_page: 0 }
+    super(props);
   }
 
   render() {
-    let { mode, attribute, value: row } = this.props;
-    let { current_page, filter } = this.state;
-
-    if (mode != 'browse') return <div className='attribute'/>;
+    let {mode, attribute, value: row, record, template} = this.props;
+    if (
+      !['browse', 'model_viewer'].includes(mode) ||
+      row.every((value) => null == value)
+    )
+      return <div className='attribute' />;
 
     if (!row || !row.length) return <div className='attribute'>No data</div>;
 
-    let columns = [
-      {
-        Header: 'label',
-        accessor: 'row_name'
-      },
-      {
-        Header: attribute.name,
-        accessor: 'value'
-      }
-    ];
+    let Component =
+      'model_viewer' === mode ? MatrixAttributeModal : MatrixAttributeFilter;
 
-    filter = new RegExp(filter);
-    let data = row.map( (value,i) =>({
-      row_name: attribute.options[i],
-      value
-    }) ).filter( ({row_name}) => filter.test(row_name));
-
-    return <div className='attribute'>
-      <input placeholder='Filter query' className='filter' type='text' onChange={
-        e => this.setState({ current_page: 0, filter: e.target.value })
-      }/>
-      <TableViewer
-        pages={ -1 }
-        page_size={ 10 }
-        columns={ columns }
-        data={ data }/>
-    </div>
+    return (
+      <div className='attribute'>
+        <Component
+          attribute={attribute}
+          row={row}
+          record={record}
+          template={template}
+        />
+      </div>
+    );
   }
 }

@@ -1,0 +1,21 @@
+@import 'globals';
+
+.matrix-open-modal-btn {
+  color: darkgoldenrod;
+}
+
+.matrix-data-modal {
+  width: 600px;
+  padding: 20px;
+  border-radius: 2px;
+  background: white;
+  max-height: 70vh;
+  font-family: $body_font;
+  overflow-y: auto;
+
+  .matrix-data-modal-header {
+    font-weight: bolder;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid darkgreen;
+  }
+}

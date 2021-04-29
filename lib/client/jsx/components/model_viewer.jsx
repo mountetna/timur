@@ -37,6 +37,7 @@ const ModelViewer = ({
         template={template}
         record={row.original}
         attribute_name={att_name}
+        mode="model_viewer"
       />
     )
   }));
