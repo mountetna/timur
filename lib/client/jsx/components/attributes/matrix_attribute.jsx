@@ -1,6 +1,6 @@
 import React from 'react';
 import MatrixAttributeFilter from './matrix_attribute_filter';
-import MatrixAttributeModal from './matrix_attribute_modal';
+import SearchMatrixAttributeViewer from './search_matrix_attribute_viewer';
 
 export default class MatrixAttribute extends React.Component {
   constructor(props) {
@@ -18,7 +18,9 @@ export default class MatrixAttribute extends React.Component {
     if (!row || !row.length) return <div className='attribute'>No data</div>;
 
     let Component =
-      'model_viewer' === mode ? MatrixAttributeModal : MatrixAttributeFilter;
+      'model_viewer' === mode
+        ? SearchMatrixAttributeViewer
+        : MatrixAttributeFilter;
 
     return (
       <div className='attribute'>

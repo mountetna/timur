@@ -1,26 +1,41 @@
 import React, {useCallback, useState, useEffect, useMemo} from 'react';
+import * as _ from 'lodash';
 import {connect} from "react-redux";
 import {
   selectDisplayAttributeNamesAndTypes,
   selectSearchShowDisconnected,
   selectSortedAttributeNames
 } from "../../selectors/search";
-import {setFilterString, setShowDisconnected, setSearchAttributeNames} from "../../actions/search_actions";
+import {
+  setFilterString,
+  setShowDisconnected,
+  setSearchAttributeNames,
+  setOutputPredicate
+} from "../../actions/search_actions";
 import {useModal} from "etna-js/components/ModalDialogContainer";
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import TreeView, {getSelectedLeaves} from 'etna-js/components/TreeView';
 import SelectInput from "etna-js/components/inputs/select_input";
 import {selectIsEditor} from 'etna-js/selectors/user-selector';
+import {selectTemplate} from 'etna-js/selectors/magma';
 
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
-export function QueryBuilder({ display_attributes, setFilterString, selectedModel, attribute_names, setShowAdvanced }) {
+export function QueryBuilder({
+  display_attributes,
+  setFilterString,
+  selectedModel,
+  attribute_names,
+  setShowAdvanced,
+  setOutputPredicate }) {
+
   const { openModal } = useModal();
   const [filtersState, setFiltersState] = useState([]);
-
   const show_disconnected = useReduxState(state => selectSearchShowDisconnected(state));
+  const template = useReduxState(state => selectTemplate(state, selectedModel));      
+
   useEffect(() => {
     setFiltersState([]);
   }, [selectedModel]);
@@ -30,7 +45,15 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
   }, [attribute_names]);
 
   useEffect(() => {
-    setFilterString(filtersState.map(({attribute, operator, operand}) => {
+    // We'll break out the actual filters
+    //   from the matrix output predicates.
+    let [filters, outputPredicates] = _.partition(filtersState, ({attribute}) => {
+      if (!attribute) return false;
+
+      return "matrix" !== template.attributes[attribute].attribute_type;
+    });
+
+    setFilterString(filters.map(({attribute, operator, operand}) => {
       switch (operator) {
         case 'Greater than':
           operator = '>';
@@ -59,6 +82,16 @@ export function QueryBuilder({ display_attributes, setFilterString, selectedMode
         case 'Is null':
           operand = null;
           operator = '^@';
+          break;
+      }
+
+      return `${attribute}${operator}${operand}`;
+    }))
+    console.log('outputPredicates in query', outputPredicates);
+    setOutputPredicate(outputPredicates.map(({attribute, operator, operand}) => {
+      switch (operator) {
+        case 'In':
+          operator = '[]';
           break;
       }
 
@@ -270,5 +303,6 @@ export default connect(
   (state) => ({ attribute_names: selectSortedAttributeNames(state), }),
   {
     setFilterString,
+    setOutputPredicate
  }
 )(QueryBuilder);
