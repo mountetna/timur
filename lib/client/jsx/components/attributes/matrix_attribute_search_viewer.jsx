@@ -13,7 +13,7 @@ export default function MatrixAttributeSearchViewer(props) {
 
   return (
     <a className='matrix-open-modal-btn pointer' onClick={openMatrixContainer}>
-      View matrix data
+      View matrix row
     </a>
   );
 }
