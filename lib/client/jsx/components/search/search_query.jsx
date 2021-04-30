@@ -7,7 +7,8 @@ import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {
   selectSearchFilterString,
   selectSearchShowDisconnected,
-  selectSortedAttributeNames
+  selectSortedAttributeNames,
+  selectSearchOutputPredicate
 } from "../../selectors/search";
 import {requestTSV} from "etna-js/actions/magma_actions";
 import {
@@ -51,6 +52,7 @@ const DisabledButton = ({id,disabled,label,onClick}) =>
 export function SearchQuery({
   selectedModel, setFilterString, loading, requestTSV, model_names, onSelectTableChange,
   pageSize, setPageSize, setPage, attribute_names, display_attributes, filter_string,
+  output_predicate
 }) {
   const buttonDisabled = !selectedModel || loading;
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -99,7 +101,8 @@ export function SearchQuery({
             model_name: selectedModel,
             filter: filter_string,
             attribute_names,
-            show_disconnected
+            show_disconnected,
+            output_predicate: output_predicate
           })
         }
       />
@@ -113,6 +116,7 @@ export default connect(
     model_names: selectModelNames(state),
     attribute_names: selectSortedAttributeNames(state),
     filter_string: selectSearchFilterString(state),
+    output_predicate: selectSearchOutputPredicate(state)
   }),
   {
     setSearchAttributeNames,
