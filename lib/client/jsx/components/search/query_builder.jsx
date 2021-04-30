@@ -1,5 +1,4 @@
 import React, {useCallback, useState, useEffect, useMemo} from 'react';
-import * as _ from 'lodash';
 import {connect} from "react-redux";
 import {
   selectDisplayAttributeNamesAndTypes,
@@ -45,15 +44,11 @@ export function QueryBuilder({
   }, [attribute_names]);
 
   useEffect(() => {
-    // We'll break out the actual filters
-    //   from the matrix output predicates.
-    let [filters, outputPredicates] = _.partition(filtersState, ({attribute}) => {
-      if (!attribute) return false;
-
-      return "matrix" !== template.attributes[attribute].attribute_type;
+    let outputPredicates = filtersState.filter(({attribute}) => {
+      return "matrix" === template.attributes[attribute].attribute_type;
     });
 
-    setFilterString(filters.map(({attribute, operator, operand}) => {
+    setFilterString(filtersState.map(({attribute, operator, operand}) => {
       switch (operator) {
         case 'Greater than':
           operator = '>';
@@ -87,7 +82,8 @@ export function QueryBuilder({
 
       return `${attribute}${operator}${operand}`;
     }))
-    console.log('outputPredicates in query', outputPredicates);
+    
+    // Set any matrix attributes to slices
     setOutputPredicate(outputPredicates.map(({attribute, operator, operand}) => {
       switch (operator) {
         case 'In':

@@ -66,7 +66,6 @@ export function Search({
   }, [setSearchAttributeNames, emptySearchCache, setSelectedModel]);
 
   const [loading, loadDocuments] = useAsyncWork(function* loadDocuments(page, newSearch) {
-    console.log('output_predicate', output_predicate);
     const payload = yield requestDocuments({
       model_name: selectedModel,
       record_names: 'all',
