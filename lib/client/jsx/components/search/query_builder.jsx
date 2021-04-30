@@ -16,8 +16,6 @@ import {useReduxState} from 'etna-js/hooks/useReduxState';
 import TreeView, {getSelectedLeaves} from 'etna-js/components/TreeView';
 import SelectInput from "etna-js/components/inputs/select_input";
 import {selectIsEditor} from 'etna-js/selectors/user-selector';
-import {selectTemplate} from 'etna-js/selectors/magma';
-
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
@@ -28,12 +26,12 @@ export function QueryBuilder({
   selectedModel,
   attribute_names,
   setShowAdvanced,
-  setOutputPredicate }) {
+  setOutputPredicate,
+  magma_state }) {
 
   const { openModal } = useModal();
   const [filtersState, setFiltersState] = useState([]);
   const show_disconnected = useReduxState(state => selectSearchShowDisconnected(state));
-  const template = useReduxState(state => selectTemplate(state, selectedModel));      
 
   useEffect(() => {
     setFiltersState([]);
@@ -49,9 +47,12 @@ export function QueryBuilder({
     //   database. We leave them as input filters so that only records
     //   with matrix data are returned.
     let outputPredicates = filtersState.filter(({attribute}) => {
+      if (!attribute) return false;
+      let template = magma_state.models[selectedModel].template;      
+
       return "matrix" === template.attributes[attribute].attribute_type;
     });
-
+    
     setFilterString(filtersState.map(({attribute, operator, operand}) => {
       switch (operator) {
         case 'Greater than':
@@ -99,7 +100,7 @@ export function QueryBuilder({
         return `${attribute}${operator}${operand}`;
       }))
     }
-  }, [setFilterString, filtersState]);
+  }, [setFilterString, setOutputPredicate, filtersState]);
 
   const onOpenAttributeFilter = () => {
     openModal(<FilterAttributesModal display_attributes={display_attributes} selectedModel={selectedModel} />);
@@ -302,7 +303,10 @@ function attributeNamesToDisabled(attributeNames) {
 }
 
 export default connect(
-  (state) => ({ attribute_names: selectSortedAttributeNames(state), }),
+  (state) => ({
+    attribute_names: selectSortedAttributeNames(state),
+    magma_state: state.magma
+  }),
   {
     setFilterString,
     setOutputPredicate
