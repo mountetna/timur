@@ -1,6 +1,6 @@
 import React from 'react';
 import {useModal} from 'etna-js/components/ModalDialogContainer';
-import MatrixAttributeFilter from './matrix_attribute_filter';
+import MatrixAttributeFilterTable from './matrix_attribute_filter_table';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectSearchOutputPredicate} from '../../selectors/search';
 
@@ -43,7 +43,7 @@ function MatrixDataModal({attribute, row, record, template}) {
       <div className='matrix-data-modal-header'>
         {attribute.display_name} for {record[template.identifier]}
       </div>
-      <MatrixAttributeFilter attribute={viewAttribute} row={row} />
+      <MatrixAttributeFilterTable attribute={viewAttribute} row={row} />
     </div>
   );
 }

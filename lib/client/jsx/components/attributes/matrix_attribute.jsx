@@ -1,5 +1,5 @@
 import React from 'react';
-import MatrixAttributeFilter from './matrix_attribute_filter';
+import MatrixAttributeFilterTable from './matrix_attribute_filter_table';
 import MatrixAttributeSearchViewer from './matrix_attribute_search_viewer';
 
 export default class MatrixAttribute extends React.Component {
@@ -20,7 +20,7 @@ export default class MatrixAttribute extends React.Component {
     let Component =
       'model_viewer' === mode
         ? MatrixAttributeSearchViewer
-        : MatrixAttributeFilter;
+        : MatrixAttributeFilterTable;
 
     return (
       <div className='attribute'>

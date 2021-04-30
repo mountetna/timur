@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import TableViewer from 'etna-js/components/table_viewer';
 
-export default function MatrixAttributeFilter({attribute, row}) {
+export default function MatrixAttributeFilterTable({attribute, row}) {
   const [filter, setFilter] = useState('');
   const [filteredData, setFilteredData] = useState(null);
   const [pageData, setPageData] = useState(null);
