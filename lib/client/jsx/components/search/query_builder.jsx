@@ -44,6 +44,10 @@ export function QueryBuilder({
   }, [attribute_names]);
 
   useEffect(() => {
+    // Matrix filters need to also be translated into output_predicates, too,
+    //   because in Magma they have to be sliced after leaving the
+    //   database. We leave them as input filters so that only records
+    //   with matrix data are returned.
     let outputPredicates = filtersState.filter(({attribute}) => {
       return "matrix" === template.attributes[attribute].attribute_type;
     });
