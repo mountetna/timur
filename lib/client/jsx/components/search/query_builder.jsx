@@ -87,16 +87,18 @@ export function QueryBuilder({
       return `${attribute}${operator}${operand}`;
     }))
     
-    // Set any matrix attributes to slices
-    setOutputPredicate(outputPredicates.map(({attribute, operator, operand}) => {
-      switch (operator) {
-        case 'In':
-          operator = '[]';
-          break;
-      }
+    if (outputPredicates) {
+      // Set any matrix attributes to slices
+      setOutputPredicate(outputPredicates.map(({attribute, operator, operand}) => {
+        switch (operator) {
+          case 'In':
+            operator = '[]';
+            break;
+        }
 
-      return `${attribute}${operator}${operand}`;
-    }))
+        return `${attribute}${operator}${operand}`;
+      }))
+    }
   }, [setFilterString, filtersState]);
 
   const onOpenAttributeFilter = () => {
