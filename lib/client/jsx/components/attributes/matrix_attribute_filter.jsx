@@ -56,7 +56,7 @@ export default function MatrixAttributeFilter({attribute, row}) {
         onChange={(e) => setFilter(e.target.value)}
       />
       <TableViewer
-        pages={Math.floor(filteredData.length / page_size) + 1}
+        pages={Math.ceil(filteredData.length / page_size)}
         page={page}
         page_size={page_size}
         setPage={setPage}
