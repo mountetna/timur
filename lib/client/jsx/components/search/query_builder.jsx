@@ -4,14 +4,14 @@ import {
   selectDisplayAttributeNamesAndTypes,
   selectSearchShowDisconnected,
   selectSortedAttributeNames,
-  selectSearchUnmeltMatrices
+  selectSearchExpandMatrices
 } from "../../selectors/search";
 import {
   setFilterString,
   setShowDisconnected,
   setSearchAttributeNames,
   setOutputPredicate,
-  setUnmeltMatrices
+  setExpandMatrices
 } from "../../actions/search_actions";
 import {useModal} from "etna-js/components/ModalDialogContainer";
 import {useReduxState} from 'etna-js/hooks/useReduxState';
@@ -194,7 +194,7 @@ function QueryFilterModal({
   show_disconnected, setShowDisconnected, 
   filtersState: initialFiltersState,
   setFiltersState: updateParentFiltersState,
-  unmelt_matrices, setUnmeltMatrices
+  expand_matrices, setExpandMatrices
 }) {
   const { dismissModal } = useModal();
   let [filtersState, setLocalFiltersState] = useState(initialFiltersState);
@@ -282,10 +282,10 @@ function QueryFilterModal({
               onChange={ () => setShowDisconnected(!show_disconnected) }
               type="checkbox"/> Show only disconnected records
           </label>
-          <label className='unmelt-matrices'>
+          <label className='expand-matrices'>
             <input
-              checked={ !!unmelt_matrices }
-              onChange={ () => setUnmeltMatrices(!unmelt_matrices) }
+              checked={ !!expand_matrices }
+              onChange={ () => setExpandMatrices(!expand_matrices) }
               type="checkbox"/> Expand matrices in TSV
           </label>
         </React.Fragment> }
@@ -301,10 +301,10 @@ QueryFilterModal = connect(
   (state) => ({ attribute_names: selectSortedAttributeNames(state),
     show_disconnected: selectSearchShowDisconnected(state),
     can_edit: selectIsEditor(state),
-    unmelt_matrices: selectSearchUnmeltMatrices(state)
+    expand_matrices: selectSearchExpandMatrices(state)
   }),
   { setShowDisconnected,
-    setUnmeltMatrices }
+    setExpandMatrices }
 )(QueryFilterModal);
 
 function attributeNamesToSelected(attributeNames) {
