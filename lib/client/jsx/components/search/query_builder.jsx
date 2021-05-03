@@ -3,13 +3,15 @@ import {connect} from "react-redux";
 import {
   selectDisplayAttributeNamesAndTypes,
   selectSearchShowDisconnected,
-  selectSortedAttributeNames
+  selectSortedAttributeNames,
+  selectSearchUnmeltMatrices
 } from "../../selectors/search";
 import {
   setFilterString,
   setShowDisconnected,
   setSearchAttributeNames,
-  setOutputPredicate
+  setOutputPredicate,
+  setUnmeltMatrices
 } from "../../actions/search_actions";
 import {useModal} from "etna-js/components/ModalDialogContainer";
 import {useReduxState} from 'etna-js/hooks/useReduxState';
@@ -191,7 +193,8 @@ function QueryFilterModal({
   attribute_names, can_edit,
   show_disconnected, setShowDisconnected, 
   filtersState: initialFiltersState,
-  setFiltersState: updateParentFiltersState
+  setFiltersState: updateParentFiltersState,
+  unmelt_matrices, setUnmeltMatrices
 }) {
   const { dismissModal } = useModal();
   let [filtersState, setLocalFiltersState] = useState(initialFiltersState);
@@ -271,12 +274,21 @@ function QueryFilterModal({
         />
       </div>
       <div className='tray'>
-        { can_edit && <div className='show-disconnected'>
-          <input
-            checked={ !!show_disconnected }
-            onChange={ () => setShowDisconnected(!show_disconnected) }
-            type="checkbox"/> Show only disconnected records
-        </div> }
+        { can_edit && 
+        <React.Fragment>
+          <label className='show-disconnected'>
+            <input
+              checked={ !!show_disconnected }
+              onChange={ () => setShowDisconnected(!show_disconnected) }
+              type="checkbox"/> Show only disconnected records
+          </label>
+          <label className='unmelt-matrices'>
+            <input
+              checked={ !!unmelt_matrices }
+              onChange={ () => setUnmeltMatrices(!unmelt_matrices) }
+              type="checkbox"/> Unmelt matrices
+          </label>
+        </React.Fragment> }
         <div className='actions'>
           <button onClick={dismissModal}>Ok</button>
         </div>
@@ -288,9 +300,11 @@ function QueryFilterModal({
 QueryFilterModal = connect(
   (state) => ({ attribute_names: selectSortedAttributeNames(state),
     show_disconnected: selectSearchShowDisconnected(state),
-    can_edit: selectIsEditor(state)
+    can_edit: selectIsEditor(state),
+    unmelt_matrices: selectSearchUnmeltMatrices(state)
   }),
-  { setShowDisconnected }
+  { setShowDisconnected,
+    setUnmeltMatrices }
 )(QueryFilterModal);
 
 function attributeNamesToSelected(attributeNames) {

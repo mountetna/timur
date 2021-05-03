@@ -18,8 +18,9 @@ $query-sep: 1px solid #ddd;
     margin-top: 10px;
     border-top: $thin-rule;
 
-    .show-disconnected {
-      flex: 0 0 auto;
+    .show-disconnected,
+    .unmelt-matrices {
+      flex: 1 1 auto;
     }
     .actions {
       flex: 1 1 auto;

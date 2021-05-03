@@ -8,7 +8,8 @@ import {
   selectSearchFilterString,
   selectSearchShowDisconnected,
   selectSortedAttributeNames,
-  selectSearchOutputPredicate
+  selectSearchOutputPredicate,
+  selectSearchUnmeltMatrices
 } from "../../selectors/search";
 import {requestTSV} from "etna-js/actions/magma_actions";
 import {
@@ -52,7 +53,7 @@ const DisabledButton = ({id,disabled,label,onClick}) =>
 export function SearchQuery({
   selectedModel, setFilterString, loading, requestTSV, model_names, onSelectTableChange,
   pageSize, setPageSize, setPage, attribute_names, display_attributes, filter_string,
-  output_predicate
+  output_predicate, unmelt_matrices
 }) {
   const buttonDisabled = !selectedModel || loading;
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -102,7 +103,8 @@ export function SearchQuery({
             filter: filter_string,
             attribute_names,
             show_disconnected,
-            output_predicate: output_predicate
+            output_predicate: output_predicate,
+            unmelt_matrices: unmelt_matrices
           })
         }
       />
@@ -116,7 +118,8 @@ export default connect(
     model_names: selectModelNames(state),
     attribute_names: selectSortedAttributeNames(state),
     filter_string: selectSearchFilterString(state),
-    output_predicate: selectSearchOutputPredicate(state)
+    output_predicate: selectSearchOutputPredicate(state),
+    unmelt_matrices: selectSearchUnmeltMatrices(state)
   }),
   {
     setSearchAttributeNames,
