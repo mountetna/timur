@@ -286,7 +286,7 @@ function QueryFilterModal({
             <input
               checked={ !!unmelt_matrices }
               onChange={ () => setUnmeltMatrices(!unmelt_matrices) }
-              type="checkbox"/> Unmelt matrices
+              type="checkbox"/> Unmelt matrices in TSV
           </label>
         </React.Fragment> }
         <div className='actions'>
