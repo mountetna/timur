@@ -35,7 +35,6 @@ export default function TsvOptionsModal({selectedModel}) {
   });
 
   function onDownload() {
-    console.log('transpose', transpose, 'expand', expandMatrices);
     invoke(
       requestTSV({
         model_name: selectedModel,
