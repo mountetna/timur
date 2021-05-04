@@ -75,7 +75,7 @@ export default function TsvOptionsModal({selectedModel}) {
           id='download-tsv-btn'
           label={'\u21af Download'}
           disabled={false}
-          onClick={() => onDownload()}
+          onClick={onDownload}
         />
       </div>
     </div>
