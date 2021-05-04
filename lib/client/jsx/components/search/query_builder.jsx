@@ -3,15 +3,13 @@ import {connect} from "react-redux";
 import {
   selectDisplayAttributeNamesAndTypes,
   selectSearchShowDisconnected,
-  selectSortedAttributeNames,
-  selectSearchExpandMatrices
+  selectSortedAttributeNames
 } from "../../selectors/search";
 import {
   setFilterString,
   setShowDisconnected,
   setSearchAttributeNames,
-  setOutputPredicate,
-  setExpandMatrices
+  setOutputPredicate
 } from "../../actions/search_actions";
 import {useModal} from "etna-js/components/ModalDialogContainer";
 import {useReduxState} from 'etna-js/hooks/useReduxState';
@@ -193,8 +191,7 @@ function QueryFilterModal({
   attribute_names, can_edit,
   show_disconnected, setShowDisconnected, 
   filtersState: initialFiltersState,
-  setFiltersState: updateParentFiltersState,
-  expand_matrices, setExpandMatrices
+  setFiltersState: updateParentFiltersState
 }) {
   const { dismissModal } = useModal();
   let [filtersState, setLocalFiltersState] = useState(initialFiltersState);
@@ -275,20 +272,12 @@ function QueryFilterModal({
       </div>
       <div className='tray'>
         { can_edit && 
-        <React.Fragment>
           <label className='show-disconnected'>
             <input
               checked={ !!show_disconnected }
               onChange={ () => setShowDisconnected(!show_disconnected) }
               type="checkbox"/> Show only disconnected records
-          </label>
-          <label className='expand-matrices'>
-            <input
-              checked={ !!expand_matrices }
-              onChange={ () => setExpandMatrices(!expand_matrices) }
-              type="checkbox"/> Expand matrices in TSV
-          </label>
-        </React.Fragment> }
+          </label> }
         <div className='actions'>
           <button onClick={dismissModal}>Ok</button>
         </div>
@@ -300,11 +289,9 @@ function QueryFilterModal({
 QueryFilterModal = connect(
   (state) => ({ attribute_names: selectSortedAttributeNames(state),
     show_disconnected: selectSearchShowDisconnected(state),
-    can_edit: selectIsEditor(state),
-    expand_matrices: selectSearchExpandMatrices(state)
+    can_edit: selectIsEditor(state)
   }),
-  { setShowDisconnected,
-    setExpandMatrices }
+  { setShowDisconnected }
 )(QueryFilterModal);
 
 function attributeNamesToSelected(attributeNames) {

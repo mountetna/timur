@@ -1,9 +1,9 @@
 @import 'globals';
 @import 'attribute';
 
-
 $query-sep: 1px solid #ddd;
-.search-filters-modal {
+.search-filters-modal,
+.tsv-options-modal {
   width: 600px;
   padding: 20px;
   border-radius: 2px;
@@ -12,6 +12,24 @@ $query-sep: 1px solid #ddd;
   line-height: 200%;
   font-family: $body_font;
 
+  .header {
+    border-bottom: 2px solid darkgreen;
+  }
+
+  .options-tray {
+    flex-direction: column;
+  }
+
+  .options-action-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+    .button {
+      @include green_button;
+    }
+  }
+
   .tray {
     display: flex;
     padding-top: 10px;
@@ -19,7 +37,8 @@ $query-sep: 1px solid #ddd;
     border-top: $thin-rule;
 
     .show-disconnected,
-    .expand-matrices {
+    .expand-matrices,
+    .transpose {
       flex: 1 1 auto;
     }
     .actions {
@@ -60,7 +79,6 @@ $query-sep: 1px solid #ddd;
   }
 }
 
-
 .search-attribute-filters-modal {
   width: 600px;
   padding: 20px;
@@ -69,7 +87,6 @@ $query-sep: 1px solid #ddd;
   max-height: 70vh;
   font-family: $body_font;
   overflow-y: auto;
-
 
   .actions {
     text-align: right;
@@ -129,7 +146,7 @@ $query-sep: 1px solid #ddd;
   .control {
     padding: 10px 2px;
     text-align: center;
-    
+
     .query {
       display: flex;
       .selection {
@@ -164,7 +181,6 @@ $query-sep: 1px solid #ddd;
         }
       }
     }
-
   }
 
   select {

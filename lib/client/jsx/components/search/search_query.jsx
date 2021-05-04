@@ -3,19 +3,16 @@ import {connect} from 'react-redux';
 import SelectInput from 'etna-js/components/inputs/select_input';
 import Toggle from 'etna-js/components/inputs/toggle';
 import {selectModelNames} from "etna-js/selectors/magma";
-import {useReduxState} from 'etna-js/hooks/useReduxState';
+import {useModal} from "etna-js/components/ModalDialogContainer";
 import {
-  selectSearchFilterString,
-  selectSearchShowDisconnected,
-  selectSortedAttributeNames,
-  selectSearchOutputPredicate,
-  selectSearchExpandMatrices
+  selectSearchFilterString
 } from "../../selectors/search";
-import {requestTSV} from "etna-js/actions/magma_actions";
 import {
   setFilterString, setSearchAttributeNames
 } from "../../actions/search_actions";
 import QueryBuilder from "./query_builder";
+import DisabledButton from './disabled_button';
+import TsvOptionsModal from './tsv_options_modal';
 
 const TableSelect = ({model_names, selectedModel, onSelectTableChange}) =>
   <div className='table-select'>
@@ -40,25 +37,14 @@ const PageSelect = ({pageSize, setPageSize}) =>
     />
   </div>;
 
-const DisabledButton = ({id,disabled,label,onClick}) =>
-  <input
-    id={id}
-    type='button'
-    className={ disabled ? 'button disabled' : 'button' }
-    value={label}
-    disabled={disabled}
-    onClick={onClick}
-  />;
-
 export function SearchQuery({
-  selectedModel, setFilterString, loading, requestTSV, model_names, onSelectTableChange,
-  pageSize, setPageSize, setPage, attribute_names, display_attributes, filter_string,
-  output_predicate, expand_matrices
+  selectedModel, setFilterString, loading, model_names, onSelectTableChange,
+  pageSize, setPageSize, setPage, display_attributes, filter_string
 }) {
   const buttonDisabled = !selectedModel || loading;
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const show_disconnected = useReduxState(state => selectSearchShowDisconnected(state));
+  const { openModal } = useModal();
 
   const advancedSearch = <div className='advanced-search'>
     <input
@@ -98,14 +84,7 @@ export function SearchQuery({
         label={'\u21af TSV'}
         disabled={buttonDisabled}
         onClick={() =>
-          requestTSV({
-            model_name: selectedModel,
-            filter: filter_string,
-            attribute_names,
-            show_disconnected,
-            output_predicate: output_predicate,
-            expand_matrices: expand_matrices
-          })
+          openModal(<TsvOptionsModal selectedModel={selectedModel} />)
         }
       />
     </div>
@@ -116,15 +95,11 @@ export function SearchQuery({
 export default connect(
   (state) => ({
     model_names: selectModelNames(state),
-    attribute_names: selectSortedAttributeNames(state),
-    filter_string: selectSearchFilterString(state),
-    output_predicate: selectSearchOutputPredicate(state),
-    expand_matrices: selectSearchExpandMatrices(state)
+    filter_string: selectSearchFilterString(state)
   }),
   {
     setSearchAttributeNames,
-    setFilterString,
-    requestTSV,
+    setFilterString
   }
 )(SearchQuery);
 
