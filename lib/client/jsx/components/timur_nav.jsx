@@ -37,6 +37,7 @@ const getTabs = (user) => {
   let tabs = {
     browse: Routes.browse_path(CONFIG.project_name),
     search: Routes.search_path(CONFIG.project_name),
+    query: Routes.query_path(CONFIG.project_name),
     map: Routes.map_path(CONFIG.project_name),
     manifests: Routes.manifests_path(CONFIG.project_name),
     plots: Routes.plots_path(CONFIG.project_name),

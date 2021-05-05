@@ -1,6 +1,7 @@
 @import "globals";
 
-#model_map {
+#model_map,
+.query-map {
   display: flex;
   margin-top: 10px;
   position: relative;

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import React, { Component } from 'react';
 import { requestPredicates, requestModels } from 'etna-js/actions/magma_actions';
-import PredicateChainSet from './query_builder/predicate_chain_set';
+import PredicateChainSet from './predicate_chain_set';
 
 // helper to format the predicate state into an actual query
 const predicateArray = (predicate) => {
