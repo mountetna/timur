@@ -51,7 +51,7 @@ class LayoutNode {
     return this.weight;
   }
 
-  place(grid, selected_model) {
+  place(grid) {
     if (!this.depth) return;
 
     let maxpos = grid[this.depth].length;
@@ -65,7 +65,7 @@ class LayoutNode {
 }
 
 class TreeLayout {
-  constructor(selected_model, models, width, height) {
+  constructor(models, width, height) {
     this.nodes = models.reduce((nodes, model) => {
       nodes[model.name] = new LayoutNode(model,this)
       return nodes
@@ -86,7 +86,7 @@ class TreeLayout {
       project.setDepth(1, grid);
 
 
-      Object.values(this.nodes).forEach( node => node.place(grid, selected_model) );
+      Object.values(this.nodes).forEach( node => node.place(grid) );
     }
 
   }

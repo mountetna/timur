@@ -40,7 +40,7 @@ class ModelMap extends React.Component {
         <ModelMapGraphic 
           width={width}
           height={height}
-          current_model={current_model}
+          selected_models={[current_model]}
           handler={this.showModel.bind(this)}
         />
       </div>

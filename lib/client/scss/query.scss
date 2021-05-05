@@ -1,0 +1,81 @@
+@import 'globals';
+
+.query-map {
+  display: flex;
+  margin-top: 10px;
+  position: relative;
+  font-family: $body_font;
+
+  .map {
+    flex-basis: 600px;
+    border-right: 1px solid lightgray;
+
+    .heading {
+      position: absolute;
+      left: 15px;
+      top: 20px;
+      border-bottom: $thin_rule;
+    }
+    svg {
+      overflow: visible;
+      line {
+        stroke-width: 3px;
+        stroke: #aca;
+      }
+      #arrow {
+        fill: #aca;
+      }
+    }
+    .model_node {
+      cursor: pointer;
+      position: absolute;
+
+      font-family: $body_font;
+      font-size: 0.75em;
+
+      border-radius: 3px;
+      border: 2px solid #aaa;
+      background: #f2f2f2;
+      box-shadow: 0 0 2px 0 #ccc;
+      padding: 5px;
+
+      &.selected {
+        border: 2px solid #0c0;
+        background: #cfc;
+      }
+
+      &.disabled {
+        background: darkgray;
+        border: 2px solid #aaa;
+        cursor: not-allowed;
+
+        &:hover {
+          background: lightpink;
+        }
+      }
+
+      transform: translate(-50%, -50%);
+      &:hover {
+        background: #cec;
+      }
+    }
+  }
+}
+
+.query-attributes-modal {
+  width: 800px;
+  padding: 20px;
+  border-radius: 2px;
+  background: white;
+  max-height: 70vh;
+  font-family: $body_font;
+  overflow-y: auto;
+
+  .actions {
+    text-align: right;
+
+    button {
+      @include green_button;
+    }
+  }
+}

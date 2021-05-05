@@ -7,10 +7,11 @@ import ModelNode from './model_node';
 import Layout from './tree_layout';
 
 export default function ModelMapGraphic({
-  current_model,
+  selected_models,
   handler,
   width,
-  height
+  height,
+  disabled_models,
 }) {
   width = width || 600;
   height = height || 600;
@@ -25,7 +26,7 @@ export default function ModelMapGraphic({
     };
   });
 
-  let layout = new Layout(current_model, templates, width, height);
+  let layout = new Layout(templates, width, height);
 
   return (
     <React.Fragment>
@@ -57,9 +58,10 @@ export default function ModelMapGraphic({
             key={model_name}
             center={node.center}
             size={node.size}
-            selected={current_model}
+            selected={selected_models ? selected_models.includes(model_name) : false}
             handler={handler}
             model_name={model_name}
+            disabled={disabled_models ? disabled_models.includes(model_name) : false}
           />
         );
       })}
