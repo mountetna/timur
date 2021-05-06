@@ -10,7 +10,8 @@ import QueryPreview from './query_preview';
 const useStyles = makeStyles((theme) => ({
   previewPane: {
     overflowX: 'auto',
-    maxWidth: '100%'
+    maxWidth: '100%',
+    maxHeight: '100%'
   }
 }));
 

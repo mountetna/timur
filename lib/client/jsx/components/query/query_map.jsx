@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {requestModels} from 'etna-js/actions/magma_actions';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
@@ -6,8 +6,6 @@ import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import ModelMapGraphic from '../model_map/model_map_graphic';
 import QueryAttributesModal from './query_attributes_modal';
 import {QueryContext} from '../../contexts/query/query_context';
-
-import {useModal} from 'etna-js/components/ModalDialogContainer';
 
 function modelIsClickable(model_name) {
   // Should be in some Path library? Any model that is project or
@@ -23,7 +21,8 @@ export default function QueryMap({}) {
 
   const {state, setAttributes} = useContext(QueryContext);
   const invoke = useActionInvoker();
-  const {openModal} = useModal();
+  const [open, setOpen] = useState(false);
+  const [modelName, setModelName] = useState(null);
 
   useEffect(() => {
     invoke(requestModels());
@@ -31,14 +30,13 @@ export default function QueryMap({}) {
 
   function onClickModel(model_name) {
     if (modelIsClickable(model_name)) {
-      openModal(
-        <QueryAttributesModal
-          model_name={model_name}
-          attributes={state.attributes[model_name] || []}
-          setAttributes={setAttributes}
-        />
-      );
+      setModelName(model_name);
+      setOpen(true);
     }
+  }
+
+  function handleClose() {
+    setOpen(false);
   }
 
   return (
@@ -52,6 +50,15 @@ export default function QueryMap({}) {
           handler={onClickModel}
         />
       </div>
+      {open ? (
+        <QueryAttributesModal
+          onClose={handleClose}
+          open={open}
+          model_name={modelName}
+          attributes={state.attributes ? state.attributes[modelName] || [] : []}
+          setAttributes={setAttributes}
+        />
+      ) : null}
     </div>
   );
 }

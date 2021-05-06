@@ -1,5 +1,7 @@
 import React, {useState, useContext} from 'react';
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -25,23 +27,40 @@ export default function QueryControls() {
   let models = state.attributes ? Object.keys(state.attributes) : [];
 
   return (
-    <div>
-      <FormControl className={classes.formControl}>
-        <InputLabel shrink>Root Model</InputLabel>
-        <Select
-          value={state.rootModel}
-          onChange={setRootModel}
-          displayEmpty
-          className={classes.selectEmpty}
-        >
-          <MenuItem value=''>
-            <em>None</em>
-          </MenuItem>
-          {models.map((model_name) => (
-            <MenuItem value={model_name}>{model_name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+    <Grid container justify='center' alignItems='center'>
+      <Grid item xs={7}>
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink>Root Model</InputLabel>
+          <Select
+            value={state.rootModel}
+            onChange={setRootModel}
+            displayEmpty
+            className={classes.selectEmpty}
+          >
+            <MenuItem value=''>
+              <em>None</em>
+            </MenuItem>
+            {models.map((model_name) => (
+              <MenuItem value={model_name}>{model_name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={5}>
+        <Grid container alignItems='center' justify='center'>
+          <Grid item>
+            <ButtonGroup
+              variant='contained'
+              color='primary'
+              aria-label='contained primary button group'
+            >
+              <Button>Filters</Button>
+              <Button>Query</Button>
+              <Button>{'\u21af TSV'}</Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }

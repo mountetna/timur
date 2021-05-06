@@ -1,17 +1,32 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import {makeStyles} from '@material-ui/core/styles';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {useModal} from 'etna-js/components/ModalDialogContainer';
 import {selectTemplate} from 'etna-js/selectors/magma';
 
 import {visibleSortedAttributes} from '../../utils/attributes';
 
+const useStyles = makeStyles((theme) => ({
+  scrollable: {
+    overflowY: 'auto'
+  }
+}));
+
 function AttributeSelector({attribute, checked, onClick}) {
+  const classes = useStyles();
+
   return (
-    <div className='map_attribute report_row' key={attribute.attribute_name}>
+    <Grid container className='attribute-row' key={attribute.attribute_name}>
       <FormControlLabel
         control={
           <Checkbox
@@ -22,31 +37,46 @@ function AttributeSelector({attribute, checked, onClick}) {
         }
         label={attribute.attribute_name}
       />
-      <div className='description-wrapper'>
+      <Grid item className='description-wrapper'>
         {attribute.description && (
           <span className='description'>{attribute.description}</span>
         )}
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 }
 
 export default function QueryAttributesModal({
   model_name,
   attributes,
-  setAttributes
+  setAttributes,
+  onClose,
+  open
 }) {
+  const classes = useStyles();
   const [selectedAttributes, setSelectedAttributes] = useState([]);
-  let template = useReduxState((state) => selectTemplate(state, model_name));
-  const attributeOptions = visibleSortedAttributes(template.attributes).filter(
-    (attribute) => 'project' !== attribute.model_name
-  );
+  const contentRef = React.useRef(null);
 
-  const {dismissModal} = useModal();
+  useEffect(() => {
+    if (open) {
+      const {current: contentElement} = contentRef;
+      if (contentElement !== null) {
+        contentElement.focus();
+      }
+    }
+  }, [open]);
 
   useEffect(() => {
     setSelectedAttributes(attributes.filter(({model}) => model === model_name));
   }, []);
+
+  let template = useReduxState((state) => selectTemplate(state, model_name));
+
+  if (!template) return null;
+
+  const attributeOptions = visibleSortedAttributes(template.attributes).filter(
+    (attribute) => 'project' !== attribute.model_name
+  );
 
   function attributeCurrentlySelected(attribute) {
     return (
@@ -91,33 +121,39 @@ export default function QueryAttributesModal({
 
   function handleOk() {
     setAttributes(selectedAttributes, model_name);
-    dismissModal();
+    onClose();
   }
 
   return (
-    <div className='query-attributes-modal'>
-      <div className='model_report'>
-        <div className='heading report_row'>
-          <span className='name'>Model</span>
-          <span className='title'>{model_name}</span>
-        </div>
-        <div className='heading report_row all-selector' onClick={toggleAll}>
-          <span className='name'>All</span>
-        </div>
-        {attributeOptions.map((attribute) => (
-          <AttributeSelector
-            key={attribute.attribute_name}
-            onClick={toggleAttribute}
-            attribute={attribute}
-            checked={attributeCurrentlySelected(attribute)}
-          />
-        ))}
-      </div>
-      <div className='actions'>
-        <Button variant='contained' color='primary' onClick={handleOk}>
+    <Dialog onClose={onClose} maxWidth='md' open={open} scroll='paper'>
+      <DialogTitle id='query-attributes-dialog-title'>
+        <span className='name'>Model</span>
+        <span className='title'>{model_name}</span>
+      </DialogTitle>
+      <DialogContent dividers={true}>
+        <DialogContentText
+          id='query-attributes-dialog-description'
+          ref={contentRef}
+          tabIndex={-1}
+        >
+          {attributeOptions.map((attribute) => (
+            <AttributeSelector
+              key={attribute.attribute_name}
+              onClick={toggleAttribute}
+              attribute={attribute}
+              checked={attributeCurrentlySelected(attribute)}
+            />
+          ))}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button contained onClick={toggleAll} color='primary'>
+          All
+        </Button>
+        <Button contained onClick={handleOk} color='primary'>
           Ok
         </Button>
-      </div>
-    </div>
+      </DialogActions>
+    </Dialog>
   );
 }
