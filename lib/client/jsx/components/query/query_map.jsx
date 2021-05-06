@@ -1,4 +1,7 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
+
+import {requestModels} from 'etna-js/actions/magma_actions';
+import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 
 import ModelMapGraphic from '../model_map/model_map_graphic';
 import QueryAttributesModal from './query_attributes_modal';
@@ -18,21 +21,23 @@ export default function QueryMap({}) {
   //      relationship is to project.
   //   2) handler should bring up an attribute-selection modal.
 
-  const {state, setModels} = useContext(QueryContext);
-
-  let {models} = state;
-
+  const {state, setAttributes} = useContext(QueryContext);
+  const invoke = useActionInvoker();
   const {openModal} = useModal();
+
+  useEffect(() => {
+    invoke(requestModels());
+  }, []);
 
   function onClickModel(model_name) {
     if (modelIsClickable(model_name)) {
-      // TODO: Only select the model if attributes for the given model are selected.
-      setModels(
-        models.includes(model_name)
-          ? models.filter((m) => model_name !== m)
-          : models.concat([model_name])
+      openModal(
+        <QueryAttributesModal
+          model_name={model_name}
+          attributes={state.attributes[model_name] || []}
+          setAttributes={setAttributes}
+        />
       );
-      openModal(<QueryAttributesModal model_name={model_name} />);
     }
   }
 
@@ -41,7 +46,9 @@ export default function QueryMap({}) {
       <div className='map'>
         <ModelMapGraphic
           disabled_models={['project', 'document']}
-          selected_models={state.models}
+          selected_models={
+            state.attributes ? Object.keys(state.attributes) : []
+          }
           handler={onClickModel}
         />
       </div>

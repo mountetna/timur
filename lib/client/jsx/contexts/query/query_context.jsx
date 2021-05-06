@@ -3,10 +3,9 @@ import {useQueryAttributeStateManagement} from './query_attribute_state_manageme
 
 export const defaultContext = {
   state: {
-    attributes: [],
-    models: [],
+    attributes: {},
     rootModel: null,
-    filters: []
+    filters: {}
   }
 };
 
@@ -21,17 +20,20 @@ export const QueryProvider = (props) => {
     });
   }, []);
 
-  function setModels(models) {
-    setState({
-      ...state,
-      models: [...models]
-    });
-  }
+  function setAttributes(attributes, model_name) {
+    console.log('in setAttributes', attributes);
+    // Remove a model if no attributes
+    let updatedAttributes = {...state.attributes};
 
-  function setAttributes(attributes) {
+    if (attributes.length > 0) {
+      updatedAttributes[model_name] = attributes;
+    } else {
+      delete updatedAttributes[model_name];
+    }
+
     setState({
       ...state,
-      attributes: [...attributes]
+      attributes: updatedAttributes
     });
   }
 
@@ -55,7 +57,6 @@ export const QueryProvider = (props) => {
     <QueryContext.Provider
       value={{
         state,
-        setModels,
         setAttributes,
         setFilters,
         setRootModel

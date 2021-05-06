@@ -1,12 +1,10 @@
 import React, {useState, createContext, useEffect} from 'react';
+import * as _ from 'lodash';
 
-export function useQueryAttributeStateManagement(state, setAttributes) {
+export function useQueryAttributeStateManagement(
+  state,
+  setAttributes,
+  setModels
+) {
   const {models, attributes} = state;
-
-  useEffect(() => {
-    if (models && attributes) {
-      // Remove any attributes not related to the selected models.
-      setAttributes(attributes.filter(({model}) => models.include(model)));
-    }
-  }, [models]);
 }

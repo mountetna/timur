@@ -11,7 +11,7 @@ export default function ModelMapGraphic({
   handler,
   width,
   height,
-  disabled_models,
+  disabled_models
 }) {
   width = width || 600;
   height = height || 600;
@@ -58,10 +58,14 @@ export default function ModelMapGraphic({
             key={model_name}
             center={node.center}
             size={node.size}
-            selected={selected_models ? selected_models.includes(model_name) : false}
+            selected={
+              selected_models ? selected_models.includes(model_name) : false
+            }
             handler={handler}
             model_name={model_name}
-            disabled={disabled_models ? disabled_models.includes(model_name) : false}
+            disabled={
+              disabled_models ? disabled_models.includes(model_name) : false
+            }
           />
         );
       })}

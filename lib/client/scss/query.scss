@@ -78,4 +78,32 @@
       @include green_button;
     }
   }
+
+  .heading {
+    .title {
+      padding-left: 1rem;
+      font-weight: bolder;
+      color: darkblue;
+    }
+
+    &.all-selector {
+      cursor: pointer;
+      color: goldenrod;
+    }
+  }
+
+  .report_row {
+    display: flex;
+
+    label {
+      width: 200px;
+    }
+
+    .description-wrapper {
+      font-size: smaller;
+      color: darkblue;
+      padding: 9px;
+      flex: 1 1 auto;
+    }
+  }
 }
