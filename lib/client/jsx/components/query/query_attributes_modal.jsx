@@ -147,8 +147,11 @@ export default function QueryAttributesModal({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button contained onClick={toggleAll} color='primary'>
+        <Button contained onClick={toggleAll} color='default'>
           All
+        </Button>
+        <Button contained onClick={onClose} color='secondary'>
+          Cancel
         </Button>
         <Button contained onClick={handleOk} color='primary'>
           Ok
