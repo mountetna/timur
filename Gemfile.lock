@@ -1,7 +1,7 @@
 PATH
   remote: /etna
   specs:
-    etna (0.1.35)
+    etna (0.1.36)
       concurrent-ruby
       jwt
       multipart-post
@@ -36,7 +36,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jwt (2.2.3)
     method_source (1.0.0)
-    mini_portile2 (2.5.0)
+    mini_portile2 (2.5.1)
     minitest (5.14.2)
     multipart-post (2.1.1)
     nio4r (2.5.7)
