@@ -147,15 +147,27 @@ export default function QueryAttributesModal({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button contained onClick={toggleAll} color='default'>
-          All
-        </Button>
-        <Button contained onClick={onClose} color='secondary'>
-          Cancel
-        </Button>
-        <Button contained onClick={handleOk} color='primary'>
-          Ok
-        </Button>
+        <Grid container>
+          <Grid item xs={6} justify='flex-start'>
+            <Button onClick={toggleAll} color='default'>
+              All
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Grid container justify='flex-end'>
+              <Grid item>
+                <Button onClick={onClose} color='secondary'>
+                  Cancel
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button onClick={handleOk} color='primary'>
+                  Ok
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </DialogActions>
     </Dialog>
   );

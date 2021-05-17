@@ -54,7 +54,6 @@ export default function QueryControls() {
               color='primary'
               aria-label='contained primary button group'
             >
-              <Button>Filters</Button>
               <Button>Query</Button>
               <Button>{'\u21af TSV'}</Button>
             </ButtonGroup>

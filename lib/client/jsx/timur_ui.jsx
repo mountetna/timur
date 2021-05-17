@@ -21,7 +21,7 @@ import Search from './components/search/search';
 import {selectUser} from 'etna-js/selectors/user-selector';
 import {ModalDialogContainer} from 'etna-js/components/ModalDialogContainer';
 import {Notifications} from 'etna-js/components/Notifications';
-import QueryBuilder from './components/query/query_builder';
+import QueryPage from './components/query/query_page';
 
 const ROUTES = [
   {
@@ -103,7 +103,7 @@ const ROUTES = [
   {
     name: 'query',
     template: ':project_name/query',
-    component: QueryBuilder,
+    component: QueryPage,
     mode: 'query'
   }
 ];
