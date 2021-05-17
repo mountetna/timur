@@ -7,6 +7,7 @@
     "url": "https://github.com/mountetna/timur.git"
   },
   "dependencies": {
+    "@babel/preset-typescript": "^7.13.0",
     "@emotion/core": "^10.0.28",
     "@material-ui/core": "^4.11.4",
     "babel-core": "^6.26.0",
@@ -42,6 +43,7 @@
     "reselect": "^3.0.1",
     "spark-md5": "^3.0.0",
     "style-loader": "^1.2.1",
+    "typescript": "^4.2.3",
     "webworkify-webpack": "^2.1.1"
   },
   "devDependencies": {
@@ -77,7 +79,7 @@
   "scripts": {
     "lint": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ./lib/client/jsx/** ",
     "lintfile": "$(npm bin)/eslint --ext .jsx,.js.jsx,.js ",
-    "test": "jest && webpack",
+    "test": "tsc && jest && webpack",
     "build": "./node_modules/webpack/bin/webpack.js --env.NODE_ENV=production",
     "build-dev": "./node_modules/webpack/bin/webpack.js --env.NODE_ENV=development",
     "webpack": "./node_modules/webpack/bin/webpack.js --env.NODE_ENV=production --watch",

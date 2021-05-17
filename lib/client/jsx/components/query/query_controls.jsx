@@ -30,8 +30,11 @@ export default function QueryControls() {
     <Grid container justify='center' alignItems='center'>
       <Grid item xs={7}>
         <FormControl className={classes.formControl}>
-          <InputLabel shrink>Root Model</InputLabel>
+          <InputLabel shrink id='rootModel'>
+            Root Model
+          </InputLabel>
           <Select
+            labelId='rootModel'
             value={state.rootModel}
             onChange={setRootModel}
             displayEmpty

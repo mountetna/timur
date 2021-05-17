@@ -5,7 +5,8 @@ export const defaultContext = {
   state: {
     attributes: {},
     rootModel: null,
-    filters: {}
+    recordFilters: [],
+    valueFilters: []
   }
 };
 
@@ -21,7 +22,6 @@ export const QueryProvider = (props) => {
   }, []);
 
   function setAttributes(attributes, model_name) {
-    console.log('in setAttributes', attributes);
     // Remove a model if no attributes
     let updatedAttributes = {...state.attributes};
 
@@ -37,10 +37,35 @@ export const QueryProvider = (props) => {
     });
   }
 
-  function setFilters(filters) {
+  function addRecordFilter(recordFilter) {
     setState({
       ...state,
-      filters: [...filters]
+      recordFilters: [...state.recordFilters].concat([recordFilter])
+    });
+  }
+
+  function removeRecordFilter(filterIndex) {
+    let updatedRecordFilters = [...state.recordFilters];
+    updatedRecordFilters.splice(filterIndex, 1);
+    setState({
+      ...state,
+      recordFilters: updatedRecordFilters
+    });
+  }
+
+  function addValueFilter(valueFilter) {
+    setState({
+      ...state,
+      valueFilters: [...state.valueFilters].concat([valueFilter])
+    });
+  }
+
+  function removeValueFilter(filterIndex) {
+    let updatedValueFilters = [...state.valueFilters];
+    updatedValueFilters.splice(filterIndex, 1);
+    setState({
+      ...state,
+      valueFilters: updatedValueFilters
     });
   }
 
@@ -58,7 +83,10 @@ export const QueryProvider = (props) => {
       value={{
         state,
         setAttributes,
-        setFilters,
+        addRecordFilter,
+        removeRecordFilter,
+        addValueFilter,
+        removeValueFilter,
         setRootModel
       }}
     >

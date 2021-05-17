@@ -33,7 +33,7 @@ module.exports = (env) => ({
         ],
 
         // Only run `.js` and `.jsx` files through Babel
-        test: /\.jsx?$/
+        test: /\.(js|ts)x?$/
       },
 
       {
