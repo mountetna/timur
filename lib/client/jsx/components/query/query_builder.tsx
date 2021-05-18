@@ -22,6 +22,9 @@ const QueryBuilder = ({}) => {
       <Grid item>
         <QueryControls />
       </Grid>
+      {/* <Grid item>
+        <QueryJoins />
+      </Grid> */}
       <Grid item className={classes.previewPane}>
         <QueryPreview />
       </Grid>

@@ -16,7 +16,6 @@ import {selectTemplate} from 'etna-js/selectors/magma';
 
 import {Attribute} from '../../models/model_types';
 import {QueryColumn} from '../../contexts/query/query_types';
-import {visibleSortedAttributes} from '../../utils/attributes';
 
 const useStyles = makeStyles((theme) => ({
   scrollable: {

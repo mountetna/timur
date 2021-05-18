@@ -5,7 +5,7 @@ var webpack = require('webpack');
 module.exports = (env) => ({
   context: path.resolve(__dirname),
   resolve: {
-    extensions: ['.js', '.jsx', '.scss', '.png', '.jpg', '.jpeg', '.svg'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss', '.png', '.jpg', '.jpeg', '.svg'],
     alias: {
       'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib'),
       react: path.join(__dirname, 'node_modules/react'),
