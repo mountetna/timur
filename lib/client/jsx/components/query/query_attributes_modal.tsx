@@ -14,6 +14,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectTemplate} from 'etna-js/selectors/magma';
 
+import {Attribute} from '../../models/model_types';
+import {QueryColumn} from '../../contexts/query/query_types';
 import {visibleSortedAttributes} from '../../utils/attributes';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +24,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function AttributeSelector({attribute, checked, onClick}) {
+interface AttributeSelectorInterface {
+  attribute: Attribute;
+  checked: boolean;
+  onClick: (attr: Attribute) => void;
+}
+
+function AttributeSelector({
+  attribute,
+  checked,
+  onClick
+}: AttributeSelectorInterface) {
   const classes = useStyles();
 
   return (
@@ -46,16 +58,28 @@ function AttributeSelector({attribute, checked, onClick}) {
   );
 }
 
-export default function QueryAttributesModal({
+interface QueryAttributesModelInterface {
+  model_name: string;
+  attributes: QueryColumn[];
+  setAttributes: (attributes: QueryColumn[], model_name: string) => void;
+  attributeOptions: Attribute[];
+  onClose: () => void;
+  open: boolean;
+}
+
+const QueryAttributesModal = ({
   model_name,
   attributes,
   setAttributes,
+  attributeOptions,
   onClose,
   open
-}) {
+}: QueryAttributesModelInterface) => {
   const classes = useStyles();
-  const [selectedAttributes, setSelectedAttributes] = useState([]);
-  const contentRef = React.useRef(null);
+  const [selectedAttributes, setSelectedAttributes] = useState(
+    [] as QueryColumn[]
+  );
+  const contentRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   useEffect(() => {
     if (open) {
@@ -67,50 +91,52 @@ export default function QueryAttributesModal({
   }, [open]);
 
   useEffect(() => {
-    setSelectedAttributes(attributes.filter(({model}) => model === model_name));
+    setSelectedAttributes(
+      attributes.filter((attr: QueryColumn) => attr.model_name === model_name)
+    );
   }, []);
 
-  let template = useReduxState((state) => selectTemplate(state, model_name));
+  let reduxState = useReduxState();
+  let template = selectTemplate(reduxState, model_name);
 
   if (!template) return null;
 
-  const attributeOptions = visibleSortedAttributes(template.attributes).filter(
-    (attribute) => 'project' !== attribute.model_name
-  );
-
-  function attributeCurrentlySelected(attribute) {
+  function attributeCurrentlySelected(attribute: Attribute | QueryColumn) {
     return (
       selectedAttributes.findIndex(
-        ({model, attribute_name}) =>
-          model === model_name && attribute_name === attribute.attribute_name
+        (attr: QueryColumn) =>
+          attr.model_name === model_name &&
+          attr.attribute_name === attribute.attribute_name
       ) > -1
     );
   }
 
-  function toggleAttribute(attribute) {
+  function toggleAttribute(attribute: Attribute) {
     setSelectedAttributes(
       attributeCurrentlySelected(attribute)
         ? selectedAttributes.filter(
-            ({attribute_name, model}) =>
+            (attr: QueryColumn) =>
               !(
-                model === model_name &&
-                attribute_name === attribute.attribute_name
+                attr.model_name === model_name &&
+                attr.attribute_name === attribute.attribute_name
               )
           )
-        : selectedAttributes.concat({
-            model: model_name,
-            attribute_name: attribute.attribute_name,
-            display_label: `${model_name}.${attribute.attribute_name}`
-          })
+        : selectedAttributes.concat([
+            {
+              model_name,
+              attribute_name: attribute.attribute_name,
+              display_label: `${model_name}.${attribute.attribute_name}`
+            }
+          ])
     );
   }
 
   function toggleAll() {
-    let updatedAttributes = [];
+    let updatedAttributes: QueryColumn[] = [];
     if (selectedAttributes.length === 0) {
-      updatedAttributes = attributeOptions.map((attribute) => {
+      updatedAttributes = attributeOptions.map((attribute: Attribute) => {
         return {
-          model: model_name,
+          model_name: model_name,
           attribute_name: attribute.attribute_name,
           display_label: `${model_name}.${attribute.attribute_name}`
         };
@@ -136,7 +162,7 @@ export default function QueryAttributesModal({
           ref={contentRef}
           tabIndex={-1}
         >
-          {attributeOptions.map((attribute) => (
+          {attributeOptions.map((attribute: Attribute) => (
             <AttributeSelector
               key={attribute.attribute_name}
               onClick={toggleAttribute}
@@ -171,4 +197,6 @@ export default function QueryAttributesModal({
       </DialogActions>
     </Dialog>
   );
-}
+};
+
+export default QueryAttributesModal;

@@ -1,14 +1,15 @@
 // Generic filter component?
 // Model, attribute, operator, operand
 
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useContext} from 'react';
 import Grid from '@material-ui/core/Grid';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {QueryContext} from '../../contexts/query/query_context';
-import {selectQueryRecordFilters} from '../../selectors/query_selector';
-
-import QueryFilter from './query_filter';
+import {selectQuerySelectedModels} from '../../selectors/query_selector';
 
 const useStyles = makeStyles((theme) => ({
   previewPane: {
@@ -18,28 +19,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function QueryRecordFilters() {
+const QueryFilter = ({
+  index,
+  modelName,
+  attributeName,
+  operator,
+  operand,
+  setFilter,
+  removeFilter
+}: any) => {
   const classes = useStyles();
-  const {state, setRecordFilters} = useContext(QueryContext);
-  const recordFilters = selectQueryRecordFilters(state);
+  const {state} = useContext(QueryContext);
+
+  let modelNames = selectQuerySelectedModels(state);
+
+  function setModelName() {}
 
   return (
     <Grid container>
-      {recordFilters.map(
-        ({modelName, attributeName, operand, operator}, index) => {
-          return (
-            <Grid item>
-              <QueryFilter
-                modelName={modelName}
-                attributeName={attributeName}
-                operator={operator}
-                operand={operand}
-                index={index}
-              />
-            </Grid>
-          );
-        }
-      )}
       <Grid item>
         <InputLabel id={`modelSelect-${index}`}>Model</InputLabel>
         <Select
@@ -47,7 +44,6 @@ export default function QueryRecordFilters() {
           value={modelName}
           onChange={setModelName}
           displayEmpty
-          className={classes.selectEmpty}
         >
           {modelNames.map((name) => (
             <MenuItem value={name}>{name}</MenuItem>
@@ -59,4 +55,6 @@ export default function QueryRecordFilters() {
       <Grid item></Grid>
     </Grid>
   );
-}
+};
+
+export default QueryFilter;

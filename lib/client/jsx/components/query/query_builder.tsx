@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function QueryBuilder({}) {
+const QueryBuilder = ({}) => {
   const classes = useStyles();
 
   return (
@@ -30,4 +30,6 @@ export default function QueryBuilder({}) {
       </Grid>
     </Grid>
   );
-}
+};
+
+export default QueryBuilder;

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -7,6 +7,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {makeStyles} from '@material-ui/core/styles';
+
+import {useReduxState} from 'etna-js/hooks/useReduxState';
+import {selectTemplate} from 'etna-js/selectors/magma';
 
 import {QueryContext} from '../../contexts/query/query_context';
 
@@ -17,17 +20,35 @@ const useStyles = makeStyles((theme) => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2)
+  },
+  container: {
+    width: '100%'
   }
 }));
 
-export default function QueryControls() {
-  const {state, setFilters, setRootModel} = useContext(QueryContext);
+const QueryControls = () => {
+  const {state, setRootModel} = useContext(QueryContext);
   const classes = useStyles();
 
-  let models = state.attributes ? Object.keys(state.attributes) : [];
+  let reduxState = useReduxState();
+
+  function onModelSelect(modelName: string) {
+    let template = selectTemplate(reduxState, modelName);
+    setRootModel(modelName, {
+      model_name: modelName,
+      attribute_name: template.identifier,
+      display_label: `${modelName}.${template.identifier}`
+    });
+  }
 
   return (
-    <Grid container justify='center' alignItems='center'>
+    <Grid
+      container
+      xs={12}
+      className={classes.container}
+      justify='center'
+      alignItems='center'
+    >
       <Grid item xs={7}>
         <FormControl className={classes.formControl}>
           <InputLabel shrink id='rootModel'>
@@ -36,21 +57,24 @@ export default function QueryControls() {
           <Select
             labelId='rootModel'
             value={state.rootModel}
-            onChange={setRootModel}
+            onChange={(e) => onModelSelect(e.target.value as string)}
             displayEmpty
             className={classes.selectEmpty}
           >
             <MenuItem value=''>
               <em>None</em>
             </MenuItem>
-            {models.map((model_name) => (
-              <MenuItem value={model_name}>{model_name}</MenuItem>
-            ))}
+            {state.graph &&
+              [...state.graph.allowedModels]
+                .sort()
+                .map((model_name: string) => (
+                  <MenuItem value={model_name}>{model_name}</MenuItem>
+                ))}
           </Select>
         </FormControl>
       </Grid>
       <Grid item xs={5}>
-        <Grid container alignItems='center' justify='center'>
+        <Grid container alignItems='center' justify='flex-end'>
           <Grid item>
             <ButtonGroup
               variant='contained'
@@ -65,4 +89,6 @@ export default function QueryControls() {
       </Grid>
     </Grid>
   );
-}
+};
+
+export default QueryControls;

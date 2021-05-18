@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import {QueryContext} from '../../contexts/query/query_context';
+import {QueryColumn} from '../../contexts/query/query_types';
 
 const useStyles = makeStyles({
   table: {
@@ -16,15 +17,16 @@ const useStyles = makeStyles({
   }
 });
 
-export default function QueryPreview() {
+const QueryPreview = () => {
   const {state} = useContext(QueryContext);
   const classes = useStyles();
 
-  if (!state.attributes || !state.rootModel) return null;
+  if (!state.rootModel || !state.rootIdentifier) return null;
 
-  let columns = Object.values(state.attributes)
+  let columns = Object.values(state.attributes || {})
     .flat()
-    .map((attr) => attr.display_label);
+    .map((attr: QueryColumn) => attr.display_label);
+  columns.unshift(state.rootIdentifier.display_label);
 
   return (
     <TableContainer component={Paper}>
@@ -35,7 +37,7 @@ export default function QueryPreview() {
       >
         <TableHead>
           <TableRow>
-            {columns.map((heading) => (
+            {columns.map((heading: string) => (
               <TableCell>{heading}</TableCell>
             ))}
           </TableRow>
@@ -43,4 +45,6 @@ export default function QueryPreview() {
       </Table>
     </TableContainer>
   );
-}
+};
+
+export default QueryPreview;

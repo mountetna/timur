@@ -6,16 +6,13 @@ import ModelLink, {Arrowhead} from './model_link';
 import ModelNode from './model_node';
 import Layout from './tree_layout';
 
-export default function ModelMapGraphic({
+const ModelMapGraphic = ({
   selected_models,
   handler,
-  width,
-  height,
+  width = 600,
+  height = 600,
   disabled_models
-}) {
-  width = width || 600;
-  height = height || 600;
-
+}) => {
   let {model_names, templates} = useReduxState((state) => {
     let mod_names = selectModelNames(state);
     return {
@@ -71,4 +68,6 @@ export default function ModelMapGraphic({
       })}
     </React.Fragment>
   );
-}
+};
+
+export default ModelMapGraphic;
