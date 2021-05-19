@@ -6,6 +6,7 @@ import {Model, Template, Attribute} from '../models/model_types';
 export class QueryGraph {
   graph: DirectedGraph;
   unallowedModels: string[] = ['project'];
+  includedLinkTypes: string[] = ['link', 'table'];
   allowedModels: Set<string>;
 
   constructor(magmaModels: {[key: string]: Model}) {
@@ -22,18 +23,20 @@ export class QueryGraph {
         let template: Template = modelDefinition.template;
         this.allowedModels.add(modelName);
 
-        if (this.unallowedModels.includes(template.parent)) return;
-
-        this.graph.addConnection(template.parent, modelName);
+        if (!this.unallowedModels.includes(template.parent))
+          this.graph.addConnection(template.parent, modelName);
 
         Object.values(template.attributes)
           .filter(
             (attr: Attribute) =>
-              'link' === attr.attribute_type && attr.link_model_name
+              this.includedLinkTypes.includes(attr.attribute_type) &&
+              attr.link_model_name
           )
           .forEach((link: Attribute) => {
-            if (link.link_model_name)
+            if (link.link_model_name) {
+              this.allowedModels.add(link.link_model_name);
               this.graph.addConnection(modelName, link.link_model_name);
+            }
           });
       }
     );
@@ -57,5 +60,17 @@ export class QueryGraph {
     // An immediate example is "document".
     if (!Object.keys(this.graph.children).includes(modelName)) return {};
     return this.graph.asNormalizedHash(modelName);
+  }
+
+  allPaths(modelName: string): string[][] {
+    if (!Object.keys(this.graph.children).includes(modelName)) return [];
+
+    let parentage: string[] = this.graph.fullParentage(modelName);
+
+    // Any model that you can traverse to from any parent should
+    //   also count as a path.
+    return this.pathsFrom(modelName)
+      .concat([parentage])
+      .concat(parentage.map((p) => this.pathsFrom(p)).flat(1));
   }
 }

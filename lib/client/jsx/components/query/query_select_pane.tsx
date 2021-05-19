@@ -100,7 +100,11 @@ const QuerySelectPane = () => {
           removeModel={() => {}}
         />
         {intersectionModels.map((modelName: string, index: number) => {
-          let choiceSet = [...state.graph.allowedModels]
+          if (!state.rootModel) return;
+
+          let choiceSet = [
+            ...new Set(state.graph.allPaths(state.rootModel).flat())
+          ]
             .filter(
               (m) => !intersectionModels.includes(m) && m !== state.rootModel
             )
