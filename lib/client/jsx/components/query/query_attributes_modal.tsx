@@ -90,9 +90,10 @@ const QueryAttributesModal = ({
   }, [open]);
 
   useEffect(() => {
-    setSelectedAttributes(
-      attributes.filter((attr: QueryColumn) => attr.model_name === model_name)
-    );
+    if (attributes)
+      setSelectedAttributes(
+        attributes.filter((attr: QueryColumn) => attr.model_name === model_name)
+      );
   }, []);
 
   let reduxState = useReduxState();

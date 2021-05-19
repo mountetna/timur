@@ -9,7 +9,7 @@ import useQueryGraph from './use_query_graph';
 const defaultState = {
   attributes: {} as {[key: string]: QueryColumn[]},
   rootModel: null as string | null,
-  rootIdentifier: {} as QueryColumn,
+  rootIdentifier: {} as QueryColumn | null,
   recordFilters: [] as QueryFilter[],
   valueFilters: [] as QueryFilter[],
   graph: {} as QueryGraph
@@ -17,12 +17,13 @@ const defaultState = {
 
 export const defaultContext = {
   state: defaultState as QueryState,
-  setAttributes: (attributes: QueryColumn[], model_name: string) => {},
+  setAttributes: (model_name: string, attributes: QueryColumn[]) => {},
   addRecordFilter: (recordFilter: QueryFilter) => {},
   removeRecordFilter: (index: number) => {},
   addValueFilter: (valueFilter: QueryFilter) => {},
   removeValueFilter: (index: number) => {},
-  setRootModel: (model_name: string, model_identifier: QueryColumn) => {}
+  setRootModel: (model_name: string, model_identifier: QueryColumn) => {},
+  clearRootModel: () => {}
 };
 
 export type QueryState = Readonly<typeof defaultState>;
@@ -43,7 +44,7 @@ export const QueryProvider = (
     });
   }, []);
 
-  function setAttributes(attributes: QueryColumn[], model_name: string) {
+  function setAttributes(model_name: string, attributes: QueryColumn[]) {
     // Remove a model if no attributes
     let updatedAttributes = {...state.attributes};
 
@@ -99,6 +100,17 @@ export const QueryProvider = (
     });
   }
 
+  function clearRootModel() {
+    setState({
+      ...state,
+      rootModel: null,
+      rootIdentifier: null,
+      attributes: {},
+      recordFilters: [],
+      valueFilters: []
+    });
+  }
+
   function setGraph(graph: QueryGraph) {
     setState({
       ...state,
@@ -117,7 +129,8 @@ export const QueryProvider = (
         removeRecordFilter,
         addValueFilter,
         removeValueFilter,
-        setRootModel
+        setRootModel,
+        clearRootModel
       }}
     >
       {props.children}

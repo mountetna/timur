@@ -9,7 +9,7 @@ const QueryPage = ({}) => {
     <React.Fragment>
       <QueryProvider>
         <Grid container spacing={5}>
-          <Grid item>
+          <Grid item xs={12}>
             <QueryBuilder />
           </Grid>
         </Grid>
