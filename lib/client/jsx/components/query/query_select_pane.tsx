@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const QuerySelectPane = () => {
+  const [intersectionModels, setIntersectionModels] = useState([] as string[]);
   const {state, setRootModel, setAttributes, clearRootModel} = useContext(
     QueryContext
   );
@@ -47,18 +48,30 @@ const QuerySelectPane = () => {
 
   let reduxState = useReduxState();
 
-  function onModelSelect(modelName: string, isRoot: boolean = false) {
-    if (isRoot && '' === modelName) {
+  function onRootModelSelect(modelName: string) {
+    if ('' === modelName) {
       clearRootModel();
-    } else if (isRoot) {
+    } else {
       let template = selectTemplate(reduxState, modelName);
       setRootModel(modelName, {
         model_name: modelName,
         attribute_name: template.identifier,
         display_label: `${modelName}.${template.identifier}`
       });
-    } else {
     }
+  }
+
+  function updateIntersectionModels(modelName: string, index: number) {
+    let updatedModels: string[] = [...intersectionModels];
+    updatedModels[index] = modelName;
+    setIntersectionModels(updatedModels);
+  }
+
+  function removeIntersectionModel(index: number) {
+    let updatedModels: string[] = [...intersectionModels];
+    let removedModelName: string = updatedModels.splice(index, 1)[0];
+    setIntersectionModels(updatedModels);
+    setAttributes(removedModelName, []);
   }
 
   return (
@@ -76,14 +89,39 @@ const QuerySelectPane = () => {
               ? [...state.graph.allowedModels]
               : []
           }
-          onSelectModel={(modelName) => onModelSelect(modelName, true)}
+          onSelectModel={(modelName) => onRootModelSelect(modelName)}
           onSelectAttributes={setAttributes}
           selectedAttributes={
             state.rootModel && state.attributes
               ? state.attributes[state.rootModel]
               : []
           }
+          canRemove={false}
+          removeModel={() => {}}
         />
+        {intersectionModels.map((modelName: string, index: number) => {
+          let choiceSet = [...state.graph.allowedModels]
+            .filter(
+              (m) => !intersectionModels.includes(m) && m !== state.rootModel
+            )
+            .concat([modelName]);
+          return (
+            <QueryModelAttributeSelector
+              label='Intersection Model'
+              modelValue={modelName}
+              modelChoiceSet={choiceSet}
+              onSelectModel={(newModelName) =>
+                updateIntersectionModels(newModelName, index)
+              }
+              onSelectAttributes={setAttributes}
+              selectedAttributes={
+                modelName && state.attributes ? state.attributes[modelName] : []
+              }
+              canRemove={true}
+              removeModel={() => removeIntersectionModel(index)}
+            />
+          );
+        })}
       </CardContent>
       <CardActions disableSpacing>
         {state.rootModel ? (
@@ -91,7 +129,12 @@ const QuerySelectPane = () => {
             title='Add intersection model'
             aria-label='add intersection model'
           >
-            <IconButton aria-label='add model and attributes'>
+            <IconButton
+              aria-label='add model and attributes'
+              onClick={() =>
+                setIntersectionModels(intersectionModels.concat(['']))
+              }
+            >
               <AddIcon />
             </IconButton>
           </Tooltip>

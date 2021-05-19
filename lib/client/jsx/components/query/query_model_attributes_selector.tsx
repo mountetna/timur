@@ -1,8 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -10,7 +6,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
+import ClearIcon from '@material-ui/icons/Clear';
+import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
@@ -55,6 +52,8 @@ interface QueryModelAttribute {
   selectedAttributes: QueryColumn[];
   onSelectModel: (modelName: string) => void;
   onSelectAttributes: (modelName: string, attributes: QueryColumn[]) => void;
+  removeModel: () => void;
+  canRemove: boolean;
 }
 
 const QueryModelAttributeSelector = ({
@@ -63,7 +62,9 @@ const QueryModelAttributeSelector = ({
   modelValue,
   selectedAttributes,
   onSelectModel,
-  onSelectAttributes
+  onSelectAttributes,
+  removeModel,
+  canRemove
 }: QueryModelAttribute) => {
   const [open, setOpen] = useState(false);
   const [modelAttributes, setModelAttributes] = useState([] as Attribute[]);
@@ -133,8 +134,23 @@ const QueryModelAttributeSelector = ({
       {modelValue ? (
         <Grid item justify='flex-end'>
           <Button onClick={showAttributes} variant='contained' color='default'>
-            Attributes
+            {`Attributes - ${
+              selectedAttributes ? selectedAttributes.length : 0
+            }`}
           </Button>
+          {canRemove ? (
+            <Tooltip
+              title='Remove model and attributes'
+              aria-label='remove model and attributes'
+            >
+              <IconButton
+                aria-label='remove model and attributes'
+                onClick={removeModel}
+              >
+                <ClearIcon color='action' />
+              </IconButton>
+            </Tooltip>
+          ) : null}
           <QueryAttributesModal
             attributes={selectedAttributes}
             attributeOptions={selectableModelAttributes}
