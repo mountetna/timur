@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -45,17 +45,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-interface QueryModelAttribute {
-  label: string;
-  modelChoiceSet: string[];
-  modelValue: string;
-  selectedAttributes: QueryColumn[];
-  onSelectModel: (modelName: string) => void;
-  onSelectAttributes: (modelName: string, attributes: QueryColumn[]) => void;
-  removeModel: () => void;
-  canRemove: boolean;
-}
-
 const QueryModelAttributeSelector = ({
   label,
   modelChoiceSet,
@@ -65,7 +54,16 @@ const QueryModelAttributeSelector = ({
   onSelectAttributes,
   removeModel,
   canRemove
-}: QueryModelAttribute) => {
+}: {
+  label: string;
+  modelChoiceSet: string[];
+  modelValue: string;
+  selectedAttributes: QueryColumn[];
+  onSelectModel: (modelName: string) => void;
+  onSelectAttributes: (modelName: string, attributes: QueryColumn[]) => void;
+  removeModel: () => void;
+  canRemove: boolean;
+}) => {
   const [open, setOpen] = useState(false);
   const [modelAttributes, setModelAttributes] = useState([] as Attribute[]);
   const [selectableModelAttributes, setSelectableModelAttributes] = useState(
@@ -75,17 +73,20 @@ const QueryModelAttributeSelector = ({
 
   let reduxState = useReduxState();
 
-  function onModelSelect(modelName: string) {
-    onSelectModel(modelName);
-    if ('' !== modelName) {
-      let template = selectTemplate(reduxState, modelName);
-      setModelAttributes(visibleSortedAttributes(template.attributes));
-    }
-  }
+  const onModelSelect = useCallback(
+    (modelName: string) => {
+      onSelectModel(modelName);
+      if ('' !== modelName) {
+        let template = selectTemplate(reduxState, modelName);
+        setModelAttributes(visibleSortedAttributes(template.attributes));
+      }
+    },
+    [reduxState]
+  );
 
-  function showAttributes() {
+  const showAttributes = useCallback(() => {
     setOpen(true);
-  }
+  }, []);
 
   useEffect(() => {
     // I think we should force people to get these FK values

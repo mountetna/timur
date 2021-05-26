@@ -63,18 +63,24 @@ const QuerySelectPane = () => {
     [state.rootModel, reduxState]
   );
 
-  function updateIntersectionModels(modelName: string, index: number) {
-    let updatedModels: string[] = [...intersectionModels];
-    updatedModels[index] = modelName;
-    setIntersectionModels(updatedModels);
-  }
+  const updateIntersectionModels = useCallback(
+    (modelName: string, index: number) => {
+      let updatedModels: string[] = [...intersectionModels];
+      updatedModels[index] = modelName;
+      setIntersectionModels(updatedModels);
+    },
+    [intersectionModels]
+  );
 
-  function removeIntersectionModel(index: number) {
-    let updatedModels: string[] = [...intersectionModels];
-    let removedModelName: string = updatedModels.splice(index, 1)[0];
-    setIntersectionModels(updatedModels);
-    setAttributes(removedModelName, []);
-  }
+  const removeIntersectionModel = useCallback(
+    (index: number) => {
+      let updatedModels: string[] = [...intersectionModels];
+      let removedModelName: string = updatedModels.splice(index, 1)[0];
+      setIntersectionModels(updatedModels);
+      setAttributes(removedModelName, []);
+    },
+    [intersectionModels]
+  );
 
   return (
     <Card className={classes.root}>
