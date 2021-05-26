@@ -23,17 +23,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-interface AttributeSelectorInterface {
-  attribute: Attribute;
-  checked: boolean;
-  onClick: (attr: Attribute) => void;
-}
-
 function AttributeSelector({
   attribute,
   checked,
   onClick
-}: AttributeSelectorInterface) {
+}: {
+  attribute: Attribute;
+  checked: boolean;
+  onClick: (attr: Attribute) => void;
+}) {
   const classes = useStyles();
 
   return (
@@ -57,15 +55,6 @@ function AttributeSelector({
   );
 }
 
-interface QueryAttributesModelInterface {
-  model_name: string;
-  attributes: QueryColumn[];
-  setAttributes: (attributes: QueryColumn[], model_name: string) => void;
-  attributeOptions: Attribute[];
-  onClose: () => void;
-  open: boolean;
-}
-
 const QueryAttributesModal = ({
   model_name,
   attributes,
@@ -73,7 +62,14 @@ const QueryAttributesModal = ({
   attributeOptions,
   onClose,
   open
-}: QueryAttributesModelInterface) => {
+}: {
+  model_name: string;
+  attributes: QueryColumn[];
+  setAttributes: (attributes: QueryColumn[], model_name: string) => void;
+  attributeOptions: Attribute[];
+  onClose: () => void;
+  open: boolean;
+}) => {
   const classes = useStyles();
   const [selectedAttributes, setSelectedAttributes] = useState(
     [] as QueryColumn[]

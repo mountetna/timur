@@ -97,7 +97,8 @@ const QueryModelAttributeSelector = ({
       'parent',
       'child',
       'collection',
-      'link'
+      'link',
+      'table'
     ];
     setSelectableModelAttributes(
       modelAttributes.filter(
@@ -153,7 +154,7 @@ const QueryModelAttributeSelector = ({
             </Tooltip>
           ) : null}
           <QueryAttributesModal
-            attributes={selectedAttributes}
+            attributes={selectedAttributes || []}
             attributeOptions={selectableModelAttributes}
             setAttributes={(attributes: QueryColumn[]) =>
               onSelectAttributes(modelValue, attributes)

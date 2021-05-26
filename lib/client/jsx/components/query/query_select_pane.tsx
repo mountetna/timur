@@ -127,7 +127,9 @@ const QuerySelectPane = () => {
               }
               onSelectAttributes={setAttributes}
               selectedAttributes={
-                modelName && state.attributes ? state.attributes[modelName] : []
+                modelName && state.attributes && state.attributes[modelName]
+                  ? state.attributes[modelName]
+                  : []
               }
               canRemove={true}
               removeModel={() => removeIntersectionModel(index)}
