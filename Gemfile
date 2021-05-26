@@ -15,6 +15,9 @@ gem 'sequel', '4.49.0'
 
 gem 'puma', '>=5.0.2'
 gem 'concurrent-ruby'
+gem "yabeda"
+gem "yabeda-prometheus"
+gem "yabeda-puma-plugin"
 
 group :development, :test do
   gem 'rspec'
