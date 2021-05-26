@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -48,18 +48,20 @@ const QuerySelectPane = () => {
 
   let reduxState = useReduxState();
 
-  function onRootModelSelect(modelName: string) {
-    if ('' === modelName) {
+  const onRootModelSelect = useCallback(
+    (modelName: string) => {
       clearRootModel();
-    } else {
-      let template = selectTemplate(reduxState, modelName);
-      setRootModel(modelName, {
-        model_name: modelName,
-        attribute_name: template.identifier,
-        display_label: `${modelName}.${template.identifier}`
-      });
-    }
-  }
+      if ('' !== modelName) {
+        let template = selectTemplate(reduxState, modelName);
+        setRootModel(modelName, {
+          model_name: modelName,
+          attribute_name: template.identifier,
+          display_label: `${modelName}.${template.identifier}`
+        });
+      }
+    },
+    [state.rootModel, reduxState]
+  );
 
   function updateIntersectionModels(modelName: string, index: number) {
     let updatedModels: string[] = [...intersectionModels];

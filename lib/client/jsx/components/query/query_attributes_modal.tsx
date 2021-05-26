@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -90,48 +90,53 @@ const QueryAttributesModal = ({
   }, [open]);
 
   useEffect(() => {
-    if (attributes)
-      setSelectedAttributes(
-        attributes.filter((attr: QueryColumn) => attr.model_name === model_name)
-      );
-  }, []);
+    setSelectedAttributes(
+      attributes.filter((attr: QueryColumn) => attr.model_name === model_name)
+    );
+  }, [attributes]);
 
   let reduxState = useReduxState();
   let template = selectTemplate(reduxState, model_name);
 
   if (!template) return null;
 
-  function attributeCurrentlySelected(attribute: Attribute | QueryColumn) {
-    return (
-      selectedAttributes.findIndex(
-        (attr: QueryColumn) =>
-          attr.model_name === model_name &&
-          attr.attribute_name === attribute.attribute_name
-      ) > -1
-    );
-  }
+  const attributeCurrentlySelected = useCallback(
+    (attribute: Attribute | QueryColumn) => {
+      return (
+        selectedAttributes.findIndex(
+          (attr: QueryColumn) =>
+            attr.model_name === model_name &&
+            attr.attribute_name === attribute.attribute_name
+        ) > -1
+      );
+    },
+    [selectedAttributes, model_name]
+  );
 
-  function toggleAttribute(attribute: Attribute) {
-    setSelectedAttributes(
-      attributeCurrentlySelected(attribute)
-        ? selectedAttributes.filter(
-            (attr: QueryColumn) =>
-              !(
-                attr.model_name === model_name &&
-                attr.attribute_name === attribute.attribute_name
-              )
-          )
-        : selectedAttributes.concat([
-            {
-              model_name,
-              attribute_name: attribute.attribute_name,
-              display_label: `${model_name}.${attribute.attribute_name}`
-            }
-          ])
-    );
-  }
+  const toggleAttribute = useCallback(
+    (attribute: Attribute) => {
+      setSelectedAttributes(
+        attributeCurrentlySelected(attribute)
+          ? selectedAttributes.filter(
+              (attr: QueryColumn) =>
+                !(
+                  attr.model_name === model_name &&
+                  attr.attribute_name === attribute.attribute_name
+                )
+            )
+          : selectedAttributes.concat([
+              {
+                model_name,
+                attribute_name: attribute.attribute_name,
+                display_label: `${model_name}.${attribute.attribute_name}`
+              }
+            ])
+      );
+    },
+    [attributeCurrentlySelected, selectedAttributes, model_name]
+  );
 
-  function toggleAll() {
+  const toggleAll = useCallback(() => {
     let updatedAttributes: QueryColumn[] = [];
     if (selectedAttributes.length === 0) {
       updatedAttributes = attributeOptions.map((attribute: Attribute) => {
@@ -143,17 +148,17 @@ const QueryAttributesModal = ({
       });
     }
     setSelectedAttributes(updatedAttributes);
-  }
+  }, [selectedAttributes, model_name]);
 
-  function handleOk() {
+  const handleOk = useCallback(() => {
     setAttributes(selectedAttributes, model_name);
     onClose();
-  }
+  }, [selectedAttributes, model_name]);
 
   return (
     <Dialog onClose={onClose} maxWidth='md' open={open} scroll='paper'>
       <DialogTitle id='query-attributes-dialog-title'>
-        <span className='name'>Model</span>
+        <span className='name'>Model</span>{' '}
         <span className='title'>{model_name}</span>
       </DialogTitle>
       <DialogContent dividers={true}>
