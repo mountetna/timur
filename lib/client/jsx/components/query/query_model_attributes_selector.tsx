@@ -15,9 +15,9 @@ import {selectTemplate} from 'etna-js/selectors/magma';
 
 import {Attribute} from '../../models/model_types';
 
-import {QueryContext} from '../../contexts/query/query_context';
 import {QueryColumn} from '../../contexts/query/query_types';
 import QueryAttributesModal from './query_attributes_modal';
+import {selectAllowedModelAttributes} from '../../selectors/query_selector';
 
 import {visibleSortedAttributes} from '../../utils/attributes';
 
@@ -73,7 +73,7 @@ const QueryModelAttributeSelector = ({
 
   let reduxState = useReduxState();
 
-  const onModelSelect = useCallback(
+  const handleModelSelect = useCallback(
     (modelName: string) => {
       onSelectModel(modelName);
       if ('' !== modelName) {
@@ -89,23 +89,7 @@ const QueryModelAttributeSelector = ({
   }, []);
 
   useEffect(() => {
-    // I think we should force people to get these FK values
-    //   from the other model, because generally people won't want
-    //   the FK itself, just the identifier of the other model.
-    const unallowedAttributeTypes = [
-      'identifier',
-      'parent',
-      'child',
-      'collection',
-      'link',
-      'table'
-    ];
-    setSelectableModelAttributes(
-      modelAttributes.filter(
-        (attr: Attribute) =>
-          !unallowedAttributeTypes.includes(attr.attribute_type)
-      )
-    );
+    setSelectableModelAttributes(selectAllowedModelAttributes(modelAttributes));
   }, [modelAttributes]);
 
   const id = `${label}-${Math.random()}`;
@@ -120,7 +104,7 @@ const QueryModelAttributeSelector = ({
           <Select
             labelId={id}
             value={modelValue}
-            onChange={(e) => onModelSelect(e.target.value as string)}
+            onChange={(e) => handleModelSelect(e.target.value as string)}
             displayEmpty
             className={classes.selectEmpty}
           >

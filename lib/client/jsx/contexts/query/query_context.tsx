@@ -18,8 +18,7 @@ const defaultState = {
 export const defaultContext = {
   state: defaultState as QueryState,
   setAttributes: (model_name: string, attributes: QueryColumn[]) => {},
-  addRecordFilter: (recordFilter: QueryFilter) => {},
-  removeRecordFilter: (index: number) => {},
+  setRecordFilters: (recordFilters: QueryFilter[]) => {},
   addValueFilter: (valueFilter: QueryFilter) => {},
   removeValueFilter: (index: number) => {},
   setRootModel: (model_name: string, model_identifier: QueryColumn) => {},
@@ -60,26 +59,24 @@ export const QueryProvider = (
     });
   }
 
-  function addRecordFilter(recordFilter: QueryFilter) {
+  function setRecordFilters(recordFilters: QueryFilter[]) {
     setState({
       ...state,
-      recordFilters: [...state.recordFilters].concat([recordFilter])
+      recordFilters: [...(recordFilters || [])]
     });
   }
 
-  function removeRecordFilter(filterIndex: number) {
-    let updatedRecordFilters = [...state.recordFilters];
-    updatedRecordFilters.splice(filterIndex, 1);
+  function clearRecordFilters() {
     setState({
       ...state,
-      recordFilters: updatedRecordFilters
+      recordFilters: []
     });
   }
 
   function addValueFilter(valueFilter: QueryFilter) {
     setState({
       ...state,
-      valueFilters: [...state.valueFilters].concat([valueFilter])
+      valueFilters: [...(state.valueFilters || [])].concat([valueFilter])
     });
   }
 
@@ -125,8 +122,7 @@ export const QueryProvider = (
       value={{
         state,
         setAttributes,
-        addRecordFilter,
-        removeRecordFilter,
+        setRecordFilters,
         addValueFilter,
         removeValueFilter,
         setRootModel,

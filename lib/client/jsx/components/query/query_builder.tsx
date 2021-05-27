@@ -4,7 +4,6 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import QueryControls from './query_controls';
 import QueryPreview from './query_preview';
-import QueryRecordFilters from './query_record_filters';
 
 const useStyles = makeStyles((theme) => ({
   previewPane: {
@@ -22,14 +21,8 @@ const QueryBuilder = ({}) => {
       <Grid item>
         <QueryControls />
       </Grid>
-      {/* <Grid item>
-        <QueryJoins />
-      </Grid> */}
       <Grid item className={classes.previewPane}>
         <QueryPreview />
-      </Grid>
-      <Grid item>
-        <QueryRecordFilters />
       </Grid>
     </Grid>
   );

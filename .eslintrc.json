@@ -1,5 +1,5 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module",
@@ -9,14 +9,17 @@
   },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "es6": true
   },
   "globals": {
     "Routes": false,
     "TIMUR_CONFIG": false
   },
   "plugins": [
-    "react"
+    "react",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "no-undef": "error",
@@ -24,6 +27,8 @@
     "semi": "warn",
     "no-var": "warn",
     "curly": [ "warn", "multi-line" ],
-    "brace-style": ["warn", "stroustrup", {"allowSingleLine": true}]
+    "brace-style": ["warn", "stroustrup", {"allowSingleLine": true}],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"]
   }
 }
