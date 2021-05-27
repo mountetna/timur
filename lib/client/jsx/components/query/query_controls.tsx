@@ -5,6 +5,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import {makeStyles} from '@material-ui/core/styles';
 
 import QuerySelectPane from './query_select_pane';
+import QueryWherePane from './query_where_pane';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -45,6 +46,9 @@ const QueryControls = () => {
       <Grid item container spacing={2}>
         <Grid item xs={4}>
           <QuerySelectPane />
+        </Grid>
+        <Grid item xs={4}>
+          <QueryWherePane />
         </Grid>
       </Grid>
     </Grid>
