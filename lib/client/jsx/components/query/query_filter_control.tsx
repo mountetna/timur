@@ -2,6 +2,7 @@
 // Model, attribute, operator, operand
 
 import React, {useContext, useCallback, useState, useEffect} from 'react';
+import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,6 +10,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {makeStyles} from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectTemplate} from 'etna-js/selectors/magma';
@@ -18,7 +22,6 @@ import {QueryFilter} from '../../contexts/query/query_types';
 import {Attribute} from '../../models/model_types';
 import {selectAllowedModelAttributes} from '../../selectors/query_selector';
 import {visibleSortedAttributes} from '../../utils/attributes';
-import _ from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -45,65 +48,64 @@ const useStyles = makeStyles((theme) => ({
   textInput: {
     margin: theme.spacing(1),
     minWidth: 120
+  },
+  fullWidth: {
+    width: '100%',
+    margin: theme.spacing(1),
+    minWidth: 120
   }
 }));
 
 const QueryFilterControl = ({
   filter,
-  setFilter,
+  patchFilter,
   removeFilter
 }: {
-  filter: QueryFilter | null;
-  setFilter: (filter: QueryFilter) => void;
+  filter: QueryFilter;
+  patchFilter: (filter: QueryFilter) => void;
   removeFilter: () => void;
 }) => {
-  const [modelName, setModelName] = useState('');
-  const [attributeName, setAttributeName] = useState('');
-  const [operator, setOperator] = useState('');
-  const [operand, setOperand] = useState('');
   const [modelAttributes, setModelAttributes] = useState([] as Attribute[]);
   const classes = useStyles();
   const {state} = useContext(QueryContext);
+  let reduxState = useReduxState();
 
   useEffect(() => {
-    if (
-      [modelName, attributeName, operator, operand].every((val) => '' !== val)
-    ) {
-      setFilter({modelName, attributeName, operator, operand});
-    }
-  }, [modelName, attributeName, operator, operand]);
-
-  useEffect(() => {
-    if (null != filter) {
-      setModelName(filter.modelName);
-      setAttributeName(filter.attributeName);
-      setOperator(prettifyOperator(filter.operator));
-      setOperand(filter.operand);
-    }
+    initializeModelAttributes(filter.modelName);
   }, []);
 
   if (!state.rootModel) return null;
 
-  let reduxState = useReduxState();
+  const initializeModelAttributes = (modelName: string) => {
+    if ('' !== modelName) {
+      let template = selectTemplate(reduxState, modelName);
+      setModelAttributes(
+        selectAllowedModelAttributes(
+          visibleSortedAttributes(template.attributes)
+        )
+      );
+    }
+  };
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
-      setModelName(modelName);
-      if ('' !== modelName) {
-        let template = selectTemplate(reduxState, modelName);
-        setModelAttributes(
-          selectAllowedModelAttributes(
-            visibleSortedAttributes(template.attributes)
-          )
-        );
-      }
+      patchFilter({
+        ...filter,
+        modelName
+      });
+      initializeModelAttributes(modelName);
     },
-    [reduxState]
+    [filter, patchFilter]
   );
 
-  const handleAttributeSelect = useCallback((attributeName: string) => {
-    setAttributeName(attributeName);
-  }, []);
+  const handleAttributeSelect = useCallback(
+    (attributeName: string) =>
+      patchFilter({
+        ...filter,
+        attributeName
+      }),
+    [filter, patchFilter]
+  );
 
   const operatorOptions: {[key: string]: string} = {
     Equals: '::equals',
@@ -114,26 +116,33 @@ const QueryFilterControl = ({
   };
 
   const magmifyOperator = useCallback(
-    (operator: string) => {
-      return operatorOptions[operator];
-    },
+    (operator: string) => operatorOptions[operator],
     [operatorOptions]
   );
 
   const prettifyOperator = useCallback(
-    (operator: string) => {
-      return _.invert(operatorOptions)[operator];
-    },
+    (operator: string) => _.invert(operatorOptions)[operator],
     [operatorOptions]
   );
 
-  const handleOperatorSelect = useCallback((operator: string) => {
-    setOperator(magmifyOperator(operator));
-  }, []);
+  const handleOperatorSelect = useCallback(
+    (operator: string) =>
+      patchFilter({
+        ...filter,
+        operator: magmifyOperator(operator)
+      }),
+    [filter, patchFilter, magmifyOperator]
+  );
 
-  const handleOperandChange = useCallback((operand: string) => {
-    setOperand(operand);
-  }, []);
+  let handleOperandChange = useCallback(
+    (operand: string) => {
+      patchFilter({
+        ...filter,
+        operand
+      });
+    },
+    [filter, patchFilter]
+  );
 
   let modelNames = [...new Set(state.graph.allPaths(state.rootModel).flat())];
 
@@ -150,7 +159,7 @@ const QueryFilterControl = ({
           <InputLabel id={uniqId('model')}>Model</InputLabel>
           <Select
             labelId={uniqId('model')}
-            value={modelName}
+            value={filter.modelName}
             onChange={(e) => handleModelSelect(e.target.value as string)}
             displayEmpty
           >
@@ -163,26 +172,28 @@ const QueryFilterControl = ({
       <Grid item xs={3}>
         <FormControl className={classes.formControl}>
           <InputLabel id={uniqId('attribute')}>Attribute</InputLabel>
-          <Select
-            labelId={uniqId('attribute')}
-            value={attributeName}
-            onChange={(e) => handleAttributeSelect(e.target.value as string)}
-            displayEmpty
-          >
-            {modelAttributes.sort().map((attr) => (
-              <MenuItem value={attr.attribute_name}>
-                {attr.attribute_name}
-              </MenuItem>
-            ))}
-          </Select>
+          {modelAttributes.length > 0 ? (
+            <Select
+              labelId={uniqId('attribute')}
+              value={filter.attributeName}
+              onChange={(e) => handleAttributeSelect(e.target.value as string)}
+              displayEmpty
+            >
+              {modelAttributes.sort().map((attr) => (
+                <MenuItem value={attr.attribute_name}>
+                  {attr.attribute_name}
+                </MenuItem>
+              ))}
+            </Select>
+          ) : null}
         </FormControl>
       </Grid>
-      <Grid item xs={3}>
-        <FormControl className={classes.formControl}>
+      <Grid item xs={2}>
+        <FormControl className={classes.fullWidth}>
           <InputLabel id={uniqId('operator')}>Operator</InputLabel>
           <Select
             labelId={uniqId('operator')}
-            value={prettifyOperator(operator)}
+            value={prettifyOperator(filter.operator)}
             onChange={(e) => handleOperatorSelect(e.target.value as string)}
             displayEmpty
           >
@@ -199,10 +210,17 @@ const QueryFilterControl = ({
           <TextField
             id={uniqId('operand')}
             label='Operand'
-            defaultValue={operand}
+            value={filter.operand}
             onChange={(e) => handleOperandChange(e.target.value as string)}
           />
         </FormControl>
+      </Grid>
+      <Grid item xs={1}>
+        <Tooltip title='Remove filter' aria-label='remove filter'>
+          <IconButton aria-label='remove filter' onClick={removeFilter}>
+            <ClearIcon />
+          </IconButton>
+        </Tooltip>
       </Grid>
     </Grid>
   );

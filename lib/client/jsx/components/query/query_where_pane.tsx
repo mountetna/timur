@@ -12,38 +12,46 @@ import QueryFilterControl from './query_filter_control';
 import {QueryFilter} from '../../contexts/query/query_types';
 
 const QueryWherePane = () => {
-  const [whereFilters, setWhereFilters] = useState([] as QueryFilter[]);
-  const {state, setRecordFilters} = useContext(QueryContext);
+  const [updateCounter, setUpdateCounter] = useState(0);
+  const {
+    state,
+    addRecordFilter,
+    removeRecordFilter,
+    patchRecordFilter
+  } = useContext(QueryContext);
 
   if (!state.rootModel) return null;
 
   function addNewRecordFilter() {
-    setWhereFilters(whereFilters.concat([null]));
+    addRecordFilter({
+      modelName: '',
+      attributeName: '',
+      operator: '',
+      operand: ''
+    });
   }
 
-  function addRecordFilter(index: number, filter: QueryFilter) {
-    let copy = [...whereFilters];
-    copy[index] = filter;
-    setWhereFilters(copy);
+  function handlePatchFilter(index: number, filter: QueryFilter) {
+    patchRecordFilter(index, filter);
   }
 
-  function removeRecordFilter(index: number) {
-    let copy = [...whereFilters];
-    copy.splice(index, 1);
-    setWhereFilters(copy);
+  function handleRemoveFilter(index: number) {
+    removeRecordFilter(index);
+    setUpdateCounter(updateCounter + 1);
   }
 
   return (
     <Card>
       <CardHeader title='Where' subheader='filter the records' />
       <CardContent>
-        {whereFilters.map((filter: QueryFilter, index: number) => (
+        {state.recordFilters.map((filter: QueryFilter, index: number) => (
           <QueryFilterControl
+            key={`${index}-${updateCounter}`}
             filter={filter}
-            setFilter={(updatedFilter: QueryFilter) =>
-              addRecordFilter(index, updatedFilter)
+            patchFilter={(updatedFilter: QueryFilter) =>
+              handlePatchFilter(index, updatedFilter)
             }
-            removeFilter={() => removeRecordFilter(index)}
+            removeFilter={() => handleRemoveFilter(index)}
           />
         ))}
       </CardContent>

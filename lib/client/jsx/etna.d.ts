@@ -156,3 +156,11 @@ declare module 'etna-js/selectors/magma' {
 declare module 'etna-js/actions/magma_actions' {
   export function requestModels(): any;
 }
+
+declare module 'etna-js/utils/debounce' {
+  export default function debounce(
+    func: any,
+    wait: number,
+    immediate?: boolean
+  ): any;
+}

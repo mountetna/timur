@@ -44,10 +44,10 @@ const QueryControls = () => {
         </ButtonGroup>
       </Grid>
       <Grid item container spacing={2}>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <QuerySelectPane />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <QueryWherePane />
         </Grid>
       </Grid>

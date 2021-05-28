@@ -1,4 +1,4 @@
-import React, {useState, createContext, useEffect} from 'react';
+import React, {useState, createContext, useCallback} from 'react';
 
 import {QueryFilter, QueryColumn} from './query_types';
 
@@ -18,7 +18,9 @@ const defaultState = {
 export const defaultContext = {
   state: defaultState as QueryState,
   setAttributes: (model_name: string, attributes: QueryColumn[]) => {},
-  setRecordFilters: (recordFilters: QueryFilter[]) => {},
+  addRecordFilter: (recordFilter: QueryFilter) => {},
+  removeRecordFilter: (index: number) => {},
+  patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
   addValueFilter: (valueFilter: QueryFilter) => {},
   removeValueFilter: (index: number) => {},
   setRootModel: (model_name: string, model_identifier: QueryColumn) => {},
@@ -35,13 +37,7 @@ export type ProviderProps = {params?: {}; children: any};
 export const QueryProvider = (
   props: ProviderProps & Partial<QueryContextData>
 ) => {
-  const [state, setState] = useState({} as QueryState);
-
-  useEffect(() => {
-    setState({
-      ...(props.state || defaultContext.state)
-    });
-  }, []);
+  const [state, setState] = useState(props.state || defaultContext.state);
 
   function setAttributes(model_name: string, attributes: QueryColumn[]) {
     // Remove a model if no attributes
@@ -59,45 +55,75 @@ export const QueryProvider = (
     });
   }
 
-  function setRecordFilters(recordFilters: QueryFilter[]) {
-    setState({
-      ...state,
-      recordFilters: [...(recordFilters || [])]
-    });
-  }
+  const addRecordFilter = useCallback(
+    (recordFilter: QueryFilter) => {
+      setState({
+        ...state,
+        recordFilters: [...(state.recordFilters || [])].concat([recordFilter])
+      });
+    },
+    [state]
+  );
 
-  function clearRecordFilters() {
-    setState({
-      ...state,
-      recordFilters: []
-    });
-  }
+  const removeRecordFilter = useCallback(
+    (filterIndex: number) => {
+      let updatedRecordFilters = [...state.recordFilters];
+      updatedRecordFilters.splice(filterIndex, 1);
+      setState({
+        ...state,
+        recordFilters: updatedRecordFilters
+      });
+    },
+    [state]
+  );
 
-  function addValueFilter(valueFilter: QueryFilter) {
-    setState({
-      ...state,
-      valueFilters: [...(state.valueFilters || [])].concat([valueFilter])
-    });
-  }
+  const patchRecordFilter = useCallback(
+    (index: number, recordFilter: QueryFilter) => {
+      console.log('patching state', state, index, recordFilter);
+      let updatedRecordFilters = [...state.recordFilters];
+      updatedRecordFilters[index] = recordFilter;
+      setState({
+        ...state,
+        recordFilters: updatedRecordFilters
+      });
+    },
+    [state, state.recordFilters]
+  );
 
-  function removeValueFilter(filterIndex: number) {
-    let updatedValueFilters = [...state.valueFilters];
-    updatedValueFilters.splice(filterIndex, 1);
-    setState({
-      ...state,
-      valueFilters: updatedValueFilters
-    });
-  }
+  const addValueFilter = useCallback(
+    (valueFilter: QueryFilter) => {
+      setState({
+        ...state,
+        valueFilters: [...(state.valueFilters || [])].concat([valueFilter])
+      });
+    },
+    [state]
+  );
 
-  function setRootModel(rootModel: string, rootIdentifier: QueryColumn) {
-    setState({
-      ...state,
-      rootModel,
-      rootIdentifier
-    });
-  }
+  const removeValueFilter = useCallback(
+    (filterIndex: number) => {
+      let updatedValueFilters = [...state.valueFilters];
+      updatedValueFilters.splice(filterIndex, 1);
+      setState({
+        ...state,
+        valueFilters: updatedValueFilters
+      });
+    },
+    [state]
+  );
 
-  function clearRootModel() {
+  const setRootModel = useCallback(
+    (rootModel: string, rootIdentifier: QueryColumn) => {
+      setState({
+        ...state,
+        rootModel,
+        rootIdentifier
+      });
+    },
+    [state]
+  );
+
+  const clearRootModel = useCallback(() => {
     setState({
       ...state,
       rootModel: null,
@@ -106,14 +132,17 @@ export const QueryProvider = (
       recordFilters: [],
       valueFilters: []
     });
-  }
+  }, [state]);
 
-  function setGraph(graph: QueryGraph) {
-    setState({
-      ...state,
-      graph
-    });
-  }
+  const setGraph = useCallback(
+    (graph: QueryGraph) => {
+      setState({
+        ...state,
+        graph
+      });
+    },
+    [state]
+  );
 
   useQueryGraph(setGraph);
 
@@ -122,7 +151,9 @@ export const QueryProvider = (
       value={{
         state,
         setAttributes,
-        setRecordFilters,
+        addRecordFilter,
+        removeRecordFilter,
+        patchRecordFilter,
         addValueFilter,
         removeValueFilter,
         setRootModel,
