@@ -12,6 +12,11 @@ import QueryFilterControl from './query_filter_control';
 import {QueryFilter} from '../../contexts/query/query_types';
 
 const QueryWherePane = () => {
+  // Use an update counter to get the child components
+  //  (i.e. the QueryFilterControls) to remount whenever
+  //  the recordFilters list has one removed.
+  // If not, the component rendered state gets confused
+  //  because of non-unique keys.
   const [updateCounter, setUpdateCounter] = useState(0);
   const {
     state,
