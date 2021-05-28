@@ -148,8 +148,7 @@ const QueryFilterControl = ({
   let modelNames = [...new Set(state.graph.allPaths(state.rootModel).flat())];
 
   let uniqId = useCallback(
-    (idType: string): string =>
-      `${idType}-Select-${Math.random().toString().substr(2, 8)}`,
+    (idType: string): string => `${idType}-Select-${Math.random().toString()}`,
     []
   );
 

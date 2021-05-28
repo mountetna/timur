@@ -11,7 +11,7 @@ const defaultState = {
   rootModel: null as string | null,
   rootIdentifier: {} as QueryColumn | null,
   recordFilters: [] as QueryFilter[],
-  valueFilters: [] as QueryFilter[],
+  slices: [] as QueryFilter[],
   graph: {} as QueryGraph
 };
 
@@ -21,8 +21,9 @@ export const defaultContext = {
   addRecordFilter: (recordFilter: QueryFilter) => {},
   removeRecordFilter: (index: number) => {},
   patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
-  addValueFilter: (valueFilter: QueryFilter) => {},
-  removeValueFilter: (index: number) => {},
+  addSlice: (slice: QueryFilter) => {},
+  removeSlice: (index: number) => {},
+  patchSlice: (index: number, slice: QueryFilter) => (),
   setRootModel: (model_name: string, model_identifier: QueryColumn) => {},
   clearRootModel: () => {}
 };
@@ -79,7 +80,6 @@ export const QueryProvider = (
 
   const patchRecordFilter = useCallback(
     (index: number, recordFilter: QueryFilter) => {
-      console.log('patching state', state, index, recordFilter);
       let updatedRecordFilters = [...state.recordFilters];
       updatedRecordFilters[index] = recordFilter;
       setState({
@@ -87,26 +87,38 @@ export const QueryProvider = (
         recordFilters: updatedRecordFilters
       });
     },
-    [state, state.recordFilters]
+    [state]
   );
 
-  const addValueFilter = useCallback(
-    (valueFilter: QueryFilter) => {
+  const addSlice = useCallback(
+    (slice: QueryFilter) => {
       setState({
         ...state,
-        valueFilters: [...(state.valueFilters || [])].concat([valueFilter])
+        slices: [...(state.slices || [])].concat([slice])
       });
     },
     [state]
   );
 
-  const removeValueFilter = useCallback(
-    (filterIndex: number) => {
-      let updatedValueFilters = [...state.valueFilters];
-      updatedValueFilters.splice(filterIndex, 1);
+  const removeSlice = useCallback(
+    (index: number) => {
+      let updatedSlices = [...state.slices];
+      updatedSlices.splice(index, 1);
       setState({
         ...state,
-        valueFilters: updatedValueFilters
+        slices: updatedSlices
+      });
+    },
+    [state]
+  );
+
+  const patchSlice = useCallback(
+    (index: number, slice: QueryFilter) => {
+      let updatedSlices = [...state.slices];
+      updatedSlices[index] = slice;
+      setState({
+        ...state,
+        slices: updatedSlices
       });
     },
     [state]
@@ -130,7 +142,7 @@ export const QueryProvider = (
       rootIdentifier: null,
       attributes: {},
       recordFilters: [],
-      valueFilters: []
+      slices: []
     });
   }, [state]);
 
@@ -154,8 +166,9 @@ export const QueryProvider = (
         addRecordFilter,
         removeRecordFilter,
         patchRecordFilter,
-        addValueFilter,
-        removeValueFilter,
+        addSlice,
+        removeSlice,
+        patchSlice,
         setRootModel,
         clearRootModel
       }}
