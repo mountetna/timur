@@ -47,10 +47,11 @@ const useStyles = makeStyles((theme) => ({
   },
   textInput: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
+    paddingLeft: '1rem'
   },
   fullWidth: {
-    width: '100%',
+    width: '96%',
     margin: theme.spacing(1),
     minWidth: 120
   }
@@ -155,7 +156,7 @@ const QueryFilterControl = ({
   return (
     <Grid container>
       <Grid item xs={3}>
-        <FormControl className={classes.formControl}>
+        <FormControl className={classes.fullWidth}>
           <InputLabel id={uniqId('model')}>Model</InputLabel>
           <Select
             labelId={uniqId('model')}
@@ -170,7 +171,7 @@ const QueryFilterControl = ({
         </FormControl>
       </Grid>
       <Grid item xs={3}>
-        <FormControl className={classes.formControl}>
+        <FormControl className={classes.fullWidth}>
           <InputLabel id={uniqId('attribute')}>Attribute</InputLabel>
           {modelAttributes.length > 0 ? (
             <Select
@@ -206,7 +207,7 @@ const QueryFilterControl = ({
         </FormControl>
       </Grid>
       <Grid item xs={3}>
-        <FormControl className={classes.formControl}>
+        <FormControl className={classes.textInput}>
           <TextField
             id={uniqId('operand')}
             label='Operand'
