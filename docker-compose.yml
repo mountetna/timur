@@ -5,6 +5,7 @@ x-base-etna-service:
   &base-etna-service # Base configuration used by most etna services.
   image: etna-base-dev
   volumes: &base-etna-service-volumes
+    - timur-node-modules:/app/node_modules
     - .:/app:delegated
     - timur-app-gems:/app/vendor/bundle:rw
     - timur-log-dir:/app/log:rw
@@ -95,6 +96,9 @@ volumes:
     name: "timur-data-dir"
   timur-opt-dir:
     driver: local
+  timur-node-modules:
+    driver: local
+    name: "timur-node-modules"
 
 networks:
   edge_net:
