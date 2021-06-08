@@ -1,5 +1,5 @@
 import {Attribute} from '../models/model_types';
-import {QueryColumn} from '../contexts/query/query_types';
+import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
 
 export const selectAllowedModelAttributes = (
   attributes: Attribute[]
