@@ -25,8 +25,10 @@ import {selectTemplate} from 'etna-js/selectors/magma';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import {QueryFilter} from '../../contexts/query/query_types';
-import {Attribute} from '../../models/model_types';
-import {selectAllowedModelAttributes} from '../../selectors/query_selector';
+import {
+  selectAllowedModelAttributes,
+  selectMatrixAttributes
+} from '../../selectors/query_selector';
 import {visibleSortedAttributes} from '../../utils/attributes';
 
 const useStyles = makeStyles((theme) => ({
@@ -66,11 +68,13 @@ const useStyles = makeStyles((theme) => ({
 const QueryFilterControl = ({
   filter,
   modelNames,
+  matrixAttributesOnly,
   patchFilter,
   removeFilter
 }: {
   filter: QueryFilter;
   modelNames: string[];
+  matrixAttributesOnly?: boolean;
   patchFilter: (filter: QueryFilter) => void;
   removeFilter: () => void;
 }) => {
@@ -81,12 +85,21 @@ const QueryFilterControl = ({
   const modelAttributes = useMemo(() => {
     if ('' !== filter.modelName) {
       let template = selectTemplate(reduxState, filter.modelName);
-      return selectAllowedModelAttributes(
-        visibleSortedAttributes(template.attributes)
+      let sortedTemplateAttributes = visibleSortedAttributes(
+        template.attributes
       );
+
+      if (matrixAttributesOnly) {
+        return selectMatrixAttributes(
+          sortedTemplateAttributes,
+          state.attributes[filter.modelName]
+        );
+      } else {
+        return selectAllowedModelAttributes(sortedTemplateAttributes);
+      }
     }
     return [];
-  }, [filter.modelName]);
+  }, [filter.modelName, state.attributes]);
 
   const handleModelSelect = useCallback(
     (modelName: string) => {

@@ -8,10 +8,12 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
+import {selectModels} from 'etna-js/selectors/magma';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
 import {QueryFilter} from '../../contexts/query/query_types';
+import {selectSliceableModelNames} from '../../selectors/query_selector';
 
 const QuerySlicePane = () => {
   // Use an update counter to get the child components
@@ -45,8 +47,11 @@ const QuerySlicePane = () => {
   const modelNames = useMemo(() => {
     if (!state.rootModel) return [];
 
-    return [...new Set(state.graph.allPaths(state.rootModel).flat())];
-  }, [state.graph, state.rootModel, reduxState]);
+    return selectSliceableModelNames(
+      selectModels(reduxState),
+      state.attributes
+    );
+  }, [state.attributes, state.rootModel, reduxState]);
 
   if (!state.rootModel) return null;
 
@@ -62,6 +67,7 @@ const QuerySlicePane = () => {
             key={`${index}-${updateCounter}`}
             filter={filter}
             modelNames={modelNames}
+            matrixAttributesOnly={true}
             patchFilter={(updatedFilter: QueryFilter) =>
               handlePatchSlice(index, updatedFilter)
             }
