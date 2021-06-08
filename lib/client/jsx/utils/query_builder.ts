@@ -14,11 +14,22 @@ export class QueryBuilder {
 
   addRootIdentifier(rootIdentifier: QueryColumn) {
     this.root = rootIdentifier.model_name;
-    this.attributes[this.root] = [rootIdentifier];
+    if (!this.attributes.hasOwnProperty(this.root)) {
+      this.attributes[this.root] = [rootIdentifier];
+    } else {
+      this.attributes[this.root].splice(0, 0, rootIdentifier);
+    }
   }
 
   addAttributes(attributes: {[key: string]: QueryColumn[]}) {
     // For all attributes, we need to update them with the path
+    //   from this.root to the given attribute model.
+    Object.entries(attributes).forEach(
+      ([modelName, selectedAttributes]: [string, QueryColumn[]]) => {
+        if (!this.attributes.hasOwnProperty(modelName))
+          this.attributes[modelName] = [];
+      }
+    );
   }
 
   query(): any[] {
@@ -31,6 +42,9 @@ export class QueryBuilder {
     let path = this.graph
       .pathsFrom(this.root)
       .find((potentialPath: string[]) => potentialPath.includes(targetModel));
+
+    if (!path) throw `No path from ${this.root} to ${targetModel}.`;
+    return path;
   }
 
   joinAttributesSlices(): string[][] {
