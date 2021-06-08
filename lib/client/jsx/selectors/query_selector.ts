@@ -1,26 +1,4 @@
-import {QueryState} from '../contexts/query/query_context';
-import {QueryFilter} from '../contexts/query/query_types';
-import {QueryGraph} from '../utils/query_graph';
 import {Attribute} from '../models/model_types';
-
-export const selectQuerySelectedModels = (state: QueryState): string[] =>
-  Object.keys(state.attributes);
-
-export const selectQueryRecordFilters = (state: QueryState): QueryFilter[] =>
-  state.recordFilters;
-
-export const selectQueryValueFilters = (state: QueryState): QueryFilter[] =>
-  state.valueFilters;
-
-export const selectQueryLinkedModels = (
-  state: QueryState,
-  magmaModels: any
-): string[] => {
-  let {rootModel} = state;
-
-  let graph = new QueryGraph(magmaModels);
-  return [''];
-};
 
 export const selectAllowedModelAttributes = (
   attributes: Attribute[]
@@ -39,4 +17,30 @@ export const selectAllowedModelAttributes = (
   return attributes.filter(
     (attr: Attribute) => !unallowedAttributeTypes.includes(attr.attribute_type)
   );
+};
+
+export const selectSliceableModelNames = (
+  magmaModels: any,
+  modelNames: string[]
+): string[] => {
+  // Only return table or matrix models from the modelNames choice set.
+  // Determine if a model is a table or matrix by traversing up
+  //   to its parent model, then seeing the relationship type
+  //   back down to the original model.
+  return modelNames.filter((modelName: string) => {
+    let attributes: {[key: string]: {[key: string]: string}} =
+      magmaModels[modelName].template.attributes;
+
+    let parentModel: {[key: string]: string} | undefined = Object.values(
+      attributes
+    ).find((attr: {[key: string]: string}) => attr.attribute_type === 'parent');
+
+    console.log('parentModel', parentModel);
+    if (!parentModel) return false;
+
+    return ['table', 'matrix'].includes(
+      magmaModels[parentModel.attribute_name].template.attributes[modelName]
+        .attribute_type
+    );
+  });
 };

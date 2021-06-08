@@ -1,7 +1,13 @@
 // Generic filter component?
 // Model, attribute, operator, operand
 
-import React, {useContext, useCallback, useState, useEffect} from 'react';
+import React, {
+  useMemo,
+  useContext,
+  useCallback,
+  useState,
+  useEffect
+} from 'react';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -59,34 +65,28 @@ const useStyles = makeStyles((theme) => ({
 
 const QueryFilterControl = ({
   filter,
+  modelNames,
   patchFilter,
   removeFilter
 }: {
   filter: QueryFilter;
+  modelNames: string[];
   patchFilter: (filter: QueryFilter) => void;
   removeFilter: () => void;
 }) => {
-  const [modelAttributes, setModelAttributes] = useState([] as Attribute[]);
   const classes = useStyles();
   const {state} = useContext(QueryContext);
   let reduxState = useReduxState();
 
-  useEffect(() => {
-    initializeModelAttributes(filter.modelName);
-  }, []);
-
-  if (!state.rootModel) return null;
-
-  const initializeModelAttributes = (modelName: string) => {
-    if ('' !== modelName) {
-      let template = selectTemplate(reduxState, modelName);
-      setModelAttributes(
-        selectAllowedModelAttributes(
-          visibleSortedAttributes(template.attributes)
-        )
+  const modelAttributes = useMemo(() => {
+    if ('' !== filter.modelName) {
+      let template = selectTemplate(reduxState, filter.modelName);
+      return selectAllowedModelAttributes(
+        visibleSortedAttributes(template.attributes)
       );
     }
-  };
+    return [];
+  }, [filter.modelName]);
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
@@ -94,7 +94,6 @@ const QueryFilterControl = ({
         ...filter,
         modelName
       });
-      initializeModelAttributes(modelName);
     },
     [filter, patchFilter]
   );
@@ -145,12 +144,12 @@ const QueryFilterControl = ({
     [filter, patchFilter]
   );
 
-  let modelNames = [...new Set(state.graph.allPaths(state.rootModel).flat())];
-
   let uniqId = useCallback(
     (idType: string): string => `${idType}-Select-${Math.random().toString()}`,
     []
   );
+
+  if (!state.rootModel) return null;
 
   return (
     <Grid container>

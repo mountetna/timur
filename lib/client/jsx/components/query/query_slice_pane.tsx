@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useMemo, useContext, useState} from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -6,6 +6,8 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
+
+import {useReduxState} from 'etna-js/hooks/useReduxState';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
@@ -20,7 +22,7 @@ const QuerySlicePane = () => {
   const [updateCounter, setUpdateCounter] = useState(0);
   const {state, addSlice, removeSlice, patchSlice} = useContext(QueryContext);
 
-  if (!state.rootModel) return null;
+  let reduxState = useReduxState();
 
   function addNewSlice() {
     addSlice({
@@ -40,6 +42,14 @@ const QuerySlicePane = () => {
     setUpdateCounter(updateCounter + 1);
   }
 
+  const modelNames = useMemo(() => {
+    if (!state.rootModel) return [];
+
+    return [...new Set(state.graph.allPaths(state.rootModel).flat())];
+  }, [state.graph, state.rootModel, reduxState]);
+
+  if (!state.rootModel) return null;
+
   return (
     <Card>
       <CardHeader
@@ -51,6 +61,7 @@ const QuerySlicePane = () => {
           <QueryFilterControl
             key={`${index}-${updateCounter}`}
             filter={filter}
+            modelNames={modelNames}
             patchFilter={(updatedFilter: QueryFilter) =>
               handlePatchSlice(index, updatedFilter)
             }

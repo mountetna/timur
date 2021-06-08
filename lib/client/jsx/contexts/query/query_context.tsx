@@ -23,7 +23,7 @@ export const defaultContext = {
   patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
   addSlice: (slice: QueryFilter) => {},
   removeSlice: (index: number) => {},
-  patchSlice: (index: number, slice: QueryFilter) => (),
+  patchSlice: (index: number, slice: QueryFilter) => {},
   setRootModel: (model_name: string, model_identifier: QueryColumn) => {},
   clearRootModel: () => {}
 };

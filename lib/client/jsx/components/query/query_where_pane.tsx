@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useMemo, useContext, useState} from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -25,8 +25,6 @@ const QueryWherePane = () => {
     patchRecordFilter
   } = useContext(QueryContext);
 
-  if (!state.rootModel) return null;
-
   function addNewRecordFilter() {
     addRecordFilter({
       modelName: '',
@@ -45,6 +43,14 @@ const QueryWherePane = () => {
     setUpdateCounter(updateCounter + 1);
   }
 
+  const modelNames = useMemo(() => {
+    if (!state.rootModel) return [];
+
+    return [...new Set(state.graph.allPaths(state.rootModel).flat())];
+  }, [state.graph, state.rootModel]);
+
+  if (!state.rootModel) return null;
+
   return (
     <Card>
       <CardHeader title='Where' subheader='filter the records' />
@@ -53,6 +59,7 @@ const QueryWherePane = () => {
           <QueryFilterControl
             key={`${index}-${updateCounter}`}
             filter={filter}
+            modelNames={modelNames}
             patchFilter={(updatedFilter: QueryFilter) =>
               handlePatchFilter(index, updatedFilter)
             }
