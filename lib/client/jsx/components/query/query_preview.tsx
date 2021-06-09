@@ -59,6 +59,19 @@ const QueryPreview = () => {
     <Card>
       <CardHeader title='Data Frame -- Preview' />
       <CardContent>
+        <CodeMirror
+          options={{
+            readOnly: 'no-cursor',
+            lineWrapping: true,
+            mode: 'application/json',
+            autoCloseBrackets: true,
+            gutters: ['CodeMirror-lint-markers'],
+            lint: false,
+            tabSize: 2
+          }}
+          value={JSON.stringify(query)}
+          onBeforeChange={(editor, data, value) => {}}
+        />
         <TableContainer component={Paper}>
           <Table
             className={classes.table}
@@ -74,19 +87,6 @@ const QueryPreview = () => {
             </TableHead>
           </Table>
         </TableContainer>
-        <CodeMirror
-          options={{
-            readOnly: 'no-cursor',
-            lineWrapping: true,
-            mode: 'application/json',
-            autoCloseBrackets: true,
-            gutters: ['CodeMirror-lint-markers'],
-            lint: false,
-            tabSize: 2
-          }}
-          value={JSON.stringify(query)}
-          onBeforeChange={(editor, data, value) => {}}
-        />
       </CardContent>
     </Card>
   );
