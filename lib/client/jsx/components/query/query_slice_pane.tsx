@@ -13,7 +13,10 @@ import {selectModels} from 'etna-js/selectors/magma';
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
 import {QueryFilter} from '../../contexts/query/query_types';
-import {selectSliceableModelNames} from '../../selectors/query_selector';
+import {
+  selectSliceableModelNames,
+  selectTableModelNames
+} from '../../selectors/query_selector';
 
 const QuerySlicePane = () => {
   // Use an update counter to get the child components
@@ -53,6 +56,15 @@ const QuerySlicePane = () => {
     );
   }, [state.attributes, state.rootModel, reduxState]);
 
+  const tableModelNames = useMemo(() => {
+    if (!state.rootModel) return [];
+
+    return selectTableModelNames(
+      selectModels(reduxState),
+      Object.keys(state.attributes)
+    );
+  }, [state.attributes, reduxState, state.rootModel]);
+
   if (!state.rootModel) return null;
 
   return (
@@ -67,7 +79,7 @@ const QuerySlicePane = () => {
             key={`${index}-${updateCounter}`}
             filter={filter}
             modelNames={modelNames}
-            matrixAttributesOnly={true}
+            matrixAttributesOnly={!tableModelNames.includes(filter.modelName)}
             patchFilter={(updatedFilter: QueryFilter) =>
               handlePatchSlice(index, updatedFilter)
             }

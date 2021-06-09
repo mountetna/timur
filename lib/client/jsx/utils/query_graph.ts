@@ -72,8 +72,24 @@ export class QueryGraph {
 
     // Any model that you can traverse to from any parent should
     //   also count as a path.
+
+    // Children paths
     return this.pathsFrom(modelName)
-      .concat([parentage])
-      .concat(parentage.map((p) => this.pathsFrom(p)).flat(1));
+      .concat(
+        // paths to parents, shortest to longest
+        parentage.map((p: string, index: number) =>
+          parentage.slice(0, index + 1)
+        )
+      )
+      .concat(
+        // paths routing through parents
+        parentage
+          .map((p: string, index: number) =>
+            this.pathsFrom(p).map((path) =>
+              parentage.slice(0, index).concat(path)
+            )
+          )
+          .flat(1)
+      );
   }
 }

@@ -67,7 +67,7 @@ const selectMatrixModelNames = (
     .map(([modelName, attributes]: [string, QueryColumn[]]) => modelName);
 };
 
-const selectTableModelNames = (
+export const selectTableModelNames = (
   magmaModels: any,
   modelNames: string[]
 ): string[] => {

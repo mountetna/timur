@@ -53,12 +53,18 @@ export class QueryBuilder {
 
   expandOperand(
     filter: QueryFilter,
-    includeModelName: boolean = true
+    includeModelPath: boolean = true
   ): (string | string[])[] {
-    let clone: {[key: string]: string | string[]} = {...filter};
+    let clone: {
+      modelName: string;
+      attributeName: string;
+      operator: string;
+      operand: string | string[];
+    } = {...filter};
     let result: (string | string[])[] = [];
 
-    if (includeModelName) result.push(clone.modelName);
+    if (includeModelPath && undefined != this.pathToModel(clone.modelName))
+      result.push(...(this.pathToModel(clone.modelName) as string[]));
 
     result.push(clone.attributeName);
     result.push(clone.operator);
