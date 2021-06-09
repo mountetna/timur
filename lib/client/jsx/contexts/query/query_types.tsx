@@ -2,7 +2,7 @@ export interface QueryFilter {
   modelName: string;
   attributeName: string;
   operator: string;
-  operand: string;
+  operand: string | number;
 }
 
 export interface QueryColumn {

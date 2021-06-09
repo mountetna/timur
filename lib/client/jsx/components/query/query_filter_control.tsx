@@ -101,6 +101,27 @@ const QueryFilterControl = ({
     return [];
   }, [filter.modelName, state.attributes]);
 
+  const attributeType = useMemo(() => {
+    if ('' !== filter.attributeName) {
+      let template = selectTemplate(reduxState, filter.modelName);
+
+      switch (
+        template.attributes[filter.attributeName].attribute_type.toLowerCase()
+      ) {
+        case 'string':
+          return 'text';
+        case 'datetime':
+          return 'date';
+        case 'integer':
+        case 'float':
+          return 'number';
+        default:
+          return 'text';
+      }
+    }
+    return 'text';
+  }, [filter.attributeName, filter.modelName, state.attributes]);
+
   const handleModelSelect = useCallback(
     (modelName: string) => {
       patchFilter({
@@ -154,7 +175,7 @@ const QueryFilterControl = ({
     (operand: string) => {
       patchFilter({
         ...filter,
-        operand
+        operand: attributeType === 'number' ? parseFloat(operand) : operand
       });
     },
     [filter, patchFilter]
