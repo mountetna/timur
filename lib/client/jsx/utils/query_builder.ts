@@ -22,33 +22,133 @@ export class QueryBuilder {
   }
 
   addAttributes(attributes: {[key: string]: QueryColumn[]}) {
-    // For all attributes, we need to update them with the path
-    //   from this.root to the given attribute model.
     Object.entries(attributes).forEach(
       ([modelName, selectedAttributes]: [string, QueryColumn[]]) => {
         if (!this.attributes.hasOwnProperty(modelName))
           this.attributes[modelName] = [];
+
+        this.attributes[modelName] = this.attributes[modelName].concat(
+          selectedAttributes
+        );
       }
     );
   }
 
-  query(): any[] {
-    // THIS IS A STUB
-    // TODO: it's not really like this!
-    return [this.root, this.recordFilters, this.attributes, this.slices];
+  addRecordFilters(recordFilters: QueryFilter[]) {
+    this.recordFilters = recordFilters;
   }
 
-  pathToModel(targetModel: string): string[] {
+  addSlices(slices: QueryFilter[]) {
+    this.slices = slices;
+  }
+
+  query(): any[] {
+    return [
+      this.root,
+      ...this.expandedOperands(this.recordFilters),
+      '::all',
+      this.joinAttributesSlices()
+    ];
+  }
+
+  expandOperand(
+    filter: QueryFilter,
+    includeModelName: boolean = true
+  ): (string | string[])[] {
+    let clone: {[key: string]: string | string[]} = {...filter};
+    let result: (string | string[])[] = [];
+
+    if (includeModelName) result.push(clone.modelName);
+
+    result.push(clone.attributeName);
+    result.push(clone.operator);
+
+    if (filter.operator === '::in' || filter.operator === '::slice') {
+      clone.operand = (clone.operand as string).split(',');
+    }
+
+    result.push(clone.operand);
+
+    return result;
+  }
+
+  expandedOperands(filters: QueryFilter[]) {
+    return filters.map((filter) =>
+      this.expandOperand(filter, this.root !== filter.modelName)
+    );
+  }
+
+  pathToModel(targetModel: string): string[] | undefined {
     let path = this.graph
-      .pathsFrom(this.root)
+      .allPaths(this.root)
       .find((potentialPath: string[]) => potentialPath.includes(targetModel));
 
-    if (!path) throw `No path from ${this.root} to ${targetModel}.`;
-    return path;
+    if (!path)
+      console.error(`No path from ${this.root} to ${targetModel}. Ignoring.`);
+
+    return path?.slice(0, path.indexOf(targetModel) + 1);
   }
 
-  joinAttributesSlices(): string[][] {
+  // Type should be some sort of arbitrarily nested string array
+  //   [
+  //     ['name'],
+  //     ['species'],
+  //     ['labor', 'year'],
+  //     ['labor', 'completed'],
+  //     ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value']
+  //   ]
+  joinAttributesSlices(): (string | string[] | (string | string[])[])[] {
     // Convert this.attributes + this.slices into the right
-    //   query format
+    //   query format. Include the path from the root model
+    //   to the attributes' model.
+    let initialValues = this.attributes[this.root].map((attr) => [
+      attr.attribute_name
+    ]);
+
+    return Object.entries(this.attributes).reduce(
+      (
+        acc: (string | string[] | (string | string[])[])[],
+        [modelName, attributes]: [string, QueryColumn[]]
+      ) => {
+        if (modelName === this.root) return acc;
+
+        let path = this.pathToModel(modelName);
+
+        if (!path) return acc;
+
+        attributes.forEach((attr) => {
+          acc.push(
+            this.predicateWithSlice(path as string[], attr) as (
+              | string
+              | string[]
+            )[]
+          );
+        });
+
+        return acc;
+      },
+      [...initialValues]
+    );
+  }
+
+  predicateWithSlice(
+    path: string[],
+    attribute: QueryColumn
+  ): (string | string[] | (string | string[])[])[] {
+    // If there is a slice associated with this predicate, we'll
+    // inject it here.
+    let matchingSlice = this.slices.find(
+      (slice) => slice.modelName === attribute.model_name
+    );
+
+    let predicate: (string | string[] | (string | string[])[])[] = [...path];
+
+    if (matchingSlice) {
+      predicate.push(this.expandOperand(matchingSlice, false));
+      predicate.push('::first');
+    }
+
+    predicate.push(attribute.attribute_name);
+    return predicate;
   }
 }

@@ -63,7 +63,7 @@ exports[`ModelMap renders 1`] = `
       </g>
     </svg>
     <div
-      className="model_node "
+      className="model_node  "
       onClick={[Function]}
       style={
         Object {
@@ -75,7 +75,7 @@ exports[`ModelMap renders 1`] = `
       labor
     </div>
     <div
-      className="model_node "
+      className="model_node  "
       onClick={[Function]}
       style={
         Object {
@@ -87,7 +87,7 @@ exports[`ModelMap renders 1`] = `
       monster
     </div>
     <div
-      className="model_node selected"
+      className="model_node selected "
       onClick={[Function]}
       style={
         Object {
@@ -246,7 +246,7 @@ exports[`ModelMap renders an incomplete graph 1`] = `
       </defs>
     </svg>
     <div
-      className="model_node selected"
+      className="model_node selected "
       onClick={[Function]}
       style={
         Object {

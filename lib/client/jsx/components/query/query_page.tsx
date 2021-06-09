@@ -14,10 +14,11 @@ const QueryPage = ({}) => {
   return (
     <React.Fragment>
       <QueryProvider>
-        <Grid container spacing={5}>
+        <Grid container spacing={5} direction='column'>
           <Grid item xs={12}>
             <QueryBuilder />
           </Grid>
+          <Grid item xs={12}></Grid>
         </Grid>
       </QueryProvider>
     </React.Fragment>

@@ -1,5 +1,5 @@
 import {Attribute} from '../models/model_types';
-import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
+import {QueryColumn} from '../contexts/query/query_types';
 
 export const selectAllowedModelAttributes = (
   attributes: Attribute[]
@@ -7,8 +7,8 @@ export const selectAllowedModelAttributes = (
   // I think we should force people to get these FK values
   //   from the other model, because generally people won't want
   //   the FK itself, just some attributes of the other model.
+  // Keep "identifier" because it's useful for ::has and ::lacks
   const unallowedAttributeTypes = [
-    'identifier',
     'parent',
     'child',
     'collection',

@@ -8,6 +8,7 @@ export class QueryGraph {
   unallowedModels: string[] = ['project'];
   includedLinkTypes: string[] = ['link', 'table'];
   allowedModels: Set<string>;
+  initialized: boolean = false;
 
   constructor(magmaModels: {[key: string]: Model}) {
     this.graph = new DirectedGraph();
@@ -40,6 +41,8 @@ export class QueryGraph {
           });
       }
     );
+
+    this.initialized = true;
   }
 
   pathsFrom(modelName: string): string[][] {

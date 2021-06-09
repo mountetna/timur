@@ -125,7 +125,10 @@ const QueryFilterControl = ({
     Contains: '::matches',
     In: '::in',
     'Less than': '::<',
-    'Greater than': '::>'
+    'Greater than': '::>',
+    Slice: '::slice',
+    Has: '::has',
+    Lacks: '::lacks'
   };
 
   const magmifyOperator = useCallback(
