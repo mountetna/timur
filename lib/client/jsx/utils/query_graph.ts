@@ -113,11 +113,9 @@ export class QueryGraph {
   }
 
   attributeIsFile(modelName: string, attributeName: string) {
-    const fileTypes = ['file', 'image', 'file_collection'];
-
     if (!this.modelHasAttribute(modelName, attributeName)) return false;
 
-    return fileTypes.includes(
+    return ['file', 'image', 'file_collection'].includes(
       this.models[modelName].template.attributes[attributeName].attribute_type
     );
   }

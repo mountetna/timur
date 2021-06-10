@@ -154,6 +154,8 @@ const QueryFilterControl = ({
     Lacks: '::lacks'
   };
 
+  const noOperandOperators: string[] = ['::has', '::lacks'];
+
   const magmifyOperator = useCallback(
     (operator: string) => operatorOptions[operator],
     [operatorOptions]
@@ -231,7 +233,7 @@ const QueryFilterControl = ({
           <InputLabel id={uniqId('operator')}>Operator</InputLabel>
           <Select
             labelId={uniqId('operator')}
-            value={prettifyOperator(filter.operator)}
+            value={prettifyOperator(filter.operator) || ''}
             onChange={(e) => handleOperatorSelect(e.target.value as string)}
             displayEmpty
           >
@@ -244,14 +246,16 @@ const QueryFilterControl = ({
         </FormControl>
       </Grid>
       <Grid item xs={3}>
-        <FormControl className={classes.textInput}>
-          <TextField
-            id={uniqId('operand')}
-            label='Operand'
-            value={filter.operand}
-            onChange={(e) => handleOperandChange(e.target.value as string)}
-          />
-        </FormControl>
+        {noOperandOperators.includes(filter.operator) ? null : (
+          <FormControl className={classes.textInput}>
+            <TextField
+              id={uniqId('operand')}
+              label='Operand'
+              value={filter.operand}
+              onChange={(e) => handleOperandChange(e.target.value as string)}
+            />
+          </FormControl>
+        )}
       </Grid>
       <Grid item xs={1}>
         <Tooltip title='Remove filter' aria-label='remove filter'>

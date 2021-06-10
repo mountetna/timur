@@ -5,29 +5,14 @@ import React, {
   useCallback,
   useEffect
 } from 'react';
-import {
-  makeStyles,
-  withStyles,
-  Theme,
-  createStyles
-} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
-import Switch, {SwitchClassKey, SwitchProps} from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import Table from '@material-ui/core/Table';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
@@ -40,48 +25,8 @@ import {ReactReduxContext} from 'react-redux';
 import {QueryContext} from '../../contexts/query/query_context';
 import {QueryColumn} from '../../contexts/query/query_types';
 import {QueryBuilder} from '../../utils/query_builder';
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650
-  }
-});
-
-const AntSwitch = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: 28,
-      height: 16,
-      padding: 0,
-      display: 'flex'
-    },
-    switchBase: {
-      padding: 2,
-      color: theme.palette.grey[500],
-      '&$checked': {
-        transform: 'translateX(12px)',
-        color: theme.palette.common.white,
-        '& + $track': {
-          opacity: 1,
-          backgroundColor: theme.palette.primary.main,
-          borderColor: theme.palette.primary.main
-        }
-      }
-    },
-    thumb: {
-      width: 12,
-      height: 12,
-      boxShadow: 'none'
-    },
-    track: {
-      border: `1px solid ${theme.palette.grey[500]}`,
-      borderRadius: 16 / 2,
-      opacity: 1,
-      backgroundColor: theme.palette.common.white
-    },
-    checked: {}
-  })
-)(Switch);
+import QueryTable from './query_table';
+import AntSwitch from './ant_switch';
 
 const QueryResults = () => {
   const [flattenQuery, setFlattenQuery] = useState(true);
@@ -91,7 +36,6 @@ const QueryResults = () => {
   const [data, setData] = useState({} as any);
   const [numRecords, setNumRecords] = useState(0);
   const {state} = useContext(QueryContext);
-  const classes = useStyles();
   let {store} = useContext(ReactReduxContext);
   const invoke = useActionInvoker();
 
@@ -173,7 +117,7 @@ const QueryResults = () => {
       })
       .then((answerData) => {
         setData(answerData);
-        setQueries([...queries].splice(0, 0, query as string[]));
+        // setQueries([...queries].splice(0, 0, query as string[]));
       })
       .catch((e) => {
         e.then((error: {[key: string]: string[]}) => {
@@ -258,44 +202,14 @@ const QueryResults = () => {
             </ButtonGroup>
           </Grid>
           <Grid item>
-            <TableContainer component={Paper}>
-              <Table
-                className={classes.table}
-                size='small'
-                aria-label='result preview table'
-              >
-                <TableHead>
-                  <TableRow>
-                    {columns.map(({label}: {label: string}) => (
-                      <TableCell>{label}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows
-                    ? rows.map((row: any[]) => {
-                        return (
-                          <TableRow hover tabIndex={-1} key={row[0]}>
-                            {row.map((datum: any, index: number) => (
-                              <TableCell key={index} scope='row' padding='none'>
-                                {datum}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        );
-                      })
-                    : null}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 50, 200]}
-              component='div'
-              count={numRecords}
-              rowsPerPage={pageSize}
+            <QueryTable
+              columns={columns}
+              rows={rows}
+              pageSize={pageSize}
+              numRecords={numRecords}
               page={page}
-              onChangePage={handlePageChange}
-              onChangeRowsPerPage={handlePageSizeChange}
+              handlePageChange={handlePageChange}
+              handlePageSizeChange={handlePageSizeChange}
             />
           </Grid>
         </Grid>
