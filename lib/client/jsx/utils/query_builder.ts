@@ -7,6 +7,7 @@ export class QueryBuilder {
   slices: QueryFilter[] = [];
   attributes: {[key: string]: QueryColumn[]} = {};
   root: string = '';
+  flatten: boolean = true;
 
   constructor(graph: QueryGraph) {
     this.graph = graph;
@@ -42,12 +43,16 @@ export class QueryBuilder {
     this.slices = slices;
   }
 
-  query(flatten: boolean = true): any[] {
+  setFlatten(flat: boolean) {
+    this.flatten = flat;
+  }
+
+  query(): any[] {
     return [
       this.root,
       ...this.expandedOperands(this.recordFilters),
       '::all',
-      this.joinAttributesSlices(flatten)
+      this.joinAttributesSlices()
     ];
   }
 
@@ -76,6 +81,7 @@ export class QueryBuilder {
     if (filter.operator === '::in' || filter.operator === '::slice') {
       clone.operand = (clone.operand as string).split(',');
     }
+    // TODO: We have to do weird things with ::has and ::lacks
 
     result.push(clone.operand);
 
@@ -93,14 +99,29 @@ export class QueryBuilder {
       .allPaths(this.root)
       .find((potentialPath: string[]) => potentialPath.includes(targetModel));
 
-    // if (!path)
-    //   console.error(`No path from ${this.root} to ${targetModel}. Ignoring.`);
+    if (!path) return;
 
     // Direct children paths include the root, so
     //   we'll filter it out
-    return path
-      ?.slice(0, path.indexOf(targetModel) + 1)
-      .filter((m) => m !== this.root);
+    return this.pathWithModelPredicates(
+      path
+        ?.slice(0, path.indexOf(targetModel) + 1)
+        .filter((m) => m !== this.root)
+    );
+  }
+
+  pathWithModelPredicates(path: string[]): string[] {
+    let updatedPath: string[] = [];
+    let previousModelName = this.root;
+    path.forEach((modelName: string) => {
+      updatedPath.push(modelName);
+      if (this.graph.stepIsOneToMany(previousModelName, modelName)) {
+        this.flatten ? updatedPath.push('::first') : updatedPath.push('::all');
+      }
+      previousModelName = modelName;
+    });
+
+    return updatedPath;
   }
 
   // Type should be some sort of arbitrarily nested string array,
@@ -112,9 +133,7 @@ export class QueryBuilder {
   //     ['labor', 'completed'],
   //     ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value']
   //   ]
-  joinAttributesSlices(
-    flatten: boolean = true
-  ): (string | string[] | (string | string[])[])[] {
+  joinAttributesSlices(): (string | string[] | (string | string[])[])[] {
     // Convert this.attributes + this.slices into the right
     //   query format. Include the path from the root model
     //   to the attributes' model.
@@ -135,7 +154,7 @@ export class QueryBuilder {
 
         attributes.forEach((attr) => {
           acc.push(
-            this.predicateWithSlice(path as string[], attr, flatten) as (
+            this.predicateWithSlice(path as string[], attr) as (
               | string
               | string[]
             )[]
@@ -150,29 +169,24 @@ export class QueryBuilder {
 
   predicateWithSlice(
     path: string[],
-    attribute: QueryColumn,
-    flatten: boolean = true
+    attribute: QueryColumn
   ): (string | string[] | (string | string[] | number)[])[] {
     // If there is a slice associated with this predicate, we'll
-    // inject it here.
+    // inject it here, before the ::first or ::all predicate.
     let matchingSlice = this.slices.find(
       (slice) => slice.modelName === attribute.model_name
     );
 
-    let predicate: (string | string[] | (string | string[] | number)[])[] = [];
-
-    let previousModelName = this.root;
-    path.forEach((modelName: string) => {
-      predicate.push(modelName);
-      if (this.graph.stepIsCollection(previousModelName, modelName)) {
-        flatten ? predicate.push('::first') : predicate.push('::all');
-      }
-      previousModelName = modelName;
-    });
+    let predicate: (string | string[] | (string | string[] | number)[])[] = [
+      ...path
+    ];
 
     if (matchingSlice) {
-      predicate.push(this.expandOperand(matchingSlice, false));
-      predicate.push('::first');
+      predicate.splice(
+        predicate.length - 1,
+        0,
+        this.expandOperand(matchingSlice, false)
+      );
     }
 
     predicate.push(

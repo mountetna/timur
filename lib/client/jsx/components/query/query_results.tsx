@@ -132,6 +132,7 @@ const QueryResults = () => {
       builder.addAttributes(state.attributes);
       builder.addRecordFilters(state.recordFilters);
       builder.addSlices(state.slices);
+      builder.setFlatten(flattenQuery);
 
       return builder;
     }
@@ -142,13 +143,14 @@ const QueryResults = () => {
     state.attributes,
     state.recordFilters,
     state.slices,
-    state.graph
+    state.graph,
+    flattenQuery
   ]);
 
   const query = useMemo(() => {
     if (!builder) return '';
 
-    return builder.query(flattenQuery);
+    return builder.query();
   }, [builder, flattenQuery]);
 
   const count = useMemo(() => {

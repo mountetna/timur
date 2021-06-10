@@ -101,14 +101,13 @@ export class QueryGraph {
     return !!this.models[modelName].template.attributes[attributeName];
   }
 
-  stepIsCollection(start: string, end: string) {
+  stepIsOneToMany(start: string, end: string) {
     // For a single model relationship (start -> end),
     //   returns `true` if it is a one-to-many
     //   relationship.
     if (!this.modelHasAttribute(start, end)) return false;
 
-    return (
-      'collection' ===
+    return ['table', 'collection'].includes(
       this.models[start].template.attributes[end].attribute_type
     );
   }

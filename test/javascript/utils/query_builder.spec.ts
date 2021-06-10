@@ -98,7 +98,9 @@ describe('QueryBuilder', () => {
       ]
     ]);
 
-    expect(builder.query(false)).toEqual([
+    builder.setFlatten(false);
+
+    expect(builder.query()).toEqual([
       'monster',
       ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
       ['name', '::equals', 'Nemean Lion'],
@@ -109,7 +111,7 @@ describe('QueryBuilder', () => {
         ['stats', '::url'],
         ['labor', 'year'],
         ['labor', 'completed'],
-        ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value'],
+        ['labor', 'prize', ['name', '::equals', 'Sparta'], '::all', 'value'],
         ['victim', '::all', 'country']
       ]
     ]);

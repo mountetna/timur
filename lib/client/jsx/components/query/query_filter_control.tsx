@@ -125,8 +125,10 @@ const QueryFilterControl = ({
   const handleModelSelect = useCallback(
     (modelName: string) => {
       patchFilter({
-        ...filter,
-        modelName
+        modelName,
+        attributeName: '',
+        operator: '',
+        operand: ''
       });
     },
     [filter, patchFilter]
