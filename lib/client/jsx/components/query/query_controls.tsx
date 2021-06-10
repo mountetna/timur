@@ -1,10 +1,7 @@
-import React, {useContext, useCallback} from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {QueryContext} from '../../contexts/query/query_context';
 import QuerySelectPane from './query_select_pane';
 import QueryWherePane from './query_where_pane';
 import QuerySlicePane from './query_slice_pane';
@@ -25,12 +22,6 @@ const useStyles = makeStyles((theme) => ({
 const QueryControls = () => {
   const classes = useStyles();
 
-  const {state} = useContext(QueryContext);
-
-  const generateQuery = useCallback(() => {
-    console.log("let's make a query");
-  }, [state.attributes, state.recordFilters, state.slices]);
-
   return (
     <Grid
       container
@@ -40,17 +31,6 @@ const QueryControls = () => {
       alignItems='center'
       direction='column'
     >
-      <Grid item container alignItems='center' justify='flex-end'>
-        <ButtonGroup
-          variant='contained'
-          color='primary'
-          aria-label='contained primary button group'
-        >
-          <Button>Previous Queries</Button>
-          <Button onClick={generateQuery}>Query</Button>
-          <Button>{'\u21af TSV'}</Button>
-        </ButtonGroup>
-      </Grid>
       <Grid item container spacing={2}>
         <Grid item xs={3}>
           <QuerySelectPane />

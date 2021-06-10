@@ -4,6 +4,7 @@ import {DirectedGraph} from 'etna-js/utils/directed_graph';
 import {Model, Template, Attribute} from '../models/model_types';
 
 export class QueryGraph {
+  models: {[key: string]: Model};
   graph: DirectedGraph;
   unallowedModels: string[] = ['project'];
   includedLinkTypes: string[] = ['link', 'table'];
@@ -11,6 +12,7 @@ export class QueryGraph {
   initialized: boolean = false;
 
   constructor(magmaModels: {[key: string]: Model}) {
+    this.models = magmaModels;
     this.graph = new DirectedGraph();
     this.allowedModels = new Set();
 
@@ -91,5 +93,33 @@ export class QueryGraph {
           )
           .flat(1)
       );
+  }
+
+  modelHasAttribute(modelName: string, attributeName: string) {
+    if (!this.models[modelName]) return false;
+
+    return !!this.models[modelName].template.attributes[attributeName];
+  }
+
+  stepIsCollection(start: string, end: string) {
+    // For a single model relationship (start -> end),
+    //   returns `true` if it is a one-to-many
+    //   relationship.
+    if (!this.modelHasAttribute(start, end)) return false;
+
+    return (
+      'collection' ===
+      this.models[start].template.attributes[end].attribute_type
+    );
+  }
+
+  attributeIsFile(modelName: string, attributeName: string) {
+    const fileTypes = ['file', 'image', 'file_collection'];
+
+    if (!this.modelHasAttribute(modelName, attributeName)) return false;
+
+    return fileTypes.includes(
+      this.models[modelName].template.attributes[attributeName].attribute_type
+    );
   }
 }

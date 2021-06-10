@@ -42,26 +42,30 @@ export class QueryBuilder {
     this.slices = slices;
   }
 
-  query(): any[] {
+  query(flatten: boolean = true): any[] {
     return [
       this.root,
       ...this.expandedOperands(this.recordFilters),
       '::all',
-      this.joinAttributesSlices()
+      this.joinAttributesSlices(flatten)
     ];
+  }
+
+  count(): any[] {
+    return [this.root, ...this.expandedOperands(this.recordFilters), '::count'];
   }
 
   expandOperand(
     filter: QueryFilter,
     includeModelPath: boolean = true
-  ): (string | string[])[] {
+  ): (string | string[] | number)[] {
     let clone: {
       modelName: string;
       attributeName: string;
       operator: string;
-      operand: string | string[];
+      operand: string | string[] | number;
     } = {...filter};
-    let result: (string | string[])[] = [];
+    let result: (string | string[] | number)[] = [];
 
     if (includeModelPath && undefined != this.pathToModel(clone.modelName))
       result.push(...(this.pathToModel(clone.modelName) as string[]));
@@ -89,13 +93,18 @@ export class QueryBuilder {
       .allPaths(this.root)
       .find((potentialPath: string[]) => potentialPath.includes(targetModel));
 
-    if (!path)
-      console.error(`No path from ${this.root} to ${targetModel}. Ignoring.`);
+    // if (!path)
+    //   console.error(`No path from ${this.root} to ${targetModel}. Ignoring.`);
 
-    return path?.slice(0, path.indexOf(targetModel) + 1);
+    // Direct children paths include the root, so
+    //   we'll filter it out
+    return path
+      ?.slice(0, path.indexOf(targetModel) + 1)
+      .filter((m) => m !== this.root);
   }
 
-  // Type should be some sort of arbitrarily nested string array
+  // Type should be some sort of arbitrarily nested string array,
+  //   but not sure how to correctly specify all the possible permutations.
   //   [
   //     ['name'],
   //     ['species'],
@@ -103,13 +112,15 @@ export class QueryBuilder {
   //     ['labor', 'completed'],
   //     ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value']
   //   ]
-  joinAttributesSlices(): (string | string[] | (string | string[])[])[] {
+  joinAttributesSlices(
+    flatten: boolean = true
+  ): (string | string[] | (string | string[])[])[] {
     // Convert this.attributes + this.slices into the right
     //   query format. Include the path from the root model
     //   to the attributes' model.
-    let initialValues = this.attributes[this.root].map((attr) => [
-      attr.attribute_name
-    ]);
+    let initialValues = this.attributes[this.root].map((attr) =>
+      this.attributeNameWithPredicate(attr.model_name, attr.attribute_name)
+    );
 
     return Object.entries(this.attributes).reduce(
       (
@@ -124,7 +135,7 @@ export class QueryBuilder {
 
         attributes.forEach((attr) => {
           acc.push(
-            this.predicateWithSlice(path as string[], attr) as (
+            this.predicateWithSlice(path as string[], attr, flatten) as (
               | string
               | string[]
             )[]
@@ -139,22 +150,48 @@ export class QueryBuilder {
 
   predicateWithSlice(
     path: string[],
-    attribute: QueryColumn
-  ): (string | string[] | (string | string[])[])[] {
+    attribute: QueryColumn,
+    flatten: boolean = true
+  ): (string | string[] | (string | string[] | number)[])[] {
     // If there is a slice associated with this predicate, we'll
     // inject it here.
     let matchingSlice = this.slices.find(
       (slice) => slice.modelName === attribute.model_name
     );
 
-    let predicate: (string | string[] | (string | string[])[])[] = [...path];
+    let predicate: (string | string[] | (string | string[] | number)[])[] = [];
+
+    let previousModelName = this.root;
+    path.forEach((modelName: string) => {
+      predicate.push(modelName);
+      if (this.graph.stepIsCollection(previousModelName, modelName)) {
+        flatten ? predicate.push('::first') : predicate.push('::all');
+      }
+      previousModelName = modelName;
+    });
 
     if (matchingSlice) {
       predicate.push(this.expandOperand(matchingSlice, false));
       predicate.push('::first');
     }
 
-    predicate.push(attribute.attribute_name);
+    predicate.push(
+      ...this.attributeNameWithPredicate(
+        attribute.model_name,
+        attribute.attribute_name
+      )
+    );
+
+    return predicate;
+  }
+
+  attributeNameWithPredicate(modelName: string, attributeName: string) {
+    // Probably only used for File / Image / FileCollection attributes?
+    let predicate = [attributeName];
+    if (this.graph.attributeIsFile(modelName, attributeName)) {
+      predicate.push('::url');
+    }
+
     return predicate;
   }
 }

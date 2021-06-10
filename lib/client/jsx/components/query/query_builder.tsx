@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 
 import QueryControls from './query_controls';
-import QueryPreview from './query_preview';
+import QueryResults from './query_results';
 
 const useStyles = makeStyles((theme) => ({
   previewPane: {
@@ -22,7 +22,7 @@ const QueryBuilder = ({}) => {
         <QueryControls />
       </Grid>
       <Grid item className={classes.previewPane}>
-        <QueryPreview />
+        <QueryResults />
       </Grid>
     </Grid>
   );

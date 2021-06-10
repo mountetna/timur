@@ -25,6 +25,12 @@ const models = {
     revisions: {},
     views: {},
     template: require('../fixtures/template_prize.json')
+  },
+  victim: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../fixtures/template_victim.json')
   }
 };
 
@@ -49,8 +55,9 @@ describe('QueryBuilder', () => {
     builder.addRootIdentifier(stamp('monster', 'name'));
     builder.addAttributes({
       labor: [stamp('labor', 'year'), stamp('labor', 'completed')],
-      monster: [stamp('monster', 'species')],
-      prize: [stamp('prize', 'value')]
+      monster: [stamp('monster', 'species'), stamp('monster', 'stats')],
+      prize: [stamp('prize', 'value')],
+      victim: [stamp('victim', 'country')]
     });
     builder.addRecordFilters([
       {
@@ -83,10 +90,66 @@ describe('QueryBuilder', () => {
       [
         ['name'],
         ['species'],
+        ['stats', '::url'],
         ['labor', 'year'],
         ['labor', 'completed'],
-        ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value']
+        ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value'],
+        ['victim', '::first', 'country']
       ]
+    ]);
+
+    expect(builder.query(false)).toEqual([
+      'monster',
+      ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+      ['name', '::equals', 'Nemean Lion'],
+      '::all',
+      [
+        ['name'],
+        ['species'],
+        ['stats', '::url'],
+        ['labor', 'year'],
+        ['labor', 'completed'],
+        ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value'],
+        ['victim', '::all', 'country']
+      ]
+    ]);
+  });
+
+  it('returns a count query string', () => {
+    builder.addRootIdentifier(stamp('monster', 'name'));
+    builder.addAttributes({
+      labor: [stamp('labor', 'year'), stamp('labor', 'completed')],
+      monster: [stamp('monster', 'species')],
+      prize: [stamp('prize', 'value')]
+    });
+    builder.addRecordFilters([
+      {
+        modelName: 'labor',
+        attributeName: 'name',
+        operator: '::in',
+        operand: 'lion,hydra,apples'
+      },
+      {
+        modelName: 'monster',
+        attributeName: 'name',
+        operator: '::equals',
+        operand: 'Nemean Lion'
+      }
+    ]);
+    builder.addSlices([
+      {
+        modelName: 'prize',
+        attributeName: 'name',
+        operator: '::equals',
+        operand: 'Sparta'
+      }
+    ]);
+
+    expect(builder.count()).toEqual([
+      'monster',
+      ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+      ['name', '::equals', 'Nemean Lion'],
+      '::count'
     ]);
   });
 });

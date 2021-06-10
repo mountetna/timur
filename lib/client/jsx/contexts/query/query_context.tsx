@@ -40,21 +40,24 @@ export const QueryProvider = (
 ) => {
   const [state, setState] = useState(props.state || defaultContext.state);
 
-  function setAttributes(model_name: string, attributes: QueryColumn[]) {
-    // Remove a model if no attributes
-    let updatedAttributes = {...state.attributes};
+  const setAttributes = useCallback(
+    (model_name: string, attributes: QueryColumn[]) => {
+      // Remove a model if no attributes
+      let updatedAttributes = {...state.attributes};
 
-    if (attributes.length > 0) {
-      updatedAttributes[model_name] = attributes;
-    } else {
-      delete updatedAttributes[model_name];
-    }
+      if (attributes.length > 0) {
+        updatedAttributes[model_name] = attributes;
+      } else {
+        delete updatedAttributes[model_name];
+      }
 
-    setState({
-      ...state,
-      attributes: updatedAttributes
-    });
-  }
+      setState({
+        ...state,
+        attributes: updatedAttributes
+      });
+    },
+    [state]
+  );
 
   const addRecordFilter = useCallback(
     (recordFilter: QueryFilter) => {

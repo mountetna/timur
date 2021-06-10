@@ -18,6 +18,12 @@ const models = {
     revisions: {},
     views: {},
     template: require('../fixtures/template_project.json')
+  },
+  victim: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../fixtures/template_victim.json')
   }
 };
 
@@ -39,7 +45,7 @@ describe('QueryGraph', () => {
     expect(Object.keys(graph.graph.children).includes('prize')).toEqual(true);
     expect(Object.keys(graph.graph.parents).includes('prize')).toEqual(true);
     expect(graph.pathsFrom('labor')).toEqual([
-      ['labor', 'monster'],
+      ['labor', 'monster', 'victim'],
       ['labor', 'prize']
     ]);
   });
@@ -47,8 +53,15 @@ describe('QueryGraph', () => {
   it('provides all paths from a child model, up and down the graph', () => {
     expect(graph.allPaths('prize')).toEqual([
       ['labor'],
-      ['labor', 'monster'],
+      ['labor', 'monster', 'victim'],
       ['labor', 'prize']
     ]);
+  });
+
+  it('correctly identifies collection relationships', () => {
+    expect(graph.stepIsCollection('labor', 'monster')).toEqual(false);
+    expect(graph.stepIsCollection('labor', 'prize')).toEqual(false);
+    expect(graph.stepIsCollection('monster', 'victim')).toEqual(true);
+    expect(graph.stepIsCollection('labor', 'victim')).toEqual(false);
   });
 });
