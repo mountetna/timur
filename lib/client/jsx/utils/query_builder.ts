@@ -64,26 +64,25 @@ export class QueryBuilder {
     filter: QueryFilter,
     includeModelPath: boolean = true
   ): (string | string[] | number)[] {
-    let clone: {
-      modelName: string;
-      attributeName: string;
-      operator: string;
-      operand: string | string[] | number;
-    } = {...filter};
     let result: (string | string[] | number)[] = [];
 
-    if (includeModelPath && undefined != this.pathToModel(clone.modelName))
-      result.push(...(this.pathToModel(clone.modelName) as string[]));
+    if (includeModelPath && undefined != this.pathToModel(filter.modelName))
+      result.push(...(this.pathToModel(filter.modelName) as string[]));
 
-    result.push(clone.attributeName);
-    result.push(clone.operator);
+    result.push(filter.attributeName);
+    result.push(filter.operator);
 
-    if (filter.operator === '::in' || filter.operator === '::slice') {
-      clone.operand = (clone.operand as string).split(',');
+    if (['::in', '::slice'].includes(filter.operator)) {
+      result.push((filter.operand as string).split(','));
+    } else if (['::has', '::lacks'].includes(filter.operator)) {
+      // invert the model and attribute names, ignore operand
+      let length = result.length;
+      let tmpOperator = result[length - 1];
+      result[length - 1] = result[length - 2];
+      result[length - 2] = tmpOperator;
+    } else {
+      result.push(filter.operand);
     }
-    // TODO: We have to do weird things with ::has and ::lacks
-
-    result.push(clone.operand);
 
     return result;
   }
