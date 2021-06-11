@@ -54,7 +54,11 @@ describe('QueryBuilder', () => {
   it('works', () => {
     builder.addRootIdentifier(stamp('monster', 'name'));
     builder.addAttributes({
-      labor: [stamp('labor', 'year'), stamp('labor', 'completed')],
+      labor: [
+        stamp('labor', 'year'),
+        stamp('labor', 'completed'),
+        stamp('labor', 'contributions')
+      ],
       monster: [stamp('monster', 'species'), stamp('monster', 'stats')],
       prize: [stamp('prize', 'value')],
       victim: [stamp('victim', 'country')]
@@ -71,6 +75,12 @@ describe('QueryBuilder', () => {
         attributeName: 'name',
         operator: '::equals',
         operand: 'Nemean Lion'
+      },
+      {
+        modelName: 'labor',
+        attributeName: 'number',
+        operator: '::equals',
+        operand: 2
       }
     ]);
     builder.addSlices([
@@ -79,6 +89,12 @@ describe('QueryBuilder', () => {
         attributeName: 'name',
         operator: '::equals',
         operand: 'Sparta'
+      },
+      {
+        modelName: 'labor',
+        attributeName: 'contributions',
+        operator: '::slice',
+        operand: 'Athens,Sidon'
       }
     ]);
 
@@ -86,6 +102,7 @@ describe('QueryBuilder', () => {
       'monster',
       ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
       ['name', '::equals', 'Nemean Lion'],
+      ['labor', 'number', '::equals', 2],
       '::all',
       [
         ['name'],
@@ -93,6 +110,7 @@ describe('QueryBuilder', () => {
         ['stats', '::url'],
         ['labor', 'year'],
         ['labor', 'completed'],
+        ['labor', 'contributions', '::slice', ['Athens', 'Sidon']],
         ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value'],
         ['victim', '::first', 'country']
       ]
@@ -104,6 +122,7 @@ describe('QueryBuilder', () => {
       'monster',
       ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
       ['name', '::equals', 'Nemean Lion'],
+      ['labor', 'number', '::equals', 2],
       '::all',
       [
         ['name'],
@@ -111,19 +130,24 @@ describe('QueryBuilder', () => {
         ['stats', '::url'],
         ['labor', 'year'],
         ['labor', 'completed'],
+        ['labor', 'contributions', '::slice', ['Athens', 'Sidon']],
         ['labor', 'prize', ['name', '::equals', 'Sparta'], '::all', 'value'],
         ['victim', '::all', 'country']
       ]
     ]);
 
-    builder.setOrFilters(true);
+    builder.setOrRecordFilterIndices([0, 2]);
 
     expect(builder.query()).toEqual([
       'monster',
       [
-        '::or',
-        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
-        ['name', '::equals', 'Nemean Lion']
+        '::and',
+        ['name', '::equals', 'Nemean Lion'],
+        [
+          '::or',
+          ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+          ['labor', 'number', '::equals', 2]
+        ]
       ],
       '::all',
       [
@@ -132,6 +156,7 @@ describe('QueryBuilder', () => {
         ['stats', '::url'],
         ['labor', 'year'],
         ['labor', 'completed'],
+        ['labor', 'contributions', '::slice', ['Athens', 'Sidon']],
         ['labor', 'prize', ['name', '::equals', 'Sparta'], '::all', 'value'],
         ['victim', '::all', 'country']
       ]

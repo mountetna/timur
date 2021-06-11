@@ -8,7 +8,7 @@ export class QueryBuilder {
   attributes: {[key: string]: QueryColumn[]} = {};
   root: string = '';
   flatten: boolean = true;
-  orFilters: boolean = false;
+  orRecordFilterIndices: number[] = [];
 
   constructor(graph: QueryGraph) {
     this.graph = graph;
@@ -48,8 +48,8 @@ export class QueryBuilder {
     this.flatten = flat;
   }
 
-  setOrFilters(or: boolean) {
-    this.orFilters = or;
+  setOrRecordFilterIndices(orRecordFilterIndices: number[]) {
+    this.orRecordFilterIndices = orRecordFilterIndices;
   }
 
   query(): any[] {
@@ -93,12 +93,32 @@ export class QueryBuilder {
   }
 
   expandedOperands(filters: QueryFilter[]) {
-    let expandedFilters: any[] = filters.map((filter) =>
-      this.expandOperand(filter, this.root !== filter.modelName)
-    );
+    let expandedFilters: any[] = [];
 
-    if (this.orFilters) expandedFilters = [['::or', ...expandedFilters]];
+    if (this.orRecordFilterIndices.length > 0) {
+      let andFilters: any[] = ['::and'];
+      let orFilters: any[] = ['::or'];
 
+      filters.forEach((filter, index: number) => {
+        let expandedFilter = this.expandOperand(
+          filter,
+          this.root !== filter.modelName
+        );
+
+        if (this.orRecordFilterIndices.includes(index)) {
+          orFilters.push(expandedFilter);
+        } else {
+          andFilters.push(expandedFilter);
+        }
+      });
+
+      andFilters.push(orFilters);
+      expandedFilters = [andFilters];
+    } else {
+      expandedFilters = filters.map((filter) =>
+        this.expandOperand(filter, this.root !== filter.modelName)
+      );
+    }
     return expandedFilters;
   }
 
@@ -109,13 +129,18 @@ export class QueryBuilder {
 
     if (!path) return;
 
-    // Direct children paths include the root, so
-    //   we'll filter it out
+    // Direct children paths include the root, and
+    //   we'll filter it out so all paths do not
+    //   include the root model (eliminate redundancy).
     return this.pathWithModelPredicates(
       path
         ?.slice(0, path.indexOf(targetModel) + 1)
         .filter((m) => m !== this.root)
     );
+  }
+
+  allOrFirst() {
+    return this.flatten ? '::first' : '::all';
   }
 
   pathWithModelPredicates(path: string[]): string[] {
@@ -124,7 +149,7 @@ export class QueryBuilder {
     path.forEach((modelName: string) => {
       updatedPath.push(modelName);
       if (this.graph.stepIsOneToMany(previousModelName, modelName)) {
-        this.flatten ? updatedPath.push('::first') : updatedPath.push('::all');
+        updatedPath.push(this.allOrFirst());
       }
       previousModelName = modelName;
     });
@@ -189,22 +214,48 @@ export class QueryBuilder {
       ...path
     ];
 
+    let includeAttributeName = true;
+
     if (matchingSlice) {
-      predicate.splice(
-        predicate.length - 1,
-        0,
-        this.expandOperand(matchingSlice, false)
-      );
+      if (this.isMatchingMatrixSlice(matchingSlice, attribute)) {
+        // For matrices (i.e. ::slice), we'll construct it
+        //   a little differently.
+        predicate = predicate.concat(this.expandOperand(matchingSlice, false));
+        // attribute name already
+        // included as part of the expanded operand
+        includeAttributeName = false;
+      } else if (this.isTableSlice(matchingSlice)) {
+        // This splicing works for tables.
+        // Adds in a new array for the operand before
+        //   the ::first or ::all
+        predicate.splice(
+          predicate.length - 1,
+          0,
+          this.expandOperand(matchingSlice, false)
+        );
+      }
     }
 
-    predicate.push(
-      ...this.attributeNameWithPredicate(
-        attribute.model_name,
-        attribute.attribute_name
-      )
-    );
+    if (includeAttributeName)
+      predicate.push(
+        ...this.attributeNameWithPredicate(
+          attribute.model_name,
+          attribute.attribute_name
+        )
+      );
 
     return predicate;
+  }
+
+  isMatchingMatrixSlice(slice: QueryFilter, attribute: QueryColumn) {
+    return (
+      slice.operator === '::slice' &&
+      slice.attributeName === attribute.attribute_name
+    );
+  }
+
+  isTableSlice(slice: QueryFilter) {
+    return slice.operator !== '::slice';
   }
 
   attributeNameWithPredicate(modelName: string, attributeName: string) {

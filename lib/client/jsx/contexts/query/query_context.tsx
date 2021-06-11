@@ -11,6 +11,7 @@ const defaultState = {
   rootModel: null as string | null,
   rootIdentifier: {} as QueryColumn | null,
   recordFilters: [] as QueryFilter[],
+  orRecordFilterIndices: [] as number[],
   slices: [] as QueryFilter[],
   graph: {} as QueryGraph
 };
@@ -21,6 +22,7 @@ export const defaultContext = {
   addRecordFilter: (recordFilter: QueryFilter) => {},
   removeRecordFilter: (index: number) => {},
   patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
+  setOrRecordFilterIndices: (indices: number[]) => {},
   addSlice: (slice: QueryFilter) => {},
   removeSlice: (index: number) => {},
   patchSlice: (index: number, slice: QueryFilter) => {},
@@ -88,6 +90,16 @@ export const QueryProvider = (
       setState({
         ...state,
         recordFilters: updatedRecordFilters
+      });
+    },
+    [state]
+  );
+
+  const setOrRecordFilterIndices = useCallback(
+    (orRecordFilterIndices: number[]) => {
+      setState({
+        ...state,
+        orRecordFilterIndices
       });
     },
     [state]
@@ -172,6 +184,7 @@ export const QueryProvider = (
         addRecordFilter,
         removeRecordFilter,
         patchRecordFilter,
+        setOrRecordFilterIndices,
         addSlice,
         removeSlice,
         patchSlice,
