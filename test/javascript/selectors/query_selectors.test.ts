@@ -1,6 +1,7 @@
 import {
   selectSliceableModelNames,
-  selectMatrixAttributes
+  selectMatrixAttributes,
+  selectOuterIndexOf
 } from '../../../lib/client/jsx/selectors/query_selector';
 
 const models = {
@@ -99,5 +100,27 @@ describe('selectMatrixAttributes', () => {
     );
 
     expect(matrixAttributes).toEqual([]);
+  });
+});
+
+describe('selectOuterIndexOf', () => {
+  it('find top-level headings', () => {
+    let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
+    expect(selectOuterIndexOf(input, 'bim')).toEqual(2);
+  });
+
+  it('returns -1 when no match', () => {
+    let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
+    expect(selectOuterIndexOf(input, 'kapow')).toEqual(-1);
+  });
+
+  fit('finds nested headings', () => {
+    let input = [
+      'foo',
+      ['bar', ['shallow']],
+      'bim',
+      ['blah', 'zap', ['deep', ['nesting']]]
+    ];
+    expect(selectOuterIndexOf(input, 'nesting')).toEqual(3);
   });
 });
