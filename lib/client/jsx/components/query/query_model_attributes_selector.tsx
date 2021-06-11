@@ -19,7 +19,7 @@ import {QueryColumn} from '../../contexts/query/query_types';
 import QueryAttributesModal from './query_attributes_modal';
 import {selectAllowedModelAttributes} from '../../selectors/query_selector';
 
-import {visibleSortedAttributes} from '../../utils/attributes';
+import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -78,7 +78,9 @@ const QueryModelAttributeSelector = ({
       onSelectModel(modelName);
       if ('' !== modelName) {
         let template = selectTemplate(reduxState, modelName);
-        setModelAttributes(visibleSortedAttributes(template.attributes));
+        setModelAttributes(
+          visibleSortedAttributesWithUpdatedAt(template.attributes)
+        );
       }
     },
     [reduxState]

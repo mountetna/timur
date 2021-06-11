@@ -29,7 +29,7 @@ import {
   selectAllowedModelAttributes,
   selectMatrixAttributes
 } from '../../selectors/query_selector';
-import {visibleSortedAttributes} from '../../utils/attributes';
+import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -85,7 +85,7 @@ const QueryFilterControl = ({
   const modelAttributes = useMemo(() => {
     if ('' !== filter.modelName) {
       let template = selectTemplate(reduxState, filter.modelName);
-      let sortedTemplateAttributes = visibleSortedAttributes(
+      let sortedTemplateAttributes = visibleSortedAttributesWithUpdatedAt(
         template.attributes
       );
 

@@ -130,9 +130,12 @@ export const QueryProvider = (
   const setRootModel = useCallback(
     (rootModel: string, rootIdentifier: QueryColumn) => {
       setState({
-        ...state,
+        ...state, // we want to keep state.graph!
         rootModel,
-        rootIdentifier
+        rootIdentifier,
+        attributes: {},
+        recordFilters: [],
+        slices: []
       });
     },
     [state]

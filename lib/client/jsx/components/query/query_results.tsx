@@ -29,6 +29,7 @@ import QueryTable from './query_table';
 import AntSwitch from './ant_switch';
 
 const QueryResults = () => {
+  const [orFilters, setOrFilters] = useState(false);
   const [flattenQuery, setFlattenQuery] = useState(true);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -77,6 +78,7 @@ const QueryResults = () => {
       builder.addRecordFilters(state.recordFilters);
       builder.addSlices(state.slices);
       builder.setFlatten(flattenQuery);
+      builder.setOrFilters(orFilters);
 
       return builder;
     }
@@ -88,7 +90,8 @@ const QueryResults = () => {
     state.recordFilters,
     state.slices,
     state.graph,
-    flattenQuery
+    flattenQuery,
+    orFilters
   ]);
 
   const query = useMemo(() => {
@@ -178,6 +181,19 @@ const QueryResults = () => {
             />
           </Grid>
           <Grid item container alignItems='center' justify='flex-end'>
+            <Typography component='div'>
+              <Grid component='label' container alignItems='center' spacing={1}>
+                <Grid item>And filters</Grid>
+                <Grid item>
+                  <AntSwitch
+                    checked={orFilters}
+                    onChange={() => setOrFilters(!orFilters)}
+                    name='or-filters-query'
+                  />
+                </Grid>
+                <Grid item>Or filters</Grid>
+              </Grid>
+            </Typography>
             <Typography component='div'>
               <Grid component='label' container alignItems='center' spacing={1}>
                 <Grid item>Expanded</Grid>

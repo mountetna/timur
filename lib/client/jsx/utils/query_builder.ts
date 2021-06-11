@@ -8,6 +8,7 @@ export class QueryBuilder {
   attributes: {[key: string]: QueryColumn[]} = {};
   root: string = '';
   flatten: boolean = true;
+  orFilters: boolean = false;
 
   constructor(graph: QueryGraph) {
     this.graph = graph;
@@ -45,6 +46,10 @@ export class QueryBuilder {
 
   setFlatten(flat: boolean) {
     this.flatten = flat;
+  }
+
+  setOrFilters(or: boolean) {
+    this.orFilters = or;
   }
 
   query(): any[] {
@@ -88,9 +93,13 @@ export class QueryBuilder {
   }
 
   expandedOperands(filters: QueryFilter[]) {
-    return filters.map((filter) =>
+    let expandedFilters: any[] = filters.map((filter) =>
       this.expandOperand(filter, this.root !== filter.modelName)
     );
+
+    if (this.orFilters) expandedFilters = [['::or', ...expandedFilters]];
+
+    return expandedFilters;
   }
 
   pathToModel(targetModel: string): string[] | undefined {

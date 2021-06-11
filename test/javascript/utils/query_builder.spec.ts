@@ -115,6 +115,27 @@ describe('QueryBuilder', () => {
         ['victim', '::all', 'country']
       ]
     ]);
+
+    builder.setOrFilters(true);
+
+    expect(builder.query()).toEqual([
+      'monster',
+      [
+        '::or',
+        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+        ['name', '::equals', 'Nemean Lion']
+      ],
+      '::all',
+      [
+        ['name'],
+        ['species'],
+        ['stats', '::url'],
+        ['labor', 'year'],
+        ['labor', 'completed'],
+        ['labor', 'prize', ['name', '::equals', 'Sparta'], '::all', 'value'],
+        ['victim', '::all', 'country']
+      ]
+    ]);
   });
 
   it('returns a count query string', () => {
