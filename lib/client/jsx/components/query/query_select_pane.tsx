@@ -41,16 +41,13 @@ const useStyles = makeStyles((theme) => ({
 
 const QuerySelectPane = () => {
   const [intersectionModels, setIntersectionModels] = useState([] as string[]);
-  const {state, setRootModel, setAttributes, clearRootModel} = useContext(
-    QueryContext
-  );
+  const {state, setRootModel, setAttributes} = useContext(QueryContext);
   const classes = useStyles();
 
   let reduxState = useReduxState();
 
   const onRootModelSelect = useCallback(
     (modelName: string) => {
-      clearRootModel();
       if ('' !== modelName) {
         let template = selectTemplate(reduxState, modelName);
         setRootModel(modelName, {
@@ -58,6 +55,8 @@ const QuerySelectPane = () => {
           attribute_name: template.identifier,
           display_label: `${modelName}.${template.identifier}`
         });
+      } else {
+        setRootModel(null, null);
       }
     },
     [state.rootModel, reduxState]

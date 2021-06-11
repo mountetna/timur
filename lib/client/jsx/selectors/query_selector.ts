@@ -94,33 +94,27 @@ const getPath = (
   heading: string,
   currentPath: number[]
 ): number[] => {
-  console.log('path', array, heading, currentPath);
   let index = array.indexOf(heading);
-  console.log(index);
   if (index > -1) return currentPath.concat([index]);
 
-  let innerPath = [...currentPath];
+  let innerPath: number[] = [];
 
   array.forEach((ele, index: number) => {
     if (Array.isArray(ele)) {
-      let tempPath = getPath(ele, heading, [index]);
+      let tempPath = getPath(ele, heading, currentPath.concat(index));
       if (tempPath.length > 0) {
-        innerPath.concat(index);
+        innerPath = tempPath;
       }
     }
   });
 
-  console.log('innerpath', innerPath);
-  return innerPath.length > 0 ? currentPath.concat(innerPath) : [];
+  return innerPath.length > 0 ? innerPath : [];
 };
 
 export const selectOuterIndexOf = (array: any[], heading: string): number => {
-  console.log('array', array, heading);
   let index = array.indexOf(heading);
-  console.log(index);
   if (index > -1) return index;
 
   let fullPath = getPath(array, heading, []);
-  console.log(fullPath);
   return fullPath.length > 0 ? fullPath[0] : -1;
 };

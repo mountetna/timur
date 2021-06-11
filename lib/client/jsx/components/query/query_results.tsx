@@ -22,6 +22,7 @@ import {getAnswer} from 'etna-js/api/magma_api';
 import {Exchange} from 'etna-js/actions/exchange_actions';
 import {ReactReduxContext} from 'react-redux';
 
+import {selectOuterIndexOf} from '../../selectors/query_selector';
 import {QueryContext} from '../../contexts/query/query_context';
 import {QueryColumn} from '../../contexts/query/query_types';
 import {QueryBuilder} from '../../utils/query_builder';
@@ -31,7 +32,9 @@ import AntSwitch from './ant_switch';
 const QueryResults = () => {
   const [expandMatrices, setExpandMatrices] = useState(true);
   const [flattenQuery, setFlattenQuery] = useState(true);
+  const [lastPage, setLastPage] = useState(0);
   const [page, setPage] = useState(0);
+  const [lastPageSize, setLastPageSize] = useState(10);
   const [pageSize, setPageSize] = useState(10);
   const [queries, setQueries] = useState([] as string[][]);
   const [data, setData] = useState({} as any);
@@ -130,43 +133,23 @@ const QueryResults = () => {
       });
   }, [query, count, queries, store.dispatch, pageSize, page]);
 
-  function getOuterIndex(mapping: any[], columnHeading: string): number {
-    // Returns the outtermost index in mapping,
-    //   where mapping can be a nested set of arrays, where
-    //   any inner array contains an element that matches the
-    //   given columnHeading.
-    let index = mapping.indexOf(columnHeading);
-
-    if (-1 === index) {
-      return mapping
-        .filter((ele) => Array.isArray(ele))
-        .map((ary) => getOuterIndex(ary, columnHeading))
-        .filter((i) => i)[0];
-    } else {
-      return index;
-    }
-  }
-
   const rows = useMemo(() => {
     if (!data || !data.answer) return;
 
     let colMapping = data.format[1];
     // Need to order the results the same as `columns`
     return data.answer.map(([recordName, answer]: [string, any[]]) =>
-      columns.map(({colId}) => {
-        let dataIndex = colMapping.indexOf(colId);
-        // For nested results, dataIndex will come back as -1, so
-        //   we'll have to look deeper.
-        let cellData = answer[colMapping.indexOf(colId)];
-
-        return answer[dataIndex];
-      })
+      columns.map(({colId}) => answer[selectOuterIndexOf(colMapping, colId)])
     );
   }, [data, columns]);
 
   useEffect(() => {
-    runQuery();
-  }, [page, pageSize]);
+    if (lastPage !== page || lastPageSize !== pageSize) {
+      runQuery();
+      setLastPage(page);
+      setLastPageSize(pageSize);
+    }
+  }, [page, pageSize, lastPage, lastPageSize]);
 
   if (!state.rootModel || !state.rootIdentifier || 0 === columns.length)
     return null;

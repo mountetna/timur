@@ -26,8 +26,10 @@ export const defaultContext = {
   addSlice: (slice: QueryFilter) => {},
   removeSlice: (index: number) => {},
   patchSlice: (index: number, slice: QueryFilter) => {},
-  setRootModel: (model_name: string, model_identifier: QueryColumn) => {},
-  clearRootModel: () => {}
+  setRootModel: (
+    model_name: string | null,
+    model_identifier: QueryColumn | null
+  ) => {}
 };
 
 export type QueryState = Readonly<typeof defaultState>;
@@ -140,7 +142,7 @@ export const QueryProvider = (
   );
 
   const setRootModel = useCallback(
-    (rootModel: string, rootIdentifier: QueryColumn) => {
+    (rootModel: string | null, rootIdentifier: QueryColumn | null) => {
       setState({
         ...state, // we want to keep state.graph!
         rootModel,
@@ -152,17 +154,6 @@ export const QueryProvider = (
     },
     [state]
   );
-
-  const clearRootModel = useCallback(() => {
-    setState({
-      ...state,
-      rootModel: null,
-      rootIdentifier: null,
-      attributes: {},
-      recordFilters: [],
-      slices: []
-    });
-  }, [state]);
 
   const setGraph = useCallback(
     (graph: QueryGraph) => {
@@ -188,8 +179,7 @@ export const QueryProvider = (
         addSlice,
         removeSlice,
         patchSlice,
-        setRootModel,
-        clearRootModel
+        setRootModel
       }}
     >
       {props.children}
