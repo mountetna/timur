@@ -7,60 +7,12 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import {makeStyles} from '@material-ui/core/styles';
-
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectTemplate} from 'etna-js/selectors/magma';
-
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryModelAttributeSelector from './query_model_attributes_selector';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  },
-  root: {
-    minWidth: 345
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)'
-  },
-  title: {
-    fontSize: 14
-  },
-  pos: {
-    marginBottom: 12
-  }
-}));
-
 const QuerySelectPane = () => {
   const [intersectionModels, setIntersectionModels] = useState([] as string[]);
-  const {state, setRootModel, setAttributes} = useContext(QueryContext);
-  const classes = useStyles();
-
-  let reduxState = useReduxState();
-
-  const onRootModelSelect = useCallback(
-    (modelName: string) => {
-      if ('' !== modelName) {
-        let template = selectTemplate(reduxState, modelName);
-        setRootModel(modelName, {
-          model_name: modelName,
-          attribute_name: template.identifier,
-          display_label: `${modelName}.${template.identifier}`
-        });
-      } else {
-        setRootModel(null, null);
-      }
-    },
-    [state.rootModel, reduxState]
-  );
+  const {state, setAttributes} = useContext(QueryContext);
 
   const updateIntersectionModels = useCallback(
     (modelName: string, index: number) => {
@@ -81,31 +33,15 @@ const QuerySelectPane = () => {
     [intersectionModels]
   );
 
+  if (!state.rootModel) return null;
+
   return (
-    <Card className={classes.root}>
+    <Card>
       <CardHeader
         title='Select'
-        subheader='the models and attributes you want in your data frame'
+        subheader='the additional models and attributes you want'
       />
       <CardContent>
-        <QueryModelAttributeSelector
-          label='Root Model'
-          modelValue={state.rootModel || ''}
-          modelChoiceSet={
-            state.graph && state.graph.allowedModels
-              ? [...state.graph.allowedModels]
-              : []
-          }
-          onSelectModel={(modelName) => onRootModelSelect(modelName)}
-          onSelectAttributes={setAttributes}
-          selectedAttributes={
-            state.rootModel && state.attributes
-              ? state.attributes[state.rootModel]
-              : []
-          }
-          canRemove={false}
-          removeModel={() => {}}
-        />
         {intersectionModels.map((modelName: string, index: number) => {
           if (!state.rootModel) return;
 

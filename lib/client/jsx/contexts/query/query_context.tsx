@@ -12,7 +12,7 @@ const defaultState = {
   rootIdentifier: {} as QueryColumn | null,
   recordFilters: [] as QueryFilter[],
   orRecordFilterIndices: [] as number[],
-  slices: [] as QueryFilter[],
+  slices: {} as {[key: string]: QueryFilter[]},
   graph: {} as QueryGraph
 };
 
@@ -111,7 +111,12 @@ export const QueryProvider = (
     (slice: QueryFilter) => {
       setState({
         ...state,
-        slices: [...(state.slices || [])].concat([slice])
+        slices: {
+          ...state.slices,
+          [slice.modelName]: [...(state.slices[slice.modelName] || [])].concat([
+            slice
+          ])
+        }
       });
     },
     [state]

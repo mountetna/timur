@@ -19,12 +19,17 @@ import {
   selectTableModelNames
 } from '../../selectors/query_selector';
 
-const QuerySlicePane = () => {
-  // Use an update counter to get the child components
-  //  (i.e. the QueryFilterControls) to remount whenever
-  //  the slice list has one removed.
-  // If not, the component rendered state gets confused
-  //  because of non-unique keys.
+const QuerySliceAttributePane = ({
+  modelName,
+  attributeName
+}: {
+  modelName: string;
+  attributeName?: string;
+}) => {
+  // All the slices related to a given model / attribute,
+  //   with the model / attribute as a "label".
+  // Tables will only have modelName.
+  // Matrices will have modelName + attributeName.
   const [updateCounter, setUpdateCounter] = useState(0);
   const {state, addSlice, removeSlice, patchSlice} = useContext(QueryContext);
 
@@ -32,7 +37,7 @@ const QuerySlicePane = () => {
 
   function addNewSlice() {
     addSlice({
-      modelName: '',
+      modelName,
       attributeName: '',
       operator: '',
       operand: ''
@@ -90,41 +95,31 @@ const QuerySlicePane = () => {
   if (!state.rootModel) return null;
 
   return (
-    <Card>
-      <CardHeader
-        title='Slice'
-        subheader='table and matrix values out of the results'
-      />
-      <CardContent>
-        <Grid container xs={12} spacing={1}>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={8}>
-            {state.slices.map((filter: QueryFilter, index: number) => (
-              <QueryFilterControl
-                key={`${index}-${updateCounter}`}
-                filter={filter}
-                modelNames={modelNames}
-                matrixAttributesOnly={
-                  !tableModelNames.includes(filter.modelName)
-                }
-                patchFilter={(updatedFilter: QueryFilter) =>
-                  handlePatchSlice(index, updatedFilter)
-                }
-                removeFilter={() => handleRemoveSlice(index)}
-              />
-            ))}
-          </Grid>
-        </Grid>
-      </CardContent>
-      <CardActions disableSpacing>
+    <Grid container xs={12} spacing={1}>
+      <Grid item xs={4}></Grid>
+      <Grid item xs={7}>
+        {state.slices.map((filter: QueryFilter, index: number) => (
+          <QueryFilterControl
+            key={`${index}-${updateCounter}`}
+            filter={filter}
+            modelNames={modelNames}
+            matrixAttributesOnly={!tableModelNames.includes(filter.modelName)}
+            patchFilter={(updatedFilter: QueryFilter) =>
+              handlePatchSlice(index, updatedFilter)
+            }
+            removeFilter={() => handleRemoveSlice(index)}
+          />
+        ))}
+      </Grid>
+      <Grid item xs={1}>
         <Tooltip title='Add slice' aria-label='add slice'>
           <IconButton aria-label='add slice' onClick={addNewSlice}>
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </CardActions>
-    </Card>
+      </Grid>
+    </Grid>
   );
 };
 
-export default QuerySlicePane;
+export default QuerySliceAttributePane;

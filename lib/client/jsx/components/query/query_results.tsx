@@ -152,8 +152,14 @@ const QueryResults = () => {
               onBeforeChange={(editor, data, value) => {}}
             />
           </Grid>
-          <Grid item container alignItems='center' justify='space-around'>
-            <Grid item xs={3}>
+          <Grid
+            item
+            container
+            spacing={1}
+            alignItems='center'
+            justify='space-around'
+          >
+            <Grid item xs={4}>
               <Typography component='div'>
                 <Grid
                   component='label'
@@ -173,7 +179,7 @@ const QueryResults = () => {
                 </Grid>
               </Typography>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
               <Typography component='div'>
                 <Grid
                   component='label'
@@ -193,7 +199,7 @@ const QueryResults = () => {
                 </Grid>
               </Typography>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
               <ButtonGroup
                 variant='contained'
                 color='primary'
