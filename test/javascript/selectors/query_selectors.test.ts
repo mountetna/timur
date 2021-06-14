@@ -1,14 +1,42 @@
 import {
   selectSliceableModelNames,
   selectMatrixAttributes,
-  selectOuterIndexOf
+  selectOuterIndexOf,
+  stepIsOneToMany,
+  attributeIsFile
 } from '../../../lib/client/jsx/selectors/query_selector';
 
 const models = {
-  monster: {template: require('../fixtures/template_monster.json')},
-  labor: {template: require('../fixtures/template_labor.json')},
-  prize: {template: require('../fixtures/template_prize.json')},
-  project: {template: require('../fixtures/template_project.json')}
+  prize: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../fixtures/template_prize.json')
+  },
+  monster: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../fixtures/template_monster.json')
+  },
+  labor: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../fixtures/template_labor.json')
+  },
+  project: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../fixtures/template_project.json')
+  },
+  victim: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../fixtures/template_victim.json')
+  }
 };
 
 describe('selectSliceableModelNames', () => {
@@ -122,5 +150,14 @@ describe('selectOuterIndexOf', () => {
       ['blah', 'zap', ['deep', ['nesting']]]
     ];
     expect(selectOuterIndexOf(input, 'nesting')).toEqual(3);
+  });
+});
+
+describe('stepIsOneToMany', () => {
+  it('correctly identifies one-to-many relationships', () => {
+    expect(stepIsOneToMany(models, 'labor', 'monster')).toEqual(false);
+    expect(stepIsOneToMany(models, 'labor', 'prize')).toEqual(false);
+    expect(stepIsOneToMany(models, 'monster', 'victim')).toEqual(true);
+    expect(stepIsOneToMany(models, 'labor', 'victim')).toEqual(false);
   });
 });

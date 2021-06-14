@@ -40,7 +40,7 @@ describe('QueryBuilder', () => {
 
   beforeEach(() => {
     graph = new QueryGraph(models);
-    builder = new QueryBuilder(graph);
+    builder = new QueryBuilder(graph, models);
   });
 
   function stamp(model_name: string, attribute_name: string) {

@@ -57,11 +57,4 @@ describe('QueryGraph', () => {
       ['labor', 'prize']
     ]);
   });
-
-  it('correctly identifies one-to-many relationships', () => {
-    expect(graph.stepIsOneToMany('labor', 'monster')).toEqual(false);
-    expect(graph.stepIsOneToMany('labor', 'prize')).toEqual(false);
-    expect(graph.stepIsOneToMany('monster', 'victim')).toEqual(true);
-    expect(graph.stepIsOneToMany('labor', 'victim')).toEqual(false);
-  });
 });
