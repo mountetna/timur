@@ -24,7 +24,7 @@ export const defaultContext = {
   patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
   setOrRecordFilterIndices: (indices: number[]) => {},
   addSlice: (slice: QueryFilter) => {},
-  removeSlice: (index: number) => {},
+  removeSlice: (modelName: string, index: number) => {},
   patchSlice: (index: number, slice: QueryFilter) => {},
   setRootModel: (
     model_name: string | null,
@@ -123,12 +123,15 @@ export const QueryProvider = (
   );
 
   const removeSlice = useCallback(
-    (index: number) => {
-      let updatedSlices = [...state.slices];
+    (modelName: string, index: number) => {
+      let updatedSlices = [...state.slices[modelName]];
       updatedSlices.splice(index, 1);
       setState({
         ...state,
-        slices: updatedSlices
+        slices: {
+          ...state.slices,
+          [modelName]: updatedSlices
+        }
       });
     },
     [state]
@@ -136,11 +139,14 @@ export const QueryProvider = (
 
   const patchSlice = useCallback(
     (index: number, slice: QueryFilter) => {
-      let updatedSlices = [...state.slices];
+      let updatedSlices = [...state.slices[slice.modelName]];
       updatedSlices[index] = slice;
       setState({
         ...state,
-        slices: updatedSlices
+        slices: {
+          ...state.slices,
+          [slice.modelName]: updatedSlices
+        }
       });
     },
     [state]
@@ -154,7 +160,7 @@ export const QueryProvider = (
         rootIdentifier,
         attributes: {},
         recordFilters: [],
-        slices: []
+        slices: {}
       });
     },
     [state]
