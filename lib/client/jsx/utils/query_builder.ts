@@ -1,8 +1,11 @@
 import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
 import {QueryGraph} from './query_graph';
+import {Model} from '../models/model_types';
+import {stepIsOneToMany, attributeIsFile} from '../selectors/query_selector';
 
 export class QueryBuilder {
   graph: QueryGraph;
+  models: {[key: string]: Model};
   recordFilters: QueryFilter[] = [];
   slices: QueryFilter[] = [];
   attributes: {[key: string]: QueryColumn[]} = {};
@@ -10,8 +13,9 @@ export class QueryBuilder {
   flatten: boolean = true;
   orRecordFilterIndices: number[] = [];
 
-  constructor(graph: QueryGraph) {
+  constructor(graph: QueryGraph, models: {[key: string]: Model}) {
     this.graph = graph;
+    this.models = models;
   }
 
   addRootIdentifier(rootIdentifier: QueryColumn) {
@@ -148,7 +152,7 @@ export class QueryBuilder {
     let previousModelName = this.root;
     path.forEach((modelName: string) => {
       updatedPath.push(modelName);
-      if (this.graph.stepIsOneToMany(previousModelName, modelName)) {
+      if (stepIsOneToMany(this.models, previousModelName, modelName)) {
         updatedPath.push(this.allOrFirst());
       }
       previousModelName = modelName;
@@ -261,7 +265,7 @@ export class QueryBuilder {
   attributeNameWithPredicate(modelName: string, attributeName: string) {
     // Probably only used for File / Image / FileCollection attributes?
     let predicate = [attributeName];
-    if (this.graph.attributeIsFile(modelName, attributeName)) {
+    if (attributeIsFile(this.models, modelName, attributeName)) {
       predicate.push('::url');
     }
 

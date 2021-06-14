@@ -16,16 +16,17 @@ import CardContent from '@material-ui/core/CardContent';
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
+import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {getAnswer} from 'etna-js/api/magma_api';
+import {selectModels} from 'etna-js/selectors/magma';
 import {Exchange} from 'etna-js/actions/exchange_actions';
 import {ReactReduxContext} from 'react-redux';
 
-import {selectOuterIndexOf} from '../../selectors/query_selector';
 import {QueryContext} from '../../contexts/query/query_context';
-import {QueryColumn} from '../../contexts/query/query_types';
 import {QueryBuilder} from '../../utils/query_builder';
+import {QueryResponse} from '../../contexts/query/query_types';
 import QueryTable from './query_table';
 import AntSwitch from './ant_switch';
 
@@ -37,44 +38,16 @@ const QueryResults = () => {
   const [lastPageSize, setLastPageSize] = useState(10);
   const [pageSize, setPageSize] = useState(10);
   const [queries, setQueries] = useState([] as string[][]);
-  const [data, setData] = useState({} as any);
+  const [data, setData] = useState({} as QueryResponse);
   const [numRecords, setNumRecords] = useState(0);
   const {state} = useContext(QueryContext);
   let {store} = useContext(ReactReduxContext);
   const invoke = useActionInvoker();
-
-  function generateIdCol(attr: QueryColumn): string {
-    return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}`;
-  }
-
-  const columns = useMemo(() => {
-    if (!state.rootIdentifier) return [];
-
-    let colDefs: {
-      label: string;
-      colId: string;
-    }[] = [
-      {
-        colId: generateIdCol(state.rootIdentifier),
-        label: state.rootIdentifier.display_label
-      }
-    ];
-
-    return colDefs.concat(
-      Object.values(state.attributes || {})
-        .flat()
-        .map((attr) => {
-          return {
-            label: attr.display_label,
-            colId: generateIdCol(attr)
-          };
-        })
-    );
-  }, [state.attributes, state.rootIdentifier]);
+  let reduxState = useReduxState();
 
   const builder = useMemo(() => {
     if (state.rootIdentifier && state.graph && state.graph.initialized) {
-      let builder = new QueryBuilder(state.graph);
+      let builder = new QueryBuilder(state.graph, selectModels(reduxState));
 
       builder.addRootIdentifier(state.rootIdentifier);
       builder.addAttributes(state.attributes);
@@ -94,7 +67,8 @@ const QueryResults = () => {
     state.slices,
     state.graph,
     state.orRecordFilterIndices,
-    flattenQuery
+    flattenQuery,
+    reduxState
   ]);
 
   const query = useMemo(() => {
@@ -133,17 +107,9 @@ const QueryResults = () => {
       });
   }, [query, count, queries, store.dispatch, pageSize, page]);
 
-  const rows = useMemo(() => {
-    if (!data || !data.answer) return;
-
-    let colMapping = data.format[1];
-    // Need to order the results the same as `columns`
-    return data.answer.map(([recordName, answer]: [string, any[]]) =>
-      columns.map(({colId}) => answer[selectOuterIndexOf(colMapping, colId)])
-    );
-  }, [data, columns]);
-
   useEffect(() => {
+    // At some point, we can probably cache data and only
+    //   fetch when needed?
     if (lastPage !== page || lastPageSize !== pageSize) {
       runQuery();
       setLastPage(page);
@@ -151,8 +117,7 @@ const QueryResults = () => {
     }
   }, [page, pageSize, lastPage, lastPageSize]);
 
-  if (!state.rootModel || !state.rootIdentifier || 0 === columns.length)
-    return null;
+  if (!state.rootModel || !state.rootIdentifier) return null;
 
   function handlePageSizeChange(
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -187,34 +152,63 @@ const QueryResults = () => {
               onBeforeChange={(editor, data, value) => {}}
             />
           </Grid>
-          <Grid item container alignItems='center' justify='flex-end'>
-            <Typography component='div'>
-              <Grid component='label' container alignItems='center' spacing={1}>
-                <Grid item>Expanded</Grid>
-                <Grid item>
-                  <AntSwitch
-                    checked={flattenQuery}
-                    onChange={() => setFlattenQuery(!flattenQuery)}
-                    name='flatten-query'
-                  />
+          <Grid item container alignItems='center' justify='space-around'>
+            <Grid item xs={3}>
+              <Typography component='div'>
+                <Grid
+                  component='label'
+                  container
+                  alignItems='center'
+                  spacing={1}
+                >
+                  <Grid item>Nest matrices</Grid>
+                  <Grid item>
+                    <AntSwitch
+                      checked={expandMatrices}
+                      onChange={() => setExpandMatrices(!expandMatrices)}
+                      name='expand-matrices-query'
+                    />
+                  </Grid>
+                  <Grid item>Expand matrices</Grid>
                 </Grid>
-                <Grid item>Flattened</Grid>
-              </Grid>
-            </Typography>
-            <ButtonGroup
-              variant='contained'
-              color='primary'
-              aria-label='contained primary button group'
-            >
-              <Button>Previous Queries</Button>
-              <Button onClick={runQuery}>Query</Button>
-              <Button>{'\u21af TSV'}</Button>
-            </ButtonGroup>
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography component='div'>
+                <Grid
+                  component='label'
+                  container
+                  alignItems='center'
+                  spacing={1}
+                >
+                  <Grid item>Expanded</Grid>
+                  <Grid item>
+                    <AntSwitch
+                      checked={flattenQuery}
+                      onChange={() => setFlattenQuery(!flattenQuery)}
+                      name='flatten-query'
+                    />
+                  </Grid>
+                  <Grid item>Flattened</Grid>
+                </Grid>
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <ButtonGroup
+                variant='contained'
+                color='primary'
+                aria-label='contained primary button group'
+              >
+                <Button disabled>Previous Queries</Button>
+                <Button onClick={runQuery}>Query</Button>
+                <Button disabled>{'\u21af TSV'}</Button>
+              </ButtonGroup>
+            </Grid>
           </Grid>
           <Grid item>
             <QueryTable
-              columns={columns}
-              rows={rows}
+              data={data}
+              expandMatrices={expandMatrices}
               pageSize={pageSize}
               numRecords={numRecords}
               page={page}

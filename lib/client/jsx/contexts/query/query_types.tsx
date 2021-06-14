@@ -10,3 +10,9 @@ export interface QueryColumn {
   attribute_name: string;
   display_label: string;
 }
+
+export interface QueryResponse {
+  answer: any[];
+  format: any[];
+  type: string;
+}

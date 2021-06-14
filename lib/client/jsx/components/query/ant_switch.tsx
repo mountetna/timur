@@ -1,3 +1,4 @@
+// From https://material-ui.com/components/switches/#CustomizedSwitches.tsx
 import {withStyles, Theme, createStyles} from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 

@@ -1,4 +1,4 @@
-import {Attribute} from '../models/model_types';
+import {Attribute, Model} from '../models/model_types';
 import {QueryColumn} from '../contexts/query/query_types';
 
 export const selectAllowedModelAttributes = (
@@ -117,4 +117,41 @@ export const selectOuterIndexOf = (array: any[], heading: string): number => {
 
   let fullPath = getPath(array, heading, []);
   return fullPath.length > 0 ? fullPath[0] : -1;
+};
+
+export const modelHasAttribute = (
+  magmaModels: {[key: string]: Model},
+  modelName: string,
+  attributeName: string
+) => {
+  if (!magmaModels[modelName]) return false;
+
+  return !!magmaModels[modelName].template.attributes[attributeName];
+};
+
+export const stepIsOneToMany = (
+  magmaModels: {[key: string]: Model},
+  start: string,
+  end: string
+) => {
+  // For a single model relationship (start -> end),
+  //   returns `true` if it is a one-to-many
+  //   relationship.
+  if (!modelHasAttribute(magmaModels, start, end)) return false;
+
+  return ['table', 'collection'].includes(
+    magmaModels[start].template.attributes[end].attribute_type
+  );
+};
+
+export const attributeIsFile = (
+  magmaModels: {[key: string]: Model},
+  modelName: string,
+  attributeName: string
+) => {
+  if (!modelHasAttribute(magmaModels, modelName, attributeName)) return false;
+
+  return ['file', 'image', 'file_collection'].includes(
+    magmaModels[modelName].template.attributes[attributeName].attribute_type
+  );
 };

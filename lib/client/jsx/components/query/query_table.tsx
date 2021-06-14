@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo, useContext} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Table from '@material-ui/core/Table';
@@ -10,6 +10,10 @@ import TableBody from '@material-ui/core/TableBody';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 
+import {selectOuterIndexOf} from '../../selectors/query_selector';
+import {QueryContext} from '../../contexts/query/query_context';
+import {QueryColumn, QueryResponse} from '../../contexts/query/query_types';
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650
@@ -17,16 +21,16 @@ const useStyles = makeStyles({
 });
 
 const QueryTable = ({
-  columns,
-  rows,
+  data,
+  expandMatrices,
   numRecords,
   page,
   pageSize,
   handlePageChange,
   handlePageSizeChange
 }: {
-  columns: any[];
-  rows: any[];
+  data: QueryResponse;
+  expandMatrices: boolean;
   numRecords: number;
   page: number;
   pageSize: number;
@@ -38,7 +42,49 @@ const QueryTable = ({
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
 }) => {
+  const {state} = useContext(QueryContext);
   const classes = useStyles();
+
+  function generateIdCol(attr: QueryColumn): string {
+    return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}`;
+  }
+
+  const columns = useMemo(() => {
+    if (!state.rootIdentifier) return [];
+
+    let colDefs: {
+      label: string;
+      colId: string;
+    }[] = [
+      {
+        colId: generateIdCol(state.rootIdentifier),
+        label: state.rootIdentifier.display_label
+      }
+    ];
+
+    return colDefs.concat(
+      Object.values(state.attributes || {})
+        .flat()
+        .map((attr) => {
+          return {
+            label: attr.display_label,
+            colId: generateIdCol(attr)
+          };
+        })
+    );
+  }, [state.attributes, state.rootIdentifier]);
+
+  const rows = useMemo(() => {
+    if (!data || !data.answer) return;
+
+    let colMapping = data.format[1];
+    // Need to order the results the same as `columns`
+    return data.answer.map(([recordName, answer]: [string, any[]]) =>
+      columns.map(({colId}) => answer[selectOuterIndexOf(colMapping, colId)])
+    );
+  }, [data, columns]);
+
+  if (0 === columns.length) return null;
 
   return (
     <React.Fragment>
