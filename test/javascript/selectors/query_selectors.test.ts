@@ -3,7 +3,7 @@ import {
   selectMatrixAttributes,
   selectOuterIndexOf,
   stepIsOneToMany,
-  attributeIsFile
+  pathToColumn
 } from '../../../lib/client/jsx/selectors/query_selector';
 
 const models = {
@@ -132,7 +132,7 @@ describe('selectMatrixAttributes', () => {
 });
 
 describe('selectOuterIndexOf', () => {
-  it('find top-level headings', () => {
+  it('finds top-level headings', () => {
     let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
     expect(selectOuterIndexOf(input, 'bim')).toEqual(2);
   });
@@ -142,7 +142,7 @@ describe('selectOuterIndexOf', () => {
     expect(selectOuterIndexOf(input, 'kapow')).toEqual(-1);
   });
 
-  fit('finds nested headings', () => {
+  it('finds nested headings', () => {
     let input = [
       'foo',
       ['bar', ['shallow']],
@@ -153,10 +153,42 @@ describe('selectOuterIndexOf', () => {
   });
 });
 
+describe('pathToColumn', () => {
+  it('finds top-level headings', () => {
+    let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
+    expect(pathToColumn(input, 'bim', false)).toEqual('2');
+  });
+
+  it('returns -1 when no match', () => {
+    let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
+    expect(pathToColumn(input, 'kapow', false)).toEqual('-1');
+  });
+
+  it('finds nested headings', () => {
+    let input = [
+      'foo',
+      ['bar', ['shallow']],
+      'bim',
+      ['blah', 'zap', ['deep', ['nesting']]]
+    ];
+    expect(pathToColumn(input, 'nesting', false)).toEqual('3');
+  });
+
+  it('returns full path when expanding matrices', () => {
+    let input = [
+      'foo',
+      ['bar', ['shallow']],
+      'bim',
+      ['blah', 'zap', ['deep', ['nesting']]]
+    ];
+    expect(pathToColumn(input, 'nesting', true)).toEqual('3.2.1.0');
+  });
+});
+
 describe('stepIsOneToMany', () => {
   it('correctly identifies one-to-many relationships', () => {
     expect(stepIsOneToMany(models, 'labor', 'monster')).toEqual(false);
-    expect(stepIsOneToMany(models, 'labor', 'prize')).toEqual(false);
+    expect(stepIsOneToMany(models, 'labor', 'prize')).toEqual(true);
     expect(stepIsOneToMany(models, 'monster', 'victim')).toEqual(true);
     expect(stepIsOneToMany(models, 'labor', 'victim')).toEqual(false);
   });

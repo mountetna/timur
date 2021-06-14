@@ -1,6 +1,7 @@
 import React, {useMemo, useContext} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import * as _ from 'lodash';
 
+import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -10,7 +11,9 @@ import TableBody from '@material-ui/core/TableBody';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import {selectOuterIndexOf} from '../../selectors/query_selector';
+import {useReduxState} from 'etna-js/hooks/useReduxState';
+import {selectModels} from 'etna-js/selectors/magma';
+import {pathToColumn, attributeIsMatrix} from '../../selectors/query_selector';
 import {QueryContext} from '../../contexts/query/query_context';
 import {QueryColumn, QueryResponse} from '../../contexts/query/query_types';
 
@@ -43,6 +46,7 @@ const QueryTable = ({
   ) => void;
 }) => {
   const {state} = useContext(QueryContext);
+  const reduxState = useReduxState();
   const classes = useStyles();
 
   function generateIdCol(attr: QueryColumn): string {
@@ -62,17 +66,39 @@ const QueryTable = ({
       }
     ];
 
+    // return colDefs.concat(
+    //   Object.values(state.attributes || {})
+    //     .flat()
+    //     .map((attr) => {
+    //       return {
+    //         label: attr.display_label,
+    //         colId: generateIdCol(attr)
+    //       };
+    //     })
+    // );
     return colDefs.concat(
       Object.values(state.attributes || {})
         .flat()
-        .map((attr) => {
-          return {
-            label: attr.display_label,
-            colId: generateIdCol(attr)
-          };
-        })
+        .reduce((acc: {label: string; colId: string}[], attr) => {
+          if (
+            expandMatrices &&
+            attributeIsMatrix(
+              selectModels(reduxState),
+              attr.model_name,
+              attr.attribute_name
+            )
+          ) {
+          } else {
+            acc.push({
+              label: attr.display_label,
+              colId: generateIdCol(attr)
+            });
+          }
+
+          return acc;
+        }, [])
     );
-  }, [state.attributes, state.rootIdentifier]);
+  }, [state.attributes, state.rootIdentifier, reduxState]);
 
   const rows = useMemo(() => {
     if (!data || !data.answer) return;
@@ -80,12 +106,14 @@ const QueryTable = ({
     let colMapping = data.format[1];
     // Need to order the results the same as `columns`
     return data.answer.map(([recordName, answer]: [string, any[]]) =>
-      columns.map(({colId}) => answer[selectOuterIndexOf(colMapping, colId)])
+      columns.map(({colId}) =>
+        _.at(answer, pathToColumn(colMapping, colId, expandMatrices)).flat()
+      )
     );
   }, [data, columns]);
 
   if (0 === columns.length) return null;
-
+  console.log('rows', rows, columns);
   return (
     <React.Fragment>
       <TableContainer component={Paper}>

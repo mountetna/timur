@@ -56,14 +56,11 @@ const selectMatrixModelNames = (
   selectedAttributes: {[key: string]: QueryColumn[]}
 ): string[] => {
   return Object.entries(selectedAttributes)
-    .filter(([modelName, attributes]: [string, QueryColumn[]]) => {
-      let magmaAttributes = magmaModels[modelName].template.attributes;
-
-      return attributes.some(
-        (attr) =>
-          'matrix' === magmaAttributes[attr.attribute_name].attribute_type
-      );
-    })
+    .filter(([modelName, attributes]: [string, QueryColumn[]]) =>
+      attributes.some((attr) =>
+        attributeIsMatrix(magmaModels, modelName, attr.attribute_name)
+      )
+    )
     .map(([modelName, attributes]: [string, QueryColumn[]]) => modelName);
 };
 
@@ -81,15 +78,13 @@ export const selectTableModelNames = (
 
     if (!parentModel) return false;
 
-    return (
-      'table' ===
-      magmaModels[parentModel.attribute_name].template.attributes[modelName]
-        .attribute_type
-    );
+    return attributeIs(magmaModels, parentModel.attribute_name, modelName, [
+      'table'
+    ]);
   });
 };
 
-const getPath = (
+export const getPath = (
   array: any[],
   heading: string,
   currentPath: number[]
@@ -119,6 +114,22 @@ export const selectOuterIndexOf = (array: any[], heading: string): number => {
   return fullPath.length > 0 ? fullPath[0] : -1;
 };
 
+export const pathToColumn = (
+  array: any[],
+  heading: string,
+  expandMatrices: boolean
+): string => {
+  let index = array.indexOf(heading);
+  if (index > -1) return index.toString();
+
+  let fullPath = getPath(array, heading, []);
+  return fullPath.length > 0
+    ? expandMatrices
+      ? fullPath.join('.') // TODO: modify this to account for matrix columns
+      : fullPath[0].toString()
+    : '-1';
+};
+
 export const modelHasAttribute = (
   magmaModels: {[key: string]: Model},
   modelName: string,
@@ -137,10 +148,19 @@ export const stepIsOneToMany = (
   // For a single model relationship (start -> end),
   //   returns `true` if it is a one-to-many
   //   relationship.
-  if (!modelHasAttribute(magmaModels, start, end)) return false;
+  return attributeIs(magmaModels, start, end, ['table', 'collection']);
+};
 
-  return ['table', 'collection'].includes(
-    magmaModels[start].template.attributes[end].attribute_type
+const attributeIs = (
+  magmaModels: {[key: string]: Model},
+  modelName: string,
+  attributeName: string,
+  types: string[]
+) => {
+  if (!modelHasAttribute(magmaModels, modelName, attributeName)) return false;
+
+  return types.includes(
+    magmaModels[modelName].template.attributes[attributeName].attribute_type
   );
 };
 
@@ -149,9 +169,17 @@ export const attributeIsFile = (
   modelName: string,
   attributeName: string
 ) => {
-  if (!modelHasAttribute(magmaModels, modelName, attributeName)) return false;
+  return attributeIs(magmaModels, modelName, attributeName, [
+    'file',
+    'image',
+    'file_collection'
+  ]);
+};
 
-  return ['file', 'image', 'file_collection'].includes(
-    magmaModels[modelName].template.attributes[attributeName].attribute_type
-  );
+export const attributeIsMatrix = (
+  magmaModels: {[key: string]: Model},
+  modelName: string,
+  attributeName: string
+) => {
+  return attributeIs(magmaModels, modelName, attributeName, ['matrix']);
 };
