@@ -1,7 +1,11 @@
 import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
 import {QueryGraph} from './query_graph';
 import {Model} from '../models/model_types';
-import {stepIsOneToMany, attributeIsFile} from '../selectors/query_selector';
+import {
+  stepIsOneToMany,
+  attributeIsFile,
+  isMatchingMatrixSlice
+} from '../selectors/query_selector';
 
 export class QueryBuilder {
   graph: QueryGraph;
@@ -221,7 +225,7 @@ export class QueryBuilder {
     let includeAttributeName = true;
 
     if (matchingSlice) {
-      if (this.isMatchingMatrixSlice(matchingSlice, attribute)) {
+      if (isMatchingMatrixSlice(matchingSlice, attribute)) {
         // For matrices (i.e. ::slice), we'll construct it
         //   a little differently.
         predicate = predicate.concat(this.expandOperand(matchingSlice, false));
@@ -249,13 +253,6 @@ export class QueryBuilder {
       );
 
     return predicate;
-  }
-
-  isMatchingMatrixSlice(slice: QueryFilter, attribute: QueryColumn) {
-    return (
-      slice.operator === '::slice' &&
-      slice.attributeName === attribute.attribute_name
-    );
   }
 
   isTableSlice(slice: QueryFilter) {

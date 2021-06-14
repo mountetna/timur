@@ -1,5 +1,7 @@
+import * as _ from 'lodash';
+
 import {Attribute, Model} from '../models/model_types';
-import {QueryColumn} from '../contexts/query/query_types';
+import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
 
 export const selectAllowedModelAttributes = (
   attributes: Attribute[]
@@ -106,14 +108,6 @@ export const getPath = (
   return innerPath.length > 0 ? innerPath : [];
 };
 
-export const selectOuterIndexOf = (array: any[], heading: string): number => {
-  let index = array.indexOf(heading);
-  if (index > -1) return index;
-
-  let fullPath = getPath(array, heading, []);
-  return fullPath.length > 0 ? fullPath[0] : -1;
-};
-
 export const pathToColumn = (
   array: any[],
   heading: string,
@@ -122,12 +116,27 @@ export const pathToColumn = (
   let index = array.indexOf(heading);
   if (index > -1) return index.toString();
 
-  let fullPath = getPath(array, heading, []);
-  return fullPath.length > 0
-    ? expandMatrices
-      ? fullPath.join('.') // TODO: modify this to account for matrix columns
-      : fullPath[0].toString()
-    : '-1';
+  let fullPath: number[] = [];
+
+  if (expandMatrices) {
+    let nonMatrixColId = heading.split('.')[0];
+    let sliceColId = heading.split('.')[1];
+
+    fullPath = getPath(array, nonMatrixColId, []);
+    // fullPath returns the path to project#model::attribute.
+    //   Slice that out since we want the slices.
+    // Add [1] because in the
+    //   tuple, it should be [project#model::attribute, [array, of, slice, operands]]
+    let pathToMatrixSlices = fullPath.slice(0, -1);
+    pathToMatrixSlices.push(1);
+    let matrixData = _.at(array, pathToMatrixSlices.join('.'))[0];
+    let sliceIndex = matrixData.indexOf(sliceColId);
+
+    return pathToMatrixSlices.concat([sliceIndex]).join('.');
+  } else {
+    fullPath = getPath(array, heading, []);
+    return fullPath.length > 0 ? fullPath[0].toString() : '-1';
+  }
 };
 
 export const modelHasAttribute = (
@@ -182,4 +191,22 @@ export const attributeIsMatrix = (
   attributeName: string
 ) => {
   return attributeIs(magmaModels, modelName, attributeName, ['matrix']);
+};
+
+export const isMatchingMatrixSlice = (
+  slice: QueryFilter,
+  attribute: QueryColumn
+) => {
+  return (
+    slice.operator === '::slice' &&
+    slice.attributeName === attribute.attribute_name &&
+    slice.modelName === attribute.model_name
+  );
+};
+
+export const hasMatrixSlice = (
+  slices: QueryFilter[],
+  attribute: QueryColumn
+) => {
+  return slices.some((slice) => isMatchingMatrixSlice(slice, attribute));
 };

@@ -13,7 +13,12 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectModels} from 'etna-js/selectors/magma';
-import {pathToColumn, attributeIsMatrix} from '../../selectors/query_selector';
+import {
+  pathToColumn,
+  attributeIsMatrix,
+  hasMatrixSlice,
+  isMatchingMatrixSlice
+} from '../../selectors/query_selector';
 import {QueryContext} from '../../contexts/query/query_context';
 import {QueryColumn, QueryResponse} from '../../contexts/query/query_types';
 
@@ -86,8 +91,19 @@ const QueryTable = ({
               selectModels(reduxState),
               attr.model_name,
               attr.attribute_name
-            )
+            ) &&
+            hasMatrixSlice(state.slices, attr)
           ) {
+            state.slices
+              .filter((slice) => isMatchingMatrixSlice(slice, attr))
+              .forEach((slice) => {
+                (slice.operand as string).split(',').forEach((heading) => {
+                  acc.push({
+                    label: `${attr.display_label}.${heading}`,
+                    colId: `${generateIdCol(attr)}.${heading}`
+                  });
+                });
+              });
           } else {
             acc.push({
               label: attr.display_label,
@@ -98,7 +114,13 @@ const QueryTable = ({
           return acc;
         }, [])
     );
-  }, [state.attributes, state.rootIdentifier, reduxState]);
+  }, [
+    state.attributes,
+    state.rootIdentifier,
+    state.slices,
+    reduxState,
+    expandMatrices
+  ]);
 
   const rows = useMemo(() => {
     if (!data || !data.answer) return;

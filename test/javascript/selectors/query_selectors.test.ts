@@ -1,7 +1,6 @@
 import {
   selectSliceableModelNames,
   selectMatrixAttributes,
-  selectOuterIndexOf,
   stepIsOneToMany,
   pathToColumn
 } from '../../../lib/client/jsx/selectors/query_selector';
@@ -131,28 +130,6 @@ describe('selectMatrixAttributes', () => {
   });
 });
 
-describe('selectOuterIndexOf', () => {
-  it('finds top-level headings', () => {
-    let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
-    expect(selectOuterIndexOf(input, 'bim')).toEqual(2);
-  });
-
-  it('returns -1 when no match', () => {
-    let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
-    expect(selectOuterIndexOf(input, 'kapow')).toEqual(-1);
-  });
-
-  it('finds nested headings', () => {
-    let input = [
-      'foo',
-      ['bar', ['shallow']],
-      'bim',
-      ['blah', 'zap', ['deep', ['nesting']]]
-    ];
-    expect(selectOuterIndexOf(input, 'nesting')).toEqual(3);
-  });
-});
-
 describe('pathToColumn', () => {
   it('finds top-level headings', () => {
     let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
@@ -174,14 +151,14 @@ describe('pathToColumn', () => {
     expect(pathToColumn(input, 'nesting', false)).toEqual('3');
   });
 
-  it('returns full path when expanding matrices', () => {
+  fit('returns full path when expanding matrices', () => {
     let input = [
       'foo',
       ['bar', ['shallow']],
       'bim',
-      ['blah', 'zap', ['deep', ['nesting']]]
+      ['blah', 'zap', ['deep', ['something', 'nesting']]]
     ];
-    expect(pathToColumn(input, 'nesting', true)).toEqual('3.2.1.0');
+    expect(pathToColumn(input, 'deep.nesting', true)).toEqual('3.2.1.1');
   });
 });
 
