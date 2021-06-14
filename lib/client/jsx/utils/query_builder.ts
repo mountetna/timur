@@ -174,8 +174,8 @@ export class QueryBuilder {
     // Convert this.attributes + this.slices into the right
     //   query format. Include the path from the root model
     //   to the attributes' model.
-    let initialValues = this.attributes[this.root].map((attr) =>
-      this.attributeNameWithPredicate(attr.model_name, attr.attribute_name)
+    let initialValues = this.attributes[this.root].map(
+      (attr) => this.predicateWithSlice([], attr) as (string | string[])[]
     );
 
     return Object.entries(this.attributes).reduce(

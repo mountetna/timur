@@ -163,6 +163,27 @@ describe('QueryBuilder', () => {
     ]);
   });
 
+  it('adds slice for root model', () => {
+    builder.addRootIdentifier(stamp('labor', 'name'));
+    builder.addAttributes({
+      labor: [stamp('labor', 'contributions')]
+    });
+    builder.addSlices([
+      {
+        modelName: 'labor',
+        attributeName: 'contributions',
+        operator: '::slice',
+        operand: 'Athens,Sidon'
+      }
+    ]);
+
+    expect(builder.query()).toEqual([
+      'labor',
+      '::all',
+      [['name'], ['contributions', '::slice', ['Athens', 'Sidon']]]
+    ]);
+  });
+
   it('returns a count query string', () => {
     builder.addRootIdentifier(stamp('monster', 'name'));
     builder.addAttributes({

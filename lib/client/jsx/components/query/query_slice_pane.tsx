@@ -12,7 +12,7 @@ import {selectModels} from 'etna-js/selectors/magma';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
-import {QueryFilter} from '../../contexts/query/query_types';
+import {QueryFilter, QueryColumn} from '../../contexts/query/query_types';
 import {
   selectSliceableModelNames,
   selectTableModelNames
@@ -47,23 +47,44 @@ const QuerySlicePane = () => {
     setUpdateCounter(updateCounter + 1);
   }
 
+  const attributesWithRootIdentifier = useMemo(() => {
+    if (!state.rootIdentifier || !state.rootModel) return {};
+
+    return {
+      ...state.attributes,
+      [state.rootModel]: [...(state.attributes[state.rootModel] || [])].concat([
+        state.rootIdentifier
+      ])
+    };
+  }, [state.attributes, state.rootModel, state.rootIdentifier]);
+
   const modelNames = useMemo(() => {
     if (!state.rootModel) return [];
 
     return selectSliceableModelNames(
       selectModels(reduxState),
-      state.attributes
+      attributesWithRootIdentifier
     );
-  }, [state.attributes, state.rootModel, reduxState]);
+  }, [
+    state.attributes,
+    state.rootModel,
+    attributesWithRootIdentifier,
+    reduxState
+  ]);
 
   const tableModelNames = useMemo(() => {
     if (!state.rootModel) return [];
 
     return selectTableModelNames(
       selectModels(reduxState),
-      Object.keys(state.attributes)
+      Object.keys(attributesWithRootIdentifier)
     );
-  }, [state.attributes, reduxState, state.rootModel]);
+  }, [
+    state.attributes,
+    reduxState,
+    state.rootModel,
+    attributesWithRootIdentifier
+  ]);
 
   if (!state.rootModel) return null;
 
