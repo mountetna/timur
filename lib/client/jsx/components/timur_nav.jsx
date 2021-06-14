@@ -7,6 +7,7 @@ import IdentifierSearch from './identifier_search';
 import Link from 'etna-js/components/link';
 import {selectUser} from 'etna-js/selectors/user-selector';
 import {isAdmin} from 'etna-js/utils/janus';
+import {useFeatureFlag} from 'etna-js/hooks/useFeatureFlag';
 
 const Halo = ({radius}) =>
   <div className="halo">
@@ -37,7 +38,6 @@ const getTabs = (user) => {
   let tabs = {
     browse: Routes.browse_path(CONFIG.project_name),
     search: Routes.search_path(CONFIG.project_name),
-    query: Routes.query_path(CONFIG.project_name),
     map: Routes.map_path(CONFIG.project_name),
     manifests: Routes.manifests_path(CONFIG.project_name),
     plots: Routes.plots_path(CONFIG.project_name),
@@ -46,6 +46,11 @@ const getTabs = (user) => {
 
   if (isAdmin(user, CONFIG.project_name)) {
     tabs['views'] = Routes.views_path(CONFIG.project_name);
+  }
+
+  console.log('user?', user, useFeatureFlag('timurquery'));
+  if (useFeatureFlag('timurquery')) {
+    tabs['query'] = Routes.query_path(CONFIG.project_name);
   }
 
   return tabs;
