@@ -94,11 +94,11 @@ const QueryModelAttributeSelector = ({
     setSelectableModelAttributes(selectAllowedModelAttributes(modelAttributes));
   }, [modelAttributes]);
 
-  const id = `${label}-${Math.random()}`;
+  const id = `${label}-${modelValue}`;
 
   return (
-    <Grid container alignItems='center'>
-      <Grid item justify='flex-start'>
+    <Grid container alignItems='center' justify='flex-start'>
+      <Grid item>
         <FormControl className={classes.formControl}>
           <InputLabel shrink id={id}>
             {label}
@@ -120,7 +120,7 @@ const QueryModelAttributeSelector = ({
         </FormControl>
       </Grid>
       {modelValue ? (
-        <Grid item justify='flex-end'>
+        <Grid item>
           <Button onClick={showAttributes} variant='contained' color='default'>
             {`Attributes - ${
               selectedAttributes ? selectedAttributes.length : 0

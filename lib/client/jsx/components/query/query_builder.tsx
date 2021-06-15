@@ -20,8 +20,8 @@ const QueryBuilder = ({}) => {
   const {state} = useContext(QueryContext);
 
   return (
-    <Grid container xs={12} spacing={1} direction='column'>
-      <Grid item container>
+    <Grid container spacing={1} direction='column'>
+      <Grid item xs={12} container>
         <Grid item xs={5}>
           <QueryControls />
         </Grid>
