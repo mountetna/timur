@@ -174,24 +174,22 @@ const QueryAttributesModal = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Grid container>
-          <Grid item xs={6} justify='flex-start'>
+        <Grid container justify='flex-start'>
+          <Grid item xs={6}>
             <Button onClick={toggleAll} color='default'>
               All
             </Button>
           </Grid>
-          <Grid item xs={6}>
-            <Grid container justify='flex-end'>
-              <Grid item>
-                <Button onClick={onClose} color='secondary'>
-                  Cancel
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button onClick={handleOk} color='primary'>
-                  Ok
-                </Button>
-              </Grid>
+          <Grid item xs={6} container justify='flex-end'>
+            <Grid item>
+              <Button onClick={onClose} color='secondary'>
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button onClick={handleOk} color='primary'>
+                Ok
+              </Button>
             </Grid>
           </Grid>
         </Grid>

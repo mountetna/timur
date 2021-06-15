@@ -10,7 +10,7 @@ import QueryFilterControl from './query_filter_control';
 import {QueryFilter} from '../../contexts/query/query_types';
 import useSliceMethods from './query_use_slice_methods';
 
-const QuerySliceMatrixAttributePane = ({
+const QuerySliceModelAttributePane = ({
   modelName,
   slices,
   isMatrix,
@@ -37,7 +37,7 @@ const QuerySliceMatrixAttributePane = ({
   if (!state.rootModel) return null;
 
   return (
-    <Grid container xs={12} spacing={1}>
+    <Grid container spacing={1}>
       <Grid item xs={2}>
         <Typography>{modelName}</Typography>
       </Grid>
@@ -75,4 +75,4 @@ const QuerySliceMatrixAttributePane = ({
   );
 };
 
-export default QuerySliceMatrixAttributePane;
+export default QuerySliceModelAttributePane;

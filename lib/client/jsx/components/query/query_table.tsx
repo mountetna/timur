@@ -136,15 +136,15 @@ const QueryTable = ({
   }, [data, columns]);
 
   if (0 === columns.length) return null;
-  console.log('rows', rows, columns);
+
   return (
     <React.Fragment>
       <TableContainer component={Paper}>
         <Table className={classes.table} size='small' aria-label='result table'>
           <TableHead>
             <TableRow>
-              {columns.map(({label}: {label: string}) => (
-                <TableCell>{label}</TableCell>
+              {columns.map(({label}: {label: string}, index: number) => (
+                <TableCell key={index}>{label}</TableCell>
               ))}
             </TableRow>
           </TableHead>

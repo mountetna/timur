@@ -194,10 +194,8 @@ const QueryFilterControl = ({
     [filter, patchFilter]
   );
 
-  let uniqId = useCallback(
-    (idType: string): string => `${idType}-Select-${Math.random().toString()}`,
-    []
-  );
+  let uniqId = (idType: string): string =>
+    `${idType}-Select-${Math.random().toString()}`;
 
   if (!state.rootModel) return null;
 
@@ -213,8 +211,10 @@ const QueryFilterControl = ({
               onChange={(e) => handleModelSelect(e.target.value as string)}
               displayEmpty
             >
-              {modelNames.sort().map((name) => (
-                <MenuItem value={name}>{name}</MenuItem>
+              {modelNames.sort().map((name, index: number) => (
+                <MenuItem key={index} value={name}>
+                  {name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -230,8 +230,8 @@ const QueryFilterControl = ({
               onChange={(e) => handleAttributeSelect(e.target.value as string)}
               displayEmpty
             >
-              {modelAttributes.sort().map((attr) => (
-                <MenuItem value={attr.attribute_name}>
+              {modelAttributes.sort().map((attr, index: number) => (
+                <MenuItem key={index} value={attr.attribute_name}>
                   {attr.attribute_name}
                 </MenuItem>
               ))}
@@ -250,8 +250,10 @@ const QueryFilterControl = ({
           >
             {Object.keys(operatorOptions)
               .sort()
-              .map((operator: string) => (
-                <MenuItem value={operator}>{operator}</MenuItem>
+              .map((operator: string, index: number) => (
+                <MenuItem key={index} value={operator}>
+                  {operator}
+                </MenuItem>
               ))}
           </Select>
         </FormControl>

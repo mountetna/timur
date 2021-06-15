@@ -1,21 +1,50 @@
 import React from 'react';
 import {Provider} from 'react-redux';
+import {StylesProvider} from '@material-ui/styles/';
+import renderer from 'react-test-renderer';
+
 import {
   QueryProvider,
   defaultContext
 } from '../../../../lib/client/jsx/contexts/query/query_context';
-import {StylesProvider} from '@material-ui/styles/';
-import renderer from 'react-test-renderer';
 import {mockStore, generateClassName} from '../../helpers';
-import QueryPage from '../../../../lib/client/jsx/components/query/query_page';
+import QueryBuilder from '../../../../lib/client/jsx/components/query/query_builder';
+import {QueryGraph} from '../../../../lib/client/jsx/utils/query_graph';
 
 const models = {
-  monster: {template: require('../../fixtures/template_monster.json')},
-  labor: {template: require('../../fixtures/template_labor.json')},
-  project: {template: require('../../fixtures/template_project.json')}
+  monster: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../../fixtures/template_monster.json')
+  },
+  prize: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../../fixtures/template_prize.json')
+  },
+  victim: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../../fixtures/template_victim.json')
+  },
+  labor: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../../fixtures/template_labor.json')
+  },
+  project: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../../fixtures/template_project.json')
+  }
 };
 
-describe('QueryPage', () => {
+describe('QueryBuilder', () => {
   let store;
 
   beforeEach(() => {});
@@ -30,6 +59,8 @@ describe('QueryPage', () => {
       magma_host: 'https://magma.test'
     };
 
+    let graph = new QueryGraph(models);
+
     // Wrap with Provider here so store gets passed down to child components in Context
     const tree = renderer
       .create(
@@ -38,15 +69,25 @@ describe('QueryPage', () => {
             <QueryProvider
               state={{
                 ...defaultContext.state,
+                graph,
                 rootModel: 'monster',
                 rootIdentifier: {
                   model_name: 'monster',
                   attribute_name: 'name',
                   display_label: 'monster.name'
                 },
+                attributes: {
+                  prize: [
+                    {
+                      model_name: 'prize',
+                      attribute_name: 'name',
+                      display_label: 'prize.name'
+                    }
+                  ]
+                },
                 recordFilters: [
                   {
-                    modelName: 'labors',
+                    modelName: 'labor',
                     attributeName: 'year',
                     operator: '::equals',
                     operand: 2
@@ -64,7 +105,7 @@ describe('QueryPage', () => {
                 }
               }}
             >
-              <QueryPage />
+              <QueryBuilder />
             </QueryProvider>
           </StylesProvider>
         </Provider>

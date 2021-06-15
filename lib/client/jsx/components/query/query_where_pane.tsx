@@ -79,7 +79,7 @@ const QueryWherePane = () => {
           <Grid item xs={11}></Grid>
         </Grid>
         {state.recordFilters.map((filter: QueryFilter, index: number) => (
-          <Grid container alignItems='center' justify='center'>
+          <Grid key={index} container alignItems='center' justify='center'>
             <Grid item xs={1}>
               <Checkbox
                 checked={state.orRecordFilterIndices.includes(index)}

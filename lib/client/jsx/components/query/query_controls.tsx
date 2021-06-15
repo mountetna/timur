@@ -7,13 +7,6 @@ import QuerySelectPane from './query_select_pane';
 import QueryWherePane from './query_where_pane';
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  },
   container: {
     width: '100%'
   },
@@ -34,13 +27,13 @@ const QueryControls = () => {
       direction='column'
       spacing={2}
     >
-      <Grid item className={classes.container}>
+      <Grid item className={classes.item}>
         <QueryFromPane />
       </Grid>
-      <Grid item className={classes.container}>
+      <Grid item className={classes.item}>
         <QuerySelectPane />
       </Grid>
-      <Grid item className={classes.container}>
+      <Grid item className={classes.item}>
         <QueryWherePane />
       </Grid>
     </Grid>

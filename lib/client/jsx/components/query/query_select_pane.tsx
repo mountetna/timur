@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useCallback, useContext, useState, useEffect} from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,6 +13,15 @@ import QueryModelAttributeSelector from './query_model_attributes_selector';
 const QuerySelectPane = () => {
   const [intersectionModels, setIntersectionModels] = useState([] as string[]);
   const {state, setAttributes} = useContext(QueryContext);
+
+  useEffect(() => {
+    if (
+      intersectionModels.length === 0 &&
+      Object.keys(state.attributes).length > 0
+    ) {
+      setIntersectionModels(Object.keys(state.attributes));
+    }
+  }, [state.attributes]);
 
   const updateIntersectionModels = useCallback(
     (modelName: string, index: number) => {
@@ -30,7 +39,7 @@ const QuerySelectPane = () => {
       setIntersectionModels(updatedModels);
       setAttributes(removedModelName, []);
     },
-    [intersectionModels]
+    [intersectionModels, setAttributes]
   );
 
   if (!state.rootModel) return null;
@@ -54,6 +63,7 @@ const QuerySelectPane = () => {
             .concat([modelName]);
           return (
             <QueryModelAttributeSelector
+              key={index}
               label='Intersection Model'
               modelValue={modelName}
               modelChoiceSet={choiceSet}

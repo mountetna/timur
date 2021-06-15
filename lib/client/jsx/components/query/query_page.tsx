@@ -18,7 +18,6 @@ const QueryPage = ({}) => {
           <Grid item xs={12}>
             <QueryBuilder />
           </Grid>
-          <Grid item xs={12}></Grid>
         </Grid>
       </QueryProvider>
     </React.Fragment>

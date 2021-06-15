@@ -94,7 +94,7 @@ const QueryModelAttributeSelector = ({
     setSelectableModelAttributes(selectAllowedModelAttributes(modelAttributes));
   }, [modelAttributes]);
 
-  const id = `${label}-${modelValue}`;
+  const id = `${label}-${Math.random()}`;
 
   return (
     <Grid container alignItems='center' justify='flex-start'>
@@ -113,8 +113,10 @@ const QueryModelAttributeSelector = ({
             <MenuItem value=''>
               <em>None</em>
             </MenuItem>
-            {modelChoiceSet.sort().map((model_name: string) => (
-              <MenuItem value={model_name}>{model_name}</MenuItem>
+            {modelChoiceSet.sort().map((model_name: string, index: number) => (
+              <MenuItem key={index} value={model_name}>
+                {model_name}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
