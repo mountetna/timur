@@ -53,7 +53,7 @@ export const selectSliceableModelNames = (
   ).concat(selectMatrixModelNames(magmaModels, selectedAttributes));
 };
 
-const selectMatrixModelNames = (
+export const selectMatrixModelNames = (
   magmaModels: any,
   selectedAttributes: {[key: string]: QueryColumn[]}
 ): string[] => {
@@ -130,6 +130,9 @@ export const pathToColumn = (
     let pathToMatrixSlices = fullPath.slice(0, -1);
     pathToMatrixSlices.push(1);
     let matrixData = _.at(array, pathToMatrixSlices.join('.'))[0];
+
+    if (!matrixData) return '-1';
+
     let sliceIndex = matrixData.indexOf(sliceColId);
 
     return pathToMatrixSlices.concat([sliceIndex]).join('.');
@@ -193,12 +196,15 @@ export const attributeIsMatrix = (
   return attributeIs(magmaModels, modelName, attributeName, ['matrix']);
 };
 
+export const isMatrixSlice = (slice: QueryFilter) =>
+  '::slice' === slice.operator;
+
 export const isMatchingMatrixSlice = (
   slice: QueryFilter,
   attribute: QueryColumn
 ) => {
   return (
-    slice.operator === '::slice' &&
+    isMatrixSlice(slice) &&
     slice.attributeName === attribute.attribute_name &&
     slice.modelName === attribute.model_name
   );

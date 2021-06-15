@@ -83,26 +83,33 @@ describe('QueryBuilder', () => {
         operand: 2
       }
     ]);
-    builder.addSlices([
-      {
-        modelName: 'prize',
-        attributeName: 'name',
-        operator: '::equals',
-        operand: 'Sparta'
-      },
-      {
-        modelName: 'labor',
-        attributeName: 'contributions',
-        operator: '::slice',
-        operand: 'Athens,Sidon'
-      }
-    ]);
+    builder.addSlices({
+      prize: [
+        {
+          modelName: 'prize',
+          attributeName: 'name',
+          operator: '::equals',
+          operand: 'Sparta'
+        }
+      ],
+      labor: [
+        {
+          modelName: 'labor',
+          attributeName: 'contributions',
+          operator: '::slice',
+          operand: 'Athens,Sidon'
+        }
+      ]
+    });
 
     expect(builder.query()).toEqual([
       'monster',
-      ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
-      ['name', '::equals', 'Nemean Lion'],
-      ['labor', 'number', '::equals', 2],
+      [
+        '::and',
+        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+        ['name', '::equals', 'Nemean Lion'],
+        ['labor', 'number', '::equals', 2]
+      ],
       '::all',
       [
         ['name'],
@@ -120,9 +127,12 @@ describe('QueryBuilder', () => {
 
     expect(builder.query()).toEqual([
       'monster',
-      ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
-      ['name', '::equals', 'Nemean Lion'],
-      ['labor', 'number', '::equals', 2],
+      [
+        '::and',
+        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+        ['name', '::equals', 'Nemean Lion'],
+        ['labor', 'number', '::equals', 2]
+      ],
       '::all',
       [
         ['name'],
@@ -168,14 +178,16 @@ describe('QueryBuilder', () => {
     builder.addAttributes({
       labor: [stamp('labor', 'contributions')]
     });
-    builder.addSlices([
-      {
-        modelName: 'labor',
-        attributeName: 'contributions',
-        operator: '::slice',
-        operand: 'Athens,Sidon'
-      }
-    ]);
+    builder.addSlices({
+      labor: [
+        {
+          modelName: 'labor',
+          attributeName: 'contributions',
+          operator: '::slice',
+          operand: 'Athens,Sidon'
+        }
+      ]
+    });
 
     expect(builder.query()).toEqual([
       'labor',
@@ -205,19 +217,24 @@ describe('QueryBuilder', () => {
         operand: 'Nemean Lion'
       }
     ]);
-    builder.addSlices([
-      {
-        modelName: 'prize',
-        attributeName: 'name',
-        operator: '::equals',
-        operand: 'Sparta'
-      }
-    ]);
+    builder.addSlices({
+      prize: [
+        {
+          modelName: 'prize',
+          attributeName: 'name',
+          operator: '::equals',
+          operand: 'Sparta'
+        }
+      ]
+    });
 
     expect(builder.count()).toEqual([
       'monster',
-      ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
-      ['name', '::equals', 'Nemean Lion'],
+      [
+        '::and',
+        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+        ['name', '::equals', 'Nemean Lion']
+      ],
       '::count'
     ]);
   });

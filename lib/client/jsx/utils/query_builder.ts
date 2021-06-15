@@ -4,14 +4,15 @@ import {Model} from '../models/model_types';
 import {
   stepIsOneToMany,
   attributeIsFile,
-  isMatchingMatrixSlice
+  isMatchingMatrixSlice,
+  isMatrixSlice
 } from '../selectors/query_selector';
 
 export class QueryBuilder {
   graph: QueryGraph;
   models: {[key: string]: Model};
   recordFilters: QueryFilter[] = [];
-  slices: QueryFilter[] = [];
+  slices: {[key: string]: QueryFilter[]} = {};
   attributes: {[key: string]: QueryColumn[]} = {};
   root: string = '';
   flatten: boolean = true;
@@ -48,7 +49,7 @@ export class QueryBuilder {
     this.recordFilters = recordFilters;
   }
 
-  addSlices(slices: QueryFilter[]) {
+  addSlices(slices: {[key: string]: QueryFilter[]}) {
     this.slices = slices;
   }
 
@@ -102,9 +103,9 @@ export class QueryBuilder {
 
   expandedOperands(filters: QueryFilter[]) {
     let expandedFilters: any[] = [];
+    let andFilters: any[] = ['::and'];
 
     if (this.orRecordFilterIndices.length > 0) {
-      let andFilters: any[] = ['::and'];
       let orFilters: any[] = ['::or'];
 
       filters.forEach((filter, index: number) => {
@@ -122,10 +123,13 @@ export class QueryBuilder {
 
       andFilters.push(orFilters);
       expandedFilters = [andFilters];
-    } else {
-      expandedFilters = filters.map((filter) =>
-        this.expandOperand(filter, this.root !== filter.modelName)
+    } else if (filters.length > 0) {
+      andFilters = andFilters.concat(
+        filters.map((filter) =>
+          this.expandOperand(filter, this.root !== filter.modelName)
+        )
       );
+      expandedFilters = [andFilters];
     }
     return expandedFilters;
   }
@@ -214,9 +218,7 @@ export class QueryBuilder {
   ): (string | string[] | (string | string[] | number)[])[] {
     // If there is a slice associated with this predicate, we'll
     // inject it here, before the ::first or ::all predicate.
-    let matchingSlice = this.slices.find(
-      (slice) => slice.modelName === attribute.model_name
-    );
+    let matchingSlices = this.slices[attribute.model_name] || [];
 
     let predicate: (string | string[] | (string | string[] | number)[])[] = [
       ...path
@@ -224,7 +226,7 @@ export class QueryBuilder {
 
     let includeAttributeName = true;
 
-    if (matchingSlice) {
+    matchingSlices.forEach((matchingSlice: QueryFilter) => {
       if (isMatchingMatrixSlice(matchingSlice, attribute)) {
         // For matrices (i.e. ::slice), we'll construct it
         //   a little differently.
@@ -242,7 +244,7 @@ export class QueryBuilder {
           this.expandOperand(matchingSlice, false)
         );
       }
-    }
+    });
 
     if (includeAttributeName)
       predicate.push(
@@ -256,7 +258,7 @@ export class QueryBuilder {
   }
 
   isTableSlice(slice: QueryFilter) {
-    return slice.operator !== '::slice';
+    return !isMatrixSlice(slice);
   }
 
   attributeNameWithPredicate(modelName: string, attributeName: string) {

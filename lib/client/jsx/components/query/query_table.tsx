@@ -92,9 +92,10 @@ const QueryTable = ({
               attr.model_name,
               attr.attribute_name
             ) &&
-            hasMatrixSlice(state.slices, attr)
+            hasMatrixSlice(Object.values(state.slices).flat(), attr)
           ) {
-            state.slices
+            Object.values(state.slices)
+              .flat()
               .filter((slice) => isMatchingMatrixSlice(slice, attr))
               .forEach((slice) => {
                 (slice.operand as string).split(',').forEach((heading) => {

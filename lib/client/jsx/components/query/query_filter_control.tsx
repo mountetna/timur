@@ -69,12 +69,14 @@ const QueryFilterControl = ({
   filter,
   modelNames,
   matrixAttributesOnly,
+  hideModel,
   patchFilter,
   removeFilter
 }: {
   filter: QueryFilter;
   modelNames: string[];
   matrixAttributesOnly?: boolean;
+  hideModel?: boolean;
   patchFilter: (filter: QueryFilter) => void;
   removeFilter: () => void;
 }) => {
@@ -143,16 +145,23 @@ const QueryFilterControl = ({
     [filter, patchFilter]
   );
 
-  const operatorOptions: {[key: string]: string} = {
-    Equals: '::equals',
-    Contains: '::matches',
-    In: '::in',
-    'Less than': '::<',
-    'Greater than': '::>',
-    Slice: '::slice',
-    Has: '::has',
-    Lacks: '::lacks'
-  };
+  let operatorOptions: {[key: string]: string};
+
+  if (matrixAttributesOnly) {
+    operatorOptions = {
+      Slice: '::slice'
+    };
+  } else {
+    operatorOptions = {
+      Equals: '::equals',
+      Contains: '::matches',
+      In: '::in',
+      'Less than': '::<',
+      'Greater than': '::>',
+      Has: '::has',
+      Lacks: '::lacks'
+    };
+  }
 
   const noOperandOperators: string[] = ['::has', '::lacks'];
 
@@ -194,21 +203,23 @@ const QueryFilterControl = ({
 
   return (
     <Grid container>
-      <Grid item xs={3}>
-        <FormControl className={classes.fullWidth}>
-          <InputLabel id={uniqId('model')}>Model</InputLabel>
-          <Select
-            labelId={uniqId('model')}
-            value={filter.modelName}
-            onChange={(e) => handleModelSelect(e.target.value as string)}
-            displayEmpty
-          >
-            {modelNames.sort().map((name) => (
-              <MenuItem value={name}>{name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
+      {!hideModel ? (
+        <Grid item xs={3}>
+          <FormControl className={classes.fullWidth}>
+            <InputLabel id={uniqId('model')}>Model</InputLabel>
+            <Select
+              labelId={uniqId('model')}
+              value={filter.modelName}
+              onChange={(e) => handleModelSelect(e.target.value as string)}
+              displayEmpty
+            >
+              {modelNames.sort().map((name) => (
+                <MenuItem value={name}>{name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+      ) : null}
       <Grid item xs={3}>
         <FormControl className={classes.fullWidth}>
           <InputLabel id={uniqId('attribute')}>Attribute</InputLabel>

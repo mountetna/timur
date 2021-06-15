@@ -1,22 +1,19 @@
 import React, {useMemo, useContext, useState} from 'react';
-import Grid from '@material-ui/core/Grid';
+
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectModels} from 'etna-js/selectors/magma';
 
 import {QueryContext} from '../../contexts/query/query_context';
-import QueryFilterControl from './query_filter_control';
-import {QueryFilter, QueryColumn} from '../../contexts/query/query_types';
+import QuerySliceModelAttributePane from './query_slice_model_attribute_pane';
+import {QueryFilter} from '../../contexts/query/query_types';
 import {
-  selectSliceableModelNames,
-  selectTableModelNames
+  selectMatrixModelNames,
+  selectTableModelNames,
+  isMatrixSlice
 } from '../../selectors/query_selector';
 
 const QuerySlicePane = () => {
@@ -26,27 +23,26 @@ const QuerySlicePane = () => {
   // If not, the component rendered state gets confused
   //  because of non-unique keys.
   const [updateCounter, setUpdateCounter] = useState(0);
-  const {state, addSlice, removeSlice, patchSlice} = useContext(QueryContext);
+  const {state, removeSlice} = useContext(QueryContext);
+  const reduxState = useReduxState();
 
-  let reduxState = useReduxState();
-
-  function addNewSlice() {
-    addSlice({
-      modelName: '',
-      attributeName: '',
-      operator: '',
-      operand: ''
-    });
-  }
-
-  function handlePatchSlice(index: number, filter: QueryFilter) {
-    patchSlice(index, filter);
-  }
-
-  function handleRemoveSlice(index: number) {
-    removeSlice(index);
+  function handleRemoveSlice(modelName: string, index: number) {
+    removeSlice(modelName, index);
     setUpdateCounter(updateCounter + 1);
   }
+
+  const matrixSlices = useMemo(() => {
+    return Object.values(state.slices)
+      .flat()
+      .filter((slice) => isMatrixSlice(slice))
+      .reduce((acc: {[key: string]: QueryFilter[]}, slice: QueryFilter) => {
+        if (!acc.hasOwnProperty(slice.modelName)) acc[slice.modelName] = [];
+
+        acc[slice.modelName].push(slice);
+
+        return acc;
+      }, {});
+  }, [state.slices]);
 
   const attributesWithRootIdentifier = useMemo(() => {
     if (!state.rootIdentifier || !state.rootModel) return {};
@@ -59,19 +55,14 @@ const QuerySlicePane = () => {
     };
   }, [state.attributes, state.rootModel, state.rootIdentifier]);
 
-  const modelNames = useMemo(() => {
+  const matrixModelNames = useMemo(() => {
     if (!state.rootModel) return [];
 
-    return selectSliceableModelNames(
+    return selectMatrixModelNames(
       selectModels(reduxState),
       attributesWithRootIdentifier
     );
-  }, [
-    state.attributes,
-    state.rootModel,
-    attributesWithRootIdentifier,
-    reduxState
-  ]);
+  }, [reduxState, state.rootModel, attributesWithRootIdentifier]);
 
   const tableModelNames = useMemo(() => {
     if (!state.rootModel) return [];
@@ -80,12 +71,16 @@ const QuerySlicePane = () => {
       selectModels(reduxState),
       Object.keys(attributesWithRootIdentifier)
     );
-  }, [
-    state.attributes,
-    reduxState,
-    state.rootModel,
-    attributesWithRootIdentifier
-  ]);
+  }, [reduxState, state.rootModel, attributesWithRootIdentifier]);
+
+  const tableSlices = useMemo(() => {
+    return Object.keys(state.slices)
+      .filter((modelName) => tableModelNames.includes(modelName))
+      .reduce((acc: {[key: string]: QueryFilter[]}, modelName) => {
+        acc[modelName] = [...state.slices[modelName]];
+        return acc;
+      }, {});
+  }, [state.slices, tableModelNames]);
 
   if (!state.rootModel) return null;
 
@@ -96,33 +91,25 @@ const QuerySlicePane = () => {
         subheader='table and matrix values out of the results'
       />
       <CardContent>
-        <Grid container xs={12} spacing={1}>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={8}>
-            {state.slices.map((filter: QueryFilter, index: number) => (
-              <QueryFilterControl
-                key={`${index}-${updateCounter}`}
-                filter={filter}
-                modelNames={modelNames}
-                matrixAttributesOnly={
-                  !tableModelNames.includes(filter.modelName)
-                }
-                patchFilter={(updatedFilter: QueryFilter) =>
-                  handlePatchSlice(index, updatedFilter)
-                }
-                removeFilter={() => handleRemoveSlice(index)}
-              />
-            ))}
-          </Grid>
-        </Grid>
+        {matrixModelNames.map((modelName: string, index: number) => (
+          <QuerySliceModelAttributePane
+            key={`matrix-${index}-${updateCounter}`}
+            slices={matrixSlices[modelName]}
+            modelName={modelName}
+            isMatrix={true}
+            removeSlice={handleRemoveSlice}
+          />
+        ))}
+        {tableModelNames.map((modelName: string, index: number) => (
+          <QuerySliceModelAttributePane
+            key={`table-${index}-${updateCounter}`}
+            slices={tableSlices[modelName]}
+            modelName={modelName}
+            isMatrix={false}
+            removeSlice={handleRemoveSlice}
+          />
+        ))}
       </CardContent>
-      <CardActions disableSpacing>
-        <Tooltip title='Add slice' aria-label='add slice'>
-          <IconButton aria-label='add slice' onClick={addNewSlice}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      </CardActions>
     </Card>
   );
 };
