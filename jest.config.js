@@ -18,7 +18,10 @@ module.exports = {
     '^react-modal$': '<rootDir>/node_modules/react-modal',
     '^enzyme$': '<rootDir>/node_modules/enzyme',
     '^enzyme-adapter-react-16$':
-      '<rootDir>/node_modules/enzyme-adapter-react-16'
+      '<rootDir>/node_modules/enzyme-adapter-react-16',
+    '^@material-ui/core/styles':
+      '<rootDir>/node_modules/@material-ui/core/styles',
+    '^color': '<rootDir>/node_modules/color'
   },
   testMatch: ['**/test/**/?(*.)(spec|test).(j|t)s?(x)'],
   collectCoverageFrom: ['**/*.js?(x)'],

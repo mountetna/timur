@@ -123,19 +123,20 @@ export const pathToColumn = (
     let sliceColId = heading.split('.')[1];
 
     fullPath = getPath(array, nonMatrixColId, []);
+
+    if (!sliceColId) return fullPath.length > 0 ? fullPath[0].toString() : '-1';
+
     // fullPath returns the path to project#model::attribute.
-    //   Slice that out since we want the slices.
-    // Add [1] because in the
-    //   tuple, it should be [project#model::attribute, [array, of, slice, operands]]
-    let pathToMatrixSlices = fullPath.slice(0, -1);
-    pathToMatrixSlices.push(1);
-    let matrixData = _.at(array, pathToMatrixSlices.join('.'))[0];
+    //   The tuple should be [project#model::attribute, [array, of, slice, operands]]
+    let pathToSliceOperands = fullPath.slice(0, -1);
+    pathToSliceOperands.push(1);
+    let sliceOperands = _.at(array, pathToSliceOperands.join('.'))[0];
 
-    if (!matrixData) return '-1';
+    let sliceIndex = sliceOperands.indexOf(sliceColId);
 
-    let sliceIndex = matrixData.indexOf(sliceColId);
-
-    return pathToMatrixSlices.concat([sliceIndex]).join('.');
+    // Disgard the extra [1] here from pathToSliceOperands,
+    //   because of the answer format
+    return fullPath.slice(0, -1).concat([sliceIndex]).join('.');
   } else {
     fullPath = getPath(array, heading, []);
     return fullPath.length > 0 ? fullPath[0].toString() : '-1';

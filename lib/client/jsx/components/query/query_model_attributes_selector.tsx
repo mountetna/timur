@@ -25,7 +25,10 @@ import {Attribute} from '../../models/model_types';
 import useSliceMethods from './query_use_slice_methods';
 import {QueryColumn} from '../../contexts/query/query_types';
 import QueryAttributesModal from './query_attributes_modal';
-import {selectAllowedModelAttributes} from '../../selectors/query_selector';
+import {
+  hasMatrixSlice,
+  selectAllowedModelAttributes
+} from '../../selectors/query_selector';
 import QuerySlicePane from './query_slice_pane';
 
 import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
@@ -151,7 +154,7 @@ const QueryModelAttributeSelector = ({
   const hasMatrixSlices = matrixModelNames.includes(modelValue);
   const hasTableSlices = tableModelNames.includes(modelValue);
 
-  console.log('matrixSlices', matrixSlices, tableSlices);
+  const hasSlices = hasMatrixSlices || hasTableSlices;
 
   const id = `${label}-${Math.random()}`;
 
@@ -213,7 +216,7 @@ const QueryModelAttributeSelector = ({
                 }}
               />
             </Grid>
-            {hasMatrixSlices || hasTableSlices ? (
+            {hasSlices ? (
               <Grid item>
                 <QuerySlicePane
                   modelName={modelValue}

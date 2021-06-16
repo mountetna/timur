@@ -102,7 +102,7 @@ const QueryResults = () => {
       .catch((e) => {
         e.then((error: {[key: string]: string[]}) => {
           console.error(error);
-          invoke(showMessages(error.errors));
+          invoke(showMessages(error.errors || [error.error] || error));
         });
       });
   }, [query, count, queries, store.dispatch, pageSize, page]);

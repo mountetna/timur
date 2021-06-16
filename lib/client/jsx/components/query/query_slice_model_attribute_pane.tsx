@@ -41,6 +41,19 @@ const QuerySliceModelAttributePane = ({
       <Grid item xs={1}>
         <Typography>Slices</Typography>
       </Grid>
+      <Grid item xs={1}>
+        <Tooltip
+          title={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
+          aria-label={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
+        >
+          <IconButton
+            aria-label={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
+            onClick={() => addNewSlice(isMatrix ? '::slice' : '')}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </Grid>
       <Grid item xs={10}>
         {slices
           ? slices.map((filter: QueryFilter, index: number) => (
@@ -57,19 +70,6 @@ const QuerySliceModelAttributePane = ({
               />
             ))
           : null}
-      </Grid>
-      <Grid item xs={1}>
-        <Tooltip
-          title={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
-          aria-label={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
-        >
-          <IconButton
-            aria-label={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
-            onClick={() => addNewSlice(isMatrix ? '::slice' : '')}
-          >
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
       </Grid>
     </Grid>
   );

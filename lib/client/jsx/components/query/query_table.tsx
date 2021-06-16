@@ -21,7 +21,6 @@ import {
 } from '../../selectors/query_selector';
 import {QueryContext} from '../../contexts/query/query_context';
 import {QueryColumn, QueryResponse} from '../../contexts/query/query_types';
-import useSliceMethods from './query_use_slice_methods';
 
 const useStyles = makeStyles({
   table: {

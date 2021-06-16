@@ -151,14 +151,26 @@ describe('pathToColumn', () => {
     expect(pathToColumn(input, 'nesting', false)).toEqual('3');
   });
 
-  fit('returns full path when expanding matrices', () => {
+  it('returns full path when expanding matrices', () => {
     let input = [
       'foo',
       ['bar', ['shallow']],
       'bim',
       ['blah', 'zap', ['deep', ['something', 'nesting']]]
     ];
-    expect(pathToColumn(input, 'deep.nesting', true)).toEqual('3.2.1.1');
+
+    // Note that the values may seem counterintuitive, but the
+    //   query answer actually compacts out the "attribute",
+    //   which in these cases would be "bar" and "deep".
+    // Answer would be something like:
+    // answer = [
+    //  1,
+    //  [2],
+    //  3,
+    //  [4, 5, [6, 7]]
+    // ]
+    expect(pathToColumn(input, 'bar.shallow', true)).toEqual('1.0');
+    expect(pathToColumn(input, 'deep.nesting', true)).toEqual('3.2.1');
   });
 });
 

@@ -123,13 +123,17 @@ export class QueryBuilder {
 
       andFilters.push(orFilters);
       expandedFilters = [andFilters];
-    } else if (filters.length > 0) {
+    } else if (filters.length > 1) {
       andFilters = andFilters.concat(
         filters.map((filter) =>
           this.expandOperand(filter, this.root !== filter.modelName)
         )
       );
       expandedFilters = [andFilters];
+    } else if (filters.length > 0) {
+      expandedFilters = filters.map((filter) =>
+        this.expandOperand(filter, this.root !== filter.modelName)
+      );
     }
     return expandedFilters;
   }
