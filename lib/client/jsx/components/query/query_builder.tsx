@@ -5,7 +5,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryControls from './query_controls';
 import QueryResults from './query_results';
-import QuerySlicePane from './query_slice_pane';
 
 const useStyles = makeStyles((theme) => ({
   previewPane: {
@@ -21,13 +20,8 @@ const QueryBuilder = ({}) => {
 
   return (
     <Grid container spacing={1} direction='column'>
-      <Grid item xs={12} container>
-        <Grid item xs={5}>
-          <QueryControls />
-        </Grid>
-        <Grid item xs={7}>
-          <QuerySlicePane />
-        </Grid>
+      <Grid item xs={12}>
+        <QueryControls />
       </Grid>
       <Grid item className={classes.previewPane}>
         <QueryResults key={state.rootModel} />

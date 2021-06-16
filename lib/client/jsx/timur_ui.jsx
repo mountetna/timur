@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import { findRoute, setRoutes } from 'etna-js/dispatchers/router';
 
-import Modal from 'react-modal';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 // Components.
 import Manifests from './components/manifest/manifests';
@@ -22,6 +22,10 @@ import {selectUser} from 'etna-js/selectors/user-selector';
 import {ModalDialogContainer} from 'etna-js/components/ModalDialogContainer';
 import {Notifications} from 'etna-js/components/Notifications';
 import QueryPage from './components/query/query_page';
+
+import { createEtnaTheme } from 'etna-js/style/theme';
+
+const theme = createEtnaTheme("#3684fd","#77c");
 
 const ROUTES = [
   {
@@ -149,14 +153,16 @@ class TimurUI extends React.Component {
 
     return (
       <React.Fragment>
-        <ModalDialogContainer>
-          <div id="ui-container">
-            <Notifications/>
-            <TimurNav environment={environment} mode={mode}/>
-            <Messages/>
-            <Component key={key} {...params} />
-          </div>
-        </ModalDialogContainer>
+        <ThemeProvider theme={theme}>
+          <ModalDialogContainer>
+            <div id="ui-container">
+              <Notifications/>
+              <TimurNav environment={environment} mode={mode}/>
+              <Messages/>
+              <Component key={key} {...params} />
+            </div>
+          </ModalDialogContainer>
+        </ThemeProvider>
       </React.Fragment>
     );
   }

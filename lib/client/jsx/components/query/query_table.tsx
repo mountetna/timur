@@ -21,6 +21,7 @@ import {
 } from '../../selectors/query_selector';
 import {QueryContext} from '../../contexts/query/query_context';
 import {QueryColumn, QueryResponse} from '../../contexts/query/query_types';
+import useSliceMethods from './query_use_slice_methods';
 
 const useStyles = makeStyles({
   table: {
@@ -71,16 +72,6 @@ const QueryTable = ({
       }
     ];
 
-    // return colDefs.concat(
-    //   Object.values(state.attributes || {})
-    //     .flat()
-    //     .map((attr) => {
-    //       return {
-    //         label: attr.display_label,
-    //         colId: generateIdCol(attr)
-    //       };
-    //     })
-    // );
     return colDefs.concat(
       Object.values(state.attributes || {})
         .flat()
@@ -136,7 +127,7 @@ const QueryTable = ({
   }, [data, columns]);
 
   if (0 === columns.length) return null;
-
+  console.log('rows', rows, columns);
   return (
     <React.Fragment>
       <TableContainer component={Paper}>

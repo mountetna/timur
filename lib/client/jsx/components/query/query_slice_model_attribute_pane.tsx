@@ -38,10 +38,10 @@ const QuerySliceModelAttributePane = ({
 
   return (
     <Grid container spacing={1}>
-      <Grid item xs={2}>
-        <Typography>{modelName}</Typography>
+      <Grid item xs={1}>
+        <Typography>Slices</Typography>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={10}>
         {slices
           ? slices.map((filter: QueryFilter, index: number) => (
               <QueryFilterControl

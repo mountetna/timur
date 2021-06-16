@@ -19,9 +19,12 @@ const QuerySelectPane = () => {
       intersectionModels.length === 0 &&
       Object.keys(state.attributes).length > 0
     ) {
-      setIntersectionModels(Object.keys(state.attributes));
+      let nonRootModels = Object.keys(state.attributes).filter(
+        (modelName) => modelName !== state.rootModel
+      );
+      setIntersectionModels(nonRootModels);
     }
-  }, [state.attributes]);
+  }, [state.attributes, state.rootModel]);
 
   const updateIntersectionModels = useCallback(
     (modelName: string, index: number) => {
