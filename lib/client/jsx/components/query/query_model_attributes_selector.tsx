@@ -186,44 +186,48 @@ const QueryModelAttributeSelector = ({
         </FormControl>
       </Grid>
       {modelValue ? (
-        <Grid item xs={10} container spacing={2} direction='column'>
-          <Grid item>
-            <Button
-              onClick={showAttributes}
-              variant='contained'
-              color='default'
-            >
-              {`Attributes - ${
-                selectedAttributes
-                  ? selectedAttributes.map((a) => a.attribute_name).join(', ')
-                  : 'None'
-              }`}
-            </Button>
-            <RemoveModelIcon removeModel={removeModel} canRemove={canRemove} />
-            <QueryAttributesModal
-              attributes={selectedAttributes || []}
-              attributeOptions={selectableModelAttributes}
-              setAttributes={(attributes: QueryColumn[]) =>
-                onSelectAttributes(modelValue, attributes)
-              }
-              model_name={modelValue || ''}
-              open={open}
-              onClose={() => {
-                setOpen(false);
-              }}
-            />
-          </Grid>
-          {hasMatrixSlices || hasTableSlices ? (
+        <React.Fragment>
+          <Grid item xs={9} container spacing={2} direction='column'>
             <Grid item>
-              <QuerySlicePane
-                modelName={modelValue}
-                isMatrix={hasMatrixSlices}
-                slices={hasMatrixSlices ? matrixSlices : tableSlices}
-                handleRemoveSlice={handleRemoveSlice}
+              <Button
+                onClick={showAttributes}
+                variant='contained'
+                color='default'
+              >
+                {`Attributes - ${
+                  selectedAttributes
+                    ? selectedAttributes.map((a) => a.attribute_name).join(', ')
+                    : 'None'
+                }`}
+              </Button>
+              <QueryAttributesModal
+                attributes={selectedAttributes || []}
+                attributeOptions={selectableModelAttributes}
+                setAttributes={(attributes: QueryColumn[]) =>
+                  onSelectAttributes(modelValue, attributes)
+                }
+                model_name={modelValue || ''}
+                open={open}
+                onClose={() => {
+                  setOpen(false);
+                }}
               />
             </Grid>
-          ) : null}
-        </Grid>
+            {hasMatrixSlices || hasTableSlices ? (
+              <Grid item>
+                <QuerySlicePane
+                  modelName={modelValue}
+                  isMatrix={hasMatrixSlices}
+                  slices={hasMatrixSlices ? matrixSlices : tableSlices}
+                  handleRemoveSlice={handleRemoveSlice}
+                />
+              </Grid>
+            ) : null}
+          </Grid>
+          <Grid item xs={1}>
+            <RemoveModelIcon canRemove={canRemove} removeModel={removeModel} />
+          </Grid>
+        </React.Fragment>
       ) : null}
     </Grid>
   );

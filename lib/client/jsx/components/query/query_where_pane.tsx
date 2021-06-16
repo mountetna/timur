@@ -72,12 +72,14 @@ const QueryWherePane = () => {
     <Card>
       <CardHeader title='Where' subheader='filter the records' />
       <CardContent>
-        <Grid container alignItems='center' justify='center'>
-          <Grid item xs={1}>
-            <Typography>OR</Typography>
+        {state.recordFilters.length > 0 ? (
+          <Grid container alignItems='center' justify='center'>
+            <Grid item xs={1}>
+              <Typography>OR</Typography>
+            </Grid>
+            <Grid item xs={11}></Grid>
           </Grid>
-          <Grid item xs={11}></Grid>
-        </Grid>
+        ) : null}
         {state.recordFilters.map((filter: QueryFilter, index: number) => (
           <Grid key={index} container alignItems='center' justify='center'>
             <Grid item xs={1}>
