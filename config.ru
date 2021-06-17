@@ -9,6 +9,7 @@ require_relative 'lib/server'
 
 Timur.instance.configure(YAML.load(File.read('config.yml')))
 
+use Etna::MetricsExporter
 use Etna::ParseBody
 use Etna::SymbolizeParams
 use Etna::Auth
