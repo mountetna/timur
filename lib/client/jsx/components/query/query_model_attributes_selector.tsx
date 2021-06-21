@@ -227,11 +227,11 @@ const QueryModelAttributeSelector = ({
               </Grid>
             ) : null}
           </Grid>
-          <Grid item xs={1}>
-            <RemoveModelIcon canRemove={canRemove} removeModel={removeModel} />
-          </Grid>
         </React.Fragment>
       ) : null}
+      <Grid item xs={1}>
+        <RemoveModelIcon canRemove={canRemove} removeModel={removeModel} />
+      </Grid>
     </Grid>
   );
 };
