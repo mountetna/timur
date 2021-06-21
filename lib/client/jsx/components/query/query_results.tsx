@@ -187,7 +187,7 @@ const QueryResults = () => {
                   alignItems='center'
                   spacing={1}
                 >
-                  <Grid item>Expanded</Grid>
+                  <Grid item>Nested</Grid>
                   <Grid item>
                     <AntSwitch
                       checked={flattenQuery}

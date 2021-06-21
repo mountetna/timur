@@ -1102,7 +1102,7 @@ exports[`QueryBuilder renders 1`] = `
                   <div
                     className="MuiGrid-root MuiGrid-item"
                   >
-                    Expanded
+                    Nested
                   </div>
                   <div
                     className="MuiGrid-root MuiGrid-item"
