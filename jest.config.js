@@ -21,7 +21,8 @@ module.exports = {
       '<rootDir>/node_modules/enzyme-adapter-react-16',
     '^@material-ui/core/styles':
       '<rootDir>/node_modules/@material-ui/core/styles',
-    '^color': '<rootDir>/node_modules/color'
+    '^color$': '<rootDir>/node_modules/color',
+    '^color-string$': '<rootDir>/node_modules/color-string'
   },
   testMatch: ['**/test/**/?(*.)(spec|test).(j|t)s?(x)'],
   collectCoverageFrom: ['**/*.js?(x)'],
