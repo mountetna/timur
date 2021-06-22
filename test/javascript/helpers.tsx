@@ -2,8 +2,13 @@ import nock from 'nock';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import fetch from 'isomorphic-fetch';
+import {Provider} from 'react-redux';
+import {StylesOptions, StylesProvider} from '@material-ui/styles/';
 
-import {StylesOptions} from '@material-ui/styles/';
+import {
+  QueryProvider,
+  QueryState
+} from '../../lib/client/jsx/contexts/query/query_context';
 
 export const stubUrl = ({
   verb = 'get',
@@ -47,3 +52,14 @@ export const generateClassName: StylesOptions['generateClassName'] = (
   rule,
   sheet
 ): string => `${sheet!.options.classNamePrefix}-${rule.key}`;
+
+export const querySpecWrapper = (
+  mockState: QueryState,
+  store: typeof mockStore
+) => ({children}: {children?: any}) => (
+  <Provider store={store}>
+    <StylesProvider generateClassName={generateClassName}>
+      <QueryProvider state={mockState}>{children}</QueryProvider>
+    </StylesProvider>
+  </Provider>
+);

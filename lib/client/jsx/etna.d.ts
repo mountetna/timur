@@ -177,3 +177,14 @@ declare module 'etna-js/actions/exchange_actions' {
     constructor(dispatch: any, exchange_name: string);
   }
 }
+
+declare module 'etna-js/utils/tsv' {
+  export type MatrixDatum = {[key: string]: any};
+  export type MatrixData = MatrixDatum[];
+
+  export function downloadTSV(
+    data: MatrixData,
+    fields: string[],
+    fileName: string
+  ): void;
+}

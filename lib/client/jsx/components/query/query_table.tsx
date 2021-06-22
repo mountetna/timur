@@ -1,5 +1,4 @@
-import React, {useMemo, useContext} from 'react';
-import * as _ from 'lodash';
+import React from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -11,16 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectModels} from 'etna-js/selectors/magma';
-import {
-  pathToColumn,
-  attributeIsMatrix,
-  hasMatrixSlice,
-  isMatchingMatrixSlice
-} from '../../selectors/query_selector';
-import {QueryContext} from '../../contexts/query/query_context';
-import {QueryColumn, QueryResponse} from '../../contexts/query/query_types';
+import {QueryTableColumn} from '../../contexts/query/query_types';
 
 const useStyles = makeStyles({
   table: {
@@ -29,16 +19,16 @@ const useStyles = makeStyles({
 });
 
 const QueryTable = ({
-  data,
-  expandMatrices,
+  columns,
+  rows,
   numRecords,
   page,
   pageSize,
   handlePageChange,
   handlePageSizeChange
 }: {
-  data: QueryResponse;
-  expandMatrices: boolean;
+  columns: QueryTableColumn[];
+  rows: any;
   numRecords: number;
   page: number;
   pageSize: number;
@@ -50,83 +40,10 @@ const QueryTable = ({
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
 }) => {
-  const {state} = useContext(QueryContext);
-  const reduxState = useReduxState();
   const classes = useStyles();
 
-  function generateIdCol(attr: QueryColumn): string {
-    return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}`;
-  }
-
-  const columns = useMemo(() => {
-    if (!state.rootIdentifier) return [];
-
-    let colDefs: {
-      label: string;
-      colId: string;
-    }[] = [
-      {
-        colId: generateIdCol(state.rootIdentifier),
-        label: state.rootIdentifier.display_label
-      }
-    ];
-
-    return colDefs.concat(
-      Object.values(state.attributes || {})
-        .flat()
-        .reduce((acc: {label: string; colId: string}[], attr) => {
-          if (
-            expandMatrices &&
-            attributeIsMatrix(
-              selectModels(reduxState),
-              attr.model_name,
-              attr.attribute_name
-            ) &&
-            hasMatrixSlice(Object.values(state.slices).flat(), attr)
-          ) {
-            Object.values(state.slices)
-              .flat()
-              .filter((slice) => isMatchingMatrixSlice(slice, attr))
-              .forEach((slice) => {
-                (slice.operand as string).split(',').forEach((heading) => {
-                  acc.push({
-                    label: `${attr.display_label}.${heading}`,
-                    colId: `${generateIdCol(attr)}.${heading}`
-                  });
-                });
-              });
-          } else {
-            acc.push({
-              label: attr.display_label,
-              colId: generateIdCol(attr)
-            });
-          }
-
-          return acc;
-        }, [])
-    );
-  }, [
-    state.attributes,
-    state.rootIdentifier,
-    state.slices,
-    reduxState,
-    expandMatrices
-  ]);
-
-  const rows = useMemo(() => {
-    if (!data || !data.answer) return;
-
-    let colMapping = data.format[1];
-    // Need to order the results the same as `columns`
-    return data.answer.map(([recordName, answer]: [string, any[]]) =>
-      columns.map(({colId}) =>
-        _.at(answer, pathToColumn(colMapping, colId, expandMatrices)).flat()
-      )
-    );
-  }, [data, columns]);
-
   if (0 === columns.length) return null;
-  console.log('rows', rows, columns);
+  console.log('rows', rows);
   return (
     <React.Fragment>
       <TableContainer component={Paper}>

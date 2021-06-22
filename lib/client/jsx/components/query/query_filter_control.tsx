@@ -158,8 +158,8 @@ const QueryFilterControl = ({
       In: '::in',
       'Less than': '::<',
       'Greater than': '::>',
-      Has: '::has',
-      Lacks: '::lacks'
+      'Is present': '::has',
+      'Is missing': '::lacks'
     };
   }
 

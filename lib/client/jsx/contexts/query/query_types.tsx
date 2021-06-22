@@ -16,3 +16,8 @@ export interface QueryResponse {
   format: any[];
   type: string;
 }
+
+export interface QueryTableColumn {
+  label: string;
+  colId: string;
+}

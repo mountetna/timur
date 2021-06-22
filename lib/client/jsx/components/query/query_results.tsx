@@ -22,6 +22,7 @@ import {showMessages} from 'etna-js/actions/message_actions';
 import {getAnswer} from 'etna-js/api/magma_api';
 import {selectModels} from 'etna-js/selectors/magma';
 import {Exchange} from 'etna-js/actions/exchange_actions';
+import {downloadTSV, MatrixDatum, MatrixData} from 'etna-js/utils/tsv';
 import {ReactReduxContext} from 'react-redux';
 
 import {QueryContext} from '../../contexts/query/query_context';
@@ -29,6 +30,7 @@ import {QueryBuilder} from '../../utils/query_builder';
 import {QueryResponse} from '../../contexts/query/query_types';
 import QueryTable from './query_table';
 import AntSwitch from './ant_switch';
+import useTableEffects from './query_use_table_effects';
 
 const QueryResults = () => {
   const [expandMatrices, setExpandMatrices] = useState(true);
@@ -97,7 +99,7 @@ const QueryResults = () => {
       })
       .then((answerData) => {
         setData(answerData);
-        // setQueries([...queries].splice(0, 0, query as string[]));
+        // setQueries([...queries].splice(0, 0, builder));
       })
       .catch((e) => {
         e.then((error: {[key: string]: string[]}) => {
@@ -105,7 +107,7 @@ const QueryResults = () => {
           invoke(showMessages(error.errors || [error.error] || error));
         });
       });
-  }, [query, count, queries, store.dispatch, pageSize, page]);
+  }, [query, count, builder, store.dispatch, pageSize, page]);
 
   useEffect(() => {
     // At some point, we can probably cache data and only
@@ -131,6 +133,40 @@ const QueryResults = () => {
   ) {
     setPage(newPage);
   }
+
+  const {columns, rows, formatRowData} = useTableEffects(data, expandMatrices);
+
+  const downloadData = useCallback(() => {
+    if ('' === count || '' === query) return;
+
+    let exchange = new Exchange(store.dispatch, 'query-download-tsv-magma');
+    getAnswer({query}, exchange)
+      .then((allData) => {
+        let rowData = formatRowData(allData, columns);
+        console.log('rowData', rowData);
+
+        let matrixMap = rowData.map((row: any) => {
+          return columns.reduce(
+            (acc: MatrixDatum, {label}, i: number) => {
+              return {...acc, [label]: row[i]};
+            },
+            {rowNames: row[0]}
+          );
+        }, []);
+        console.log('matrixMap', matrixMap);
+        downloadTSV(
+          matrixMap,
+          ['rowNames'].concat(columns.map(({label}) => label)),
+          'your-query'
+        );
+      })
+      .catch((e) => {
+        e.then((error: {[key: string]: string[]}) => {
+          console.error(error);
+          invoke(showMessages(error.errors || [error.error] || error));
+        });
+      });
+  }, [query, store.dispatch, columns]);
 
   return (
     <Card>
@@ -207,14 +243,14 @@ const QueryResults = () => {
               >
                 <Button disabled>Previous Queries</Button>
                 <Button onClick={runQuery}>Query</Button>
-                <Button disabled>{'\u21af TSV'}</Button>
+                <Button onClick={downloadData}>{'\u21af TSV'}</Button>
               </ButtonGroup>
             </Grid>
           </Grid>
           <Grid item>
             <QueryTable
-              data={data}
-              expandMatrices={expandMatrices}
+              columns={columns}
+              rows={rows}
               pageSize={pageSize}
               numRecords={numRecords}
               page={page}
