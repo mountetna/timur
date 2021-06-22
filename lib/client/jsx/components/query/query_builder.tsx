@@ -19,10 +19,8 @@ const QueryBuilder = ({}) => {
   const {state} = useContext(QueryContext);
 
   return (
-    <Grid container spacing={1} direction='column'>
-      <Grid item xs={12}>
-        <QueryControls />
-      </Grid>
+    <Grid container direction='column'>
+      <QueryControls />
       <Grid item className={classes.previewPane}>
         <QueryResults key={state.rootModel} />
       </Grid>

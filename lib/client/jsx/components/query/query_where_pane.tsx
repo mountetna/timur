@@ -6,14 +6,14 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
 import {QueryFilter} from '../../contexts/query/query_types';
+import QueryClause from './query_clause';
 
 const QueryWherePane = () => {
   // Use an update counter to get the child components
@@ -69,17 +69,7 @@ const QueryWherePane = () => {
   if (!state.rootModel) return null;
 
   return (
-    <Card>
-      <CardHeader title='Where' subheader='filter the records' />
-      <CardContent>
-        {state.recordFilters.length > 0 ? (
-          <Grid container alignItems='center' justify='center'>
-            <Grid item xs={1}>
-              <Typography>OR</Typography>
-            </Grid>
-            <Grid item xs={11}></Grid>
-          </Grid>
-        ) : null}
+    <QueryClause title='Where'>
         {state.recordFilters.map((filter: QueryFilter, index: number) => (
           <Grid key={index} container alignItems='center' justify='center'>
             <Grid item xs={1}>
@@ -103,15 +93,10 @@ const QueryWherePane = () => {
             </Grid>
           </Grid>
         ))}
-      </CardContent>
-      <CardActions disableSpacing>
-        <Tooltip title='Add filter' aria-label='add filter'>
-          <IconButton aria-label='add filter' onClick={addNewRecordFilter}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      </CardActions>
-    </Card>
+        <Button onClick={addNewRecordFilter} startIcon={<AddIcon />}>
+          Filter
+        </Button>
+    </QueryClause>
   );
 };
 

@@ -9,10 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
+import {makeStyles} from '@material-ui/core/styles';
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
@@ -28,7 +25,25 @@ import {QueryContext} from '../../contexts/query/query_context';
 import {QueryBuilder} from '../../utils/query_builder';
 import {QueryResponse} from '../../contexts/query/query_types';
 import QueryTable from './query_table';
+import QueryClause from './query_clause';
 import AntSwitch from './ant_switch';
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    marginRight: "5px"
+  },
+  result: {
+    padding: 10,
+    margin: 10,
+    border: '1px solid #0f0',
+    borderRadius: 2,
+    backgroundColor: 'rgba(0,255,0,0.1)',
+  },
+  config: {
+    padding: 5,
+    paddingTop: 0
+  }
+}));
 
 const QueryResults = () => {
   const [expandMatrices, setExpandMatrices] = useState(true);
@@ -132,99 +147,64 @@ const QueryResults = () => {
     setPage(newPage);
   }
 
+  const classes = useStyles();
+
   return (
-    <Card>
-      <CardHeader title='Data Frame' />
-      <CardContent>
-        <Grid container direction='column'>
-          <Grid item>
-            <CodeMirror
-              options={{
-                readOnly: 'no-cursor',
-                lineWrapping: true,
-                mode: 'application/json',
-                autoCloseBrackets: true,
-                gutters: ['CodeMirror-lint-markers'],
-                lint: false,
-                tabSize: 2
-              }}
-              value={JSON.stringify(query)}
-              onBeforeChange={(editor, data, value) => {}}
-            />
-          </Grid>
-          <Grid
-            item
-            container
-            spacing={1}
-            alignItems='center'
-            justify='space-around'
-          >
-            <Grid item xs={4}>
-              <Typography component='div'>
-                <Grid
-                  component='label'
-                  container
-                  alignItems='center'
-                  spacing={1}
-                >
-                  <Grid item>Nest matrices</Grid>
-                  <Grid item>
-                    <AntSwitch
-                      checked={expandMatrices}
-                      onChange={() => setExpandMatrices(!expandMatrices)}
-                      name='expand-matrices-query'
-                    />
-                  </Grid>
-                  <Grid item>Expand matrices</Grid>
-                </Grid>
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography component='div'>
-                <Grid
-                  component='label'
-                  container
-                  alignItems='center'
-                  spacing={1}
-                >
-                  <Grid item>Nested</Grid>
-                  <Grid item>
-                    <AntSwitch
-                      checked={flattenQuery}
-                      onChange={() => setFlattenQuery(!flattenQuery)}
-                      name='flatten-query'
-                    />
-                  </Grid>
-                  <Grid item>Flattened</Grid>
-                </Grid>
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <ButtonGroup
-                variant='contained'
-                color='primary'
-                aria-label='contained primary button group'
-              >
-                <Button disabled>Previous Queries</Button>
-                <Button onClick={runQuery}>Query</Button>
-                <Button disabled>{'\u21af TSV'}</Button>
-              </ButtonGroup>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <QueryTable
-              data={data}
-              expandMatrices={expandMatrices}
-              pageSize={pageSize}
-              numRecords={numRecords}
-              page={page}
-              handlePageChange={handlePageChange}
-              handlePageSizeChange={handlePageSizeChange}
-            />
-          </Grid>
+    <Grid container xs={12}>
+      <Grid item xs={12} className={classes.result}>
+        <CodeMirror
+          options={{
+            readOnly: 'no-cursor',
+            lineWrapping: true,
+            mode: 'application/json',
+            autoCloseBrackets: true,
+            lint: false,
+            background: "none",
+            tabSize: 2
+          }}
+          value={JSON.stringify(query)}
+          onBeforeChange={(editor, data, value) => {}}
+        />
+      </Grid>
+      <Grid xs={12} item container direction='column'>
+        <Grid
+          className={classes.config}
+          item
+          container
+          alignItems='center'
+          justify='flex-end'
+        >
+          <AntSwitch
+            checked={expandMatrices}
+            onChange={() => setExpandMatrices(!expandMatrices)}
+            name='expand-matrices-query'
+            leftOption='Nest matrices'
+            rightOption='Expand matrices'
+          />
+          <AntSwitch
+            checked={flattenQuery}
+            onChange={() => setFlattenQuery(!flattenQuery)}
+            name='flatten-query'
+            leftOption='Nested'
+            rightOption='Flattened'
+          />
+          <Button className={classes.button} disabled>Previous Queries</Button>
+          <Button className={classes.button} onClick={runQuery}>Query</Button>
+          <Button className={classes.button} disabled>{'\u21af TSV'}</Button>
         </Grid>
-      </CardContent>
-    </Card>
+        <Grid item>
+          <QueryTable
+            data={data}
+            expandMatrices={expandMatrices}
+            pageSize={pageSize}
+            numRecords={numRecords}
+            page={page}
+            handlePageChange={handlePageChange}
+            handlePageSizeChange={handlePageSizeChange}
+          />
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 
