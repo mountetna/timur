@@ -48,7 +48,6 @@ const getTabs = (user) => {
     tabs['views'] = Routes.views_path(CONFIG.project_name);
   }
 
-  console.log('user?', user, useFeatureFlag('timurquery'));
   if (useFeatureFlag('timurquery')) {
     tabs['query'] = Routes.query_path(CONFIG.project_name);
   }
