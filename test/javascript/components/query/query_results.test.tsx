@@ -1,14 +1,9 @@
 import React from 'react';
-import {rest} from 'msw';
-import {setupServer} from 'msw/node';
 import {render, fireEvent, waitFor, screen} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import {
-  QueryProvider,
-  defaultContext
-} from '../../../../lib/client/jsx/contexts/query/query_context';
-import {mockStore, generateClassName} from '../../helpers';
+import {defaultContext} from '../../../../lib/client/jsx/contexts/query/query_context';
+import {mockStore, querySpecWrapper} from '../../helpers';
 import QueryResults from '../../../../lib/client/jsx/components/query/query_results';
 import {QueryGraph} from '../../../../lib/client/jsx/utils/query_graph';
 
@@ -46,76 +41,145 @@ const models = {
 };
 
 describe('QueryResults', () => {
-  const server = setupServer();
   let store;
+  let graph = new QueryGraph(models);
 
-  beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+  beforeAll(() => {
+    global.CONFIG = {
+      magma_host: 'https://magma.test'
+    };
+  });
 
-  it('renders', () => {
+  it('renders', async () => {
     store = mockStore({
       magma: {models},
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    global.CONFIG = {
-      magma_host: 'https://magma.test'
+    let mockState = {
+      ...defaultContext.state,
+      graph,
+      rootModel: 'monster',
+      rootIdentifier: {
+        model_name: 'monster',
+        attribute_name: 'name',
+        display_label: 'monster.name'
+      },
+      attributes: {
+        prize: [
+          {
+            model_name: 'prize',
+            attribute_name: 'name',
+            display_label: 'prize.name'
+          }
+        ]
+      },
+      recordFilters: [
+        {
+          modelName: 'labor',
+          attributeName: 'year',
+          operator: '::equals',
+          operand: 2
+        }
+      ],
+      slices: {
+        prize: [
+          {
+            modelName: 'prize',
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Athens'
+          }
+        ]
+      }
     };
 
-    let graph = new QueryGraph(models);
+    const {asFragment} = render(<QueryResults />, {
+      wrapper: querySpecWrapper(mockState, store)
+    });
 
-    // Wrap with Provider here so store gets passed down to child components in Context
-    const tree = renderer
-      .create(
-        <Provider store={store}>
-          <StylesProvider generateClassName={generateClassName}>
-            <QueryProvider
-              state={{
-                ...defaultContext.state,
-                graph,
-                rootModel: 'monster',
-                rootIdentifier: {
-                  model_name: 'monster',
-                  attribute_name: 'name',
-                  display_label: 'monster.name'
-                },
-                attributes: {
-                  prize: [
-                    {
-                      model_name: 'prize',
-                      attribute_name: 'name',
-                      display_label: 'prize.name'
-                    }
-                  ]
-                },
-                recordFilters: [
-                  {
-                    modelName: 'labor',
-                    attributeName: 'year',
-                    operator: '::equals',
-                    operand: 2
-                  }
-                ],
-                slices: {
-                  prize: [
-                    {
-                      modelName: 'prize',
-                      attributeName: 'name',
-                      operator: '::equals',
-                      operand: 'Athens'
-                    }
-                  ]
-                }
-              }}
-            >
-              <QueryResults />
-            </QueryProvider>
-          </StylesProvider>
-        </Provider>
-      )
-      .toJSON();
+    await waitFor(() => screen.getByText('Data Frame'));
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
+
+    expect(screen.getByText('monster.name')).toBeTruthy();
+    expect(screen.getByText('prize.name')).toBeTruthy();
+  });
+
+  it('expands and nests matrix columns', async () => {
+    store = mockStore({
+      magma: {models},
+      janus: {projects: require('../../fixtures/project_names.json')}
+    });
+
+    let mockState = {
+      ...defaultContext.state,
+      graph,
+      rootModel: 'monster',
+      rootIdentifier: {
+        model_name: 'monster',
+        attribute_name: 'name',
+        display_label: 'monster.name'
+      },
+      attributes: {
+        prize: [
+          {
+            model_name: 'prize',
+            attribute_name: 'name',
+            display_label: 'prize.name'
+          }
+        ],
+        labor: [
+          {
+            model_name: 'labor',
+            attribute_name: 'contributions',
+            display_label: 'labor.contributions'
+          }
+        ]
+      },
+      recordFilters: [
+        {
+          modelName: 'labor',
+          attributeName: 'year',
+          operator: '::equals',
+          operand: 2
+        }
+      ],
+      slices: {
+        prize: [
+          {
+            modelName: 'prize',
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Athens'
+          }
+        ],
+        labor: [
+          {
+            modelName: 'labor',
+            attributeName: 'contributions',
+            operator: '::slice',
+            operand: 'Athens,Sparta'
+          }
+        ]
+      }
+    };
+
+    const {asFragment} = render(<QueryResults />, {
+      wrapper: querySpecWrapper(mockState, store)
+    });
+
+    await waitFor(() => screen.getByText('Data Frame'));
+
+    expect(asFragment()).toMatchSnapshot();
+
+    expect(screen.getByText('labor.contributions.Athens')).toBeTruthy();
+    expect(screen.getByText('labor.contributions.Sparta')).toBeTruthy();
+
+    fireEvent.click(screen.getByText('Nest matrices'));
+
+    expect(screen.getByText('labor.contributions')).toBeTruthy();
+    expect(() => screen.getByText('labor.contributions.Athens')).toThrowError();
+    expect(() => screen.getByText('labor.contributions.Sparta')).toThrowError();
   });
 });

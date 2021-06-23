@@ -1,13 +1,9 @@
 import React from 'react';
-import {Provider} from 'react-redux';
-import {StylesProvider} from '@material-ui/styles/';
-import renderer from 'react-test-renderer';
+import {render} from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
-import {
-  QueryProvider,
-  defaultContext
-} from '../../../../lib/client/jsx/contexts/query/query_context';
-import {mockStore, generateClassName} from '../../helpers';
+import {defaultContext} from '../../../../lib/client/jsx/contexts/query/query_context';
+import {mockStore, querySpecWrapper} from '../../helpers';
 import QueryBuilder from '../../../../lib/client/jsx/components/query/query_builder';
 import {QueryGraph} from '../../../../lib/client/jsx/utils/query_graph';
 
@@ -46,8 +42,13 @@ const models = {
 
 describe('QueryBuilder', () => {
   let store;
+  let graph = new QueryGraph(models);
 
-  beforeEach(() => {});
+  beforeAll(() => {
+    global.CONFIG = {
+      magma_host: 'https://magma.test'
+    };
+  });
 
   it('renders', () => {
     store = mockStore({
@@ -55,63 +56,48 @@ describe('QueryBuilder', () => {
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    global.CONFIG = {
-      magma_host: 'https://magma.test'
+    let mockState = {
+      ...defaultContext.state,
+      graph,
+      rootModel: 'monster',
+      rootIdentifier: {
+        model_name: 'monster',
+        attribute_name: 'name',
+        display_label: 'monster.name'
+      },
+      attributes: {
+        prize: [
+          {
+            model_name: 'prize',
+            attribute_name: 'name',
+            display_label: 'prize.name'
+          }
+        ]
+      },
+      recordFilters: [
+        {
+          modelName: 'labor',
+          attributeName: 'year',
+          operator: '::equals',
+          operand: 2
+        }
+      ],
+      slices: {
+        prize: [
+          {
+            modelName: 'prize',
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Athens'
+          }
+        ]
+      }
     };
 
-    let graph = new QueryGraph(models);
+    const {asFragment} = render(<QueryBuilder />, {
+      wrapper: querySpecWrapper(mockState, store)
+    });
 
-    // Wrap with Provider here so store gets passed down to child components in Context
-    const tree = renderer
-      .create(
-        <Provider store={store}>
-          <StylesProvider generateClassName={generateClassName}>
-            <QueryProvider
-              state={{
-                ...defaultContext.state,
-                graph,
-                rootModel: 'monster',
-                rootIdentifier: {
-                  model_name: 'monster',
-                  attribute_name: 'name',
-                  display_label: 'monster.name'
-                },
-                attributes: {
-                  prize: [
-                    {
-                      model_name: 'prize',
-                      attribute_name: 'name',
-                      display_label: 'prize.name'
-                    }
-                  ]
-                },
-                recordFilters: [
-                  {
-                    modelName: 'labor',
-                    attributeName: 'year',
-                    operator: '::equals',
-                    operand: 2
-                  }
-                ],
-                slices: {
-                  prize: [
-                    {
-                      modelName: 'prize',
-                      attributeName: 'name',
-                      operator: '::equals',
-                      operand: 'Athens'
-                    }
-                  ]
-                }
-              }}
-            >
-              <QueryBuilder />
-            </QueryProvider>
-          </StylesProvider>
-        </Provider>
-      )
-      .toJSON();
-
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });
