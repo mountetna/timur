@@ -1,453 +1,414 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`QueryResults expands matrix columns 1`] = `
+exports[`QueryResults expands and nests matrix columns 1`] = `
 <DocumentFragment>
   <div
-    class="MuiPaper-root MuiCard-root MuiPaper-elevation1 MuiPaper-rounded"
+    class="MuiGrid-root MuiGrid-container MuiGrid-grid-xs-12"
   >
     <div
-      class="MuiCardHeader-root"
+      class="MuiGrid-root makeStyles-result MuiGrid-item MuiGrid-grid-xs-12"
     >
       <div
-        class="MuiCardHeader-content"
+        class="react-codemirror2"
       >
-        <span
-          class="MuiTypography-root MuiCardHeader-title MuiTypography-h5 MuiTypography-displayBlock"
+        <div
+          class="CodeMirror cm-s-default CodeMirror-wrap"
         >
-          Data Frame
-        </span>
+          <div
+            style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 0px;"
+          >
+            <textarea
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="CodeMirror-vscrollbar"
+            cm-not-content="true"
+            style="display: block; bottom: 0px;"
+            tabindex="-1"
+          >
+            <div
+              style="min-width: 1px; height: 86px;"
+            />
+          </div>
+          <div
+            class="CodeMirror-hscrollbar"
+            cm-not-content="true"
+            tabindex="-1"
+          >
+            <div
+              style="height: 100%; min-height: 1px; width: 0px;"
+            />
+          </div>
+          <div
+            class="CodeMirror-scrollbar-filler"
+            cm-not-content="true"
+          />
+          <div
+            class="CodeMirror-gutter-filler"
+            cm-not-content="true"
+          />
+          <div
+            class="CodeMirror-scroll"
+            tabindex="-1"
+          >
+            <div
+              class="CodeMirror-sizer"
+              style="margin-left: 0px; padding-right: 0px; padding-bottom: 0px;"
+            >
+              <div
+                style="position: relative;"
+              >
+                <div
+                  class="CodeMirror-lines"
+                  role="presentation"
+                >
+                  <div
+                    role="presentation"
+                    style="position: relative; outline: none;"
+                  >
+                    <div
+                      class="CodeMirror-measure"
+                    />
+                    <div
+                      class="CodeMirror-measure"
+                    >
+                      <pre
+                        class="CodeMirror-line"
+                        role="presentation"
+                      >
+                        <span
+                          role="presentation"
+                          style="padding-right: .1px;"
+                        >
+                          ["monster",["labor","year","::equals",2],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","contributions","::slice",["Athens","Sparta"]]]]
+                        </span>
+                      </pre>
+                    </div>
+                    <div
+                      style="position: relative; z-index: 1;"
+                    />
+                    <div
+                      class="CodeMirror-cursors"
+                    />
+                    <div
+                      class="CodeMirror-code"
+                      role="presentation"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent;"
+            />
+            <div
+              class="CodeMirror-gutters"
+              style="display: none;"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div
-      class="MuiCardContent-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-direction-xs-column MuiGrid-grid-xs-12"
     >
       <div
-        class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column"
+        class="MuiGrid-root makeStyles-config MuiGrid-container MuiGrid-item MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"
       >
         <div
-          class="MuiGrid-root MuiGrid-item"
+          class="MuiTypography-root makeStyles-container MuiTypography-body1"
         >
-          <div
-            class="react-codemirror2"
+          <label
+            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
           >
             <div
-              class="CodeMirror cm-s-default CodeMirror-wrap"
+              class="MuiGrid-root MuiGrid-item"
             >
-              <div
-                style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 0px;"
-              >
-                <textarea
-                  autocapitalize="off"
-                  autocorrect="off"
-                  spellcheck="false"
-                  style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"
-                  tabindex="0"
-                />
-              </div>
-              <div
-                class="CodeMirror-vscrollbar"
-                cm-not-content="true"
-                style="display: block; bottom: 0px;"
-                tabindex="-1"
-              >
-                <div
-                  style="min-width: 1px; height: 86px;"
-                />
-              </div>
-              <div
-                class="CodeMirror-hscrollbar"
-                cm-not-content="true"
-                tabindex="-1"
-              >
-                <div
-                  style="height: 100%; min-height: 1px; width: 0px;"
-                />
-              </div>
-              <div
-                class="CodeMirror-scrollbar-filler"
-                cm-not-content="true"
-              />
-              <div
-                class="CodeMirror-gutter-filler"
-                cm-not-content="true"
-              />
-              <div
-                class="CodeMirror-scroll"
-                tabindex="-1"
-              >
-                <div
-                  class="CodeMirror-sizer"
-                  style="margin-left: 0px; padding-right: 0px; padding-bottom: 0px;"
-                >
-                  <div
-                    style="position: relative;"
-                  >
-                    <div
-                      class="CodeMirror-lines"
-                      role="presentation"
-                    >
-                      <div
-                        role="presentation"
-                        style="position: relative; outline: none;"
-                      >
-                        <div
-                          class="CodeMirror-measure"
-                        />
-                        <div
-                          class="CodeMirror-measure"
-                        >
-                          <pre
-                            class="CodeMirror-line"
-                            role="presentation"
-                          >
-                            <span
-                              role="presentation"
-                              style="padding-right: .1px;"
-                            >
-                              ["monster",["labor","year","::equals",2],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","contributions","::slice",["Athens","Sparta"]]]]
-                            </span>
-                          </pre>
-                        </div>
-                        <div
-                          style="position: relative; z-index: 1;"
-                        />
-                        <div
-                          class="CodeMirror-cursors"
-                        />
-                        <div
-                          class="CodeMirror-code"
-                          role="presentation"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent;"
-                />
-                <div
-                  class="CodeMirror-gutters"
-                  style="left: 0px;"
-                >
-                  <div
-                    class="CodeMirror-gutter CodeMirror-lint-markers"
-                  />
-                </div>
-              </div>
+              Nest matrices
             </div>
-          </div>
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              <span
+                class="MuiSwitch-root WithStyles(ForwardRef(Switch))-root"
+              >
+                <span
+                  aria-disabled="false"
+                  class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiSwitch-switchBase WithStyles(ForwardRef(Switch))-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked MuiSwitch-checked WithStyles(ForwardRef(Switch))-checked"
+                >
+                  <span
+                    class="MuiIconButton-label"
+                  >
+                    <input
+                      checked=""
+                      class="PrivateSwitchBase-input MuiSwitch-input"
+                      name="expand-matrices-query"
+                      type="checkbox"
+                      value=""
+                    />
+                    <span
+                      class="MuiSwitch-thumb WithStyles(ForwardRef(Switch))-thumb"
+                    />
+                  </span>
+                  <span
+                    class="MuiTouchRipple-root"
+                  />
+                </span>
+                <span
+                  class="MuiSwitch-track WithStyles(ForwardRef(Switch))-track"
+                />
+              </span>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              Expand matrices
+            </div>
+          </label>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-item MuiGrid-align-items-xs-center MuiGrid-justify-xs-space-around"
+          class="MuiTypography-root makeStyles-container MuiTypography-body1"
+        >
+          <label
+            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              Nested
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              <span
+                class="MuiSwitch-root WithStyles(ForwardRef(Switch))-root"
+              >
+                <span
+                  aria-disabled="false"
+                  class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiSwitch-switchBase WithStyles(ForwardRef(Switch))-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked MuiSwitch-checked WithStyles(ForwardRef(Switch))-checked"
+                >
+                  <span
+                    class="MuiIconButton-label"
+                  >
+                    <input
+                      checked=""
+                      class="PrivateSwitchBase-input MuiSwitch-input"
+                      name="flatten-query"
+                      type="checkbox"
+                      value=""
+                    />
+                    <span
+                      class="MuiSwitch-thumb WithStyles(ForwardRef(Switch))-thumb"
+                    />
+                  </span>
+                  <span
+                    class="MuiTouchRipple-root"
+                  />
+                </span>
+                <span
+                  class="MuiSwitch-track WithStyles(ForwardRef(Switch))-track"
+                />
+              </span>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              Flattened
+            </div>
+          </label>
+        </div>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button MuiButton-disabled MuiButtonBase-disabled"
+          disabled=""
+          tabindex="-1"
+          type="button"
+        >
+          <span
+            class="MuiButton-label"
+          >
+            Previous Queries
+          </span>
+        </button>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiButton-label"
+          >
+            Query
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiButton-label"
+          >
+            ↯ TSV
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-item"
+      >
+        <div
+          class="MuiPaper-root MuiTableContainer-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <table
+            aria-label="result table"
+            class="MuiTable-root makeStyles-table"
+          >
+            <thead
+              class="MuiTableHead-root"
+            >
+              <tr
+                class="MuiTableRow-root MuiTableRow-head"
+              >
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  monster.name
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  prize.name
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  labor.contributions.Athens
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  labor.contributions.Sparta
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              class="MuiTableBody-root"
+            />
+          </table>
+        </div>
+        <div
+          class="MuiTablePagination-root"
         >
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
+            class="MuiToolbar-root MuiToolbar-regular MuiTablePagination-toolbar MuiToolbar-gutters"
           >
             <div
-              class="MuiTypography-root MuiTypography-body1"
+              class="MuiTablePagination-spacer"
+            />
+            <p
+              class="MuiTypography-root MuiTablePagination-caption MuiTypography-body2 MuiTypography-colorInherit"
+              id="mui-50000"
             >
-              <label
-                class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
-              >
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  Nest matrices
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  <span
-                    class="MuiSwitch-root WithStyles(ForwardRef(Switch))-root"
-                  >
-                    <span
-                      aria-disabled="false"
-                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiSwitch-switchBase WithStyles(ForwardRef(Switch))-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked MuiSwitch-checked WithStyles(ForwardRef(Switch))-checked"
-                    >
-                      <span
-                        class="MuiIconButton-label"
-                      >
-                        <input
-                          checked=""
-                          class="PrivateSwitchBase-input MuiSwitch-input"
-                          name="expand-matrices-query"
-                          type="checkbox"
-                          value=""
-                        />
-                        <span
-                          class="MuiSwitch-thumb WithStyles(ForwardRef(Switch))-thumb"
-                        />
-                      </span>
-                      <span
-                        class="MuiTouchRipple-root"
-                      />
-                    </span>
-                    <span
-                      class="MuiSwitch-track WithStyles(ForwardRef(Switch))-track"
-                    />
-                  </span>
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  Expand matrices
-                </div>
-              </label>
-            </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
-          >
+              Rows per page:
+            </p>
             <div
-              class="MuiTypography-root MuiTypography-body1"
+              class="MuiInputBase-root MuiTablePagination-input MuiTablePagination-selectRoot"
             >
-              <label
-                class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
+              <div
+                aria-haspopup="listbox"
+                aria-labelledby="mui-50000 mui-50000"
+                class="MuiSelect-root MuiSelect-select MuiTablePagination-select MuiSelect-selectMenu MuiInputBase-input"
+                id="mui-50000"
+                role="button"
+                tabindex="0"
               >
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  Nested
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  <span
-                    class="MuiSwitch-root WithStyles(ForwardRef(Switch))-root"
-                  >
-                    <span
-                      aria-disabled="false"
-                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiSwitch-switchBase WithStyles(ForwardRef(Switch))-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked MuiSwitch-checked WithStyles(ForwardRef(Switch))-checked"
-                    >
-                      <span
-                        class="MuiIconButton-label"
-                      >
-                        <input
-                          checked=""
-                          class="PrivateSwitchBase-input MuiSwitch-input"
-                          name="flatten-query"
-                          type="checkbox"
-                          value=""
-                        />
-                        <span
-                          class="MuiSwitch-thumb WithStyles(ForwardRef(Switch))-thumb"
-                        />
-                      </span>
-                      <span
-                        class="MuiTouchRipple-root"
-                      />
-                    </span>
-                    <span
-                      class="MuiSwitch-track WithStyles(ForwardRef(Switch))-track"
-                    />
-                  </span>
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  Flattened
-                </div>
-              </label>
+                10
+              </div>
+              <input
+                aria-hidden="true"
+                class="MuiSelect-nativeInput"
+                tabindex="-1"
+                value="10"
+              />
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSelect-icon MuiTablePagination-selectIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M7 10l5 5 5-5z"
+                />
+              </svg>
             </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
-          >
+            <p
+              class="MuiTypography-root MuiTablePagination-caption MuiTypography-body2 MuiTypography-colorInherit"
+            >
+              0-0 of 0
+            </p>
             <div
-              aria-label="contained primary button group"
-              class="MuiButtonGroup-root MuiButtonGroup-contained"
-              role="group"
+              class="MuiTablePagination-actions"
             >
               <button
-                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-disabled MuiButtonBase-disabled"
+                aria-label="Previous page"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-disabled MuiButtonBase-disabled"
                 disabled=""
                 tabindex="-1"
+                title="Previous page"
                 type="button"
               >
                 <span
-                  class="MuiButton-label"
+                  class="MuiIconButton-label"
                 >
-                  Previous Queries
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"
+                    />
+                  </svg>
                 </span>
               </button>
               <button
-                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary"
-                tabindex="0"
+                aria-label="Next page"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-disabled MuiButtonBase-disabled"
+                disabled=""
+                tabindex="-1"
+                title="Next page"
                 type="button"
               >
                 <span
-                  class="MuiButton-label"
+                  class="MuiIconButton-label"
                 >
-                  Query
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"
+                    />
+                  </svg>
                 </span>
-                <span
-                  class="MuiTouchRipple-root"
-                />
               </button>
-              <button
-                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary"
-                tabindex="0"
-                type="button"
-              >
-                <span
-                  class="MuiButton-label"
-                >
-                  ↯ TSV
-                </span>
-                <span
-                  class="MuiTouchRipple-root"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div
-          class="MuiGrid-root MuiGrid-item"
-        >
-          <div
-            class="MuiPaper-root MuiTableContainer-root MuiPaper-elevation1 MuiPaper-rounded"
-          >
-            <table
-              aria-label="result table"
-              class="MuiTable-root makeStyles-table"
-            >
-              <thead
-                class="MuiTableHead-root"
-              >
-                <tr
-                  class="MuiTableRow-root MuiTableRow-head"
-                >
-                  <th
-                    class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                    scope="col"
-                  >
-                    monster.name
-                  </th>
-                  <th
-                    class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                    scope="col"
-                  >
-                    prize.name
-                  </th>
-                  <th
-                    class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                    scope="col"
-                  >
-                    labor.contributions.Athens
-                  </th>
-                  <th
-                    class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                    scope="col"
-                  >
-                    labor.contributions.Sparta
-                  </th>
-                </tr>
-              </thead>
-              <tbody
-                class="MuiTableBody-root"
-              />
-            </table>
-          </div>
-          <div
-            class="MuiTablePagination-root"
-          >
-            <div
-              class="MuiToolbar-root MuiToolbar-regular MuiTablePagination-toolbar MuiToolbar-gutters"
-            >
-              <div
-                class="MuiTablePagination-spacer"
-              />
-              <p
-                class="MuiTypography-root MuiTablePagination-caption MuiTypography-body2 MuiTypography-colorInherit"
-                id="mui-50000"
-              >
-                Rows per page:
-              </p>
-              <div
-                class="MuiInputBase-root MuiTablePagination-input MuiTablePagination-selectRoot"
-              >
-                <div
-                  aria-haspopup="listbox"
-                  aria-labelledby="mui-50000 mui-50000"
-                  class="MuiSelect-root MuiSelect-select MuiTablePagination-select MuiSelect-selectMenu MuiInputBase-input"
-                  id="mui-50000"
-                  role="button"
-                  tabindex="0"
-                >
-                  10
-                </div>
-                <input
-                  aria-hidden="true"
-                  class="MuiSelect-nativeInput"
-                  tabindex="-1"
-                  value="10"
-                />
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSelect-icon MuiTablePagination-selectIcon"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M7 10l5 5 5-5z"
-                  />
-                </svg>
-              </div>
-              <p
-                class="MuiTypography-root MuiTablePagination-caption MuiTypography-body2 MuiTypography-colorInherit"
-              >
-                0-0 of 0
-              </p>
-              <div
-                class="MuiTablePagination-actions"
-              >
-                <button
-                  aria-label="Previous page"
-                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-disabled MuiButtonBase-disabled"
-                  disabled=""
-                  tabindex="-1"
-                  title="Previous page"
-                  type="button"
-                >
-                  <span
-                    class="MuiIconButton-label"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="MuiSvgIcon-root"
-                      focusable="false"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"
-                      />
-                    </svg>
-                  </span>
-                </button>
-                <button
-                  aria-label="Next page"
-                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-disabled MuiButtonBase-disabled"
-                  disabled=""
-                  tabindex="-1"
-                  title="Next page"
-                  type="button"
-                >
-                  <span
-                    class="MuiIconButton-label"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="MuiSvgIcon-root"
-                      focusable="false"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -460,439 +421,400 @@ exports[`QueryResults expands matrix columns 1`] = `
 exports[`QueryResults renders 1`] = `
 <DocumentFragment>
   <div
-    class="MuiPaper-root MuiCard-root MuiPaper-elevation1 MuiPaper-rounded"
+    class="MuiGrid-root MuiGrid-container MuiGrid-grid-xs-12"
   >
     <div
-      class="MuiCardHeader-root"
+      class="MuiGrid-root makeStyles-result MuiGrid-item MuiGrid-grid-xs-12"
     >
       <div
-        class="MuiCardHeader-content"
+        class="react-codemirror2"
       >
-        <span
-          class="MuiTypography-root MuiCardHeader-title MuiTypography-h5 MuiTypography-displayBlock"
+        <div
+          class="CodeMirror cm-s-default CodeMirror-wrap"
         >
-          Data Frame
-        </span>
+          <div
+            style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 0px;"
+          >
+            <textarea
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="CodeMirror-vscrollbar"
+            cm-not-content="true"
+            style="display: block; bottom: 0px;"
+            tabindex="-1"
+          >
+            <div
+              style="min-width: 1px; height: 75px;"
+            />
+          </div>
+          <div
+            class="CodeMirror-hscrollbar"
+            cm-not-content="true"
+            tabindex="-1"
+          >
+            <div
+              style="height: 100%; min-height: 1px; width: 0px;"
+            />
+          </div>
+          <div
+            class="CodeMirror-scrollbar-filler"
+            cm-not-content="true"
+          />
+          <div
+            class="CodeMirror-gutter-filler"
+            cm-not-content="true"
+          />
+          <div
+            class="CodeMirror-scroll"
+            tabindex="-1"
+          >
+            <div
+              class="CodeMirror-sizer"
+              style="margin-left: 0px; padding-right: 0px; padding-bottom: 0px;"
+            >
+              <div
+                style="position: relative;"
+              >
+                <div
+                  class="CodeMirror-lines"
+                  role="presentation"
+                >
+                  <div
+                    role="presentation"
+                    style="position: relative; outline: none;"
+                  >
+                    <div
+                      class="CodeMirror-measure"
+                    />
+                    <div
+                      class="CodeMirror-measure"
+                    >
+                      <pre
+                        class="CodeMirror-line"
+                        role="presentation"
+                      >
+                        <span
+                          role="presentation"
+                          style="padding-right: .1px;"
+                        >
+                          ["monster",["labor","year","::equals",2],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"]]]
+                        </span>
+                      </pre>
+                    </div>
+                    <div
+                      style="position: relative; z-index: 1;"
+                    />
+                    <div
+                      class="CodeMirror-cursors"
+                    />
+                    <div
+                      class="CodeMirror-code"
+                      role="presentation"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent;"
+            />
+            <div
+              class="CodeMirror-gutters"
+              style="display: none;"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div
-      class="MuiCardContent-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-direction-xs-column MuiGrid-grid-xs-12"
     >
       <div
-        class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column"
+        class="MuiGrid-root makeStyles-config MuiGrid-container MuiGrid-item MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"
       >
         <div
-          class="MuiGrid-root MuiGrid-item"
+          class="MuiTypography-root makeStyles-container MuiTypography-body1"
         >
-          <div
-            class="react-codemirror2"
+          <label
+            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
           >
             <div
-              class="CodeMirror cm-s-default CodeMirror-wrap"
+              class="MuiGrid-root MuiGrid-item"
             >
-              <div
-                style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 0px;"
-              >
-                <textarea
-                  autocapitalize="off"
-                  autocorrect="off"
-                  spellcheck="false"
-                  style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"
-                  tabindex="0"
-                />
-              </div>
-              <div
-                class="CodeMirror-vscrollbar"
-                cm-not-content="true"
-                style="display: block; bottom: 0px;"
-                tabindex="-1"
-              >
-                <div
-                  style="min-width: 1px; height: 75px;"
-                />
-              </div>
-              <div
-                class="CodeMirror-hscrollbar"
-                cm-not-content="true"
-                tabindex="-1"
-              >
-                <div
-                  style="height: 100%; min-height: 1px; width: 0px;"
-                />
-              </div>
-              <div
-                class="CodeMirror-scrollbar-filler"
-                cm-not-content="true"
-              />
-              <div
-                class="CodeMirror-gutter-filler"
-                cm-not-content="true"
-              />
-              <div
-                class="CodeMirror-scroll"
-                tabindex="-1"
-              >
-                <div
-                  class="CodeMirror-sizer"
-                  style="margin-left: 0px; padding-right: 0px; padding-bottom: 0px;"
-                >
-                  <div
-                    style="position: relative;"
-                  >
-                    <div
-                      class="CodeMirror-lines"
-                      role="presentation"
-                    >
-                      <div
-                        role="presentation"
-                        style="position: relative; outline: none;"
-                      >
-                        <div
-                          class="CodeMirror-measure"
-                        />
-                        <div
-                          class="CodeMirror-measure"
-                        >
-                          <pre
-                            class="CodeMirror-line"
-                            role="presentation"
-                          >
-                            <span
-                              role="presentation"
-                              style="padding-right: .1px;"
-                            >
-                              ["monster",["labor","year","::equals",2],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"]]]
-                            </span>
-                          </pre>
-                        </div>
-                        <div
-                          style="position: relative; z-index: 1;"
-                        />
-                        <div
-                          class="CodeMirror-cursors"
-                        />
-                        <div
-                          class="CodeMirror-code"
-                          role="presentation"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent;"
-                />
-                <div
-                  class="CodeMirror-gutters"
-                  style="left: 0px;"
-                >
-                  <div
-                    class="CodeMirror-gutter CodeMirror-lint-markers"
-                  />
-                </div>
-              </div>
+              Nest matrices
             </div>
-          </div>
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              <span
+                class="MuiSwitch-root WithStyles(ForwardRef(Switch))-root"
+              >
+                <span
+                  aria-disabled="false"
+                  class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiSwitch-switchBase WithStyles(ForwardRef(Switch))-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked MuiSwitch-checked WithStyles(ForwardRef(Switch))-checked"
+                >
+                  <span
+                    class="MuiIconButton-label"
+                  >
+                    <input
+                      checked=""
+                      class="PrivateSwitchBase-input MuiSwitch-input"
+                      name="expand-matrices-query"
+                      type="checkbox"
+                      value=""
+                    />
+                    <span
+                      class="MuiSwitch-thumb WithStyles(ForwardRef(Switch))-thumb"
+                    />
+                  </span>
+                  <span
+                    class="MuiTouchRipple-root"
+                  />
+                </span>
+                <span
+                  class="MuiSwitch-track WithStyles(ForwardRef(Switch))-track"
+                />
+              </span>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              Expand matrices
+            </div>
+          </label>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-item MuiGrid-align-items-xs-center MuiGrid-justify-xs-space-around"
+          class="MuiTypography-root makeStyles-container MuiTypography-body1"
+        >
+          <label
+            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              Nested
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              <span
+                class="MuiSwitch-root WithStyles(ForwardRef(Switch))-root"
+              >
+                <span
+                  aria-disabled="false"
+                  class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiSwitch-switchBase WithStyles(ForwardRef(Switch))-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked MuiSwitch-checked WithStyles(ForwardRef(Switch))-checked"
+                >
+                  <span
+                    class="MuiIconButton-label"
+                  >
+                    <input
+                      checked=""
+                      class="PrivateSwitchBase-input MuiSwitch-input"
+                      name="flatten-query"
+                      type="checkbox"
+                      value=""
+                    />
+                    <span
+                      class="MuiSwitch-thumb WithStyles(ForwardRef(Switch))-thumb"
+                    />
+                  </span>
+                  <span
+                    class="MuiTouchRipple-root"
+                  />
+                </span>
+                <span
+                  class="MuiSwitch-track WithStyles(ForwardRef(Switch))-track"
+                />
+              </span>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item"
+            >
+              Flattened
+            </div>
+          </label>
+        </div>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button MuiButton-disabled MuiButtonBase-disabled"
+          disabled=""
+          tabindex="-1"
+          type="button"
+        >
+          <span
+            class="MuiButton-label"
+          >
+            Previous Queries
+          </span>
+        </button>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiButton-label"
+          >
+            Query
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiButton-label"
+          >
+            ↯ TSV
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-item"
+      >
+        <div
+          class="MuiPaper-root MuiTableContainer-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <table
+            aria-label="result table"
+            class="MuiTable-root makeStyles-table"
+          >
+            <thead
+              class="MuiTableHead-root"
+            >
+              <tr
+                class="MuiTableRow-root MuiTableRow-head"
+              >
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  monster.name
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  prize.name
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              class="MuiTableBody-root"
+            />
+          </table>
+        </div>
+        <div
+          class="MuiTablePagination-root"
         >
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
+            class="MuiToolbar-root MuiToolbar-regular MuiTablePagination-toolbar MuiToolbar-gutters"
           >
             <div
-              class="MuiTypography-root MuiTypography-body1"
+              class="MuiTablePagination-spacer"
+            />
+            <p
+              class="MuiTypography-root MuiTablePagination-caption MuiTypography-body2 MuiTypography-colorInherit"
+              id="mui-50000"
             >
-              <label
-                class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
-              >
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  Nest matrices
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  <span
-                    class="MuiSwitch-root WithStyles(ForwardRef(Switch))-root"
-                  >
-                    <span
-                      aria-disabled="false"
-                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiSwitch-switchBase WithStyles(ForwardRef(Switch))-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked MuiSwitch-checked WithStyles(ForwardRef(Switch))-checked"
-                    >
-                      <span
-                        class="MuiIconButton-label"
-                      >
-                        <input
-                          checked=""
-                          class="PrivateSwitchBase-input MuiSwitch-input"
-                          name="expand-matrices-query"
-                          type="checkbox"
-                          value=""
-                        />
-                        <span
-                          class="MuiSwitch-thumb WithStyles(ForwardRef(Switch))-thumb"
-                        />
-                      </span>
-                      <span
-                        class="MuiTouchRipple-root"
-                      />
-                    </span>
-                    <span
-                      class="MuiSwitch-track WithStyles(ForwardRef(Switch))-track"
-                    />
-                  </span>
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  Expand matrices
-                </div>
-              </label>
-            </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
-          >
+              Rows per page:
+            </p>
             <div
-              class="MuiTypography-root MuiTypography-body1"
+              class="MuiInputBase-root MuiTablePagination-input MuiTablePagination-selectRoot"
             >
-              <label
-                class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
+              <div
+                aria-haspopup="listbox"
+                aria-labelledby="mui-50000 mui-50000"
+                class="MuiSelect-root MuiSelect-select MuiTablePagination-select MuiSelect-selectMenu MuiInputBase-input"
+                id="mui-50000"
+                role="button"
+                tabindex="0"
               >
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  Nested
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  <span
-                    class="MuiSwitch-root WithStyles(ForwardRef(Switch))-root"
-                  >
-                    <span
-                      aria-disabled="false"
-                      class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiSwitch-switchBase WithStyles(ForwardRef(Switch))-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked MuiSwitch-checked WithStyles(ForwardRef(Switch))-checked"
-                    >
-                      <span
-                        class="MuiIconButton-label"
-                      >
-                        <input
-                          checked=""
-                          class="PrivateSwitchBase-input MuiSwitch-input"
-                          name="flatten-query"
-                          type="checkbox"
-                          value=""
-                        />
-                        <span
-                          class="MuiSwitch-thumb WithStyles(ForwardRef(Switch))-thumb"
-                        />
-                      </span>
-                      <span
-                        class="MuiTouchRipple-root"
-                      />
-                    </span>
-                    <span
-                      class="MuiSwitch-track WithStyles(ForwardRef(Switch))-track"
-                    />
-                  </span>
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item"
-                >
-                  Flattened
-                </div>
-              </label>
+                10
+              </div>
+              <input
+                aria-hidden="true"
+                class="MuiSelect-nativeInput"
+                tabindex="-1"
+                value="10"
+              />
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSelect-icon MuiTablePagination-selectIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M7 10l5 5 5-5z"
+                />
+              </svg>
             </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
-          >
+            <p
+              class="MuiTypography-root MuiTablePagination-caption MuiTypography-body2 MuiTypography-colorInherit"
+            >
+              0-0 of 0
+            </p>
             <div
-              aria-label="contained primary button group"
-              class="MuiButtonGroup-root MuiButtonGroup-contained"
-              role="group"
+              class="MuiTablePagination-actions"
             >
               <button
-                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-disabled MuiButtonBase-disabled"
+                aria-label="Previous page"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-disabled MuiButtonBase-disabled"
                 disabled=""
                 tabindex="-1"
+                title="Previous page"
                 type="button"
               >
                 <span
-                  class="MuiButton-label"
+                  class="MuiIconButton-label"
                 >
-                  Previous Queries
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"
+                    />
+                  </svg>
                 </span>
               </button>
               <button
-                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary"
-                tabindex="0"
+                aria-label="Next page"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-disabled MuiButtonBase-disabled"
+                disabled=""
+                tabindex="-1"
+                title="Next page"
                 type="button"
               >
                 <span
-                  class="MuiButton-label"
+                  class="MuiIconButton-label"
                 >
-                  Query
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"
+                    />
+                  </svg>
                 </span>
-                <span
-                  class="MuiTouchRipple-root"
-                />
               </button>
-              <button
-                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary"
-                tabindex="0"
-                type="button"
-              >
-                <span
-                  class="MuiButton-label"
-                >
-                  ↯ TSV
-                </span>
-                <span
-                  class="MuiTouchRipple-root"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div
-          class="MuiGrid-root MuiGrid-item"
-        >
-          <div
-            class="MuiPaper-root MuiTableContainer-root MuiPaper-elevation1 MuiPaper-rounded"
-          >
-            <table
-              aria-label="result table"
-              class="MuiTable-root makeStyles-table"
-            >
-              <thead
-                class="MuiTableHead-root"
-              >
-                <tr
-                  class="MuiTableRow-root MuiTableRow-head"
-                >
-                  <th
-                    class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                    scope="col"
-                  >
-                    monster.name
-                  </th>
-                  <th
-                    class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                    scope="col"
-                  >
-                    prize.name
-                  </th>
-                </tr>
-              </thead>
-              <tbody
-                class="MuiTableBody-root"
-              />
-            </table>
-          </div>
-          <div
-            class="MuiTablePagination-root"
-          >
-            <div
-              class="MuiToolbar-root MuiToolbar-regular MuiTablePagination-toolbar MuiToolbar-gutters"
-            >
-              <div
-                class="MuiTablePagination-spacer"
-              />
-              <p
-                class="MuiTypography-root MuiTablePagination-caption MuiTypography-body2 MuiTypography-colorInherit"
-                id="mui-50000"
-              >
-                Rows per page:
-              </p>
-              <div
-                class="MuiInputBase-root MuiTablePagination-input MuiTablePagination-selectRoot"
-              >
-                <div
-                  aria-haspopup="listbox"
-                  aria-labelledby="mui-50000 mui-50000"
-                  class="MuiSelect-root MuiSelect-select MuiTablePagination-select MuiSelect-selectMenu MuiInputBase-input"
-                  id="mui-50000"
-                  role="button"
-                  tabindex="0"
-                >
-                  10
-                </div>
-                <input
-                  aria-hidden="true"
-                  class="MuiSelect-nativeInput"
-                  tabindex="-1"
-                  value="10"
-                />
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSelect-icon MuiTablePagination-selectIcon"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M7 10l5 5 5-5z"
-                  />
-                </svg>
-              </div>
-              <p
-                class="MuiTypography-root MuiTablePagination-caption MuiTypography-body2 MuiTypography-colorInherit"
-              >
-                0-0 of 0
-              </p>
-              <div
-                class="MuiTablePagination-actions"
-              >
-                <button
-                  aria-label="Previous page"
-                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-disabled MuiButtonBase-disabled"
-                  disabled=""
-                  tabindex="-1"
-                  title="Previous page"
-                  type="button"
-                >
-                  <span
-                    class="MuiIconButton-label"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="MuiSvgIcon-root"
-                      focusable="false"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"
-                      />
-                    </svg>
-                  </span>
-                </button>
-                <button
-                  aria-label="Next page"
-                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-disabled MuiButtonBase-disabled"
-                  disabled=""
-                  tabindex="-1"
-                  title="Next page"
-                  type="button"
-                >
-                  <span
-                    class="MuiIconButton-label"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="MuiSvgIcon-root"
-                      focusable="false"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
             </div>
           </div>
         </div>

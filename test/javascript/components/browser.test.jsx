@@ -17,6 +17,10 @@ describe('Browser', () => {
   };
 
   beforeEach(() => {
+    global.CONFIG = {
+      project_name: 'labors'
+    };
+
     store = mockStore({
       magma: {models}
     });

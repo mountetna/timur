@@ -44,12 +44,6 @@ describe('QueryResults', () => {
   let store;
   let graph = new QueryGraph(models);
 
-  beforeAll(() => {
-    global.CONFIG = {
-      magma_host: 'https://magma.test'
-    };
-  });
-
   it('renders', async () => {
     store = mockStore({
       magma: {models},
@@ -98,7 +92,7 @@ describe('QueryResults', () => {
       wrapper: querySpecWrapper(mockState, store)
     });
 
-    await waitFor(() => screen.getByText('Data Frame'));
+    await waitFor(() => screen.getByText('Nest matrices'));
 
     expect(asFragment()).toMatchSnapshot();
 
@@ -169,7 +163,7 @@ describe('QueryResults', () => {
       wrapper: querySpecWrapper(mockState, store)
     });
 
-    await waitFor(() => screen.getByText('Data Frame'));
+    await waitFor(() => screen.getByText('Nest matrices'));
 
     expect(asFragment()).toMatchSnapshot();
 

@@ -44,13 +44,6 @@ describe('QueryResults', () => {
   let store;
   const graph = new QueryGraph(models);
 
-  beforeAll(() => {
-    global.CONFIG = {
-      project_name: 'test',
-      magma_host: 'https://magma.test'
-    };
-  });
-
   it('returns column labels', async () => {
     store = mockStore({
       magma: {models},
@@ -131,10 +124,10 @@ describe('QueryResults', () => {
         ['Lernean Hydra', ['Lernean Hydra', [3, 0]]]
       ],
       format: [
-        'test::monster#name',
+        'labors::monster#name',
         [
-          'test::monster#name',
-          ['test::labor#contributions', ['Athens', 'Sparta']]
+          'labors::monster#name',
+          ['labors::labor#contributions', ['Athens', 'Sparta']]
         ]
       ],
       type: 'Mock'
@@ -197,10 +190,10 @@ describe('QueryResults', () => {
         ['Lernean Hydra', ['Lernean Hydra', [3, 0]]]
       ],
       format: [
-        'test::monster#name',
+        'labors::monster#name',
         [
-          'test::monster#name',
-          ['test::labor#contributions', ['Athens', 'Sparta']]
+          'labors::monster#name',
+          ['labors::labor#contributions', ['Athens', 'Sparta']]
         ]
       ],
       type: 'Mock'
@@ -262,10 +255,10 @@ describe('QueryResults', () => {
         ['Lernean Hydra', ['Lernean Hydra', [0, 3]]]
       ],
       format: [
-        'test::monster#name',
+        'labors::monster#name',
         [
-          'test::monster#name',
-          ['test::labor#contributions', ['Sparta', 'Athens']]
+          'labors::monster#name',
+          ['labors::labor#contributions', ['Sparta', 'Athens']]
         ]
       ],
       type: 'Mock'

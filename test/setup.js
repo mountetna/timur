@@ -26,7 +26,10 @@ document.createRange = () => {
 const mockMath = Object.create(global.Math);
 mockMath.random = () => 0.5;
 global.Math = mockMath;
-global.CONFIG = {};
+global.CONFIG = {
+  project_name: 'labors',
+  magma_host: 'https://magma.test'
+};
 
 global.Routes = {
   fetch_manifests_path: (projectName) =>

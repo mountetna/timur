@@ -44,12 +44,6 @@ describe('QueryBuilder', () => {
   let store;
   let graph = new QueryGraph(models);
 
-  beforeAll(() => {
-    global.CONFIG = {
-      magma_host: 'https://magma.test'
-    };
-  });
-
   it('renders', () => {
     store = mockStore({
       magma: {models},
