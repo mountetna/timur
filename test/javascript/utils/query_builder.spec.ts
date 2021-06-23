@@ -81,6 +81,12 @@ describe('QueryBuilder', () => {
         attributeName: 'number',
         operator: '::equals',
         operand: 2
+      },
+      {
+        modelName: 'prize',
+        attributeName: 'name',
+        operator: '::equals',
+        operand: 'Apples'
       }
     ]);
     builder.addSlices({
@@ -108,7 +114,8 @@ describe('QueryBuilder', () => {
         '::and',
         ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
         ['name', '::equals', 'Nemean Lion'],
-        ['labor', 'number', '::equals', 2]
+        ['labor', 'number', '::equals', 2],
+        ['labor', 'prize', '::any', 'name', '::equals', 'Apples']
       ],
       '::all',
       [
@@ -131,7 +138,8 @@ describe('QueryBuilder', () => {
         '::and',
         ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
         ['name', '::equals', 'Nemean Lion'],
-        ['labor', 'number', '::equals', 2]
+        ['labor', 'number', '::equals', 2],
+        ['labor', 'prize', '::all', 'name', '::equals', 'Apples']
       ],
       '::all',
       [
@@ -153,6 +161,7 @@ describe('QueryBuilder', () => {
       [
         '::and',
         ['name', '::equals', 'Nemean Lion'],
+        ['labor', 'prize', '::all', 'name', '::equals', 'Apples'],
         [
           '::or',
           ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],

@@ -44,7 +44,7 @@ const QuerySelectPane = () => {
   if (!state.rootModel) return null;
 
   return (
-    <QueryClause title='Select'>
+    <QueryClause title='Columns'>
       {intersectionModels.map((modelName: string, index: number) => {
         if (!state.rootModel) return;
 
@@ -73,10 +73,9 @@ const QuerySelectPane = () => {
       })}
       {state.rootModel ? (
         <Button
-          onClick={() =>
-            setIntersectionModels(intersectionModels.concat(['']))
-          }
-          startIcon={ <AddIcon /> }>
+          onClick={() => setIntersectionModels(intersectionModels.concat(['']))}
+          startIcon={<AddIcon />}
+        >
           Attribute
         </Button>
       ) : null}

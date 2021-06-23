@@ -38,9 +38,8 @@ export class QueryBuilder {
         if (!this.attributes.hasOwnProperty(modelName))
           this.attributes[modelName] = [];
 
-        this.attributes[modelName] = this.attributes[modelName].concat(
-          selectedAttributes
-        );
+        this.attributes[modelName] =
+          this.attributes[modelName].concat(selectedAttributes);
       }
     );
   }
@@ -81,7 +80,7 @@ export class QueryBuilder {
     let result: (string | string[] | number)[] = [];
 
     if (includeModelPath && undefined != this.pathToModel(filter.modelName))
-      result.push(...(this.pathToModel(filter.modelName) as string[]));
+      result.push(...(this.pathToModel(filter.modelName, true) as string[]));
 
     result.push(filter.attributeName);
     result.push(filter.operator);
@@ -138,7 +137,10 @@ export class QueryBuilder {
     return expandedFilters;
   }
 
-  pathToModel(targetModel: string): string[] | undefined {
+  pathToModel(
+    targetModel: string,
+    useAny: boolean = false
+  ): string[] | undefined {
     let path = this.graph
       .allPaths(this.root)
       .find((potentialPath: string[]) => potentialPath.includes(targetModel));
@@ -151,21 +153,22 @@ export class QueryBuilder {
     return this.pathWithModelPredicates(
       path
         ?.slice(0, path.indexOf(targetModel) + 1)
-        .filter((m) => m !== this.root)
+        .filter((m) => m !== this.root),
+      useAny
     );
   }
 
-  allOrFirst() {
-    return this.flatten ? '::first' : '::all';
+  reducerVerb(useAny: boolean = false) {
+    return this.flatten ? (useAny ? '::any' : '::first') : '::all';
   }
 
-  pathWithModelPredicates(path: string[]): string[] {
+  pathWithModelPredicates(path: string[], useAny: boolean = false): string[] {
     let updatedPath: string[] = [];
     let previousModelName = this.root;
     path.forEach((modelName: string) => {
       updatedPath.push(modelName);
       if (stepIsOneToMany(this.models, previousModelName, modelName)) {
-        updatedPath.push(this.allOrFirst());
+        updatedPath.push(this.reducerVerb(useAny));
       }
       previousModelName = modelName;
     });
