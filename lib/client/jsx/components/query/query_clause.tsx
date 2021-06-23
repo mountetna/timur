@@ -1,4 +1,4 @@
-import React, {useCallback, useContext} from 'react';
+import React, { PropsWithChildren, useCallback, useContext} from 'react';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const QueryClause = ({title, children} : { title: string, children: [any] }) => {
+const QueryClause = ({title, children} : PropsWithChildren<{ title: string }>) => {
   const classes = useStyles();
 
   return (

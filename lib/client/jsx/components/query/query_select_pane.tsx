@@ -50,15 +50,11 @@ const QuerySelectPane = () => {
 
         let choiceSet = [
           ...new Set(state.graph.allPaths(state.rootModel).flat())
-        ]
-          .filter(
-            (m) => !intersectionModels.includes(m) && m !== state.rootModel
-          )
-          .concat([modelName]);
+        ].concat([modelName]);
         return (
           <QueryModelAttributeSelector
             key={index}
-            label='Intersection Model'
+            label='Join Model'
             modelValue={modelName}
             modelChoiceSet={choiceSet}
             onSelectModel={(newModelName) =>

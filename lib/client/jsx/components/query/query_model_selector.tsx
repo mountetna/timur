@@ -116,7 +116,6 @@ const QueryModelSelector = ({
   return (
     <Grid
       container
-      className={classes.container}
       alignItems='center'
       justify='flex-start'
     >

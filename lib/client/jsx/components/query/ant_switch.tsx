@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default ({leftOption,rightOption,checked,onChange, name}) => {
+export default ({leftOption,rightOption,checked,onChange, name} : { leftOption: string, rightOption: string, checked: boolean, onChange: (event: any, checked: boolean) => void, name: string } ) => {
   const classes = useStyles();
 
   return <Typography component='div'

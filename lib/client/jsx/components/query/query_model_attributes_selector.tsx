@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120
   },
   container: {
-    borderBottom: '1px solid darkgray'
   },
   selectEmpty: {
     marginTop: theme.spacing(2)

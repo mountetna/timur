@@ -144,7 +144,7 @@ const QueryTable = ({
                   return (
                     <TableRow hover tabIndex={-1} key={row[0]}>
                       {row.map((datum: any, index: number) => (
-                        <TableCell key={index} scope='row' padding='none'>
+                        <TableCell key={index} scope='row'>
                           {datum}
                         </TableCell>
                       ))}
