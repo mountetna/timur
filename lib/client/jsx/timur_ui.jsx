@@ -25,7 +25,7 @@ import QueryPage from './components/query/query_page';
 
 import { createEtnaTheme } from 'etna-js/style/theme';
 
-const theme = createEtnaTheme("#3684fd","#77c");
+const theme = createEtnaTheme("goldenrod", "#066306");
 
 const ROUTES = [
   {

@@ -1,16 +1,26 @@
 import React, {useCallback, useContext} from 'react';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import {makeStyles} from '@material-ui/core/styles';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectTemplate} from 'etna-js/selectors/magma';
 
 import {QueryContext} from '../../contexts/query/query_context';
-import QueryModelAttributeSelector from './query_model_attributes_selector';
+import QueryModelSelector from './query_model_selector';
+import QueryClause from './query_clause';
+
+const useStyles = makeStyles((theme) => ({
+  clauseTitle: {
+    fontSize: "1.2rem",
+    minWidth: "120px"
+  },
+  queryClause: {
+    padding: "5px"
+  }
+}));
 
 const QueryFromPane = () => {
-  const {state, setRootModel, setAttributes} = useContext(QueryContext);
+  const {state, setRootModel} = useContext(QueryContext);
 
   let reduxState = useReduxState();
 
@@ -30,30 +40,23 @@ const QueryFromPane = () => {
     [state.rootModel, reduxState]
   );
 
+  const classes = useStyles();
+
   return (
-    <Card>
-      <CardHeader title='From' subheader='the root model for your data frame' />
-      <CardContent>
-        <QueryModelAttributeSelector
-          label='Root Model'
-          modelValue={state.rootModel || ''}
-          modelChoiceSet={
-            state.graph && state.graph.allowedModels
-              ? [...state.graph.allowedModels]
-              : []
-          }
-          onSelectModel={(modelName) => onRootModelSelect(modelName)}
-          onSelectAttributes={setAttributes}
-          selectedAttributes={
-            state.rootModel && state.attributes
-              ? state.attributes[state.rootModel]
-              : []
-          }
-          canRemove={false}
-          removeModel={() => {}}
-        />
-      </CardContent>
-    </Card>
+    <QueryClause title='From'>
+      <QueryModelSelector
+        label='Root Model'
+        modelValue={state.rootModel || ''}
+        modelChoiceSet={
+          state.graph && state.graph.allowedModels
+            ? [...state.graph.allowedModels]
+            : []
+        }
+        onSelectModel={(modelName) => onRootModelSelect(modelName)}
+        canRemove={false}
+        removeModel={() => {}}
+      />
+    </QueryClause>
   );
 };
 

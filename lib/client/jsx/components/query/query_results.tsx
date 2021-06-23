@@ -7,12 +7,8 @@ import React, {
 } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
+import {makeStyles} from '@material-ui/core/styles';
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
@@ -22,7 +18,7 @@ import {showMessages} from 'etna-js/actions/message_actions';
 import {getAnswer} from 'etna-js/api/magma_api';
 import {selectModels} from 'etna-js/selectors/magma';
 import {Exchange} from 'etna-js/actions/exchange_actions';
-import {downloadTSV, MatrixDatum, MatrixData} from 'etna-js/utils/tsv';
+import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
 import {ReactReduxContext} from 'react-redux';
 
 import {QueryContext} from '../../contexts/query/query_context';
@@ -31,6 +27,23 @@ import {QueryResponse} from '../../contexts/query/query_types';
 import QueryTable from './query_table';
 import AntSwitch from './ant_switch';
 import useTableEffects from './query_use_table_effects';
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    marginRight: '5px'
+  },
+  result: {
+    padding: 10,
+    margin: 10,
+    border: '1px solid #0f0',
+    borderRadius: 2,
+    backgroundColor: 'rgba(0,255,0,0.1)'
+  },
+  config: {
+    padding: 5,
+    paddingTop: 0
+  }
+}));
 
 const QueryResults = () => {
   const [expandMatrices, setExpandMatrices] = useState(true);
@@ -143,8 +156,6 @@ const QueryResults = () => {
     getAnswer({query}, exchange)
       .then((allData) => {
         let rowData = formatRowData(allData, columns);
-        console.log('rowData', rowData);
-
         let matrixMap = rowData.map((row: any) => {
           return columns.reduce(
             (acc: MatrixDatum, {label}, i: number) => {
@@ -153,7 +164,7 @@ const QueryResults = () => {
             {rowNames: row[0]}
           );
         }, []);
-        console.log('matrixMap', matrixMap);
+
         downloadTSV(
           matrixMap,
           ['rowNames'].concat(columns.map(({label}) => label)),
@@ -168,99 +179,70 @@ const QueryResults = () => {
       });
   }, [query, store.dispatch, columns]);
 
+  const classes = useStyles();
+
   return (
-    <Card>
-      <CardHeader title='Data Frame' />
-      <CardContent>
-        <Grid container direction='column'>
-          <Grid item>
-            <CodeMirror
-              options={{
-                readOnly: 'no-cursor',
-                lineWrapping: true,
-                mode: 'application/json',
-                autoCloseBrackets: true,
-                gutters: ['CodeMirror-lint-markers'],
-                lint: false,
-                tabSize: 2
-              }}
-              value={JSON.stringify(query)}
-              onBeforeChange={(editor, data, value) => {}}
-            />
-          </Grid>
-          <Grid
-            item
-            container
-            spacing={1}
-            alignItems='center'
-            justify='space-around'
-          >
-            <Grid item xs={4}>
-              <Typography component='div'>
-                <Grid
-                  component='label'
-                  container
-                  alignItems='center'
-                  spacing={1}
-                >
-                  <Grid item>Nest matrices</Grid>
-                  <Grid item>
-                    <AntSwitch
-                      checked={expandMatrices}
-                      onChange={() => setExpandMatrices(!expandMatrices)}
-                      name='expand-matrices-query'
-                    />
-                  </Grid>
-                  <Grid item>Expand matrices</Grid>
-                </Grid>
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography component='div'>
-                <Grid
-                  component='label'
-                  container
-                  alignItems='center'
-                  spacing={1}
-                >
-                  <Grid item>Nested</Grid>
-                  <Grid item>
-                    <AntSwitch
-                      checked={flattenQuery}
-                      onChange={() => setFlattenQuery(!flattenQuery)}
-                      name='flatten-query'
-                    />
-                  </Grid>
-                  <Grid item>Flattened</Grid>
-                </Grid>
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <ButtonGroup
-                variant='contained'
-                color='primary'
-                aria-label='contained primary button group'
-              >
-                <Button disabled>Previous Queries</Button>
-                <Button onClick={runQuery}>Query</Button>
-                <Button onClick={downloadData}>{'\u21af TSV'}</Button>
-              </ButtonGroup>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <QueryTable
-              columns={columns}
-              rows={rows}
-              pageSize={pageSize}
-              numRecords={numRecords}
-              page={page}
-              handlePageChange={handlePageChange}
-              handlePageSizeChange={handlePageSizeChange}
-            />
-          </Grid>
+    <Grid container xs={12}>
+      <Grid item xs={12} className={classes.result}>
+        <CodeMirror
+          options={{
+            readOnly: 'no-cursor',
+            lineWrapping: true,
+            mode: 'application/json',
+            autoCloseBrackets: true,
+            lint: false,
+            background: 'none',
+            tabSize: 2
+          }}
+          value={JSON.stringify(query)}
+          onBeforeChange={(editor, data, value) => {}}
+        />
+      </Grid>
+      <Grid xs={12} item container direction='column'>
+        <Grid
+          className={classes.config}
+          item
+          container
+          alignItems='center'
+          justify='flex-end'
+        >
+          <AntSwitch
+            checked={expandMatrices}
+            onChange={() => setExpandMatrices(!expandMatrices)}
+            name='expand-matrices-query'
+            leftOption='Nest matrices'
+            rightOption='Expand matrices'
+          />
+          <AntSwitch
+            checked={flattenQuery}
+            onChange={() => setFlattenQuery(!flattenQuery)}
+            name='flatten-query'
+            leftOption='Nested'
+            rightOption='Flattened'
+          />
+          <Button className={classes.button} disabled>
+            Previous Queries
+          </Button>
+          <Button className={classes.button} onClick={runQuery}>
+            Query
+          </Button>
+          <Button className={classes.button} onClick={downloadData}>
+            {'\u21af TSV'}
+          </Button>
         </Grid>
-      </CardContent>
-    </Card>
+        <Grid item>
+          <QueryTable
+            columns={columns}
+            rows={rows}
+            pageSize={pageSize}
+            numRecords={numRecords}
+            page={page}
+            handlePageChange={handlePageChange}
+            handlePageSizeChange={handlePageSizeChange}
+          />
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 

@@ -20,22 +20,17 @@ const QueryControls = () => {
 
   return (
     <Grid
+      item
       container
       className={classes.container}
       justify='flex-start'
       alignItems='center'
       direction='column'
-      spacing={2}
+      xs={12}
     >
-      <Grid item className={classes.item}>
-        <QueryFromPane />
-      </Grid>
-      <Grid item className={classes.item}>
-        <QuerySelectPane />
-      </Grid>
-      <Grid item className={classes.item}>
-        <QueryWherePane />
-      </Grid>
+      <QueryFromPane />
+      <QueryWherePane />
+      <QuerySelectPane />
     </Grid>
   );
 };

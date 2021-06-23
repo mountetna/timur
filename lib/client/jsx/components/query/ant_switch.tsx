@@ -1,6 +1,10 @@
 // From https://material-ui.com/components/switches/#CustomizedSwitches.tsx
+import React from 'react';
 import {withStyles, Theme, createStyles} from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import {makeStyles} from '@material-ui/core/styles';
 
 const AntSwitch = withStyles((theme: Theme) =>
   createStyles({
@@ -12,14 +16,13 @@ const AntSwitch = withStyles((theme: Theme) =>
     },
     switchBase: {
       padding: 2,
-      color: theme.palette.grey[500],
+      color: theme.palette.common.white,
       '&$checked': {
-        transform: 'translateX(12px)',
         color: theme.palette.common.white,
+        transform: 'translateX(12px)',
         '& + $track': {
           opacity: 1,
-          backgroundColor: theme.palette.primary.main,
-          borderColor: theme.palette.primary.main
+          backgroundColor: theme.palette.primary.main
         }
       }
     },
@@ -29,13 +32,39 @@ const AntSwitch = withStyles((theme: Theme) =>
       boxShadow: 'none'
     },
     track: {
-      border: `1px solid ${theme.palette.grey[500]}`,
-      borderRadius: 16 / 2,
       opacity: 1,
-      backgroundColor: theme.palette.common.white
+      backgroundColor: theme.palette.secondary.main
     },
     checked: {}
   })
 )(Switch);
 
-export default AntSwitch;
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginRight: "30px"
+  }
+}));
+
+export default ({leftOption,rightOption,checked,onChange, name} : { leftOption: string, rightOption: string, checked: boolean, onChange: (event: any, checked: boolean) => void, name: string } ) => {
+  const classes = useStyles();
+
+  return <Typography component='div'
+      className={classes.container}>
+    <Grid
+      component='label'
+      container
+      alignItems='center'
+      spacing={1}
+    >
+      <Grid item>{leftOption}</Grid>
+      <Grid item>
+        <AntSwitch
+          checked={checked}
+          onChange={onChange}
+          name={name}
+        />
+      </Grid>
+      <Grid item>{rightOption}</Grid>
+    </Grid>
+  </Typography>
+};
