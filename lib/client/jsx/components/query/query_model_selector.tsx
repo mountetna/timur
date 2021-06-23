@@ -121,7 +121,7 @@ const QueryModelSelector = ({
     >
       <Grid item xs={2}>
         <FormControl className={classes.formControl}>
-          <InputLabel id={id}>
+          <InputLabel shrink id={id}>
             {label}
           </InputLabel>
           <Select

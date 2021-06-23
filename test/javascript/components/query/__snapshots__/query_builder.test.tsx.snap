@@ -442,7 +442,7 @@ exports[`QueryBuilder renders 1`] = `
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-11"
       >
         <div
-          className="MuiGrid-root makeStyles-container MuiGrid-container MuiGrid-align-items-xs-center"
+          className="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center"
         >
           <div
             className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
@@ -458,7 +458,7 @@ exports[`QueryBuilder renders 1`] = `
                 Join Model
               </label>
               <div
-                className="MuiInputBase-root MuiInput-root MuiInput-underline makeStyles-selectEmpty MuiInputBase-formControl MuiInput-formControl"
+                className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                 onClick={[Function]}
               >
                 <div
