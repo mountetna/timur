@@ -167,11 +167,7 @@ const QueryModelAttributeSelector = ({
             labelId={id}
             value={modelValue}
             onChange={(e) => handleModelSelect(e.target.value as string)}
-            displayEmpty
           >
-            <MenuItem value=''>
-              <em>None</em>
-            </MenuItem>
             {modelChoiceSet.sort().map((model_name: string, index: number) => (
               <MenuItem key={index} value={model_name}>
                 {model_name}
