@@ -2,7 +2,8 @@ import {
   selectSliceableModelNames,
   selectMatrixAttributes,
   stepIsOneToMany,
-  pathToColumn
+  pathToColumn,
+  getPath
 } from '../../../lib/client/jsx/selectors/query_selector';
 
 const models = {
@@ -141,7 +142,7 @@ describe('pathToColumn', () => {
     expect(pathToColumn(input, 'kapow', false)).toEqual('-1');
   });
 
-  it('finds nested headings', () => {
+  it('finds root index for nested headings', () => {
     let input = [
       'foo',
       ['bar', ['shallow']],
@@ -171,6 +172,13 @@ describe('pathToColumn', () => {
     // ]
     expect(pathToColumn(input, 'bar.shallow', true)).toEqual('1.0');
     expect(pathToColumn(input, 'deep.nesting', true)).toEqual('3.2.1');
+  });
+});
+
+describe('getPath', () => {
+  it('finds path to nested model name', () => {
+    let input = ['model1', ['model2', ['model3', '::any'], '::any'], '::any'];
+    expect(getPath(input, 'model3', [])).toEqual([1, 1, 0]);
   });
 });
 

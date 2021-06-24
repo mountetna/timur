@@ -31,6 +31,12 @@ const models = {
     revisions: {},
     views: {},
     template: require('../fixtures/template_victim.json')
+  },
+  wound: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../fixtures/template_wound.json')
   }
 };
 
@@ -112,10 +118,10 @@ describe('QueryBuilder', () => {
       'monster',
       [
         '::and',
-        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
         ['name', '::equals', 'Nemean Lion'],
-        ['labor', 'number', '::equals', 2],
-        ['labor', 'prize', '::any', 'name', '::equals', 'Apples']
+        ['labor', ['number', '::equals', 2], '::any'],
+        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any']
       ],
       '::all',
       [
@@ -241,10 +247,83 @@ describe('QueryBuilder', () => {
       'monster',
       [
         '::and',
-        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
         ['name', '::equals', 'Nemean Lion']
       ],
       '::count'
+    ]);
+  });
+
+  it('handles any / all for deep paths in filters with some non-branching models', () => {
+    builder.addRootIdentifier(stamp('labor', 'name'));
+    builder.addRecordFilters([
+      {
+        modelName: 'wound',
+        attributeName: 'location',
+        operator: '::equals',
+        operand: 'arm'
+      }
+    ]);
+
+    expect(builder.query()).toEqual([
+      'labor',
+      [
+        'monster',
+        [
+          'victim',
+          ['wound', ['location', '::equals', 'arm'], '::any'],
+          '::any'
+        ],
+        '::any'
+      ],
+      '::all',
+      [['name']]
+    ]);
+
+    builder.setFlatten(false);
+
+    expect(builder.query()).toEqual([
+      'labor',
+      [
+        'monster',
+        'victim',
+        '::all',
+        'wound',
+        '::all',
+        'location',
+        '::equals',
+        'arm'
+      ],
+      '::all',
+      [['name']]
+    ]);
+  });
+
+  it('handles any / all for deep paths in filters with branching models only', () => {
+    builder.addRootIdentifier(stamp('monster', 'name'));
+    builder.addRecordFilters([
+      {
+        modelName: 'wound',
+        attributeName: 'location',
+        operator: '::equals',
+        operand: 'arm'
+      }
+    ]);
+
+    expect(builder.query()).toEqual([
+      'monster',
+      ['victim', ['wound', ['location', '::equals', 'arm'], '::any'], '::any'],
+      '::all',
+      [['name']]
+    ]);
+
+    builder.setFlatten(false);
+
+    expect(builder.query()).toEqual([
+      'monster',
+      ['victim', '::all', 'wound', '::all', 'location', '::equals', 'arm'],
+      '::all',
+      [['name']]
     ]);
   });
 });
