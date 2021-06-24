@@ -43,7 +43,7 @@ const QueryTable = ({
   const classes = useStyles();
 
   if (0 === columns.length) return null;
-  console.log('rows', rows);
+
   return (
     <React.Fragment>
       <TablePagination
