@@ -35,13 +35,8 @@ import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(1),
+    marginBottom: 10,
     minWidth: 120
-  },
-  container: {
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
   },
   root: {
     minWidth: 345
@@ -160,7 +155,6 @@ const QueryModelAttributeSelector = ({
   return (
     <Grid
       container
-      className={classes.container}
       alignItems='center'
       justify='flex-start'
     >
@@ -173,12 +167,7 @@ const QueryModelAttributeSelector = ({
             labelId={id}
             value={modelValue}
             onChange={(e) => handleModelSelect(e.target.value as string)}
-            displayEmpty
-            className={classes.selectEmpty}
           >
-            <MenuItem value=''>
-              <em>None</em>
-            </MenuItem>
             {modelChoiceSet.sort().map((model_name: string, index: number) => (
               <MenuItem key={index} value={model_name}>
                 {model_name}

@@ -43,14 +43,15 @@ const QuerySelectPane = () => {
 
   if (!state.rootModel) return null;
 
+  let choiceSet = [
+    ...new Set(state.graph.allPaths(state.rootModel).flat().concat(state.rootModel))
+  ];
+
   return (
     <QueryClause title='Columns'>
       {intersectionModels.map((modelName: string, index: number) => {
         if (!state.rootModel) return;
 
-        let choiceSet = [
-          ...new Set(state.graph.allPaths(state.rootModel).flat())
-        ].concat([modelName]);
         return (
           <QueryModelAttributeSelector
             key={index}

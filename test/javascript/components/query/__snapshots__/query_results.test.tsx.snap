@@ -267,50 +267,6 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
         class="MuiGrid-root MuiGrid-item"
       >
         <div
-          class="MuiPaper-root MuiTableContainer-root MuiPaper-elevation1 MuiPaper-rounded"
-        >
-          <table
-            aria-label="result table"
-            class="MuiTable-root makeStyles-table"
-          >
-            <thead
-              class="MuiTableHead-root"
-            >
-              <tr
-                class="MuiTableRow-root MuiTableRow-head"
-              >
-                <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                  scope="col"
-                >
-                  monster.name
-                </th>
-                <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                  scope="col"
-                >
-                  prize.name
-                </th>
-                <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                  scope="col"
-                >
-                  labor.contributions.Athens
-                </th>
-                <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                  scope="col"
-                >
-                  labor.contributions.Sparta
-                </th>
-              </tr>
-            </thead>
-            <tbody
-              class="MuiTableBody-root"
-            />
-          </table>
-        </div>
-        <div
           class="MuiTablePagination-root"
         >
           <div
@@ -411,6 +367,50 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
               </button>
             </div>
           </div>
+        </div>
+        <div
+          class="MuiTableContainer-root"
+        >
+          <table
+            aria-label="result table"
+            class="MuiTable-root makeStyles-table"
+          >
+            <thead
+              class="MuiTableHead-root"
+            >
+              <tr
+                class="MuiTableRow-root MuiTableRow-head"
+              >
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  monster.name
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  prize.name
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  labor.contributions.Athens
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  labor.contributions.Sparta
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              class="MuiTableBody-root"
+            />
+          </table>
         </div>
       </div>
     </div>
@@ -685,38 +685,6 @@ exports[`QueryResults renders 1`] = `
         class="MuiGrid-root MuiGrid-item"
       >
         <div
-          class="MuiPaper-root MuiTableContainer-root MuiPaper-elevation1 MuiPaper-rounded"
-        >
-          <table
-            aria-label="result table"
-            class="MuiTable-root makeStyles-table"
-          >
-            <thead
-              class="MuiTableHead-root"
-            >
-              <tr
-                class="MuiTableRow-root MuiTableRow-head"
-              >
-                <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                  scope="col"
-                >
-                  monster.name
-                </th>
-                <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
-                  scope="col"
-                >
-                  prize.name
-                </th>
-              </tr>
-            </thead>
-            <tbody
-              class="MuiTableBody-root"
-            />
-          </table>
-        </div>
-        <div
           class="MuiTablePagination-root"
         >
           <div
@@ -817,6 +785,38 @@ exports[`QueryResults renders 1`] = `
               </button>
             </div>
           </div>
+        </div>
+        <div
+          class="MuiTableContainer-root"
+        >
+          <table
+            aria-label="result table"
+            class="MuiTable-root makeStyles-table"
+          >
+            <thead
+              class="MuiTableHead-root"
+            >
+              <tr
+                class="MuiTableRow-root MuiTableRow-head"
+              >
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  monster.name
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                  scope="col"
+                >
+                  prize.name
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              class="MuiTableBody-root"
+            />
+          </table>
         </div>
       </div>
     </div>

@@ -46,7 +46,16 @@ const QueryTable = ({
   console.log('rows', rows);
   return (
     <React.Fragment>
-      <TableContainer component={Paper}>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50, 200]}
+        component='div'
+        count={numRecords}
+        rowsPerPage={pageSize}
+        page={page}
+        onChangePage={handlePageChange}
+        onChangeRowsPerPage={handlePageSizeChange}
+      />
+      <TableContainer>
         <Table className={classes.table} size='small' aria-label='result table'>
           <TableHead>
             <TableRow>
@@ -72,15 +81,6 @@ const QueryTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 50, 200]}
-        component='div'
-        count={numRecords}
-        rowsPerPage={pageSize}
-        page={page}
-        onChangePage={handlePageChange}
-        onChangeRowsPerPage={handlePageSizeChange}
-      />
     </React.Fragment>
   );
 };
