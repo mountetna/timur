@@ -150,7 +150,7 @@ const QueryResults = () => {
   const {columns, rows, formatRowData} = useTableEffects(data, expandMatrices);
 
   const downloadData = useCallback(() => {
-    if ('' === count || '' === query) return;
+    if ('' === query) return;
 
     let exchange = new Exchange(store.dispatch, 'query-download-tsv-magma');
     getAnswer({query}, exchange)
