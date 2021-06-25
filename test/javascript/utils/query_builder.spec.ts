@@ -121,7 +121,7 @@ describe('QueryBuilder', () => {
         ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
         ['name', '::equals', 'Nemean Lion'],
         ['labor', 'number', '::equals', 2],
-        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any']]
+        ['labor', 'prize', ['name', '::equals', 'Apples'], '::any']
       ],
       '::all',
       [
@@ -270,11 +270,9 @@ describe('QueryBuilder', () => {
         'labor',
         [
           'monster',
-          [
-            'victim',
-            ['wound', ['location', '::equals', 'arm'], '::any'],
-            '::any'
-          ]
+          'victim',
+          ['wound', ['location', '::equals', 'arm'], '::any'],
+          '::any'
         ],
         '::all',
         [['name']]
@@ -375,11 +373,9 @@ describe('QueryBuilder', () => {
         [
           'labor',
           'monster',
-          [
-            'victim',
-            ['wound', ['location', '::equals', 'arm'], '::any'],
-            '::any'
-          ]
+          'victim',
+          ['wound', ['location', '::equals', 'arm'], '::any'],
+          '::any'
         ],
         '::all',
         [['name']]
@@ -400,6 +396,34 @@ describe('QueryBuilder', () => {
           '::equals',
           'arm'
         ],
+        '::all',
+        [['name']]
+      ]);
+    });
+
+    it('paths that go up and down and terminate in a table', () => {
+      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRecordFilters([
+        {
+          modelName: 'prize',
+          attributeName: 'name',
+          operator: '::equals',
+          operand: 'Apples'
+        }
+      ]);
+
+      expect(builder.query()).toEqual([
+        'monster',
+        ['labor', 'prize', ['name', '::equals', 'Apples'], '::any'],
+        '::all',
+        [['name']]
+      ]);
+
+      builder.setFlatten(false);
+
+      expect(builder.query()).toEqual([
+        'monster',
+        ['labor', 'prize', '::all', 'name', '::equals', 'Apples'],
         '::all',
         [['name']]
       ]);

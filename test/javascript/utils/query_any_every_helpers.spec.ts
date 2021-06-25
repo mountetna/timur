@@ -4,16 +4,9 @@ import {
 } from '../../../lib/client/jsx/utils/query_any_every_helpers';
 
 describe('injectValueAtPath', () => {
-  it('only adds ::any when it is already present', () => {
-    let array = ['modelName'];
-    injectValueAtPath(array, [1], ['new', 'tuple']);
-
-    expect(array).toEqual(['modelName', ['new', 'tuple']]);
-  });
-
   it('correctly injects and appends ::any', () => {
     let array = ['modelName', 'secondModel', ['thirdModel', '::any'], '::any'];
-    injectValueAtPath(array, [2, 1], ['new', 'tuple']);
+    let injected = injectValueAtPath(array, [2, 1], ['new', 'tuple']);
 
     expect(array).toEqual([
       'modelName',
@@ -21,6 +14,18 @@ describe('injectValueAtPath', () => {
       ['thirdModel', ['new', 'tuple'], '::any'],
       '::any'
     ]);
+    expect(injected).toEqual(true);
+  });
+
+  it('unpacks the new value (instead of injecting) if no ::any being replaced', () => {
+    let array = ['modelName', ['something', ['nested']]];
+    let injected = injectValueAtPath(array, [1, 1, 1], ['new', 'tuple']);
+
+    expect(array).toEqual([
+      'modelName',
+      ['something', ['nested', 'new', 'tuple']]
+    ]);
+    expect(injected).toEqual(false);
   });
 });
 
@@ -35,6 +40,20 @@ describe('shouldInjectFilter', () => {
           operand: 'bar'
         },
         ['test', '::any']
+      )
+    ).toEqual(true);
+  });
+
+  it('returns true for flat ::anys at root level', () => {
+    expect(
+      shouldInjectFilter(
+        {
+          modelName: 'singleton',
+          attributeName: 'foo',
+          operator: '::equals',
+          operand: 'bar'
+        },
+        ['test', 'singleton', '::any']
       )
     ).toEqual(true);
   });

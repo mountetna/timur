@@ -32,9 +32,21 @@ export default class QueryFilterPathBuilder {
         } else {
           // here we'll nest with ::any
           filterAnyPath.push(nestedFilterIndex);
-          injectValueAtPath(updatedPath, filterAnyPath, newValue);
-          // Reset this so we re-index for the new, nested array.
-          nestedFilterIndex = 0;
+          let injected = injectValueAtPath(
+            updatedPath,
+            filterAnyPath,
+            newValue
+          );
+
+          if (injected) {
+            // Reset this so we re-index for the new, nested array.
+            nestedFilterIndex = 0;
+          } else {
+            // the value was not injected but rather spliced inline,
+            //   so we increment the nestedFilterIndex and pop
+            //   the last value off the filterAnyPath.
+            filterAnyPath.pop();
+          }
         }
       } else {
         updatedPath.push(modelName);
@@ -42,7 +54,6 @@ export default class QueryFilterPathBuilder {
       previousModelName = modelName;
       nestedFilterIndex++;
     });
-
     return updatedPath;
   }
 }

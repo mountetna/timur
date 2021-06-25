@@ -32,7 +32,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
             tabindex="-1"
           >
             <div
-              style="min-width: 1px; height: 88px;"
+              style="min-width: 1px; height: 86px;"
             />
           </div>
           <div
@@ -85,7 +85,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
                           role="presentation"
                           style="padding-right: .1px;"
                         >
-                          ["monster",["labor",["year","::equals",2],"::any"],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","contributions","::slice",["Athens","Sparta"]]]]
+                          ["monster",["labor","year","::equals",2],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","contributions","::slice",["Athens","Sparta"]]]]
                         </span>
                       </pre>
                     </div>
@@ -450,7 +450,7 @@ exports[`QueryResults renders 1`] = `
             tabindex="-1"
           >
             <div
-              style="min-width: 1px; height: 77px;"
+              style="min-width: 1px; height: 75px;"
             />
           </div>
           <div
@@ -503,7 +503,7 @@ exports[`QueryResults renders 1`] = `
                           role="presentation"
                           style="padding-right: .1px;"
                         >
-                          ["monster",["labor",["year","::equals",2],"::any"],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"]]]
+                          ["monster",["labor","year","::equals",2],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"]]]
                         </span>
                       </pre>
                     </div>

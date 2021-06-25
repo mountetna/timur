@@ -10,7 +10,11 @@ import {
 } from '../selectors/query_selector';
 import QuerySimplePathBuilder from './query_simple_path_builder';
 import QueryFilterPathBuilder from './query_filter_path_builder';
-import {injectValueAtPath, shouldInjectFilter} from './query_any_every_helpers';
+import {
+  injectValueAtPath,
+  shouldInjectFilter,
+  nextInjectionPathItem
+} from './query_any_every_helpers';
 
 export class QueryBuilder {
   graph: QueryGraph;
@@ -103,10 +107,9 @@ export class QueryBuilder {
         //   to get [model, [attribute, operator, operand], "::any"]
         // At this point we know we're injecting into a tuple, so
         //   construct the valueInjectionPath that way.
-        let injectionPath = getPath(path, filter.modelName, [])
-          .slice(0, -1)
-          .concat([1]);
-
+        let injectionPath = nextInjectionPathItem(
+          getPath(path, filter.modelName, [])
+        );
         injectValueAtPath(path, injectionPath, result);
         result = path;
       } else {
