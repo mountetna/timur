@@ -68,5 +68,6 @@
       "skipLibCheck": true,                           /* Skip type checking of declaration files. */
       "forceConsistentCasingInFileNames": true        /* Disallow inconsistently-cased references to the same file. */
     },
-    "include": ["lib/client/**/*"],
+    "include": ["lib/client/**/*", "node_modules/etna-js/**/*"],
+    "exclude": ["node_modules/etna-js/**/*.spec.ts"]
   }
