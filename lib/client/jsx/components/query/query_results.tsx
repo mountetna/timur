@@ -157,17 +157,14 @@ const QueryResults = () => {
       .then((allData) => {
         let rowData = formatRowData(allData, columns);
         let matrixMap = rowData.map((row: any) => {
-          return columns.reduce(
-            (acc: MatrixDatum, {label}, i: number) => {
-              return {...acc, [label]: row[i]};
-            },
-            {rowNames: row[0]}
-          );
+          return columns.reduce((acc: MatrixDatum, {label}, i: number) => {
+            return {...acc, [label]: row[i]};
+          }, {});
         }, []);
 
         downloadTSV(
           matrixMap,
-          ['rowNames'].concat(columns.map(({label}) => label)),
+          columns.map(({label}) => label),
           `${state.rootModel}-${new Date().toISOString()}` // at some point include the builder hash?
         );
       })
