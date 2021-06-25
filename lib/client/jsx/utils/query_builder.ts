@@ -3,12 +3,14 @@ import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
 import {QueryGraph} from './query_graph';
 import {Model} from '../models/model_types';
 import {
-  stepIsOneToMany,
   attributeIsFile,
   isMatchingMatrixSlice,
   isMatrixSlice,
   getPath
 } from '../selectors/query_selector';
+import QuerySimplePathBuilder from './query_simple_path_builder';
+import QueryFilterPathBuilder from './query_filter_path_builder';
+import {injectValueAtPath, shouldInjectFilter} from './query_any_every_helpers';
 
 export class QueryBuilder {
   graph: QueryGraph;
@@ -75,13 +77,6 @@ export class QueryBuilder {
     return [this.root, ...this.expandedOperands(this.recordFilters), '::count'];
   }
 
-  injectValueAtPath(array: any[], path: number[], value: any) {
-    let desiredInjectionPath = path.slice(0, -1).concat([1]);
-
-    _.set(array, desiredInjectionPath, value);
-    _.set(array, path.slice(0, -1).concat([2]), '::any');
-  }
-
   expandOperand(filter: QueryFilter, includeModelPath: boolean = true): any[] {
     let result: any[] = [];
 
@@ -102,16 +97,21 @@ export class QueryBuilder {
 
     let path: string[] | undefined = this.pathToModel(filter.modelName, true);
     if (includeModelPath && undefined != path) {
-      if (this.flatten) {
+      if (this.flatten && shouldInjectFilter(filter, path)) {
         // Inject the current [attribute, operator, operand] into
         //   the deepest array, between [model, "::any"]...
         //   to get [model, [attribute, operator, operand], "::any"]
-        let injectionPath = getPath(path, filter.modelName, []);
-        this.injectValueAtPath(path, injectionPath, result);
+        // At this point we know we're injecting into a tuple, so
+        //   construct the valueInjectionPath that way.
+        let injectionPath = getPath(path, filter.modelName, [])
+          .slice(0, -1)
+          .concat([1]);
+
+        injectValueAtPath(path, injectionPath, result);
         result = path;
       } else {
-        // Otherwise, just add the path into the start of
-        //   the array.
+        // Otherwise, just add the path to the start of
+        //   the result.
         result.unshift(...path);
       }
     }
@@ -177,39 +177,26 @@ export class QueryBuilder {
     );
   }
 
-  reducerVerb() {
-    return this.flatten ? '::first' : '::all';
-  }
-
   pathWithModelPredicates(path: string[], forFilter: boolean = false): any[] {
-    let updatedPath: any[] = [];
-    let previousModelName = this.root;
-    let filterAnyPath: number[] = [];
-
-    path.forEach((modelName: string, index: number) => {
-      if (
-        stepIsOneToMany(this.models, previousModelName, modelName) &&
-        forFilter &&
+    // When constructing this path for a filter,
+    //   and flattened, we need to nest any collection
+    //   models.
+    if (forFilter && this.flatten) {
+      const filterBuilder = new QueryFilterPathBuilder(
+        path,
+        this.root,
+        this.models
+      );
+      return filterBuilder.build();
+    } else {
+      const pathBuilder = new QuerySimplePathBuilder(
+        path,
+        this.root,
+        this.models,
         this.flatten
-      ) {
-        let newValue = [modelName, '::any'];
-        if (updatedPath.length === 0) {
-          updatedPath.push(...newValue);
-        } else {
-          // here we'll nest with ::any
-          filterAnyPath.push(index);
-          this.injectValueAtPath(updatedPath, filterAnyPath, newValue);
-        }
-      } else if (stepIsOneToMany(this.models, previousModelName, modelName)) {
-        updatedPath.push(modelName);
-        updatedPath.push(this.reducerVerb());
-      } else {
-        updatedPath.push(modelName);
-      }
-      previousModelName = modelName;
-    });
-
-    return updatedPath;
+      );
+      return pathBuilder.build();
+    }
   }
 
   // Type should be some sort of arbitrarily nested string array,

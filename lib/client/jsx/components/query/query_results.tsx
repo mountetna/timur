@@ -168,7 +168,7 @@ const QueryResults = () => {
         downloadTSV(
           matrixMap,
           ['rowNames'].concat(columns.map(({label}) => label)),
-          'your-query'
+          `${state.rootModel}-${new Date().toISOString()}` // at some point include the builder hash?
         );
       })
       .catch((e) => {

@@ -118,10 +118,10 @@ describe('QueryBuilder', () => {
       'monster',
       [
         '::and',
-        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
+        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
         ['name', '::equals', 'Nemean Lion'],
-        ['labor', ['number', '::equals', 2], '::any'],
-        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any']
+        ['labor', 'number', '::equals', 2],
+        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any']]
       ],
       '::all',
       [
@@ -247,83 +247,190 @@ describe('QueryBuilder', () => {
       'monster',
       [
         '::and',
-        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
+        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
         ['name', '::equals', 'Nemean Lion']
       ],
       '::count'
     ]);
   });
 
-  it('handles any / all for deep paths in filters with some non-branching models', () => {
-    builder.addRootIdentifier(stamp('labor', 'name'));
-    builder.addRecordFilters([
-      {
-        modelName: 'wound',
-        attributeName: 'location',
-        operator: '::equals',
-        operand: 'arm'
-      }
-    ]);
+  describe('handles any / all for', () => {
+    it('deep paths in filters with some non-branching models', () => {
+      builder.addRootIdentifier(stamp('labor', 'name'));
+      builder.addRecordFilters([
+        {
+          modelName: 'wound',
+          attributeName: 'location',
+          operator: '::equals',
+          operand: 'arm'
+        }
+      ]);
 
-    expect(builder.query()).toEqual([
-      'labor',
-      [
+      expect(builder.query()).toEqual([
+        'labor',
+        [
+          'monster',
+          [
+            'victim',
+            ['wound', ['location', '::equals', 'arm'], '::any'],
+            '::any'
+          ]
+        ],
+        '::all',
+        [['name']]
+      ]);
+
+      builder.setFlatten(false);
+
+      expect(builder.query()).toEqual([
+        'labor',
+        [
+          'monster',
+          'victim',
+          '::all',
+          'wound',
+          '::all',
+          'location',
+          '::equals',
+          'arm'
+        ],
+        '::all',
+        [['name']]
+      ]);
+    });
+
+    it('deep paths in filters with branching models only', () => {
+      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRecordFilters([
+        {
+          modelName: 'wound',
+          attributeName: 'location',
+          operator: '::equals',
+          operand: 'arm'
+        }
+      ]);
+
+      expect(builder.query()).toEqual([
         'monster',
         [
           'victim',
           ['wound', ['location', '::equals', 'arm'], '::any'],
           '::any'
         ],
-        '::any'
-      ],
-      '::all',
-      [['name']]
-    ]);
+        '::all',
+        [['name']]
+      ]);
 
-    builder.setFlatten(false);
+      builder.setFlatten(false);
 
-    expect(builder.query()).toEqual([
-      'labor',
-      [
+      expect(builder.query()).toEqual([
         'monster',
-        'victim',
+        ['victim', '::all', 'wound', '::all', 'location', '::equals', 'arm'],
         '::all',
-        'wound',
+        [['name']]
+      ]);
+    });
+
+    it('shallow paths in filters with branching models', () => {
+      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRecordFilters([
+        {
+          modelName: 'victim',
+          attributeName: 'name',
+          operator: '::equals',
+          operand: 'Hercules'
+        }
+      ]);
+
+      expect(builder.query()).toEqual([
+        'monster',
+        ['victim', ['name', '::equals', 'Hercules'], '::any'],
         '::all',
-        'location',
-        '::equals',
-        'arm'
-      ],
-      '::all',
-      [['name']]
-    ]);
-  });
+        [['name']]
+      ]);
 
-  it('handles any / all for deep paths in filters with branching models only', () => {
-    builder.addRootIdentifier(stamp('monster', 'name'));
-    builder.addRecordFilters([
-      {
-        modelName: 'wound',
-        attributeName: 'location',
-        operator: '::equals',
-        operand: 'arm'
-      }
-    ]);
+      builder.setFlatten(false);
 
-    expect(builder.query()).toEqual([
-      'monster',
-      ['victim', ['wound', ['location', '::equals', 'arm'], '::any'], '::any'],
-      '::all',
-      [['name']]
-    ]);
+      expect(builder.query()).toEqual([
+        'monster',
+        ['victim', '::all', 'name', '::equals', 'Hercules'],
+        '::all',
+        [['name']]
+      ]);
+    });
 
-    builder.setFlatten(false);
+    it('paths that go up and down the tree', () => {
+      builder.addRootIdentifier(stamp('prize', 'name'));
+      builder.addRecordFilters([
+        {
+          modelName: 'wound',
+          attributeName: 'location',
+          operator: '::equals',
+          operand: 'arm'
+        }
+      ]);
 
-    expect(builder.query()).toEqual([
-      'monster',
-      ['victim', '::all', 'wound', '::all', 'location', '::equals', 'arm'],
-      '::all',
-      [['name']]
-    ]);
+      expect(builder.query()).toEqual([
+        'prize',
+        [
+          'labor',
+          'monster',
+          [
+            'victim',
+            ['wound', ['location', '::equals', 'arm'], '::any'],
+            '::any'
+          ]
+        ],
+        '::all',
+        [['name']]
+      ]);
+
+      builder.setFlatten(false);
+
+      expect(builder.query()).toEqual([
+        'prize',
+        [
+          'labor',
+          'monster',
+          'victim',
+          '::all',
+          'wound',
+          '::all',
+          'location',
+          '::equals',
+          'arm'
+        ],
+        '::all',
+        [['name']]
+      ]);
+    });
+
+    it('paths that go up the tree', () => {
+      builder.addRootIdentifier(stamp('prize', 'name'));
+      builder.addRecordFilters([
+        {
+          modelName: 'labor',
+          attributeName: 'name',
+          operator: '::in',
+          operand: 'Lion,Hydra'
+        }
+      ]);
+
+      expect(builder.query()).toEqual([
+        'prize',
+        ['labor', 'name', '::in', ['Lion', 'Hydra']],
+        '::all',
+        [['name']]
+      ]);
+
+      builder.setFlatten(false);
+
+      expect(builder.query()).toEqual([
+        'prize',
+        ['labor', 'name', '::in', ['Lion', 'Hydra']],
+        '::all',
+        [['name']]
+      ]);
+    });
   });
 });
