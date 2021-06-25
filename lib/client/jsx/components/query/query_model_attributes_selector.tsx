@@ -122,7 +122,7 @@ const QueryModelAttributeSelector = ({
         );
       }
     },
-    [reduxState]
+    [reduxState, onSelectModel]
   );
 
   function handleRemoveSlice(modelName: string, index: number) {
@@ -140,24 +140,20 @@ const QueryModelAttributeSelector = ({
 
   const {
     matrixModelNames,
-    tableModelNames,
+    collectionModelNames,
     matrixSlices,
-    tableSlices
+    collectionSlices
   } = useSliceMethods(modelValue, updateCounter, setUpdateCounter, removeSlice);
 
   const hasMatrixSlices = matrixModelNames.includes(modelValue);
-  const hasTableSlices = tableModelNames.includes(modelValue);
+  const hasCollectionSlices = collectionModelNames.includes(modelValue);
 
-  const hasSlices = hasMatrixSlices || hasTableSlices;
+  const hasSlices = hasMatrixSlices || hasCollectionSlices;
 
   const id = `${label}-${Math.random()}`;
 
   return (
-    <Grid
-      container
-      alignItems='center'
-      justify='flex-start'
-    >
+    <Grid container alignItems='center' justify='flex-start'>
       <Grid item xs={2}>
         <FormControl className={classes.formControl}>
           <InputLabel shrink id={id}>
@@ -209,7 +205,7 @@ const QueryModelAttributeSelector = ({
                 <QuerySlicePane
                   modelName={modelValue}
                   isMatrix={hasMatrixSlices}
-                  slices={hasMatrixSlices ? matrixSlices : tableSlices}
+                  slices={hasMatrixSlices ? matrixSlices : collectionSlices}
                   handleRemoveSlice={handleRemoveSlice}
                 />
               </Grid>

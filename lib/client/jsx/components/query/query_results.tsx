@@ -59,6 +59,7 @@ const QueryResults = () => {
   let {store} = useContext(ReactReduxContext);
   const invoke = useActionInvoker();
   let reduxState = useReduxState();
+  const classes = useStyles();
 
   const builder = useMemo(() => {
     if (state.rootIdentifier && state.graph && state.graph.initialized) {
@@ -90,7 +91,7 @@ const QueryResults = () => {
     if (!builder) return '';
 
     return builder.query();
-  }, [builder, flattenQuery]);
+  }, [builder]);
 
   const count = useMemo(() => {
     if (!builder) return '';
@@ -120,7 +121,7 @@ const QueryResults = () => {
           invoke(showMessages(error.errors || [error.error] || error));
         });
       });
-  }, [query, count, builder, store.dispatch, pageSize, page]);
+  }, [query, count, store.dispatch, pageSize, page, invoke]);
 
   useEffect(() => {
     // At some point, we can probably cache data and only
@@ -130,9 +131,7 @@ const QueryResults = () => {
       setLastPage(page);
       setLastPageSize(pageSize);
     }
-  }, [page, pageSize, lastPage, lastPageSize]);
-
-  if (!state.rootModel || !state.rootIdentifier) return null;
+  }, [page, pageSize, lastPage, lastPageSize, runQuery]);
 
   function handlePageSizeChange(
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -174,9 +173,9 @@ const QueryResults = () => {
           invoke(showMessages(error.errors || [error.error] || error));
         });
       });
-  }, [query, store.dispatch, columns]);
+  }, [query, store.dispatch, columns, formatRowData, invoke, state.rootModel]);
 
-  const classes = useStyles();
+  if (!state.rootModel || !state.rootIdentifier) return null;
 
   return (
     <Grid container xs={12}>

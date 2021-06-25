@@ -1,12 +1,5 @@
-import React, {
-  useContext,
-  useMemo,
-  useCallback,
-  useEffect,
-  useState
-} from 'react';
+import React, {useCallback} from 'react';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -15,13 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
-
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectTemplate} from 'etna-js/selectors/magma';
-
-import {QueryContext} from '../../contexts/query/query_context';
-
-import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -85,40 +71,19 @@ const QueryModelSelector = ({
   removeModel: () => void;
   canRemove: boolean;
 }) => {
-  const [open, setOpen] = useState(false);
-  // All the slices related to a given model / attribute,
-  //   with the model / attribute as a "label".
-  // Matrices will have modelName + attributeName.
-  const [updateCounter, setUpdateCounter] = useState(0);
-
-  const {removeSlice} = useContext(QueryContext);
   const classes = useStyles();
-
-  let reduxState = useReduxState();
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
       onSelectModel(modelName);
-      if ('' !== modelName) {
-        let template = selectTemplate(reduxState, modelName);
-      }
     },
-    [reduxState]
+    [onSelectModel]
   );
-
-  function handleRemoveSlice(modelName: string, index: number) {
-    removeSlice(modelName, index);
-    setUpdateCounter(updateCounter + 1);
-  }
 
   const id = `${label}-${Math.random()}`;
 
   return (
-    <Grid
-      container
-      alignItems='center'
-      justify='flex-start'
-    >
+    <Grid container alignItems='center' justify='flex-start'>
       <Grid item xs={2}>
         <FormControl className={classes.formControl}>
           <InputLabel shrink id={id}>
