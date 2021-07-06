@@ -22,13 +22,22 @@ const QuerySelectPane = () => {
     }
   }, [state.attributes, state.rootModel, intersectionModels.length]);
 
+  const removeModel = useCallback(
+    (modelName: string) => {
+      setAttributes(modelName, []);
+    },
+    [setAttributes]
+  );
+
   const updateIntersectionModels = useCallback(
     (modelName: string, index: number) => {
+      const previousModelName = intersectionModels[index];
       let updatedModels: string[] = [...intersectionModels];
       updatedModels[index] = modelName;
       setIntersectionModels(updatedModels);
+      if (previousModelName !== modelName) removeModel(previousModelName);
     },
-    [intersectionModels]
+    [intersectionModels, removeModel]
   );
 
   const removeIntersectionModel = useCallback(
@@ -36,9 +45,9 @@ const QuerySelectPane = () => {
       let updatedModels: string[] = [...intersectionModels];
       let removedModelName: string = updatedModels.splice(index, 1)[0];
       setIntersectionModels(updatedModels);
-      setAttributes(removedModelName, []);
+      removeModel(removedModelName);
     },
-    [intersectionModels, setAttributes]
+    [intersectionModels, removeModel]
   );
 
   if (!state.rootModel) return null;

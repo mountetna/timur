@@ -101,7 +101,7 @@ const QueryFilterControl = ({
       }
     }
     return [];
-  }, [filter.modelName, state.attributes]);
+  }, [filter.modelName, state.attributes, reduxState, matrixAttributesOnly]);
 
   const attributeType = useMemo(() => {
     if ('' !== filter.attributeName) {
@@ -122,7 +122,7 @@ const QueryFilterControl = ({
       }
     }
     return 'text';
-  }, [filter.attributeName, filter.modelName, state.attributes]);
+  }, [filter.attributeName, filter.modelName, reduxState]);
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
@@ -133,7 +133,7 @@ const QueryFilterControl = ({
         operand: ''
       });
     },
-    [filter, patchFilter]
+    [patchFilter]
   );
 
   const handleAttributeSelect = useCallback(
@@ -191,7 +191,7 @@ const QueryFilterControl = ({
         operand: attributeType === 'number' ? parseFloat(operand) : operand
       });
     },
-    [filter, patchFilter]
+    [filter, patchFilter, attributeType]
   );
 
   let uniqId = (idType: string): string =>
