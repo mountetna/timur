@@ -40,7 +40,7 @@ const models = {
   }
 };
 
-describe('QueryResults', () => {
+describe('useTableEffects', () => {
   let store;
   const graph = new QueryGraph(models);
 
