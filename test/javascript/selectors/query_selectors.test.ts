@@ -57,25 +57,22 @@ describe('selectMatrixModelNames', () => {
         }
       ]
     };
-    let sliceableModelNames = selectMatrixModelNames(
-      models,
-      selectedAttributes
-    );
+    let matrixModelNames = selectMatrixModelNames(models, selectedAttributes);
 
-    expect(sliceableModelNames).toEqual(['prize']);
+    expect(matrixModelNames).toEqual(['labor']);
 
     selectedAttributes = {
-      labor: [
+      prize: [
         {
-          model_name: 'labor',
-          attribute_name: 'year',
-          display_label: 'labor.year'
+          model_name: 'prize',
+          attribute_name: 'name',
+          display_label: 'prize.name'
         }
       ]
     };
-    sliceableModelNames = selectMatrixModelNames(models, selectedAttributes);
+    matrixModelNames = selectMatrixModelNames(models, selectedAttributes);
 
-    expect(sliceableModelNames).toEqual([]);
+    expect(matrixModelNames).toEqual([]);
   });
 });
 
