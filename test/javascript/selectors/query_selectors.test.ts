@@ -1,5 +1,5 @@
 import {
-  selectSliceableModelNames,
+  selectMatrixModelNames,
   selectMatrixAttributes,
   stepIsOneToMany,
   pathToColumn,
@@ -39,8 +39,8 @@ const models = {
   }
 };
 
-describe('selectSliceableModelNames', () => {
-  it('returns the only table and matrix model names', () => {
+describe('selectMatrixModelNames', () => {
+  it('returns matrix model names', () => {
     let selectedAttributes: {[key: string]: any} = {
       labor: [
         {
@@ -57,12 +57,12 @@ describe('selectSliceableModelNames', () => {
         }
       ]
     };
-    let sliceableModelNames = selectSliceableModelNames(
+    let sliceableModelNames = selectMatrixModelNames(
       models,
       selectedAttributes
     );
 
-    expect(sliceableModelNames).toEqual(['prize', 'labor']);
+    expect(sliceableModelNames).toEqual(['prize']);
 
     selectedAttributes = {
       labor: [
@@ -73,7 +73,7 @@ describe('selectSliceableModelNames', () => {
         }
       ]
     };
-    sliceableModelNames = selectSliceableModelNames(models, selectedAttributes);
+    sliceableModelNames = selectMatrixModelNames(models, selectedAttributes);
 
     expect(sliceableModelNames).toEqual([]);
   });
