@@ -116,22 +116,6 @@ export const selectCollectionModelNames = (
   return [...sliceableModelNames];
 };
 
-export const selectSliceableModelNames = (
-  magmaModels: any,
-  selectedAttributes: {[key: string]: QueryColumn[]}
-): string[] => {
-  // Only return table or matrix models if the user has selected
-  //   attributes from them.
-  // Determine if a model is a table by traversing up
-  //   to its parent model, then seeing the relationship type
-  //   back down to the original model.
-  // Matrices have to be detected from the model-attribute directly.
-  return selectCollectionModelNames(
-    magmaModels,
-    Object.keys(selectedAttributes)
-  ).concat(selectMatrixModelNames(magmaModels, selectedAttributes));
-};
-
 export const getPath = (
   array: any[],
   heading: string,
