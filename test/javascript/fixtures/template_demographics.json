@@ -1,5 +1,5 @@
 {
-  "name": "victim",
+  "name": "demographics",
   "attributes": {
     "created_at": {
       "name": "created_at",
@@ -17,12 +17,12 @@
       "validation": null,
       "attribute_type": "date_time"
     },
-    "monster": {
-      "name": "monster",
-      "attribute_name": "monster",
-      "model_name": "monster",
-      "link_model_name": "monster",
-      "display_name": "Monster",
+    "victim": {
+      "name": "victim",
+      "attribute_name": "victim",
+      "model_name": "victim",
+      "link_model_name": "victim",
+      "display_name": "Victim",
       "restricted": false,
       "read_only": false,
       "hidden": false,
@@ -39,37 +39,17 @@
       "validation": null,
       "attribute_type": "identifier"
     },
-    "country": {
-      "name": "country",
-      "attribute_name": "country",
-      "display_name": "Country",
+    "value": {
+      "name": "value",
+      "attribute_name": "value",
+      "display_name": "Value",
       "restricted": false,
       "read_only": false,
       "hidden": false,
       "validation": null,
       "attribute_type": "string"
-    },
-    "wound": {
-      "name": "wound",
-      "attribute_name": "wound",
-      "display_name": "Wound",
-      "restricted": false,
-      "read_only": false,
-      "hidden": false,
-      "validation": null,
-      "attribute_type": "collection"
-    },
-    "demographics": {
-      "name": "demographics",
-      "attribute_name": "demographics",
-      "display_name": "Demographics",
-      "restricted": false,
-      "read_only": false,
-      "hidden": false,
-      "validation": null,
-      "attribute_type": "table"
     }
   },
   "identifier": "name",
-  "parent": "monster"
+  "parent": "victim"
 }

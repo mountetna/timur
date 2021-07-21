@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 import {Attribute, Model} from '../models/model_types';
 import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
+import {QueryGraph} from '../utils/query_graph';
 
 export const modelHasAttribute = (
   magmaModels: {[key: string]: Model},
@@ -82,27 +83,37 @@ export const selectMatrixModelNames = (
 };
 
 export const selectCollectionModelNames = (
-  magmaModels: any,
-  modelNames: string[]
+  graph: QueryGraph,
+  rootModelName: string,
+  selectedAttributeModelNames: string[]
 ): string[] => {
-  return modelNames.filter((modelName: string) => {
-    let attributes: {[key: string]: {[key: string]: string}} =
-      magmaModels[modelName].template.attributes;
+  let sliceableModelNames: Set<string> = new Set();
 
-    let parentModel: {[key: string]: string} | undefined = Object.values(
-      attributes
-    ).find((attr: {[key: string]: string}) => attr.attribute_type === 'parent');
+  const fullParentage: string[] = graph.graph.fullParentage(rootModelName);
 
-    // Because we aren't traversing through project,
-    //   any collection of project should be treated
-    //   as a non-collection.
-    if (!parentModel || parentModel.attribute_name === 'project') return false;
-
-    return attributeIs(magmaModels, parentModel.attribute_name, modelName, [
-      'table',
-      'collection'
-    ]);
+  graph.allPaths(rootModelName).forEach((path: string[]) => {
+    for (let i = 0; i < path.length - 1; i++) {
+      let current = path[i];
+      let next = path[i + 1];
+      if (current === rootModelName || next === rootModelName) {
+        continue;
+      } else if (
+        i === 0 &&
+        graph.stepIsOneToMany(rootModelName, current) &&
+        selectedAttributeModelNames.includes(current)
+      ) {
+        sliceableModelNames.add(current);
+      } else if (
+        graph.stepIsOneToMany(current, next) &&
+        !fullParentage.includes(next) &&
+        selectedAttributeModelNames.includes(next)
+      ) {
+        sliceableModelNames.add(next);
+      }
+    }
   });
+
+  return [...sliceableModelNames];
 };
 
 export const selectSliceableModelNames = (

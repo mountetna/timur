@@ -57,14 +57,6 @@ const useSliceMethods = (
     };
   }, [state.attributes, state.rootModel, state.rootIdentifier]);
 
-  const nonRootModelNames = useMemo(() => {
-    if (!state.rootIdentifier || !state.rootModel) return [];
-
-    return Object.keys(state.attributes).filter(
-      (modelName) => modelName !== state.rootModel
-    );
-  }, [state.attributes, state.rootModel, state.rootIdentifier]);
-
   const matrixModelNames = useMemo(() => {
     if (!state.rootModel) return [];
 
@@ -78,10 +70,11 @@ const useSliceMethods = (
     if (!state.rootModel) return [];
 
     return selectCollectionModelNames(
-      selectModels(reduxState),
-      nonRootModelNames
+      state.graph,
+      state.rootModel,
+      Object.keys(state.attributes)
     );
-  }, [reduxState, state.rootModel, nonRootModelNames]);
+  }, [state.graph, state.rootModel, state.attributes]);
 
   const matrixSlices = useMemo(() => {
     if (!state.slices[modelName] || !matrixModelNames.includes(modelName))

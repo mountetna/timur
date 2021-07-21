@@ -37,6 +37,18 @@ const models = {
     revisions: {},
     views: {},
     template: require('../../fixtures/template_project.json')
+  },
+  demographics: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../../fixtures/template_demographics.json')
+  },
+  wound: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../../fixtures/template_wound.json')
   }
 };
 
@@ -65,6 +77,13 @@ describe('useSliceMethods', () => {
             model_name: 'victim',
             attribute_name: 'name',
             display_label: 'victim.name'
+          }
+        ],
+        prize: [
+          {
+            model_name: 'prize',
+            attribute_name: 'value',
+            display_label: 'prize.value'
           }
         ]
       }
@@ -112,6 +131,48 @@ describe('useSliceMethods', () => {
     });
 
     expect(result.current.collectionModelNames).toEqual(['prize']);
+  });
+
+  it('does not include collections if in the full parentage of root', async () => {
+    store = mockStore({
+      magma: {models},
+      janus: {projects: require('../../fixtures/project_names.json')}
+    });
+
+    let mockState = {
+      ...defaultContext.state,
+      graph,
+      rootModel: 'wound',
+      rootIdentifier: {
+        model_name: 'wound',
+        attribute_name: 'name',
+        display_label: 'wound.name'
+      },
+      attributes: {
+        victim: [
+          {
+            model_name: 'victim',
+            attribute_name: 'name',
+            display_label: 'victim.name'
+          }
+        ],
+        monster: [
+          {
+            model_name: 'monster',
+            attribute_name: 'name',
+            display_label: 'monster.name'
+          }
+        ]
+      }
+    };
+
+    const data = {answer: [], format: [], type: 'Mock'};
+
+    const {result} = renderHook(() => useSliceMethods(data, true), {
+      wrapper: querySpecWrapper(mockState, store)
+    });
+
+    expect(result.current.collectionModelNames).toEqual([]);
   });
 
   it('includes models with matrices even if is root model', async () => {
