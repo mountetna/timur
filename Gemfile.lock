@@ -1,7 +1,7 @@
 PATH
   remote: /etna
   specs:
-    etna (0.1.38)
+    etna (0.1.39)
       concurrent-ruby
       jwt
       multipart-post
@@ -134,4 +134,4 @@ DEPENDENCIES
   yabeda-puma-plugin
 
 BUNDLED WITH
-   2.2.23
+   2.2.24
