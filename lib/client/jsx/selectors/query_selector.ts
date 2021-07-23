@@ -95,7 +95,7 @@ export const selectCollectionModelNames = (
     for (let i = 0; i < path.length - 1; i++) {
       let current = path[i];
       let next = path[i + 1];
-      if (current === rootModelName || next === rootModelName) {
+      if ((current === rootModelName && !next) || next === rootModelName) {
         continue;
       } else if (
         i === 0 &&

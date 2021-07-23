@@ -147,7 +147,7 @@ const QueryModelAttributeSelector = ({
 
   const hasMatrixSlices = matrixModelNames.includes(modelValue);
   const hasCollectionSlices = collectionModelNames.includes(modelValue);
-
+  console.log('sliceable things', matrixModelNames, collectionModelNames);
   const hasSlices = hasMatrixSlices || hasCollectionSlices;
 
   const id = `${label}-${Math.random()}`;

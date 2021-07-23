@@ -49,6 +49,12 @@ const models = {
     revisions: {},
     views: {},
     template: require('../../fixtures/template_wound.json')
+  },
+  aspect: {
+    documents: {},
+    revisions: {},
+    views: {},
+    template: require('../../fixtures/template_aspect.json')
   }
 };
 
@@ -120,6 +126,13 @@ describe('useSliceMethods', () => {
             attribute_name: 'name',
             display_label: 'prize.name'
           }
+        ],
+        aspect: [
+          {
+            model_name: 'aspect',
+            attribute_name: 'name',
+            display_label: 'aspect.name'
+          }
         ]
       }
     };
@@ -130,7 +143,7 @@ describe('useSliceMethods', () => {
       wrapper: querySpecWrapper(mockState, store)
     });
 
-    expect(result.current.collectionModelNames).toEqual(['prize']);
+    expect(result.current.collectionModelNames).toEqual(['aspect', 'prize']);
   });
 
   it('does not include collections if in the full parentage of root', async () => {

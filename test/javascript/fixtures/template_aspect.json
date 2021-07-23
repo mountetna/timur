@@ -1,0 +1,45 @@
+{
+  "name": "aspect",
+  "attributes": {
+    "created_at": {
+      "name": "created_at",
+      "attribute_name": "created_at",
+      "display_name": "Created At",
+      "hidden": true,
+      "validation": null,
+      "attribute_type": "date_time"
+    },
+    "updated_at": {
+      "name": "updated_at",
+      "attribute_name": "updated_at",
+      "display_name": "Updated At",
+      "hidden": true,
+      "validation": null,
+      "attribute_type": "date_time"
+    },
+    "monster": {
+      "name": "monster",
+      "attribute_name": "monster",
+      "model_name": "monster",
+      "link_model_name": "monster",
+      "display_name": "Monster",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "parent"
+    },
+    "name": {
+      "name": "name",
+      "attribute_name": "name",
+      "display_name": "Name",
+      "restricted": false,
+      "read_only": false,
+      "hidden": false,
+      "validation": null,
+      "attribute_type": "identifier"
+    }
+  },
+  "identifier": "name",
+  "parent": "monster"
+}
