@@ -95,6 +95,8 @@ export class QueryBuilder {
       let tmpOperator = result[length - 1];
       result[length - 1] = result[length - 2];
       result[length - 2] = tmpOperator;
+    } else if (['::true', '::false', '::untrue'].includes(filter.operator)) {
+      // ignore operand
     } else {
       result.push(filter.operand);
     }
