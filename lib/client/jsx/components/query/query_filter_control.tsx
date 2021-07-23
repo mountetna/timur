@@ -116,6 +116,7 @@ const QueryFilterControl = ({
           return 'date';
         case 'integer':
         case 'float':
+        case 'number':
           return 'number';
         default:
           return 'text';
