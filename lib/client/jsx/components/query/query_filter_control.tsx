@@ -167,8 +167,14 @@ const QueryFilterControl = ({
   const noOperandOperators: string[] = ['::has', '::lacks'];
 
   const magmifyOperator = useCallback(
-    (operator: string) => operatorOptions[operator],
-    [operatorOptions]
+    (operator: string) => {
+      if (attributeType === 'number' && operator === 'Equals') {
+        return '::=';
+      }
+
+      return operatorOptions[operator];
+    },
+    [operatorOptions, attributeType]
   );
 
   const prettifyOperator = useCallback(
