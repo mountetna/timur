@@ -30,6 +30,7 @@ import {
   selectMatrixAttributes
 } from '../../selectors/query_selector';
 import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
+import FilterOperator from './query_filter_operator';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -120,12 +121,18 @@ const QueryFilterControl = ({
           return 'number';
         case 'boolean':
           return 'boolean';
+        case 'matrix':
+          return 'matrix';
         default:
           return 'text';
       }
     }
     return 'text';
   }, [filter.attributeName, filter.modelName, reduxState]);
+
+  const filterOperator = useMemo(() => {
+    return new FilterOperator(attributeType, filter.operator);
+  }, [attributeType, filter.operator]);
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
@@ -148,68 +155,23 @@ const QueryFilterControl = ({
     [filter, patchFilter]
   );
 
-  let operatorOptions: {[key: string]: string};
-
-  if (matrixAttributesOnly) {
-    operatorOptions = {
-      Slice: '::slice'
-    };
-  } else {
-    operatorOptions = {
-      Equals: '::equals',
-      Contains: '::matches',
-      In: '::in',
-      'Less than': '::<',
-      'Greater than': '::>',
-      'Is present': '::has',
-      'Is missing': '::lacks',
-      'Is true': '::true',
-      'Is false': '::false',
-      'Is untrue': '::untrue'
-    };
-  }
-
-  const noOperandOperators: string[] = [
-    '::has',
-    '::lacks',
-    '::true',
-    '::false',
-    '::untrue'
-  ];
-
-  const magmifyOperator = useCallback(
-    (operator: string) => {
-      if (attributeType === 'number' && operator === 'Equals') {
-        return '::=';
-      }
-
-      return operatorOptions[operator];
-    },
-    [operatorOptions, attributeType]
-  );
-
-  const prettifyOperator = useCallback(
-    (operator: string) => _.invert(operatorOptions)[operator],
-    [operatorOptions]
-  );
-
   const handleOperatorSelect = useCallback(
     (operator: string) =>
       patchFilter({
         ...filter,
-        operator: magmifyOperator(operator)
+        operator: filterOperator.magmify(operator)
       }),
-    [filter, patchFilter, magmifyOperator]
+    [filter, patchFilter, filterOperator]
   );
 
   let handleOperandChange = useCallback(
     (operand: string) => {
       patchFilter({
         ...filter,
-        operand: attributeType === 'number' ? parseFloat(operand) : operand
+        operand: filterOperator.formatOperand(operand)
       });
     },
-    [filter, patchFilter, attributeType]
+    [filter, patchFilter, filterOperator]
   );
 
   let uniqId = (idType: string): string =>
@@ -262,11 +224,11 @@ const QueryFilterControl = ({
           <InputLabel id={uniqId('operator')}>Operator</InputLabel>
           <Select
             labelId={uniqId('operator')}
-            value={prettifyOperator(filter.operator) || ''}
+            value={filterOperator.prettify() || ''}
             onChange={(e) => handleOperatorSelect(e.target.value as string)}
             displayEmpty
           >
-            {Object.keys(operatorOptions)
+            {Object.keys(filterOperator.options())
               .sort()
               .map((operator: string, index: number) => (
                 <MenuItem key={index} value={operator}>
@@ -277,7 +239,7 @@ const QueryFilterControl = ({
         </FormControl>
       </Grid>
       <Grid item xs={3}>
-        {noOperandOperators.includes(filter.operator) ? null : (
+        {filterOperator.hasOperand() ? (
           <FormControl className={classes.textInput}>
             <TextField
               id={uniqId('operand')}
@@ -286,7 +248,7 @@ const QueryFilterControl = ({
               onChange={(e) => handleOperandChange(e.target.value as string)}
             />
           </FormControl>
-        )}
+        ) : null}
       </Grid>
       <Grid item xs={1}>
         <Tooltip title='Remove filter' aria-label='remove filter'>
