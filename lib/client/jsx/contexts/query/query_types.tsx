@@ -7,8 +7,12 @@ export interface QueryBase {
 
 export interface QuerySlice extends QueryBase {}
 
+export interface QueryFilterAnyMap {
+  [modelName: string]: boolean;
+}
+
 export interface QueryFilter extends QueryBase {
-  anyMap: {[key: string]: boolean};
+  anyMap: QueryFilterAnyMap;
 }
 
 export interface QueryColumn {

@@ -17,7 +17,6 @@ import {
 } from '../selectors/query_selector';
 import {
   injectValueAtPath,
-  shouldInjectFilter,
   nextInjectionPathItem
 } from './query_any_every_helpers';
 
@@ -86,47 +85,46 @@ export class QueryBuilder {
     return [this.root, ...this.expandedOperands(this.recordFilters), '::count'];
   }
 
-  expandOperand(filter: QueryBase, includeModelPath: boolean = true): any[] {
+  serializeQueryBase(queryBase: QueryBase): any[] {
     let result: any[] = [];
 
-    result.push(filter.attributeName);
-    result.push(filter.operator);
+    result.push(queryBase.attributeName);
+    result.push(queryBase.operator);
 
-    if (['::in', '::slice'].includes(filter.operator)) {
-      result.push((filter.operand as string).split(','));
-    } else if (['::has', '::lacks'].includes(filter.operator)) {
+    if (['::in', '::slice'].includes(queryBase.operator)) {
+      result.push((queryBase.operand as string).split(','));
+    } else if (['::has', '::lacks'].includes(queryBase.operator)) {
       // invert the model and attribute names, ignore operand
       let length = result.length;
       let tmpOperator = result[length - 1];
       result[length - 1] = result[length - 2];
       result[length - 2] = tmpOperator;
-    } else if (['::true', '::false', '::untrue'].includes(filter.operator)) {
+    } else if (['::true', '::false', '::untrue'].includes(queryBase.operator)) {
       // ignore operand
     } else {
-      result.push(filter.operand);
+      result.push(queryBase.operand);
     }
 
-    let path: string[] | undefined = this.pathToModelWithPredicates(
-      filter.modelName,
-      true
+    return result;
+  }
+
+  filterWithPath(filter: QueryBase, includeModelPath: boolean = true): any[] {
+    let result: any[] = this.serializeQueryBase(filter);
+
+    let path: string[] | undefined = this.filterPathWithModelPredicates(
+      filter as QueryFilter
     );
     if (includeModelPath && undefined != path) {
-      if (shouldInjectFilter(filter, path)) {
-        // Inject the current [attribute, operator, operand] into
-        //   the deepest array, between [model, "::any"]...
-        //   to get [model, [attribute, operator, operand], "::any"]
-        // At this point we know we're injecting into a tuple, so
-        //   construct the valueInjectionPath that way.
-        let injectionPath = nextInjectionPathItem(
-          getPath(path, filter.modelName, [])
-        );
-        injectValueAtPath(path, injectionPath, result);
-        result = path;
-      } else {
-        // Otherwise, just add the path to the start of
-        //   the result.
-        result.unshift(...path);
-      }
+      // Inject the current [attribute, operator, operand] into
+      //   the deepest array, between [model, "::any"]...
+      //   to get [model, [attribute, operator, operand], "::any"]
+      // At this point we know we're injecting into a tuple, so
+      //   construct the valueInjectionPath that way.
+      let injectionPath = nextInjectionPathItem(
+        getPath(path, filter.modelName, [])
+      );
+      injectValueAtPath(path, injectionPath, result);
+      result = path;
     }
 
     return result;
@@ -140,7 +138,7 @@ export class QueryBuilder {
       let orFilters: any[] = ['::or'];
 
       filters.forEach((filter, index: number) => {
-        let expandedFilter = this.expandOperand(
+        let expandedFilter = this.filterWithPath(
           filter,
           this.root !== filter.modelName
         );
@@ -157,45 +155,44 @@ export class QueryBuilder {
     } else if (filters.length > 1) {
       andFilters = andFilters.concat(
         filters.map((filter) =>
-          this.expandOperand(filter, this.root !== filter.modelName)
+          this.filterWithPath(filter, this.root !== filter.modelName)
         )
       );
       expandedFilters = [andFilters];
     } else if (filters.length > 0) {
       expandedFilters = filters.map((filter) =>
-        this.expandOperand(filter, this.root !== filter.modelName)
+        this.filterWithPath(filter, this.root !== filter.modelName)
       );
     }
     return expandedFilters;
   }
 
-  pathToModelWithPredicates(
-    targetModelName: string,
-    forFilter: boolean = false
-  ): any[] | undefined {
-    const pathWithoutRoot = this.graph.shortestPath(this.root, targetModelName);
+  filterPathWithModelPredicates(filter: QueryFilter): any[] | undefined {
+    const pathWithoutRoot = this.graph.shortestPath(
+      this.root,
+      filter.modelName
+    );
 
     if (!pathWithoutRoot) return;
 
-    return forFilter
-      ? this.filterPathWithModelPredicates(pathWithoutRoot)
-      : this.slicePathWithModelPredicates(pathWithoutRoot);
-  }
-
-  filterPathWithModelPredicates(path: string[]): any[] {
     // When constructing this path for a filter,
     //   we need to nest any collection models.
     const filterBuilder = new QueryFilterPathBuilder(
-      path,
+      pathWithoutRoot,
       this.root,
-      this.models
+      this.models,
+      filter.anyMap
     );
     return filterBuilder.build();
   }
 
-  slicePathWithModelPredicates(path: string[]): any[] {
+  slicePathWithModelPredicates(targetModelName: string): any[] | undefined {
+    const pathWithoutRoot = this.graph.shortestPath(this.root, targetModelName);
+
+    if (!pathWithoutRoot) return;
+
     const pathBuilder = new QuerySimplePathBuilder(
-      path,
+      pathWithoutRoot,
       this.root,
       this.models,
       this.flatten
@@ -227,7 +224,7 @@ export class QueryBuilder {
       ) => {
         if (modelName === this.root) return acc;
 
-        let path = this.pathToModelWithPredicates(modelName);
+        let path = this.slicePathWithModelPredicates(modelName);
 
         if (!path) return acc;
 
@@ -264,7 +261,7 @@ export class QueryBuilder {
       if (isMatchingMatrixSlice(matchingSlice, attribute)) {
         // For matrices (i.e. ::slice), we'll construct it
         //   a little differently.
-        predicate = predicate.concat(this.expandOperand(matchingSlice, false));
+        predicate = predicate.concat(this.serializeQueryBase(matchingSlice));
         // attribute name already
         // included as part of the expanded operand
         includeAttributeName = false;
@@ -275,7 +272,7 @@ export class QueryBuilder {
         predicate.splice(
           predicate.length - 1,
           0,
-          this.expandOperand(matchingSlice, false)
+          this.serializeQueryBase(matchingSlice)
         );
       }
     });

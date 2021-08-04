@@ -2,20 +2,24 @@ import * as _ from 'lodash';
 import {Model} from '../models/model_types';
 import {stepIsOneToMany} from '../selectors/query_selector';
 import {injectValueAtPath} from './query_any_every_helpers';
+import {QueryFilterAnyMap} from '../contexts/query/query_types';
 
 export default class QueryFilterPathBuilder {
   path: string[];
   models: {[key: string]: Model};
   rootModelName: string;
+  anyMap: QueryFilterAnyMap;
 
   constructor(
     path: string[],
     rootModelName: string,
-    models: {[key: string]: Model}
+    models: {[key: string]: Model},
+    anyMap: QueryFilterAnyMap
   ) {
     this.path = path;
     this.models = models;
     this.rootModelName = rootModelName;
+    this.anyMap = anyMap;
   }
 
   build(): any[] {
@@ -26,7 +30,10 @@ export default class QueryFilterPathBuilder {
 
     this.path.forEach((modelName: string) => {
       if (stepIsOneToMany(this.models, previousModelName, modelName)) {
-        let newValue = [modelName, '::any'];
+        let newValue = [
+          modelName,
+          this.anyMap[modelName] ? '::any' : '::every'
+        ];
         if (updatedPath.length === 0) {
           updatedPath.push(...newValue);
         } else {

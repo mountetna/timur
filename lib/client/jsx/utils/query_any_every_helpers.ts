@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 
-import {QueryBase} from '../contexts/query/query_types';
-import {getPath} from '../selectors/query_selector';
+const anyOrEvery = ['::any', '::every'];
 
 export const nextInjectionPathItem = (injectionPath: number[]) => {
   let nextItemPath = [...injectionPath];
@@ -17,14 +16,14 @@ export const injectValueAtPath = (
   value: any
 ) => {
   let currentValue = _.get(array, valueInjectionPath);
-  if ('::any' === currentValue) {
+  if (anyOrEvery.includes(currentValue)) {
     _.set(array, valueInjectionPath, value);
 
-    // We create a new injection path to inject a final "::any"
+    // We create a new injection path to inject a final "::any" or "::every"
     //   after the value.
     let anyInjectionPath = nextInjectionPathItem(valueInjectionPath);
 
-    _.set(array, anyInjectionPath, '::any');
+    _.set(array, anyInjectionPath, currentValue);
 
     return true;
   } else {
@@ -41,27 +40,4 @@ export const injectValueAtPath = (
 
     return false;
   }
-};
-
-const isModelWithAny = (
-  path: any[],
-  injectionPath: number[],
-  filter: QueryBase
-) => {
-  let nextItemPath = nextInjectionPathItem(injectionPath);
-
-  return (
-    _.get(path, injectionPath.join('.')) === filter.modelName &&
-    _.get(path, nextItemPath.join('.')) === '::any'
-  );
-};
-
-export const shouldInjectFilter = (filter: QueryBase, path: any[]) => {
-  // Should only inject data if the final array
-  //   for the filter.modelName is an array with [modelName, '::any']
-  // Otherwise no injection.
-  let injectionPath = getPath(path, filter.modelName, []);
-  if (isModelWithAny(path, injectionPath, filter)) return true;
-
-  return false;
 };
