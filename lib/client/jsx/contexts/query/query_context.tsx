@@ -1,6 +1,6 @@
 import React, {useState, createContext, useCallback} from 'react';
 
-import {QueryFilter, QueryColumn} from './query_types';
+import {QueryFilter, QueryColumn, QuerySlice} from './query_types';
 
 import {QueryGraph} from '../../utils/query_graph';
 
@@ -12,7 +12,7 @@ const defaultState = {
   rootIdentifier: {} as QueryColumn | null,
   recordFilters: [] as QueryFilter[],
   orRecordFilterIndices: [] as number[],
-  slices: {} as {[key: string]: QueryFilter[]},
+  slices: {} as {[key: string]: QuerySlice[]},
   graph: {} as QueryGraph
 };
 
@@ -23,9 +23,9 @@ export const defaultContext = {
   removeRecordFilter: (index: number) => {},
   patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
   setOrRecordFilterIndices: (indices: number[]) => {},
-  addSlice: (slice: QueryFilter) => {},
+  addSlice: (slice: QuerySlice) => {},
   removeSlice: (modelName: string, index: number) => {},
-  patchSlice: (index: number, slice: QueryFilter) => {},
+  patchSlice: (index: number, slice: QuerySlice) => {},
   setRootModel: (
     model_name: string | null,
     model_identifier: QueryColumn | null
@@ -108,7 +108,7 @@ export const QueryProvider = (
   );
 
   const addSlice = useCallback(
-    (slice: QueryFilter) => {
+    (slice: QuerySlice) => {
       setState({
         ...state,
         slices: {
@@ -138,7 +138,7 @@ export const QueryProvider = (
   );
 
   const patchSlice = useCallback(
-    (index: number, slice: QueryFilter) => {
+    (index: number, slice: QuerySlice) => {
       let updatedSlices = [...state.slices[slice.modelName]];
       updatedSlices[index] = slice;
       setState({

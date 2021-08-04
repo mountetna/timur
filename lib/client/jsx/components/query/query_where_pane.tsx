@@ -2,18 +2,14 @@ import React, {useMemo, useContext, useState, useCallback} from 'react';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
-import {QueryFilter} from '../../contexts/query/query_types';
+import {QueryFilter, QuerySlice} from '../../contexts/query/query_types';
 import QueryClause from './query_clause';
+import QueryAnyEverySelectorList from './query_any_every_selector_list';
 
 const QueryWherePane = () => {
   // Use an update counter to get the child components
@@ -35,13 +31,47 @@ const QueryWherePane = () => {
       modelName: '',
       attributeName: '',
       operator: '',
-      operand: ''
+      operand: '',
+      anyMap: {}
     });
   }
 
-  function handlePatchFilter(index: number, filter: QueryFilter) {
-    patchRecordFilter(index, filter);
-  }
+  const handlePatchFilter = useCallback(
+    (
+      index: number,
+      updatedFilter: QueryFilter,
+      originalFilter: QueryFilter
+    ) => {
+      if (
+        state.rootModel &&
+        updatedFilter.modelName !== originalFilter.modelName
+      ) {
+        let modelsInPath = state.graph.shortestPath(
+          state.rootModel,
+          updatedFilter.modelName
+        );
+        let previousModelName = state.rootModel;
+        let selectableModels: string[] = [];
+
+        modelsInPath?.forEach((modelName) => {
+          if (state.graph.stepIsOneToMany(previousModelName, modelName)) {
+            selectableModels.push(modelName);
+          }
+          previousModelName = modelName;
+        });
+
+        updatedFilter.anyMap = selectableModels.reduce(
+          (acc: {[key: string]: boolean}, modelName: string) => {
+            acc[modelName] = true;
+            return acc;
+          },
+          {}
+        );
+      }
+      patchRecordFilter(index, updatedFilter);
+    },
+    [patchRecordFilter, state.rootModel, state.graph]
+  );
 
   function handleRemoveFilter(index: number) {
     removeRecordFilter(index);
@@ -57,7 +87,7 @@ const QueryWherePane = () => {
 
       setOrRecordFilterIndices(copy);
     },
-    [state, state.orRecordFilterIndices]
+    [state.orRecordFilterIndices, setOrRecordFilterIndices]
   );
 
   const modelNames = useMemo(() => {
@@ -70,32 +100,35 @@ const QueryWherePane = () => {
 
   return (
     <QueryClause title='Where'>
-        {state.recordFilters.map((filter: QueryFilter, index: number) => (
-          <Grid key={index} container alignItems='center' justify='center'>
-            <Grid item xs={1}>
-              <Checkbox
-                checked={state.orRecordFilterIndices.includes(index)}
-                color='primary'
-                onChange={(e, checked) => handleChangeOrFilters(index)}
-                inputProps={{'aria-label': 'secondary checkbox'}}
-              />
-            </Grid>
-            <Grid item container xs={11}>
-              <QueryFilterControl
-                key={`${index}-${updateCounter}`}
-                filter={filter}
-                modelNames={modelNames}
-                patchFilter={(updatedFilter: QueryFilter) =>
-                  handlePatchFilter(index, updatedFilter)
-                }
-                removeFilter={() => handleRemoveFilter(index)}
-              />
-            </Grid>
+      {state.recordFilters.map((filter: QueryFilter, index: number) => (
+        <Grid key={index} container alignItems='center' justify='center'>
+          <Grid item xs={1}>
+            <Checkbox
+              checked={state.orRecordFilterIndices.includes(index)}
+              color='primary'
+              onChange={(e, checked) => handleChangeOrFilters(index)}
+              inputProps={{'aria-label': 'secondary checkbox'}}
+            />
           </Grid>
-        ))}
-        <Button onClick={addNewRecordFilter} startIcon={<AddIcon />}>
-          Filter
-        </Button>
+          <Grid item xs={3}>
+            <QueryAnyEverySelectorList filter={filter} index={index} />
+          </Grid>
+          <Grid item container xs={8}>
+            <QueryFilterControl
+              key={`${index}-${updateCounter}`}
+              filter={filter}
+              modelNames={modelNames}
+              patchFilter={(updatedFilter: QueryFilter | QuerySlice) =>
+                handlePatchFilter(index, updatedFilter as QueryFilter, filter)
+              }
+              removeFilter={() => handleRemoveFilter(index)}
+            />
+          </Grid>
+        </Grid>
+      ))}
+      <Button onClick={addNewRecordFilter} startIcon={<AddIcon />}>
+        Filter
+      </Button>
     </QueryClause>
   );
 };

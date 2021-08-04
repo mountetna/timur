@@ -3,7 +3,7 @@ import React, {useMemo, useCallback, useContext} from 'react';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectModels} from 'etna-js/selectors/magma';
 import {QueryContext} from '../../contexts/query/query_context';
-import {QueryFilter} from '../../contexts/query/query_types';
+import {QuerySlice} from '../../contexts/query/query_types';
 import {
   selectMatrixModelNames,
   selectCollectionModelNames,
@@ -32,7 +32,7 @@ const useSliceMethods = (
   );
 
   const handlePatchSlice = useCallback(
-    (index: number, filter: QueryFilter) => {
+    (index: number, filter: QuerySlice) => {
       patchSlice(index, filter);
     },
     [patchSlice]

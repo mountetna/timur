@@ -1,7 +1,11 @@
 import * as _ from 'lodash';
 
 import {Attribute, Model} from '../models/model_types';
-import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
+import {
+  QueryColumn,
+  QueryFilter,
+  QuerySlice
+} from '../contexts/query/query_types';
 import {QueryGraph} from '../utils/query_graph';
 
 export const modelHasAttribute = (
@@ -196,11 +200,11 @@ export const attributeIsFile = (
   ]);
 };
 
-export const isMatrixSlice = (slice: QueryFilter) =>
+export const isMatrixSlice = (slice: QuerySlice) =>
   '::slice' === slice.operator;
 
 export const isMatchingMatrixSlice = (
-  slice: QueryFilter,
+  slice: QuerySlice,
   attribute: QueryColumn
 ) => {
   return (
@@ -211,7 +215,7 @@ export const isMatchingMatrixSlice = (
 };
 
 export const hasMatrixSlice = (
-  slices: QueryFilter[],
+  slices: QuerySlice[],
   attribute: QueryColumn
 ) => {
   return slices.some((slice) => isMatchingMatrixSlice(slice, attribute));

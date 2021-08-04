@@ -1,15 +1,20 @@
 import * as _ from 'lodash';
-import {QueryColumn, QueryFilter} from '../contexts/query/query_types';
+import {
+  QueryColumn,
+  QueryFilter,
+  QuerySlice,
+  QueryBase
+} from '../contexts/query/query_types';
 import {QueryGraph} from './query_graph';
 import {Model} from '../models/model_types';
+import QuerySimplePathBuilder from './query_simple_path_builder';
+import QueryFilterPathBuilder from './query_filter_path_builder';
 import {
   attributeIsFile,
   isMatchingMatrixSlice,
   isMatrixSlice,
   getPath
 } from '../selectors/query_selector';
-import QuerySimplePathBuilder from './query_simple_path_builder';
-import QueryFilterPathBuilder from './query_filter_path_builder';
 import {
   injectValueAtPath,
   shouldInjectFilter,
@@ -20,7 +25,7 @@ export class QueryBuilder {
   graph: QueryGraph;
   models: {[key: string]: Model};
   recordFilters: QueryFilter[] = [];
-  slices: {[key: string]: QueryFilter[]} = {};
+  slices: {[key: string]: QuerySlice[]} = {};
   attributes: {[key: string]: QueryColumn[]} = {};
   root: string = '';
   flatten: boolean = true;
@@ -56,7 +61,7 @@ export class QueryBuilder {
     this.recordFilters = recordFilters;
   }
 
-  addSlices(slices: {[key: string]: QueryFilter[]}) {
+  addSlices(slices: {[key: string]: QuerySlice[]}) {
     this.slices = slices;
   }
 
@@ -81,7 +86,7 @@ export class QueryBuilder {
     return [this.root, ...this.expandedOperands(this.recordFilters), '::count'];
   }
 
-  expandOperand(filter: QueryFilter, includeModelPath: boolean = true): any[] {
+  expandOperand(filter: QueryBase, includeModelPath: boolean = true): any[] {
     let result: any[] = [];
 
     result.push(filter.attributeName);
@@ -101,9 +106,12 @@ export class QueryBuilder {
       result.push(filter.operand);
     }
 
-    let path: string[] | undefined = this.pathToModel(filter.modelName, true);
+    let path: string[] | undefined = this.pathToModelWithPredicates(
+      filter.modelName,
+      true
+    );
     if (includeModelPath && undefined != path) {
-      if (this.flatten && shouldInjectFilter(filter, path)) {
+      if (shouldInjectFilter(filter, path)) {
         // Inject the current [attribute, operator, operand] into
         //   the deepest array, between [model, "::any"]...
         //   to get [model, [attribute, operator, operand], "::any"]
@@ -161,47 +169,38 @@ export class QueryBuilder {
     return expandedFilters;
   }
 
-  pathToModel(
-    targetModel: string,
+  pathToModelWithPredicates(
+    targetModelName: string,
     forFilter: boolean = false
-  ): string[] | undefined {
-    let path = this.graph
-      .allPaths(this.root)
-      .find((potentialPath: string[]) => potentialPath.includes(targetModel));
+  ): any[] | undefined {
+    const pathWithoutRoot = this.graph.shortestPath(this.root, targetModelName);
 
-    if (!path) return;
+    if (!pathWithoutRoot) return;
 
-    // Direct children paths include the root, and
-    //   we'll filter it out so all paths do not
-    //   include the root model (eliminate redundancy).
-    return this.pathWithModelPredicates(
-      path
-        ?.slice(0, path.indexOf(targetModel) + 1)
-        .filter((m) => m !== this.root),
-      forFilter
-    );
+    return forFilter
+      ? this.filterPathWithModelPredicates(pathWithoutRoot)
+      : this.slicePathWithModelPredicates(pathWithoutRoot);
   }
 
-  pathWithModelPredicates(path: string[], forFilter: boolean = false): any[] {
+  filterPathWithModelPredicates(path: string[]): any[] {
     // When constructing this path for a filter,
-    //   and flattened, we need to nest any collection
-    //   models.
-    if (forFilter && this.flatten) {
-      const filterBuilder = new QueryFilterPathBuilder(
-        path,
-        this.root,
-        this.models
-      );
-      return filterBuilder.build();
-    } else {
-      const pathBuilder = new QuerySimplePathBuilder(
-        path,
-        this.root,
-        this.models,
-        this.flatten
-      );
-      return pathBuilder.build();
-    }
+    //   we need to nest any collection models.
+    const filterBuilder = new QueryFilterPathBuilder(
+      path,
+      this.root,
+      this.models
+    );
+    return filterBuilder.build();
+  }
+
+  slicePathWithModelPredicates(path: string[]): any[] {
+    const pathBuilder = new QuerySimplePathBuilder(
+      path,
+      this.root,
+      this.models,
+      this.flatten
+    );
+    return pathBuilder.build();
   }
 
   // Type should be some sort of arbitrarily nested string array,
@@ -228,7 +227,7 @@ export class QueryBuilder {
       ) => {
         if (modelName === this.root) return acc;
 
-        let path = this.pathToModel(modelName);
+        let path = this.pathToModelWithPredicates(modelName);
 
         if (!path) return acc;
 
@@ -261,7 +260,7 @@ export class QueryBuilder {
 
     let includeAttributeName = true;
 
-    matchingSlices.forEach((matchingSlice: QueryFilter) => {
+    matchingSlices.forEach((matchingSlice: QuerySlice) => {
       if (isMatchingMatrixSlice(matchingSlice, attribute)) {
         // For matrices (i.e. ::slice), we'll construct it
         //   a little differently.
@@ -292,7 +291,7 @@ export class QueryBuilder {
     return predicate;
   }
 
-  isTableSlice(slice: QueryFilter) {
+  isTableSlice(slice: QuerySlice) {
     return !isMatrixSlice(slice);
   }
 

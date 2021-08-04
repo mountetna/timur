@@ -1,12 +1,6 @@
-import React, { PropsWithChildren, useCallback, useContext} from 'react';
+import React, { PropsWithChildren } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
-
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectTemplate} from 'etna-js/selectors/magma';
-
-import {QueryContext} from '../../contexts/query/query_context';
-import QueryModelSelector from './query_model_selector';
 
 const useStyles = makeStyles((theme) => ({
   clauseTitle: {

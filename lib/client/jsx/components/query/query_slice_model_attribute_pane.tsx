@@ -7,7 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
-import {QueryFilter} from '../../contexts/query/query_types';
+import {QuerySlice} from '../../contexts/query/query_types';
 import useSliceMethods from './query_use_slice_methods';
 
 const QuerySliceModelAttributePane = ({
@@ -17,7 +17,7 @@ const QuerySliceModelAttributePane = ({
   removeSlice
 }: {
   modelName: string;
-  slices: QueryFilter[];
+  slices: QuerySlice[];
   isMatrix: boolean;
   removeSlice: (modelName: string, index: number) => void;
 }) => {
@@ -56,14 +56,14 @@ const QuerySliceModelAttributePane = ({
       </Grid>
       <Grid item xs={10}>
         {slices
-          ? slices.map((filter: QueryFilter, index: number) => (
+          ? slices.map((filter: QuerySlice, index: number) => (
               <QueryFilterControl
                 key={`model-${modelName}-${index}-${updateCounter}`}
                 filter={filter}
                 modelNames={[modelName]}
                 hideModel={true}
                 matrixAttributesOnly={isMatrix}
-                patchFilter={(updatedFilter: QueryFilter) =>
+                patchFilter={(updatedFilter: QuerySlice) =>
                   handlePatchSlice(index, updatedFilter)
                 }
                 removeFilter={() => handleRemoveSlice(index)}

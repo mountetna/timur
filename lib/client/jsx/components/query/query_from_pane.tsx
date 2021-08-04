@@ -1,5 +1,4 @@
 import React, {useCallback, useContext} from 'react';
-import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
@@ -11,11 +10,11 @@ import QueryClause from './query_clause';
 
 const useStyles = makeStyles((theme) => ({
   clauseTitle: {
-    fontSize: "1.2rem",
-    minWidth: "120px"
+    fontSize: '1.2rem',
+    minWidth: '120px'
   },
   queryClause: {
-    padding: "5px"
+    padding: '5px'
   }
 }));
 

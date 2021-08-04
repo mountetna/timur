@@ -24,7 +24,7 @@ import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectTemplate} from 'etna-js/selectors/magma';
 
 import {QueryContext} from '../../contexts/query/query_context';
-import {QueryFilter} from '../../contexts/query/query_types';
+import {QueryFilter, QuerySlice} from '../../contexts/query/query_types';
 import {
   selectAllowedModelAttributes,
   selectMatrixAttributes
@@ -74,11 +74,11 @@ const QueryFilterControl = ({
   patchFilter,
   removeFilter
 }: {
-  filter: QueryFilter;
+  filter: QueryFilter | QuerySlice;
   modelNames: string[];
   matrixAttributesOnly?: boolean;
   hideModel?: boolean;
-  patchFilter: (filter: QueryFilter) => void;
+  patchFilter: (filter: QueryFilter | QuerySlice) => void;
   removeFilter: () => void;
 }) => {
   const classes = useStyles();

@@ -1,8 +1,14 @@
-export interface QueryFilter {
+export interface QueryBase {
   modelName: string;
   attributeName: string;
   operator: string;
   operand: string | number;
+}
+
+export interface QuerySlice extends QueryBase {}
+
+export interface QueryFilter extends QueryBase {
+  anyMap: {[key: string]: boolean};
 }
 
 export interface QueryColumn {

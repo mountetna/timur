@@ -119,4 +119,21 @@ export class QueryGraph {
       this.models[modelName].template.attributes[attributeName].attribute_type
     );
   }
+
+  shortestPath(rootModel: string, targetModel: string): string[] | undefined {
+    let path = this.allPaths(rootModel).find((potentialPath: string[]) =>
+      potentialPath.includes(targetModel)
+    );
+
+    if (!path) return;
+
+    // Direct children paths include the root, and
+    //   we'll filter it out so all paths do not
+    //   include the root model (eliminate redundancy).
+    const pathWithoutRoot = path
+      ?.slice(0, path.indexOf(targetModel) + 1)
+      .filter((m) => m !== rootModel);
+
+    return pathWithoutRoot;
+  }
 }

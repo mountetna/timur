@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import {QueryFilter} from '../contexts/query/query_types';
+import {QueryBase} from '../contexts/query/query_types';
 import {getPath} from '../selectors/query_selector';
 
 export const nextInjectionPathItem = (injectionPath: number[]) => {
@@ -46,7 +46,7 @@ export const injectValueAtPath = (
 const isModelWithAny = (
   path: any[],
   injectionPath: number[],
-  filter: QueryFilter
+  filter: QueryBase
 ) => {
   let nextItemPath = nextInjectionPathItem(injectionPath);
 
@@ -56,7 +56,7 @@ const isModelWithAny = (
   );
 };
 
-export const shouldInjectFilter = (filter: QueryFilter, path: any[]) => {
+export const shouldInjectFilter = (filter: QueryBase, path: any[]) => {
   // Should only inject data if the final array
   //   for the filter.modelName is an array with [modelName, '::any']
   // Otherwise no injection.
