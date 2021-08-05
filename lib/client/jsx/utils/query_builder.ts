@@ -19,6 +19,7 @@ import {
   injectValueAtPath,
   nextInjectionPathItem
 } from './query_any_every_helpers';
+import FilterOperator from '../components/query/query_filter_operator';
 
 export class QueryBuilder {
   graph: QueryGraph;
@@ -50,8 +51,9 @@ export class QueryBuilder {
         if (!this.attributes.hasOwnProperty(modelName))
           this.attributes[modelName] = [];
 
-        this.attributes[modelName] =
-          this.attributes[modelName].concat(selectedAttributes);
+        this.attributes[modelName] = this.attributes[modelName].concat(
+          selectedAttributes
+        );
       }
     );
   }
@@ -91,15 +93,17 @@ export class QueryBuilder {
     result.push(queryBase.attributeName);
     result.push(queryBase.operator);
 
-    if (['::in', '::slice'].includes(queryBase.operator)) {
+    if (FilterOperator.commaSeparatedOperators.includes(queryBase.operator)) {
       result.push((queryBase.operand as string).split(','));
-    } else if (['::has', '::lacks'].includes(queryBase.operator)) {
+    } else if (
+      FilterOperator.terminalInvertOperators.includes(queryBase.operator)
+    ) {
       // invert the model and attribute names, ignore operand
       let length = result.length;
       let tmpOperator = result[length - 1];
       result[length - 1] = result[length - 2];
       result[length - 2] = tmpOperator;
-    } else if (['::true', '::false', '::untrue'].includes(queryBase.operator)) {
+    } else if (FilterOperator.terminalOperators.includes(queryBase.operator)) {
       // ignore operand
     } else {
       result.push(queryBase.operand);

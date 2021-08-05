@@ -18,21 +18,22 @@ export default class FilterOperator {
     'Is untrue': '::untrue'
   };
 
+  static terminalOperators: string[] = ['::true', '::false', '::untrue'];
+
+  static terminalInvertOperators: string[] = ['::has', '::lacks'];
+
+  static commaSeparatedOperators: string[] = ['::in', '::slice'];
+
   constructor(attributeType: string, operator: string) {
     this.attributeType = attributeType;
     this.operator = operator;
   }
 
   hasOperand(): boolean {
-    const noOperandOperators = [
-      '::has',
-      '::lacks',
-      '::true',
-      '::false',
-      '::untrue'
-    ];
-
-    return !noOperandOperators.includes(this.operator);
+    return !(
+      FilterOperator.terminalOperators.includes(this.operator) ||
+      FilterOperator.terminalInvertOperators.includes(this.operator)
+    );
   }
 
   prettify(): string {
