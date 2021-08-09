@@ -110,10 +110,10 @@ const QueryWherePane = () => {
               inputProps={{'aria-label': 'secondary checkbox'}}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <QueryAnyEverySelectorList filter={filter} index={index} />
           </Grid>
-          <Grid item container xs={8}>
+          <Grid item container xs={9}>
             <QueryFilterControl
               key={`${index}-${updateCounter}`}
               filter={filter}
