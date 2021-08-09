@@ -6,6 +6,7 @@ PATH
       curb
       jwt
       multipart-post
+      net-ssh
       nokogiri
       rack
       rollbar
@@ -43,6 +44,7 @@ GEM
     mini_portile2 (2.5.3)
     minitest (5.14.2)
     multipart-post (2.1.1)
+    net-ssh (6.1.0)
     nio4r (2.5.7)
     nokogiri (1.11.7)
       mini_portile2 (~> 2.5.0)
@@ -132,4 +134,4 @@ DEPENDENCIES
   yabeda-puma-plugin
 
 BUNDLED WITH
-   2.2.24
+   2.2.25
