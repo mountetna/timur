@@ -42,10 +42,6 @@ x-base-etna-services:
   'timur_webpack':
     &base-etna-webpack # The ruby webpack server watching for changes
     <<: *base-etna-service
-    environment:
-      <<: *base-etna-env
-      RUN_NPM_INSTALL: 'true'
-      SKIP_RUBY_SETUP: 'true'
     command: npm run webpack
 
   'timur_db':
@@ -63,17 +59,14 @@ x-base-etna-services:
   'timur_app_fe':
     &base-etna-fe # The application level apache frontend serving static assets, data, and proxying the main app.
     image: etna-apache
+    entrypoint: /entrypoints/development_app_fe.sh
     volumes:
       - timur-public-dir:/app/public:ro
-      - timur-opt-dir:/usr/opt:ro
-      - ../docker/etna-base-dev/entrypoints:/entrypoints:ro
+      - ./data:/app/data:delegated
     depends_on:
       - 'timur_app'
-    entrypoint: /entrypoints/development.sh
     command: ['httpd', '-DFOREGROUND']
     environment:
-      SKIP_BUILD: '1'
-      WAIT_FOR_APP: '1'
       APP_NAME: 'timur'
 
 volumes:
