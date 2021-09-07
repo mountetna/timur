@@ -491,6 +491,50 @@ exports[`QueryBuilder renders 1`] = `
                           <label
                             class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
                             data-shrink="true"
+                            id="model-Select-0.5"
+                          >
+                            Model
+                          </label>
+                          <div
+                            class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                          >
+                            <div
+                              aria-haspopup="listbox"
+                              aria-labelledby="model-Select-0.5"
+                              class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
+                              role="button"
+                              tabindex="0"
+                            >
+                              prize
+                            </div>
+                            <input
+                              aria-hidden="true"
+                              class="MuiSelect-nativeInput"
+                              tabindex="-1"
+                              value="prize"
+                            />
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root MuiSelect-icon"
+                              focusable="false"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M7 10l5 5 5-5z"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+                      >
+                        <div
+                          class="MuiFormControl-root makeStyles-fullWidth"
+                        >
+                          <label
+                            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
+                            data-shrink="true"
                             id="attribute-Select-0.5"
                           >
                             Attribute
