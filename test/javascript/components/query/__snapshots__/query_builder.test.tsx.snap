@@ -451,10 +451,10 @@ exports[`QueryBuilder renders 1`] = `
                     class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
                   >
                     <button
-                      aria-label="Add table slice"
+                      aria-label="Add slice"
                       class="MuiButtonBase-root MuiIconButton-root"
                       tabindex="0"
-                      title="Add table slice"
+                      title="Add slice"
                       type="button"
                     >
                       <span

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useMemo} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,12 +13,10 @@ import useSliceMethods from './query_use_slice_methods';
 const QuerySliceModelAttributePane = ({
   modelName,
   slices,
-  isMatrix,
   removeSlice
 }: {
   modelName: string;
   slices: QuerySlice[];
-  isMatrix: boolean;
   removeSlice: (modelName: string, index: number) => void;
 }) => {
   // All the slices related to a given model / attribute,
@@ -27,19 +25,20 @@ const QuerySliceModelAttributePane = ({
   const [updateCounter, setUpdateCounter] = useState(0);
   const {state} = useContext(QueryContext);
 
-  const {addNewSlice, handlePatchSlice, handleRemoveSlice} = useSliceMethods(
-    modelName,
-    updateCounter,
-    setUpdateCounter,
-    removeSlice
-  );
+  const {matrixModelNames, addNewSlice, handlePatchSlice, handleRemoveSlice} =
+    useSliceMethods(modelName, updateCounter, setUpdateCounter, removeSlice);
+
+  let sliceableModelNames = useMemo(() => {
+    if (!state.rootModel) return [];
+
+    if (state.rootModel === modelName && matrixModelNames.includes(modelName)) {
+      return [modelName];
+    } else {
+      return state.graph.sliceableModelNamesInPath(state.rootModel, modelName);
+    }
+  }, [state.rootModel, modelName, state.graph, matrixModelNames]);
 
   if (!state.rootModel) return null;
-
-  const modelNames = state.graph.sliceableModelNamesInPath(
-    state.rootModel,
-    modelName
-  );
 
   return (
     <Grid container spacing={1}>
@@ -47,14 +46,8 @@ const QuerySliceModelAttributePane = ({
         <Typography>Slices</Typography>
       </Grid>
       <Grid item xs={1}>
-        <Tooltip
-          title={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
-          aria-label={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
-        >
-          <IconButton
-            aria-label={`Add ${isMatrix ? 'matrix' : 'table'} slice`}
-            onClick={() => addNewSlice(isMatrix ? '::slice' : '')}
-          >
+        <Tooltip title='Add slice' aria-label='Add slice'>
+          <IconButton aria-label='Add slice' onClick={() => addNewSlice()}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -65,8 +58,8 @@ const QuerySliceModelAttributePane = ({
               <QueryFilterControl
                 key={`model-${modelName}-${index}-${updateCounter}`}
                 filter={filter}
-                modelNames={modelNames}
-                matrixAttributesOnly={isMatrix}
+                isColumnFilter={true}
+                modelNames={sliceableModelNames}
                 patchFilter={(updatedFilter: QuerySlice) =>
                   handlePatchSlice(index, updatedFilter)
                 }

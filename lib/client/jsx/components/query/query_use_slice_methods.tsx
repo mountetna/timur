@@ -19,20 +19,18 @@ const useSliceMethods = (
   let {state, addSlice, patchSlice} = useContext(QueryContext);
   const reduxState = useReduxState();
 
-  const addNewSlice = useCallback(
-    (operator: string) => {
-      addSlice(endModelName, {
-        modelName: '',
-        attributeName: '',
-        operator,
-        operand: ''
-      });
-    },
-    [addSlice, endModelName]
-  );
+  const addNewSlice = useCallback(() => {
+    addSlice(endModelName, {
+      modelName: '',
+      attributeName: '',
+      operator: '',
+      operand: ''
+    });
+  }, [addSlice, endModelName]);
 
   const handlePatchSlice = useCallback(
     (index: number, filter: QuerySlice) => {
+      console.log(endModelName, filter);
       patchSlice(endModelName, index, filter);
     },
     [patchSlice, endModelName]
@@ -76,22 +74,11 @@ const useSliceMethods = (
     );
   }, [state.graph, state.rootModel, state.attributes]);
 
-  const matrixSlices = useMemo(() => {
-    if (!state.slices[endModelName] || !matrixModelNames.includes(endModelName))
-      return [];
-
-    return state.slices[endModelName].filter((slice) => isMatrixSlice(slice));
-  }, [state.slices, endModelName, matrixModelNames]);
-
-  const collectionSlices = useMemo(() => {
-    if (
-      !state.slices[endModelName] ||
-      !collectionModelNames.includes(endModelName)
-    )
-      return [];
+  const slicesForModel = useMemo(() => {
+    if (!state.slices[endModelName]) return [];
 
     return state.slices[endModelName];
-  }, [state.slices, endModelName, collectionModelNames]);
+  }, [state.slices, endModelName]);
 
   return {
     handleRemoveSlice,
@@ -99,8 +86,7 @@ const useSliceMethods = (
     addNewSlice,
     matrixModelNames,
     collectionModelNames,
-    matrixSlices,
-    collectionSlices
+    slicesForModel
   };
 };
 

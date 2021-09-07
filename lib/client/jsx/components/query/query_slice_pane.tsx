@@ -7,12 +7,10 @@ import {QuerySlice} from '../../contexts/query/query_types';
 const QuerySlicePane = ({
   modelName,
   slices,
-  isMatrix,
   handleRemoveSlice
 }: {
   modelName: string;
   slices: QuerySlice[];
-  isMatrix: boolean;
   handleRemoveSlice: (modelName: string, index: number) => void;
 }) => {
   const {state} = useContext(QueryContext);
@@ -23,7 +21,6 @@ const QuerySlicePane = ({
     <QuerySliceModelAttributePane
       slices={slices}
       modelName={modelName}
-      isMatrix={isMatrix}
       removeSlice={handleRemoveSlice}
     />
   );

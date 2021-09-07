@@ -108,6 +108,7 @@ const QueryWherePane = () => {
             <QueryFilterControl
               key={`${index}-${updateCounter}`}
               filter={filter}
+              isColumnFilter={false}
               modelNames={modelNames}
               patchFilter={(updatedFilter: QueryFilter | QuerySlice) =>
                 handlePatchFilter(index, updatedFilter as QueryFilter, filter)

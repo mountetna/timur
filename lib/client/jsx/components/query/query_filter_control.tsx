@@ -69,13 +69,13 @@ const useStyles = makeStyles((theme) => ({
 const QueryFilterControl = ({
   filter,
   modelNames,
-  matrixAttributesOnly,
+  isColumnFilter,
   patchFilter,
   removeFilter
 }: {
   filter: QueryFilter | QuerySlice;
   modelNames: string[];
-  matrixAttributesOnly?: boolean;
+  isColumnFilter: boolean;
   patchFilter: (filter: QueryFilter | QuerySlice) => void;
   removeFilter: () => void;
 }) => {
@@ -90,17 +90,10 @@ const QueryFilterControl = ({
         template.attributes
       );
 
-      if (matrixAttributesOnly) {
-        return selectMatrixAttributes(
-          sortedTemplateAttributes,
-          state.attributes[filter.modelName]
-        );
-      } else {
-        return selectAllowedModelAttributes(sortedTemplateAttributes);
-      }
+      return selectAllowedModelAttributes(sortedTemplateAttributes);
     }
     return [];
-  }, [filter.modelName, state.attributes, reduxState, matrixAttributesOnly]);
+  }, [filter.modelName, reduxState]);
 
   const attributeType = useMemo(() => {
     if ('' !== filter.attributeName) {
@@ -224,7 +217,7 @@ const QueryFilterControl = ({
             onChange={(e) => handleOperatorSelect(e.target.value as string)}
             displayEmpty
           >
-            {Object.keys(filterOperator.options())
+            {Object.keys(filterOperator.options(isColumnFilter))
               .sort()
               .map((operator: string, index: number) => (
                 <MenuItem key={index} value={operator}>

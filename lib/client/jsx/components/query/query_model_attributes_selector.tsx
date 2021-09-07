@@ -138,12 +138,8 @@ const QueryModelAttributeSelector = ({
     setSelectableModelAttributes(selectAllowedModelAttributes(modelAttributes));
   }, [modelAttributes]);
 
-  const {
-    matrixModelNames,
-    collectionModelNames,
-    matrixSlices,
-    collectionSlices
-  } = useSliceMethods(modelValue, updateCounter, setUpdateCounter, removeSlice);
+  const {matrixModelNames, collectionModelNames, slicesForModel} =
+    useSliceMethods(modelValue, updateCounter, setUpdateCounter, removeSlice);
 
   const isSliceableAsMatrix = matrixModelNames.includes(modelValue);
   const isSliceableAsCollection = collectionModelNames.includes(modelValue);
@@ -204,8 +200,7 @@ const QueryModelAttributeSelector = ({
               <Grid item>
                 <QuerySlicePane
                   modelName={modelValue}
-                  isMatrix={isSliceableAsMatrix}
-                  slices={isSliceableAsMatrix ? matrixSlices : collectionSlices}
+                  slices={slicesForModel}
                   handleRemoveSlice={handleRemoveSlice}
                 />
               </Grid>
