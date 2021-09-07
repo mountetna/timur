@@ -34,13 +34,12 @@ const QuerySliceModelAttributePane = ({
     removeSlice
   );
 
-  const modelNames = useMemo(() => {
-    if (!state.rootModel) return [];
-
-    return state.graph.sliceableModelNamesInPath(state.rootModel, modelName);
-  }, [state.graph, state.rootModel, modelName]);
-
   if (!state.rootModel) return null;
+
+  const modelNames = state.graph.sliceableModelNamesInPath(
+    state.rootModel,
+    modelName
+  );
 
   return (
     <Grid container spacing={1}>
