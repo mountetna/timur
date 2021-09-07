@@ -6,7 +6,7 @@ exports[`ModelViewer renders 1`] = `
   role="table"
   style={
     Object {
-      "minWidth": "210px",
+      "minWidth": "240px",
     }
   }
 >
@@ -59,7 +59,7 @@ exports[`ModelViewer renders 1`] = `
         Object {
           "display": "flex",
           "flex": "1 0 auto",
-          "minWidth": "210px",
+          "minWidth": "240px",
         }
       }
     >
@@ -308,6 +308,41 @@ exports[`ModelViewer renders 1`] = `
           }
         />
       </div>
+      <div
+        className="th"
+        colSpan={1}
+        role="columnheader"
+        style={
+          Object {
+            "alignItems": "flex-start",
+            "boxSizing": "border-box",
+            "display": "flex",
+            "flex": "100 0 auto",
+            "justifyContent": "flex-start",
+            "minWidth": "30px",
+            "position": "relative",
+            "width": "100px",
+          }
+        }
+      >
+        <div
+          className="content"
+        >
+          habitat
+        </div>
+        <div
+          className="resizer "
+          draggable={false}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          role="separator"
+          style={
+            Object {
+              "cursor": "col-resize",
+            }
+          }
+        />
+      </div>
     </div>
   </div>
   <div
@@ -320,7 +355,7 @@ exports[`ModelViewer renders 1`] = `
         Object {
           "display": "flex",
           "flex": "1 0 auto",
-          "minWidth": "210px",
+          "minWidth": "240px",
         }
       }
     >
@@ -485,6 +520,25 @@ exports[`ModelViewer renders 1`] = `
           />
         </div>
       </div>
+      <div
+        className="td"
+        role="cell"
+        style={
+          Object {
+            "alignItems": "flex-start",
+            "boxSizing": "border-box",
+            "display": "flex",
+            "flex": "100 0 auto",
+            "justifyContent": "flex-start",
+            "minWidth": "30px",
+            "width": "100px",
+          }
+        }
+      >
+        <div
+          className="attribute"
+        />
+      </div>
     </div>
     <div
       className="tr"
@@ -493,7 +547,7 @@ exports[`ModelViewer renders 1`] = `
         Object {
           "display": "flex",
           "flex": "1 0 auto",
-          "minWidth": "210px",
+          "minWidth": "240px",
         }
       }
     >
@@ -657,6 +711,25 @@ exports[`ModelViewer renders 1`] = `
             className="collection"
           />
         </div>
+      </div>
+      <div
+        className="td"
+        role="cell"
+        style={
+          Object {
+            "alignItems": "flex-start",
+            "boxSizing": "border-box",
+            "display": "flex",
+            "flex": "100 0 auto",
+            "justifyContent": "flex-start",
+            "minWidth": "30px",
+            "width": "100px",
+          }
+        }
+      >
+        <div
+          className="attribute"
+        />
       </div>
     </div>
   </div>

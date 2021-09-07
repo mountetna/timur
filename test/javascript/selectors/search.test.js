@@ -53,6 +53,7 @@ describe('selectSortedDisplayAttributeNames', () => {
       'labor',
       'aspect',
       'victim',
+      'habitat',
       'stats',
       'certificates',
       'species'
