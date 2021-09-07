@@ -1,4 +1,4 @@
-import React, {useMemo, useContext} from 'react';
+import React, {useMemo, useContext, useCallback} from 'react';
 import * as _ from 'lodash';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
@@ -76,23 +76,26 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
     expandMatrices
   ]);
 
-  function formatRowData(allData: QueryResponse, cols: QueryTableColumn[]) {
-    let colMapping = allData.format[1];
-    // Need to order the results the same as `columns`
-    return allData.answer.map(([recordName, answer]: [string, any[]]) =>
-      cols.map(
-        ({colId}) =>
-          _.at(answer, pathToColumn(colMapping, colId, expandMatrices))[0]
-      )
-    );
-  }
+  const formatRowData = useCallback(
+    (allData: QueryResponse, cols: QueryTableColumn[]) => {
+      let colMapping = allData.format[1];
+      // Need to order the results the same as `columns`
+      return allData.answer.map(([recordName, answer]: [string, any[]]) =>
+        cols.map(
+          ({colId}) =>
+            _.at(answer, pathToColumn(colMapping, colId, expandMatrices))[0]
+        )
+      );
+    },
+    [expandMatrices]
+  );
 
   const rows = useMemo(() => {
     if (!data || !data.answer) return;
 
     // Need to order the results the same as `columns`
     return formatRowData(data, columns);
-  }, [data, columns]);
+  }, [data, columns, formatRowData]);
 
   return {
     columns,

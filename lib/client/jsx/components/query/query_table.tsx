@@ -71,7 +71,7 @@ const QueryTable = ({
                     <TableRow hover tabIndex={-1} key={row[0]}>
                       {row.map((datum: any, index: number) => (
                         <TableCell key={index} scope='row'>
-                          {datum}
+                          {datum?.toString()}
                         </TableCell>
                       ))}
                     </TableRow>
