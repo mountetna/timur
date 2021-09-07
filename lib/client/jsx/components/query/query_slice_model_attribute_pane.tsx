@@ -1,4 +1,4 @@
-import React, {useContext, useState, useMemo} from 'react';
+import React, {useContext, useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
