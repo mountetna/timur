@@ -70,14 +70,12 @@ const QueryFilterControl = ({
   filter,
   modelNames,
   matrixAttributesOnly,
-  hideModel,
   patchFilter,
   removeFilter
 }: {
   filter: QueryFilter | QuerySlice;
   modelNames: string[];
   matrixAttributesOnly?: boolean;
-  hideModel?: boolean;
   patchFilter: (filter: QueryFilter | QuerySlice) => void;
   removeFilter: () => void;
 }) => {
@@ -181,25 +179,23 @@ const QueryFilterControl = ({
 
   return (
     <Grid container>
-      {!hideModel ? (
-        <Grid item xs={3}>
-          <FormControl className={classes.fullWidth}>
-            <InputLabel id={uniqId('model')}>Model</InputLabel>
-            <Select
-              labelId={uniqId('model')}
-              value={filter.modelName}
-              onChange={(e) => handleModelSelect(e.target.value as string)}
-              displayEmpty
-            >
-              {modelNames.sort().map((name, index: number) => (
-                <MenuItem key={index} value={name}>
-                  {name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      ) : null}
+      <Grid item xs={3}>
+        <FormControl className={classes.fullWidth}>
+          <InputLabel id={uniqId('model')}>Model</InputLabel>
+          <Select
+            labelId={uniqId('model')}
+            value={filter.modelName}
+            onChange={(e) => handleModelSelect(e.target.value as string)}
+            displayEmpty
+          >
+            {modelNames.sort().map((name, index: number) => (
+              <MenuItem key={index} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
       <Grid item xs={3}>
         <FormControl className={classes.fullWidth}>
           <InputLabel id={uniqId('attribute')}>Attribute</InputLabel>

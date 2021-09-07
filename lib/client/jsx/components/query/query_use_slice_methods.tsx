@@ -11,39 +11,39 @@ import {
 } from '../../selectors/query_selector';
 
 const useSliceMethods = (
-  modelName: string,
+  endModelName: string,
   updateCounter: number,
   setUpdateCounter: React.Dispatch<React.SetStateAction<number>>,
-  removeSlice: (modelName: string, index: number) => void
+  removeSlice: (endModelName: string, index: number) => void
 ) => {
   let {state, addSlice, patchSlice} = useContext(QueryContext);
   const reduxState = useReduxState();
 
   const addNewSlice = useCallback(
     (operator: string) => {
-      addSlice({
-        modelName,
+      addSlice(endModelName, {
+        modelName: '',
         attributeName: '',
         operator,
         operand: ''
       });
     },
-    [addSlice, modelName]
+    [addSlice, endModelName]
   );
 
   const handlePatchSlice = useCallback(
     (index: number, filter: QuerySlice) => {
-      patchSlice(index, filter);
+      patchSlice(endModelName, index, filter);
     },
-    [patchSlice]
+    [patchSlice, endModelName]
   );
 
   const handleRemoveSlice = useCallback(
     (index: number) => {
-      removeSlice(modelName, index);
+      removeSlice(endModelName, index);
       setUpdateCounter(updateCounter + 1);
     },
-    [removeSlice, updateCounter, modelName, setUpdateCounter]
+    [removeSlice, updateCounter, endModelName, setUpdateCounter]
   );
 
   const attributesWithRootIdentifier = useMemo(() => {
@@ -77,18 +77,21 @@ const useSliceMethods = (
   }, [state.graph, state.rootModel, state.attributes]);
 
   const matrixSlices = useMemo(() => {
-    if (!state.slices[modelName] || !matrixModelNames.includes(modelName))
+    if (!state.slices[endModelName] || !matrixModelNames.includes(endModelName))
       return [];
 
-    return state.slices[modelName].filter((slice) => isMatrixSlice(slice));
-  }, [state.slices, modelName, matrixModelNames]);
+    return state.slices[endModelName].filter((slice) => isMatrixSlice(slice));
+  }, [state.slices, endModelName, matrixModelNames]);
 
   const collectionSlices = useMemo(() => {
-    if (!state.slices[modelName] || !collectionModelNames.includes(modelName))
+    if (
+      !state.slices[endModelName] ||
+      !collectionModelNames.includes(endModelName)
+    )
       return [];
 
-    return state.slices[modelName];
-  }, [state.slices, modelName, collectionModelNames]);
+    return state.slices[endModelName];
+  }, [state.slices, endModelName, collectionModelNames]);
 
   return {
     handleRemoveSlice,

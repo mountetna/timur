@@ -51,9 +51,8 @@ export class QueryBuilder {
         if (!this.attributes.hasOwnProperty(modelName))
           this.attributes[modelName] = [];
 
-        this.attributes[modelName] = this.attributes[modelName].concat(
-          selectedAttributes
-        );
+        this.attributes[modelName] =
+          this.attributes[modelName].concat(selectedAttributes);
       }
     );
   }
@@ -273,8 +272,9 @@ export class QueryBuilder {
         // This splicing works for tables.
         // Adds in a new array for the operand before
         //   the ::first or ::all
+        let sliceModelIndex = predicate.indexOf(matchingSlice.modelName);
         predicate.splice(
-          predicate.length - 1,
+          sliceModelIndex + 1,
           0,
           this.serializeQueryBase(matchingSlice)
         );

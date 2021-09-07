@@ -46,19 +46,10 @@ const QueryWherePane = () => {
         state.rootModel &&
         updatedFilter.modelName !== originalFilter.modelName
       ) {
-        let modelsInPath = state.graph.shortestPath(
+        let selectableModels = state.graph.sliceableModelNamesInPath(
           state.rootModel,
           updatedFilter.modelName
         );
-        let previousModelName = state.rootModel;
-        let selectableModels: string[] = [];
-
-        modelsInPath?.forEach((modelName) => {
-          if (state.graph.stepIsOneToMany(previousModelName, modelName)) {
-            selectableModels.push(modelName);
-          }
-          previousModelName = modelName;
-        });
 
         updatedFilter.anyMap = selectableModels.reduce(
           (acc: {[key: string]: boolean}, modelName: string) => {

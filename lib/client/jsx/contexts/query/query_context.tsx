@@ -23,9 +23,9 @@ export const defaultContext = {
   removeRecordFilter: (index: number) => {},
   patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
   setOrRecordFilterIndices: (indices: number[]) => {},
-  addSlice: (slice: QuerySlice) => {},
-  removeSlice: (modelName: string, index: number) => {},
-  patchSlice: (index: number, slice: QuerySlice) => {},
+  addSlice: (endModelName: string, slice: QuerySlice) => {},
+  removeSlice: (endModelName: string, index: number) => {},
+  patchSlice: (endModelName: string, index: number, slice: QuerySlice) => {},
   setRootModel: (
     model_name: string | null,
     model_identifier: QueryColumn | null
@@ -108,12 +108,12 @@ export const QueryProvider = (
   );
 
   const addSlice = useCallback(
-    (slice: QuerySlice) => {
+    (endModelName: string, slice: QuerySlice) => {
       setState({
         ...state,
         slices: {
           ...state.slices,
-          [slice.modelName]: [...(state.slices[slice.modelName] || [])].concat([
+          [endModelName]: [...(state.slices[endModelName] || [])].concat([
             slice
           ])
         }
@@ -123,14 +123,14 @@ export const QueryProvider = (
   );
 
   const removeSlice = useCallback(
-    (modelName: string, index: number) => {
-      let updatedSlices = [...state.slices[modelName]];
+    (endModelName: string, index: number) => {
+      let updatedSlices = [...state.slices[endModelName]];
       updatedSlices.splice(index, 1);
       setState({
         ...state,
         slices: {
           ...state.slices,
-          [modelName]: updatedSlices
+          [endModelName]: updatedSlices
         }
       });
     },
@@ -138,14 +138,14 @@ export const QueryProvider = (
   );
 
   const patchSlice = useCallback(
-    (index: number, slice: QuerySlice) => {
-      let updatedSlices = [...state.slices[slice.modelName]];
+    (endModelName: string, index: number, slice: QuerySlice) => {
+      let updatedSlices = [...state.slices[endModelName]];
       updatedSlices[index] = slice;
       setState({
         ...state,
         slices: {
           ...state.slices,
-          [slice.modelName]: updatedSlices
+          [endModelName]: updatedSlices
         }
       });
     },

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useMemo} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -34,6 +34,12 @@ const QuerySliceModelAttributePane = ({
     removeSlice
   );
 
+  const modelNames = useMemo(() => {
+    if (!state.rootModel) return [];
+
+    return state.graph.sliceableModelNamesInPath(state.rootModel, modelName);
+  }, [state.graph, state.rootModel, modelName]);
+
   if (!state.rootModel) return null;
 
   return (
@@ -60,8 +66,7 @@ const QuerySliceModelAttributePane = ({
               <QueryFilterControl
                 key={`model-${modelName}-${index}-${updateCounter}`}
                 filter={filter}
-                modelNames={[modelName]}
-                hideModel={true}
+                modelNames={modelNames}
                 matrixAttributesOnly={isMatrix}
                 patchFilter={(updatedFilter: QuerySlice) =>
                   handlePatchSlice(index, updatedFilter)

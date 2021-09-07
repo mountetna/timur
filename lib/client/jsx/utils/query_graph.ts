@@ -136,4 +136,19 @@ export class QueryGraph {
 
     return pathWithoutRoot;
   }
+
+  sliceableModelNamesInPath(startModel: string, endModel: string): string[] {
+    let modelsInPath = this.shortestPath(startModel, endModel);
+    let previousModelName = startModel;
+    let selectableModels: string[] = [];
+
+    modelsInPath?.forEach((modelName) => {
+      if (this.stepIsOneToMany(previousModelName, modelName)) {
+        selectableModels.push(modelName);
+      }
+      previousModelName = modelName;
+    });
+
+    return selectableModels;
+  }
 }
