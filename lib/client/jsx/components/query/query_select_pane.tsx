@@ -1,4 +1,10 @@
-import React, {useCallback, useContext, useState, useEffect} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+  useMemo
+} from 'react';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -50,13 +56,19 @@ const QuerySelectPane = () => {
     [intersectionModels, removeModel]
   );
 
-  if (!state.rootModel) return null;
+  const choiceSet = useMemo(() => {
+    if (!state.rootModel) return [];
 
-  let choiceSet = [
-    ...new Set(
-      state.graph.allPaths(state.rootModel).flat().concat(state.rootModel)
-    )
-  ];
+    let selectedModels = Object.keys(state.attributes);
+
+    return [
+      ...new Set(
+        state.graph.allPaths(state.rootModel).flat().concat(state.rootModel)
+      )
+    ].filter((m) => !selectedModels.includes(m));
+  }, [state.rootModel, state.graph, state.attributes]);
+
+  if (!state.rootModel) return null;
 
   return (
     <QueryClause title='Columns'>
@@ -68,7 +80,7 @@ const QuerySelectPane = () => {
             key={index}
             label='Join Model'
             modelValue={modelName}
-            modelChoiceSet={choiceSet}
+            modelChoiceSet={[...new Set(choiceSet.concat(modelName))]}
             onSelectModel={(newModelName) =>
               updateIntersectionModels(newModelName, index)
             }
