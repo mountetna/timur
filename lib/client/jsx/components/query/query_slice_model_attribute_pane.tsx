@@ -7,17 +7,15 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
-import {QuerySlice} from '../../contexts/query/query_types';
+import {QuerySlice, QueryColumn} from '../../contexts/query/query_types';
 import useSliceMethods from './query_use_slice_methods';
 
 const QuerySliceModelAttributePane = ({
-  modelName,
-  slices,
-  removeSlice
+  column,
+  columnIndex
 }: {
-  modelName: string;
-  slices: QuerySlice[];
-  removeSlice: (modelName: string, index: number) => void;
+  column: QueryColumn;
+  columnIndex: number;
 }) => {
   // All the slices related to a given model / attribute,
   //   with the model / attribute as a "label".
@@ -26,17 +24,23 @@ const QuerySliceModelAttributePane = ({
   const {state} = useContext(QueryContext);
 
   const {matrixModelNames, addNewSlice, handlePatchSlice, handleRemoveSlice} =
-    useSliceMethods(modelName, updateCounter, setUpdateCounter, removeSlice);
+    useSliceMethods(column, columnIndex, updateCounter, setUpdateCounter);
 
   let sliceableModelNames = useMemo(() => {
     if (!state.rootModel) return [];
 
-    if (state.rootModel === modelName && matrixModelNames.includes(modelName)) {
-      return [modelName];
+    if (
+      state.rootModel === column.model_name &&
+      matrixModelNames.includes(column.model_name)
+    ) {
+      return [column.model_name];
     } else {
-      return state.graph.sliceableModelNamesInPath(state.rootModel, modelName);
+      return state.graph.sliceableModelNamesInPath(
+        state.rootModel,
+        column.model_name
+      );
     }
-  }, [state.rootModel, modelName, state.graph, matrixModelNames]);
+  }, [state.rootModel, column, state.graph, matrixModelNames]);
 
   if (!state.rootModel) return null;
 
@@ -53,11 +57,11 @@ const QuerySliceModelAttributePane = ({
         </Tooltip>
       </Grid>
       <Grid item xs={10}>
-        {slices
-          ? slices.map((filter: QuerySlice, index: number) => (
+        {column.slices
+          ? column.slices.map((slice: QuerySlice, index: number) => (
               <QueryFilterControl
-                key={`model-${modelName}-${index}-${updateCounter}`}
-                filter={filter}
+                key={`model-${column.model_name}-${index}-${updateCounter}`}
+                filter={slice}
                 isColumnFilter={true}
                 modelNames={sliceableModelNames}
                 patchFilter={(updatedFilter: QuerySlice) =>

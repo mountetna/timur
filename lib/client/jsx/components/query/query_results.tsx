@@ -66,9 +66,8 @@ const QueryResults = () => {
       let builder = new QueryBuilder(state.graph, selectModels(reduxState));
 
       builder.addRootIdentifier(state.rootIdentifier);
-      builder.addAttributes(state.attributes);
+      builder.addColumns(state.columns);
       builder.addRecordFilters(state.recordFilters);
-      builder.addSlices(state.slices);
       builder.setFlatten(flattenQuery);
       builder.setOrRecordFilterIndices(state.orRecordFilterIndices);
 
@@ -78,9 +77,8 @@ const QueryResults = () => {
     return null;
   }, [
     state.rootIdentifier,
-    state.attributes,
+    state.columns,
     state.recordFilters,
-    state.slices,
     state.graph,
     state.orRecordFilterIndices,
     flattenQuery,

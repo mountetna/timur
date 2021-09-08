@@ -11,7 +11,6 @@ import QuerySimplePathBuilder from './query_simple_path_builder';
 import QueryFilterPathBuilder from './query_filter_path_builder';
 import {
   attributeIsFile,
-  isMatchingMatrixSlice,
   isMatrixSlice,
   getPath
 } from '../selectors/query_selector';
@@ -25,8 +24,7 @@ export class QueryBuilder {
   graph: QueryGraph;
   models: {[key: string]: Model};
   recordFilters: QueryFilter[] = [];
-  slices: {[key: string]: QuerySlice[]} = {};
-  attributes: {[key: string]: QueryColumn[]} = {};
+  columns: QueryColumn[] = [];
   root: string = '';
   flatten: boolean = true;
   orRecordFilterIndices: number[] = [];
@@ -38,31 +36,15 @@ export class QueryBuilder {
 
   addRootIdentifier(rootIdentifier: QueryColumn) {
     this.root = rootIdentifier.model_name;
-    if (!this.attributes.hasOwnProperty(this.root)) {
-      this.attributes[this.root] = [rootIdentifier];
-    } else {
-      this.attributes[this.root].splice(0, 0, rootIdentifier);
-    }
+    this.columns.splice(0, 0, rootIdentifier);
   }
 
-  addAttributes(attributes: {[key: string]: QueryColumn[]}) {
-    Object.entries(attributes).forEach(
-      ([modelName, selectedAttributes]: [string, QueryColumn[]]) => {
-        if (!this.attributes.hasOwnProperty(modelName))
-          this.attributes[modelName] = [];
-
-        this.attributes[modelName] =
-          this.attributes[modelName].concat(selectedAttributes);
-      }
-    );
+  addColumns(columns: QueryColumn[]) {
+    this.columns = this.columns.concat(columns);
   }
 
   addRecordFilters(recordFilters: QueryFilter[]) {
     this.recordFilters = recordFilters;
-  }
-
-  addSlices(slices: {[key: string]: QuerySlice[]}) {
-    this.slices = slices;
   }
 
   setFlatten(flat: boolean) {
@@ -78,7 +60,7 @@ export class QueryBuilder {
       this.root,
       ...this.expandedOperands(this.recordFilters),
       '::all',
-      this.joinAttributesSlices()
+      this.expandColumns()
     ];
   }
 
@@ -212,33 +194,26 @@ export class QueryBuilder {
   //     ['labor', 'completed'],
   //     ['labor', 'prize', ['name', '::equals', 'Sparta'], '::first', 'value']
   //   ]
-  joinAttributesSlices(): (string | string[] | (string | string[])[])[] {
+  expandColumns(): (string | string[] | (string | string[])[])[] {
     // Convert this.attributes + this.slices into the right
     //   query format. Include the path from the root model
     //   to the attributes' model.
-    let initialValues = this.attributes[this.root].map(
-      (attr) => this.predicateWithSlice([], attr) as (string | string[])[]
-    );
+    let initialValues = this.predicateWithSlice([], this.columns[0]);
 
-    return Object.entries(this.attributes).reduce(
-      (
-        acc: (string | string[] | (string | string[])[])[],
-        [modelName, attributes]: [string, QueryColumn[]]
-      ) => {
-        if (modelName === this.root) return acc;
+    return this.columns.slice(1).reduce(
+      (acc: any[], column: QueryColumn) => {
+        if (column.model_name === this.root) {
+          acc.push(this.predicateWithSlice([], column));
+        } else {
+          let path = this.slicePathWithModelPredicates(column.model_name);
 
-        let path = this.slicePathWithModelPredicates(modelName);
-
-        if (!path) return acc;
-
-        attributes.forEach((attr) => {
           acc.push(
-            this.predicateWithSlice(path as string[], attr) as (
+            this.predicateWithSlice((path || []) as string[], column) as (
               | string
               | string[]
             )[]
           );
-        });
+        }
 
         return acc;
       },
@@ -248,11 +223,11 @@ export class QueryBuilder {
 
   predicateWithSlice(
     path: string[],
-    attribute: QueryColumn
+    column: QueryColumn
   ): (string | string[] | (string | string[] | number)[])[] {
     // If there is a slice associated with this predicate, we'll
     // inject it here, before the ::first or ::all predicate.
-    let matchingSlices = this.slices[attribute.model_name] || [];
+    let matchingSlices = column.slices || [];
 
     let predicate: (string | string[] | (string | string[] | number)[])[] = [
       ...path
@@ -261,7 +236,7 @@ export class QueryBuilder {
     let includeAttributeName = true;
 
     matchingSlices.forEach((matchingSlice: QuerySlice) => {
-      if (isMatchingMatrixSlice(matchingSlice, attribute)) {
+      if (isMatrixSlice(matchingSlice)) {
         // For matrices (i.e. ::slice), we'll construct it
         //   a little differently.
         predicate = predicate.concat(this.serializeQueryBase(matchingSlice));
@@ -284,8 +259,8 @@ export class QueryBuilder {
     if (includeAttributeName)
       predicate.push(
         ...this.attributeNameWithPredicate(
-          attribute.model_name,
-          attribute.attribute_name
+          column.model_name,
+          column.attribute_name
         )
       );
 

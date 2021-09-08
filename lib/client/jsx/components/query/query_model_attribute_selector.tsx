@@ -1,12 +1,5 @@
-import React, {
-  useContext,
-  useMemo,
-  useCallback,
-  useEffect,
-  useState
-} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -15,20 +8,17 @@ import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectTemplate} from 'etna-js/selectors/magma';
 
-import {QueryContext} from '../../contexts/query/query_context';
 import {Attribute} from '../../models/model_types';
 
 import useSliceMethods from './query_use_slice_methods';
 import {QueryColumn} from '../../contexts/query/query_types';
-import QueryAttributesModal from './query_attributes_modal';
-import {
-  hasMatrixSlice,
-  selectAllowedModelAttributes
-} from '../../selectors/query_selector';
+import {selectAllowedModelAttributes} from '../../selectors/query_selector';
 import QuerySlicePane from './query_slice_pane';
 
 import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
@@ -51,27 +41,26 @@ const useStyles = makeStyles((theme) => ({
   },
   pos: {
     marginBottom: 12
+  },
+  fullWidth: {
+    width: '96%',
+    margin: theme.spacing(1),
+    minWidth: 120
   }
 }));
 
-const RemoveModelIcon = ({
+const RemoveColumnIcon = ({
   canRemove,
-  removeModel
+  removeColumn
 }: {
   canRemove: boolean;
-  removeModel: () => void;
+  removeColumn: () => void;
 }) => {
   if (!canRemove) return null;
 
   return (
-    <Tooltip
-      title='Remove model and attributes'
-      aria-label='remove model and attributes'
-    >
-      <IconButton
-        aria-label='remove model and attributes'
-        onClick={removeModel}
-      >
+    <Tooltip title='Remove column' aria-label='remove column'>
+      <IconButton aria-label='remove column' onClick={removeColumn}>
         <ClearIcon color='action' />
       </IconButton>
     </Tooltip>
@@ -81,24 +70,22 @@ const RemoveModelIcon = ({
 const QueryModelAttributeSelector = ({
   label,
   modelChoiceSet,
-  modelValue,
-  selectedAttributes,
+  column,
+  columnIndex,
   onSelectModel,
-  onSelectAttributes,
-  removeModel,
+  onSelectAttribute,
+  removeColumn,
   canRemove
 }: {
   label: string;
   modelChoiceSet: string[];
-  modelValue: string;
-  selectedAttributes: QueryColumn[];
+  column: QueryColumn;
+  columnIndex: number;
   onSelectModel: (modelName: string) => void;
-  onSelectAttributes: (modelName: string, attributes: QueryColumn[]) => void;
-  removeModel: () => void;
+  onSelectAttribute: (attribute_name: string) => void;
+  removeColumn: () => void;
   canRemove: boolean;
 }) => {
-  const [open, setOpen] = useState(false);
-  const [modelAttributes, setModelAttributes] = useState([] as Attribute[]);
   const [selectableModelAttributes, setSelectableModelAttributes] = useState(
     [] as Attribute[]
   );
@@ -107,7 +94,6 @@ const QueryModelAttributeSelector = ({
   // Matrices will have modelName + attributeName.
   const [updateCounter, setUpdateCounter] = useState(0);
 
-  const {removeSlice} = useContext(QueryContext);
   const classes = useStyles();
 
   let reduxState = useReduxState();
@@ -115,38 +101,36 @@ const QueryModelAttributeSelector = ({
   const handleModelSelect = useCallback(
     (modelName: string) => {
       onSelectModel(modelName);
-      if ('' !== modelName) {
+      if ('' !== modelName && modelName !== column.model_name) {
         let template = selectTemplate(reduxState, modelName);
-        setModelAttributes(
-          visibleSortedAttributesWithUpdatedAt(template.attributes)
+        setSelectableModelAttributes(
+          selectAllowedModelAttributes(
+            visibleSortedAttributesWithUpdatedAt(template.attributes)
+          )
         );
       }
     },
-    [reduxState, onSelectModel]
+    [reduxState, onSelectModel, setSelectableModelAttributes, column.model_name]
   );
 
-  function handleRemoveSlice(modelName: string, index: number) {
-    removeSlice(modelName, index);
-    setUpdateCounter(updateCounter + 1);
-  }
+  const {matrixModelNames, collectionModelNames} = useSliceMethods(
+    column,
+    columnIndex,
+    updateCounter,
+    setUpdateCounter
+  );
 
-  const showAttributes = useCallback(() => {
-    setOpen(true);
-  }, []);
-
-  useEffect(() => {
-    setSelectableModelAttributes(selectAllowedModelAttributes(modelAttributes));
-  }, [modelAttributes]);
-
-  const {matrixModelNames, collectionModelNames, slicesForModel} =
-    useSliceMethods(modelValue, updateCounter, setUpdateCounter, removeSlice);
-
-  const isSliceableAsMatrix = matrixModelNames.includes(modelValue);
-  const isSliceableAsCollection = collectionModelNames.includes(modelValue);
+  const isSliceableAsMatrix = matrixModelNames.includes(column.model_name);
+  const isSliceableAsCollection = collectionModelNames.includes(
+    column.model_name
+  );
 
   const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
 
   const id = `${label}-${Math.random()}`;
+
+  console.log('selectableModelAttributes', selectableModelAttributes);
+  console.log('column', column, modelChoiceSet);
 
   return (
     <Grid container alignItems='center' justify='flex-start'>
@@ -157,7 +141,7 @@ const QueryModelAttributeSelector = ({
           </InputLabel>
           <Select
             labelId={id}
-            value={modelValue}
+            value={column.model_name}
             onChange={(e) => handleModelSelect(e.target.value as string)}
           >
             {modelChoiceSet.sort().map((model_name: string, index: number) => (
@@ -168,48 +152,51 @@ const QueryModelAttributeSelector = ({
           </Select>
         </FormControl>
       </Grid>
-      {modelValue ? (
+      {column.model_name ? (
         <React.Fragment>
-          <Grid item xs={9} container spacing={2} direction='column'>
-            <Grid item>
-              <Button
-                onClick={showAttributes}
-                variant='contained'
-                color='default'
-              >
-                {`Attributes - ${
-                  selectedAttributes
-                    ? selectedAttributes.map((a) => a.attribute_name).join(', ')
-                    : 'None'
-                }`}
-              </Button>
-              <QueryAttributesModal
-                attributes={selectedAttributes || []}
-                attributeOptions={selectableModelAttributes}
-                setAttributes={(attributes: QueryColumn[]) =>
-                  onSelectAttributes(modelValue, attributes)
-                }
-                model_name={modelValue || ''}
-                open={open}
-                onClose={() => {
-                  setOpen(false);
-                }}
-              />
+          <Grid
+            item
+            xs={9}
+            container
+            spacing={2}
+            direction='column'
+            key={column.model_name}
+          >
+            <Grid item xs={4}>
+              <FormControl className={classes.fullWidth}>
+                <Autocomplete
+                  id={`${id}-attribute`}
+                  value={selectableModelAttributes.find(
+                    (a: Attribute) =>
+                      a.attribute_name === column.attribute_name &&
+                      a.model_name === column.model_name
+                  )}
+                  options={selectableModelAttributes.sort()}
+                  getOptionLabel={(option) => option.attribute_name}
+                  style={{width: 300}}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Attribute'
+                      variant='outlined'
+                    />
+                  )}
+                  onChange={(e, v) =>
+                    onSelectAttribute(v?.attribute_name || '')
+                  }
+                />
+              </FormControl>
             </Grid>
             {isSliceable ? (
               <Grid item>
-                <QuerySlicePane
-                  modelName={modelValue}
-                  slices={slicesForModel}
-                  handleRemoveSlice={handleRemoveSlice}
-                />
+                <QuerySlicePane column={column} columnIndex={columnIndex} />
               </Grid>
             ) : null}
           </Grid>
         </React.Fragment>
       ) : null}
       <Grid item xs={1}>
-        <RemoveModelIcon canRemove={canRemove} removeModel={removeModel} />
+        <RemoveColumnIcon canRemove={canRemove} removeColumn={removeColumn} />
       </Grid>
     </Grid>
   );

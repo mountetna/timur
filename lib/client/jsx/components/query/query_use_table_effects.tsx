@@ -12,8 +12,7 @@ import {
 import {
   pathToColumn,
   attributeIsMatrix,
-  hasMatrixSlice,
-  isMatchingMatrixSlice
+  hasMatrixSlice
 } from '../../selectors/query_selector';
 
 const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
@@ -35,46 +34,35 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
     ];
 
     return colDefs.concat(
-      Object.values(state.attributes || {})
-        .flat()
-        .reduce((acc: QueryTableColumn[], attr) => {
-          if (
-            expandMatrices &&
-            attributeIsMatrix(
-              selectModels(reduxState),
-              attr.model_name,
-              attr.attribute_name
-            ) &&
-            hasMatrixSlice(Object.values(state.slices).flat(), attr)
-          ) {
-            Object.values(state.slices)
-              .flat()
-              .filter((slice) => isMatchingMatrixSlice(slice, attr))
-              .forEach((slice) => {
-                (slice.operand as string).split(',').forEach((heading) => {
-                  acc.push({
-                    label: `${attr.display_label}.${heading}`,
-                    colId: `${generateIdCol(attr)}.${heading}`
-                  });
-                });
+      state.columns.reduce((acc: QueryTableColumn[], column) => {
+        if (
+          expandMatrices &&
+          attributeIsMatrix(
+            selectModels(reduxState),
+            column.model_name,
+            column.attribute_name
+          ) &&
+          hasMatrixSlice(column)
+        ) {
+          column.slices.forEach((slice) => {
+            (slice.operand as string).split(',').forEach((heading) => {
+              acc.push({
+                label: `${column.display_label}.${heading}`,
+                colId: `${generateIdCol(column)}.${heading}`
               });
-          } else {
-            acc.push({
-              label: attr.display_label,
-              colId: generateIdCol(attr)
             });
-          }
+          });
+        } else {
+          acc.push({
+            label: column.display_label,
+            colId: generateIdCol(column)
+          });
+        }
 
-          return acc;
-        }, [])
+        return acc;
+      }, [])
     );
-  }, [
-    state.attributes,
-    state.rootIdentifier,
-    state.slices,
-    reduxState,
-    expandMatrices
-  ]);
+  }, [state.columns, state.rootIdentifier, reduxState, expandMatrices]);
 
   const formatRowData = useCallback(
     (allData: QueryResponse, cols: QueryTableColumn[]) => {

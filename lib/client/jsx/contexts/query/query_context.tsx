@@ -7,25 +7,23 @@ import {QueryGraph} from '../../utils/query_graph';
 import useQueryGraph from './use_query_graph';
 
 const defaultState = {
-  attributes: {} as {[key: string]: QueryColumn[]},
+  columns: [] as QueryColumn[],
   rootModel: null as string | null,
   rootIdentifier: {} as QueryColumn | null,
   recordFilters: [] as QueryFilter[],
   orRecordFilterIndices: [] as number[],
-  slices: {} as {[key: string]: QuerySlice[]},
   graph: {} as QueryGraph
 };
 
 export const defaultContext = {
   state: defaultState as QueryState,
-  setAttributes: (model_name: string, attributes: QueryColumn[]) => {},
+  addQueryColumn: (column: QueryColumn) => {},
+  removeQueryColumn: (index: number) => {},
+  patchQueryColumn: (index: number, column: QueryColumn) => {},
   addRecordFilter: (recordFilter: QueryFilter) => {},
   removeRecordFilter: (index: number) => {},
   patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
   setOrRecordFilterIndices: (indices: number[]) => {},
-  addSlice: (endModelName: string, slice: QuerySlice) => {},
-  removeSlice: (endModelName: string, index: number) => {},
-  patchSlice: (endModelName: string, index: number, slice: QuerySlice) => {},
   setRootModel: (
     model_name: string | null,
     model_identifier: QueryColumn | null
@@ -44,20 +42,35 @@ export const QueryProvider = (
 ) => {
   const [state, setState] = useState(props.state || defaultContext.state);
 
-  const setAttributes = useCallback(
-    (model_name: string, attributes: QueryColumn[]) => {
-      // Remove a model if no attributes
-      let updatedAttributes = {...state.attributes};
-
-      if (attributes.length > 0) {
-        updatedAttributes[model_name] = attributes;
-      } else {
-        delete updatedAttributes[model_name];
-      }
-
+  const addQueryColumn = useCallback(
+    (column: QueryColumn) => {
       setState({
         ...state,
-        attributes: updatedAttributes
+        columns: [...(state.columns || [])].concat([column])
+      });
+    },
+    [state]
+  );
+
+  const removeQueryColumn = useCallback(
+    (index: number) => {
+      let updatedQueryColumns = [...state.columns];
+      updatedQueryColumns.splice(index, 1);
+      setState({
+        ...state,
+        columns: updatedQueryColumns
+      });
+    },
+    [state]
+  );
+
+  const patchQueryColumn = useCallback(
+    (index: number, column: QueryColumn) => {
+      let updatedQueryColumns = [...state.columns];
+      updatedQueryColumns[index] = column;
+      setState({
+        ...state,
+        columns: updatedQueryColumns
       });
     },
     [state]
@@ -107,60 +120,14 @@ export const QueryProvider = (
     [state]
   );
 
-  const addSlice = useCallback(
-    (endModelName: string, slice: QuerySlice) => {
-      setState({
-        ...state,
-        slices: {
-          ...state.slices,
-          [endModelName]: [...(state.slices[endModelName] || [])].concat([
-            slice
-          ])
-        }
-      });
-    },
-    [state]
-  );
-
-  const removeSlice = useCallback(
-    (endModelName: string, index: number) => {
-      let updatedSlices = [...state.slices[endModelName]];
-      updatedSlices.splice(index, 1);
-      setState({
-        ...state,
-        slices: {
-          ...state.slices,
-          [endModelName]: updatedSlices
-        }
-      });
-    },
-    [state]
-  );
-
-  const patchSlice = useCallback(
-    (endModelName: string, index: number, slice: QuerySlice) => {
-      let updatedSlices = [...state.slices[endModelName]];
-      updatedSlices[index] = slice;
-      setState({
-        ...state,
-        slices: {
-          ...state.slices,
-          [endModelName]: updatedSlices
-        }
-      });
-    },
-    [state]
-  );
-
   const setRootModel = useCallback(
     (rootModel: string | null, rootIdentifier: QueryColumn | null) => {
       setState({
         ...state, // we want to keep state.graph!
         rootModel,
         rootIdentifier,
-        attributes: {},
-        recordFilters: [],
-        slices: {}
+        columns: [],
+        recordFilters: []
       });
     },
     [state]
@@ -182,14 +149,13 @@ export const QueryProvider = (
     <QueryContext.Provider
       value={{
         state,
-        setAttributes,
+        addQueryColumn,
+        removeQueryColumn,
+        patchQueryColumn,
         addRecordFilter,
         removeRecordFilter,
         patchRecordFilter,
         setOrRecordFilterIndices,
-        addSlice,
-        removeSlice,
-        patchSlice,
         setRootModel
       }}
     >

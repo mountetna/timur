@@ -19,6 +19,7 @@ export interface QueryColumn {
   model_name: string;
   attribute_name: string;
   display_label: string;
+  slices: QuerySlice[];
 }
 
 export interface QueryResponse {

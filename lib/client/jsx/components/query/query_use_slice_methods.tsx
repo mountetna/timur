@@ -3,57 +3,63 @@ import React, {useMemo, useCallback, useContext} from 'react';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectModels} from 'etna-js/selectors/magma';
 import {QueryContext} from '../../contexts/query/query_context';
-import {QuerySlice} from '../../contexts/query/query_types';
+import {QuerySlice, QueryColumn} from '../../contexts/query/query_types';
 import {
   selectMatrixModelNames,
-  selectCollectionModelNames,
-  isMatrixSlice
+  selectCollectionModelNames
 } from '../../selectors/query_selector';
 
 const useSliceMethods = (
-  endModelName: string,
+  column: QueryColumn,
+  columnIndex: number,
   updateCounter: number,
-  setUpdateCounter: React.Dispatch<React.SetStateAction<number>>,
-  removeSlice: (endModelName: string, index: number) => void
+  setUpdateCounter: React.Dispatch<React.SetStateAction<number>>
 ) => {
-  let {state, addSlice, patchSlice} = useContext(QueryContext);
+  let {state, patchQueryColumn} = useContext(QueryContext);
   const reduxState = useReduxState();
 
   const addNewSlice = useCallback(() => {
-    addSlice(endModelName, {
-      modelName: '',
-      attributeName: '',
-      operator: '',
-      operand: ''
+    patchQueryColumn(columnIndex, {
+      ...column,
+      slices: [...(column.slices || [])].concat({
+        modelName: '',
+        attributeName: '',
+        operator: '',
+        operand: ''
+      })
     });
-  }, [addSlice, endModelName]);
+  }, [patchQueryColumn, column, columnIndex]);
 
   const handlePatchSlice = useCallback(
-    (index: number, filter: QuerySlice) => {
-      console.log(endModelName, filter);
-      patchSlice(endModelName, index, filter);
+    (sliceIndex: number, slice: QuerySlice) => {
+      let updatedSlices = [...column.slices];
+      updatedSlices[sliceIndex] = slice;
+      patchQueryColumn(columnIndex, {
+        ...column,
+        slices: updatedSlices
+      });
     },
-    [patchSlice, endModelName]
+    [patchQueryColumn, column, columnIndex]
   );
 
   const handleRemoveSlice = useCallback(
-    (index: number) => {
-      removeSlice(endModelName, index);
+    (sliceIndex: number) => {
+      let updatedSlices = [...column.slices];
+      updatedSlices.splice(sliceIndex, 1);
+      patchQueryColumn(columnIndex, {
+        ...column,
+        slices: updatedSlices
+      });
       setUpdateCounter(updateCounter + 1);
     },
-    [removeSlice, updateCounter, endModelName, setUpdateCounter]
+    [updateCounter, setUpdateCounter, patchQueryColumn, column, columnIndex]
   );
 
   const attributesWithRootIdentifier = useMemo(() => {
-    if (!state.rootIdentifier || !state.rootModel) return {};
+    if (!state.rootIdentifier || !state.rootModel) return [];
 
-    return {
-      ...state.attributes,
-      [state.rootModel]: [...(state.attributes[state.rootModel] || [])].concat([
-        state.rootIdentifier
-      ])
-    };
-  }, [state.attributes, state.rootModel, state.rootIdentifier]);
+    return [...state.columns].concat([state.rootIdentifier]);
+  }, [state.columns, state.rootModel, state.rootIdentifier]);
 
   const matrixModelNames = useMemo(() => {
     if (!state.rootModel) return [];
@@ -67,26 +73,17 @@ const useSliceMethods = (
   const collectionModelNames = useMemo(() => {
     if (!state.rootModel) return [];
 
-    return selectCollectionModelNames(
-      state.graph,
-      state.rootModel,
-      Object.keys(state.attributes)
-    );
-  }, [state.graph, state.rootModel, state.attributes]);
-
-  const slicesForModel = useMemo(() => {
-    if (!state.slices[endModelName]) return [];
-
-    return state.slices[endModelName];
-  }, [state.slices, endModelName]);
+    return selectCollectionModelNames(state.graph, state.rootModel, [
+      ...new Set(state.columns.map((c) => c.model_name))
+    ]);
+  }, [state.graph, state.rootModel, state.columns]);
 
   return {
     handleRemoveSlice,
     handlePatchSlice,
     addNewSlice,
     matrixModelNames,
-    collectionModelNames,
-    slicesForModel
+    collectionModelNames
   };
 };
 

@@ -75,15 +75,13 @@ export const selectMatrixAttributes = (
 
 export const selectMatrixModelNames = (
   magmaModels: any,
-  selectedAttributes: {[key: string]: QueryColumn[]}
+  columns: QueryColumn[]
 ): string[] => {
-  return Object.entries(selectedAttributes)
-    .filter(([modelName, attributes]: [string, QueryColumn[]]) =>
-      attributes.some((attr) =>
-        attributeIsMatrix(magmaModels, modelName, attr.attribute_name)
-      )
+  return columns
+    .filter((column: QueryColumn) =>
+      attributeIsMatrix(magmaModels, column.model_name, column.attribute_name)
     )
-    .map(([modelName, attributes]: [string, QueryColumn[]]) => modelName);
+    .map((column: QueryColumn) => column.model_name);
 };
 
 export const selectCollectionModelNames = (
@@ -203,20 +201,17 @@ export const attributeIsFile = (
 export const isMatrixSlice = (slice: QuerySlice) =>
   '::slice' === slice.operator;
 
-export const isMatchingMatrixSlice = (
-  slice: QuerySlice,
-  attribute: QueryColumn
-) => {
-  return (
-    isMatrixSlice(slice) &&
-    slice.attributeName === attribute.attribute_name &&
-    slice.modelName === attribute.model_name
-  );
-};
+// export const isMatchingMatrixSlice = (
+//   slice: QuerySlice,
+//   attribute: QueryColumn
+// ) => {
+//   return (
+//     isMatrixSlice(slice) &&
+//     slice.attributeName === attribute.attribute_name &&
+//     slice.modelName === attribute.model_name
+//   );
+// };
 
-export const hasMatrixSlice = (
-  slices: QuerySlice[],
-  attribute: QueryColumn
-) => {
-  return slices.some((slice) => isMatchingMatrixSlice(slice, attribute));
+export const hasMatrixSlice = (column: QueryColumn) => {
+  return column.slices.some((slice) => isMatrixSlice(slice));
 };
