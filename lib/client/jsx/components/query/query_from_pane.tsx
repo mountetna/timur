@@ -30,13 +30,14 @@ const QueryFromPane = () => {
         setRootModel(modelName, {
           model_name: modelName,
           attribute_name: template.identifier,
-          display_label: `${modelName}.${template.identifier}`
+          display_label: `${modelName}.${template.identifier}`,
+          slices: []
         });
       } else {
         setRootModel(null, null);
       }
     },
-    [state.rootModel, reduxState]
+    [reduxState, setRootModel]
   );
 
   const classes = useStyles();

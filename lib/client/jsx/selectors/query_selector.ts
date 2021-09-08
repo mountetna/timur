@@ -148,11 +148,14 @@ export const pathToColumn = (
   let index = array.indexOf(heading);
   if (index > -1) return index.toString();
 
-  let fullPath: number[] = [];
+  let indexlessHeading = heading.split('@')[0];
+  let startingIndex = heading.split('@')[1];
+
+  let fullPath: number[] = [parseInt(startingIndex)];
 
   if (expandMatrices) {
-    let nonMatrixColId = heading.split('.')[0];
-    let sliceColId = heading.split('.')[1];
+    let nonMatrixColId = indexlessHeading.split('.')[0];
+    let sliceColId = indexlessHeading.split('.')[1];
 
     fullPath = getPath(array, nonMatrixColId, []);
 
@@ -170,7 +173,7 @@ export const pathToColumn = (
     //   because of the answer format
     return fullPath.slice(0, -1).concat([sliceIndex]).join('.');
   } else {
-    fullPath = getPath(array, heading, []);
+    fullPath = getPath(array, indexlessHeading, []);
     return fullPath.length > 0 ? fullPath[0].toString() : '-1';
   }
 };

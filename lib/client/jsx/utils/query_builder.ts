@@ -36,7 +36,6 @@ export class QueryBuilder {
 
   addRootIdentifier(rootIdentifier: QueryColumn) {
     this.root = rootIdentifier.model_name;
-    this.columns.splice(0, 0, rootIdentifier);
   }
 
   addColumns(columns: QueryColumn[]) {
@@ -198,6 +197,8 @@ export class QueryBuilder {
     // Convert this.attributes + this.slices into the right
     //   query format. Include the path from the root model
     //   to the attributes' model.
+    if (this.columns.length === 0) return [''];
+
     let initialValues = this.predicateWithSlice([], this.columns[0]);
 
     return this.columns.slice(1).reduce(

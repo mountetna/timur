@@ -12,29 +12,23 @@ import {
 import {
   pathToColumn,
   attributeIsMatrix,
-  hasMatrixSlice
+  hasMatrixSlice,
+  isMatrixSlice
 } from '../../selectors/query_selector';
 
 const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
   let {state} = useContext(QueryContext);
   const reduxState = useReduxState();
 
-  function generateIdCol(attr: QueryColumn): string {
-    return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}`;
+  function generateIdCol(attr: QueryColumn, index: number): string {
+    return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}@${index}`;
   }
 
   const columns = useMemo(() => {
     if (!state.rootIdentifier) return [];
 
-    let colDefs: QueryTableColumn[] = [
-      {
-        colId: generateIdCol(state.rootIdentifier),
-        label: state.rootIdentifier.display_label
-      }
-    ];
-
-    return colDefs.concat(
-      state.columns.reduce((acc: QueryTableColumn[], column) => {
+    return state.columns.reduce(
+      (acc: QueryTableColumn[], column: QueryColumn, index: number) => {
         if (
           expandMatrices &&
           attributeIsMatrix(
@@ -44,23 +38,26 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
           ) &&
           hasMatrixSlice(column)
         ) {
-          column.slices.forEach((slice) => {
-            (slice.operand as string).split(',').forEach((heading) => {
-              acc.push({
-                label: `${column.display_label}.${heading}`,
-                colId: `${generateIdCol(column)}.${heading}`
+          column.slices
+            .filter((slice) => isMatrixSlice(slice))
+            .forEach((slice) => {
+              (slice.operand as string).split(',').forEach((heading) => {
+                acc.push({
+                  label: `${column.display_label}.${heading}`,
+                  colId: `${generateIdCol(column, index)}.${heading}`
+                });
               });
             });
-          });
         } else {
           acc.push({
             label: column.display_label,
-            colId: generateIdCol(column)
+            colId: generateIdCol(column, index)
           });
         }
 
         return acc;
-      }, [])
+      },
+      []
     );
   }, [state.columns, state.rootIdentifier, reduxState, expandMatrices]);
 

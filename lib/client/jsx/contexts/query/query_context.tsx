@@ -126,7 +126,7 @@ export const QueryProvider = (
         ...state, // we want to keep state.graph!
         rootModel,
         rootIdentifier,
-        columns: [],
+        columns: rootIdentifier ? [rootIdentifier] : [],
         recordFilters: []
       });
     },

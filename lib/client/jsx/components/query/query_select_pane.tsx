@@ -47,7 +47,7 @@ const QuerySelectPane = () => {
                 display_label: `${column.model_name}.${attributeName}`
               })
             }
-            canRemove={true}
+            canEdit={0 !== index}
             removeColumn={() => removeQueryColumn(index)}
           />
         );

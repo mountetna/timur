@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,6 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectTemplate} from 'etna-js/selectors/magma';
@@ -50,13 +51,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RemoveColumnIcon = ({
-  canRemove,
+  canEdit,
   removeColumn
 }: {
-  canRemove: boolean;
+  canEdit: boolean;
   removeColumn: () => void;
 }) => {
-  if (!canRemove) return null;
+  if (!canEdit) return null;
 
   return (
     <Tooltip title='Remove column' aria-label='remove column'>
@@ -64,6 +65,85 @@ const RemoveColumnIcon = ({
         <ClearIcon color='action' />
       </IconButton>
     </Tooltip>
+  );
+};
+
+function id(label: string) {
+  return `${label}-${Math.random()}`;
+}
+
+const ModelNameSelector = ({
+  canEdit,
+  onSelect,
+  label,
+  modelName,
+  modelChoiceSet
+}: {
+  canEdit: boolean;
+  onSelect: (modelName: string) => void;
+  label: string;
+  modelName: string;
+  modelChoiceSet: string[];
+}) => {
+  const classes = useStyles();
+
+  if (!canEdit) return <Typography>{modelName}</Typography>;
+
+  return (
+    <FormControl className={classes.formControl}>
+      <InputLabel shrink id={id(label)}>
+        {label}
+      </InputLabel>
+      <Select
+        labelId={id(label)}
+        value={modelName}
+        onChange={(e) => onSelect(e.target.value as string)}
+      >
+        {modelChoiceSet.sort().map((model_name: string, index: number) => (
+          <MenuItem key={index} value={model_name}>
+            {model_name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+};
+
+const AttributeSelector = ({
+  onSelect,
+  canEdit,
+  attributeChoiceSet,
+  column,
+  label
+}: {
+  label: string;
+  column: QueryColumn;
+  attributeChoiceSet: Attribute[];
+  canEdit: boolean;
+  onSelect: (attributeName: string) => void;
+}) => {
+  const classes = useStyles();
+
+  if (!canEdit) return <Typography>{column.attribute_name}</Typography>;
+
+  return (
+    <FormControl className={classes.fullWidth}>
+      <Autocomplete
+        id={`${id(label)}-attribute`}
+        value={attributeChoiceSet.find(
+          (a: Attribute) =>
+            a.attribute_name === column.attribute_name &&
+            a.model_name === column.model_name
+        )}
+        options={attributeChoiceSet.sort()}
+        getOptionLabel={(option) => option.attribute_name}
+        style={{width: 300}}
+        renderInput={(params) => (
+          <TextField {...params} label='Attribute' variant='outlined' />
+        )}
+        onChange={(e, v) => onSelect(v?.attribute_name || '')}
+      />
+    </FormControl>
   );
 };
 
@@ -75,7 +155,7 @@ const QueryModelAttributeSelector = ({
   onSelectModel,
   onSelectAttribute,
   removeColumn,
-  canRemove
+  canEdit
 }: {
   label: string;
   modelChoiceSet: string[];
@@ -84,7 +164,7 @@ const QueryModelAttributeSelector = ({
   onSelectModel: (modelName: string) => void;
   onSelectAttribute: (attribute_name: string) => void;
   removeColumn: () => void;
-  canRemove: boolean;
+  canEdit: boolean;
 }) => {
   const [selectableModelAttributes, setSelectableModelAttributes] = useState(
     [] as Attribute[]
@@ -93,8 +173,6 @@ const QueryModelAttributeSelector = ({
   //   with the model / attribute as a "label".
   // Matrices will have modelName + attributeName.
   const [updateCounter, setUpdateCounter] = useState(0);
-
-  const classes = useStyles();
 
   let reduxState = useReduxState();
 
@@ -127,30 +205,16 @@ const QueryModelAttributeSelector = ({
 
   const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
 
-  const id = `${label}-${Math.random()}`;
-
-  console.log('selectableModelAttributes', selectableModelAttributes);
-  console.log('column', column, modelChoiceSet);
-
   return (
     <Grid container alignItems='center' justify='flex-start'>
       <Grid item xs={2}>
-        <FormControl className={classes.formControl}>
-          <InputLabel shrink id={id}>
-            {label}
-          </InputLabel>
-          <Select
-            labelId={id}
-            value={column.model_name}
-            onChange={(e) => handleModelSelect(e.target.value as string)}
-          >
-            {modelChoiceSet.sort().map((model_name: string, index: number) => (
-              <MenuItem key={index} value={model_name}>
-                {model_name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <ModelNameSelector
+          canEdit={canEdit}
+          label={label}
+          modelName={column.model_name}
+          onSelect={handleModelSelect}
+          modelChoiceSet={modelChoiceSet}
+        />
       </Grid>
       {column.model_name ? (
         <React.Fragment>
@@ -163,29 +227,13 @@ const QueryModelAttributeSelector = ({
             key={column.model_name}
           >
             <Grid item xs={4}>
-              <FormControl className={classes.fullWidth}>
-                <Autocomplete
-                  id={`${id}-attribute`}
-                  value={selectableModelAttributes.find(
-                    (a: Attribute) =>
-                      a.attribute_name === column.attribute_name &&
-                      a.model_name === column.model_name
-                  )}
-                  options={selectableModelAttributes.sort()}
-                  getOptionLabel={(option) => option.attribute_name}
-                  style={{width: 300}}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Attribute'
-                      variant='outlined'
-                    />
-                  )}
-                  onChange={(e, v) =>
-                    onSelectAttribute(v?.attribute_name || '')
-                  }
-                />
-              </FormControl>
+              <AttributeSelector
+                onSelect={onSelectAttribute}
+                canEdit={canEdit}
+                label={label}
+                attributeChoiceSet={selectableModelAttributes}
+                column={column}
+              />
             </Grid>
             {isSliceable ? (
               <Grid item>
@@ -196,7 +244,7 @@ const QueryModelAttributeSelector = ({
         </React.Fragment>
       ) : null}
       <Grid item xs={1}>
-        <RemoveColumnIcon canRemove={canRemove} removeColumn={removeColumn} />
+        <RemoveColumnIcon canEdit={canEdit} removeColumn={removeColumn} />
       </Grid>
     </Grid>
   );
