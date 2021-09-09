@@ -1,20 +1,19 @@
 import {QueryBuilder} from '../../../lib/client/jsx/utils/query_builder';
 import {QueryGraph} from '../../../lib/client/jsx/utils/query_graph';
 
-const models = {
-  monster: {
-    documents: {}, revisions: {}, views: {}, template: require('../fixtures/template_monster.json')
-  }, labor: {
-    documents: {}, revisions: {}, views: {}, template: require('../fixtures/template_labor.json')
-  }, project: {
-    documents: {}, revisions: {}, views: {}, template: require('../fixtures/template_project.json')
-  }, prize: {
-    documents: {}, revisions: {}, views: {}, template: require('../fixtures/template_prize.json')
-  }, victim: {
-    documents: {}, revisions: {}, views: {}, template: require('../fixtures/template_victim.json')
-  }, wound: {
-    documents: {}, revisions: {}, views: {}, template: require('../fixtures/template_wound.json')
+function stampTemplate(template: any) {
+  return {
+    documents: {}, revisions: {}, views: {}, template
   }
+}
+
+const models = {
+  monster: stampTemplate(require('../fixtures/template_monster.json')),
+  labor: stampTemplate(require('../fixtures/template_labor.json')),
+  project: stampTemplate(require('../fixtures/template_project.json')),
+  prize: stampTemplate(require('../fixtures/template_prize.json')),
+  victim: stampTemplate(require('../fixtures/template_victim.json')),
+  wound: stampTemplate(require('../fixtures/template_wound.json')),
 };
 
 describe('QueryBuilder', () => {
@@ -109,10 +108,10 @@ describe('QueryBuilder', () => {
     expect(builder.query()).toEqual([
       'monster', [
         '::and',
-        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
         ['name', '::equals', 'Nemean Lion'],
-        ['labor', 'number', '::equals', 2],
-        ['labor', 'prize', ['name', '::equals', 'Apples'], '::any']
+        ['labor', ['number', '::equals', 2], '::any'],
+        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any']
       ], '::all', [
         ['name'],
         ['species'],
@@ -130,10 +129,10 @@ describe('QueryBuilder', () => {
     expect(builder.query()).toEqual([
       'monster', [
         '::and',
-        ['labor', 'name', '::in', ['lion', 'hydra', 'apples']],
+        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
         ['name', '::equals', 'Nemean Lion'],
-        ['labor', 'number', '::equals', 2],
-        ['labor', 'prize', ['name', '::equals', 'Apples'], '::any']
+        ['labor', ['number', '::equals', 2], '::any'],
+        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any']
       ], '::all', [
         ['name'],
         ['species'],
@@ -150,8 +149,8 @@ describe('QueryBuilder', () => {
 
     expect(builder.query()).toEqual([
       'monster', [
-        '::and', ['name', '::equals', 'Nemean Lion'], ['labor', 'prize', ['name', '::equals', 'Apples'], '::any'], [
-          '::or', ['labor', 'name', '::in', ['lion', 'hydra', 'apples']], ['labor', 'number', '::equals', 2]
+        '::and', ['name', '::equals', 'Nemean Lion'], ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any'], [
+          '::or', ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'], ['labor', ['number', '::equals', 2], '::any']
         ]
       ], '::all', [
         ['name'],
@@ -208,7 +207,7 @@ describe('QueryBuilder', () => {
 
     expect(builder.count()).toEqual([
       'monster', [
-        '::and', ['labor', 'name', '::in', ['lion', 'hydra', 'apples']], ['name', '::equals', 'Nemean Lion']
+        '::and', ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'], ['name', '::equals', 'Nemean Lion']
       ], '::count'
     ]);
   });
@@ -226,7 +225,7 @@ describe('QueryBuilder', () => {
 
       expect(builder.query()).toEqual([
         'labor', [
-          'monster', 'victim', ['wound', ['location', '::equals', 'arm'], '::any'], '::any'
+          'monster', ['victim', ['wound', ['location', '::equals', 'arm'], '::any'], '::any'], '::any'
         ], '::all', [['name']]
       ]);
     });
@@ -275,7 +274,7 @@ describe('QueryBuilder', () => {
 
       expect(builder.query()).toEqual([
         'prize', [
-          'labor', 'monster', 'victim', ['wound', ['location', '::equals', 'arm'], '::any'], '::any'
+          'labor', ['monster', ['victim', ['wound', ['location', '::equals', 'arm'], '::any'], '::any'], '::any'], '::any'
         ], '::all', [['name']]
       ]);
     });
@@ -291,7 +290,7 @@ describe('QueryBuilder', () => {
       ]);
 
       expect(builder.query()).toEqual([
-        'monster', ['labor', 'prize', ['name', '::equals', 'Apples'], '::any'], '::all', [['name']]
+        'monster', ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any'], '::all', [['name']]
       ]);
     });
 
@@ -304,7 +303,7 @@ describe('QueryBuilder', () => {
       ]);
 
       expect(builder.query()).toEqual([
-        'prize', ['labor', 'name', '::in', ['Lion', 'Hydra']], '::all', [['name']]
+        'prize', ['labor', ['name', '::in', ['Lion', 'Hydra']], '::any'], '::all', [['name']]
       ]);
     });
   });
@@ -322,7 +321,7 @@ describe('QueryBuilder', () => {
 
       expect(builder.query()).toEqual([
         'labor', [
-          'monster', 'victim', ['wound', ['location', '::equals', 'arm'], '::every'], '::every'
+          'monster', ['victim', ['wound', ['location', '::equals', 'arm'], '::every'], '::every'], '::any'
         ], '::all', [['name']]
       ]);
     });
@@ -371,7 +370,7 @@ describe('QueryBuilder', () => {
 
       expect(builder.query()).toEqual([
         'prize', [
-          'labor', 'monster', 'victim', ['wound', ['location', '::equals', 'arm'], '::every'], '::every'
+          'labor', ['monster', ['victim', ['wound', ['location', '::equals', 'arm'], '::every'], '::every'], '::any'], '::any'
         ], '::all', [['name']]
       ]);
     });
@@ -387,7 +386,7 @@ describe('QueryBuilder', () => {
       ]);
 
       expect(builder.query()).toEqual([
-        'monster', ['labor', 'prize', ['name', '::equals', 'Apples'], '::every'], '::all', [['name']]
+        'monster', ['labor', ['prize', ['name', '::equals', 'Apples'], '::every'], '::any'], '::all', [['name']]
       ]);
     });
 
@@ -400,7 +399,7 @@ describe('QueryBuilder', () => {
       ]);
 
       expect(builder.query()).toEqual([
-        'prize', ['labor', 'name', '::in', ['Lion', 'Hydra']], '::all', [['name']]
+        'prize', ['labor', ['name', '::in', ['Lion', 'Hydra']], '::any'], '::all', [['name']]
       ]);
     });
   });

@@ -24,7 +24,7 @@ export default class QueryFilterPathBuilder {
     let nestedFilterIndex: number = 0;
 
     this.path.forEach((modelName: string) => {
-      const foldingClause = modelName in this.anyMap ? this.anyMap[modelName] ? '::any' : '::every' : '::any';
+      const foldingClause = this.anyMap && modelName in this.anyMap ? this.anyMap[modelName] ? '::any' : '::every' : '::any';
 
       let newValue = [
         modelName, foldingClause
