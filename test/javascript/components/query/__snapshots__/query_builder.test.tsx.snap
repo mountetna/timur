@@ -365,7 +365,7 @@ exports[`QueryBuilder renders 1`] = `
           class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-11"
         >
           <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center"
+            class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
           >
             <div
               class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
@@ -394,7 +394,7 @@ exports[`QueryBuilder renders 1`] = `
             />
           </div>
           <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center"
+            class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
           >
             <div
               class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
@@ -829,7 +829,7 @@ exports[`QueryBuilder renders 1`] = `
             </div>
           </div>
           <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center"
+            class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
           >
             <div
               class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
@@ -1264,7 +1264,7 @@ exports[`QueryBuilder renders 1`] = `
             </div>
           </div>
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-text"
+            class="MuiButtonBase-root MuiButton-root MuiButton-text query-add-column-btn"
             tabindex="0"
             type="button"
           >
