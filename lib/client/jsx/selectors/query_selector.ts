@@ -123,6 +123,8 @@ export const getPath = (
   heading: string,
   currentPath: number[]
 ): number[] => {
+  if (!array) return [];
+
   let index = array.indexOf(heading);
   if (index > -1) return currentPath.concat([index]);
 
@@ -145,19 +147,16 @@ export const pathToColumn = (
   heading: string,
   expandMatrices: boolean
 ): string => {
-  let index = array.indexOf(heading);
-  if (index > -1) return index.toString();
-
   let indexlessHeading = heading.split('@')[0];
-  let startingIndex = heading.split('@')[1];
+  let startingIndexPlusMatrixColId = heading.split('@')[1];
 
-  let fullPath: number[] = [parseInt(startingIndex)];
+  let fullPath: number[] = [];
 
   if (expandMatrices) {
-    let nonMatrixColId = indexlessHeading.split('.')[0];
-    let sliceColId = indexlessHeading.split('.')[1];
+    let startingIndex = parseInt(startingIndexPlusMatrixColId.split('.')[0]);
+    let sliceColId = startingIndexPlusMatrixColId.split('.')[1];
 
-    fullPath = getPath(array, nonMatrixColId, []);
+    fullPath = getPath(array[startingIndex], indexlessHeading, [startingIndex]);
 
     if (!sliceColId) return fullPath.length > 0 ? fullPath[0].toString() : '-1';
 
@@ -169,11 +168,15 @@ export const pathToColumn = (
 
     let sliceIndex = sliceOperands.indexOf(sliceColId);
 
-    // Disgard the extra [1] here from pathToSliceOperands,
-    //   because of the answer format
-    return fullPath.slice(0, -1).concat([sliceIndex]).join('.');
+    // Get rid of the extra [1] used to find the slice operands
+    return pathToSliceOperands.slice(0, -1).concat([sliceIndex]).join('.');
   } else {
-    fullPath = getPath(array, indexlessHeading, []);
+    let startingIndex = parseInt(startingIndexPlusMatrixColId);
+
+    if (!Array.isArray(array[startingIndex])) return startingIndex.toString();
+
+    fullPath = getPath(array[startingIndex], indexlessHeading, [startingIndex]);
+
     return fullPath.length > 0 ? fullPath[0].toString() : '-1';
   }
 };

@@ -52,7 +52,6 @@ export default class FilterOperator {
   }
 
   options(isColumnFilter: boolean): {[key: string]: string} {
-    console.log('in options', this.attributeType, isColumnFilter);
     if ('matrix' === this.attributeType && isColumnFilter) {
       return Object.keys(FilterOperator.allOptions).reduce(
         (acc: {[key: string]: string}, key: string) => {
