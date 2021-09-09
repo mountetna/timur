@@ -78,6 +78,19 @@ describe('QueryBuilder', () => {
               operand: 'Athens'
             }
           ]
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'name',
+          display_label: 'prize.name',
+          slices: [
+            {
+              modelName: 'prize',
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Sparta'
+            }
+          ]
         }
       ],
       recordFilters: [

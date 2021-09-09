@@ -165,6 +165,30 @@ describe('pathToColumn', () => {
     expect(pathToColumn(input, 'bar@1.shallow', true)).toEqual('1.0');
     expect(pathToColumn(input, 'deep@3.nesting', true)).toEqual('3.2.1');
   });
+
+  it('returns correct path for duplicate values', () => {
+    let input = [
+      'foo',
+      ['bar', ['shallow', 'deep']],
+      ['bar', ['shallow', 'deep']],
+      ['blah', 'zap', ['deep', ['something', 'nesting']]]
+    ];
+
+    // Note that the values may seem counterintuitive, but the
+    //   query answer actually compacts out the "attribute",
+    //   which in these cases would be "bar".
+    // Answer would be something like:
+    // answer = [
+    //  1,
+    //  [2, 3],
+    //  [4, 5],
+    //  [6, 7, [8, 9]]
+    // ]
+    expect(pathToColumn(input, 'bar@1.shallow', true)).toEqual('1.0');
+    expect(pathToColumn(input, 'bar@1.deep', true)).toEqual('1.1');
+    expect(pathToColumn(input, 'bar@2.shallow', true)).toEqual('2.0');
+    expect(pathToColumn(input, 'bar@2.deep', true)).toEqual('2.1');
+  });
 });
 
 describe('getPath', () => {

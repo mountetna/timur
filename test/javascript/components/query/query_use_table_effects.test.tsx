@@ -288,4 +288,81 @@ describe('useTableEffects', () => {
       ['Lernean Hydra', 0, 3]
     ]);
   });
+
+  it('returns correct data for duplicated columns with distinct slices', async () => {
+    store = mockStore({
+      magma: {models},
+      janus: {projects: require('../../fixtures/project_names.json')}
+    });
+
+    let mockState = {
+      ...defaultContext.state,
+      graph,
+      rootModel: 'monster',
+      rootIdentifier: {
+        model_name: 'monster',
+        attribute_name: 'name',
+        display_label: 'monster.name'
+      },
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name'
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'value',
+          display_label: 'prize.value',
+          slices: [
+            {
+              modelName: 'prize',
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Athens'
+            }
+          ]
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'value',
+          display_label: 'prize.value',
+          slices: [
+            {
+              modelName: 'prize',
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Sparta'
+            }
+          ]
+        }
+      ]
+    };
+
+    const data = {
+      answer: [
+        ['Nemean Lion', ['Nemean Lion', 2, 1]],
+        ['Lernean Hydra', ['Lernean Hydra', 0, 3]]
+      ],
+      format: [
+        'labors::monster#name',
+        ['labors::monster#name', 'labors::prize#value', 'labors::prize#value']
+      ],
+      type: 'Mock'
+    };
+
+    const {result} = renderHook(() => useTableEffects(data, true), {
+      wrapper: querySpecWrapper(mockState, store)
+    });
+
+    expect(result.current.columns.map(({label}) => label)).toEqual([
+      'monster.name',
+      'prize.value',
+      'prize.value'
+    ]);
+    expect(result.current.rows).toEqual([
+      ['Nemean Lion', 2, 1],
+      ['Lernean Hydra', 0, 3]
+    ]);
+  });
 });
