@@ -59,15 +59,27 @@ describe('QueryResults', () => {
         attribute_name: 'name',
         display_label: 'monster.name'
       },
-      attributes: {
-        prize: [
-          {
-            model_name: 'prize',
-            attribute_name: 'name',
-            display_label: 'prize.name'
-          }
-        ]
-      },
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name',
+          slices: []
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'name',
+          display_label: 'prize.name',
+          slices: [
+            {
+              modelName: 'prize',
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Athens'
+            }
+          ]
+        }
+      ],
       recordFilters: [
         {
           modelName: 'labor',
@@ -75,17 +87,7 @@ describe('QueryResults', () => {
           operator: '::equals',
           operand: 2
         }
-      ],
-      slices: {
-        prize: [
-          {
-            modelName: 'prize',
-            attributeName: 'name',
-            operator: '::equals',
-            operand: 'Athens'
-          }
-        ]
-      }
+      ]
     };
 
     const {asFragment} = render(<QueryResults />, {
@@ -115,22 +117,39 @@ describe('QueryResults', () => {
         attribute_name: 'name',
         display_label: 'monster.name'
       },
-      attributes: {
-        prize: [
-          {
-            model_name: 'prize',
-            attribute_name: 'name',
-            display_label: 'prize.name'
-          }
-        ],
-        labor: [
-          {
-            model_name: 'labor',
-            attribute_name: 'contributions',
-            display_label: 'labor.contributions'
-          }
-        ]
-      },
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name'
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'name',
+          display_label: 'prize.name',
+          slices: [
+            {
+              modelName: 'prize',
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Athens'
+            }
+          ]
+        },
+        {
+          model_name: 'labor',
+          attribute_name: 'contributions',
+          display_label: 'labor.contributions',
+          slices: [
+            {
+              modelName: 'labor',
+              attributeName: 'contributions',
+              operator: '::slice',
+              operand: 'Athens,Sparta'
+            }
+          ]
+        }
+      ],
       recordFilters: [
         {
           modelName: 'labor',
@@ -138,25 +157,7 @@ describe('QueryResults', () => {
           operator: '::equals',
           operand: 2
         }
-      ],
-      slices: {
-        prize: [
-          {
-            modelName: 'prize',
-            attributeName: 'name',
-            operator: '::equals',
-            operand: 'Athens'
-          }
-        ],
-        labor: [
-          {
-            modelName: 'labor',
-            attributeName: 'contributions',
-            operator: '::slice',
-            operand: 'Athens,Sparta'
-          }
-        ]
-      }
+      ]
     };
 
     const {asFragment} = render(<QueryResults />, {

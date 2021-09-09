@@ -59,15 +59,20 @@ describe('useTableEffects', () => {
         attribute_name: 'name',
         display_label: 'monster.name'
       },
-      attributes: {
-        prize: [
-          {
-            model_name: 'prize',
-            attribute_name: 'name',
-            display_label: 'prize.name'
-          }
-        ]
-      }
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name',
+          slices: []
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'name',
+          display_label: 'prize.name',
+          slices: []
+        }
+      ]
     };
 
     const data = {answer: [], format: [], type: 'Mock'};
@@ -97,25 +102,27 @@ describe('useTableEffects', () => {
         attribute_name: 'name',
         display_label: 'monster.name'
       },
-      attributes: {
-        labor: [
-          {
-            model_name: 'labor',
-            attribute_name: 'contributions',
-            display_label: 'labor.contributions'
-          }
-        ]
-      },
-      slices: {
-        labor: [
-          {
-            modelName: 'labor',
-            attributeName: 'contributions',
-            operator: '::slice',
-            operand: 'Athens,Sparta'
-          }
-        ]
-      }
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name',
+          slices: []
+        },
+        {
+          model_name: 'labor',
+          attribute_name: 'contributions',
+          display_label: 'labor.contributions',
+          slices: [
+            {
+              modelName: 'labor',
+              attributeName: 'contributions',
+              operator: '::slice',
+              operand: 'Athens,Sparta'
+            }
+          ]
+        }
+      ]
     };
 
     const data = {
@@ -163,25 +170,27 @@ describe('useTableEffects', () => {
         attribute_name: 'name',
         display_label: 'monster.name'
       },
-      attributes: {
-        labor: [
-          {
-            model_name: 'labor',
-            attribute_name: 'contributions',
-            display_label: 'labor.contributions'
-          }
-        ]
-      },
-      slices: {
-        labor: [
-          {
-            modelName: 'labor',
-            attributeName: 'contributions',
-            operator: '::slice',
-            operand: 'Athens,Sparta'
-          }
-        ]
-      }
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name',
+          slices: []
+        },
+        {
+          model_name: 'labor',
+          attribute_name: 'contributions',
+          display_label: 'labor.contributions',
+          slices: [
+            {
+              modelName: 'labor',
+              attributeName: 'contributions',
+              operator: '::slice',
+              operand: 'Athens,Sparta'
+            }
+          ]
+        }
+      ]
     };
 
     const data = {
@@ -228,25 +237,26 @@ describe('useTableEffects', () => {
         attribute_name: 'name',
         display_label: 'monster.name'
       },
-      attributes: {
-        labor: [
-          {
-            model_name: 'labor',
-            attribute_name: 'contributions',
-            display_label: 'labor.contributions'
-          }
-        ]
-      },
-      slices: {
-        labor: [
-          {
-            modelName: 'labor',
-            attributeName: 'contributions',
-            operator: '::slice',
-            operand: 'Sparta,Athens'
-          }
-        ]
-      }
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name'
+        },
+        {
+          model_name: 'labor',
+          attribute_name: 'contributions',
+          display_label: 'labor.contributions',
+          slices: [
+            {
+              modelName: 'labor',
+              attributeName: 'contributions',
+              operator: '::slice',
+              operand: 'Sparta,Athens'
+            }
+          ]
+        }
+      ]
     };
 
     const data = {

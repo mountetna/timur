@@ -59,15 +59,27 @@ describe('QueryBuilder', () => {
         attribute_name: 'name',
         display_label: 'monster.name'
       },
-      attributes: {
-        prize: [
-          {
-            model_name: 'prize',
-            attribute_name: 'name',
-            display_label: 'prize.name'
-          }
-        ]
-      },
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name',
+          slices: []
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'name',
+          display_label: 'prize.name',
+          slices: [
+            {
+              modelName: 'prize',
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Athens'
+            }
+          ]
+        }
+      ],
       recordFilters: [
         {
           modelName: 'labor',
@@ -75,17 +87,7 @@ describe('QueryBuilder', () => {
           operator: '::equals',
           operand: 2
         }
-      ],
-      slices: {
-        prize: [
-          {
-            modelName: 'prize',
-            attributeName: 'name',
-            operator: '::equals',
-            operand: 'Athens'
-          }
-        ]
-      }
+      ]
     };
 
     const {asFragment} = render(<QueryBuilder />, {

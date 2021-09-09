@@ -77,22 +77,26 @@ describe('useSliceMethods', () => {
         attribute_name: 'name',
         display_label: 'prize.name'
       },
-      attributes: {
-        victim: [
-          {
-            model_name: 'victim',
-            attribute_name: 'name',
-            display_label: 'victim.name'
-          }
-        ],
-        prize: [
-          {
-            model_name: 'prize',
-            attribute_name: 'value',
-            display_label: 'prize.value'
-          }
-        ]
-      }
+      columns: [
+        {
+          model_name: 'prize',
+          attribute_name: 'name',
+          display_label: 'prize.name',
+          slices: []
+        },
+        {
+          model_name: 'victim',
+          attribute_name: 'name',
+          display_label: 'victim.name',
+          slices: []
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'value',
+          display_label: 'prize.value',
+          slices: []
+        }
+      ]
     };
 
     const data = {answer: [], format: [], type: 'Mock'};
@@ -119,22 +123,26 @@ describe('useSliceMethods', () => {
         attribute_name: 'name',
         display_label: 'monster.name'
       },
-      attributes: {
-        prize: [
-          {
-            model_name: 'prize',
-            attribute_name: 'name',
-            display_label: 'prize.name'
-          }
-        ],
-        aspect: [
-          {
-            model_name: 'aspect',
-            attribute_name: 'name',
-            display_label: 'aspect.name'
-          }
-        ]
-      }
+      columns: [
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name',
+          slices: []
+        },
+        {
+          model_name: 'prize',
+          attribute_name: 'name',
+          display_label: 'prize.name',
+          slices: []
+        },
+        {
+          model_name: 'aspect',
+          attribute_name: 'name',
+          display_label: 'aspect.name',
+          slices: []
+        }
+      ]
     };
 
     const data = {answer: [], format: [], type: 'Mock'};
@@ -161,22 +169,26 @@ describe('useSliceMethods', () => {
         attribute_name: 'name',
         display_label: 'wound.name'
       },
-      attributes: {
-        victim: [
-          {
-            model_name: 'victim',
-            attribute_name: 'name',
-            display_label: 'victim.name'
-          }
-        ],
-        monster: [
-          {
-            model_name: 'monster',
-            attribute_name: 'name',
-            display_label: 'monster.name'
-          }
-        ]
-      }
+      columns: [
+        {
+          model_name: 'wound',
+          attribute_name: 'name',
+          display_label: 'wound.name',
+          slices: []
+        },
+        {
+          model_name: 'victim',
+          attribute_name: 'name',
+          display_label: 'victim.name',
+          slices: []
+        },
+        {
+          model_name: 'monster',
+          attribute_name: 'name',
+          display_label: 'monster.name',
+          slices: []
+        }
+      ]
     };
 
     const data = {answer: [], format: [], type: 'Mock'};
@@ -203,15 +215,20 @@ describe('useSliceMethods', () => {
         attribute_name: 'name',
         display_label: 'labor.name'
       },
-      attributes: {
-        labor: [
-          {
-            model_name: 'labor',
-            attribute_name: 'contributions',
-            display_label: 'labor.constributions'
-          }
-        ]
-      }
+      columns: [
+        {
+          model_name: 'labor',
+          attribute_name: 'name',
+          display_label: 'labor.name',
+          slices: []
+        },
+        {
+          model_name: 'labor',
+          attribute_name: 'contributions',
+          display_label: 'labor.constributions',
+          slices: []
+        }
+      ]
     };
 
     const data = {answer: [], format: [], type: 'Mock'};
