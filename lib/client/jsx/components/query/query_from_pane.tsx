@@ -37,7 +37,7 @@ const QueryFromPane = () => {
         setRootModel(null, null);
       }
     },
-    [reduxState, setRootModel]
+    [reduxState]
   );
 
   const classes = useStyles();
