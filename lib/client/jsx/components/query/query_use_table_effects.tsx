@@ -66,19 +66,10 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
       let colMapping = allData.format[1];
       // Need to order the results the same as `columns`
       return allData.answer.map(([recordName, answer]: [string, any[]]) =>
-        cols.map(({colId}) => {
-          console.log(
-            'answer',
-            answer,
-            colId,
-            colMapping,
-            pathToColumn(colMapping, colId, expandMatrices)
-          );
-          return _.at(
-            answer,
-            pathToColumn(colMapping, colId, expandMatrices)
-          )[0];
-        })
+        cols.map(
+          ({colId}) =>
+            _.at(answer, pathToColumn(colMapping, colId, expandMatrices))[0]
+        )
       );
     },
     [expandMatrices]
