@@ -729,7 +729,7 @@ exports[`QueryBuilder renders 1`] = `
                 tabindex="-1"
               >
                 <div
-                  style="min-width: 1px; height: 75px;"
+                  style="min-width: 1px; height: 77px;"
                 />
               </div>
               <div
@@ -782,7 +782,7 @@ exports[`QueryBuilder renders 1`] = `
                               role="presentation"
                               style="padding-right: .1px;"
                             >
-                              ["monster",["labor","year","::equals",2],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"]]]
+                              ["monster",["labor",["year","::equals",2],"::any"],"::all",[["name"],["labor","prize",["name","::equals","Athens"],"::first","name"]]]
                             </span>
                           </pre>
                         </div>
