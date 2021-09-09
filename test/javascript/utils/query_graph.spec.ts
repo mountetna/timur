@@ -1,4 +1,5 @@
 import {QueryGraph} from '../../../lib/client/jsx/utils/query_graph';
+import {QueryBuilder} from "../../../lib/client/jsx/utils/query_builder";
 
 const models = {
   monster: {
@@ -57,4 +58,19 @@ describe('QueryGraph', () => {
       ['labor', 'prize']
     ]);
   });
+
+  describe('for xcrs1 models', () => {
+    const models = require('../fixtures/xcrs1_magma_metadata.json').models;
+    beforeEach(() => {
+      graph = new QueryGraph(models);
+    });
+
+    it('handles the path laterally from subject -> sc_seq', () =>{
+      expect(graph.shortestPath('subject', 'sc_seq')).toEqual([
+        'biospecimen',
+        'biospecimen_group',
+        'sc_seq',
+      ])
+    })
+  })
 });
