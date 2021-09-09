@@ -1,3 +1,4 @@
+import {QueryColumn} from '../../../lib/client/jsx/contexts/query/query_types';
 import {
   selectMatrixModelNames,
   selectMatrixAttributes,
@@ -41,36 +42,34 @@ const models = {
 
 describe('selectMatrixModelNames', () => {
   it('returns matrix model names', () => {
-    let selectedAttributes: {[key: string]: any} = {
-      labor: [
-        {
-          model_name: 'labor',
-          attribute_name: 'contributions',
-          display_label: 'labor.contributions'
-        }
-      ],
-      prize: [
-        {
-          model_name: 'prize',
-          attribute_name: 'name',
-          display_label: 'prize.name'
-        }
-      ]
-    };
-    let matrixModelNames = selectMatrixModelNames(models, selectedAttributes);
+    let selectedColumns: QueryColumn[] = [
+      {
+        model_name: 'labor',
+        attribute_name: 'contributions',
+        display_label: 'labor.contributions',
+        slices: []
+      },
+      {
+        model_name: 'prize',
+        attribute_name: 'name',
+        display_label: 'prize.name',
+        slices: []
+      }
+    ];
+
+    let matrixModelNames = selectMatrixModelNames(models, selectedColumns);
 
     expect(matrixModelNames).toEqual(['labor']);
 
-    selectedAttributes = {
-      prize: [
-        {
-          model_name: 'prize',
-          attribute_name: 'name',
-          display_label: 'prize.name'
-        }
-      ]
-    };
-    matrixModelNames = selectMatrixModelNames(models, selectedAttributes);
+    selectedColumns = [
+      {
+        model_name: 'prize',
+        attribute_name: 'name',
+        display_label: 'prize.name',
+        slices: []
+      }
+    ];
+    matrixModelNames = selectMatrixModelNames(models, selectedColumns);
 
     expect(matrixModelNames).toEqual([]);
   });
@@ -78,50 +77,46 @@ describe('selectMatrixModelNames', () => {
 
 describe('selectMatrixAttributes', () => {
   it('returns only matrix attributes', () => {
-    let selectedAttributes: {[key: string]: any} = {
-      labor: [
-        {
-          model_name: 'labor',
-          attribute_name: 'contributions',
-          display_label: 'labor.contributions'
-        }
-      ],
-      prize: [
-        {
-          model_name: 'prize',
-          attribute_name: 'name',
-          display_label: 'prize.name'
-        }
-      ]
-    };
+    let selectedColumns: QueryColumn[] = [
+      {
+        model_name: 'labor',
+        attribute_name: 'contributions',
+        display_label: 'labor.contributions',
+        slices: []
+      },
+      {
+        model_name: 'prize',
+        attribute_name: 'name',
+        display_label: 'prize.name',
+        slices: []
+      }
+    ];
     let matrixAttributes = selectMatrixAttributes(
       Object.values(models.labor.template.attributes),
-      selectedAttributes.labor
+      selectedColumns
     );
 
     expect(matrixAttributes).toEqual([
       models.labor.template.attributes['contributions']
     ]);
 
-    selectedAttributes = {
-      labor: [
-        {
-          model_name: 'labor',
-          attribute_name: 'year',
-          display_label: 'labor.year'
-        }
-      ],
-      prize: [
-        {
-          model_name: 'prize',
-          attribute_name: 'name',
-          display_label: 'prize.name'
-        }
-      ]
-    };
+    selectedColumns = [
+      {
+        model_name: 'labor',
+        attribute_name: 'year',
+        display_label: 'labor.year',
+        slices: []
+      },
+      {
+        model_name: 'prize',
+        attribute_name: 'name',
+        display_label: 'prize.name',
+        slices: []
+      }
+    ];
     matrixAttributes = selectMatrixAttributes(
       Object.values(models.labor.template.attributes),
-      selectedAttributes.labor
+      selectedColumns
     );
 
     expect(matrixAttributes).toEqual([]);
@@ -131,12 +126,12 @@ describe('selectMatrixAttributes', () => {
 describe('pathToColumn', () => {
   it('finds top-level headings', () => {
     let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
-    expect(pathToColumn(input, 'bim', false)).toEqual('2');
+    expect(pathToColumn(input, 'bim@2', false)).toEqual('2');
   });
 
   it('returns -1 when no match', () => {
     let input = ['foo', 'bar', 'bim', ['blah', 'zap']];
-    expect(pathToColumn(input, 'kapow', false)).toEqual('-1');
+    expect(pathToColumn(input, 'kapow@1', false)).toEqual('-1');
   });
 
   it('finds root index for nested headings', () => {
@@ -146,7 +141,7 @@ describe('pathToColumn', () => {
       'bim',
       ['blah', 'zap', ['deep', ['nesting']]]
     ];
-    expect(pathToColumn(input, 'nesting', false)).toEqual('3');
+    expect(pathToColumn(input, 'nesting@3', false)).toEqual('3');
   });
 
   it('returns full path when expanding matrices', () => {
@@ -167,8 +162,8 @@ describe('pathToColumn', () => {
     //  3,
     //  [4, 5, [6, 7]]
     // ]
-    expect(pathToColumn(input, 'bar.shallow', true)).toEqual('1.0');
-    expect(pathToColumn(input, 'deep.nesting', true)).toEqual('3.2.1');
+    expect(pathToColumn(input, 'bar@1.shallow', true)).toEqual('1.0');
+    expect(pathToColumn(input, 'deep@3.nesting', true)).toEqual('3.2.1');
   });
 });
 

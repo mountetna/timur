@@ -1,5 +1,6 @@
 import {QueryBuilder} from '../../../lib/client/jsx/utils/query_builder';
 import {QueryGraph} from '../../../lib/client/jsx/utils/query_graph';
+import {QuerySlice} from '../../../lib/client/jsx/contexts/query/query_types';
 
 const models = {
   monster: {
@@ -49,26 +50,45 @@ describe('QueryBuilder', () => {
     builder = new QueryBuilder(graph, models);
   });
 
-  function stamp(model_name: string, attribute_name: string) {
+  function stamp(
+    model_name: string,
+    attribute_name: string,
+    slices: QuerySlice[]
+  ) {
     return {
       model_name,
       attribute_name,
-      display_label: `${model_name}.${attribute_name}`
+      display_label: `${model_name}.${attribute_name}`,
+      slices: slices
     };
   }
 
   it('works', () => {
-    builder.addRootIdentifier(stamp('monster', 'name'));
-    builder.addAttributes({
-      labor: [
-        stamp('labor', 'year'),
-        stamp('labor', 'completed'),
-        stamp('labor', 'contributions')
-      ],
-      monster: [stamp('monster', 'species'), stamp('monster', 'stats')],
-      prize: [stamp('prize', 'value')],
-      victim: [stamp('victim', 'country')]
-    });
+    builder.addRootIdentifier(stamp('monster', 'name', []));
+    builder.addColumns([
+      stamp('monster', 'name', []),
+      stamp('monster', 'species', []),
+      stamp('monster', 'stats', []),
+      stamp('labor', 'year', []),
+      stamp('labor', 'completed', []),
+      stamp('labor', 'contributions', [
+        {
+          modelName: 'labor',
+          attributeName: 'contributions',
+          operator: '::slice',
+          operand: 'Athens,Sidon'
+        }
+      ]),
+      stamp('prize', 'value', [
+        {
+          modelName: 'prize',
+          attributeName: 'name',
+          operator: '::equals',
+          operand: 'Sparta'
+        }
+      ]),
+      stamp('victim', 'country', [])
+    ]);
     builder.addRecordFilters([
       {
         modelName: 'labor',
@@ -101,24 +121,6 @@ describe('QueryBuilder', () => {
         }
       }
     ]);
-    builder.addSlices({
-      prize: [
-        {
-          modelName: 'prize',
-          attributeName: 'name',
-          operator: '::equals',
-          operand: 'Sparta'
-        }
-      ],
-      labor: [
-        {
-          modelName: 'labor',
-          attributeName: 'contributions',
-          operator: '::slice',
-          operand: 'Athens,Sidon'
-        }
-      ]
-    });
 
     expect(builder.query()).toEqual([
       'monster',
@@ -131,7 +133,7 @@ describe('QueryBuilder', () => {
       ],
       '::all',
       [
-        ['name'],
+        'name',
         ['species'],
         ['stats', '::url'],
         ['labor', 'year'],
@@ -155,7 +157,7 @@ describe('QueryBuilder', () => {
       ],
       '::all',
       [
-        ['name'],
+        'name',
         ['species'],
         ['stats', '::url'],
         ['labor', 'year'],
@@ -182,7 +184,7 @@ describe('QueryBuilder', () => {
       ],
       '::all',
       [
-        ['name'],
+        'name',
         ['species'],
         ['stats', '::url'],
         ['labor', 'year'],
@@ -195,61 +197,58 @@ describe('QueryBuilder', () => {
   });
 
   it('adds slice for root model', () => {
-    builder.addRootIdentifier(stamp('labor', 'name'));
-    builder.addAttributes({
-      labor: [stamp('labor', 'contributions')]
-    });
-    builder.addSlices({
-      labor: [
+    builder.addRootIdentifier(stamp('labor', 'name', []));
+    builder.addColumns([
+      stamp('labor', 'name', []),
+      stamp('labor', 'contributions', [
         {
           modelName: 'labor',
           attributeName: 'contributions',
           operator: '::slice',
           operand: 'Athens,Sidon'
         }
-      ]
-    });
+      ])
+    ]);
 
     expect(builder.query()).toEqual([
       'labor',
       '::all',
-      [['name'], ['contributions', '::slice', ['Athens', 'Sidon']]]
+      ['name', ['contributions', '::slice', ['Athens', 'Sidon']]]
     ]);
   });
 
   it('returns a count query string', () => {
-    builder.addRootIdentifier(stamp('monster', 'name'));
-    builder.addAttributes({
-      labor: [stamp('labor', 'year'), stamp('labor', 'completed')],
-      monster: [stamp('monster', 'species')],
-      prize: [stamp('prize', 'value')]
-    });
-    builder.addRecordFilters([
-      {
-        modelName: 'labor',
-        attributeName: 'name',
-        operator: '::in',
-        operand: 'lion,hydra,apples',
-        any: true
-      },
-      {
-        modelName: 'monster',
-        attributeName: 'name',
-        operator: '::equals',
-        operand: 'Nemean Lion',
-        any: true
-      }
-    ]);
-    builder.addSlices({
-      prize: [
+    builder.addRootIdentifier(stamp('monster', 'name', []));
+    builder.addColumns([
+      stamp('monster', 'name', []),
+      stamp('labor', 'year', []),
+      stamp('labor', 'completed', []),
+      stamp('monster', 'species', []),
+      stamp('prize', 'value', [
         {
           modelName: 'prize',
           attributeName: 'name',
           operator: '::equals',
           operand: 'Sparta'
         }
-      ]
-    });
+      ])
+    ]);
+    builder.addRecordFilters([
+      {
+        modelName: 'labor',
+        attributeName: 'name',
+        operator: '::in',
+        operand: 'lion,hydra,apples',
+        anyMap: {}
+      },
+      {
+        modelName: 'monster',
+        attributeName: 'name',
+        operator: '::equals',
+        operand: 'Nemean Lion',
+        anyMap: {}
+      }
+    ]);
 
     expect(builder.count()).toEqual([
       'monster',
@@ -264,7 +263,7 @@ describe('QueryBuilder', () => {
 
   describe('handles any for', () => {
     it('deep paths in filters with some non-branching models', () => {
-      builder.addRootIdentifier(stamp('labor', 'name'));
+      builder.addRootIdentifier(stamp('labor', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -277,6 +276,7 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('labor', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'labor',
@@ -287,12 +287,12 @@ describe('QueryBuilder', () => {
           '::any'
         ],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('deep paths in filters with branching models only', () => {
-      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRootIdentifier(stamp('monster', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -305,6 +305,7 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
@@ -314,12 +315,12 @@ describe('QueryBuilder', () => {
           '::any'
         ],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('shallow paths in filters with branching models', () => {
-      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRootIdentifier(stamp('monster', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'victim',
@@ -331,17 +332,18 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
         ['victim', ['name', '::equals', 'Hercules'], '::any'],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('paths that go up and down the tree', () => {
-      builder.addRootIdentifier(stamp('prize', 'name'));
+      builder.addRootIdentifier(stamp('prize', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -354,6 +356,7 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('prize', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'prize',
@@ -365,12 +368,12 @@ describe('QueryBuilder', () => {
           '::any'
         ],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('paths that go up and down and terminate in a table', () => {
-      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRootIdentifier(stamp('monster', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'prize',
@@ -382,17 +385,18 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
         ['labor', 'prize', ['name', '::equals', 'Apples'], '::any'],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('paths that go up the tree', () => {
-      builder.addRootIdentifier(stamp('prize', 'name'));
+      builder.addRootIdentifier(stamp('prize', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'labor',
@@ -402,19 +406,20 @@ describe('QueryBuilder', () => {
           anyMap: {}
         }
       ]);
+      builder.addColumns([stamp('prize', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'prize',
         ['labor', 'name', '::in', ['Lion', 'Hydra']],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
   });
 
   describe('handles every for', () => {
     it('deep paths in filters with some non-branching models', () => {
-      builder.addRootIdentifier(stamp('labor', 'name'));
+      builder.addRootIdentifier(stamp('labor', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -427,6 +432,7 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('labor', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'labor',
@@ -437,12 +443,12 @@ describe('QueryBuilder', () => {
           '::every'
         ],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('deep paths in filters with branching models only', () => {
-      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRootIdentifier(stamp('monster', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -455,6 +461,7 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
@@ -464,12 +471,12 @@ describe('QueryBuilder', () => {
           '::every'
         ],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('shallow paths in filters with branching models', () => {
-      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRootIdentifier(stamp('monster', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'victim',
@@ -481,17 +488,18 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
         ['victim', ['name', '::equals', 'Hercules'], '::every'],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('paths that go up and down the tree', () => {
-      builder.addRootIdentifier(stamp('prize', 'name'));
+      builder.addRootIdentifier(stamp('prize', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -504,6 +512,7 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('prize', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'prize',
@@ -515,12 +524,12 @@ describe('QueryBuilder', () => {
           '::every'
         ],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('paths that go up and down and terminate in a table', () => {
-      builder.addRootIdentifier(stamp('monster', 'name'));
+      builder.addRootIdentifier(stamp('monster', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'prize',
@@ -532,17 +541,18 @@ describe('QueryBuilder', () => {
           }
         }
       ]);
+      builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
         ['labor', 'prize', ['name', '::equals', 'Apples'], '::every'],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
 
     it('paths that go up the tree', () => {
-      builder.addRootIdentifier(stamp('prize', 'name'));
+      builder.addRootIdentifier(stamp('prize', 'name', []));
       builder.addRecordFilters([
         {
           modelName: 'labor',
@@ -552,12 +562,13 @@ describe('QueryBuilder', () => {
           anyMap: {}
         }
       ]);
+      builder.addColumns([stamp('prize', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'prize',
         ['labor', 'name', '::in', ['Lion', 'Hydra']],
         '::all',
-        [['name']]
+        ['name']
       ]);
     });
   });

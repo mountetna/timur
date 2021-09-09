@@ -150,6 +150,8 @@ export const pathToColumn = (
   let indexlessHeading = heading.split('@')[0];
   let startingIndexPlusMatrixColId = heading.split('@')[1];
 
+  if (!startingIndexPlusMatrixColId) return '-1';
+
   let fullPath: number[] = [];
 
   if (expandMatrices) {
@@ -173,7 +175,11 @@ export const pathToColumn = (
   } else {
     let startingIndex = parseInt(startingIndexPlusMatrixColId);
 
-    if (!Array.isArray(array[startingIndex])) return startingIndex.toString();
+    if (!Array.isArray(array[startingIndex])) {
+      if (array[startingIndex] === indexlessHeading)
+        return startingIndex.toString();
+      else return '-1';
+    }
 
     fullPath = getPath(array[startingIndex], indexlessHeading, [startingIndex]);
 

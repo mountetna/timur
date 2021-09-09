@@ -94,8 +94,6 @@ const QueryAttributesModal = ({
   let reduxState = useReduxState();
   let template = selectTemplate(reduxState, model_name);
 
-  if (!template) return null;
-
   const attributeCurrentlySelected = useCallback(
     (attribute: Attribute | QueryColumn) => {
       return (
@@ -124,7 +122,8 @@ const QueryAttributesModal = ({
               {
                 model_name,
                 attribute_name: attribute.attribute_name,
-                display_label: `${model_name}.${attribute.attribute_name}`
+                display_label: `${model_name}.${attribute.attribute_name}`,
+                slices: []
               }
             ])
       );
@@ -139,17 +138,20 @@ const QueryAttributesModal = ({
         return {
           model_name: model_name,
           attribute_name: attribute.attribute_name,
-          display_label: `${model_name}.${attribute.attribute_name}`
+          display_label: `${model_name}.${attribute.attribute_name}`,
+          slices: []
         };
       });
     }
     setSelectedAttributes(updatedAttributes);
-  }, [selectedAttributes, model_name]);
+  }, [selectedAttributes, model_name, attributeOptions]);
 
   const handleOk = useCallback(() => {
     setAttributes(selectedAttributes, model_name);
     onClose();
-  }, [selectedAttributes, model_name]);
+  }, [selectedAttributes, model_name, onClose, setAttributes]);
+
+  if (!template) return null;
 
   return (
     <Dialog onClose={onClose} maxWidth='md' open={open} scroll='paper'>
