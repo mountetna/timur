@@ -113,3 +113,13 @@
     height: inherit;
   }
 }
+
+.query-column-selector {
+  padding: 1rem;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+button.query-add-column-btn {
+  margin-top: 1rem;
+}

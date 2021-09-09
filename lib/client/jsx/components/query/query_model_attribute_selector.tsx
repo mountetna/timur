@@ -206,7 +206,12 @@ const QueryModelAttributeSelector = ({
   const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
 
   return (
-    <Grid container alignItems='center' justify='flex-start'>
+    <Grid
+      container
+      alignItems='center'
+      justify='flex-start'
+      className='query-column-selector'
+    >
       <Grid item xs={2}>
         <ModelNameSelector
           canEdit={canEdit}

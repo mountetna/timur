@@ -63,6 +63,7 @@ const QuerySelectPane = () => {
             })
           }
           startIcon={<AddIcon />}
+          className='query-add-column-btn'
         >
           Column
         </Button>
