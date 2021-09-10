@@ -1,4 +1,5 @@
 import {QueryGraph} from '../../../lib/client/jsx/utils/query_graph';
+import {QueryBuilder} from '../../../lib/client/jsx/utils/query_builder';
 
 const models = {
   monster: {
@@ -78,13 +79,18 @@ describe('QueryGraph', () => {
     ]);
   });
 
-  it('returns models in a path with one-to-many relationships', () => {
-    expect(graph.sliceableModelNamesInPath('prize', 'wound')).toEqual([
-      'victim',
-      'wound'
-    ]);
-    expect(graph.sliceableModelNamesInPath('prize', 'vegetation')).toEqual([
-      'vegetation'
-    ]);
+  describe('for xcrs1 models', () => {
+    const models = require('../fixtures/xcrs1_magma_metadata.json').models;
+    beforeEach(() => {
+      graph = new QueryGraph(models);
+    });
+
+    it('handles the path laterally from subject -> sc_seq', () => {
+      expect(graph.shortestPath('subject', 'sc_seq')).toEqual([
+        'biospecimen',
+        'biospecimen_group',
+        'sc_seq'
+      ]);
+    });
   });
 });

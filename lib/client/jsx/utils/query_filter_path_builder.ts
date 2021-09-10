@@ -6,16 +6,11 @@ import {QueryFilterAnyMap} from '../contexts/query/query_types';
 
 export default class QueryFilterPathBuilder {
   path: string[];
-  models: {[key: string]: Model};
+  models: { [key: string]: Model };
   rootModelName: string;
   anyMap: QueryFilterAnyMap;
 
-  constructor(
-    path: string[],
-    rootModelName: string,
-    models: {[key: string]: Model},
-    anyMap: QueryFilterAnyMap
-  ) {
+  constructor(path: string[], rootModelName: string, models: { [key: string]: Model }, anyMap: QueryFilterAnyMap) {
     this.path = path;
     this.models = models;
     this.rootModelName = rootModelName;
@@ -29,34 +24,27 @@ export default class QueryFilterPathBuilder {
     let nestedFilterIndex: number = 0;
 
     this.path.forEach((modelName: string) => {
-      if (stepIsOneToMany(this.models, previousModelName, modelName)) {
-        let newValue = [
-          modelName,
-          this.anyMap[modelName] ? '::any' : '::every'
-        ];
-        if (updatedPath.length === 0) {
-          updatedPath.push(...newValue);
-        } else {
-          // here we'll nest with ::any
-          filterAnyPath.push(nestedFilterIndex);
-          let injected = injectValueAtPath(
-            updatedPath,
-            filterAnyPath,
-            newValue
-          );
+      const foldingClause = this.anyMap && modelName in this.anyMap ? this.anyMap[modelName] ? '::any' : '::every' : '::any';
 
-          if (injected) {
-            // Reset this so we re-index for the new, nested array.
-            nestedFilterIndex = 0;
-          } else {
-            // the value was not injected but rather spliced inline,
-            //   so we increment the nestedFilterIndex and pop
-            //   the last value off the filterAnyPath.
-            filterAnyPath.pop();
-          }
-        }
+      let newValue = [
+        modelName, foldingClause
+      ];
+      if (updatedPath.length === 0) {
+        updatedPath.push(...newValue);
       } else {
-        updatedPath.push(modelName);
+        // here we'll nest with ::any
+        filterAnyPath.push(nestedFilterIndex);
+        let injected = injectValueAtPath(updatedPath, filterAnyPath, newValue);
+
+        if (injected) {
+          // Reset this so we re-index for the new, nested array.
+          nestedFilterIndex = 0;
+        } else {
+          // the value was not injected but rather spliced inline,
+          //   so we increment the nestedFilterIndex and pop
+          //   the last value off the filterAnyPath.
+          filterAnyPath.pop();
+        }
       }
       previousModelName = modelName;
       nestedFilterIndex++;
