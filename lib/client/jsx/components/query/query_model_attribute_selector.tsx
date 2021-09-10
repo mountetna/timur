@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useContext} from 'react';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -18,6 +18,7 @@ import {selectTemplate} from 'etna-js/selectors/magma';
 import {Attribute} from '../../models/model_types';
 
 import useSliceMethods from './query_use_slice_methods';
+import {QueryContext} from '../../contexts/query/query_context';
 import {QueryColumn} from '../../contexts/query/query_types';
 import {selectAllowedModelAttributes} from '../../selectors/query_selector';
 import QuerySlicePane from './query_slice_pane';
@@ -124,7 +125,16 @@ const AttributeSelector = ({
 }) => {
   const classes = useStyles();
 
-  if (!canEdit) return <Typography>{column.attribute_name}</Typography>;
+  if (!canEdit)
+    return (
+      <TextField
+        disabled
+        variant='outlined'
+        label='Attribute'
+        value={column.attribute_name}
+        className='query-column-attribute'
+      />
+    );
 
   return (
     <FormControl className={classes.fullWidth}>
@@ -173,6 +183,8 @@ const QueryModelAttributeSelector = ({
   //   with the model / attribute as a "label".
   // Matrices will have modelName + attributeName.
   const [updateCounter, setUpdateCounter] = useState(0);
+
+  const {patchQueryColumn} = useContext(QueryContext);
 
   let reduxState = useReduxState();
 
@@ -231,14 +243,29 @@ const QueryModelAttributeSelector = ({
             direction='column'
             key={column.model_name}
           >
-            <Grid item xs={4}>
-              <AttributeSelector
-                onSelect={onSelectAttribute}
-                canEdit={canEdit}
-                label={label}
-                attributeChoiceSet={selectableModelAttributes}
-                column={column}
-              />
+            <Grid item container>
+              <Grid item xs={4}>
+                <AttributeSelector
+                  onSelect={onSelectAttribute}
+                  canEdit={canEdit}
+                  label={label}
+                  attributeChoiceSet={selectableModelAttributes}
+                  column={column}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label='Display Label'
+                  variant='outlined'
+                  value={column.display_label}
+                  onChange={(e) =>
+                    patchQueryColumn(columnIndex, {
+                      ...column,
+                      display_label: e.target.value
+                    })
+                  }
+                />
+              </Grid>
             </Grid>
             {isSliceable && canEdit ? (
               <Grid item>
