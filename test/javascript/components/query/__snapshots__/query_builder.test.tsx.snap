@@ -89,6 +89,18 @@ exports[`QueryBuilder renders 1`] = `
             <div
               class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
             >
+              OR
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-11"
+            />
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-center"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
+            >
               <span
                 aria-disabled="false"
                 class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiIconButton-colorPrimary"

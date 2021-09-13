@@ -91,6 +91,14 @@ const QueryWherePane = () => {
 
   return (
     <QueryClause title='Where'>
+      {state.recordFilters.length > 0 ? (
+        <Grid container alignItems='center' justify='center'>
+          <Grid item xs={1}>
+            OR
+          </Grid>
+          <Grid item xs={11} />
+        </Grid>
+      ) : null}
       {state.recordFilters.map((filter: QueryFilter, index: number) => (
         <Grid key={index} container alignItems='center' justify='center'>
           <Grid item xs={1}>
