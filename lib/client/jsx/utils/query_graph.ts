@@ -67,8 +67,8 @@ export class QueryGraph {
     return this.graph.asNormalizedHash(modelName);
   }
 
-  // Because this.graph.fullParentage does not account for multiple
-  //    parent paths, we'll calculate them separately here.
+  // Here we calculate parent paths as separate entities, instead
+  //   of allowing them to be in a single, flattened array.
   parentPaths(modelName: string): string[][] {
     if (!Object.keys(this.graph.parents).includes(modelName)) return [];
 
