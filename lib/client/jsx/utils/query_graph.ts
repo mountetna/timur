@@ -141,9 +141,6 @@ export class QueryGraph {
   }
 
   shortestPath(rootModel: string, targetModel: string): string[] | undefined {
-    console.log('allpaths', this.allPaths(rootModel));
-    console.log(this.pathsFrom('biospecimen_group'));
-    console.log(this.graph);
     let path = this.allPaths(rootModel).find((potentialPath: string[]) =>
       potentialPath.includes(targetModel)
     );
