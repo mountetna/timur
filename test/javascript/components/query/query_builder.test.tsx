@@ -97,7 +97,7 @@ describe('QueryBuilder', () => {
         {
           modelName: 'labor',
           attributeName: 'year',
-          operator: '::equals',
+          operator: '::=',
           operand: 2
         }
       ]

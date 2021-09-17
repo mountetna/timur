@@ -104,7 +104,7 @@ const QueryFilterControl = ({
       ) {
         case 'string':
           return 'text';
-        case 'datetime':
+        case 'date_time':
           return 'date';
         case 'integer':
         case 'float':
@@ -122,8 +122,8 @@ const QueryFilterControl = ({
   }, [filter.attributeName, filter.modelName, reduxState]);
 
   const filterOperator = useMemo(() => {
-    return new FilterOperator(attributeType, filter.operator);
-  }, [attributeType, filter.operator]);
+    return new FilterOperator(attributeType, filter.operator, isColumnFilter);
+  }, [attributeType, filter.operator, isColumnFilter]);
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
@@ -141,7 +141,9 @@ const QueryFilterControl = ({
     (attributeName: string) =>
       patchFilter({
         ...filter,
-        attributeName
+        attributeName,
+        operator: '',
+        operand: ''
       }),
     [filter, patchFilter]
   );
@@ -217,7 +219,7 @@ const QueryFilterControl = ({
             onChange={(e) => handleOperatorSelect(e.target.value as string)}
             displayEmpty
           >
-            {Object.keys(filterOperator.options(isColumnFilter))
+            {Object.keys(filterOperator.options())
               .sort()
               .map((operator: string, index: number) => (
                 <MenuItem key={index} value={operator}>
