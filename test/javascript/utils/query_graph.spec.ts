@@ -92,5 +92,13 @@ describe('QueryGraph', () => {
         'sc_seq'
       ]);
     });
+
+    it('handles the path laterally from sc_seq -> subject', () => {
+      expect(graph.shortestPath('sc_seq', 'subject')).toEqual([
+        'biospecimen_group',
+        'biospecimen',
+        'subject'
+      ]);
+    });
   });
 });

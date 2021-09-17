@@ -67,6 +67,28 @@ export class QueryGraph {
     return this.graph.asNormalizedHash(modelName);
   }
 
+  // Here we calculate parent paths as separate entities, instead
+  //   of allowing them to be in a single, flattened array.
+  parentPaths(modelName: string): string[][] {
+    if (!Object.keys(this.graph.parents).includes(modelName)) return [];
+
+    let results: string[][] = [];
+
+    Object.keys(this.graph.parents[modelName]).forEach((p: string) => {
+      let innerPaths = this.parentPaths(p);
+      if (innerPaths.length === 0) {
+        results.push([p]);
+      } else {
+        innerPaths.forEach((parentPath: string[]) => {
+          parentPath.unshift(p);
+          results.push(parentPath);
+        });
+      }
+    });
+
+    return results;
+  }
+
   allPaths(modelName: string): string[][] {
     if (!Object.keys(this.graph.children).includes(modelName)) return [];
 
@@ -78,13 +100,11 @@ export class QueryGraph {
     // Children paths
     return this.pathsFrom(modelName)
       .concat(
-        // paths to parents, shortest to longest
-        parentage.map((p: string, index: number) =>
-          parentage.slice(0, index + 1)
-        )
+        // paths up the tree
+        this.parentPaths(modelName)
       )
       .concat(
-        // paths routing through parents
+        // paths routing up through parents then down
         parentage
           .map((p: string, index: number) =>
             this.pathsFrom(p).map((path) =>
