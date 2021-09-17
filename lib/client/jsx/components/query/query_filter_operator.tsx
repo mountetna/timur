@@ -5,22 +5,8 @@ export default class FilterOperator {
   operator: string;
   isColumnFilter: boolean;
 
-  static allOptions: {[key: string]: string} = {
-    Slice: '::slice',
-    Equals: '::equals',
-    Contains: '::matches',
-    In: '::in',
-    'Less than': '::<',
-    'Greater than': '::>',
-    'Is present': '::has',
-    'Is missing': '::lacks',
-    'Is true': '::true',
-    'Is false': '::false',
-    'Is untrue': '::untrue'
-  };
-
-  static allOptionsByType: {[key: string]: {[key: string]: string}} = {
-    present: {
+  static queryOperatorsByType: {[key: string]: {[key: string]: string}} = {
+    base: {
       'Is present': '::has',
       'Is missing': '::lacks'
     },
@@ -82,30 +68,30 @@ export default class FilterOperator {
     );
   }
 
-  optionsForFilterType(): {[key: string]: string} {
+  optionsForAttribute(): {[key: string]: string} {
     return this.isColumnFilter &&
       this.attributeType in FilterOperator.columnOptionsByType
       ? FilterOperator.columnOptionsByType[this.attributeType]
-      : this.optionsWithPresent();
+      : this.attrOptionsWithBaseOptions();
   }
 
-  optionsWithPresent(): {[key: string]: string} {
+  attrOptionsWithBaseOptions(): {[key: string]: string} {
     return {
-      ...FilterOperator.allOptionsByType.present,
-      ...(FilterOperator.allOptionsByType[this.attributeType] || {})
+      ...FilterOperator.queryOperatorsByType.base,
+      ...(FilterOperator.queryOperatorsByType[this.attributeType] || {})
     };
   }
 
   prettify(): string {
-    return _.invert(this.optionsForFilterType())[this.operator];
+    return _.invert(this.optionsForAttribute())[this.operator];
   }
 
   magmify(newOperator: string): string {
-    return this.optionsForFilterType()[newOperator];
+    return this.optionsForAttribute()[newOperator];
   }
 
   options(): {[key: string]: string} {
-    return this.optionsForFilterType();
+    return this.optionsForAttribute();
   }
 
   formatOperand(operand: string): number | string {
