@@ -65,7 +65,7 @@ const QueryResults = () => {
     if (state.rootIdentifier && state.graph && state.graph.initialized) {
       let builder = new QueryBuilder(state.graph, selectModels(reduxState));
 
-      builder.addRootIdentifier(state.rootIdentifier);
+      builder.addRootModel(state.rootIdentifier.model_name);
       builder.addColumns(state.columns);
       builder.addRecordFilters(state.recordFilters);
       builder.setFlatten(flattenQuery);

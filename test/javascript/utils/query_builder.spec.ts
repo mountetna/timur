@@ -50,7 +50,7 @@ describe('QueryBuilder', () => {
     });
 
     it('handles https://www.notion.so/ucsfdatascience/6bf73d7edfad4bd38a8527049c9f1510?v=b689c4e7890d4d2dbe3d8c6acb51a6ca&p=6d87fdcbba89412782c8b5d7d3897b5b', () => {
-      builder.addRootIdentifier(stamp('subject', 'name', []));
+      builder.addRootModel('subject');
       builder.addRecordFilters([
         {
           anyMap: {biospecimen: true, sc_seq: true},
@@ -79,7 +79,7 @@ describe('QueryBuilder', () => {
   });
 
   it('works', () => {
-    builder.addRootIdentifier(stamp('monster', 'name', []));
+    builder.addRootModel('monster');
     builder.addColumns([
       stamp('monster', 'name', []),
       stamp('monster', 'species', []),
@@ -212,7 +212,7 @@ describe('QueryBuilder', () => {
   });
 
   it('adds slice for root model', () => {
-    builder.addRootIdentifier(stamp('labor', 'name', []));
+    builder.addRootModel('labor');
     builder.addColumns([
       stamp('labor', 'name', []),
       stamp('labor', 'contributions', [
@@ -233,7 +233,7 @@ describe('QueryBuilder', () => {
   });
 
   it('returns a count query string', () => {
-    builder.addRootIdentifier(stamp('monster', 'name', []));
+    builder.addRootModel('monster');
     builder.addColumns([
       stamp('monster', 'name', []),
       stamp('labor', 'year', []),
@@ -278,7 +278,7 @@ describe('QueryBuilder', () => {
 
   describe('handles any for', () => {
     it('deep paths in filters with some non-branching models', () => {
-      builder.addRootIdentifier(stamp('labor', 'name', []));
+      builder.addRootModel('labor');
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -310,7 +310,7 @@ describe('QueryBuilder', () => {
     });
 
     it('deep paths in filters with branching models only', () => {
-      builder.addRootIdentifier(stamp('monster', 'name', []));
+      builder.addRootModel('monster');
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -338,7 +338,7 @@ describe('QueryBuilder', () => {
     });
 
     it('shallow paths in filters with branching models', () => {
-      builder.addRootIdentifier(stamp('monster', 'name', []));
+      builder.addRootModel('monster');
       builder.addRecordFilters([
         {
           modelName: 'victim',
@@ -361,7 +361,7 @@ describe('QueryBuilder', () => {
     });
 
     it('paths that go up and down the tree', () => {
-      builder.addRootIdentifier(stamp('prize', 'name', []));
+      builder.addRootModel('prize');
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -397,7 +397,7 @@ describe('QueryBuilder', () => {
     });
 
     it('paths that go up and down and terminate in a table', () => {
-      builder.addRootIdentifier(stamp('monster', 'name', []));
+      builder.addRootModel('monster');
       builder.addRecordFilters([
         {
           modelName: 'prize',
@@ -420,7 +420,7 @@ describe('QueryBuilder', () => {
     });
 
     it('paths that go up the tree', () => {
-      builder.addRootIdentifier(stamp('prize', 'name', []));
+      builder.addRootModel('prize');
       builder.addRecordFilters([
         {
           modelName: 'labor',
@@ -443,7 +443,7 @@ describe('QueryBuilder', () => {
 
   describe('handles every for', () => {
     it('deep paths in filters with some non-branching models', () => {
-      builder.addRootIdentifier(stamp('labor', 'name', []));
+      builder.addRootModel('labor');
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -475,7 +475,7 @@ describe('QueryBuilder', () => {
     });
 
     it('deep paths in filters with branching models only', () => {
-      builder.addRootIdentifier(stamp('monster', 'name', []));
+      builder.addRootModel('monster');
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -503,7 +503,7 @@ describe('QueryBuilder', () => {
     });
 
     it('shallow paths in filters with branching models', () => {
-      builder.addRootIdentifier(stamp('monster', 'name', []));
+      builder.addRootModel('monster');
       builder.addRecordFilters([
         {
           modelName: 'victim',
@@ -526,7 +526,7 @@ describe('QueryBuilder', () => {
     });
 
     it('paths that go up and down the tree', () => {
-      builder.addRootIdentifier(stamp('prize', 'name', []));
+      builder.addRootModel('prize');
       builder.addRecordFilters([
         {
           modelName: 'wound',
@@ -562,7 +562,7 @@ describe('QueryBuilder', () => {
     });
 
     it('paths that go up and down and terminate in a table', () => {
-      builder.addRootIdentifier(stamp('monster', 'name', []));
+      builder.addRootModel('monster');
       builder.addRecordFilters([
         {
           modelName: 'prize',
@@ -589,7 +589,7 @@ describe('QueryBuilder', () => {
     });
 
     it('paths that go up the tree', () => {
-      builder.addRootIdentifier(stamp('prize', 'name', []));
+      builder.addRootModel('prize');
       builder.addRecordFilters([
         {
           modelName: 'labor',
@@ -607,6 +607,120 @@ describe('QueryBuilder', () => {
         '::all',
         ['name']
       ]);
+    });
+  });
+
+  describe('can serialize and deserialize', () => {
+    it('works', () => {
+      builder.addRootModel('monster');
+      builder.addColumns([
+        stamp('monster', 'name', []),
+        stamp('monster', 'species', []),
+        stamp('monster', 'stats', []),
+        stamp('labor', 'year', []),
+        stamp('labor', 'completed', []),
+        stamp('labor', 'contributions', [
+          {
+            modelName: 'labor',
+            attributeName: 'contributions',
+            operator: '::slice',
+            operand: 'Athens,Sidon'
+          }
+        ]),
+        stamp('prize', 'value', [
+          {
+            modelName: 'prize',
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Sparta'
+          }
+        ]),
+        stamp('victim', 'country', [])
+      ]);
+      builder.addRecordFilters([
+        {
+          modelName: 'labor',
+          attributeName: 'name',
+          operator: '::in',
+          operand: 'lion,hydra,apples',
+          anyMap: {}
+        },
+        {
+          modelName: 'monster',
+          attributeName: 'name',
+          operator: '::equals',
+          operand: 'Nemean Lion',
+          anyMap: {}
+        },
+        {
+          modelName: 'labor',
+          attributeName: 'number',
+          operator: '::equals',
+          operand: 2,
+          anyMap: {}
+        },
+        {
+          modelName: 'prize',
+          attributeName: 'name',
+          operator: '::equals',
+          operand: 'Apples',
+          anyMap: {
+            prize: true
+          }
+        }
+      ]);
+
+      const expectedQuery = [
+        'monster',
+        [
+          '::and',
+          ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
+          ['name', '::equals', 'Nemean Lion'],
+          ['labor', ['number', '::equals', 2], '::any'],
+          ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any']
+        ],
+        '::all',
+        [
+          'name',
+          ['species'],
+          ['stats', '::url'],
+          ['labor', 'year'],
+          ['labor', 'completed'],
+          ['labor', 'contributions', '::slice', ['Athens', 'Sidon']],
+          [
+            'labor',
+            'prize',
+            ['name', '::equals', 'Sparta'],
+            '::first',
+            'value'
+          ],
+          ['victim', '::first', 'country']
+        ]
+      ];
+
+      expect(builder.query()).toEqual(expectedQuery);
+
+      let payload = builder.dumps();
+
+      const builderClone = new QueryBuilder(graph, models);
+      builderClone.loads(payload);
+
+      expect(builderClone.query()).toEqual(expectedQuery);
+    });
+
+    it('throws errors when payload is missing keys', () => {
+      const badPayload = JSON.stringify({
+        something: 'wrong',
+        modular: {not: 'the right models'}
+      });
+
+      const builderClone = new QueryBuilder(graph, models);
+
+      expect(() => {
+        builderClone.loads(badPayload);
+      }).toThrow(
+        '["Payload is missing key recordFilters.","Payload is missing key columns.","Payload is missing key root.","Payload is missing key flatten.","Payload is missing key orRecordFilterIndices."]'
+      );
     });
   });
 });

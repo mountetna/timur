@@ -20,6 +20,49 @@ import {
 } from './query_any_every_helpers';
 import FilterOperator from '../components/query/query_filter_operator';
 
+class Payload {
+  payload: QueryBuilderPayload;
+  models: {[key: string]: Model};
+  errors: string[];
+
+  constructor(dataString: string, currentModels: {[key: string]: Model}) {
+    this.payload = this.deserialize(dataString);
+    this.models = currentModels;
+    this.errors = [];
+  }
+
+  valid(): boolean {
+    return this.containsExpectedKeys();
+  }
+
+  deserialize(dataString: string): QueryBuilderPayload {
+    return JSON.parse(dataString);
+  }
+
+  containsExpectedKeys(): boolean {
+    const expectedKeys = [
+      'recordFilters',
+      'columns',
+      'root',
+      'flatten',
+      'orRecordFilterIndices'
+    ];
+
+    const missingKeys = expectedKeys.reduce((acc: string[], k: string) => {
+      if (!Object.keys(this.payload).includes(k)) acc.push(k);
+      return acc;
+    }, []);
+
+    if (missingKeys.length > 0) {
+      missingKeys.forEach((k) =>
+        this.errors.push(`Payload is missing key ${k}.`)
+      );
+    }
+
+    return missingKeys.length === 0;
+  }
+}
+
 export class QueryBuilder {
   graph: QueryGraph;
   models: {[key: string]: Model};
@@ -34,8 +77,8 @@ export class QueryBuilder {
     this.models = models;
   }
 
-  addRootIdentifier(rootIdentifier: QueryColumn) {
-    this.root = rootIdentifier.model_name;
+  addRootModel(modelName: string) {
+    this.root = modelName;
   }
 
   addColumns(columns: QueryColumn[]) {
@@ -281,4 +324,48 @@ export class QueryBuilder {
 
     return predicate;
   }
+
+  dumps(): string {
+    // All properties except this.graph and this.models
+    return JSON.stringify({
+      recordFilters: this.recordFilters,
+      columns: this.columns,
+      root: this.root,
+      flatten: this.flatten,
+      orRecordFilterIndices: this.orRecordFilterIndices
+    });
+  }
+
+  loads(dataString: string) {
+    // return a QueryBuilder based off of a base64 encoded string
+    const payload = new Payload(dataString, this.models);
+
+    if (!payload.valid()) {
+      throw new Error(JSON.stringify(payload.errors));
+    }
+
+    this.reset();
+
+    this.addRootModel(payload.payload.root);
+    this.addColumns(payload.payload.columns);
+    this.addRecordFilters(payload.payload.recordFilters);
+    this.setFlatten(payload.payload.flatten);
+    this.setOrRecordFilterIndices(payload.payload.orRecordFilterIndices);
+  }
+
+  reset() {
+    this.root = '';
+    this.columns = [];
+    this.recordFilters = [];
+    this.flatten = true;
+    this.orRecordFilterIndices = [];
+  }
+}
+
+interface QueryBuilderPayload {
+  recordFilters: QueryFilter[];
+  columns: QueryColumn[];
+  root: string;
+  flatten: boolean;
+  orRecordFilterIndices: number[];
 }
