@@ -120,12 +120,12 @@ export const getPath = (
   currentPath: number[]
 ): number[] => {
   if (!array) return [];
+  if (!Array.isArray(array)) array = [array];
 
   let index = array.indexOf(heading);
   if (index > -1) return currentPath.concat([index]);
 
   let innerPath: number[] = [];
-
   array.forEach((ele, index: number) => {
     if (Array.isArray(ele)) {
       let tempPath = getPath(ele, heading, currentPath.concat(index));

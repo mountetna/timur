@@ -75,14 +75,16 @@ export class QueryGraph {
     let results: string[][] = [];
 
     Object.keys(this.graph.parents[modelName]).forEach((p: string) => {
-      let innerPaths = this.parentPaths(p);
-      if (innerPaths.length === 0) {
-        results.push([p]);
-      } else {
-        innerPaths.forEach((parentPath: string[]) => {
-          parentPath.unshift(p);
-          results.push(parentPath);
-        });
+      if (p !== modelName) {
+        let innerPaths = this.parentPaths(p);
+        if (innerPaths.length === 0) {
+          results.push([p]);
+        } else {
+          innerPaths.forEach((parentPath: string[]) => {
+            parentPath.unshift(p);
+            results.push(parentPath);
+          });
+        }
       }
     });
 
