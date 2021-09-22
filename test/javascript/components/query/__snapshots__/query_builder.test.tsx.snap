@@ -542,8 +542,8 @@ exports[`QueryBuilder renders 1`] = `
                         class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
                       >
                         <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined"
-                          data-shrink="false"
+                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-filled"
+                          data-shrink="true"
                           for="Join Model-0.5-attribute"
                           id="Join Model-0.5-attribute-label"
                         >
@@ -561,14 +561,14 @@ exports[`QueryBuilder renders 1`] = `
                             id="Join Model-0.5-attribute"
                             spellcheck="false"
                             type="text"
-                            value=""
+                            value="name"
                           />
                           <div
                             class="MuiAutocomplete-endAdornment"
                           >
                             <button
                               aria-label="Clear"
-                              class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator"
+                              class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator MuiAutocomplete-clearIndicatorDirty"
                               tabindex="-1"
                               title="Clear"
                               type="button"
@@ -622,7 +622,7 @@ exports[`QueryBuilder renders 1`] = `
                             class="PrivateNotchedOutline-root MuiOutlinedInput-notchedOutline"
                           >
                             <legend
-                              class="PrivateNotchedOutline-legendLabelled"
+                              class="PrivateNotchedOutline-legendLabelled PrivateNotchedOutline-legendNotched"
                             >
                               <span>
                                 Attribute
@@ -1017,8 +1017,8 @@ exports[`QueryBuilder renders 1`] = `
                         class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
                       >
                         <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined"
-                          data-shrink="false"
+                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-filled"
+                          data-shrink="true"
                           for="Join Model-0.5-attribute"
                           id="Join Model-0.5-attribute-label"
                         >
@@ -1036,14 +1036,14 @@ exports[`QueryBuilder renders 1`] = `
                             id="Join Model-0.5-attribute"
                             spellcheck="false"
                             type="text"
-                            value=""
+                            value="name"
                           />
                           <div
                             class="MuiAutocomplete-endAdornment"
                           >
                             <button
                               aria-label="Clear"
-                              class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator"
+                              class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator MuiAutocomplete-clearIndicatorDirty"
                               tabindex="-1"
                               title="Clear"
                               type="button"
@@ -1097,7 +1097,7 @@ exports[`QueryBuilder renders 1`] = `
                             class="PrivateNotchedOutline-root MuiOutlinedInput-notchedOutline"
                           >
                             <legend
-                              class="PrivateNotchedOutline-legendLabelled"
+                              class="PrivateNotchedOutline-legendLabelled PrivateNotchedOutline-legendNotched"
                             >
                               <span>
                                 Attribute
