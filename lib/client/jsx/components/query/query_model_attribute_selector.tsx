@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useContext} from 'react';
+import React, {useCallback, useState, useContext, useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -141,11 +141,9 @@ const AttributeSelector = ({
       <Autocomplete
         id={`${id(label)}-attribute`}
         value={attributeChoiceSet.find(
-          (a: Attribute) =>
-            a.attribute_name === column.attribute_name &&
-            a.model_name === column.model_name
+          (a: Attribute) => a.attribute_name === column.attribute_name
         )}
-        options={attributeChoiceSet.sort()}
+        options={attributeChoiceSet}
         getOptionLabel={(option) => option.attribute_name}
         style={{width: 300}}
         renderInput={(params) => (
@@ -188,20 +186,23 @@ const QueryModelAttributeSelector = ({
 
   let reduxState = useReduxState();
 
-  const handleModelSelect = useCallback(
+  const selectAttributesForModel = useCallback(
     (modelName: string) => {
-      onSelectModel(modelName);
-      if ('' !== modelName && modelName !== column.model_name) {
-        let template = selectTemplate(reduxState, modelName);
-        setSelectableModelAttributes(
-          selectAllowedModelAttributes(
-            visibleSortedAttributesWithUpdatedAt(template.attributes)
-          )
-        );
-      }
+      let template = selectTemplate(reduxState, modelName);
+      setSelectableModelAttributes(
+        selectAllowedModelAttributes(
+          visibleSortedAttributesWithUpdatedAt(template.attributes)
+        )
+      );
     },
-    [reduxState, onSelectModel, setSelectableModelAttributes, column.model_name]
+    [reduxState]
   );
+
+  useEffect(() => {
+    if (column?.model_name && selectTemplate(reduxState, column.model_name)) {
+      selectAttributesForModel(column.model_name);
+    }
+  }, [reduxState, column, selectAttributesForModel]);
 
   const {matrixModelNames, collectionModelNames} = useSliceMethods(
     column,
@@ -229,11 +230,11 @@ const QueryModelAttributeSelector = ({
           canEdit={canEdit}
           label={label}
           modelName={column.model_name}
-          onSelect={handleModelSelect}
+          onSelect={onSelectModel}
           modelChoiceSet={modelChoiceSet}
         />
       </Grid>
-      {column.model_name ? (
+      {column.model_name && selectableModelAttributes.length > 0 ? (
         <React.Fragment>
           <Grid
             item
@@ -249,7 +250,7 @@ const QueryModelAttributeSelector = ({
                   onSelect={onSelectAttribute}
                   canEdit={canEdit}
                   label={label}
-                  attributeChoiceSet={selectableModelAttributes}
+                  attributeChoiceSet={selectableModelAttributes.sort()}
                   column={column}
                 />
               </Grid>
