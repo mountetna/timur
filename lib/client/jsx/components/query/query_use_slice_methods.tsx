@@ -10,13 +10,16 @@ import {
 } from '../../selectors/query_selector';
 
 const useSliceMethods = (
-  column: QueryColumn,
   columnIndex: number,
   updateCounter: number,
   setUpdateCounter: React.Dispatch<React.SetStateAction<number>>
 ) => {
-  let {state, patchQueryColumn} = useContext(QueryContext);
+  let {
+    state: {rootModel, columns, graph},
+    patchQueryColumn
+  } = useContext(QueryContext);
   const reduxState = useReduxState();
+  const column = columns[columnIndex];
 
   const addNewSlice = useCallback(() => {
     patchQueryColumn(columnIndex, {
@@ -56,27 +59,27 @@ const useSliceMethods = (
   );
 
   const attributesWithRootIdentifier = useMemo(() => {
-    if (!state.rootIdentifier || !state.rootModel) return [];
+    if (!rootModel) return [];
 
-    return [...state.columns].concat([state.rootIdentifier]);
-  }, [state.columns, state.rootModel, state.rootIdentifier]);
+    return [...columns];
+  }, [columns, rootModel]);
 
   const matrixModelNames = useMemo(() => {
-    if (!state.rootModel) return [];
+    if (!rootModel) return [];
 
     return selectMatrixModelNames(
       selectModels(reduxState),
       attributesWithRootIdentifier
     );
-  }, [reduxState, state.rootModel, attributesWithRootIdentifier]);
+  }, [reduxState, rootModel, attributesWithRootIdentifier]);
 
   const collectionModelNames = useMemo(() => {
-    if (!state.rootModel) return [];
+    if (!rootModel) return [];
 
-    return selectCollectionModelNames(state.graph, state.rootModel, [
-      ...new Set(state.columns.map((c) => c.model_name))
+    return selectCollectionModelNames(graph, rootModel, [
+      ...new Set(columns.map((c) => c.model_name))
     ]);
-  }, [state.graph, state.rootModel, state.columns]);
+  }, [graph, rootModel, columns]);
 
   return {
     handleRemoveSlice,

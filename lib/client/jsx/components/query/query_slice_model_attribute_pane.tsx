@@ -7,7 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {QueryContext} from '../../contexts/query/query_context';
 import QueryFilterControl from './query_filter_control';
-import {QuerySlice, QueryColumn} from '../../contexts/query/query_types';
+import {QuerySlice} from '../../contexts/query/query_types';
 import useSliceMethods from './query_use_slice_methods';
 
 const QuerySliceModelAttributePane = ({columnIndex}: {columnIndex: number}) => {
@@ -21,7 +21,7 @@ const QuerySliceModelAttributePane = ({columnIndex}: {columnIndex: number}) => {
 
   const column = columns[columnIndex];
   const {matrixModelNames, addNewSlice, handlePatchSlice, handleRemoveSlice} =
-    useSliceMethods(column, columnIndex, updateCounter, setUpdateCounter);
+    useSliceMethods(columnIndex, updateCounter, setUpdateCounter);
 
   let sliceableModelNames = useMemo(() => {
     if (!rootModel) return [];
@@ -37,8 +37,6 @@ const QuerySliceModelAttributePane = ({columnIndex}: {columnIndex: number}) => {
         .sort();
     }
   }, [rootModel, column, graph, matrixModelNames]);
-
-  if (!rootModel) return null;
 
   return (
     <Grid container spacing={1}>

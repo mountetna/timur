@@ -1,13 +1,7 @@
 // Generic filter component?
 // Model, attribute, operator, operand
 
-import React, {
-  useMemo,
-  useContext,
-  useCallback,
-  useState,
-  useEffect
-} from 'react';
+import React, {useMemo, useCallback} from 'react';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -20,40 +14,11 @@ import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectTemplate} from 'etna-js/selectors/magma';
-
-import {QueryContext} from '../../contexts/query/query_context';
 import {QueryFilter, QuerySlice} from '../../contexts/query/query_types';
-import {
-  selectAllowedModelAttributes,
-  selectMatrixAttributes
-} from '../../selectors/query_selector';
-import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 import FilterOperator from './query_filter_operator';
+import useFilterAttributes from './query_use_filter_attributes';
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  },
-  root: {
-    minWidth: 345
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)'
-  },
-  title: {
-    fontSize: 14
-  },
-  pos: {
-    marginBottom: 12
-  },
   textInput: {
     margin: theme.spacing(1),
     minWidth: 120,
@@ -80,51 +45,8 @@ const QueryFilterControl = ({
   removeFilter: () => void;
 }) => {
   const classes = useStyles();
-  const {state} = useContext(QueryContext);
-  let reduxState = useReduxState();
 
-  const modelAttributes = useMemo(() => {
-    if ('' !== filter.modelName) {
-      let template = selectTemplate(reduxState, filter.modelName);
-
-      if (!template) return [];
-
-      let sortedTemplateAttributes = visibleSortedAttributesWithUpdatedAt(
-        template.attributes
-      );
-
-      return selectAllowedModelAttributes(sortedTemplateAttributes);
-    }
-    return [];
-  }, [filter.modelName, reduxState]);
-
-  const attributeType = useMemo(() => {
-    if ('' !== filter.attributeName) {
-      let template = selectTemplate(reduxState, filter.modelName);
-
-      if (!template) return 'text';
-
-      switch (
-        template.attributes[filter.attributeName].attribute_type.toLowerCase()
-      ) {
-        case 'string':
-          return 'text';
-        case 'date_time':
-          return 'date';
-        case 'integer':
-        case 'float':
-        case 'number':
-          return 'number';
-        case 'boolean':
-          return 'boolean';
-        case 'matrix':
-          return 'matrix';
-        default:
-          return 'text';
-      }
-    }
-    return 'text';
-  }, [filter.attributeName, filter.modelName, reduxState]);
+  const {modelAttributes, attributeType} = useFilterAttributes({filter});
 
   const filterOperator = useMemo(() => {
     return new FilterOperator(attributeType, filter.operator, isColumnFilter);
@@ -174,8 +96,6 @@ const QueryFilterControl = ({
 
   let uniqId = (idType: string): string =>
     `${idType}-Select-${Math.random().toString()}`;
-
-  if (!state.rootModel) return null;
 
   return (
     <Grid container>

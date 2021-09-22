@@ -17,17 +17,19 @@ import {
 } from '../../selectors/query_selector';
 
 const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
-  let {state} = useContext(QueryContext);
+  let {
+    state: {rootModel, columns}
+  } = useContext(QueryContext);
   const reduxState = useReduxState();
 
   function generateIdCol(attr: QueryColumn, index: number): string {
     return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}@${index}`;
   }
 
-  const columns = useMemo(() => {
-    if (!state.rootIdentifier) return [];
+  const formattedColumns = useMemo(() => {
+    if (!rootModel) return [];
 
-    return state.columns.reduce(
+    return columns.reduce(
       (acc: QueryTableColumn[], column: QueryColumn, index: number) => {
         if (
           expandMatrices &&
@@ -59,7 +61,7 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
       },
       []
     );
-  }, [state.columns, state.rootIdentifier, reduxState, expandMatrices]);
+  }, [columns, rootModel, reduxState, expandMatrices]);
 
   const formatRowData = useCallback(
     (allData: QueryResponse, cols: QueryTableColumn[]) => {
@@ -78,12 +80,12 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
   const rows = useMemo(() => {
     if (!data || !data.answer) return;
 
-    // Need to order the results the same as `columns`
-    return formatRowData(data, columns);
-  }, [data, columns, formatRowData]);
+    // Need to order the results the same as `formattedColumns`
+    return formatRowData(data, formattedColumns);
+  }, [data, formattedColumns, formatRowData]);
 
   return {
-    columns,
+    columns: formattedColumns,
     rows,
     formatRowData
   };

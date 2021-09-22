@@ -30,20 +30,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 10,
     minWidth: 120
   },
-  root: {
-    minWidth: 345
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)'
-  },
-  title: {
-    fontSize: 14
-  },
-  pos: {
-    marginBottom: 12
-  },
   fullWidth: {
     width: '96%',
     margin: theme.spacing(1),
@@ -172,9 +158,13 @@ const QueryModelAttributeSelector = ({
   // Matrices will have modelName + attributeName.
   const [updateCounter, setUpdateCounter] = useState(0);
 
-  const {state, patchQueryColumn, removeQueryColumn} = useContext(QueryContext);
+  const {
+    state: {columns, rootModel, graph},
+    patchQueryColumn,
+    removeQueryColumn
+  } = useContext(QueryContext);
 
-  const column = state.columns[columnIndex];
+  const column = columns[columnIndex];
 
   let reduxState = useReduxState();
 
@@ -197,7 +187,6 @@ const QueryModelAttributeSelector = ({
   }, [reduxState, column, selectAttributesForModel]);
 
   const {matrixModelNames, collectionModelNames} = useSliceMethods(
-    column,
     columnIndex,
     updateCounter,
     setUpdateCounter
@@ -210,12 +199,10 @@ const QueryModelAttributeSelector = ({
 
   const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
 
-  if (!state.rootModel) return null;
+  if (!rootModel) return null;
 
   let modelChoiceSet = [
-    ...new Set(
-      state.graph.allPaths(state.rootModel).flat().concat(state.rootModel)
-    )
+    ...new Set(graph.allPaths(rootModel).flat().concat(rootModel))
   ];
 
   return (

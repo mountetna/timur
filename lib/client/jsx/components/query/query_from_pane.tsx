@@ -1,5 +1,4 @@
 import React, {useCallback, useContext} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectTemplate} from 'etna-js/selectors/magma';
@@ -9,16 +8,6 @@ import QueryModelSelector from './query_model_selector';
 import QueryClause from './query_clause';
 
 import useUriQueryParams from '../../contexts/query/use_uri_query_params';
-
-const useStyles = makeStyles((theme) => ({
-  clauseTitle: {
-    fontSize: '1.2rem',
-    minWidth: '120px'
-  },
-  queryClause: {
-    padding: '5px'
-  }
-}));
 
 const QueryFromPane = () => {
   const {state, patchState, setRootModel} = useContext(QueryContext);
@@ -41,8 +30,6 @@ const QueryFromPane = () => {
     },
     [reduxState]
   );
-
-  const classes = useStyles();
 
   useUriQueryParams(state, patchState);
 

@@ -15,7 +15,7 @@ const QueryAnyEverySelectorList = ({
   index: number;
 }) => {
   const [anyMap, setAnyMap] = useState({} as {[key: string]: boolean});
-  const {state, patchRecordFilter} = useContext(QueryContext);
+  const {patchRecordFilter} = useContext(QueryContext);
 
   const handlePatchFilter = useCallback(
     (modelName: string) => {
@@ -34,8 +34,6 @@ const QueryAnyEverySelectorList = ({
   useEffect(() => {
     setAnyMap(filter.anyMap);
   }, [filter.anyMap]);
-
-  if (!state.rootModel) return null;
 
   return (
     <React.Fragment>
