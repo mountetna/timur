@@ -10,39 +10,35 @@ import QueryFilterControl from './query_filter_control';
 import {QuerySlice, QueryColumn} from '../../contexts/query/query_types';
 import useSliceMethods from './query_use_slice_methods';
 
-const QuerySliceModelAttributePane = ({
-  column,
-  columnIndex
-}: {
-  column: QueryColumn;
-  columnIndex: number;
-}) => {
+const QuerySliceModelAttributePane = ({columnIndex}: {columnIndex: number}) => {
   // All the slices related to a given model / attribute,
   //   with the model / attribute as a "label".
   // Matrices will have modelName + attributeName.
   const [updateCounter, setUpdateCounter] = useState(0);
-  const {state} = useContext(QueryContext);
+  const {
+    state: {rootModel, graph, columns}
+  } = useContext(QueryContext);
 
+  const column = columns[columnIndex];
   const {matrixModelNames, addNewSlice, handlePatchSlice, handleRemoveSlice} =
     useSliceMethods(column, columnIndex, updateCounter, setUpdateCounter);
 
   let sliceableModelNames = useMemo(() => {
-    if (!state.rootModel) return [];
+    if (!rootModel) return [];
 
     if (
-      state.rootModel === column.model_name &&
+      rootModel === column.model_name &&
       matrixModelNames.includes(column.model_name)
     ) {
       return [column.model_name];
     } else {
-      return state.graph.sliceableModelNamesInPath(
-        state.rootModel,
-        column.model_name
-      );
+      return graph
+        .sliceableModelNamesInPath(rootModel, column.model_name)
+        .sort();
     }
-  }, [state.rootModel, column, state.graph, matrixModelNames]);
+  }, [rootModel, column, graph, matrixModelNames]);
 
-  if (!state.rootModel) return null;
+  if (!rootModel) return null;
 
   return (
     <Grid container spacing={1}>

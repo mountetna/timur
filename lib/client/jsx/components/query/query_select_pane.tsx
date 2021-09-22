@@ -8,13 +8,16 @@ import QueryModelAttributeSelector from './query_model_attribute_selector';
 import QueryClause from './query_clause';
 
 const QuerySelectPane = () => {
-  const {state, addQueryColumn} = useContext(QueryContext);
+  const {
+    state: {rootModel, columns},
+    addQueryColumn
+  } = useContext(QueryContext);
 
-  if (!state.rootModel) return null;
+  if (!rootModel) return null;
 
   return (
     <QueryClause title='Columns'>
-      {state.columns.map((column: QueryColumn, index: number) => {
+      {columns.map((column: QueryColumn, index: number) => {
         return (
           <QueryModelAttributeSelector
             key={index}

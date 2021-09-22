@@ -19,7 +19,7 @@ const QueryWherePane = () => {
   //  because of non-unique keys.
   const [updateCounter, setUpdateCounter] = useState(0);
   const {
-    state,
+    state: {rootModel, graph, orRecordFilterIndices, recordFilters},
     addRecordFilter,
     removeRecordFilter,
     patchRecordFilter,
@@ -42,12 +42,9 @@ const QueryWherePane = () => {
       updatedFilter: QueryFilter,
       originalFilter: QueryFilter
     ) => {
-      if (
-        state.rootModel &&
-        updatedFilter.modelName !== originalFilter.modelName
-      ) {
-        let selectableModels = state.graph.sliceableModelNamesInPath(
-          state.rootModel,
+      if (rootModel && updatedFilter.modelName !== originalFilter.modelName) {
+        let selectableModels = graph.sliceableModelNamesInPath(
+          rootModel,
           updatedFilter.modelName
         );
 
@@ -61,7 +58,7 @@ const QueryWherePane = () => {
       }
       patchRecordFilter(index, updatedFilter);
     },
-    [patchRecordFilter, state.rootModel, state.graph]
+    [patchRecordFilter, rootModel, graph]
   );
 
   function handleRemoveFilter(index: number) {
@@ -71,27 +68,27 @@ const QueryWherePane = () => {
 
   const handleChangeOrFilters = useCallback(
     (index: number) => {
-      let copy = [...state.orRecordFilterIndices];
+      let copy = [...orRecordFilterIndices];
 
       if (copy.includes(index)) copy.splice(copy.indexOf(index), 1);
       else copy.push(index);
 
       setOrRecordFilterIndices(copy);
     },
-    [state.orRecordFilterIndices, setOrRecordFilterIndices]
+    [orRecordFilterIndices, setOrRecordFilterIndices]
   );
 
   const modelNames = useMemo(() => {
-    if (!state.rootModel) return [];
+    if (!rootModel) return [];
 
-    return [...new Set(state.graph.allPaths(state.rootModel).flat())];
-  }, [state.graph, state.rootModel]);
+    return [...new Set(graph.allPaths(rootModel).flat())].sort();
+  }, [graph, rootModel]);
 
-  if (!state.rootModel) return null;
+  if (!rootModel) return null;
 
   return (
     <QueryClause title='Where'>
-      {state.recordFilters.length > 0 ? (
+      {recordFilters.length > 0 ? (
         <Grid container alignItems='center' justify='center'>
           <Grid item xs={1}>
             OR
@@ -99,11 +96,11 @@ const QueryWherePane = () => {
           <Grid item xs={11} />
         </Grid>
       ) : null}
-      {state.recordFilters.map((filter: QueryFilter, index: number) => (
+      {recordFilters.map((filter: QueryFilter, index: number) => (
         <Grid key={index} container alignItems='center' justify='center'>
           <Grid item xs={1}>
             <Checkbox
-              checked={state.orRecordFilterIndices.includes(index)}
+              checked={orRecordFilterIndices.includes(index)}
               color='primary'
               onChange={(e, checked) => handleChangeOrFilters(index)}
               inputProps={{'aria-label': 'secondary checkbox'}}

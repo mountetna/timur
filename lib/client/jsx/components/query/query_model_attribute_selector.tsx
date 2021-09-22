@@ -284,7 +284,7 @@ const QueryModelAttributeSelector = ({
             </Grid>
             {isSliceable && canEdit ? (
               <Grid item>
-                <QuerySlicePane column={column} columnIndex={columnIndex} />
+                <QuerySlicePane columnIndex={columnIndex} />
               </Grid>
             ) : null}
           </Grid>

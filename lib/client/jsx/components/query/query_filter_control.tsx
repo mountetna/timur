@@ -188,7 +188,7 @@ const QueryFilterControl = ({
             onChange={(e) => handleModelSelect(e.target.value as string)}
             displayEmpty
           >
-            {modelNames.sort().map((name, index: number) => (
+            {modelNames.map((name, index: number) => (
               <MenuItem key={index} value={name}>
                 {name}
               </MenuItem>
