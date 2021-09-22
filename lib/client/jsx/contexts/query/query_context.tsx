@@ -6,17 +6,24 @@ import {QueryGraph} from '../../utils/query_graph';
 
 import useQueryGraph from './use_query_graph';
 
-const defaultState = {
+export const defaultQueryParams = {
   columns: [] as QueryColumn[],
   rootModel: null as string | null,
   rootIdentifier: {} as QueryColumn | null,
   recordFilters: [] as QueryFilter[],
-  orRecordFilterIndices: [] as number[],
+  orRecordFilterIndices: [] as number[]
+};
+
+const defaultState = {
+  ...defaultQueryParams,
   graph: {} as QueryGraph
 };
 
+export type QueryState = Readonly<typeof defaultState>;
+
 export const defaultContext = {
   state: defaultState as QueryState,
+  patchState: (state: QueryState) => {},
   addQueryColumn: (column: QueryColumn) => {},
   removeQueryColumn: (index: number) => {},
   patchQueryColumn: (index: number, column: QueryColumn) => {},
@@ -30,7 +37,6 @@ export const defaultContext = {
   ) => {}
 };
 
-export type QueryState = Readonly<typeof defaultState>;
 export type QueryContextData = typeof defaultContext;
 
 export const QueryContext = createContext(defaultContext);
@@ -143,12 +149,23 @@ export const QueryProvider = (
     [state]
   );
 
+  const patchState = useCallback(
+    (newState: QueryState) => {
+      setState({
+        ...state,
+        ...newState
+      });
+    },
+    [state]
+  );
+
   useQueryGraph(setGraph);
 
   return (
     <QueryContext.Provider
       value={{
         state,
+        patchState,
         addQueryColumn,
         removeQueryColumn,
         patchQueryColumn,

@@ -94,9 +94,9 @@ const QueryModelSelector = ({
             value={modelValue}
             onChange={(e) => handleModelSelect(e.target.value as string)}
           >
-            {modelChoiceSet.sort().map((model_name: string, index: number) => (
-              <MenuItem key={index} value={model_name}>
-                {model_name}
+            {modelChoiceSet.sort().map((modelName: string, index: number) => (
+              <MenuItem key={index} value={modelName}>
+                {modelName}
               </MenuItem>
             ))}
           </Select>

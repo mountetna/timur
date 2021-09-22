@@ -8,6 +8,8 @@ import {QueryContext} from '../../contexts/query/query_context';
 import QueryModelSelector from './query_model_selector';
 import QueryClause from './query_clause';
 
+import useUriQueryParams from '../../contexts/query/use_uri_query_params';
+
 const useStyles = makeStyles((theme) => ({
   clauseTitle: {
     fontSize: '1.2rem',
@@ -19,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const QueryFromPane = () => {
-  const {state, setRootModel} = useContext(QueryContext);
+  const {state, patchState, setRootModel} = useContext(QueryContext);
 
   let reduxState = useReduxState();
 
@@ -41,6 +43,8 @@ const QueryFromPane = () => {
   );
 
   const classes = useStyles();
+
+  useUriQueryParams(state, patchState);
 
   return (
     <QueryClause title='From'>

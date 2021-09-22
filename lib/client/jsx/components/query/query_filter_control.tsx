@@ -86,6 +86,9 @@ const QueryFilterControl = ({
   const modelAttributes = useMemo(() => {
     if ('' !== filter.modelName) {
       let template = selectTemplate(reduxState, filter.modelName);
+
+      if (!template) return [];
+
       let sortedTemplateAttributes = visibleSortedAttributesWithUpdatedAt(
         template.attributes
       );
@@ -98,6 +101,8 @@ const QueryFilterControl = ({
   const attributeType = useMemo(() => {
     if ('' !== filter.attributeName) {
       let template = selectTemplate(reduxState, filter.modelName);
+
+      if (!template) return 'text';
 
       switch (
         template.attributes[filter.attributeName].attribute_type.toLowerCase()

@@ -18,6 +18,8 @@ const QueryBuilder = ({}) => {
   const classes = useStyles();
   const {state} = useContext(QueryContext);
 
+  if (!state.graph || !state.graph.initialized) return null;
+
   return (
     <Grid container direction='column'>
       <QueryControls />
