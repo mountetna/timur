@@ -1,6 +1,5 @@
 var path = require('path');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 var webpack = require('webpack');
 
@@ -97,13 +96,6 @@ module.exports = (env) => ({
     new MiniCssExtractPlugin({
       filename: 'public/css/timur.bundle.css',
     }),
-    new CopyWebpackPlugin({ 
-      patterns: [ 
-       // relative path is from src
-       { from: './lib/client/img/favicon.png',
-         to: 'public/images/favicon.png' }, // <- your path to favicon
-      ]
-   })
     // new webpack.DefinePlugin({
     //   'process.env': {
     //     NODE_ENV: JSON.stringify(env ? env.NODE_ENV : 'development')
