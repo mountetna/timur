@@ -1,16 +1,23 @@
 var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 var webpack = require('webpack');
 
 module.exports = (env) => ({
+  mode: env.NODE_ENV || 'development',
+  optimization: {
+    minimizer: [new TerserPlugin({ /* additional options here */ })],
+  },
   context: path.resolve(__dirname),
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss', '.png', '.jpg', '.jpeg', '.svg'],
     alias: {
       'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib'),
       react: path.join(__dirname, 'node_modules/react'),
-      'react-dom': path.join(__dirname, 'node_modules/react-dom'),
-      'react-redux': path.join(__dirname, 'node_modules/react-redux')
+      // 'react-dom': path.join(__dirname, 'node_modules/react-dom'),
+      'react-redux': path.join(__dirname, 'node_modules/react-redux'),
+      'react-dom$': path.join(__dirname, 'node_modules/react-dom/profiling'),
+      'scheduler/tracing': path.join(__dirname, 'node_modules/scheduler/tracing-profiling')
     },
     symlinks: false
   },
@@ -88,20 +95,24 @@ module.exports = (env) => ({
           path.resolve(__dirname, 'lib/client/scss')
         ],
 
-        loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+        // loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin({
-      // define where to save the file
+    // new ExtractTextPlugin({
+    //   // define where to save the file
+    //   filename: 'public/css/timur.bundle.css',
+    //   allChunks: true
+    // }),
+    new MiniCssExtractPlugin({
       filename: 'public/css/timur.bundle.css',
-      allChunks: true
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(env ? env.NODE_ENV : 'development')
-      }
-    })
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify(env ? env.NODE_ENV : 'development')
+    //   }
+    // })
   ]
 });

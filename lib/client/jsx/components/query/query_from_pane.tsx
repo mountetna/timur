@@ -51,11 +51,7 @@ const QueryFromPane = () => {
       <QueryModelSelector
         label='Root Model'
         modelValue={state.rootModel || ''}
-        modelChoiceSet={
-          state.graph && state.graph.allowedModels
-            ? [...state.graph.allowedModels]
-            : []
-        }
+        modelChoiceSet={[...state.graph.allowedModels]}
         onSelectModel={(modelName) => onRootModelSelect(modelName)}
         canRemove={false}
         removeModel={() => {}}

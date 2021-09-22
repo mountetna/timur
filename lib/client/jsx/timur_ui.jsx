@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import { findRoute, setRoutes } from 'etna-js/dispatchers/router';
+import {findRoute, setRoutes} from 'etna-js/dispatchers/router';
 
-import { ThemeProvider } from '@material-ui/core/styles';
+import {ThemeProvider} from '@material-ui/core/styles';
 
 // Components.
 import Manifests from './components/manifest/manifests';
@@ -23,9 +23,9 @@ import {ModalDialogContainer} from 'etna-js/components/ModalDialogContainer';
 import {Notifications} from 'etna-js/components/Notifications';
 import QueryPage from './components/query/query_page';
 
-import { createEtnaTheme } from 'etna-js/style/theme';
+import {createEtnaTheme} from 'etna-js/style/theme';
 
-const theme = createEtnaTheme("goldenrod", "#066306");
+const theme = createEtnaTheme('goldenrod', '#066306');
 
 const ROUTES = [
   {
@@ -106,7 +106,7 @@ const ROUTES = [
   },
   {
     name: 'query',
-    template: ':project_name/query',
+    template: ':project_name/query?:columns',
     component: QueryPage,
     mode: 'query'
   }
@@ -114,25 +114,24 @@ const ROUTES = [
 
 setRoutes(ROUTES);
 
-const Empty = () => <div/>;
+const Empty = () => <div />;
 
 class TimurUI extends React.Component {
   constructor(props) {
     super(props);
 
     window.onpopstate = this.updateLocation.bind(this);
-
   }
 
   updateLocation() {
-    let { updateLocation } = this.props;
+    let {updateLocation} = this.props;
     updateLocation(location);
   }
 
   render() {
-    let { location, showMessages, environment, user } = this.props;
+    let {location, showMessages, environment, user} = this.props;
 
-    let { route, params } = findRoute(location, ROUTES);
+    let {route, params} = findRoute(location, ROUTES);
     let Component;
     let mode;
 
@@ -155,10 +154,10 @@ class TimurUI extends React.Component {
       <React.Fragment>
         <ThemeProvider theme={theme}>
           <ModalDialogContainer>
-            <div id="ui-container">
-              <Notifications/>
-              <TimurNav environment={environment} mode={mode}/>
-              <Messages/>
+            <div id='ui-container'>
+              <Notifications />
+              <TimurNav environment={environment} mode={mode} />
+              <Messages />
               <Component key={key} {...params} />
             </div>
           </ModalDialogContainer>
@@ -169,6 +168,6 @@ class TimurUI extends React.Component {
 }
 
 export default connect(
-  (state) => ({ location: state.location, user: selectUser(state) }),
-  { showMessages, updateLocation }
+  (state) => ({location: state.location, user: selectUser(state)}),
+  {showMessages, updateLocation}
 )(TimurUI);

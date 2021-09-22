@@ -57,20 +57,18 @@ const QuerySliceModelAttributePane = ({
         </Tooltip>
       </Grid>
       <Grid item xs={10}>
-        {column.slices
-          ? column.slices.map((slice: QuerySlice, index: number) => (
-              <QueryFilterControl
-                key={`model-${column.model_name}-${index}-${updateCounter}`}
-                filter={slice}
-                isColumnFilter={true}
-                modelNames={sliceableModelNames}
-                patchFilter={(updatedFilter: QuerySlice) =>
-                  handlePatchSlice(index, updatedFilter)
-                }
-                removeFilter={() => handleRemoveSlice(index)}
-              />
-            ))
-          : null}
+        {column?.slices.map((slice: QuerySlice, index: number) => (
+          <QueryFilterControl
+            key={`model-${column.model_name}-${index}-${updateCounter}`}
+            filter={slice}
+            isColumnFilter={true}
+            modelNames={sliceableModelNames}
+            patchFilter={(updatedFilter: QuerySlice) =>
+              handlePatchSlice(index, updatedFilter)
+            }
+            removeFilter={() => handleRemoveSlice(index)}
+          />
+        ))}
       </Grid>
     </Grid>
   );
