@@ -157,21 +157,11 @@ const AttributeSelector = ({
 
 const QueryModelAttributeSelector = ({
   label,
-  modelChoiceSet,
-  column,
   columnIndex,
-  onSelectModel,
-  onSelectAttribute,
-  removeColumn,
   canEdit
 }: {
   label: string;
-  modelChoiceSet: string[];
-  column: QueryColumn;
   columnIndex: number;
-  onSelectModel: (modelName: string) => void;
-  onSelectAttribute: (attribute_name: string) => void;
-  removeColumn: () => void;
   canEdit: boolean;
 }) => {
   const [selectableModelAttributes, setSelectableModelAttributes] = useState(
@@ -182,7 +172,9 @@ const QueryModelAttributeSelector = ({
   // Matrices will have modelName + attributeName.
   const [updateCounter, setUpdateCounter] = useState(0);
 
-  const {patchQueryColumn} = useContext(QueryContext);
+  const {state, patchQueryColumn, removeQueryColumn} = useContext(QueryContext);
+
+  const column = state.columns[columnIndex];
 
   let reduxState = useReduxState();
 
@@ -218,6 +210,14 @@ const QueryModelAttributeSelector = ({
 
   const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
 
+  if (!state.rootModel) return null;
+
+  let modelChoiceSet = [
+    ...new Set(
+      state.graph.allPaths(state.rootModel).flat().concat(state.rootModel)
+    )
+  ];
+
   return (
     <Grid
       container
@@ -230,7 +230,14 @@ const QueryModelAttributeSelector = ({
           canEdit={canEdit}
           label={label}
           modelName={column.model_name}
-          onSelect={onSelectModel}
+          onSelect={(newModelName) =>
+            patchQueryColumn(columnIndex, {
+              model_name: newModelName,
+              slices: [],
+              attribute_name: '',
+              display_label: ''
+            })
+          }
           modelChoiceSet={modelChoiceSet}
         />
       </Grid>
@@ -247,7 +254,14 @@ const QueryModelAttributeSelector = ({
             <Grid item container>
               <Grid item xs={4}>
                 <AttributeSelector
-                  onSelect={onSelectAttribute}
+                  onSelect={(attributeName) =>
+                    patchQueryColumn(columnIndex, {
+                      model_name: column.model_name,
+                      slices: [],
+                      attribute_name: attributeName,
+                      display_label: `${column.model_name}.${attributeName}`
+                    })
+                  }
                   canEdit={canEdit}
                   label={label}
                   attributeChoiceSet={selectableModelAttributes.sort()}
@@ -277,7 +291,10 @@ const QueryModelAttributeSelector = ({
         </React.Fragment>
       ) : null}
       <Grid item xs={1}>
-        <RemoveColumnIcon canEdit={canEdit} removeColumn={removeColumn} />
+        <RemoveColumnIcon
+          canEdit={canEdit}
+          removeColumn={() => removeQueryColumn(columnIndex)}
+        />
       </Grid>
     </Grid>
   );

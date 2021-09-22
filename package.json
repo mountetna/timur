@@ -80,6 +80,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-emotion": "^10.0.33",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "copy-webpack-plugin": "^6.4.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^7.27.0",

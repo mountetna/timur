@@ -11,18 +11,18 @@ export default function useUriQueryParams(
   const queryKeys = Object.keys(defaultQueryParams);
 
   // Update the search params to reflect current state
-  useEffect(() => {
-    let searchParams = new URLSearchParams(search);
-    queryKeys.forEach((key: string) => {
-      if (key in state) {
-        searchParams.set(key, JSON.stringify((state as any)[key]));
-      }
-    });
+  // useEffect(() => {
+  //   let searchParams = new URLSearchParams(search);
+  //   queryKeys.forEach((key: string) => {
+  //     if (key in state) {
+  //       searchParams.set(key, JSON.stringify((state as any)[key]));
+  //     }
+  //   });
 
-    if (search !== searchParams.toString()) {
-      history.pushState({}, '', `${pathname}?${searchParams.toString()}`);
-    }
-  }, [state, search, queryKeys, pathname]);
+  //   if (search !== searchParams.toString()) {
+  //     history.pushState({}, '', `${pathname}?${searchParams.toString()}`);
+  //   }
+  // }, [state, search, queryKeys, pathname]);
 
   // Set current state to reflect query params only on component load
   useEffect(() => {

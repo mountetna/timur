@@ -1,5 +1,6 @@
 var path = require('path');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 var webpack = require('webpack');
 
@@ -59,23 +60,10 @@ module.exports = (env) => ({
         loader: 'file-loader',
         include: [
           path.resolve(__dirname, 'node_modules/etna-js/'),
-          '/etna/packages/etna-js'
+          '/etna/packages/etna-js',
+          path.resolve(__dirname, 'lib/client/img/')
         ],
         test: /\.(jpe?g|png|svg)$/i,
-
-        options: {
-          name: '[name].[ext]',
-          outputPath: 'public/images/',
-          publicPath: '/images'
-        }
-      },
-
-      {
-        test: /\.(jpe?g|png|svg)$/i,
-
-        include: [path.resolve(__dirname, 'lib/client/img')],
-
-        loader: 'file-loader',
 
         options: {
           name: '[name].[ext]',
@@ -109,6 +97,13 @@ module.exports = (env) => ({
     new MiniCssExtractPlugin({
       filename: 'public/css/timur.bundle.css',
     }),
+    new CopyWebpackPlugin({ 
+      patterns: [ 
+       // relative path is from src
+       { from: './lib/client/img/favicon.png',
+         to: 'public/images/favicon.png' }, // <- your path to favicon
+      ]
+   })
     // new webpack.DefinePlugin({
     //   'process.env': {
     //     NODE_ENV: JSON.stringify(env ? env.NODE_ENV : 'development')
