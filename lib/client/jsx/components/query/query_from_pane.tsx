@@ -8,8 +8,6 @@ import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import QueryModelSelector from './query_model_selector';
 import QueryClause from './query_clause';
 
-import useUriQueryParams from '../../contexts/query/use_uri_query_params';
-
 const QueryFromPane = () => {
   const {
     state: {graph, rootModel},
@@ -32,8 +30,6 @@ const QueryFromPane = () => {
     },
     [reduxState, setRootModel, setRootIdentifierColumn]
   );
-
-  // useUriQueryParams(state, patchState);
 
   return (
     <QueryClause title='From'>

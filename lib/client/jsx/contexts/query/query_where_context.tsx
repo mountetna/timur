@@ -18,7 +18,8 @@ export const defaultQueryWhereContext = {
   addRecordFilter: (recordFilter: QueryFilter) => {},
   removeRecordFilter: (index: number) => {},
   patchRecordFilter: (index: number, recordFilter: QueryFilter) => {},
-  setOrRecordFilterIndices: (indices: number[]) => {}
+  setOrRecordFilterIndices: (indices: number[]) => {},
+  setWhereState: (newState: QueryWhereState) => {}
 };
 
 export type QueryWhereContextData = typeof defaultQueryWhereContext;
@@ -78,6 +79,12 @@ export const QueryWhereProvider = (
     [state]
   );
 
+  const setWhereState = useCallback((newState: QueryWhereState) => {
+    setState({
+      ...newState
+    });
+  }, []);
+
   return (
     <QueryWhereContext.Provider
       value={{
@@ -85,7 +92,8 @@ export const QueryWhereProvider = (
         addRecordFilter,
         removeRecordFilter,
         patchRecordFilter,
-        setOrRecordFilterIndices
+        setOrRecordFilterIndices,
+        setWhereState
       }}
     >
       {props.children}

@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 const QueryBuilder = ({}) => {
   const {
-    state: {graph},
-    setGraph
+    state: {graph}
   } = useContext(QueryGraphContext);
   const classes = useStyles();
 

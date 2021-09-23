@@ -225,6 +225,7 @@ const QueryResults = () => {
           justify='flex-end'
         >
           <FormControlLabel
+            className={classes.button}
             control={
               <Checkbox
                 checked={expandMatrices}
@@ -235,6 +236,7 @@ const QueryResults = () => {
             label='Expand matrices'
           />
           <FormControlLabel
+            className={classes.button}
             control={
               <Checkbox
                 checked={flattenQuery}
@@ -243,7 +245,7 @@ const QueryResults = () => {
                 color='primary'
               />
             }
-            label='Flattened'
+            label='Flattened data frame'
           />
           <Button className={classes.button} disabled>
             Previous Queries

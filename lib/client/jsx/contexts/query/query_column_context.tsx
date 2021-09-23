@@ -17,7 +17,8 @@ export const defaultQueryColumnContext = {
   addQueryColumn: (column: QueryColumn) => {},
   removeQueryColumn: (index: number) => {},
   patchQueryColumn: (index: number, column: QueryColumn) => {},
-  setRootIdentifierColumn: (column: QueryColumn) => {}
+  setRootIdentifierColumn: (column: QueryColumn) => {},
+  setQueryColumns: (columns: QueryColumn[]) => {}
 };
 
 export type QueryColumnContextData = typeof defaultQueryColumnContext;
@@ -77,6 +78,16 @@ export const QueryColumnProvider = (
     [state]
   );
 
+  const setQueryColumns = useCallback(
+    (columns: QueryColumn[]) => {
+      setState({
+        ...state,
+        columns
+      });
+    },
+    [state]
+  );
+
   return (
     <QueryColumnContext.Provider
       value={{
@@ -84,7 +95,8 @@ export const QueryColumnProvider = (
         addQueryColumn,
         removeQueryColumn,
         patchQueryColumn,
-        setRootIdentifierColumn
+        setRootIdentifierColumn,
+        setQueryColumns
       }}
     >
       {props.children}
