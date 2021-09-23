@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectModels} from 'etna-js/selectors/magma';
-import {QueryContext} from '../../contexts/query/query_context';
+import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {
   QueryColumn,
   QueryResponse,
@@ -17,9 +17,9 @@ import {
 } from '../../selectors/query_selector';
 
 const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
-  let {
-    state: {rootModel, columns}
-  } = useContext(QueryContext);
+  const {
+    state: {columns}
+  } = useContext(QueryColumnContext);
   const reduxState = useReduxState();
 
   function generateIdCol(attr: QueryColumn, index: number): string {
@@ -27,8 +27,6 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
   }
 
   const formattedColumns = useMemo(() => {
-    if (!rootModel) return [];
-
     return columns.reduce(
       (acc: QueryTableColumn[], column: QueryColumn, index: number) => {
         if (
@@ -61,7 +59,7 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
       },
       []
     );
-  }, [columns, rootModel, reduxState, expandMatrices]);
+  }, [columns, reduxState, expandMatrices]);
 
   const formatRowData = useCallback(
     (allData: QueryResponse, cols: QueryTableColumn[]) => {

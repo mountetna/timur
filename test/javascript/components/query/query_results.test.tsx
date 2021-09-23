@@ -54,11 +54,6 @@ describe('QueryResults', () => {
       ...defaultContext.state,
       graph,
       rootModel: 'monster',
-      rootIdentifier: {
-        model_name: 'monster',
-        attribute_name: 'name',
-        display_label: 'monster.name'
-      },
       columns: [
         {
           model_name: 'monster',
@@ -112,11 +107,6 @@ describe('QueryResults', () => {
       ...defaultContext.state,
       graph,
       rootModel: 'monster',
-      rootIdentifier: {
-        model_name: 'monster',
-        attribute_name: 'name',
-        display_label: 'monster.name'
-      },
       columns: [
         {
           model_name: 'monster',

@@ -5,7 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
-import {QueryContext} from '../../contexts/query/query_context';
+import {QueryGraphContext} from '../../contexts/query/query_graph_context';
+import {QueryWhereContext} from '../../contexts/query/query_where_context';
 import QueryFilterControl from './query_filter_control';
 import {QueryFilter, QuerySlice} from '../../contexts/query/query_types';
 import QueryClause from './query_clause';
@@ -19,14 +20,18 @@ const QueryWherePane = () => {
   //  because of non-unique keys.
   const [updateCounter, setUpdateCounter] = useState(0);
   const {
-    state: {rootModel, graph, orRecordFilterIndices, recordFilters},
+    state: {graph, rootModel}
+  } = useContext(QueryGraphContext);
+  const {
+    state: {orRecordFilterIndices, recordFilters},
     addRecordFilter,
     removeRecordFilter,
     patchRecordFilter,
     setOrRecordFilterIndices
-  } = useContext(QueryContext);
+  } = useContext(QueryWhereContext);
 
-  function addNewRecordFilter() {
+  const addNewRecordFilter = useCallback(() => {
+    console.log('adding ne wfilter');
     addRecordFilter({
       modelName: '',
       attributeName: '',
@@ -34,7 +39,7 @@ const QueryWherePane = () => {
       operand: '',
       anyMap: {}
     });
-  }
+  }, [addRecordFilter]);
 
   const handlePatchFilter = useCallback(
     (
@@ -42,7 +47,10 @@ const QueryWherePane = () => {
       updatedFilter: QueryFilter,
       originalFilter: QueryFilter
     ) => {
-      if (rootModel && updatedFilter.modelName !== originalFilter.modelName) {
+      if (
+        updatedFilter.modelName !== originalFilter.modelName &&
+        rootModel != null
+      ) {
         let selectableModels = graph.sliceableModelNamesInPath(
           rootModel,
           updatedFilter.modelName
@@ -58,7 +66,7 @@ const QueryWherePane = () => {
       }
       patchRecordFilter(index, updatedFilter);
     },
-    [patchRecordFilter, rootModel, graph]
+    [patchRecordFilter, graph, rootModel]
   );
 
   function handleRemoveFilter(index: number) {
@@ -78,13 +86,9 @@ const QueryWherePane = () => {
     [orRecordFilterIndices, setOrRecordFilterIndices]
   );
 
-  const modelNames = useMemo(() => {
-    if (!rootModel) return [];
-
-    return [...new Set(graph.allPaths(rootModel).flat())].sort();
-  }, [graph, rootModel]);
-
   if (!rootModel) return null;
+
+  let modelNames = [...new Set(graph.allPaths(rootModel).flat())].sort();
 
   return (
     <QueryClause title='Where'>
@@ -107,7 +111,11 @@ const QueryWherePane = () => {
             />
           </Grid>
           <Grid item xs={2}>
-            <QueryAnyEverySelectorList filter={filter} index={index} />
+            <QueryAnyEverySelectorList
+              filter={filter}
+              index={index}
+              patchRecordFilter={patchRecordFilter}
+            />
           </Grid>
           <Grid item container xs={9}>
             <QueryFilterControl

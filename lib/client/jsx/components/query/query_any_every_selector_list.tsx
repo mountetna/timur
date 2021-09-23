@@ -1,21 +1,21 @@
-import React, {useContext, useState, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import {QueryContext} from '../../contexts/query/query_context';
 import {QueryFilter} from '../../contexts/query/query_types';
 import {useEffect} from 'react';
 
 const QueryAnyEverySelectorList = ({
   filter,
-  index
+  index,
+  patchRecordFilter
 }: {
   filter: QueryFilter;
   index: number;
+  patchRecordFilter: (index: number, updatedFilter: QueryFilter) => void;
 }) => {
   const [anyMap, setAnyMap] = useState({} as {[key: string]: boolean});
-  const {patchRecordFilter} = useContext(QueryContext);
 
   const handlePatchFilter = useCallback(
     (modelName: string) => {

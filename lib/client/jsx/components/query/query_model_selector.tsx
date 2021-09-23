@@ -15,29 +15,25 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const RemoveModelIcon = ({
-  canRemove,
-  removeModel
-}: {
-  canRemove: boolean;
-  removeModel: () => void;
-}) => {
-  if (!canRemove) return null;
+const RemoveModelIcon = React.memo(
+  ({canRemove, removeModel}: {canRemove: boolean; removeModel: () => void}) => {
+    if (!canRemove) return null;
 
-  return (
-    <Tooltip
-      title='Remove model and attributes'
-      aria-label='remove model and attributes'
-    >
-      <IconButton
+    return (
+      <Tooltip
+        title='Remove model and attributes'
         aria-label='remove model and attributes'
-        onClick={removeModel}
       >
-        <ClearIcon color='action' />
-      </IconButton>
-    </Tooltip>
-  );
-};
+        <IconButton
+          aria-label='remove model and attributes'
+          onClick={removeModel}
+        >
+          <ClearIcon color='action' />
+        </IconButton>
+      </Tooltip>
+    );
+  }
+);
 
 const QueryModelSelector = ({
   label,

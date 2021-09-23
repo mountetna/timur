@@ -61,19 +61,21 @@ const QueryTable = ({
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows?.map((row: any[]) => {
-              return (
-                <TableRow hover tabIndex={-1} key={row[0]}>
-                  {row.map((datum: any, index: number) => (
-                    <TableCell key={index} scope='row'>
-                      {datum?.toString()}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              );
-            })}
-          </TableBody>
+          {rows ? (
+            <TableBody>
+              {rows.map((row: any[]) => {
+                return (
+                  <TableRow hover tabIndex={-1} key={row[0]}>
+                    {row.map((datum: any, index: number) => (
+                      <TableCell key={index} scope='row'>
+                        {datum?.toString()}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          ) : null}
         </Table>
       </TableContainer>
     </React.Fragment>

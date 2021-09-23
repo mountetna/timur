@@ -11,8 +11,8 @@ const useQueryGraph = (setGraph: any) => {
 
   useEffect(() => {
     if (models) {
-      let graph = new QueryGraph(models);
-      setGraph(graph);
+      let newGraph = new QueryGraph(models);
+      setGraph(newGraph);
     }
   }, [models]);
 };

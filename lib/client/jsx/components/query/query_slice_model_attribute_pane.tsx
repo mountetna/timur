@@ -5,21 +5,26 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import {QueryContext} from '../../contexts/query/query_context';
+import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import QueryFilterControl from './query_filter_control';
-import {QuerySlice} from '../../contexts/query/query_types';
+import {QuerySlice, QueryColumn} from '../../contexts/query/query_types';
 import useSliceMethods from './query_use_slice_methods';
 
-const QuerySliceModelAttributePane = ({columnIndex}: {columnIndex: number}) => {
+const QuerySliceModelAttributePane = ({
+  column,
+  columnIndex
+}: {
+  column: QueryColumn;
+  columnIndex: number;
+}) => {
   // All the slices related to a given model / attribute,
   //   with the model / attribute as a "label".
   // Matrices will have modelName + attributeName.
   const [updateCounter, setUpdateCounter] = useState(0);
   const {
-    state: {rootModel, graph, columns}
-  } = useContext(QueryContext);
+    state: {graph, rootModel}
+  } = useContext(QueryGraphContext);
 
-  const column = columns[columnIndex];
   const {matrixModelNames, addNewSlice, handlePatchSlice, handleRemoveSlice} =
     useSliceMethods(columnIndex, updateCounter, setUpdateCounter);
 
@@ -36,7 +41,7 @@ const QuerySliceModelAttributePane = ({columnIndex}: {columnIndex: number}) => {
         .sliceableModelNamesInPath(rootModel, column.model_name)
         .sort();
     }
-  }, [rootModel, column, graph, matrixModelNames]);
+  }, [column, graph, rootModel, matrixModelNames]);
 
   return (
     <Grid container spacing={1}>

@@ -1,6 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect} from 'react';
 import {QueryState, defaultQueryParams} from './query_context';
-import {QueryColumn, QueryFilter} from './query_types';
 
 export default function useUriQueryParams(
   state: QueryState,
@@ -42,13 +41,12 @@ export default function useUriQueryParams(
 
     patchState({
       ...state,
-      columns: JSON.parse(searchParams.get('columns') || '[]'),
-      recordFilters: JSON.parse(searchParams.get('recordFilters') || '[]'),
-      orRecordFilterIndices: JSON.parse(
-        searchParams.get('orRecordFilterIndices') || '[]'
-      ),
-      rootModel: JSON.parse(searchParams.get('rootModel') || '""'),
-      rootIdentifier: JSON.parse(searchParams.get('rootIdentifier') || '{}')
+      // columns: JSON.parse(searchParams.get('columns') || '[]'),
+      // recordFilters: JSON.parse(searchParams.get('recordFilters') || '[]'),
+      // orRecordFilterIndices: JSON.parse(
+      //   searchParams.get('orRecordFilterIndices') || '[]'
+      // ),
+      rootModel: JSON.parse(searchParams.get('rootModel') || '""')
     });
   }, []);
 }

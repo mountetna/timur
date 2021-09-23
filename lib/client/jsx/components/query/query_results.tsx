@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -21,11 +23,12 @@ import {Exchange} from 'etna-js/actions/exchange_actions';
 import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
 import {ReactReduxContext} from 'react-redux';
 
-import {QueryContext} from '../../contexts/query/query_context';
+import {QueryGraphContext} from '../../contexts/query/query_graph_context';
+import {QueryColumnContext} from '../../contexts/query/query_column_context';
+import {QueryWhereContext} from '../../contexts/query/query_where_context';
 import {QueryBuilder} from '../../utils/query_builder';
 import {QueryResponse} from '../../contexts/query/query_types';
 import QueryTable from './query_table';
-import AntSwitch from './ant_switch';
 import useTableEffects from './query_use_table_effects';
 
 const useStyles = makeStyles((theme) => ({
@@ -55,32 +58,39 @@ const QueryResults = () => {
   const [queries, setQueries] = useState([] as string[][]);
   const [data, setData] = useState({} as QueryResponse);
   const [numRecords, setNumRecords] = useState(0);
-  const {state} = useContext(QueryContext);
+  const {
+    state: {graph, rootModel}
+  } = useContext(QueryGraphContext);
+  const {
+    state: {columns}
+  } = useContext(QueryColumnContext);
+  const {
+    state: {recordFilters, orRecordFilterIndices}
+  } = useContext(QueryWhereContext);
   let {store} = useContext(ReactReduxContext);
   const invoke = useActionInvoker();
   let reduxState = useReduxState();
   const classes = useStyles();
 
   const builder = useMemo(() => {
-    if (state.rootIdentifier && state.graph && state.graph.initialized) {
-      let builder = new QueryBuilder(state.graph, selectModels(reduxState));
+    if (rootModel && graph && graph.initialized) {
+      let builder = new QueryBuilder(graph, selectModels(reduxState));
 
-      builder.addRootModel(state.rootIdentifier.model_name);
-      builder.addColumns(state.columns);
-      builder.addRecordFilters(state.recordFilters);
+      builder.addRootModel(rootModel);
+      builder.addColumns(columns);
+      builder.addRecordFilters(recordFilters);
       builder.setFlatten(flattenQuery);
-      builder.setOrRecordFilterIndices(state.orRecordFilterIndices);
+      builder.setOrRecordFilterIndices(orRecordFilterIndices);
 
       return builder;
     }
 
     return null;
   }, [
-    state.rootIdentifier,
-    state.columns,
-    state.recordFilters,
-    state.graph,
-    state.orRecordFilterIndices,
+    columns,
+    recordFilters,
+    graph,
+    orRecordFilterIndices,
     flattenQuery,
     reduxState
   ]);
@@ -144,7 +154,11 @@ const QueryResults = () => {
     setPage(newPage);
   }
 
-  const {columns, rows, formatRowData} = useTableEffects(data, expandMatrices);
+  const {
+    columns: formattedColumns,
+    rows,
+    formatRowData
+  } = useTableEffects(data, expandMatrices);
 
   const downloadData = useCallback(() => {
     if ('' === query) return;
@@ -152,17 +166,20 @@ const QueryResults = () => {
     let exchange = new Exchange(store.dispatch, 'query-download-tsv-magma');
     getAnswer({query}, exchange)
       .then((allData) => {
-        let rowData = formatRowData(allData, columns);
+        let rowData = formatRowData(allData, formattedColumns);
         let matrixMap = rowData.map((row: any) => {
-          return columns.reduce((acc: MatrixDatum, {label}, i: number) => {
-            return {...acc, [label]: row[i]};
-          }, {});
+          return formattedColumns.reduce(
+            (acc: MatrixDatum, {label}, i: number) => {
+              return {...acc, [label]: row[i]};
+            },
+            {}
+          );
         }, []);
 
         downloadTSV(
           matrixMap,
-          columns.map(({label}) => label),
-          `${state.rootModel}-${new Date().toISOString()}` // at some point include the builder hash?
+          formattedColumns.map(({label}) => label),
+          `${rootModel}-${new Date().toISOString()}` // at some point include the builder hash?
         );
       })
       .catch((e) => {
@@ -171,12 +188,19 @@ const QueryResults = () => {
           invoke(showMessages(error.errors || [error.error] || error));
         });
       });
-  }, [query, store.dispatch, columns, formatRowData, invoke, state.rootModel]);
+  }, [
+    query,
+    store.dispatch,
+    formattedColumns,
+    formatRowData,
+    invoke,
+    rootModel
+  ]);
 
-  if (!state.rootModel || !state.rootIdentifier) return null;
+  if (!rootModel) return null;
 
   return (
-    <Grid container xs={12}>
+    <Grid container>
       <Grid item xs={12} className={classes.result}>
         <CodeMirror
           options={{
@@ -200,19 +224,26 @@ const QueryResults = () => {
           alignItems='center'
           justify='flex-end'
         >
-          <AntSwitch
-            checked={expandMatrices}
-            onChange={() => setExpandMatrices(!expandMatrices)}
-            name='expand-matrices-query'
-            leftOption='Nest matrices'
-            rightOption='Expand matrices'
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={expandMatrices}
+                onChange={() => setExpandMatrices(!expandMatrices)}
+                name='expand-matrices-query'
+              />
+            }
+            label='Expand matrices'
           />
-          <AntSwitch
-            checked={flattenQuery}
-            onChange={() => setFlattenQuery(!flattenQuery)}
-            name='flatten-query'
-            leftOption='Nested'
-            rightOption='Flattened'
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={flattenQuery}
+                onChange={() => setFlattenQuery(!flattenQuery)}
+                name='flatten-query'
+                color='primary'
+              />
+            }
+            label='Flattened'
           />
           <Button className={classes.button} disabled>
             Previous Queries
@@ -226,7 +257,7 @@ const QueryResults = () => {
         </Grid>
         <Grid item>
           <QueryTable
-            columns={columns}
+            columns={formattedColumns}
             rows={rows}
             pageSize={pageSize}
             numRecords={numRecords}

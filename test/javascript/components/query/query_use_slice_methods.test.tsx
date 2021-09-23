@@ -72,11 +72,6 @@ describe('useSliceMethods', () => {
       ...defaultContext.state,
       graph,
       rootModel: 'prize',
-      rootIdentifier: {
-        model_name: 'prize',
-        attribute_name: 'name',
-        display_label: 'prize.name'
-      },
       columns: [
         {
           model_name: 'prize',
@@ -118,11 +113,6 @@ describe('useSliceMethods', () => {
       ...defaultContext.state,
       graph,
       rootModel: 'monster',
-      rootIdentifier: {
-        model_name: 'monster',
-        attribute_name: 'name',
-        display_label: 'monster.name'
-      },
       columns: [
         {
           model_name: 'monster',
@@ -164,11 +154,6 @@ describe('useSliceMethods', () => {
       ...defaultContext.state,
       graph,
       rootModel: 'wound',
-      rootIdentifier: {
-        model_name: 'wound',
-        attribute_name: 'name',
-        display_label: 'wound.name'
-      },
       columns: [
         {
           model_name: 'wound',
@@ -210,11 +195,6 @@ describe('useSliceMethods', () => {
       ...defaultContext.state,
       graph,
       rootModel: 'labor',
-      rootIdentifier: {
-        model_name: 'labor',
-        attribute_name: 'name',
-        display_label: 'labor.name'
-      },
       columns: [
         {
           model_name: 'labor',

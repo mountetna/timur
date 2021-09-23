@@ -2,8 +2,9 @@ import React, {useMemo, useCallback, useContext} from 'react';
 
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectModels} from 'etna-js/selectors/magma';
-import {QueryContext} from '../../contexts/query/query_context';
-import {QuerySlice, QueryColumn} from '../../contexts/query/query_types';
+import {QueryGraphContext} from '../../contexts/query/query_graph_context';
+import {QueryColumnContext} from '../../contexts/query/query_column_context';
+import {QuerySlice} from '../../contexts/query/query_types';
 import {
   selectMatrixModelNames,
   selectCollectionModelNames
@@ -14,10 +15,13 @@ const useSliceMethods = (
   updateCounter: number,
   setUpdateCounter: React.Dispatch<React.SetStateAction<number>>
 ) => {
-  let {
-    state: {rootModel, columns, graph},
+  const {
+    state: {columns},
     patchQueryColumn
-  } = useContext(QueryContext);
+  } = useContext(QueryColumnContext);
+  const {
+    state: {graph, rootModel}
+  } = useContext(QueryGraphContext);
   const reduxState = useReduxState();
   const column = columns[columnIndex];
 
@@ -58,20 +62,9 @@ const useSliceMethods = (
     [updateCounter, setUpdateCounter, patchQueryColumn, column, columnIndex]
   );
 
-  const attributesWithRootIdentifier = useMemo(() => {
-    if (!rootModel) return [];
-
-    return [...columns];
-  }, [columns, rootModel]);
-
   const matrixModelNames = useMemo(() => {
-    if (!rootModel) return [];
-
-    return selectMatrixModelNames(
-      selectModels(reduxState),
-      attributesWithRootIdentifier
-    );
-  }, [reduxState, rootModel, attributesWithRootIdentifier]);
+    return selectMatrixModelNames(selectModels(reduxState), columns);
+  }, [reduxState, columns]);
 
   const collectionModelNames = useMemo(() => {
     if (!rootModel) return [];
@@ -79,7 +72,7 @@ const useSliceMethods = (
     return selectCollectionModelNames(graph, rootModel, [
       ...new Set(columns.map((c) => c.model_name))
     ]);
-  }, [graph, rootModel, columns]);
+  }, [graph, columns, rootModel]);
 
   return {
     handleRemoveSlice,
