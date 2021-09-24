@@ -14,10 +14,8 @@ module.exports = (env) => ({
     alias: {
       'code-mirror': path.join(__dirname, 'node_modules/codemirror/lib'),
       react: path.join(__dirname, 'node_modules/react'),
-      // 'react-dom': path.join(__dirname, 'node_modules/react-dom'),
+      'react-dom': path.join(__dirname, 'node_modules/react-dom'),
       'react-redux': path.join(__dirname, 'node_modules/react-redux'),
-      'react-dom$': path.join(__dirname, 'node_modules/react-dom/profiling'),
-      'scheduler/tracing': path.join(__dirname, 'node_modules/scheduler/tracing-profiling')
     },
     symlinks: false
   },
