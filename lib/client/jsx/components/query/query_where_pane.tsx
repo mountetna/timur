@@ -31,7 +31,6 @@ const QueryWherePane = () => {
   } = useContext(QueryWhereContext);
 
   const addNewRecordFilter = useCallback(() => {
-    console.log('adding ne wfilter');
     addRecordFilter({
       modelName: '',
       attributeName: '',
@@ -123,6 +122,7 @@ const QueryWherePane = () => {
               filter={filter}
               isColumnFilter={false}
               modelNames={modelNames}
+              graph={graph}
               patchFilter={(updatedFilter: QueryFilter | QuerySlice) =>
                 handlePatchFilter(index, updatedFilter as QueryFilter, filter)
               }

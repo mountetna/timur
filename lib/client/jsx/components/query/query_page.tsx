@@ -19,15 +19,11 @@ const QueryPage = ({}) => {
   return (
     <React.Fragment>
       <QueryGraphProvider>
-        <QueryColumnProvider>
-          <QueryWhereProvider>
-            <Grid container direction='column' className='query-page'>
-              <Grid item xs={12}>
-                <QueryBuilder />
-              </Grid>
-            </Grid>
-          </QueryWhereProvider>
-        </QueryColumnProvider>
+        <Grid container direction='column' className='query-page'>
+          <Grid item xs={12}>
+            <QueryBuilder />
+          </Grid>
+        </Grid>
       </QueryGraphProvider>
     </React.Fragment>
   );

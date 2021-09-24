@@ -61,7 +61,7 @@ const QueryTable = ({
               ))}
             </TableRow>
           </TableHead>
-          {rows ? (
+          {rows?.length > 0 ? (
             <TableBody>
               {rows.map((row: any[]) => {
                 return (

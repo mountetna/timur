@@ -62,6 +62,7 @@ const QuerySliceModelAttributePane = ({
             filter={slice}
             isColumnFilter={true}
             modelNames={sliceableModelNames}
+            graph={graph}
             patchFilter={(updatedFilter: QuerySlice) =>
               handlePatchSlice(index, updatedFilter)
             }

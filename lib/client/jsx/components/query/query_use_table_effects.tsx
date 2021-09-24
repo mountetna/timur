@@ -1,9 +1,6 @@
-import React, {useMemo, useContext, useCallback} from 'react';
+import React, {useMemo, useCallback} from 'react';
 import * as _ from 'lodash';
 
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectModels} from 'etna-js/selectors/magma';
-import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {
   QueryColumn,
   QueryResponse,
@@ -15,13 +12,19 @@ import {
   hasMatrixSlice,
   isMatrixSlice
 } from '../../selectors/query_selector';
+import {QueryGraph} from '../../utils/query_graph';
 
-const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
-  const {
-    state: {columns}
-  } = useContext(QueryColumnContext);
-  const reduxState = useReduxState();
-
+const useTableEffects = ({
+  columns,
+  data,
+  graph,
+  expandMatrices
+}: {
+  columns: QueryColumn[];
+  data: QueryResponse;
+  expandMatrices: boolean;
+  graph: QueryGraph;
+}) => {
   function generateIdCol(attr: QueryColumn, index: number): string {
     return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}@${index}`;
   }
@@ -32,7 +35,7 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
         if (
           expandMatrices &&
           attributeIsMatrix(
-            selectModels(reduxState),
+            graph.models,
             column.model_name,
             column.attribute_name
           ) &&
@@ -59,7 +62,7 @@ const useTableEffects = (data: QueryResponse, expandMatrices: boolean) => {
       },
       []
     );
-  }, [columns, reduxState, expandMatrices]);
+  }, [columns, graph, expandMatrices]);
 
   const formatRowData = useCallback(
     (allData: QueryResponse, cols: QueryTableColumn[]) => {

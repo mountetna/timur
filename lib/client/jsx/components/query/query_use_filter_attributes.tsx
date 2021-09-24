@@ -1,20 +1,26 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState, useEffect} from 'react';
 import _ from 'lodash';
-
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectTemplate} from 'etna-js/selectors/magma';
 
 import {QueryFilter, QuerySlice} from '../../contexts/query/query_types';
 import {selectAllowedModelAttributes} from '../../selectors/query_selector';
 import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
+import {QueryGraph} from '../../utils/query_graph';
 
-const useFilterAttributes = ({filter}: {filter: QueryFilter | QuerySlice}) => {
-  let reduxState = useReduxState();
+const useFilterAttributes = ({
+  filter,
+  graph
+}: {
+  filter: QueryFilter | QuerySlice;
+  graph: QueryGraph;
+}) => {
+  const [template, setTemplate] = useState(null as any);
+
+  useEffect(() => {
+    setTemplate(graph.template(filter.modelName));
+  }, [filter.modelName, graph]);
 
   const modelAttributes = useMemo(() => {
     if ('' !== filter.modelName) {
-      let template = selectTemplate(reduxState, filter.modelName);
-
       if (!template) return [];
 
       let sortedTemplateAttributes = visibleSortedAttributesWithUpdatedAt(
@@ -24,12 +30,10 @@ const useFilterAttributes = ({filter}: {filter: QueryFilter | QuerySlice}) => {
       return selectAllowedModelAttributes(sortedTemplateAttributes);
     }
     return [];
-  }, [filter.modelName, reduxState]);
+  }, [filter.modelName, template]);
 
   const attributeType = useMemo(() => {
     if ('' !== filter.attributeName) {
-      let template = selectTemplate(reduxState, filter.modelName);
-
       if (!template) return 'text';
 
       switch (
@@ -52,7 +56,7 @@ const useFilterAttributes = ({filter}: {filter: QueryFilter | QuerySlice}) => {
       }
     }
     return 'text';
-  }, [filter.attributeName, filter.modelName, reduxState]);
+  }, [filter.attributeName, template]);
 
   return {
     modelAttributes,

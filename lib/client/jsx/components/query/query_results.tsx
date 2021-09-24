@@ -14,11 +14,9 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
-import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {getAnswer} from 'etna-js/api/magma_api';
-import {selectModels} from 'etna-js/selectors/magma';
 import {Exchange} from 'etna-js/actions/exchange_actions';
 import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
 import {ReactReduxContext} from 'react-redux';
@@ -34,6 +32,9 @@ import useTableEffects from './query_use_table_effects';
 const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: '5px'
+  },
+  checkbox: {
+    marginRight: '30px'
   },
   result: {
     padding: 10,
@@ -69,12 +70,11 @@ const QueryResults = () => {
   } = useContext(QueryWhereContext);
   let {store} = useContext(ReactReduxContext);
   const invoke = useActionInvoker();
-  let reduxState = useReduxState();
   const classes = useStyles();
 
   const builder = useMemo(() => {
     if (rootModel && graph && graph.initialized) {
-      let builder = new QueryBuilder(graph, selectModels(reduxState));
+      let builder = new QueryBuilder(graph, graph.models);
 
       builder.addRootModel(rootModel);
       builder.addColumns(columns);
@@ -92,7 +92,7 @@ const QueryResults = () => {
     graph,
     orRecordFilterIndices,
     flattenQuery,
-    reduxState
+    rootModel
   ]);
 
   const query = useMemo(() => {
@@ -158,7 +158,7 @@ const QueryResults = () => {
     columns: formattedColumns,
     rows,
     formatRowData
-  } = useTableEffects(data, expandMatrices);
+  } = useTableEffects({columns, data, graph, expandMatrices});
 
   const downloadData = useCallback(() => {
     if ('' === query) return;
@@ -225,7 +225,7 @@ const QueryResults = () => {
           justify='flex-end'
         >
           <FormControlLabel
-            className={classes.button}
+            className={classes.checkbox}
             control={
               <Checkbox
                 checked={expandMatrices}
@@ -236,7 +236,7 @@ const QueryResults = () => {
             label='Expand matrices'
           />
           <FormControlLabel
-            className={classes.button}
+            className={classes.checkbox}
             control={
               <Checkbox
                 checked={flattenQuery}

@@ -77,6 +77,7 @@ const QuerySelectPane = () => {
             modelChoiceSet={modelChoiceSet}
             columnIndex={index}
             canEdit={0 !== index}
+            graph={graph}
             onSelectModel={(modelName) => handleOnSelectModel(index, modelName)}
             onSelectAttribute={(attributeName) =>
               handleOnSelectAttribute(index, column.model_name, attributeName)

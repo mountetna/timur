@@ -1,8 +1,5 @@
 import React, {useCallback, useContext} from 'react';
 
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectTemplate} from 'etna-js/selectors/magma';
-
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import QueryModelSelector from './query_model_selector';
@@ -15,11 +12,9 @@ const QueryFromPane = () => {
   } = useContext(QueryGraphContext);
   const {setRootIdentifierColumn} = useContext(QueryColumnContext);
 
-  let reduxState = useReduxState();
-
   const onRootModelSelect = useCallback(
     (modelName: string) => {
-      let template = selectTemplate(reduxState, modelName);
+      let template = graph.template(modelName);
       setRootModel(modelName);
       setRootIdentifierColumn({
         model_name: modelName,
@@ -28,7 +23,7 @@ const QueryFromPane = () => {
         slices: []
       });
     },
-    [reduxState, setRootModel, setRootIdentifierColumn]
+    [graph, setRootModel, setRootIdentifierColumn]
   );
 
   return (

@@ -5,7 +5,7 @@ import useQueryGraph from './use_query_graph';
 
 const defaultGraphState = {
   rootModel: null as string | null,
-  graph: {} as QueryGraph
+  graph: new QueryGraph({})
 };
 
 export type QueryGraphState = Readonly<typeof defaultGraphState>;
@@ -47,7 +47,7 @@ export const QueryGraphProvider = (
     [state]
   );
 
-  useQueryGraph(setGraph);
+  useQueryGraph(state.graph, setGraph);
 
   return (
     <QueryGraphContext.Provider

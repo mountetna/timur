@@ -1,7 +1,5 @@
 import React, {useMemo, useCallback, useContext} from 'react';
 
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectModels} from 'etna-js/selectors/magma';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {QuerySlice} from '../../contexts/query/query_types';
@@ -22,7 +20,6 @@ const useSliceMethods = (
   const {
     state: {graph, rootModel}
   } = useContext(QueryGraphContext);
-  const reduxState = useReduxState();
   const column = columns[columnIndex];
 
   const addNewSlice = useCallback(() => {
@@ -63,8 +60,8 @@ const useSliceMethods = (
   );
 
   const matrixModelNames = useMemo(() => {
-    return selectMatrixModelNames(selectModels(reduxState), columns);
-  }, [reduxState, columns]);
+    return selectMatrixModelNames(graph.models, columns);
+  }, [graph, columns]);
 
   const collectionModelNames = useMemo(() => {
     if (!rootModel) return [];

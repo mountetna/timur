@@ -12,9 +12,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {useReduxState} from 'etna-js/hooks/useReduxState';
-import {selectTemplate} from 'etna-js/selectors/magma';
-
 import {Attribute} from '../../models/model_types';
 
 import useSliceMethods from './query_use_slice_methods';
@@ -23,6 +20,7 @@ import {selectAllowedModelAttributes} from '../../selectors/query_selector';
 import QuerySlicePane from './query_slice_pane';
 
 import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
+import {QueryGraph} from '../../utils/query_graph';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -140,126 +138,128 @@ const AttributeSelector = React.memo(
   }
 );
 
-const QueryModelAttributeSelector = ({
-  label,
-  column,
-  columnIndex,
-  canEdit,
-  modelChoiceSet,
-  onSelectModel,
-  onSelectAttribute,
-  onChangeLabel,
-  onRemoveColumn
-}: {
-  label: string;
-  column: QueryColumn;
-  columnIndex: number;
-  canEdit: boolean;
-  modelChoiceSet: string[];
-  onSelectModel: (modelName: string) => void;
-  onSelectAttribute: (attributeName: string) => void;
-  onChangeLabel: (label: string) => void;
-  onRemoveColumn: () => void;
-}) => {
-  const [selectableModelAttributes, setSelectableModelAttributes] = useState(
-    [] as Attribute[]
-  );
-  // All the slices related to a given model / attribute,
-  //   with the model / attribute as a "label".
-  // Matrices will have modelName + attributeName.
-  const [updateCounter, setUpdateCounter] = useState(0);
-
-  let reduxState = useReduxState();
-
-  const selectAttributesForModel = useCallback(
-    (modelName: string) => {
-      let template = selectTemplate(reduxState, modelName);
-      setSelectableModelAttributes(
-        selectAllowedModelAttributes(
-          visibleSortedAttributesWithUpdatedAt(template.attributes)
-        )
-      );
-    },
-    [reduxState]
-  );
-
-  useEffect(() => {
-    if (column?.model_name && selectTemplate(reduxState, column.model_name)) {
-      selectAttributesForModel(column.model_name);
-    }
-  }, [reduxState, column, selectAttributesForModel]);
-
-  const {matrixModelNames, collectionModelNames} = useSliceMethods(
+const QueryModelAttributeSelector = React.memo(
+  ({
+    label,
+    column,
     columnIndex,
-    updateCounter,
-    setUpdateCounter
-  );
+    canEdit,
+    modelChoiceSet,
+    graph,
+    onSelectModel,
+    onSelectAttribute,
+    onChangeLabel,
+    onRemoveColumn
+  }: {
+    label: string;
+    column: QueryColumn;
+    columnIndex: number;
+    canEdit: boolean;
+    modelChoiceSet: string[];
+    graph: QueryGraph;
+    onSelectModel: (modelName: string) => void;
+    onSelectAttribute: (attributeName: string) => void;
+    onChangeLabel: (label: string) => void;
+    onRemoveColumn: () => void;
+  }) => {
+    const [selectableModelAttributes, setSelectableModelAttributes] = useState(
+      [] as Attribute[]
+    );
+    // All the slices related to a given model / attribute,
+    //   with the model / attribute as a "label".
+    // Matrices will have modelName + attributeName.
+    const [updateCounter, setUpdateCounter] = useState(0);
 
-  const isSliceableAsMatrix = matrixModelNames.includes(column.model_name);
-  const isSliceableAsCollection = collectionModelNames.includes(
-    column.model_name
-  );
+    const selectAttributesForModel = useCallback(
+      (modelName: string) => {
+        let template = graph.template(modelName);
+        setSelectableModelAttributes(
+          selectAllowedModelAttributes(
+            visibleSortedAttributesWithUpdatedAt(template.attributes)
+          )
+        );
+      },
+      [graph]
+    );
 
-  const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
+    useEffect(() => {
+      if (column?.model_name && graph.template(column.model_name)) {
+        selectAttributesForModel(column.model_name);
+      }
+    }, [graph, column, selectAttributesForModel]);
 
-  return (
-    <Grid
-      container
-      alignItems='center'
-      justify='flex-start'
-      className='query-column-selector'
-    >
-      <Grid item xs={2}>
-        <ModelNameSelector
-          canEdit={canEdit}
-          label={label}
-          modelName={column.model_name}
-          onSelect={onSelectModel}
-          modelChoiceSet={modelChoiceSet}
-        />
-      </Grid>
-      {column.model_name && selectableModelAttributes.length > 0 ? (
-        <React.Fragment>
-          <Grid
-            item
-            xs={9}
-            container
-            spacing={2}
-            direction='column'
-            key={column.model_name}
-          >
-            <Grid item container>
-              <Grid item xs={4}>
-                <AttributeSelector
-                  onSelect={onSelectAttribute}
-                  canEdit={canEdit}
-                  label={label}
-                  attributeChoiceSet={selectableModelAttributes.sort()}
-                  column={column}
-                />
+    const {matrixModelNames, collectionModelNames} = useSliceMethods(
+      columnIndex,
+      updateCounter,
+      setUpdateCounter
+    );
+
+    const isSliceableAsMatrix = matrixModelNames.includes(column.model_name);
+    const isSliceableAsCollection = collectionModelNames.includes(
+      column.model_name
+    );
+
+    const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
+
+    return (
+      <Grid
+        container
+        alignItems='center'
+        justify='flex-start'
+        className='query-column-selector'
+      >
+        <Grid item xs={2}>
+          <ModelNameSelector
+            canEdit={canEdit}
+            label={label}
+            modelName={column.model_name}
+            onSelect={onSelectModel}
+            modelChoiceSet={modelChoiceSet}
+          />
+        </Grid>
+        {column.model_name && selectableModelAttributes.length > 0 ? (
+          <React.Fragment>
+            <Grid
+              item
+              xs={9}
+              container
+              spacing={2}
+              direction='column'
+              key={column.model_name}
+            >
+              <Grid item container>
+                <Grid item xs={4}>
+                  <AttributeSelector
+                    onSelect={onSelectAttribute}
+                    canEdit={canEdit}
+                    label={label}
+                    attributeChoiceSet={selectableModelAttributes.sort()}
+                    column={column}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    label='Display Label'
+                    variant='outlined'
+                    value={column.display_label}
+                    onChange={(e) => onChangeLabel(e.target.value)}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  label='Display Label'
-                  variant='outlined'
-                  value={column.display_label}
-                  onChange={(e) => onChangeLabel(e.target.value)}
-                />
-              </Grid>
+              {isSliceable && canEdit ? (
+                <Grid item>
+                  <QuerySlicePane column={column} columnIndex={columnIndex} />
+                </Grid>
+              ) : null}
             </Grid>
-            {isSliceable && canEdit ? (
-              <Grid item>
-                <QuerySlicePane column={column} columnIndex={columnIndex} />
-              </Grid>
-            ) : null}
-          </Grid>
-        </React.Fragment>
-      ) : null}
-      <Grid item xs={1}>
-        <RemoveColumnIcon canEdit={canEdit} removeColumn={onRemoveColumn} />
+          </React.Fragment>
+        ) : null}
+        <Grid item xs={1}>
+          <RemoveColumnIcon canEdit={canEdit} removeColumn={onRemoveColumn} />
+        </Grid>
       </Grid>
-    </Grid>
-  );
-};
+    );
+  }
+);
 
 export default QueryModelAttributeSelector;

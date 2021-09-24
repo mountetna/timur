@@ -5,7 +5,9 @@ import {makeStyles} from '@material-ui/core/styles';
 import QueryControls from './query_controls';
 import QueryResults from './query_results';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
-import useQueryGraph from '../../contexts/query/use_query_graph';
+
+import {QueryColumnProvider} from '../../contexts/query/query_column_context';
+import {QueryWhereProvider} from '../../contexts/query/query_where_context';
 
 const useStyles = makeStyles((theme) => ({
   previewPane: {
@@ -24,12 +26,16 @@ const QueryBuilder = ({}) => {
   if (!graph || !graph.initialized) return null;
 
   return (
-    <Grid container direction='column'>
-      <QueryControls />
-      <Grid item className={classes.previewPane}>
-        <QueryResults />
-      </Grid>
-    </Grid>
+    <QueryColumnProvider>
+      <QueryWhereProvider>
+        <Grid container direction='column'>
+          <QueryControls />
+          <Grid item className={classes.previewPane}>
+            <QueryResults />
+          </Grid>
+        </Grid>
+      </QueryWhereProvider>
+    </QueryColumnProvider>
   );
 };
 
