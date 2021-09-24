@@ -73,8 +73,7 @@ class IdentifierSearch extends React.Component{
     return(
       <div id='identifier_search'
         onBlur={ () => setTimeout(() => this.setState({has_focus: true}), 200) }
-        onFocus={ () => this.setState({has_focus: true}) }
-        >
+        onFocus={ () => this.setState({has_focus: true}) }>
 
         <div className='search'>
           <span className='fas fa-search' />
