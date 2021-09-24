@@ -20,7 +20,7 @@ const useSliceMethods = (
   const {
     state: {graph, rootModel}
   } = useContext(QueryGraphContext);
-  const column = columns[columnIndex];
+  const column = useMemo(() => columns[columnIndex], [columns, columnIndex]);
 
   const addNewSlice = useCallback(() => {
     patchQueryColumn(columnIndex, {

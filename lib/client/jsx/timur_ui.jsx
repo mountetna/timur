@@ -106,7 +106,7 @@ const ROUTES = [
   },
   {
     name: 'query',
-    template: ':project_name/query?:columns',
+    template: ':project_name/query',
     component: QueryPage,
     mode: 'query'
   }

@@ -7,8 +7,6 @@ import React, {
 } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -22,6 +20,7 @@ import {QueryResponse} from '../../contexts/query/query_types';
 import QueryTable from './query_table';
 import useTableEffects from './query_use_table_effects';
 import useResultsActions from './query_use_results_actions';
+import AntSwitch from './ant_switch';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -169,28 +168,19 @@ const QueryResults = () => {
       />
       <Grid xs={12} item container direction='column'>
         <Grid className={classes.config} item>
-          <FormControlLabel
-            className={classes.checkbox}
-            control={
-              <Checkbox
-                checked={expandMatrices}
-                onChange={() => setExpandMatrices(!expandMatrices)}
-                name='expand-matrices-query'
-              />
-            }
-            label='Expand matrices'
+          <AntSwitch
+            checked={expandMatrices}
+            onChange={() => setExpandMatrices(!expandMatrices)}
+            name='expand-matrices-query'
+            leftOption='Nest matrices'
+            rightOption='Expand matrices'
           />
-          <FormControlLabel
-            className={classes.checkbox}
-            control={
-              <Checkbox
-                checked={flattenQuery}
-                onChange={() => setFlattenQuery(!flattenQuery)}
-                name='flatten-query'
-                color='primary'
-              />
-            }
-            label='Flattened data frame'
+          <AntSwitch
+            checked={flattenQuery}
+            onChange={() => setFlattenQuery(!flattenQuery)}
+            name='flatten-query'
+            leftOption='Nested'
+            rightOption='Flattened'
           />
           <Button className={classes.button} disabled>
             Previous Queries

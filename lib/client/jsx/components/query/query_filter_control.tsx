@@ -1,8 +1,7 @@
 // Generic filter component?
 // Model, attribute, operator, operand
 
-import React, {useMemo, useCallback} from 'react';
-import _ from 'lodash';
+import React, {useMemo, useCallback, useState, useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
@@ -14,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import {Debouncer} from 'etna-js/utils/debouncer';
 import {QueryFilter, QuerySlice} from '../../contexts/query/query_types';
 import FilterOperator from './query_filter_operator';
 import useFilterAttributes from './query_use_filter_attributes';
@@ -37,6 +37,8 @@ const QueryFilterControl = ({
   modelNames,
   isColumnFilter,
   graph,
+  waitTime,
+  eager,
   patchFilter,
   removeFilter
 }: {
@@ -44,9 +46,25 @@ const QueryFilterControl = ({
   modelNames: string[];
   isColumnFilter: boolean;
   graph: QueryGraph;
+  waitTime?: number;
+  eager?: boolean;
   patchFilter: (filter: QueryFilter | QuerySlice) => void;
   removeFilter: () => void;
 }) => {
+  const [operandValue, setOperandValue] = useState('' as string | number);
+  const [previousOperandValue, setPreviousOperandValue] = useState(
+    '' as string | number
+  );
+  const [debouncer, setDebouncer] = useState(
+    () => new Debouncer({windowMs: waitTime, eager})
+  );
+  // Clear the existing debouncer and accept any new changes to the settings
+  useEffect(() => {
+    const debouncer = new Debouncer({windowMs: waitTime, eager});
+    setDebouncer(debouncer);
+    return () => debouncer.reset();
+  }, [waitTime, eager]);
+
   const classes = useStyles();
 
   const {modelAttributes, attributeType} = useFilterAttributes({
@@ -90,15 +108,32 @@ const QueryFilterControl = ({
     [filter, patchFilter, filterOperator]
   );
 
-  let handleOperandChange = useCallback(
+  const handleOperandChange = useCallback(
     (operand: string) => {
       patchFilter({
         ...filter,
         operand: filterOperator.formatOperand(operand)
       });
     },
-    [filter, patchFilter, filterOperator]
+    [patchFilter, filter, filterOperator]
   );
+
+  const handleOperandChangeWithDebounce = useCallback(
+    (value: string) => {
+      debouncer.ready(() => handleOperandChange(value));
+      setOperandValue(value);
+    },
+    [handleOperandChange, debouncer]
+  );
+
+  // When the operand value changes, follow it
+  useEffect(() => {
+    if (filter.operand !== previousOperandValue) {
+      debouncer.reset();
+      setOperandValue(filter.operand);
+      setPreviousOperandValue(filter.operand);
+    }
+  }, [filter.operand, debouncer, previousOperandValue]);
 
   let uniqId = (idType: string): string =>
     `${idType}-Select-${Math.random().toString()}`;
@@ -166,8 +201,10 @@ const QueryFilterControl = ({
             <TextField
               id={uniqId('operand')}
               label='Operand'
-              value={filter.operand}
-              onChange={(e) => handleOperandChange(e.target.value as string)}
+              value={operandValue}
+              onChange={(e) =>
+                handleOperandChangeWithDebounce(e.target.value as string)
+              }
             />
           </FormControl>
         ) : null}

@@ -2,7 +2,6 @@ import React from 'react';
 import {render, fireEvent, waitFor, screen} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import {defaultContext} from '../../../../lib/client/jsx/contexts/query/query_context';
 import {mockStore, querySpecWrapper} from '../../helpers';
 import QueryResults from '../../../../lib/client/jsx/components/query/query_results';
 import {QueryGraph} from '../../../../lib/client/jsx/utils/query_graph';
@@ -50,10 +49,12 @@ describe('QueryResults', () => {
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    let mockState = {
-      ...defaultContext.state,
+    let mockGraphState = {
       graph,
-      rootModel: 'monster',
+      rootModel: 'monster'
+    };
+
+    let mockColumnState = {
       columns: [
         {
           model_name: 'monster',
@@ -74,19 +75,29 @@ describe('QueryResults', () => {
             }
           ]
         }
-      ],
+      ]
+    };
+
+    let mockWhereState = {
+      orRecordFilterIndices: [],
       recordFilters: [
         {
           modelName: 'labor',
           attributeName: 'year',
           operator: '::equals',
-          operand: 2
+          operand: 2,
+          anyMap: {}
         }
       ]
     };
 
     const {asFragment} = render(<QueryResults />, {
-      wrapper: querySpecWrapper(mockState, store)
+      wrapper: querySpecWrapper({
+        mockGraphState,
+        mockColumnState,
+        mockWhereState,
+        store
+      })
     });
 
     await waitFor(() => screen.getByText('Nest matrices'));
@@ -103,15 +114,18 @@ describe('QueryResults', () => {
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    let mockState = {
-      ...defaultContext.state,
+    let mockGraphState = {
       graph,
-      rootModel: 'monster',
+      rootModel: 'monster'
+    };
+
+    let mockColumnState = {
       columns: [
         {
           model_name: 'monster',
           attribute_name: 'name',
-          display_label: 'monster.name'
+          display_label: 'monster.name',
+          slices: []
         },
         {
           model_name: 'prize',
@@ -139,19 +153,29 @@ describe('QueryResults', () => {
             }
           ]
         }
-      ],
+      ]
+    };
+
+    let mockWhereState = {
+      orRecordFilterIndices: [],
       recordFilters: [
         {
           modelName: 'labor',
           attributeName: 'year',
           operator: '::equals',
-          operand: 2
+          operand: 2,
+          anyMap: {}
         }
       ]
     };
 
     const {asFragment} = render(<QueryResults />, {
-      wrapper: querySpecWrapper(mockState, store)
+      wrapper: querySpecWrapper({
+        mockGraphState,
+        mockColumnState,
+        mockWhereState,
+        store
+      })
     });
 
     await waitFor(() => screen.getByText('Nest matrices'));

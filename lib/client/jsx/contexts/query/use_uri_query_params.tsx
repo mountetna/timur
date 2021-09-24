@@ -57,7 +57,7 @@ export default function useUriQueryParams({
       serializeState(whereState) +
       serializeState(columnState);
 
-    if (serializedState === search) return;
+    if (serializedState === search || search === '') return;
 
     setQueryColumns(JSON.parse(searchParams.get('columns') || '[]'));
     setRootModel(searchParams.get('rootModel') || '');

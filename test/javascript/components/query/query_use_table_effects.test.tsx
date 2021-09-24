@@ -2,7 +2,6 @@ import React from 'react';
 import {renderHook} from '@testing-library/react-hooks';
 import '@testing-library/jest-dom/extend-expect';
 
-import {defaultContext} from '../../../../lib/client/jsx/contexts/query/query_context';
 import {mockStore, querySpecWrapper} from '../../helpers';
 import useTableEffects from '../../../../lib/client/jsx/components/query/query_use_table_effects';
 import {QueryGraph} from '../../../../lib/client/jsx/utils/query_graph';
@@ -44,16 +43,23 @@ describe('useTableEffects', () => {
   let store;
   const graph = new QueryGraph(models);
 
+  let mockGraphState = {
+    graph,
+    rootModel: 'monster'
+  };
+
+  let mockWhereState = {
+    recordFilters: [],
+    orRecordFilterIndices: []
+  };
+
   it('returns column labels', async () => {
     store = mockStore({
       magma: {models},
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    let mockState = {
-      ...defaultContext.state,
-      graph,
-      rootModel: 'monster',
+    let mockColumnState = {
       columns: [
         {
           model_name: 'monster',
@@ -72,9 +78,23 @@ describe('useTableEffects', () => {
 
     const data = {answer: [], format: [], type: 'Mock'};
 
-    const {result} = renderHook(() => useTableEffects(data, true), {
-      wrapper: querySpecWrapper(mockState, store)
-    });
+    const {result} = renderHook(
+      () =>
+        useTableEffects({
+          data,
+          expandMatrices: true,
+          columns: mockColumnState.columns,
+          graph
+        }),
+      {
+        wrapper: querySpecWrapper({
+          mockGraphState,
+          mockWhereState,
+          mockColumnState,
+          store
+        })
+      }
+    );
 
     expect(result.current.columns.map(({label}) => label)).toEqual([
       'monster.name',
@@ -88,10 +108,7 @@ describe('useTableEffects', () => {
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    let mockState = {
-      ...defaultContext.state,
-      graph,
-      rootModel: 'monster',
+    let mockColumnState = {
       columns: [
         {
           model_name: 'monster',
@@ -130,9 +147,23 @@ describe('useTableEffects', () => {
       type: 'Mock'
     };
 
-    const {result} = renderHook(() => useTableEffects(data, true), {
-      wrapper: querySpecWrapper(mockState, store)
-    });
+    const {result} = renderHook(
+      () =>
+        useTableEffects({
+          data,
+          expandMatrices: true,
+          columns: mockColumnState.columns,
+          graph
+        }),
+      {
+        wrapper: querySpecWrapper({
+          mockGraphState,
+          mockWhereState,
+          mockColumnState,
+          store
+        })
+      }
+    );
 
     expect(result.current.columns.map(({label}) => label)).toEqual([
       'monster.name',
@@ -151,10 +182,7 @@ describe('useTableEffects', () => {
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    let mockState = {
-      ...defaultContext.state,
-      graph,
-      rootModel: 'monster',
+    let mockColumnState = {
       columns: [
         {
           model_name: 'monster',
@@ -193,9 +221,23 @@ describe('useTableEffects', () => {
       type: 'Mock'
     };
 
-    const {result} = renderHook(() => useTableEffects(data, false), {
-      wrapper: querySpecWrapper(mockState, store)
-    });
+    const {result} = renderHook(
+      () =>
+        useTableEffects({
+          data,
+          expandMatrices: false,
+          columns: mockColumnState.columns,
+          graph
+        }),
+      {
+        wrapper: querySpecWrapper({
+          mockGraphState,
+          mockWhereState,
+          mockColumnState,
+          store
+        })
+      }
+    );
 
     expect(result.current.columns.map(({label}) => label)).toEqual([
       'monster.name',
@@ -213,15 +255,13 @@ describe('useTableEffects', () => {
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    let mockState = {
-      ...defaultContext.state,
-      graph,
-      rootModel: 'monster',
+    let mockColumnState = {
       columns: [
         {
           model_name: 'monster',
           attribute_name: 'name',
-          display_label: 'monster.name'
+          display_label: 'monster.name',
+          slices: []
         },
         {
           model_name: 'labor',
@@ -254,9 +294,23 @@ describe('useTableEffects', () => {
       type: 'Mock'
     };
 
-    const {result} = renderHook(() => useTableEffects(data, true), {
-      wrapper: querySpecWrapper(mockState, store)
-    });
+    const {result} = renderHook(
+      () =>
+        useTableEffects({
+          data,
+          expandMatrices: true,
+          columns: mockColumnState.columns,
+          graph
+        }),
+      {
+        wrapper: querySpecWrapper({
+          mockGraphState,
+          mockWhereState,
+          mockColumnState,
+          store
+        })
+      }
+    );
 
     expect(result.current.columns.map(({label}) => label)).toEqual([
       'monster.name',
@@ -275,15 +329,13 @@ describe('useTableEffects', () => {
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    let mockState = {
-      ...defaultContext.state,
-      graph,
-      rootModel: 'monster',
+    let mockColumnState = {
       columns: [
         {
           model_name: 'monster',
           attribute_name: 'name',
-          display_label: 'monster.name'
+          display_label: 'monster.name',
+          slices: []
         },
         {
           model_name: 'prize',
@@ -326,9 +378,23 @@ describe('useTableEffects', () => {
       type: 'Mock'
     };
 
-    const {result} = renderHook(() => useTableEffects(data, true), {
-      wrapper: querySpecWrapper(mockState, store)
-    });
+    const {result} = renderHook(
+      () =>
+        useTableEffects({
+          data,
+          expandMatrices: true,
+          columns: mockColumnState.columns,
+          graph
+        }),
+      {
+        wrapper: querySpecWrapper({
+          mockGraphState,
+          mockWhereState,
+          mockColumnState,
+          store
+        })
+      }
+    );
 
     expect(result.current.columns.map(({label}) => label)).toEqual([
       'monster.name',

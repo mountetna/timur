@@ -2,7 +2,6 @@ import React from 'react';
 import {render} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import {defaultContext} from '../../../../lib/client/jsx/contexts/query/query_context';
 import {mockStore, querySpecWrapper} from '../../helpers';
 import QueryBuilder from '../../../../lib/client/jsx/components/query/query_builder';
 import {QueryGraph} from '../../../../lib/client/jsx/utils/query_graph';
@@ -50,10 +49,7 @@ describe('QueryBuilder', () => {
       janus: {projects: require('../../fixtures/project_names.json')}
     });
 
-    let mockState = {
-      ...defaultContext.state,
-      graph,
-      rootModel: 'monster',
+    let mockColumnState = {
       columns: [
         {
           model_name: 'monster',
@@ -87,19 +83,34 @@ describe('QueryBuilder', () => {
             }
           ]
         }
-      ],
+      ]
+    };
+
+    let mockGraphState = {
+      graph,
+      rootModel: 'monster'
+    };
+
+    let mockWhereState = {
+      orRecordFilterIndices: [],
       recordFilters: [
         {
           modelName: 'labor',
           attributeName: 'year',
           operator: '::=',
-          operand: 2
+          operand: 2,
+          anyMap: {}
         }
       ]
     };
 
     const {asFragment} = render(<QueryBuilder />, {
-      wrapper: querySpecWrapper(mockState, store)
+      wrapper: querySpecWrapper({
+        mockColumnState,
+        mockGraphState,
+        mockWhereState,
+        store
+      })
     });
 
     expect(asFragment()).toMatchSnapshot();
