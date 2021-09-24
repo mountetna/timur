@@ -51,16 +51,16 @@ class IdentifierSearch extends React.Component{
       return null;
 
     let match_exp = new RegExp(match_string, 'i');
-    let matches = {};
 
-    Object.keys(identifiers).forEach(model_name=>{
-      identifiers[model_name].forEach(name => {
-        if (name.match(match_exp)) {
-          matches[model_name] = matches[model_name] || [];
-          matches[model_name].push(name);
-        }
-      });
-    });
+    let matches = Object.entries(identifiers).reduce((acc, [model_name, names])=>{
+      let matchingNames = names.filter((n) => n.match(match_exp));
+
+      if (matchingNames.length > 0) {
+        acc[model_name] = matchingNames;
+      }
+
+      return acc;
+    }, {});
 
     return Object.keys(matches).length == 0 ? null : matches;
   }

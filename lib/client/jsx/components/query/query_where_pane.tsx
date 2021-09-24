@@ -85,9 +85,12 @@ const QueryWherePane = () => {
     [orRecordFilterIndices, setOrRecordFilterIndices]
   );
 
-  if (!rootModel) return null;
+  const modelNames = useMemo(
+    () => [...new Set(graph.allPaths(rootModel).flat())].sort(),
+    [graph, rootModel]
+  );
 
-  let modelNames = [...new Set(graph.allPaths(rootModel).flat())].sort();
+  if (!rootModel) return null;
 
   return (
     <QueryClause title='Where'>

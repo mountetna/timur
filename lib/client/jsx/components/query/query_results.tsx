@@ -14,12 +14,12 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
-import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
-import {showMessages} from 'etna-js/actions/message_actions';
-import {getAnswer} from 'etna-js/api/magma_api';
-import {Exchange} from 'etna-js/actions/exchange_actions';
-import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
-import {ReactReduxContext} from 'react-redux';
+// import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
+// import {showMessages} from 'etna-js/actions/message_actions';
+// import {getAnswer} from 'etna-js/api/magma_api';
+// import {Exchange} from 'etna-js/actions/exchange_actions';
+// import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
+// import {ReactReduxContext} from 'react-redux';
 
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '30px'
   },
   result: {
+    width: '100%',
     padding: 10,
     margin: 10,
     border: '1px solid #0f0',
@@ -45,7 +46,13 @@ const useStyles = makeStyles((theme) => ({
   },
   config: {
     padding: 5,
-    paddingTop: 0
+    paddingTop: 0,
+    alignSelf: 'flex-end'
+  },
+  resultsPane: {
+    overflowX: 'auto',
+    maxWidth: '100%',
+    maxHeight: '100%'
   }
 }));
 
@@ -68,13 +75,13 @@ const QueryResults = () => {
   const {
     state: {recordFilters, orRecordFilterIndices}
   } = useContext(QueryWhereContext);
-  let {store} = useContext(ReactReduxContext);
-  const invoke = useActionInvoker();
+  // let {store} = useContext(ReactReduxContext);
+  // const invoke = useActionInvoker();
   const classes = useStyles();
 
   const builder = useMemo(() => {
     if (rootModel && graph && graph.initialized) {
-      let builder = new QueryBuilder(graph, graph.models);
+      let builder = new QueryBuilder(graph);
 
       builder.addRootModel(rootModel);
       builder.addColumns(columns);
@@ -110,26 +117,26 @@ const QueryResults = () => {
   const runQuery = useCallback(() => {
     if ('' === count || '' === query) return;
 
-    let exchange = new Exchange(store.dispatch, 'query-post-magma');
-    getAnswer({query: count}, exchange)
-      .then((countData) => {
-        setNumRecords(countData.answer);
-        return getAnswer(
-          {query, page_size: pageSize, page: page + 1},
-          exchange
-        );
-      })
-      .then((answerData) => {
-        setData(answerData);
-        // setQueries([...queries].splice(0, 0, builder));
-      })
-      .catch((e) => {
-        e.then((error: {[key: string]: string[]}) => {
-          console.error(error);
-          invoke(showMessages(error.errors || [error.error] || error));
-        });
-      });
-  }, [query, count, store.dispatch, pageSize, page, invoke]);
+    // let exchange = new Exchange(store.dispatch, 'query-post-magma');
+    // getAnswer({query: count}, exchange)
+    //   .then((countData) => {
+    //     setNumRecords(countData.answer);
+    //     return getAnswer(
+    //       {query, page_size: pageSize, page: page + 1},
+    //       exchange
+    //     );
+    //   })
+    //   .then((answerData) => {
+    //     setData(answerData);
+    //     // setQueries([...queries].splice(0, 0, builder));
+    //   })
+    //   .catch((e) => {
+    //     e.then((error: {[key: string]: string[]}) => {
+    //       console.error(error);
+    //       invoke(showMessages(error.errors || [error.error] || error));
+    //     });
+    //   });
+  }, [query, count, pageSize, page]);
 
   useEffect(() => {
     // At some point, we can probably cache data and only
@@ -163,67 +170,60 @@ const QueryResults = () => {
   const downloadData = useCallback(() => {
     if ('' === query) return;
 
-    let exchange = new Exchange(store.dispatch, 'query-download-tsv-magma');
-    getAnswer({query}, exchange)
-      .then((allData) => {
-        let rowData = formatRowData(allData, formattedColumns);
-        let matrixMap = rowData.map((row: any) => {
-          return formattedColumns.reduce(
-            (acc: MatrixDatum, {label}, i: number) => {
-              return {...acc, [label]: row[i]};
-            },
-            {}
-          );
-        }, []);
+    // let exchange = new Exchange(store.dispatch, 'query-download-tsv-magma');
+    // getAnswer({query}, exchange)
+    //   .then((allData) => {
+    //     let rowData = formatRowData(allData, formattedColumns);
+    //     let matrixMap = rowData.map((row: any) => {
+    //       return formattedColumns.reduce(
+    //         (acc: MatrixDatum, {label}, i: number) => {
+    //           return {...acc, [label]: row[i]};
+    //         },
+    //         {}
+    //       );
+    //     }, []);
 
-        downloadTSV(
-          matrixMap,
-          formattedColumns.map(({label}) => label),
-          `${rootModel}-${new Date().toISOString()}` // at some point include the builder hash?
-        );
-      })
-      .catch((e) => {
-        e.then((error: {[key: string]: string[]}) => {
-          console.error(error);
-          invoke(showMessages(error.errors || [error.error] || error));
-        });
-      });
+    //     downloadTSV(
+    //       matrixMap,
+    //       formattedColumns.map(({label}) => label),
+    //       `${rootModel}-${new Date().toISOString()}` // at some point include the builder hash?
+    //     );
+    //   })
+    //   .catch((e) => {
+    //     e.then((error: {[key: string]: string[]}) => {
+    //       console.error(error);
+    //       invoke(showMessages(error.errors || [error.error] || error));
+    //     });
+    //   });
   }, [
     query,
-    store.dispatch,
+    // store.dispatch,
     formattedColumns,
     formatRowData,
-    invoke,
+    // invoke,
     rootModel
   ]);
 
   if (!rootModel) return null;
 
   return (
-    <Grid container>
-      <Grid item xs={12} className={classes.result}>
-        <CodeMirror
-          options={{
-            readOnly: 'no-cursor',
-            lineWrapping: true,
-            mode: 'application/json',
-            autoCloseBrackets: true,
-            lint: false,
-            background: 'none',
-            tabSize: 2
-          }}
-          value={JSON.stringify(query)}
-          onBeforeChange={(editor, data, value) => {}}
-        />
-      </Grid>
+    <Grid container className={classes.resultsPane}>
+      <CodeMirror
+        className={classes.result}
+        options={{
+          readOnly: 'no-cursor',
+          lineWrapping: true,
+          mode: 'application/json',
+          autoCloseBrackets: true,
+          lint: false,
+          background: 'none',
+          tabSize: 2
+        }}
+        value={JSON.stringify(query)}
+        onBeforeChange={(editor, data, value) => {}}
+      />
       <Grid xs={12} item container direction='column'>
-        <Grid
-          className={classes.config}
-          item
-          container
-          alignItems='center'
-          justify='flex-end'
-        >
+        <Grid className={classes.config} item justify='flex-end'>
           <FormControlLabel
             className={classes.checkbox}
             control={
@@ -257,17 +257,15 @@ const QueryResults = () => {
             {'\u21af TSV'}
           </Button>
         </Grid>
-        <Grid item>
-          <QueryTable
-            columns={formattedColumns}
-            rows={rows}
-            pageSize={pageSize}
-            numRecords={numRecords}
-            page={page}
-            handlePageChange={handlePageChange}
-            handlePageSizeChange={handlePageSizeChange}
-          />
-        </Grid>
+        <QueryTable
+          columns={formattedColumns}
+          rows={rows}
+          pageSize={pageSize}
+          numRecords={numRecords}
+          page={page}
+          handlePageChange={handlePageChange}
+          handlePageSizeChange={handlePageSizeChange}
+        />
       </Grid>
     </Grid>
   );

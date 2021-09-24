@@ -1,4 +1,4 @@
-import React, {useContext, useCallback} from 'react';
+import React, {useMemo, useContext, useCallback} from 'react';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -60,11 +60,19 @@ const QuerySelectPane = () => {
     [removeQueryColumn]
   );
 
-  if (!rootModel) return null;
+  const modelChoiceSet = useMemo(
+    () => [
+      ...new Set(
+        graph
+          .allPaths(rootModel)
+          .flat()
+          .concat(rootModel ? [rootModel] : [])
+      )
+    ],
+    [graph, rootModel]
+  );
 
-  let modelChoiceSet = [
-    ...new Set(graph.allPaths(rootModel).flat().concat([rootModel]))
-  ];
+  if (!rootModel) return null;
 
   return (
     <QueryClause title='Columns'>

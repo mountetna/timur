@@ -33,8 +33,6 @@ const QueryFromPane = () => {
         modelValue={rootModel || ''}
         modelChoiceSet={[...graph.allowedModels]}
         onSelectModel={(modelName) => onRootModelSelect(modelName)}
-        canRemove={false}
-        removeModel={() => {}}
       />
     </QueryClause>
   );

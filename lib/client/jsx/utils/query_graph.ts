@@ -97,7 +97,9 @@ export class QueryGraph {
     return results;
   }
 
-  allPaths(modelName: string): string[][] {
+  allPaths(modelName: string | null): string[][] {
+    if (!modelName) return [];
+
     if (!Object.keys(this.graph.children).includes(modelName)) return [];
 
     let parentage: string[] = this.graph.fullParentage(modelName);

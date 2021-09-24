@@ -6,7 +6,6 @@ import {
   QueryBase
 } from '../contexts/query/query_types';
 import {QueryGraph} from './query_graph';
-import {Model} from '../models/model_types';
 import QuerySimplePathBuilder from './query_simple_path_builder';
 import QueryFilterPathBuilder from './query_filter_path_builder';
 import {
@@ -22,16 +21,14 @@ import FilterOperator from '../components/query/query_filter_operator';
 
 export class QueryBuilder {
   graph: QueryGraph;
-  models: {[key: string]: Model};
   recordFilters: QueryFilter[] = [];
   columns: QueryColumn[] = [];
   root: string = '';
   flatten: boolean = true;
   orRecordFilterIndices: number[] = [];
 
-  constructor(graph: QueryGraph, models: {[key: string]: Model}) {
+  constructor(graph: QueryGraph) {
     this.graph = graph;
-    this.models = models;
   }
 
   addRootModel(modelName: string) {
@@ -164,7 +161,7 @@ export class QueryBuilder {
     const filterBuilder = new QueryFilterPathBuilder(
       pathWithoutRoot,
       this.root,
-      this.models,
+      this.graph.models,
       filter.anyMap
     );
     return filterBuilder.build();
@@ -178,7 +175,7 @@ export class QueryBuilder {
     const pathBuilder = new QuerySimplePathBuilder(
       pathWithoutRoot,
       this.root,
-      this.models,
+      this.graph.models,
       this.flatten
     );
     return pathBuilder.build();
@@ -275,7 +272,7 @@ export class QueryBuilder {
   attributeNameWithPredicate(modelName: string, attributeName: string) {
     // Probably only used for File / Image / FileCollection attributes?
     let predicate = [attributeName];
-    if (attributeIsFile(this.models, modelName, attributeName)) {
+    if (attributeIsFile(this.graph.models, modelName, attributeName)) {
       predicate.push('::url');
     }
 
