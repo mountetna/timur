@@ -5,11 +5,10 @@ import {selectModels} from 'etna-js/selectors/magma';
 
 import {QueryGraph} from '../../utils/query_graph';
 
-const useQueryGraph = (graph: QueryGraph, setGraph: any) => {
-  let reduxState = useReduxState();
-  let models = selectModels(reduxState);
-
+const useQueryGraph = (reduxState: any, graph: QueryGraph, setGraph: any) => {
   useEffect(() => {
+    let models = selectModels(reduxState);
+    console.log('models', models, reduxState);
     if (
       models &&
       Object.keys(models).length !== Object.keys(graph.models).length
@@ -17,7 +16,7 @@ const useQueryGraph = (graph: QueryGraph, setGraph: any) => {
       let newGraph = new QueryGraph(models);
       setGraph(newGraph);
     }
-  }, [models, graph]);
+  }, [reduxState, graph]);
 };
 
 export default useQueryGraph;

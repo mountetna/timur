@@ -5,8 +5,6 @@ import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {requestModels} from 'etna-js/actions/magma_actions';
 
 import {QueryGraphProvider} from '../../contexts/query/query_graph_context';
-import {QueryColumnProvider} from '../../contexts/query/query_column_context';
-import {QueryWhereProvider} from '../../contexts/query/query_where_context';
 import QueryBuilder from './query_builder';
 
 const QueryPage = ({}) => {

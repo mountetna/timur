@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 
+import {useReduxState} from 'etna-js/hooks/useReduxState';
 import QueryControls from './query_controls';
 import QueryResults from './query_results';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
@@ -13,8 +14,9 @@ const QueryBuilder = ({}) => {
     state: {graph},
     setGraph
   } = useContext(QueryGraphContext);
+  const reduxState = useReduxState();
 
-  useQueryGraph(graph, setGraph);
+  useQueryGraph(reduxState, graph, setGraph);
 
   if (!graph || !graph.initialized) return null;
 
