@@ -1,9 +1,6 @@
 import React, {useEffect} from 'react';
-import {
-  QueryColumnState,
-  defaultQueryColumnParams
-} from './query_column_context';
-import {QueryWhereState, defaultQueryWhereParams} from './query_where_context';
+import {QueryColumnState} from './query_column_context';
+import {QueryWhereState} from './query_where_context';
 import {QueryColumn} from './query_types';
 
 export default function useUriQueryParams({

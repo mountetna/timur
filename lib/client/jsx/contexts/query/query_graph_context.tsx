@@ -47,7 +47,7 @@ export const QueryGraphProvider = (
     [state]
   );
 
-  useQueryGraph(state.graph, setGraph);
+  // useQueryGraph(state.graph, setGraph);
 
   return (
     <QueryGraphContext.Provider

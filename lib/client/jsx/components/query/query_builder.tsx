@@ -6,11 +6,15 @@ import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 
 import {QueryColumnProvider} from '../../contexts/query/query_column_context';
 import {QueryWhereProvider} from '../../contexts/query/query_where_context';
+import useQueryGraph from '../../contexts/query/use_query_graph';
 
 const QueryBuilder = ({}) => {
   const {
-    state: {graph}
+    state: {graph},
+    setGraph
   } = useContext(QueryGraphContext);
+
+  useQueryGraph(graph, setGraph);
 
   if (!graph || !graph.initialized) return null;
 
