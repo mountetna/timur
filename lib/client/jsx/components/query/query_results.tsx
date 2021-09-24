@@ -167,7 +167,7 @@ const QueryResults = () => {
         onBeforeChange={(editor, data, value) => {}}
       />
       <Grid xs={12} item container direction='column'>
-        <Grid className={classes.config} item>
+        <Grid className={classes.config} item container justify='flex-end'>
           <AntSwitch
             checked={expandMatrices}
             onChange={() => setExpandMatrices(!expandMatrices)}

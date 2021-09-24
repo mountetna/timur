@@ -114,7 +114,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
       class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-direction-xs-column MuiGrid-grid-xs-12"
     >
       <div
-        class="MuiGrid-root makeStyles-config MuiGrid-item"
+        class="MuiGrid-root makeStyles-config MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end"
       >
         <div
           class="MuiTypography-root makeStyles-container MuiTypography-body1"
@@ -521,7 +521,7 @@ exports[`QueryResults renders 1`] = `
       class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-direction-xs-column MuiGrid-grid-xs-12"
     >
       <div
-        class="MuiGrid-root makeStyles-config MuiGrid-item"
+        class="MuiGrid-root makeStyles-config MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end"
       >
         <div
           class="MuiTypography-root makeStyles-container MuiTypography-body1"

@@ -49,6 +49,8 @@ export default function useUriQueryParams({
 
   // Set current state to reflect query params only on component load
   useEffect(() => {
+    if (search === '') return;
+
     let searchParams = new URLSearchParams(search);
 
     let serializedState =
@@ -57,7 +59,7 @@ export default function useUriQueryParams({
       serializeState(whereState) +
       serializeState(columnState);
 
-    if (serializedState === search || search === '') return;
+    if (serializedState === search) return;
 
     setQueryColumns(JSON.parse(searchParams.get('columns') || '[]'));
     setRootModel(searchParams.get('rootModel') || '');
