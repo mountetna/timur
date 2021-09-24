@@ -1888,6 +1888,9 @@ exports[`QueryBuilder renders 1`] = `
               </th>
             </tr>
           </thead>
+          <tbody
+            class="MuiTableBody-root"
+          />
         </table>
       </div>
     </div>

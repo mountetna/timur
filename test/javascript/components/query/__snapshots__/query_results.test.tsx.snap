@@ -456,6 +456,9 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
               </th>
             </tr>
           </thead>
+          <tbody
+            class="MuiTableBody-root"
+          />
         </table>
       </div>
     </div>
@@ -907,6 +910,9 @@ exports[`QueryResults renders 1`] = `
               </th>
             </tr>
           </thead>
+          <tbody
+            class="MuiTableBody-root"
+          />
         </table>
       </div>
     </div>
