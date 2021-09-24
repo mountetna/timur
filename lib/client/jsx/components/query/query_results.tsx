@@ -7,14 +7,23 @@ import React, {
 } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import ReplayIcon from '@material-ui/icons/Replay';
+import ShareIcon from '@material-ui/icons/Share';
 
 import {makeStyles} from '@material-ui/core/styles';
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
+import {copyText} from 'etna-js/utils/copy';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
-import {QueryColumnContext} from '../../contexts/query/query_column_context';
-import {QueryWhereContext} from '../../contexts/query/query_where_context';
+import {
+  QueryColumnContext,
+  defaultQueryColumnParams
+} from '../../contexts/query/query_column_context';
+import {
+  QueryWhereContext,
+  defaultQueryWhereParams
+} from '../../contexts/query/query_where_context';
 import {QueryBuilder} from '../../utils/query_builder';
 import {QueryResponse} from '../../contexts/query/query_types';
 import QueryTable from './query_table';
@@ -60,13 +69,16 @@ const QueryResults = () => {
   const [data, setData] = useState({} as QueryResponse);
   const [numRecords, setNumRecords] = useState(0);
   const {
-    state: {graph, rootModel}
+    state: {graph, rootModel},
+    setRootModel
   } = useContext(QueryGraphContext);
   const {
-    state: {columns}
+    state: {columns},
+    setQueryColumns
   } = useContext(QueryColumnContext);
   const {
-    state: {recordFilters, orRecordFilterIndices}
+    state: {recordFilters, orRecordFilterIndices},
+    setWhereState
   } = useContext(QueryWhereContext);
   // let {store} = useContext(ReactReduxContext);
   // const invoke = useActionInvoker();
@@ -148,6 +160,16 @@ const QueryResults = () => {
     setPage(newPage);
   }
 
+  function resetQuery() {
+    setRootModel(null);
+    setQueryColumns(defaultQueryColumnParams.columns);
+    setWhereState(defaultQueryWhereParams);
+  }
+
+  function copyLink() {
+    copyText(window.location.href);
+  }
+
   if (!rootModel) return null;
 
   return (
@@ -185,11 +207,30 @@ const QueryResults = () => {
           <Button className={classes.button} disabled>
             Previous Queries
           </Button>
-          <Button className={classes.button} onClick={runQuery}>
+          <Button
+            className={classes.button}
+            color='default'
+            onClick={resetQuery}
+            startIcon={<ReplayIcon />}
+          >
+            Reset Query
+          </Button>
+          <Button
+            className={classes.button}
+            color='secondary'
+            onClick={runQuery}
+          >
             Query
           </Button>
           <Button className={classes.button} onClick={downloadData}>
             {'\u21af TSV'}
+          </Button>
+          <Button
+            className={classes.button}
+            onClick={copyLink}
+            startIcon={<ShareIcon />}
+          >
+            Copy Link
           </Button>
         </Grid>
         <QueryTable

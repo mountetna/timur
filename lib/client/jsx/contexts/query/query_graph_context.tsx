@@ -12,7 +12,7 @@ export type QueryGraphState = Readonly<typeof defaultGraphState>;
 
 export const defaultGraphContext = {
   state: defaultGraphState as QueryGraphState,
-  setRootModel: (modelName: string) => {},
+  setRootModel: (modelName: string | null) => {},
   setGraph: (graph: QueryGraph) => {}
 };
 
@@ -28,7 +28,7 @@ export const QueryGraphProvider = (
   const [state, setState] = useState(props.state || defaultGraphContext.state);
 
   const setRootModel = useCallback(
-    (rootModel: string) => {
+    (rootModel: string | null) => {
       setState({
         ...state,
         rootModel
