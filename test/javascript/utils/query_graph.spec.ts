@@ -1,5 +1,4 @@
 import {QueryGraph} from '../../../lib/client/jsx/utils/query_graph';
-import {QueryBuilder} from '../../../lib/client/jsx/utils/query_builder';
 
 const models = {
   monster: {
@@ -98,6 +97,14 @@ describe('QueryGraph', () => {
         'biospecimen_group',
         'biospecimen',
         'subject'
+      ]);
+    });
+
+    it('handles the path laterally from sc_seq -> cytof', () => {
+      expect(graph.shortestPath('sc_seq', 'cytof')).toEqual([
+        'biospecimen_group',
+        'biospecimen',
+        'cytof'
       ]);
     });
   });

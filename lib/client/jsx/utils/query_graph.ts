@@ -102,7 +102,8 @@ export class QueryGraph {
 
     if (!Object.keys(this.graph.children).includes(modelName)) return [];
 
-    let parentage: string[] = this.graph.fullParentage(modelName);
+    // let parentage: string[] = this.graph.fullParentage(modelName);
+    let parentPaths = this.parentPaths(modelName);
 
     // Any model that you can traverse to from any parent should
     //   also count as a path.
@@ -111,15 +112,19 @@ export class QueryGraph {
     return this.pathsFrom(modelName)
       .concat(
         // paths up the tree
-        this.parentPaths(modelName)
+        parentPaths
       )
       .concat(
         // paths routing up through parents then down
-        parentage
-          .map((p: string, index: number) =>
-            this.pathsFrom(p).map((path) =>
-              parentage.slice(0, index).concat(path)
-            )
+        parentPaths
+          .map((parentPath: string[]) =>
+            parentPath
+              .map((p: string, index: number) =>
+                this.pathsFrom(p).map((path) =>
+                  parentPath.slice(0, index).concat(path)
+                )
+              )
+              .flat(1)
           )
           .flat(1)
       );
@@ -151,11 +156,17 @@ export class QueryGraph {
   }
 
   shortestPath(rootModel: string, targetModel: string): string[] | undefined {
-    let path = this.allPaths(rootModel).find((potentialPath: string[]) =>
+    let paths = this.allPaths(rootModel).filter((potentialPath: string[]) =>
       potentialPath.includes(targetModel)
     );
 
-    if (!path) return;
+    if (0 === paths.length) return;
+
+    // Calculate steps to targetModel for each path
+    let numberOfSteps = paths.map((path: string[]) => {
+      return path.indexOf(targetModel);
+    });
+    let path = paths[numberOfSteps.indexOf(Math.min(...numberOfSteps))];
 
     // Direct children paths include the root, and
     //   we'll filter it out so all paths do not
