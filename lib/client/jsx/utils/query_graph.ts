@@ -102,7 +102,6 @@ export class QueryGraph {
 
     if (!Object.keys(this.graph.children).includes(modelName)) return [];
 
-    // let parentage: string[] = this.graph.fullParentage(modelName);
     let parentPaths = this.parentPaths(modelName);
 
     // Any model that you can traverse to from any parent should
