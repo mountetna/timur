@@ -122,9 +122,11 @@ const AttributeSelector = React.memo(
       <FormControl className={classes.fullWidth}>
         <Autocomplete
           id={`${id(label)}-attribute`}
-          value={attributeChoiceSet.find(
-            (a: Attribute) => a.attribute_name === column.attribute_name
-          )}
+          value={
+            attributeChoiceSet.find(
+              (a: Attribute) => a.attribute_name === column.attribute_name
+            ) || null
+          }
           options={attributeChoiceSet}
           getOptionLabel={(option) => option.attribute_name}
           style={{width: 300}}
