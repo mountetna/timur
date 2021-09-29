@@ -1,12 +1,23 @@
 import React, {useMemo, useContext, useCallback} from 'react';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+
+import {makeStyles} from '@material-ui/core/styles';
 
 import {QueryColumn} from '../../contexts/query/query_types';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import QueryModelAttributeSelector from './query_model_attribute_selector';
 import QueryClause from './query_clause';
+
+const useStyles = makeStyles((theme) => ({
+  displayLabel: {
+    marginBottom: 10,
+    paddingLeft: 10
+  }
+}));
 
 const QuerySelectPane = () => {
   const {
@@ -18,6 +29,7 @@ const QuerySelectPane = () => {
     patchQueryColumn,
     removeQueryColumn
   } = useContext(QueryColumnContext);
+  const classes = useStyles();
 
   const handleOnSelectModel = useCallback(
     (columnIndex: number, modelName: string) => {
@@ -76,6 +88,20 @@ const QuerySelectPane = () => {
 
   return (
     <QueryClause title='Columns'>
+      <Grid className={classes.displayLabel} container>
+        <Grid item xs={2}>
+          <Typography>Display Label</Typography>
+        </Grid>
+        <Grid item xs={1}>
+          <Typography>Model</Typography>
+        </Grid>
+        <Grid item xs={2}>
+          <Typography>Attribute</Typography>
+        </Grid>
+        <Grid item xs={7}>
+          <Typography>Slices</Typography>
+        </Grid>
+      </Grid>
       {columns.map((column: QueryColumn, index: number) => {
         return (
           <QueryModelAttributeSelector

@@ -116,7 +116,9 @@
 
 .query-column-selector {
   padding: 1rem;
-  border-bottom: 1px solid lightgray;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  background: #eee;
 }
 
 button.query-add-column-btn {

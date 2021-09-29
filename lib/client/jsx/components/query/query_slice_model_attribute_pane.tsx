@@ -1,7 +1,6 @@
 import React, {useContext, useState, useMemo} from 'react';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -44,33 +43,34 @@ const QuerySliceModelAttributePane = ({
   }, [column, graph, rootModel, matrixModelNames]);
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={1}>
-        <Typography>Slices</Typography>
+    <React.Fragment>
+      <Tooltip title='Add slice' aria-label='Add slice'>
+        <Button
+          aria-label='Add slice'
+          onClick={() => addNewSlice()}
+          startIcon={<AddIcon />}
+        >
+          Add slice
+        </Button>
+      </Tooltip>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          {column?.slices.map((slice: QuerySlice, index: number) => (
+            <QueryFilterControl
+              key={`model-${column.model_name}-${index}-${updateCounter}`}
+              filter={slice}
+              isColumnFilter={true}
+              modelNames={sliceableModelNames}
+              graph={graph}
+              patchFilter={(updatedFilter: QuerySlice) =>
+                handlePatchSlice(index, updatedFilter)
+              }
+              removeFilter={() => handleRemoveSlice(index)}
+            />
+          ))}
+        </Grid>
       </Grid>
-      <Grid item xs={1}>
-        <Tooltip title='Add slice' aria-label='Add slice'>
-          <IconButton aria-label='Add slice' onClick={() => addNewSlice()}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      </Grid>
-      <Grid item xs={10}>
-        {column?.slices.map((slice: QuerySlice, index: number) => (
-          <QueryFilterControl
-            key={`model-${column.model_name}-${index}-${updateCounter}`}
-            filter={slice}
-            isColumnFilter={true}
-            modelNames={sliceableModelNames}
-            graph={graph}
-            patchFilter={(updatedFilter: QuerySlice) =>
-              handlePatchSlice(index, updatedFilter)
-            }
-            removeFilter={() => handleRemoveSlice(index)}
-          />
-        ))}
-      </Grid>
-    </Grid>
+    </React.Fragment>
   );
 };
 

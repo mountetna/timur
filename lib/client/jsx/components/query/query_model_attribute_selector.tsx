@@ -11,6 +11,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 
 import {Attribute} from '../../models/model_types';
 
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120
   },
   fullWidth: {
-    width: '96%',
+    width: '80%',
     margin: theme.spacing(1),
     minWidth: 120
   }
@@ -72,9 +73,6 @@ const ModelNameSelector = React.memo(
 
     return (
       <FormControl className={classes.formControl}>
-        <InputLabel shrink id={id(label)}>
-          {label}
-        </InputLabel>
         <Select
           labelId={id(label)}
           value={modelName}
@@ -111,8 +109,6 @@ const AttributeSelector = React.memo(
       return (
         <TextField
           disabled
-          variant='outlined'
-          label='Attribute'
           value={column.attribute_name}
           className='query-column-attribute'
         />
@@ -129,10 +125,7 @@ const AttributeSelector = React.memo(
           }
           options={attributeChoiceSet}
           getOptionLabel={(option) => option.attribute_name}
-          style={{width: 300}}
-          renderInput={(params) => (
-            <TextField {...params} label='Attribute' variant='outlined' />
-          )}
+          renderInput={(params) => <TextField {...params} />}
           onChange={(e, v) => onSelect(v?.attribute_name || '')}
         />
       </FormControl>
@@ -204,62 +197,53 @@ const QueryModelAttributeSelector = React.memo(
     const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
 
     return (
-      <Grid
-        container
-        alignItems='center'
-        justify='flex-start'
-        className='query-column-selector'
-      >
-        <Grid item xs={2}>
-          <ModelNameSelector
-            canEdit={canEdit}
-            label={label}
-            modelName={column.model_name}
-            onSelect={onSelectModel}
-            modelChoiceSet={modelChoiceSet}
-          />
-        </Grid>
-        {column.model_name && selectableModelAttributes.length > 0 ? (
-          <React.Fragment>
-            <Grid
-              item
-              xs={9}
-              container
-              spacing={2}
-              direction='column'
-              key={column.model_name}
-            >
-              <Grid item container>
-                <Grid item xs={4}>
-                  <AttributeSelector
-                    onSelect={onSelectAttribute}
-                    canEdit={canEdit}
-                    label={label}
-                    attributeChoiceSet={selectableModelAttributes.sort()}
-                    column={column}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField
-                    label='Display Label'
-                    variant='outlined'
-                    value={column.display_label}
-                    onChange={(e) => onChangeLabel(e.target.value)}
-                  />
-                </Grid>
+      <Paper>
+        <Grid
+          container
+          alignItems='center'
+          justify='flex-start'
+          className='query-column-selector'
+        >
+          <Grid item xs={2}>
+            <TextField
+              value={column.display_label}
+              onChange={(e) => onChangeLabel(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <ModelNameSelector
+              canEdit={canEdit}
+              label={label}
+              modelName={column.model_name}
+              onSelect={onSelectModel}
+              modelChoiceSet={modelChoiceSet}
+            />
+          </Grid>
+          {column.model_name && selectableModelAttributes.length > 0 ? (
+            <React.Fragment>
+              <Grid item xs={2}>
+                <AttributeSelector
+                  onSelect={onSelectAttribute}
+                  canEdit={canEdit}
+                  label={label}
+                  attributeChoiceSet={selectableModelAttributes.sort()}
+                  column={column}
+                />
               </Grid>
-              {isSliceable && canEdit ? (
-                <Grid item>
+              <Grid item xs={6}>
+                {isSliceable && canEdit ? (
                   <QuerySlicePane column={column} columnIndex={columnIndex} />
-                </Grid>
-              ) : null}
-            </Grid>
-          </React.Fragment>
-        ) : null}
-        <Grid item xs={1}>
-          <RemoveColumnIcon canEdit={canEdit} removeColumn={onRemoveColumn} />
+                ) : null}
+              </Grid>
+            </React.Fragment>
+          ) : (
+            <Grid item xs={8}></Grid>
+          )}
+          <Grid item container justify='flex-end' xs={1}>
+            <RemoveColumnIcon canEdit={canEdit} removeColumn={onRemoveColumn} />
+          </Grid>
         </Grid>
-      </Grid>
+      </Paper>
     );
   }
 );
