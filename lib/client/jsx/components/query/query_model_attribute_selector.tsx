@@ -24,13 +24,8 @@ import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 import {QueryGraph} from '../../utils/query_graph';
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    marginBottom: 10,
-    minWidth: 120
-  },
   fullWidth: {
     width: '80%',
-    margin: theme.spacing(1),
     minWidth: 120
   }
 }));
@@ -72,7 +67,7 @@ const ModelNameSelector = React.memo(
     if (!canEdit) return <Typography>{modelName}</Typography>;
 
     return (
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.fullWidth}>
         <Select
           labelId={id(label)}
           value={modelName}
@@ -210,7 +205,7 @@ const QueryModelAttributeSelector = React.memo(
               onChange={(e) => onChangeLabel(e.target.value)}
             />
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             <ModelNameSelector
               canEdit={canEdit}
               label={label}
@@ -230,14 +225,14 @@ const QueryModelAttributeSelector = React.memo(
                   column={column}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={5}>
                 {isSliceable && canEdit ? (
                   <QuerySlicePane column={column} columnIndex={columnIndex} />
                 ) : null}
               </Grid>
             </React.Fragment>
           ) : (
-            <Grid item xs={8}></Grid>
+            <Grid item xs={7}></Grid>
           )}
           <Grid item container justify='flex-end' xs={1}>
             <RemoveColumnIcon canEdit={canEdit} removeColumn={onRemoveColumn} />

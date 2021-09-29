@@ -54,21 +54,19 @@ const QuerySliceModelAttributePane = ({
         </Button>
       </Tooltip>
       <Grid container spacing={1}>
-        <Grid item xs={12}>
-          {column?.slices.map((slice: QuerySlice, index: number) => (
-            <QueryFilterControl
-              key={`model-${column.model_name}-${index}-${updateCounter}`}
-              filter={slice}
-              isColumnFilter={true}
-              modelNames={sliceableModelNames}
-              graph={graph}
-              patchFilter={(updatedFilter: QuerySlice) =>
-                handlePatchSlice(index, updatedFilter)
-              }
-              removeFilter={() => handleRemoveSlice(index)}
-            />
-          ))}
-        </Grid>
+        {column?.slices.map((slice: QuerySlice, index: number) => (
+          <QueryFilterControl
+            key={`model-${column.model_name}-${index}-${updateCounter}`}
+            filter={slice}
+            isColumnFilter={true}
+            modelNames={sliceableModelNames}
+            graph={graph}
+            patchFilter={(updatedFilter: QuerySlice) =>
+              handlePatchSlice(index, updatedFilter)
+            }
+            removeFilter={() => handleRemoveSlice(index)}
+          />
+        ))}
       </Grid>
     </React.Fragment>
   );

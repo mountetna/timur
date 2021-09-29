@@ -3,7 +3,10 @@ import React, {useMemo, useContext, useState, useCallback} from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
+
+import {makeStyles} from '@material-ui/core/styles';
 
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryWhereContext} from '../../contexts/query/query_where_context';
@@ -11,6 +14,14 @@ import QueryFilterControl from './query_filter_control';
 import {QueryFilter, QuerySlice} from '../../contexts/query/query_types';
 import QueryClause from './query_clause';
 import QueryAnyEverySelectorList from './query_any_every_selector_list';
+
+const useStyles = makeStyles((theme) => ({
+  header: {
+    marginBottom: 10,
+    paddingLeft: '1rem',
+    paddingRight: '1rem'
+  }
+}));
 
 const QueryWherePane = () => {
   // Use an update counter to get the child components
@@ -29,6 +40,7 @@ const QueryWherePane = () => {
     patchRecordFilter,
     setOrRecordFilterIndices
   } = useContext(QueryWhereContext);
+  const classes = useStyles();
 
   const addNewRecordFilter = useCallback(() => {
     addRecordFilter({
@@ -95,44 +107,74 @@ const QueryWherePane = () => {
   return (
     <QueryClause title='Where'>
       {recordFilters.length > 0 ? (
-        <Grid container alignItems='center' justify='center'>
+        <Grid
+          container
+          alignItems='center'
+          justify='center'
+          className={classes.header}
+        >
           <Grid item xs={1}>
             OR
           </Grid>
-          <Grid item xs={11} />
+          <Grid item xs={2}>
+            Any / Every
+          </Grid>
+          <Grid item container xs={9}>
+            <Grid item xs={3}>
+              Model
+            </Grid>
+            <Grid item xs={3}>
+              Attribute
+            </Grid>
+            <Grid item xs={2}>
+              Operator
+            </Grid>
+            <Grid item xs={3}>
+              Operand
+            </Grid>
+            <Grid item xs={1}></Grid>
+          </Grid>
         </Grid>
       ) : null}
       {recordFilters.map((filter: QueryFilter, index: number) => (
-        <Grid key={index} container alignItems='center' justify='center'>
-          <Grid item xs={1}>
-            <Checkbox
-              checked={orRecordFilterIndices.includes(index)}
-              color='primary'
-              onChange={(e, checked) => handleChangeOrFilters(index)}
-              inputProps={{'aria-label': 'secondary checkbox'}}
-            />
+        <Paper>
+          <Grid
+            key={index}
+            container
+            alignItems='center'
+            justify='center'
+            className='query-where-selector'
+          >
+            <Grid item xs={1}>
+              <Checkbox
+                checked={orRecordFilterIndices.includes(index)}
+                color='primary'
+                onChange={(e, checked) => handleChangeOrFilters(index)}
+                inputProps={{'aria-label': 'secondary checkbox'}}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <QueryAnyEverySelectorList
+                filter={filter}
+                index={index}
+                patchRecordFilter={patchRecordFilter}
+              />
+            </Grid>
+            <Grid item container xs={9}>
+              <QueryFilterControl
+                key={`${index}-${updateCounter}`}
+                filter={filter}
+                isColumnFilter={false}
+                modelNames={modelNames}
+                graph={graph}
+                patchFilter={(updatedFilter: QueryFilter | QuerySlice) =>
+                  handlePatchFilter(index, updatedFilter as QueryFilter, filter)
+                }
+                removeFilter={() => handleRemoveFilter(index)}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={2}>
-            <QueryAnyEverySelectorList
-              filter={filter}
-              index={index}
-              patchRecordFilter={patchRecordFilter}
-            />
-          </Grid>
-          <Grid item container xs={9}>
-            <QueryFilterControl
-              key={`${index}-${updateCounter}`}
-              filter={filter}
-              isColumnFilter={false}
-              modelNames={modelNames}
-              graph={graph}
-              patchFilter={(updatedFilter: QueryFilter | QuerySlice) =>
-                handlePatchFilter(index, updatedFilter as QueryFilter, filter)
-              }
-              removeFilter={() => handleRemoveFilter(index)}
-            />
-          </Grid>
-        </Grid>
+        </Paper>
       ))}
       <Button onClick={addNewRecordFilter} startIcon={<AddIcon />}>
         Filter

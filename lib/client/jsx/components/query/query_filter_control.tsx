@@ -5,7 +5,6 @@ import React, {useMemo, useCallback, useState, useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {makeStyles} from '@material-ui/core/styles';
@@ -20,15 +19,9 @@ import useFilterAttributes from './query_use_filter_attributes';
 import {QueryGraph} from '../../utils/query_graph';
 
 const useStyles = makeStyles((theme) => ({
-  textInput: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-    paddingLeft: '1rem'
-  },
+  textInput: {},
   fullWidth: {
-    width: '96%',
-    margin: theme.spacing(1),
-    minWidth: 120
+    width: '80%'
   }
 }));
 
@@ -139,10 +132,9 @@ const QueryFilterControl = ({
     `${idType}-Select-${Math.random().toString()}`;
 
   return (
-    <Grid container>
+    <>
       <Grid item xs={3}>
         <FormControl className={classes.fullWidth}>
-          <InputLabel id={uniqId('model')}>Model</InputLabel>
           <Select
             labelId={uniqId('model')}
             value={filter.modelName}
@@ -159,7 +151,6 @@ const QueryFilterControl = ({
       </Grid>
       <Grid item xs={3}>
         <FormControl className={classes.fullWidth}>
-          <InputLabel id={uniqId('attribute')}>Attribute</InputLabel>
           {modelAttributes.length > 0 ? (
             <Select
               labelId={uniqId('attribute')}
@@ -178,7 +169,6 @@ const QueryFilterControl = ({
       </Grid>
       <Grid item xs={2}>
         <FormControl className={classes.fullWidth}>
-          <InputLabel id={uniqId('operator')}>Operator</InputLabel>
           <Select
             labelId={uniqId('operator')}
             value={filterOperator.prettify() || ''}
@@ -200,7 +190,6 @@ const QueryFilterControl = ({
           <FormControl className={classes.textInput}>
             <TextField
               id={uniqId('operand')}
-              label='Operand'
               value={operandValue}
               onChange={(e) =>
                 handleOperandChangeWithDebounce(e.target.value as string)
@@ -209,14 +198,14 @@ const QueryFilterControl = ({
           </FormControl>
         ) : null}
       </Grid>
-      <Grid item xs={1}>
+      <Grid item xs={1} container justify='flex-end'>
         <Tooltip title='Remove filter' aria-label='remove filter'>
           <IconButton aria-label='remove filter' onClick={removeFilter}>
             <ClearIcon />
           </IconButton>
         </Tooltip>
       </Grid>
-    </Grid>
+    </>
   );
 };
 export default QueryFilterControl;

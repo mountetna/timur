@@ -92,13 +92,13 @@ const QuerySelectPane = () => {
         <Grid item xs={2}>
           <Typography>Display Label</Typography>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs={2}>
           <Typography>Model</Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography>Attribute</Typography>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={6}>
           <Typography>Slices</Typography>
         </Grid>
       </Grid>
