@@ -70,7 +70,7 @@ exports[`QueryBuilder renders 1`] = `
         class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-11"
       >
         <div
-          class="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-center"
+          class="MuiGrid-root makeStyles-header MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-center"
         >
           <div
             class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
@@ -78,53 +78,82 @@ exports[`QueryBuilder renders 1`] = `
             OR
           </div>
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-11"
-          />
-        </div>
-        <div
-          class="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-center"
-        >
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
-          >
-            <span
-              aria-disabled="false"
-              class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiIconButton-colorPrimary"
-            >
-              <span
-                class="MuiIconButton-label"
-              >
-                <input
-                  aria-label="secondary checkbox"
-                  class="PrivateSwitchBase-input"
-                  data-indeterminate="false"
-                  type="checkbox"
-                  value=""
-                />
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                  />
-                </svg>
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </span>
-          </div>
-          <div
             class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
-          />
+          >
+            Any / Every
+          </div>
           <div
             class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-9"
           >
             <div
-              class="MuiGrid-root MuiGrid-container"
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+            >
+              Model
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+            >
+              Attribute
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              Operator
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+            >
+              Operand
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <div
+            class="MuiGrid-root query-where-selector MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-center"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
+            >
+              <span
+                aria-disabled="false"
+                class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiIconButton-colorPrimary"
+              >
+                <span
+                  class="MuiIconButton-label"
+                >
+                  <input
+                    aria-label="secondary checkbox"
+                    class="PrivateSwitchBase-input"
+                    data-indeterminate="false"
+                    type="checkbox"
+                    value=""
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </span>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            />
+            <div
+              class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-9"
             >
               <div
                 class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
@@ -132,13 +161,6 @@ exports[`QueryBuilder renders 1`] = `
                 <div
                   class="MuiFormControl-root makeStyles-fullWidth"
                 >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                    data-shrink="true"
-                    id="model-Select-0.5"
-                  >
-                    Model
-                  </label>
                   <div
                     class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                   >
@@ -176,13 +198,6 @@ exports[`QueryBuilder renders 1`] = `
                 <div
                   class="MuiFormControl-root makeStyles-fullWidth"
                 >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                    data-shrink="true"
-                    id="attribute-Select-0.5"
-                  >
-                    Attribute
-                  </label>
                   <div
                     class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                   >
@@ -220,13 +235,6 @@ exports[`QueryBuilder renders 1`] = `
                 <div
                   class="MuiFormControl-root makeStyles-fullWidth"
                 >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                    data-shrink="true"
-                    id="operator-Select-0.5"
-                  >
-                    Operator
-                  </label>
                   <div
                     class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                   >
@@ -267,14 +275,6 @@ exports[`QueryBuilder renders 1`] = `
                   <div
                     class="MuiFormControl-root MuiTextField-root"
                   >
-                    <label
-                      class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                      data-shrink="true"
-                      for="operand-Select-0.5"
-                      id="operand-Select-0.5-label"
-                    >
-                      Operand
-                    </label>
                     <div
                       class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                     >
@@ -290,7 +290,7 @@ exports[`QueryBuilder renders 1`] = `
                 </div>
               </div>
               <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
+                class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
               >
                 <button
                   aria-label="remove filter"
@@ -363,7 +363,7 @@ exports[`QueryBuilder renders 1`] = `
         class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-11"
       >
         <div
-          class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
+          class="MuiGrid-root makeStyles-displayLabel MuiGrid-container"
         >
           <div
             class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
@@ -371,341 +371,286 @@ exports[`QueryBuilder renders 1`] = `
             <p
               class="MuiTypography-root MuiTypography-body1"
             >
-              monster
+              Display Label
             </p>
           </div>
           <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 MuiGrid-item MuiGrid-direction-xs-column MuiGrid-grid-xs-9"
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
           >
-            <div
-              class="MuiGrid-root MuiGrid-container MuiGrid-item"
+            <p
+              class="MuiTypography-root MuiTypography-body1"
             >
-              <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
-              >
-                <div
-                  class="MuiFormControl-root MuiTextField-root query-column-attribute"
-                >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-disabled MuiInputLabel-disabled MuiFormLabel-filled"
-                    data-shrink="true"
-                  >
-                    Attribute
-                  </label>
-                  <div
-                    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-disabled MuiOutlinedInput-disabled MuiInputBase-formControl"
-                  >
-                    <input
-                      aria-invalid="false"
-                      class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-disabled MuiOutlinedInput-disabled"
-                      disabled=""
-                      type="text"
-                      value="name"
-                    />
-                    <fieldset
-                      aria-hidden="true"
-                      class="PrivateNotchedOutline-root MuiOutlinedInput-notchedOutline"
-                    >
-                      <legend
-                        class="PrivateNotchedOutline-legendLabelled PrivateNotchedOutline-legendNotched"
-                      >
-                        <span>
-                          Attribute
-                        </span>
-                      </legend>
-                    </fieldset>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
-              >
-                <div
-                  class="MuiFormControl-root MuiTextField-root"
-                >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-filled"
-                    data-shrink="true"
-                  >
-                    Display Label
-                  </label>
-                  <div
-                    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl"
-                  >
-                    <input
-                      aria-invalid="false"
-                      class="MuiInputBase-input MuiOutlinedInput-input"
-                      type="text"
-                      value="monster.name"
-                    />
-                    <fieldset
-                      aria-hidden="true"
-                      class="PrivateNotchedOutline-root MuiOutlinedInput-notchedOutline"
-                    >
-                      <legend
-                        class="PrivateNotchedOutline-legendLabelled PrivateNotchedOutline-legendNotched"
-                      >
-                        <span>
-                          Display Label
-                        </span>
-                      </legend>
-                    </fieldset>
-                  </div>
-                </div>
-              </div>
-            </div>
+              Model
+            </p>
           </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
-          />
-        </div>
-        <div
-          class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
-        >
           <div
             class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
           >
-            <div
-              class="MuiFormControl-root makeStyles-formControl"
+            <p
+              class="MuiTypography-root MuiTypography-body1"
             >
-              <label
-                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                data-shrink="true"
-                id="Join Model-0.5"
-              >
-                Join Model
-              </label>
-              <div
-                class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
-              >
-                <div
-                  aria-haspopup="listbox"
-                  aria-labelledby="Join Model-0.5"
-                  class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
-                  role="button"
-                  tabindex="0"
-                >
-                  prize
-                </div>
-                <input
-                  aria-hidden="true"
-                  class="MuiSelect-nativeInput"
-                  tabindex="-1"
-                  value="prize"
-                />
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSelect-icon"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M7 10l5 5 5-5z"
-                  />
-                </svg>
-              </div>
-            </div>
+              Attribute
+            </p>
           </div>
           <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 MuiGrid-item MuiGrid-direction-xs-column MuiGrid-grid-xs-9"
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1"
+            >
+              Slices
+            </p>
+          </div>
+        </div>
+        <div
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <div
+            class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
           >
             <div
-              class="MuiGrid-root MuiGrid-container MuiGrid-item"
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
             >
               <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
+                class="MuiFormControl-root MuiTextField-root"
               >
                 <div
-                  class="MuiFormControl-root makeStyles-fullWidth"
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                >
+                  <input
+                    aria-invalid="false"
+                    class="MuiInputBase-input MuiInput-input"
+                    type="text"
+                    value="monster.name"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1"
+              >
+                monster
+              </p>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <div
+                class="MuiFormControl-root MuiTextField-root query-column-attribute"
+              >
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-disabled MuiInput-disabled MuiInputBase-formControl MuiInput-formControl"
+                >
+                  <input
+                    aria-invalid="false"
+                    class="MuiInputBase-input MuiInput-input MuiInputBase-disabled MuiInput-disabled"
+                    disabled=""
+                    type="text"
+                    value="name"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-5"
+            />
+            <div
+              class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <div
+            class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <div
+                class="MuiFormControl-root MuiTextField-root"
+              >
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                >
+                  <input
+                    aria-invalid="false"
+                    class="MuiInputBase-input MuiInput-input"
+                    type="text"
+                    value="prize.name"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <div
+                class="MuiFormControl-root makeStyles-fullWidth"
+              >
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                 >
                   <div
-                    aria-expanded="false"
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon"
-                    role="combobox"
-                    style="width: 300px;"
+                    aria-haspopup="listbox"
+                    aria-labelledby="Join Model-0.5"
+                    class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
+                    role="button"
+                    tabindex="0"
+                  >
+                    prize
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput"
+                    tabindex="-1"
+                    value="prize"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSelect-icon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <div
+                class="MuiFormControl-root makeStyles-fullWidth"
+              >
+                <div
+                  aria-expanded="false"
+                  class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon"
+                  role="combobox"
+                >
+                  <div
+                    class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
                   >
                     <div
-                      class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedEnd"
                     >
-                      <label
-                        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-filled"
-                        data-shrink="true"
-                        for="Join Model-0.5-attribute"
-                        id="Join Model-0.5-attribute-label"
-                      >
-                        Attribute
-                      </label>
+                      <input
+                        aria-autocomplete="list"
+                        aria-invalid="false"
+                        autocapitalize="none"
+                        autocomplete="off"
+                        class="MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd"
+                        id="Join Model-0.5-attribute"
+                        spellcheck="false"
+                        type="text"
+                        value="name"
+                      />
                       <div
-                        class="MuiInputBase-root MuiOutlinedInput-root MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiOutlinedInput-adornedEnd"
+                        class="MuiAutocomplete-endAdornment"
                       >
-                        <input
-                          aria-autocomplete="list"
-                          aria-invalid="false"
-                          autocapitalize="none"
-                          autocomplete="off"
-                          class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
-                          id="Join Model-0.5-attribute"
-                          spellcheck="false"
-                          type="text"
-                          value="name"
-                        />
-                        <div
-                          class="MuiAutocomplete-endAdornment"
+                        <button
+                          aria-label="Clear"
+                          class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator MuiAutocomplete-clearIndicatorDirty"
+                          tabindex="-1"
+                          title="Clear"
+                          type="button"
                         >
-                          <button
-                            aria-label="Clear"
-                            class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator MuiAutocomplete-clearIndicatorDirty"
-                            tabindex="-1"
-                            title="Clear"
-                            type="button"
+                          <span
+                            class="MuiIconButton-label"
                           >
-                            <span
-                              class="MuiIconButton-label"
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+                              focusable="false"
+                              viewBox="0 0 24 24"
                             >
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                                />
-                              </svg>
-                            </span>
-                            <span
-                              class="MuiTouchRipple-root"
-                            />
-                          </button>
-                          <button
-                            aria-label="Open"
-                            class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-popupIndicator"
-                            tabindex="-1"
-                            title="Open"
-                            type="button"
-                          >
-                            <span
-                              class="MuiIconButton-label"
-                            >
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M7 10l5 5 5-5z"
-                                />
-                              </svg>
-                            </span>
-                            <span
-                              class="MuiTouchRipple-root"
-                            />
-                          </button>
-                        </div>
-                        <fieldset
-                          aria-hidden="true"
-                          class="PrivateNotchedOutline-root MuiOutlinedInput-notchedOutline"
+                              <path
+                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="MuiTouchRipple-root"
+                          />
+                        </button>
+                        <button
+                          aria-label="Open"
+                          class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-popupIndicator"
+                          tabindex="-1"
+                          title="Open"
+                          type="button"
                         >
-                          <legend
-                            class="PrivateNotchedOutline-legendLabelled PrivateNotchedOutline-legendNotched"
+                          <span
+                            class="MuiIconButton-label"
                           >
-                            <span>
-                              Attribute
-                            </span>
-                          </legend>
-                        </fieldset>
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root"
+                              focusable="false"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M7 10l5 5 5-5z"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="MuiTouchRipple-root"
+                          />
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
-              >
-                <div
-                  class="MuiFormControl-root MuiTextField-root"
-                >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-filled"
-                    data-shrink="true"
-                  >
-                    Display Label
-                  </label>
-                  <div
-                    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl"
-                  >
-                    <input
-                      aria-invalid="false"
-                      class="MuiInputBase-input MuiOutlinedInput-input"
-                      type="text"
-                      value="prize.name"
-                    />
-                    <fieldset
-                      aria-hidden="true"
-                      class="PrivateNotchedOutline-root MuiOutlinedInput-notchedOutline"
-                    >
-                      <legend
-                        class="PrivateNotchedOutline-legendLabelled PrivateNotchedOutline-legendNotched"
-                      >
-                        <span>
-                          Display Label
-                        </span>
-                      </legend>
-                    </fieldset>
-                  </div>
-                </div>
-              </div>
             </div>
             <div
-              class="MuiGrid-root MuiGrid-item"
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-5"
             >
+              <button
+                aria-label="Add slice"
+                class="MuiButtonBase-root MuiButton-root MuiButton-text"
+                tabindex="0"
+                title="Add slice"
+                type="button"
+              >
+                <span
+                  class="MuiButton-label"
+                >
+                  <span
+                    class="MuiButton-startIcon MuiButton-iconSizeMedium"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                      />
+                    </svg>
+                  </span>
+                  Add slice
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
               <div
-                class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1"
+                class="MuiGrid-root makeStyles-grid MuiGrid-container MuiGrid-direction-xs-column"
               >
                 <div
-                  class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
-                >
-                  <p
-                    class="MuiTypography-root MuiTypography-body1"
-                  >
-                    Slices
-                  </p>
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
-                >
-                  <button
-                    aria-label="Add slice"
-                    class="MuiButtonBase-root MuiIconButton-root"
-                    tabindex="0"
-                    title="Add slice"
-                    type="button"
-                  >
-                    <span
-                      class="MuiIconButton-label"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="MuiSvgIcon-root"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
-                        />
-                      </svg>
-                    </span>
-                    <span
-                      class="MuiTouchRipple-root"
-                    />
-                  </button>
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-10"
+                  class="MuiPaper-root makeStyles-paper MuiPaper-elevation1 MuiPaper-rounded"
                 >
                   <div
-                    class="MuiGrid-root MuiGrid-container"
+                    class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
                   >
                     <div
                       class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
@@ -713,13 +658,6 @@ exports[`QueryBuilder renders 1`] = `
                       <div
                         class="MuiFormControl-root makeStyles-fullWidth"
                       >
-                        <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                          data-shrink="true"
-                          id="model-Select-0.5"
-                        >
-                          Model
-                        </label>
                         <div
                           class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                         >
@@ -757,13 +695,6 @@ exports[`QueryBuilder renders 1`] = `
                       <div
                         class="MuiFormControl-root makeStyles-fullWidth"
                       >
-                        <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                          data-shrink="true"
-                          id="attribute-Select-0.5"
-                        >
-                          Attribute
-                        </label>
                         <div
                           class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                         >
@@ -801,13 +732,6 @@ exports[`QueryBuilder renders 1`] = `
                       <div
                         class="MuiFormControl-root makeStyles-fullWidth"
                       >
-                        <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                          data-shrink="true"
-                          id="operator-Select-0.5"
-                        >
-                          Operator
-                        </label>
                         <div
                           class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                         >
@@ -848,14 +772,6 @@ exports[`QueryBuilder renders 1`] = `
                         <div
                           class="MuiFormControl-root MuiTextField-root"
                         >
-                          <label
-                            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                            data-shrink="true"
-                            for="operand-Select-0.5"
-                            id="operand-Select-0.5-label"
-                          >
-                            Operand
-                          </label>
                           <div
                             class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                           >
@@ -871,7 +787,7 @@ exports[`QueryBuilder renders 1`] = `
                       </div>
                     </div>
                     <div
-                      class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
+                      class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
                     >
                       <button
                         aria-label="remove filter"
@@ -903,284 +819,226 @@ exports[`QueryBuilder renders 1`] = `
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
-          >
-            <button
-              aria-label="remove column"
-              class="MuiButtonBase-root MuiIconButton-root"
-              tabindex="0"
-              title="Remove column"
-              type="button"
+            <div
+              class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
             >
-              <span
-                class="MuiIconButton-label"
+              <button
+                aria-label="remove column"
+                class="MuiButtonBase-root MuiIconButton-root"
+                tabindex="0"
+                title="Remove column"
+                type="button"
               >
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-colorAction"
-                  focusable="false"
-                  viewBox="0 0 24 24"
+                <span
+                  class="MuiIconButton-label"
                 >
-                  <path
-                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                  />
-                </svg>
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </button>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-colorAction"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </div>
           </div>
         </div>
         <div
-          class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
         >
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
           >
             <div
-              class="MuiFormControl-root makeStyles-formControl"
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
             >
-              <label
-                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                data-shrink="true"
-                id="Join Model-0.5"
-              >
-                Join Model
-              </label>
               <div
-                class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                class="MuiFormControl-root MuiTextField-root"
               >
                 <div
-                  aria-haspopup="listbox"
-                  aria-labelledby="Join Model-0.5"
-                  class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
-                  role="button"
-                  tabindex="0"
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                 >
-                  prize
-                </div>
-                <input
-                  aria-hidden="true"
-                  class="MuiSelect-nativeInput"
-                  tabindex="-1"
-                  value="prize"
-                />
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSelect-icon"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M7 10l5 5 5-5z"
+                  <input
+                    aria-invalid="false"
+                    class="MuiInputBase-input MuiInput-input"
+                    type="text"
+                    value="prize.name"
                   />
-                </svg>
+                </div>
               </div>
             </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 MuiGrid-item MuiGrid-direction-xs-column MuiGrid-grid-xs-9"
-          >
             <div
-              class="MuiGrid-root MuiGrid-container MuiGrid-item"
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
             >
               <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
+                class="MuiFormControl-root makeStyles-fullWidth"
               >
                 <div
-                  class="MuiFormControl-root makeStyles-fullWidth"
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                 >
                   <div
-                    aria-expanded="false"
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon"
-                    role="combobox"
-                    style="width: 300px;"
+                    aria-haspopup="listbox"
+                    aria-labelledby="Join Model-0.5"
+                    class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
+                    role="button"
+                    tabindex="0"
+                  >
+                    prize
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput"
+                    tabindex="-1"
+                    value="prize"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSelect-icon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <div
+                class="MuiFormControl-root makeStyles-fullWidth"
+              >
+                <div
+                  aria-expanded="false"
+                  class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon"
+                  role="combobox"
+                >
+                  <div
+                    class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
                   >
                     <div
-                      class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedEnd"
                     >
-                      <label
-                        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-filled"
-                        data-shrink="true"
-                        for="Join Model-0.5-attribute"
-                        id="Join Model-0.5-attribute-label"
-                      >
-                        Attribute
-                      </label>
+                      <input
+                        aria-autocomplete="list"
+                        aria-invalid="false"
+                        autocapitalize="none"
+                        autocomplete="off"
+                        class="MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd"
+                        id="Join Model-0.5-attribute"
+                        spellcheck="false"
+                        type="text"
+                        value="name"
+                      />
                       <div
-                        class="MuiInputBase-root MuiOutlinedInput-root MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiOutlinedInput-adornedEnd"
+                        class="MuiAutocomplete-endAdornment"
                       >
-                        <input
-                          aria-autocomplete="list"
-                          aria-invalid="false"
-                          autocapitalize="none"
-                          autocomplete="off"
-                          class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
-                          id="Join Model-0.5-attribute"
-                          spellcheck="false"
-                          type="text"
-                          value="name"
-                        />
-                        <div
-                          class="MuiAutocomplete-endAdornment"
+                        <button
+                          aria-label="Clear"
+                          class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator MuiAutocomplete-clearIndicatorDirty"
+                          tabindex="-1"
+                          title="Clear"
+                          type="button"
                         >
-                          <button
-                            aria-label="Clear"
-                            class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator MuiAutocomplete-clearIndicatorDirty"
-                            tabindex="-1"
-                            title="Clear"
-                            type="button"
+                          <span
+                            class="MuiIconButton-label"
                           >
-                            <span
-                              class="MuiIconButton-label"
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+                              focusable="false"
+                              viewBox="0 0 24 24"
                             >
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                                />
-                              </svg>
-                            </span>
-                            <span
-                              class="MuiTouchRipple-root"
-                            />
-                          </button>
-                          <button
-                            aria-label="Open"
-                            class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-popupIndicator"
-                            tabindex="-1"
-                            title="Open"
-                            type="button"
-                          >
-                            <span
-                              class="MuiIconButton-label"
-                            >
-                              <svg
-                                aria-hidden="true"
-                                class="MuiSvgIcon-root"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M7 10l5 5 5-5z"
-                                />
-                              </svg>
-                            </span>
-                            <span
-                              class="MuiTouchRipple-root"
-                            />
-                          </button>
-                        </div>
-                        <fieldset
-                          aria-hidden="true"
-                          class="PrivateNotchedOutline-root MuiOutlinedInput-notchedOutline"
+                              <path
+                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="MuiTouchRipple-root"
+                          />
+                        </button>
+                        <button
+                          aria-label="Open"
+                          class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-popupIndicator"
+                          tabindex="-1"
+                          title="Open"
+                          type="button"
                         >
-                          <legend
-                            class="PrivateNotchedOutline-legendLabelled PrivateNotchedOutline-legendNotched"
+                          <span
+                            class="MuiIconButton-label"
                           >
-                            <span>
-                              Attribute
-                            </span>
-                          </legend>
-                        </fieldset>
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root"
+                              focusable="false"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M7 10l5 5 5-5z"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="MuiTouchRipple-root"
+                          />
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
-              >
-                <div
-                  class="MuiFormControl-root MuiTextField-root"
-                >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-filled"
-                    data-shrink="true"
-                  >
-                    Display Label
-                  </label>
-                  <div
-                    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl"
-                  >
-                    <input
-                      aria-invalid="false"
-                      class="MuiInputBase-input MuiOutlinedInput-input"
-                      type="text"
-                      value="prize.name"
-                    />
-                    <fieldset
-                      aria-hidden="true"
-                      class="PrivateNotchedOutline-root MuiOutlinedInput-notchedOutline"
-                    >
-                      <legend
-                        class="PrivateNotchedOutline-legendLabelled PrivateNotchedOutline-legendNotched"
-                      >
-                        <span>
-                          Display Label
-                        </span>
-                      </legend>
-                    </fieldset>
-                  </div>
-                </div>
-              </div>
             </div>
             <div
-              class="MuiGrid-root MuiGrid-item"
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-5"
             >
+              <button
+                aria-label="Add slice"
+                class="MuiButtonBase-root MuiButton-root MuiButton-text"
+                tabindex="0"
+                title="Add slice"
+                type="button"
+              >
+                <span
+                  class="MuiButton-label"
+                >
+                  <span
+                    class="MuiButton-startIcon MuiButton-iconSizeMedium"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                      />
+                    </svg>
+                  </span>
+                  Add slice
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
               <div
-                class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1"
+                class="MuiGrid-root makeStyles-grid MuiGrid-container MuiGrid-direction-xs-column"
               >
                 <div
-                  class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
-                >
-                  <p
-                    class="MuiTypography-root MuiTypography-body1"
-                  >
-                    Slices
-                  </p>
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
-                >
-                  <button
-                    aria-label="Add slice"
-                    class="MuiButtonBase-root MuiIconButton-root"
-                    tabindex="0"
-                    title="Add slice"
-                    type="button"
-                  >
-                    <span
-                      class="MuiIconButton-label"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="MuiSvgIcon-root"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
-                        />
-                      </svg>
-                    </span>
-                    <span
-                      class="MuiTouchRipple-root"
-                    />
-                  </button>
-                </div>
-                <div
-                  class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-10"
+                  class="MuiPaper-root makeStyles-paper MuiPaper-elevation1 MuiPaper-rounded"
                 >
                   <div
-                    class="MuiGrid-root MuiGrid-container"
+                    class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
                   >
                     <div
                       class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
@@ -1188,13 +1046,6 @@ exports[`QueryBuilder renders 1`] = `
                       <div
                         class="MuiFormControl-root makeStyles-fullWidth"
                       >
-                        <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                          data-shrink="true"
-                          id="model-Select-0.5"
-                        >
-                          Model
-                        </label>
                         <div
                           class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                         >
@@ -1232,13 +1083,6 @@ exports[`QueryBuilder renders 1`] = `
                       <div
                         class="MuiFormControl-root makeStyles-fullWidth"
                       >
-                        <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                          data-shrink="true"
-                          id="attribute-Select-0.5"
-                        >
-                          Attribute
-                        </label>
                         <div
                           class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                         >
@@ -1276,13 +1120,6 @@ exports[`QueryBuilder renders 1`] = `
                       <div
                         class="MuiFormControl-root makeStyles-fullWidth"
                       >
-                        <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                          data-shrink="true"
-                          id="operator-Select-0.5"
-                        >
-                          Operator
-                        </label>
                         <div
                           class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                         >
@@ -1323,14 +1160,6 @@ exports[`QueryBuilder renders 1`] = `
                         <div
                           class="MuiFormControl-root MuiTextField-root"
                         >
-                          <label
-                            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-                            data-shrink="true"
-                            for="operand-Select-0.5"
-                            id="operand-Select-0.5-label"
-                          >
-                            Operand
-                          </label>
                           <div
                             class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
                           >
@@ -1346,7 +1175,7 @@ exports[`QueryBuilder renders 1`] = `
                       </div>
                     </div>
                     <div
-                      class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
+                      class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
                     >
                       <button
                         aria-label="remove filter"
@@ -1378,35 +1207,35 @@ exports[`QueryBuilder renders 1`] = `
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
-          >
-            <button
-              aria-label="remove column"
-              class="MuiButtonBase-root MuiIconButton-root"
-              tabindex="0"
-              title="Remove column"
-              type="button"
+            <div
+              class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
             >
-              <span
-                class="MuiIconButton-label"
+              <button
+                aria-label="remove column"
+                class="MuiButtonBase-root MuiIconButton-root"
+                tabindex="0"
+                title="Remove column"
+                type="button"
               >
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-colorAction"
-                  focusable="false"
-                  viewBox="0 0 24 24"
+                <span
+                  class="MuiIconButton-label"
                 >
-                  <path
-                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                  />
-                </svg>
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </button>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-colorAction"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </div>
           </div>
         </div>
         <button
