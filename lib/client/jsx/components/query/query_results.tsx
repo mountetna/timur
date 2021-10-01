@@ -234,6 +234,7 @@ const QueryResults = () => {
           </Button>
         </Grid>
         <QueryTable
+          maxColumns={10}
           columns={formattedColumns}
           rows={rows}
           pageSize={pageSize}

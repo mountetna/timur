@@ -29,6 +29,15 @@ const useTableEffects = ({
     return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}@${index}`;
   }
 
+  const validationValues = useCallback(
+    (column: QueryColumn) => {
+      return (graph.models[column.model_name]?.template.attributes[
+        column.attribute_name
+      ]?.validation?.value || []) as string[];
+    },
+    [graph.models]
+  );
+
   const formattedColumns = useMemo(() => {
     return columns.reduce(
       (acc: QueryTableColumn[], column: QueryColumn, index: number) => {
@@ -38,19 +47,27 @@ const useTableEffects = ({
             graph.models,
             column.model_name,
             column.attribute_name
-          ) &&
-          hasMatrixSlice(column)
+          )
         ) {
-          column.slices
-            .filter((slice) => isMatrixSlice(slice))
-            .forEach((slice) => {
-              (slice.operand as string).split(',').forEach((heading) => {
-                acc.push({
-                  label: `${column.display_label}.${heading}`,
-                  colId: `${generateIdCol(column, index)}.${heading}`
-                });
-              });
+          let matrixHeadings: string[] = [];
+
+          if (hasMatrixSlice(column)) {
+            matrixHeadings = column.slices
+              .filter((slice) => isMatrixSlice(slice))
+              .map((slice) => {
+                return (slice.operand as string).split(',');
+              })
+              .flat();
+          } else {
+            matrixHeadings = validationValues(column);
+          }
+
+          matrixHeadings.forEach((heading) => {
+            acc.push({
+              label: `${column.display_label}.${heading}`,
+              colId: `${generateIdCol(column, index)}.${heading}`
             });
+          });
         } else {
           acc.push({
             label: column.display_label,

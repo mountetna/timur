@@ -1,6 +1,8 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -14,6 +16,10 @@ import {QueryTableColumn} from '../../contexts/query/query_types';
 const useStyles = makeStyles({
   table: {
     minWidth: 650
+  },
+  columnWarning: {
+    color: 'darkred',
+    marginLeft: '1rem'
   }
 });
 
@@ -23,6 +29,7 @@ const QueryTable = ({
   numRecords,
   page,
   pageSize,
+  maxColumns,
   handlePageChange,
   handlePageSizeChange
 }: {
@@ -31,6 +38,7 @@ const QueryTable = ({
   numRecords: number;
   page: number;
   pageSize: number;
+  maxColumns: number;
   handlePageChange: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
     newPage: number
@@ -43,22 +51,36 @@ const QueryTable = ({
 
   return (
     <React.Fragment>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 50, 200]}
-        component='div'
-        count={numRecords}
-        rowsPerPage={pageSize}
-        page={page}
-        onChangePage={handlePageChange}
-        onChangeRowsPerPage={handlePageSizeChange}
-      />
+      <Grid container justify='flex-end'>
+        <Grid item xs={6}>
+          {columns.length > maxColumns ? (
+            <Typography className={classes.columnWarning}>
+              * {columns.length - maxColumns} columns not rendered. Download the
+              TSV to see the whole data frame.
+            </Typography>
+          ) : null}
+        </Grid>
+        <Grid item xs={6}>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50, 200]}
+            component='div'
+            count={numRecords}
+            rowsPerPage={pageSize}
+            page={page}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handlePageSizeChange}
+          />
+        </Grid>
+      </Grid>
       <TableContainer>
         <Table className={classes.table} size='small' aria-label='result table'>
           <TableHead>
             <TableRow>
-              {columns?.map(({label}: {label: string}, index: number) => (
-                <TableCell key={index}>{label}</TableCell>
-              ))}
+              {columns
+                ?.slice(0, maxColumns)
+                .map(({label}: {label: string}, index: number) => (
+                  <TableCell key={index}>{label}</TableCell>
+                ))}
             </TableRow>
           </TableHead>
           <TableBody>
