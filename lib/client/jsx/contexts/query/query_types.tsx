@@ -3,6 +3,7 @@ export interface QueryBase {
   attributeName: string;
   operator: string;
   operand: string | number;
+  attributeType: string;
 }
 
 export interface QuerySlice extends QueryBase {}

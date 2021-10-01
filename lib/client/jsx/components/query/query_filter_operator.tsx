@@ -22,7 +22,8 @@ export default class FilterOperator {
       'Greater than or equals': '::>=',
       'Less than': '::<',
       'Less than or equals': '::<=',
-      'Not equals': '::!='
+      'Not equals': '::!=',
+      'Not in': '::notin'
     },
     date: {
       Equals: '::=',
@@ -101,7 +102,6 @@ export default class FilterOperator {
   }
 
   formatOperand(operand: string): number | string {
-    if (this.attributeType === 'number') return parseFloat(operand);
-    else return operand;
+    return operand;
   }
 }

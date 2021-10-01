@@ -48,6 +48,7 @@ const QueryWherePane = () => {
       attributeName: '',
       operator: '',
       operand: '',
+      attributeType: '',
       anyMap: {}
     });
   }, [addRecordFilter]);
@@ -137,9 +138,8 @@ const QueryWherePane = () => {
         </Grid>
       ) : null}
       {recordFilters.map((filter: QueryFilter, index: number) => (
-        <Paper>
+        <Paper key={index}>
           <Grid
-            key={index}
             container
             alignItems='center'
             justify='center'

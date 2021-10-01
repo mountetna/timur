@@ -29,7 +29,8 @@ const useSliceMethods = (
         modelName: '',
         attributeName: '',
         operator: '',
-        operand: ''
+        operand: '',
+        attributeType: ''
       })
     });
   }, [patchQueryColumn, column, columnIndex]);

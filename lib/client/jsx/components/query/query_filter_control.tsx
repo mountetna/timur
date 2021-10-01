@@ -69,26 +69,36 @@ const QueryFilterControl = ({
     return new FilterOperator(attributeType, filter.operator, isColumnFilter);
   }, [attributeType, filter.operator, isColumnFilter]);
 
+  useEffect(() => {
+    // When user selects a different attribute, update the type
+    patchFilter({
+      ...filter,
+      attributeType
+    });
+  }, [filter.attributeName, attributeType]);
+
   const handleModelSelect = useCallback(
     (modelName: string) => {
       patchFilter({
         modelName,
         attributeName: '',
         operator: '',
-        operand: ''
+        operand: '',
+        attributeType: ''
       });
     },
     [patchFilter]
   );
 
   const handleAttributeSelect = useCallback(
-    (attributeName: string) =>
+    (attributeName: string) => {
       patchFilter({
         ...filter,
         attributeName,
         operator: '',
         operand: ''
-      }),
+      });
+    },
     [filter, patchFilter]
   );
 

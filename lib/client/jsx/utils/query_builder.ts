@@ -64,14 +64,28 @@ export class QueryBuilder {
     return [this.root, ...this.expandedOperands(this.recordFilters), '::count'];
   }
 
+  isNumeric(queryBase: QueryBase): boolean {
+    return queryBase.attributeType === 'number';
+  }
+
   serializeQueryBase(queryBase: QueryBase): any[] {
     let result: any[] = [];
 
     result.push(queryBase.attributeName);
     result.push(queryBase.operator);
 
-    if (FilterOperator.commaSeparatedOperators.includes(queryBase.operator)) {
+    if (
+      !this.isNumeric(queryBase) &&
+      FilterOperator.commaSeparatedOperators.includes(queryBase.operator)
+    ) {
       result.push((queryBase.operand as string).split(','));
+    } else if (
+      FilterOperator.commaSeparatedOperators.includes(queryBase.operator) &&
+      this.isNumeric(queryBase)
+    ) {
+      result.push(
+        (queryBase.operand as string).split(',').map((o) => parseFloat(o))
+      );
     } else if (
       FilterOperator.terminalInvertOperators.includes(queryBase.operator)
     ) {
@@ -82,6 +96,8 @@ export class QueryBuilder {
       result[length - 2] = tmpOperator;
     } else if (FilterOperator.terminalOperators.includes(queryBase.operator)) {
       // ignore operand
+    } else if (this.isNumeric(queryBase)) {
+      result.push(parseFloat(queryBase.operand as string));
     } else {
       result.push(queryBase.operand);
     }
