@@ -32,24 +32,28 @@ const QuerySelectPane = () => {
   const classes = useStyles();
 
   const handleOnSelectModel = useCallback(
-    (columnIndex: number, modelName: string) => {
+    (columnIndex: number, modelName: string, displayLabel: string) => {
       patchQueryColumn(columnIndex, {
         model_name: modelName,
         slices: [],
         attribute_name: '',
-        display_label: ''
+        display_label: displayLabel
       });
     },
     [patchQueryColumn]
   );
 
   const handleOnSelectAttribute = useCallback(
-    (columnIndex: number, modelName: string, attributeName: string) => {
+    (columnIndex: number, column: QueryColumn, attributeName: string) => {
       patchQueryColumn(columnIndex, {
-        model_name: modelName,
+        model_name: column.model_name,
         slices: [],
         attribute_name: attributeName,
-        display_label: `${modelName}.${attributeName}`
+        display_label: `${
+          column.display_label === ''
+            ? `${column.model_name}.${attributeName}`
+            : column.display_label
+        }`
       });
     },
     [patchQueryColumn]
@@ -112,9 +116,11 @@ const QuerySelectPane = () => {
             columnIndex={index}
             canEdit={0 !== index}
             graph={graph}
-            onSelectModel={(modelName) => handleOnSelectModel(index, modelName)}
+            onSelectModel={(modelName) =>
+              handleOnSelectModel(index, modelName, column.display_label)
+            }
             onSelectAttribute={(attributeName) =>
-              handleOnSelectAttribute(index, column.model_name, attributeName)
+              handleOnSelectAttribute(index, column, attributeName)
             }
             onChangeLabel={(label) => handleOnChangeLabel(index, column, label)}
             onRemoveColumn={() => handleOnRemoveColumn(index)}
