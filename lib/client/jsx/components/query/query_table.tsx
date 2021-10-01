@@ -55,8 +55,8 @@ const QueryTable = ({
         <Grid item xs={6}>
           {columns.length > maxColumns ? (
             <Typography className={classes.columnWarning}>
-              * {columns.length - maxColumns} columns not rendered. Download the
-              TSV to see the whole data frame.
+              * {(columns.length - maxColumns).toLocaleString()} columns not
+              rendered. Download the TSV to see the whole data frame.
             </Typography>
           ) : null}
         </Grid>
@@ -87,7 +87,7 @@ const QueryTable = ({
             {rows?.map((row: any[]) => {
               return (
                 <TableRow hover tabIndex={-1} key={row[0]}>
-                  {row.map((datum: any, index: number) => (
+                  {row.slice(0, maxColumns).map((datum: any, index: number) => (
                     <TableCell key={index} scope='row'>
                       {datum?.toString()}
                     </TableCell>
