@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
   columnWarning: {
     color: 'red',
-    marginLeft: '1rem'
+    paddingRight: '0.6rem'
   }
 });
 
@@ -51,27 +51,27 @@ const QueryTable = ({
 
   return (
     <React.Fragment>
-      <Grid container justify='flex-end'>
-        <Grid item xs={6}>
-          {columns.length > maxColumns ? (
-            <Typography className={classes.columnWarning}>
-              *** NOTE *** {(columns.length - maxColumns).toLocaleString()}{' '}
-              columns not rendered. Download the TSV to see the whole data
-              frame.
-            </Typography>
-          ) : null}
-        </Grid>
-        <Grid item xs={6}>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 50, 200]}
-            component='div'
-            count={numRecords}
-            rowsPerPage={pageSize}
-            page={page}
-            onChangePage={handlePageChange}
-            onChangeRowsPerPage={handlePageSizeChange}
-          />
-        </Grid>
+      <Grid
+        container
+        justify='flex-end'
+        direction='column'
+        alignItems='flex-end'
+      >
+        {columns.length > maxColumns ? (
+          <Typography className={classes.columnWarning}>
+            *** NOTE *** {(columns.length - maxColumns).toLocaleString()}{' '}
+            columns not rendered. Download the TSV to see the whole data frame.
+          </Typography>
+        ) : null}
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50, 200]}
+          component='div'
+          count={numRecords}
+          rowsPerPage={pageSize}
+          page={page}
+          onChangePage={handlePageChange}
+          onChangeRowsPerPage={handlePageSizeChange}
+        />
       </Grid>
       <TableContainer>
         <Table className={classes.table} size='small' aria-label='result table'>
