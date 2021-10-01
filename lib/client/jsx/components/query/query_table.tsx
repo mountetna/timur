@@ -18,7 +18,7 @@ const useStyles = makeStyles({
     minWidth: 650
   },
   columnWarning: {
-    color: 'darkred',
+    color: 'red',
     marginLeft: '1rem'
   }
 });
@@ -55,8 +55,9 @@ const QueryTable = ({
         <Grid item xs={6}>
           {columns.length > maxColumns ? (
             <Typography className={classes.columnWarning}>
-              * {(columns.length - maxColumns).toLocaleString()} columns not
-              rendered. Download the TSV to see the whole data frame.
+              *** NOTE *** {(columns.length - maxColumns).toLocaleString()}{' '}
+              columns not rendered. Download the TSV to see the whole data
+              frame.
             </Typography>
           ) : null}
         </Grid>
