@@ -18,6 +18,8 @@ default: &default
     :host: https://janus.development.local
   :vulcan:
     :host: https://vulcan.development.local
+  :polyphemus:
+    :host: https://polyphemus.development.local
   :auth_redirect: https://janus.development.local
   :token_algo: RS256
   :token_name: JANUS_DEV_TOKEN
