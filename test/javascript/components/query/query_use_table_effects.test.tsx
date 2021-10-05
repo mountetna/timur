@@ -84,7 +84,8 @@ describe('useTableEffects', () => {
           data,
           expandMatrices: true,
           columns: mockColumnState.columns,
-          graph
+          graph,
+          maxColumns: 10
         }),
       {
         wrapper: querySpecWrapper({
@@ -125,7 +126,8 @@ describe('useTableEffects', () => {
               modelName: 'labor',
               attributeName: 'contributions',
               operator: '::slice',
-              operand: 'Athens,Sparta'
+              operand: 'Athens,Sparta',
+              attributeType: 'matrix'
             }
           ]
         }
@@ -153,7 +155,8 @@ describe('useTableEffects', () => {
           data,
           expandMatrices: true,
           columns: mockColumnState.columns,
-          graph
+          graph,
+          maxColumns: 10
         }),
       {
         wrapper: querySpecWrapper({
@@ -199,7 +202,8 @@ describe('useTableEffects', () => {
               modelName: 'labor',
               attributeName: 'contributions',
               operator: '::slice',
-              operand: 'Athens,Sparta'
+              operand: 'Athens,Sparta',
+              attributeType: 'matrix'
             }
           ]
         }
@@ -227,7 +231,8 @@ describe('useTableEffects', () => {
           data,
           expandMatrices: false,
           columns: mockColumnState.columns,
-          graph
+          graph,
+          maxColumns: 10
         }),
       {
         wrapper: querySpecWrapper({
@@ -272,7 +277,8 @@ describe('useTableEffects', () => {
               modelName: 'labor',
               attributeName: 'contributions',
               operator: '::slice',
-              operand: 'Sparta,Athens'
+              operand: 'Sparta,Athens',
+              attributeType: 'matrix'
             }
           ]
         }
@@ -300,7 +306,8 @@ describe('useTableEffects', () => {
           data,
           expandMatrices: true,
           columns: mockColumnState.columns,
-          graph
+          graph,
+          maxColumns: 10
         }),
       {
         wrapper: querySpecWrapper({
@@ -346,7 +353,8 @@ describe('useTableEffects', () => {
               modelName: 'prize',
               attributeName: 'name',
               operator: '::equals',
-              operand: 'Athens'
+              operand: 'Athens',
+              attributeType: 'text'
             }
           ]
         },
@@ -359,7 +367,8 @@ describe('useTableEffects', () => {
               modelName: 'prize',
               attributeName: 'name',
               operator: '::equals',
-              operand: 'Sparta'
+              operand: 'Sparta',
+              attributeType: 'text'
             }
           ]
         }
@@ -384,7 +393,8 @@ describe('useTableEffects', () => {
           data,
           expandMatrices: true,
           columns: mockColumnState.columns,
-          graph
+          graph,
+          maxColumns: 10
         }),
       {
         wrapper: querySpecWrapper({

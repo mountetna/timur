@@ -18,16 +18,27 @@ const useTableEffects = ({
   columns,
   data,
   graph,
-  expandMatrices
+  expandMatrices,
+  maxColumns
 }: {
   columns: QueryColumn[];
   data: QueryResponse;
   expandMatrices: boolean;
   graph: QueryGraph;
+  maxColumns: number;
 }) => {
   function generateIdCol(attr: QueryColumn, index: number): string {
     return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}@${index}`;
   }
+
+  const validationValues = useCallback(
+    (column: QueryColumn) => {
+      return (graph.models[column.model_name]?.template.attributes[
+        column.attribute_name
+      ]?.validation?.value || []) as string[];
+    },
+    [graph.models]
+  );
 
   const formattedColumns = useMemo(() => {
     return columns.reduce(
@@ -38,19 +49,27 @@ const useTableEffects = ({
             graph.models,
             column.model_name,
             column.attribute_name
-          ) &&
-          hasMatrixSlice(column)
+          )
         ) {
-          column.slices
-            .filter((slice) => isMatrixSlice(slice))
-            .forEach((slice) => {
-              (slice.operand as string).split(',').forEach((heading) => {
-                acc.push({
-                  label: `${column.display_label}.${heading}`,
-                  colId: `${generateIdCol(column, index)}.${heading}`
-                });
-              });
+          let matrixHeadings: string[] = [];
+
+          if (hasMatrixSlice(column)) {
+            matrixHeadings = column.slices
+              .filter((slice) => isMatrixSlice(slice))
+              .map((slice) => {
+                return (slice.operand as string).split(',');
+              })
+              .flat();
+          } else {
+            matrixHeadings = validationValues(column);
+          }
+
+          matrixHeadings.forEach((heading) => {
+            acc.push({
+              label: `${column.display_label}.${heading}`,
+              colId: `${generateIdCol(column, index)}.${heading}`
             });
+          });
         } else {
           acc.push({
             label: column.display_label,
@@ -82,8 +101,8 @@ const useTableEffects = ({
     if (!data || !data.answer) return;
 
     // Need to order the results the same as `formattedColumns`
-    return formatRowData(data, formattedColumns);
-  }, [data, formattedColumns, formatRowData]);
+    return formatRowData(data, formattedColumns.slice(0, maxColumns));
+  }, [data, formattedColumns, formatRowData, maxColumns]);
 
   return {
     columns: formattedColumns,

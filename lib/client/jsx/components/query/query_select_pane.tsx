@@ -16,6 +16,13 @@ const useStyles = makeStyles((theme) => ({
   displayLabel: {
     marginBottom: 10,
     paddingLeft: 10
+  },
+  sliceHeading: {
+    paddingRight: '13px'
+  },
+  sliceSubheading: {
+    color: 'gray',
+    fontSize: '0.9rem'
   }
 }));
 
@@ -102,9 +109,25 @@ const QuerySelectPane = () => {
         <Grid item xs={2}>
           <Typography>Attribute</Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={5} className={classes.sliceHeading}>
           <Typography>Slices</Typography>
+          <Grid container className={classes.sliceSubheading}>
+            <Grid item xs={3}>
+              Model
+            </Grid>
+            <Grid item xs={3}>
+              Attribute
+            </Grid>
+            <Grid item xs={2}>
+              Operator
+            </Grid>
+            <Grid item xs={3}>
+              Operand
+            </Grid>
+            <Grid item xs={1} />
+          </Grid>
         </Grid>
+        <Grid item container xs={1} />
       </Grid>
       {columns.map((column: QueryColumn, index: number) => {
         return (

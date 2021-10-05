@@ -80,9 +80,8 @@ const QueryResults = () => {
     state: {recordFilters, orRecordFilterIndices},
     setWhereState
   } = useContext(QueryWhereContext);
-  // let {store} = useContext(ReactReduxContext);
-  // const invoke = useActionInvoker();
   const classes = useStyles();
+  const maxColumns = 10;
 
   const builder = useMemo(() => {
     if (rootModel && graph && graph.initialized) {
@@ -123,7 +122,7 @@ const QueryResults = () => {
     columns: formattedColumns,
     rows,
     formatRowData
-  } = useTableEffects({columns, data, graph, expandMatrices});
+  } = useTableEffects({columns, data, graph, expandMatrices, maxColumns});
 
   const {runQuery, downloadData} = useResultsActions({
     countQuery: count,
@@ -234,6 +233,7 @@ const QueryResults = () => {
           </Button>
         </Grid>
         <QueryTable
+          maxColumns={maxColumns}
           columns={formattedColumns}
           rows={rows}
           pageSize={pageSize}
