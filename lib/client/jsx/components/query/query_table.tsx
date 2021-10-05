@@ -60,7 +60,8 @@ const QueryTable = ({
         {columns.length > maxColumns ? (
           <Typography className={classes.columnWarning}>
             *** NOTE *** {(columns.length - maxColumns).toLocaleString()}{' '}
-            columns not rendered. Download the TSV to see the whole data frame.
+            columns not rendered. Add slices to your matrix columns or download
+            the TSV to see the whole data frame.
           </Typography>
         ) : null}
         <TablePagination
