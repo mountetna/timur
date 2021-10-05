@@ -18,12 +18,14 @@ const useTableEffects = ({
   columns,
   data,
   graph,
-  expandMatrices
+  expandMatrices,
+  maxColumns
 }: {
   columns: QueryColumn[];
   data: QueryResponse;
   expandMatrices: boolean;
   graph: QueryGraph;
+  maxColumns: number;
 }) => {
   function generateIdCol(attr: QueryColumn, index: number): string {
     return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}@${index}`;
@@ -99,8 +101,8 @@ const useTableEffects = ({
     if (!data || !data.answer) return;
 
     // Need to order the results the same as `formattedColumns`
-    return formatRowData(data, formattedColumns);
-  }, [data, formattedColumns, formatRowData]);
+    return formatRowData(data, formattedColumns.slice(0, maxColumns));
+  }, [data, formattedColumns, formatRowData, maxColumns]);
 
   return {
     columns: formattedColumns,
