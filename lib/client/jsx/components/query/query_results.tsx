@@ -25,7 +25,10 @@ import {
   defaultQueryWhereParams
 } from '../../contexts/query/query_where_context';
 import {QueryBuilder} from '../../utils/query_builder';
-import {QueryResponse} from '../../contexts/query/query_types';
+import {
+  QueryResponse,
+  EmptyQueryResponse
+} from '../../contexts/query/query_types';
 import QueryTable from './query_table';
 import useTableEffects from './query_use_table_effects';
 import useResultsActions from './query_use_results_actions';
@@ -65,7 +68,6 @@ const QueryResults = () => {
   const [page, setPage] = useState(0);
   const [lastPageSize, setLastPageSize] = useState(10);
   const [pageSize, setPageSize] = useState(10);
-  const [queries, setQueries] = useState([] as string[][]);
   const [data, setData] = useState({} as QueryResponse);
   const [numRecords, setNumRecords] = useState(0);
   const {
@@ -161,6 +163,7 @@ const QueryResults = () => {
 
   function resetQuery() {
     setRootModel(null);
+    setData(EmptyQueryResponse);
     setQueryColumns(defaultQueryColumnParams.columns);
     setWhereState(defaultQueryWhereParams);
   }
@@ -203,9 +206,6 @@ const QueryResults = () => {
             leftOption='Nested'
             rightOption='Flattened'
           />
-          <Button className={classes.button} disabled>
-            Previous Queries
-          </Button>
           <Button
             className={classes.button}
             color='default'

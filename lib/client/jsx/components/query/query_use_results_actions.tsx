@@ -8,6 +8,7 @@ import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
 import {ReactReduxContext} from 'react-redux';
 import {
   QueryResponse,
+  EmptyQueryResponse,
   QueryTableColumn
 } from '../../contexts/query/query_types';
 
@@ -39,6 +40,7 @@ const useResultsActions = ({
     if ('' === countQuery || '' === query) return;
 
     let exchange = new Exchange(store.dispatch, 'query-post-magma');
+    setData(EmptyQueryResponse);
     getAnswer({query: countQuery}, exchange)
       .then((countData) => {
         setNumRecords(countData.answer);

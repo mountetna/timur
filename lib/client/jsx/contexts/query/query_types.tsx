@@ -29,6 +29,12 @@ export interface QueryResponse {
   type: string;
 }
 
+export const EmptyQueryResponse: QueryResponse = {
+  answer: [],
+  format: [],
+  type: 'none'
+};
+
 export interface QueryTableColumn {
   label: string;
   colId: string;
