@@ -219,18 +219,6 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
           </label>
         </div>
         <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button MuiButton-disabled MuiButtonBase-disabled"
-          disabled=""
-          tabindex="-1"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            Previous Queries
-          </span>
-        </button>
-        <button
           class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
           tabindex="0"
           type="button"
@@ -688,18 +676,6 @@ exports[`QueryResults renders 1`] = `
             </div>
           </label>
         </div>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button MuiButton-disabled MuiButtonBase-disabled"
-          disabled=""
-          tabindex="-1"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            Previous Queries
-          </span>
-        </button>
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
           tabindex="0"
