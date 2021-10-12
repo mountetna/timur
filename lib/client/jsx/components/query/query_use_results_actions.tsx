@@ -35,13 +35,13 @@ const useResultsActions = ({
   const invoke = useActionInvoker();
 
   const runQuery = useCallback(() => {
-    if ('' === countQuery || '' === query) return;
+    if ('' === countQuery || '' === query) return new Promise(() => {});
 
     let numRecords = 0;
 
     let exchange = new Exchange(store.dispatch, 'query-post-magma');
     setDataAndNumRecords(EmptyQueryResponse, 0);
-    getAnswer({query: countQuery}, exchange)
+    return getAnswer({query: countQuery}, exchange)
       .then((countData) => {
         numRecords = countData.answer;
         return getAnswer(

@@ -1,4 +1,11 @@
-import React, {useMemo, useContext, useEffect, useState} from 'react';
+import React, {
+  useMemo,
+  useContext,
+  useEffect,
+  useState,
+  useCallback
+} from 'react';
+import * as _ from 'lodash';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -32,10 +39,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const QueryControlButtons = () => {
-  const [lastPage, setLastPage] = useState(defaultQueryResultsParams.page);
-  const [lastPageSize, setLastPageSize] = useState(
-    defaultQueryResultsParams.pageSize
-  );
   const {
     state: {graph, rootModel},
     setRootModel
@@ -62,12 +65,20 @@ const QueryControlButtons = () => {
     setDataAndNumRecords,
     setResultsState
   } = useContext(QueryResultsContext);
-  const classes = useStyles();
 
-  useEffect(() => {
-    setLastPage(page);
-    setLastPageSize(pageSize);
-  }, []);
+  const [lastColumns, setLastColumns] = useState(
+    defaultQueryColumnParams.columns
+  );
+  const [lastFilters, setLastFilters] = useState(
+    defaultQueryWhereParams.recordFilters
+  );
+  const [lastOrFilterIndices, setLastOrFilterIndices] = useState(
+    defaultQueryWhereParams.orRecordFilterIndices
+  );
+  const [lastPage, setLastPage] = useState(page);
+  const [lastPageSize, setLastPageSize] = useState(pageSize);
+
+  const classes = useStyles();
 
   const builder = useMemo(() => {
     if (rootModel && graph && graph.initialized) {
@@ -127,9 +138,10 @@ const QueryControlButtons = () => {
     // At some point, we can probably cache data and only
     //   fetch when needed?
     if (lastPage !== page || lastPageSize !== pageSize) {
-      runQuery();
-      setLastPage(page);
-      setLastPageSize(pageSize);
+      runQuery().then(() => {
+        setLastPage(page);
+        setLastPageSize(pageSize);
+      });
     }
   }, [page, pageSize, lastPage, lastPageSize, runQuery]);
 
@@ -148,6 +160,29 @@ const QueryControlButtons = () => {
   function copyLink() {
     copyText(window.location.href);
   }
+
+  const disableQueryBtn = useMemo(() => {
+    return (
+      _.isEqual(columns, lastColumns) &&
+      _.isEqual(recordFilters, lastFilters) &&
+      _.isEqual(orRecordFilterIndices, lastOrFilterIndices)
+    );
+  }, [
+    columns,
+    lastColumns,
+    recordFilters,
+    lastFilters,
+    orRecordFilterIndices,
+    lastOrFilterIndices
+  ]);
+
+  const handleRunQuery = useCallback(() => {
+    runQuery().then(() => {
+      setLastColumns(columns);
+      setLastFilters(recordFilters);
+      setLastOrFilterIndices(orRecordFilterIndices);
+    });
+  }, [runQuery, columns, recordFilters, orRecordFilterIndices]);
 
   if (!rootModel) return null;
 
@@ -168,7 +203,12 @@ const QueryControlButtons = () => {
         >
           Reset Query
         </Button>
-        <Button className={classes.button} color='secondary' onClick={runQuery}>
+        <Button
+          className={classes.button}
+          color='secondary'
+          onClick={handleRunQuery}
+          disabled={disableQueryBtn}
+        >
           Query
         </Button>
         <Button className={classes.button} onClick={downloadData}>
