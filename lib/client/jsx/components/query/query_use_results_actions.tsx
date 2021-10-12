@@ -41,7 +41,7 @@ const useResultsActions = ({
 
     let exchange = new Exchange(store.dispatch, 'query-post-magma');
     setDataAndNumRecords(EmptyQueryResponse, 0);
-    return getAnswer({query: countQuery}, exchange)
+    getAnswer({query: countQuery}, exchange)
       .then((countData) => {
         numRecords = countData.answer;
         return getAnswer(

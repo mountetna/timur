@@ -75,6 +75,8 @@ const QueryControlButtons = () => {
   const [lastOrFilterIndices, setLastOrFilterIndices] = useState(
     defaultQueryWhereParams.orRecordFilterIndices
   );
+  const [lastExpandMatrices, setLastExpandMatrices] = useState(expandMatrices);
+  const [lastFlattenQuery, setLastFlattenQuery] = useState(flattenQuery);
   const [lastPage, setLastPage] = useState(page);
   const [lastPageSize, setLastPageSize] = useState(pageSize);
 
@@ -137,13 +139,29 @@ const QueryControlButtons = () => {
   useEffect(() => {
     // At some point, we can probably cache data and only
     //   fetch when needed?
-    if (lastPage !== page || lastPageSize !== pageSize) {
-      runQuery().then(() => {
-        setLastPage(page);
-        setLastPageSize(pageSize);
-      });
+    if (
+      lastPage !== page ||
+      lastPageSize !== pageSize ||
+      lastExpandMatrices !== expandMatrices ||
+      lastFlattenQuery !== flattenQuery
+    ) {
+      runQuery();
+      setLastPage(page);
+      setLastPageSize(pageSize);
+      setLastExpandMatrices(expandMatrices);
+      setLastFlattenQuery(flattenQuery);
     }
-  }, [page, pageSize, lastPage, lastPageSize, runQuery]);
+  }, [
+    page,
+    pageSize,
+    lastPage,
+    lastPageSize,
+    runQuery,
+    expandMatrices,
+    flattenQuery,
+    lastExpandMatrices,
+    lastFlattenQuery
+  ]);
 
   useEffect(() => {
     if (JSON.stringify(query) !== queryString)
@@ -177,11 +195,10 @@ const QueryControlButtons = () => {
   ]);
 
   const handleRunQuery = useCallback(() => {
-    runQuery().then(() => {
-      setLastColumns(columns);
-      setLastFilters(recordFilters);
-      setLastOrFilterIndices(orRecordFilterIndices);
-    });
+    runQuery();
+    setLastColumns(columns);
+    setLastFilters(recordFilters);
+    setLastOrFilterIndices(orRecordFilterIndices);
   }, [runQuery, columns, recordFilters, orRecordFilterIndices]);
 
   if (!rootModel) return null;
