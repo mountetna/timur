@@ -5,12 +5,11 @@ import {QueryResponse} from './query_types';
 export const defaultQueryResultsParams = {
   expandMatrices: true,
   flattenQuery: true,
-  lastPage: 0,
   page: 0,
-  lastPageSize: 10,
   pageSize: 10,
   data: {} as QueryResponse,
-  numRecords: 0
+  numRecords: 0,
+  queryString: ''
 };
 
 const defaultQueryResultsState = {
@@ -23,12 +22,11 @@ export const defaultQueryResultsContext = {
   state: defaultQueryResultsState as QueryResultsState,
   setExpandMatrices: (expandMatrices: boolean) => {},
   setFlattenQuery: (flattenQuery: boolean) => {},
-  setLastPage: (lastPage: number) => {},
   setPage: (page: number) => {},
-  setLastPageSize: (lastPageSize: number) => {},
   setPageSize: (pageSize: number) => {},
-  setData: (data: QueryResponse) => {},
-  setNumRecords: (numRecords: number) => {}
+  setDataAndNumRecords: (data: QueryResponse, numRecords: number) => {},
+  setQueryString: (queryString: string) => {},
+  setResultsState: (newState: QueryResultsState) => {}
 };
 
 export type QueryResultsContextData = typeof defaultQueryResultsContext;
@@ -56,73 +54,60 @@ export const QueryResultsProvider = (
 
   const setFlattenQuery = useCallback(
     (flattenQuery: boolean) => {
-      return {
+      setState({
         ...state,
         flattenQuery
-      };
-    },
-    [state]
-  );
-
-  const setLastPage = useCallback(
-    (lastPage: number) => {
-      return {
-        ...state,
-        lastPage
-      };
+      });
     },
     [state]
   );
 
   const setPage = useCallback(
     (page: number) => {
-      return {
+      setState({
         ...state,
         page
-      };
-    },
-    [state]
-  );
-
-  const setLastPageSize = useCallback(
-    (lastPageSize: number) => {
-      return {
-        ...state,
-        lastPageSize
-      };
+      });
     },
     [state]
   );
 
   const setPageSize = useCallback(
     (pageSize: number) => {
-      return {
+      setState({
         ...state,
         pageSize
-      };
+      });
     },
     [state]
   );
 
-  const setData = useCallback(
-    (data: QueryResponse) => {
-      return {
+  const setDataAndNumRecords = useCallback(
+    (data: QueryResponse, numRecords: number) => {
+      setState({
         ...state,
-        data
-      };
-    },
-    [state]
-  );
-
-  const setNumRecords = useCallback(
-    (numRecords: number) => {
-      return {
-        ...state,
+        data,
         numRecords
-      };
+      });
     },
     [state]
   );
+
+  const setQueryString = useCallback(
+    (queryString: string) => {
+      setState({
+        ...state,
+        queryString
+      });
+    },
+    [state]
+  );
+
+  const setResultsState = useCallback((newState: QueryResultsState) => {
+    setState({
+      ...newState
+    });
+  }, []);
 
   return (
     <QueryResultsContext.Provider
@@ -130,12 +115,11 @@ export const QueryResultsProvider = (
         state,
         setExpandMatrices,
         setFlattenQuery,
-        setLastPage,
         setPage,
-        setLastPageSize,
         setPageSize,
-        setData,
-        setNumRecords
+        setDataAndNumRecords,
+        setQueryString,
+        setResultsState
       }}
     >
       {props.children}

@@ -98,7 +98,7 @@ const useTableEffects = ({
   );
 
   const rows = useMemo(() => {
-    if (!data || !data.answer) return;
+    if (!data || !data.answer || data.answer.length === 0) return;
 
     // Need to order the results the same as `formattedColumns`
     return formatRowData(data, formattedColumns.slice(0, maxColumns));

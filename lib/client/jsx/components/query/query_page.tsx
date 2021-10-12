@@ -7,6 +7,7 @@ import {requestModels} from 'etna-js/actions/magma_actions';
 import {QueryColumnProvider} from '../../contexts/query/query_column_context';
 import {QueryWhereProvider} from '../../contexts/query/query_where_context';
 import {QueryGraphProvider} from '../../contexts/query/query_graph_context';
+import {QueryResultsProvider} from '../../contexts/query/query_results_context';
 import QueryBuilder from './query_builder';
 
 const QueryPage = ({}) => {
@@ -21,11 +22,13 @@ const QueryPage = ({}) => {
       <QueryGraphProvider>
         <QueryColumnProvider>
           <QueryWhereProvider>
-            <Grid container direction='column' className='query-page'>
-              <Grid item xs={12}>
-                <QueryBuilder />
+            <QueryResultsProvider>
+              <Grid container direction='column' className='query-page'>
+                <Grid item xs={12}>
+                  <QueryBuilder />
+                </Grid>
               </Grid>
-            </Grid>
+            </QueryResultsProvider>
           </QueryWhereProvider>
         </QueryColumnProvider>
       </QueryGraphProvider>

@@ -18,6 +18,10 @@ import {
   QueryGraphProvider,
   QueryGraphState
 } from '../../lib/client/jsx/contexts/query/query_graph_context';
+import {
+  QueryResultsProvider,
+  QueryResultsState
+} from '../../lib/client/jsx/contexts/query/query_results_context';
 
 export const stubUrl = ({
   verb = 'get',
@@ -67,11 +71,13 @@ export const querySpecWrapper =
     mockColumnState,
     mockWhereState,
     mockGraphState,
+    mockResultsState,
     store
   }: {
     mockColumnState: QueryColumnState;
     mockWhereState: QueryWhereState;
     mockGraphState: QueryGraphState;
+    mockResultsState: QueryResultsState;
     store: typeof mockStore;
   }) =>
   ({children}: {children?: any}) =>
@@ -81,7 +87,9 @@ export const querySpecWrapper =
           <QueryGraphProvider state={mockGraphState}>
             <QueryColumnProvider state={mockColumnState}>
               <QueryWhereProvider state={mockWhereState}>
-                {children}
+                <QueryResultsProvider state={mockResultsState}>
+                  {children}
+                </QueryResultsProvider>
               </QueryWhereProvider>
             </QueryColumnProvider>
           </QueryGraphProvider>

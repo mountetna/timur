@@ -5,6 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import {mockStore, querySpecWrapper} from '../../helpers';
 import QueryBuilder from '../../../../lib/client/jsx/components/query/query_builder';
 import {QueryGraph} from '../../../../lib/client/jsx/utils/query_graph';
+import {defaultQueryResultsParams} from '../../../../lib/client/jsx/contexts/query/query_results_context';
 
 const models = {
   monster: {
@@ -66,7 +67,8 @@ describe('QueryBuilder', () => {
               modelName: 'prize',
               attributeName: 'name',
               operator: '::equals',
-              operand: 'Athens'
+              operand: 'Athens',
+              attributeType: 'text'
             }
           ]
         },
@@ -79,7 +81,8 @@ describe('QueryBuilder', () => {
               modelName: 'prize',
               attributeName: 'name',
               operator: '::equals',
-              operand: 'Sparta'
+              operand: 'Sparta',
+              attributeType: 'text'
             }
           ]
         }
@@ -99,7 +102,8 @@ describe('QueryBuilder', () => {
           attributeName: 'year',
           operator: '::=',
           operand: 2,
-          anyMap: {}
+          anyMap: {},
+          attributeType: 'number'
         }
       ]
     };
@@ -109,6 +113,7 @@ describe('QueryBuilder', () => {
         mockColumnState,
         mockGraphState,
         mockWhereState,
+        mockResultsState: defaultQueryResultsParams,
         store
       })
     });

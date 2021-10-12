@@ -1,18 +1,9 @@
-import React, {
-  useMemo,
-  useContext,
-  useState,
-  useCallback,
-  useEffect
-} from 'react';
-import Grid from '@material-ui/core/Grid';
+import React, {useMemo, useContext, useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import ReplayIcon from '@material-ui/icons/Replay';
 import ShareIcon from '@material-ui/icons/Share';
 
 import {makeStyles} from '@material-ui/core/styles';
-
-import {Controlled as CodeMirror} from 'react-codemirror2';
 
 import {copyText} from 'etna-js/utils/copy';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
@@ -24,52 +15,25 @@ import {
   QueryWhereContext,
   defaultQueryWhereParams
 } from '../../contexts/query/query_where_context';
-import {QueryBuilder} from '../../utils/query_builder';
 import {
-  QueryResponse,
-  EmptyQueryResponse
-} from '../../contexts/query/query_types';
-import QueryTable from './query_table';
+  QueryResultsContext,
+  defaultQueryResultsParams
+} from '../../contexts/query/query_results_context';
+import {QueryBuilder} from '../../utils/query_builder';
 import useTableEffects from './query_use_table_effects';
 import useResultsActions from './query_use_results_actions';
-import AntSwitch from './ant_switch';
 
 const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: '5px'
-  },
-  checkbox: {
-    marginRight: '30px'
-  },
-  result: {
-    width: '100%',
-    padding: 10,
-    margin: 10,
-    border: '1px solid #0f0',
-    borderRadius: 2,
-    backgroundColor: 'rgba(0,255,0,0.1)'
-  },
-  config: {
-    padding: 5,
-    paddingTop: 0,
-    alignSelf: 'flex-end'
-  },
-  resultsPane: {
-    overflowX: 'auto',
-    maxWidth: '100%',
-    maxHeight: '100%'
   }
 }));
 
 const QueryControlButtons = () => {
-  const [expandMatrices, setExpandMatrices] = useState(true);
-  const [flattenQuery, setFlattenQuery] = useState(true);
-  const [lastPage, setLastPage] = useState(0);
-  const [page, setPage] = useState(0);
-  const [lastPageSize, setLastPageSize] = useState(10);
-  const [pageSize, setPageSize] = useState(10);
-  const [data, setData] = useState({} as QueryResponse);
-  const [numRecords, setNumRecords] = useState(0);
+  const [lastPage, setLastPage] = useState(defaultQueryResultsParams.page);
+  const [lastPageSize, setLastPageSize] = useState(
+    defaultQueryResultsParams.pageSize
+  );
   const {
     state: {graph, rootModel},
     setRootModel
@@ -82,8 +46,19 @@ const QueryControlButtons = () => {
     state: {recordFilters, orRecordFilterIndices},
     setWhereState
   } = useContext(QueryWhereContext);
+  const {
+    state: {pageSize, page, data, expandMatrices, flattenQuery, queryString},
+    setQueryString,
+    setDataAndNumRecords,
+    setResultsState
+  } = useContext(QueryResultsContext);
   const classes = useStyles();
   const maxColumns = 10;
+
+  useEffect(() => {
+    setLastPage(page);
+    setLastPageSize(pageSize);
+  }, []);
 
   const builder = useMemo(() => {
     if (rootModel && graph && graph.initialized) {
@@ -133,8 +108,7 @@ const QueryControlButtons = () => {
     pageSize,
     rootModel,
     formattedColumns,
-    setData,
-    setNumRecords,
+    setDataAndNumRecords,
     formatRowData
   });
 
@@ -148,22 +122,14 @@ const QueryControlButtons = () => {
     }
   }, [page, pageSize, lastPage, lastPageSize, runQuery]);
 
-  function handlePageSizeChange(
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) {
-    setPageSize(parseInt(e.target.value));
-  }
-
-  function handlePageChange(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
-    newPage: number
-  ) {
-    setPage(newPage);
-  }
+  useEffect(() => {
+    if (JSON.stringify(query) !== queryString)
+      setQueryString(JSON.stringify(query));
+  }, [query, setQueryString, queryString]);
 
   function resetQuery() {
     setRootModel(null);
-    setData(EmptyQueryResponse);
+    setResultsState(defaultQueryResultsParams);
     setQueryColumns(defaultQueryColumnParams.columns);
     setWhereState(defaultQueryWhereParams);
   }

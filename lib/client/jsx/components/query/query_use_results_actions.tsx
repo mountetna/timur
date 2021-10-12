@@ -19,8 +19,7 @@ const useResultsActions = ({
   pageSize,
   rootModel,
   formattedColumns,
-  setData,
-  setNumRecords,
+  setDataAndNumRecords,
   formatRowData
 }: {
   countQuery: string | any[];
@@ -29,8 +28,7 @@ const useResultsActions = ({
   pageSize: number;
   rootModel: string | null;
   formattedColumns: QueryTableColumn[];
-  setData: (data: QueryResponse) => void;
-  setNumRecords: (count: number) => void;
+  setDataAndNumRecords: (data: QueryResponse, count: number) => void;
   formatRowData: (data: QueryResponse, columns: QueryTableColumn[]) => any[];
 }) => {
   let {store} = useContext(ReactReduxContext);
@@ -39,18 +37,20 @@ const useResultsActions = ({
   const runQuery = useCallback(() => {
     if ('' === countQuery || '' === query) return;
 
+    let numRecords = 0;
+
     let exchange = new Exchange(store.dispatch, 'query-post-magma');
-    setData(EmptyQueryResponse);
+    setDataAndNumRecords(EmptyQueryResponse, 0);
     getAnswer({query: countQuery}, exchange)
       .then((countData) => {
-        setNumRecords(countData.answer);
+        numRecords = countData.answer;
         return getAnswer(
           {query, page_size: pageSize, page: page + 1},
           exchange
         );
       })
       .then((answerData) => {
-        setData(answerData);
+        setDataAndNumRecords(answerData, numRecords);
         // setQueries([...queries].splice(0, 0, builder));
       })
       .catch((e) => {
@@ -59,7 +59,15 @@ const useResultsActions = ({
           invoke(showMessages(error.errors || [error.error] || error));
         });
       });
-  }, [query, countQuery, pageSize, page, invoke, store.dispatch]);
+  }, [
+    query,
+    countQuery,
+    pageSize,
+    page,
+    invoke,
+    store.dispatch,
+    setDataAndNumRecords
+  ]);
 
   const downloadData = useCallback(() => {
     if ('' === query) return;
