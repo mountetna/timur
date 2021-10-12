@@ -35,7 +35,7 @@ const useResultsActions = ({
   const invoke = useActionInvoker();
 
   const runQuery = useCallback(() => {
-    if ('' === countQuery || '' === query) return new Promise(() => {});
+    if ('' === countQuery || '' === query) return;
 
     let numRecords = 0;
 
