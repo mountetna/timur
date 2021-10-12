@@ -44,10 +44,10 @@ export const QueryResultsProvider = (
 
   const setExpandMatrices = useCallback(
     (expandMatrices: boolean) => {
-      return {
+      setState({
         ...state,
         expandMatrices
-      };
+      });
     },
     [state]
   );

@@ -196,7 +196,8 @@ describe('useSliceMethods', () => {
         mockGraphState,
         mockColumnState,
         mockWhereState,
-        mockResultsState: defaultQueryResultsParams
+        mockResultsState: defaultQueryResultsParams,
+        store
       })
     });
 

@@ -83,8 +83,6 @@ const QueryResults = () => {
 
   if (!rootModel) return null;
 
-  console.log('numRecords', numRecords);
-
   return (
     <Grid container className={classes.resultsPane}>
       <CodeMirror
