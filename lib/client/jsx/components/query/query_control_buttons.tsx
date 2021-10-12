@@ -24,10 +24,6 @@ import {
   QueryWhereContext,
   defaultQueryWhereParams
 } from '../../contexts/query/query_where_context';
-import {
-  QueryResultsContext,
-  defaultQueryResultsParams
-} from '../../contexts/query/query_results_context';
 import {QueryBuilder} from '../../utils/query_builder';
 import {
   QueryResponse,
@@ -65,15 +61,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const QueryResults = () => {
+const QueryControlButtons = () => {
   const [expandMatrices, setExpandMatrices] = useState(true);
   const [flattenQuery, setFlattenQuery] = useState(true);
   const [lastPage, setLastPage] = useState(0);
-  // const [page, setPage] = useState(0);
+  const [page, setPage] = useState(0);
   const [lastPageSize, setLastPageSize] = useState(10);
-  // const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState({} as QueryResponse);
-  // const [numRecords, setNumRecords] = useState(0);
+  const [numRecords, setNumRecords] = useState(0);
   const {
     state: {graph, rootModel},
     setRootModel
@@ -86,11 +82,6 @@ const QueryResults = () => {
     state: {recordFilters, orRecordFilterIndices},
     setWhereState
   } = useContext(QueryWhereContext);
-  const {
-    state: {pageSize, page, numRecords},
-    setPageSize,
-    setPage
-  } = useContext(QueryResultsContext);
   const classes = useStyles();
   const maxColumns = 10;
 
@@ -184,51 +175,30 @@ const QueryResults = () => {
   if (!rootModel) return null;
 
   return (
-    <Grid container className={classes.resultsPane}>
-      <CodeMirror
-        className={classes.result}
-        options={{
-          readOnly: 'no-cursor',
-          lineWrapping: true,
-          mode: 'application/json',
-          autoCloseBrackets: true,
-          lint: false,
-          background: 'none',
-          tabSize: 2
-        }}
-        value={JSON.stringify(query)}
-        onBeforeChange={(editor, data, value) => {}}
-      />
-      <Grid xs={12} item container direction='column'>
-        <Grid className={classes.config} item container justify='flex-end'>
-          <AntSwitch
-            checked={expandMatrices}
-            onChange={() => setExpandMatrices(!expandMatrices)}
-            name='expand-matrices-query'
-            leftOption='Nest matrices'
-            rightOption='Expand matrices'
-          />
-          <AntSwitch
-            checked={flattenQuery}
-            onChange={() => setFlattenQuery(!flattenQuery)}
-            name='flatten-query'
-            leftOption='Nested'
-            rightOption='Flattened'
-          />
-        </Grid>
-        <QueryTable
-          maxColumns={maxColumns}
-          columns={formattedColumns}
-          rows={rows}
-          pageSize={pageSize}
-          numRecords={numRecords}
-          page={page}
-          handlePageChange={handlePageChange}
-          handlePageSizeChange={handlePageSizeChange}
-        />
-      </Grid>
-    </Grid>
+    <React.Fragment>
+      <Button
+        className={classes.button}
+        color='default'
+        onClick={resetQuery}
+        startIcon={<ReplayIcon />}
+      >
+        Reset Query
+      </Button>
+      <Button className={classes.button} color='secondary' onClick={runQuery}>
+        Query
+      </Button>
+      <Button className={classes.button} onClick={downloadData}>
+        {'\u21af TSV'}
+      </Button>
+      <Button
+        className={classes.button}
+        onClick={copyLink}
+        startIcon={<ShareIcon />}
+      >
+        Copy Link
+      </Button>
+    </React.Fragment>
   );
 };
 
-export default QueryResults;
+export default QueryControlButtons;
