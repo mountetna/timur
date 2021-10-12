@@ -50,7 +50,8 @@ const QueryResults = () => {
       queryString,
       data,
       expandMatrices,
-      flattenQuery
+      flattenQuery,
+      maxColumns
     },
     setPageSize,
     setPage,
@@ -58,7 +59,6 @@ const QueryResults = () => {
     setFlattenQuery
   } = useContext(QueryResultsContext);
   const classes = useStyles();
-  const maxColumns = 10;
 
   const {columns: formattedColumns, rows} = useTableEffects({
     columns,

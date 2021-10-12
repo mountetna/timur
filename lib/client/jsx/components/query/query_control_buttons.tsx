@@ -1,5 +1,7 @@
 import React, {useMemo, useContext, useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import ReplayIcon from '@material-ui/icons/Replay';
 import ShareIcon from '@material-ui/icons/Share';
 
@@ -25,7 +27,7 @@ import useResultsActions from './query_use_results_actions';
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    marginRight: '5px'
+    marginLeft: '5px'
   }
 }));
 
@@ -47,13 +49,20 @@ const QueryControlButtons = () => {
     setWhereState
   } = useContext(QueryWhereContext);
   const {
-    state: {pageSize, page, data, expandMatrices, flattenQuery, queryString},
+    state: {
+      pageSize,
+      page,
+      data,
+      expandMatrices,
+      flattenQuery,
+      queryString,
+      maxColumns
+    },
     setQueryString,
     setDataAndNumRecords,
     setResultsState
   } = useContext(QueryResultsContext);
   const classes = useStyles();
-  const maxColumns = 10;
 
   useEffect(() => {
     setLastPage(page);
@@ -95,11 +104,13 @@ const QueryControlButtons = () => {
     return builder.count();
   }, [builder]);
 
-  const {
-    columns: formattedColumns,
-    rows,
-    formatRowData
-  } = useTableEffects({columns, data, graph, expandMatrices, maxColumns});
+  const {columns: formattedColumns, formatRowData} = useTableEffects({
+    columns,
+    data,
+    graph,
+    expandMatrices,
+    maxColumns
+  });
 
   const {runQuery, downloadData} = useResultsActions({
     countQuery: count,
@@ -141,29 +152,47 @@ const QueryControlButtons = () => {
   if (!rootModel) return null;
 
   return (
-    <React.Fragment>
-      <Button
-        className={classes.button}
-        color='default'
-        onClick={resetQuery}
-        startIcon={<ReplayIcon />}
-      >
-        Reset Query
-      </Button>
-      <Button className={classes.button} color='secondary' onClick={runQuery}>
-        Query
-      </Button>
-      <Button className={classes.button} onClick={downloadData}>
-        {'\u21af TSV'}
-      </Button>
-      <Button
-        className={classes.button}
-        onClick={copyLink}
-        startIcon={<ShareIcon />}
-      >
-        Copy Link
-      </Button>
-    </React.Fragment>
+    <Grid
+      item
+      container
+      direction='column'
+      justify='flex-end'
+      alignItems='flex-end'
+    >
+      <Grid item>
+        <Button
+          className={classes.button}
+          color='default'
+          onClick={resetQuery}
+          startIcon={<ReplayIcon />}
+        >
+          Reset Query
+        </Button>
+        <Button className={classes.button} color='secondary' onClick={runQuery}>
+          Query
+        </Button>
+        <Button className={classes.button} onClick={downloadData}>
+          {'\u21af TSV'}
+        </Button>
+        <Button
+          className={classes.button}
+          onClick={copyLink}
+          startIcon={<ShareIcon />}
+        >
+          Copy Link
+        </Button>
+      </Grid>
+      <Grid item>
+        {formattedColumns.length > maxColumns ? (
+          <Typography align='right' color='error'>
+            *** NOTE ***{' '}
+            {(formattedColumns.length - maxColumns).toLocaleString()} columns
+            not rendered. Add slices to your matrix columns or download the TSV
+            to see the whole data frame.
+          </Typography>
+        ) : null}
+      </Grid>
+    </Grid>
   );
 };
 

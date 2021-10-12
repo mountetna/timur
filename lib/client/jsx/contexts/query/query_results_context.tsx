@@ -9,7 +9,8 @@ export const defaultQueryResultsParams = {
   pageSize: 10,
   data: {} as QueryResponse,
   numRecords: 0,
-  queryString: ''
+  queryString: '',
+  maxColumns: 10
 };
 
 const defaultQueryResultsState = {

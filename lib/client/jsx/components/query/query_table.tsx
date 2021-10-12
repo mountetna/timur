@@ -16,10 +16,6 @@ import {QueryTableColumn} from '../../contexts/query/query_types';
 const useStyles = makeStyles({
   table: {
     minWidth: 650
-  },
-  columnWarning: {
-    color: 'red',
-    paddingRight: '0.6rem'
   }
 });
 
@@ -57,13 +53,6 @@ const QueryTable = ({
         direction='column'
         alignItems='flex-end'
       >
-        {columns.length > maxColumns ? (
-          <Typography className={classes.columnWarning}>
-            *** NOTE *** {(columns.length - maxColumns).toLocaleString()}{' '}
-            columns not rendered. Add slices to your matrix columns or download
-            the TSV to see the whole data frame.
-          </Typography>
-        ) : null}
         <TablePagination
           rowsPerPageOptions={[10, 25, 50, 200]}
           component='div'
