@@ -147,6 +147,7 @@ const QuerySelectPane = () => {
             }
             onChangeLabel={(label) => handleOnChangeLabel(index, column, label)}
             onRemoveColumn={() => handleOnRemoveColumn(index)}
+            onCopyColumn={() => addQueryColumn({...column})}
           />
         );
       })}
