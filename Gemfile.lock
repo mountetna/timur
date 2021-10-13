@@ -1,7 +1,7 @@
 PATH
   remote: /etna
   specs:
-    etna (0.1.41)
+    etna (0.1.42)
       concurrent-ruby
       curb
       jwt
@@ -41,14 +41,10 @@ GEM
     json (2.5.1)
     jwt (2.2.3)
     method_source (1.0.0)
-    mini_portile2 (2.6.1)
     minitest (5.14.2)
     multipart-post (2.1.1)
     net-ssh (6.1.0)
     nio4r (2.5.7)
-    nokogiri (1.12.2)
-      mini_portile2 (~> 2.6.1)
-      racc (~> 1.4)
     nokogiri (1.12.2-x86_64-linux)
       racc (~> 1.4)
     pg (0.21.0)
@@ -134,4 +130,4 @@ DEPENDENCIES
   yabeda-puma-plugin
 
 BUNDLED WITH
-   2.2.25
+   2.2.27
