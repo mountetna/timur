@@ -12,7 +12,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
         class="CodeMirror cm-s-default CodeMirror-wrap"
       >
         <div
-          style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 0px;"
+          style="overflow: hidden; position: relative; width: 3px; height: 0px;"
         >
           <textarea
             autocapitalize="off"
@@ -25,11 +25,10 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
         <div
           class="CodeMirror-vscrollbar"
           cm-not-content="true"
-          style="display: block; bottom: 0px;"
           tabindex="-1"
         >
           <div
-            style="min-width: 1px; height: 88px;"
+            style="min-width: 1px;"
           />
         </div>
         <div
@@ -38,7 +37,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
           tabindex="-1"
         >
           <div
-            style="height: 100%; min-height: 1px; width: 0px;"
+            style="height: 100%; min-height: 1px;"
           />
         </div>
         <div
@@ -55,7 +54,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
         >
           <div
             class="CodeMirror-sizer"
-            style="margin-left: 0px; padding-right: 0px; padding-bottom: 0px;"
+            style="margin-left: 0px;"
           >
             <div
               style="position: relative;"
@@ -70,22 +69,18 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
                 >
                   <div
                     class="CodeMirror-measure"
-                  />
-                  <div
-                    class="CodeMirror-measure"
                   >
                     <pre
-                      class="CodeMirror-line"
-                      role="presentation"
+                      class="CodeMirror-line-like"
                     >
-                      <span
-                        role="presentation"
-                        style="padding-right: .1px;"
-                      >
-                        ["monster",["labor",["year","::equals",2],"::any"],"::all",["name",["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","contributions","::slice",["Athens","Sparta"]]]]
+                      <span>
+                        xxxxxxxxxx
                       </span>
                     </pre>
                   </div>
+                  <div
+                    class="CodeMirror-measure"
+                  />
                   <div
                     style="position: relative; z-index: 1;"
                   />
@@ -101,7 +96,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
             </div>
           </div>
           <div
-            style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent;"
+            style="position: absolute; height: 50px; width: 1px;"
           />
           <div
             class="CodeMirror-gutters"
@@ -218,102 +213,6 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
             </div>
           </label>
         </div>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button MuiButton-disabled MuiButtonBase-disabled"
-          disabled=""
-          tabindex="-1"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            Previous Queries
-          </span>
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            <span
-              class="MuiButton-startIcon MuiButton-iconSizeMedium"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"
-                />
-              </svg>
-            </span>
-            Reset Query
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button MuiButton-textSecondary"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            Query
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            ↯ TSV
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            <span
-              class="MuiButton-startIcon MuiButton-iconSizeMedium"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"
-                />
-              </svg>
-            </span>
-            Copy Link
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
       </div>
       <div
         class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column MuiGrid-align-items-xs-flex-end MuiGrid-justify-xs-flex-end"
@@ -482,7 +381,7 @@ exports[`QueryResults renders 1`] = `
         class="CodeMirror cm-s-default CodeMirror-wrap"
       >
         <div
-          style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 0px;"
+          style="overflow: hidden; position: relative; width: 3px; height: 0px;"
         >
           <textarea
             autocapitalize="off"
@@ -495,11 +394,10 @@ exports[`QueryResults renders 1`] = `
         <div
           class="CodeMirror-vscrollbar"
           cm-not-content="true"
-          style="display: block; bottom: 0px;"
           tabindex="-1"
         >
           <div
-            style="min-width: 1px; height: 77px;"
+            style="min-width: 1px;"
           />
         </div>
         <div
@@ -508,7 +406,7 @@ exports[`QueryResults renders 1`] = `
           tabindex="-1"
         >
           <div
-            style="height: 100%; min-height: 1px; width: 0px;"
+            style="height: 100%; min-height: 1px;"
           />
         </div>
         <div
@@ -525,7 +423,7 @@ exports[`QueryResults renders 1`] = `
         >
           <div
             class="CodeMirror-sizer"
-            style="margin-left: 0px; padding-right: 0px; padding-bottom: 0px;"
+            style="margin-left: 0px;"
           >
             <div
               style="position: relative;"
@@ -540,22 +438,18 @@ exports[`QueryResults renders 1`] = `
                 >
                   <div
                     class="CodeMirror-measure"
-                  />
-                  <div
-                    class="CodeMirror-measure"
                   >
                     <pre
-                      class="CodeMirror-line"
-                      role="presentation"
+                      class="CodeMirror-line-like"
                     >
-                      <span
-                        role="presentation"
-                        style="padding-right: .1px;"
-                      >
-                        ["monster",["labor",["year","::equals",2],"::any"],"::all",["name",["labor","prize",["name","::equals","Athens"],"::first","name"]]]
+                      <span>
+                        xxxxxxxxxx
                       </span>
                     </pre>
                   </div>
+                  <div
+                    class="CodeMirror-measure"
+                  />
                   <div
                     style="position: relative; z-index: 1;"
                   />
@@ -571,7 +465,7 @@ exports[`QueryResults renders 1`] = `
             </div>
           </div>
           <div
-            style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent;"
+            style="position: absolute; height: 50px; width: 1px;"
           />
           <div
             class="CodeMirror-gutters"
@@ -688,102 +582,6 @@ exports[`QueryResults renders 1`] = `
             </div>
           </label>
         </div>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button MuiButton-disabled MuiButtonBase-disabled"
-          disabled=""
-          tabindex="-1"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            Previous Queries
-          </span>
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            <span
-              class="MuiButton-startIcon MuiButton-iconSizeMedium"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"
-                />
-              </svg>
-            </span>
-            Reset Query
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button MuiButton-textSecondary"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            Query
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            ↯ TSV
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            <span
-              class="MuiButton-startIcon MuiButton-iconSizeMedium"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"
-                />
-              </svg>
-            </span>
-            Copy Link
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
       </div>
       <div
         class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column MuiGrid-align-items-xs-flex-end MuiGrid-justify-xs-flex-end"

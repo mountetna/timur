@@ -1,11 +1,11 @@
 import React, {useCallback, useState, useContext, useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
+import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -29,6 +29,20 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120
   }
 }));
+
+const CopyColumnIcon = React.memo(
+  ({canEdit, copyColumn}: {canEdit: boolean; copyColumn: () => void}) => {
+    if (!canEdit) return null;
+
+    return (
+      <Tooltip title='Copy column' aria-label='copy column'>
+        <IconButton aria-label='copy column' onClick={copyColumn}>
+          <FileCopyIcon color='action' />
+        </IconButton>
+      </Tooltip>
+    );
+  }
+);
 
 const RemoveColumnIcon = React.memo(
   ({canEdit, removeColumn}: {canEdit: boolean; removeColumn: () => void}) => {
@@ -139,7 +153,8 @@ const QueryModelAttributeSelector = React.memo(
     onSelectModel,
     onSelectAttribute,
     onChangeLabel,
-    onRemoveColumn
+    onRemoveColumn,
+    onCopyColumn
   }: {
     label: string;
     column: QueryColumn;
@@ -151,6 +166,7 @@ const QueryModelAttributeSelector = React.memo(
     onSelectAttribute: (attributeName: string) => void;
     onChangeLabel: (label: string) => void;
     onRemoveColumn: () => void;
+    onCopyColumn: () => void;
   }) => {
     const [selectableModelAttributes, setSelectableModelAttributes] = useState(
       [] as Attribute[]
@@ -235,6 +251,7 @@ const QueryModelAttributeSelector = React.memo(
             <Grid item xs={7}></Grid>
           )}
           <Grid item container justify='flex-end' xs={1}>
+            <CopyColumnIcon canEdit={canEdit} copyColumn={onCopyColumn} />
             <RemoveColumnIcon canEdit={canEdit} removeColumn={onRemoveColumn} />
           </Grid>
         </Grid>

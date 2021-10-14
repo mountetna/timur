@@ -5,6 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import {mockStore, querySpecWrapper} from '../../helpers';
 import useTableEffects from '../../../../lib/client/jsx/components/query/query_use_table_effects';
 import {QueryGraph} from '../../../../lib/client/jsx/utils/query_graph';
+import {defaultQueryResultsParams} from '../../../../lib/client/jsx/contexts/query/query_results_context';
 
 const models = {
   monster: {
@@ -92,6 +93,7 @@ describe('useTableEffects', () => {
           mockGraphState,
           mockWhereState,
           mockColumnState,
+          mockResultsState: defaultQueryResultsParams,
           store
         })
       }
@@ -163,6 +165,7 @@ describe('useTableEffects', () => {
           mockGraphState,
           mockWhereState,
           mockColumnState,
+          mockResultsState: defaultQueryResultsParams,
           store
         })
       }
@@ -239,6 +242,7 @@ describe('useTableEffects', () => {
           mockGraphState,
           mockWhereState,
           mockColumnState,
+          mockResultsState: defaultQueryResultsParams,
           store
         })
       }
@@ -314,6 +318,7 @@ describe('useTableEffects', () => {
           mockGraphState,
           mockWhereState,
           mockColumnState,
+          mockResultsState: defaultQueryResultsParams,
           store
         })
       }
@@ -401,6 +406,7 @@ describe('useTableEffects', () => {
           mockGraphState,
           mockWhereState,
           mockColumnState,
+          mockResultsState: defaultQueryResultsParams,
           store
         })
       }

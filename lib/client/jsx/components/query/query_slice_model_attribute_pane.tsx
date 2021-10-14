@@ -69,7 +69,7 @@ const QuerySliceModelAttributePane = ({
       </Tooltip>
       <Grid container direction='column' className={classes.grid}>
         {column?.slices.map((slice: QuerySlice, index: number) => (
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} key={index}>
             <Grid container spacing={1} alignItems='center'>
               <QueryFilterControl
                 key={`model-${column.model_name}-${index}-${updateCounter}`}
