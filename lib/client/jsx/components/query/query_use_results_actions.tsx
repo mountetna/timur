@@ -41,12 +41,12 @@ const useResultsActions = ({
 
     let exchange = new Exchange(store.dispatch, 'query-post-magma');
     setDataAndNumRecords(EmptyQueryResponse, 0);
-    getAnswer({query: countQuery}, exchange)
+    getAnswer({query: countQuery}, exchange.fetch.bind(exchange))
       .then((countData) => {
         numRecords = countData.answer;
         return getAnswer(
           {query, page_size: pageSize, page: page + 1},
-          exchange
+          exchange.fetch.bind(exchange)
         );
       })
       .then((answerData) => {
@@ -73,7 +73,7 @@ const useResultsActions = ({
     if ('' === query) return;
 
     let exchange = new Exchange(store.dispatch, 'query-download-tsv-magma');
-    getAnswer({query}, exchange)
+    getAnswer({query}, exchange.fetch.bind(exchange))
       .then((allData) => {
         let rowData = formatRowData(allData, formattedColumns);
         let matrixMap = rowData.map((row: any) => {
