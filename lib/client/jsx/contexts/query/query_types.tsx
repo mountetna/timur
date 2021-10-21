@@ -1,9 +1,13 @@
-export interface QueryBase {
-  modelName: string;
+export interface QueryClause {
   attributeName: string;
+  attributeType: string;
   operator: string;
   operand: string | number;
-  attributeType: string;
+}
+
+export interface QueryBase {
+  modelName: string;
+  clauses: QueryClause[];
 }
 
 export interface QuerySlice extends QueryBase {}

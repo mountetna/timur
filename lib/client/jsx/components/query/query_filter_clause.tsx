@@ -19,7 +19,7 @@ import {
   QuerySlice
 } from '../../contexts/query/query_types';
 import FilterOperator from './query_filter_operator';
-import useQueryClause from './query_use_query_clause';
+import useFilterAttributes from './query_use_filter_attributes';
 import {QueryGraph} from '../../utils/query_graph';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,18 +29,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const QueryFilterControl = ({
-  filter,
+const QueryFilterClause = ({
+  clause,
+  clauseIndex,
   modelNames,
   isColumnFilter,
   graph,
+  waitTime,
+  eager,
   patchFilter,
   removeFilter
 }: {
-  filter: QueryFilter | QuerySlice;
+  clause: QueryClause;
+  clauseIndex: number;
   modelNames: string[];
   isColumnFilter: boolean;
   graph: QueryGraph;
+  waitTime?: number;
+  eager?: boolean;
   patchFilter: (filter: QueryFilter | QuerySlice) => void;
   removeFilter: () => void;
 }) => {
@@ -60,7 +66,7 @@ const QueryFilterControl = ({
 
   const classes = useStyles();
 
-  const {modelAttributes, attributeType} = useQueryClause({
+  const {modelAttributes, attributeType} = useFilterAttributes({
     filter,
     graph
   });
@@ -230,4 +236,4 @@ const QueryFilterControl = ({
     </>
   );
 };
-export default QueryFilterControl;
+export default QueryFilterClause;

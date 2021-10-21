@@ -45,10 +45,7 @@ const QueryWherePane = () => {
   const addNewRecordFilter = useCallback(() => {
     addRecordFilter({
       modelName: '',
-      attributeName: '',
-      operator: '',
-      operand: '',
-      attributeType: '',
+      clauses: [],
       anyMap: {}
     });
   }, [addRecordFilter]);
@@ -160,18 +157,26 @@ const QueryWherePane = () => {
                 patchRecordFilter={patchRecordFilter}
               />
             </Grid>
-            <Grid item container xs={9}>
-              <QueryFilterControl
-                key={`${index}-${updateCounter}`}
-                filter={filter}
-                isColumnFilter={false}
-                modelNames={modelNames}
-                graph={graph}
-                patchFilter={(updatedFilter: QueryFilter | QuerySlice) =>
-                  handlePatchFilter(index, updatedFilter as QueryFilter, filter)
-                }
-                removeFilter={() => handleRemoveFilter(index)}
-              />
+            <Grid item container xs={9} direction='column'>
+              <Grid item container>
+                <QueryFilterControl
+                  key={`${index}-${updateCounter}`}
+                  filter={filter}
+                  isColumnFilter={false}
+                  modelNames={modelNames}
+                  graph={graph}
+                  patchFilter={(updatedFilter: QueryFilter | QuerySlice) =>
+                    handlePatchFilter(
+                      index,
+                      updatedFilter as QueryFilter,
+                      filter
+                    )
+                  }
+                  removeFilter={() => handleRemoveFilter(index)}
+                />
+              </Grid>
+              <Grid item>Slices</Grid>
+              <Grid item></Grid>
             </Grid>
           </Grid>
         </Paper>
