@@ -38,7 +38,8 @@ const AttributeViewer = (props) => {
     integer: IntegerAttribute,
     float: FloatAttribute,
     date_time: DateTimeAttribute,
-    string: StringAttribute
+    string: StringAttribute,
+    shifted_date_time: DateTimeAttribute
   }[attribute.attribute_type];
 
   if (!AttributeComponent) {
