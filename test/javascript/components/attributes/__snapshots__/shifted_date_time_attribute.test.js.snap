@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ShiftedDateTimeAttribute allows privileged users to edit 1`] = `
+<div
+  className="attribute"
+>
+  <div
+    className="date_input"
+  >
+    <input
+      onChange={[Function]}
+      type="date"
+      value=""
+    />
+  </div>
+</div>
+`;
+
+exports[`ShiftedDateTimeAttribute does not allow un-privileged users to edit 1`] = `
+<div
+  className="attribute"
+>
+  01-01-00
+</div>
+`;
