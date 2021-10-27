@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
+import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 
 import {
   QueryClause,
@@ -44,7 +45,8 @@ const QueryFilterControl = ({
   isColumnFilter,
   graph,
   patchFilter,
-  removeFilter
+  removeFilter,
+  copyFilter
 }: {
   filter: QueryFilter | QuerySlice;
   modelNames: string[];
@@ -52,6 +54,7 @@ const QueryFilterControl = ({
   graph: QueryGraph;
   patchFilter: (filter: QueryFilter | QuerySlice) => void;
   removeFilter: () => void;
+  copyFilter: (filter: QueryFilter | QuerySlice) => void;
 }) => {
   const classes = useStyles();
 
@@ -171,6 +174,16 @@ const QueryFilterControl = ({
         )}
       </Grid>
       <Grid item xs={1} container justify='flex-end'>
+        {!isColumnFilter ? (
+          <Tooltip title='Copy filter' aria-label='copy filter'>
+            <IconButton
+              aria-label='copy filter'
+              onClick={() => copyFilter(filter)}
+            >
+              <FileCopyIcon color='action' />
+            </IconButton>
+          </Tooltip>
+        ) : null}
         <Tooltip title='Remove filter' aria-label='remove filter'>
           <IconButton aria-label='remove filter' onClick={removeFilter}>
             <ClearIcon />

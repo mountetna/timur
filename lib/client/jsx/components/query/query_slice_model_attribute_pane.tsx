@@ -81,6 +81,7 @@ const QuerySliceModelAttributePane = ({
                   handlePatchSlice(index, updatedFilter)
                 }
                 removeFilter={() => handleRemoveSlice(index)}
+                copyFilter={() => {}}
               />
             </Grid>
           </Paper>

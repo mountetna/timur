@@ -106,6 +106,13 @@ const QueryWherePane = () => {
     [orRecordFilterIndices, setOrRecordFilterIndices]
   );
 
+  const handleCopyFilter = useCallback(
+    (filter: QueryFilter) => {
+      addRecordFilter({...filter});
+    },
+    [addRecordFilter]
+  );
+
   const modelNames = useMemo(
     () => [...new Set(graph.allPaths(rootModel).flat())].sort(),
     [graph, rootModel]
@@ -187,6 +194,9 @@ const QueryWherePane = () => {
                     )
                   }
                   removeFilter={() => handleRemoveFilter(index)}
+                  copyFilter={(filterCopy: QueryFilter | QuerySlice) =>
+                    handleCopyFilter(filterCopy as QueryFilter)
+                  }
                 />
               </Grid>
             </Grid>
