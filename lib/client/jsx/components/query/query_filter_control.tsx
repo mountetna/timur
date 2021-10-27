@@ -26,14 +26,15 @@ const useStyles = makeStyles((theme) => ({
     width: '80%'
   },
   paper: {
-    padding: '0 0.5rem',
-    marginBottom: '0.5rem'
+    padding: '0.5rem 0.5rem 0 0.5rem',
+    marginBottom: '0.5rem',
+    height: '48px'
   },
   paddingLeft: {
     paddingLeft: 'calc(0.5rem - 4px)'
   },
-  paddingBottom: {
-    paddingBottom: '0.5rem'
+  grid: {
+    paddingTop: '0.5rem'
   }
 }));
 
@@ -128,17 +129,17 @@ const QueryFilterControl = ({
           />
         ) : (
           <>
-            <Grid className={classes.paddingBottom}>
-              <Tooltip title='Add clause' aria-label='Add clause'>
+            <Grid>
+              <Tooltip title='Add and clause' aria-label='Add and clause'>
                 <Button className={classes.paddingLeft} startIcon={<AddIcon />}>
-                  Clause
+                  And Clause
                 </Button>
               </Tooltip>
             </Grid>
-            {filter.clauses.map((clause: QueryClause, index: number) => {
-              return (
-                <Paper className={classes.paper} key={index}>
-                  <Grid container spacing={1} alignItems='center'>
+            <Grid direction='column' className={classes.grid}>
+              {filter.clauses.map((clause: QueryClause, index: number) => {
+                return (
+                  <Paper className={classes.paper} key={index}>
                     <QueryFilterClause
                       key={index}
                       clause={clause}
@@ -151,10 +152,10 @@ const QueryFilterControl = ({
                       }
                       removeClause={() => handleRemoveClause(index)}
                     />
-                  </Grid>
-                </Paper>
-              );
-            })}
+                  </Paper>
+                );
+              })}
+            </Grid>
           </>
         )}
       </Grid>

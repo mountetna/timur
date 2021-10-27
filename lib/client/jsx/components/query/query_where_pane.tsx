@@ -136,10 +136,10 @@ const QueryWherePane = () => {
               <Grid item xs={4} className={classes.paddingLeft}>
                 Attribute
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={3} className={classes.paddingLeft}>
                 Operator
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={4} className={classes.paddingLeft}>
                 Operand
               </Grid>
               <Grid item xs={1} />

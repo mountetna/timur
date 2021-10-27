@@ -132,7 +132,7 @@ const QueryFilterClause = ({
     `${idType}-Select-${Math.random().toString()}`;
 
   return (
-    <Grid container>
+    <Grid container spacing={1} alignItems='center'>
       <Grid item xs={4}>
         <FormControl className={classes.fullWidth}>
           {modelAttributes.length > 0 ? (
