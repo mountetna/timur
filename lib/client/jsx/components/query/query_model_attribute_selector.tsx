@@ -1,14 +1,9 @@
-import React, {useCallback, useState, useContext, useEffect} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 import {Attribute} from '../../models/model_types';
@@ -22,6 +17,7 @@ import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 import {QueryGraph} from '../../utils/query_graph';
 import RemoveIcon from './query_remove_icon';
 import CopyIcon from './query_copy_icon';
+import Selector from './query_selector';
 
 const useStyles = makeStyles((theme) => ({
   fullWidth: {
@@ -33,42 +29,6 @@ const useStyles = makeStyles((theme) => ({
 function id(label: string) {
   return `${label}-${Math.random()}`;
 }
-
-const ModelNameSelector = React.memo(
-  ({
-    canEdit,
-    onSelect,
-    label,
-    modelName,
-    modelChoiceSet
-  }: {
-    canEdit: boolean;
-    onSelect: (modelName: string) => void;
-    label: string;
-    modelName: string;
-    modelChoiceSet: string[];
-  }) => {
-    const classes = useStyles();
-
-    if (!canEdit) return <Typography>{modelName}</Typography>;
-
-    return (
-      <FormControl className={classes.fullWidth}>
-        <Select
-          labelId={id(label)}
-          value={modelName}
-          onChange={(e) => onSelect(e.target.value as string)}
-        >
-          {modelChoiceSet.sort().map((model_name: string, index: number) => (
-            <MenuItem key={index} value={model_name}>
-              {model_name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    );
-  }
-);
 
 const AttributeSelector = React.memo(
   ({
@@ -194,12 +154,12 @@ const QueryModelAttributeSelector = React.memo(
             />
           </Grid>
           <Grid item xs={2}>
-            <ModelNameSelector
+            <Selector
               canEdit={canEdit}
               label={label}
-              modelName={column.model_name}
+              name={column.model_name}
               onSelect={onSelectModel}
-              modelChoiceSet={modelChoiceSet}
+              choiceSet={modelChoiceSet}
             />
           </Grid>
           {column.model_name && selectableModelAttributes.length > 0 ? (

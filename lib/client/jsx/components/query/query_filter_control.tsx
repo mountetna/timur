@@ -2,15 +2,9 @@ import React, {useCallback} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import {makeStyles} from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 
 import {
   QueryClause,
@@ -21,12 +15,9 @@ import {QueryGraph} from '../../utils/query_graph';
 import QueryFilterClause from './query_filter_clause';
 import RemoveIcon from './query_remove_icon';
 import CopyIcon from './query_copy_icon';
+import Selector from './query_selector';
 
 const useStyles = makeStyles((theme) => ({
-  textInput: {},
-  fullWidth: {
-    width: '80%'
-  },
   paper: {
     padding: '0.5rem 0.5rem 0 0.5rem',
     marginBottom: '0.5rem',
@@ -103,26 +94,16 @@ const QueryFilterControl = ({
     });
   }, [patchFilter, filter]);
 
-  let uniqId = (idType: string): string =>
-    `${idType}-Select-${Math.random().toString()}`;
-
   return (
     <>
       <Grid item xs={3}>
-        <FormControl className={classes.fullWidth}>
-          <Select
-            labelId={uniqId('model')}
-            value={filter.modelName}
-            onChange={(e) => handleModelSelect(e.target.value as string)}
-            displayEmpty
-          >
-            {modelNames.map((name, index: number) => (
-              <MenuItem key={index} value={name}>
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Selector
+          canEdit={true}
+          name={filter.modelName}
+          onSelect={handleModelSelect}
+          choiceSet={modelNames}
+          label='model'
+        />
       </Grid>
       <Grid item container xs={8} direction='column'>
         <Grid>
