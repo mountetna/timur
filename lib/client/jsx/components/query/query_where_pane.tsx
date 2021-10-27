@@ -193,9 +193,7 @@ const QueryWherePane = () => {
                     )
                   }
                   removeFilter={() => handleRemoveFilter(index)}
-                  copyFilter={(filterCopy: QueryFilter | QuerySlice) =>
-                    handleCopyFilter(filterCopy as QueryFilter)
-                  }
+                  copyFilter={() => handleCopyFilter(filter)}
                 />
               </Grid>
             </Grid>

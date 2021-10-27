@@ -8,15 +8,13 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {makeStyles} from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import ClearIcon from '@material-ui/icons/Clear';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import {Debouncer} from 'etna-js/utils/debouncer';
 import {QueryClause} from '../../contexts/query/query_types';
 import FilterOperator from './query_filter_operator';
 import useQueryClause from './query_use_query_clause';
 import {QueryGraph} from '../../utils/query_graph';
+import RemoveIcon from './query_remove_icon';
 
 const useStyles = makeStyles((theme) => ({
   textInput: {},
@@ -72,13 +70,14 @@ const QueryFilterClause = ({
     return new FilterOperator(attributeType, clause.operator, isColumnFilter);
   }, [attributeType, clause.operator, isColumnFilter]);
 
-  // useEffect(() => {
-  //   // When user selects a different attribute, update the type
-  //   patchClause({
-  //     ...clause,
-  //     attributeType
-  //   });
-  // }, [clause.attributeName, attributeType, clause, patchClause]);
+  useEffect(() => {
+    // When user selects a different attribute, update the type
+    if (attributeType !== clause.attributeType)
+      patchClause({
+        ...clause,
+        attributeType
+      });
+  }, [attributeType, clause, patchClause]);
 
   const handleAttributeSelect = useCallback(
     (attributeName: string) => {
@@ -182,17 +181,13 @@ const QueryFilterClause = ({
           </FormControl>
         ) : null}
       </Grid>
-      {!isColumnFilter ? (
-        <Grid item xs={1} container justify='flex-end'>
-          <Tooltip title='Remove clause' aria-label='remove clause'>
-            <IconButton aria-label='remove clause' onClick={removeClause}>
-              <ClearIcon />
-            </IconButton>
-          </Tooltip>
-        </Grid>
-      ) : (
-        <Grid item xs={1} />
-      )}
+      <Grid item xs={1} container justify='flex-end'>
+        <RemoveIcon
+          canEdit={!isColumnFilter}
+          onClick={removeClause}
+          label='clause'
+        />
+      </Grid>
     </Grid>
   );
 };

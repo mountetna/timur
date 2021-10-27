@@ -44,7 +44,7 @@ const QueryFilterControl = ({
   graph: QueryGraph;
   patchFilter: (filter: QueryFilter) => void;
   removeFilter: () => void;
-  copyFilter: (filter: QueryFilter) => void;
+  copyFilter: () => void;
 }) => {
   const classes = useStyles();
 
@@ -139,11 +139,7 @@ const QueryFilterControl = ({
         </Grid>
       </Grid>
       <Grid item xs={1} container justify='flex-end'>
-        <CopyIcon
-          canEdit={true}
-          onClick={() => copyFilter(filter)}
-          label='filter'
-        />
+        <CopyIcon canEdit={true} onClick={copyFilter} label='filter' />
         <RemoveIcon canEdit={true} onClick={removeFilter} label='filter' />
       </Grid>
     </>
