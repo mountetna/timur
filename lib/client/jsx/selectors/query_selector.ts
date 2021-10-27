@@ -207,7 +207,7 @@ export const attributeIsFile = (
 };
 
 export const isMatrixSlice = (slice: QuerySlice) =>
-  '::slice' === slice.operator;
+  '::slice' === slice.clauses[0].operator;
 
 export const hasMatrixSlice = (column: QueryColumn) => {
   return column.slices.some((slice) => isMatrixSlice(slice));

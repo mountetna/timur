@@ -111,7 +111,7 @@ export class QueryBuilder {
   filterWithPath(filter: QueryBase, includeModelPath: boolean = true): any[] {
     let result: any[] = [
       '::and',
-      filter.clauses.map((clause) => this.serializeQueryClause(clause)).flat()
+      ...filter.clauses.map((clause) => this.serializeQueryClause(clause))
     ];
 
     let path: string[] | undefined = this.filterPathWithModelPredicates(

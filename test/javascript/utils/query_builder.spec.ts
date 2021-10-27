@@ -54,11 +54,15 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           anyMap: {biospecimen: true, sc_seq: true},
-          attributeName: 'tube_name',
-          modelName: 'sc_seq',
-          operand: '',
-          operator: '::has',
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'tube_name',
+              operand: '',
+              operator: '::has',
+              attributeType: 'text'
+            }
+          ],
+          modelName: 'sc_seq'
         }
       ]);
       builder.addColumns([stamp('subject', 'name', [])]);
@@ -68,7 +72,7 @@ describe('QueryBuilder', () => {
           'biospecimen',
           [
             'biospecimen_group',
-            ['sc_seq', ['::has', 'tube_name'], '::any'],
+            ['sc_seq', ['::and', ['::has', 'tube_name']], '::any'],
             '::any'
           ],
           '::any'
@@ -90,19 +94,27 @@ describe('QueryBuilder', () => {
       stamp('labor', 'contributions', [
         {
           modelName: 'labor',
-          attributeName: 'contributions',
-          operator: '::slice',
-          operand: 'Athens,Sidon',
-          attributeType: 'matrix'
+          clauses: [
+            {
+              attributeName: 'contributions',
+              operator: '::slice',
+              operand: 'Athens,Sidon',
+              attributeType: 'matrix'
+            }
+          ]
         }
       ]),
       stamp('prize', 'value', [
         {
           modelName: 'prize',
-          attributeName: 'name',
-          operator: '::equals',
-          operand: 'Sparta',
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Sparta',
+              attributeType: 'text'
+            }
+          ]
         }
       ]),
       stamp('victim', 'country', [])
@@ -110,37 +122,53 @@ describe('QueryBuilder', () => {
     builder.addRecordFilters([
       {
         modelName: 'labor',
-        attributeName: 'name',
-        operator: '::in',
-        operand: 'lion,hydra,apples',
         anyMap: {},
-        attributeType: 'text'
+        clauses: [
+          {
+            attributeName: 'name',
+            operator: '::in',
+            operand: 'lion,hydra,apples',
+            attributeType: 'text'
+          }
+        ]
       },
       {
         modelName: 'monster',
-        attributeName: 'name',
-        operator: '::equals',
-        operand: 'Nemean Lion',
         anyMap: {},
-        attributeType: 'text'
+        clauses: [
+          {
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Nemean Lion',
+            attributeType: 'text'
+          }
+        ]
       },
       {
         modelName: 'labor',
-        attributeName: 'number',
-        operator: '::equals',
-        operand: '2',
         anyMap: {},
-        attributeType: 'number'
+        clauses: [
+          {
+            attributeName: 'number',
+            operator: '::equals',
+            operand: '2',
+            attributeType: 'number'
+          }
+        ]
       },
       {
         modelName: 'prize',
-        attributeName: 'name',
-        operator: '::equals',
-        operand: 'Apples',
+        clauses: [
+          {
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Apples',
+            attributeType: 'text'
+          }
+        ],
         anyMap: {
           prize: true
-        },
-        attributeType: 'text'
+        }
       }
     ]);
 
@@ -148,10 +176,18 @@ describe('QueryBuilder', () => {
       'monster',
       [
         '::and',
-        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
-        ['name', '::equals', 'Nemean Lion'],
-        ['labor', ['number', '::equals', 2], '::any'],
-        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any']
+        [
+          'labor',
+          ['::and', ['name', '::in', ['lion', 'hydra', 'apples']]],
+          '::any'
+        ],
+        ['::and', ['name', '::equals', 'Nemean Lion']],
+        ['labor', ['::and', ['number', '::equals', 2]], '::any'],
+        [
+          'labor',
+          ['prize', ['::and', ['name', '::equals', 'Apples']], '::any'],
+          '::any'
+        ]
       ],
       '::all',
       [
@@ -172,10 +208,18 @@ describe('QueryBuilder', () => {
       'monster',
       [
         '::and',
-        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
-        ['name', '::equals', 'Nemean Lion'],
-        ['labor', ['number', '::equals', 2], '::any'],
-        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any']
+        [
+          'labor',
+          ['::and', ['name', '::in', ['lion', 'hydra', 'apples']]],
+          '::any'
+        ],
+        ['::and', ['name', '::equals', 'Nemean Lion']],
+        ['labor', ['::and', ['number', '::equals', 2]], '::any'],
+        [
+          'labor',
+          ['prize', ['::and', ['name', '::equals', 'Apples']], '::any'],
+          '::any'
+        ]
       ],
       '::all',
       [
@@ -196,12 +240,20 @@ describe('QueryBuilder', () => {
       'monster',
       [
         '::and',
-        ['name', '::equals', 'Nemean Lion'],
-        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any'],
+        ['::and', ['name', '::equals', 'Nemean Lion']],
+        [
+          'labor',
+          ['prize', ['::and', ['name', '::equals', 'Apples']], '::any'],
+          '::any'
+        ],
         [
           '::or',
-          ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
-          ['labor', ['number', '::equals', 2], '::any']
+          [
+            'labor',
+            ['::and', ['name', '::in', ['lion', 'hydra', 'apples']]],
+            '::any'
+          ],
+          ['labor', ['::and', ['number', '::equals', 2]], '::any']
         ]
       ],
       '::all',
@@ -218,6 +270,53 @@ describe('QueryBuilder', () => {
     ]);
   });
 
+  it('combines multiple clauses in filters', () => {
+    builder.addRootModel('monster');
+    builder.addColumns([stamp('monster', 'name', [])]);
+    builder.addRecordFilters([
+      {
+        modelName: 'labor',
+        anyMap: {},
+        clauses: [
+          {
+            attributeName: 'name',
+            operator: '::in',
+            operand: 'lion,hydra,apples',
+            attributeType: 'text'
+          },
+          {
+            attributeName: 'number',
+            operator: '::>',
+            operand: '2',
+            attributeType: 'number'
+          },
+          {
+            attributeName: 'number',
+            operator: '::<=',
+            operand: '8',
+            attributeType: 'number'
+          }
+        ]
+      }
+    ]);
+
+    expect(builder.query()).toEqual([
+      'monster',
+      [
+        'labor',
+        [
+          '::and',
+          ['name', '::in', ['lion', 'hydra', 'apples']],
+          ['number', '::>', 2],
+          ['number', '::<=', 8]
+        ],
+        '::any'
+      ],
+      '::all',
+      ['name']
+    ]);
+  });
+
   it('adds slice for root model', () => {
     builder.addRootModel('labor');
     builder.addColumns([
@@ -225,10 +324,14 @@ describe('QueryBuilder', () => {
       stamp('labor', 'contributions', [
         {
           modelName: 'labor',
-          attributeName: 'contributions',
-          operator: '::slice',
-          operand: 'Athens,Sidon',
-          attributeType: 'matrix'
+          clauses: [
+            {
+              attributeName: 'contributions',
+              operator: '::slice',
+              operand: 'Athens,Sidon',
+              attributeType: 'matrix'
+            }
+          ]
         }
       ])
     ]);
@@ -250,29 +353,41 @@ describe('QueryBuilder', () => {
       stamp('prize', 'value', [
         {
           modelName: 'prize',
-          attributeName: 'name',
-          operator: '::equals',
-          operand: 'Sparta',
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Sparta',
+              attributeType: 'text'
+            }
+          ]
         }
       ])
     ]);
     builder.addRecordFilters([
       {
         modelName: 'labor',
-        attributeName: 'name',
-        operator: '::in',
-        operand: 'lion,hydra,apples',
-        anyMap: {},
-        attributeType: 'text'
+        clauses: [
+          {
+            attributeName: 'name',
+            operator: '::in',
+            operand: 'lion,hydra,apples',
+            attributeType: 'text'
+          }
+        ],
+        anyMap: {}
       },
       {
         modelName: 'monster',
-        attributeName: 'name',
-        operator: '::equals',
-        operand: 'Nemean Lion',
-        anyMap: {},
-        attributeType: 'text'
+        clauses: [
+          {
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Nemean Lion',
+            attributeType: 'text'
+          }
+        ],
+        anyMap: {}
       }
     ]);
 
@@ -280,8 +395,12 @@ describe('QueryBuilder', () => {
       'monster',
       [
         '::and',
-        ['labor', ['name', '::in', ['lion', 'hydra', 'apples']], '::any'],
-        ['name', '::equals', 'Nemean Lion']
+        [
+          'labor',
+          ['::and', ['name', '::in', ['lion', 'hydra', 'apples']]],
+          '::any'
+        ],
+        ['::and', ['name', '::equals', 'Nemean Lion']]
       ],
       '::count'
     ]);
@@ -293,14 +412,18 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'wound',
-          attributeName: 'location',
-          operator: '::equals',
-          operand: 'arm',
+          clauses: [
+            {
+              attributeName: 'location',
+              operator: '::equals',
+              operand: 'arm',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             victim: true,
             wound: true
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('labor', 'name', [])]);
@@ -311,7 +434,7 @@ describe('QueryBuilder', () => {
           'monster',
           [
             'victim',
-            ['wound', ['location', '::equals', 'arm'], '::any'],
+            ['wound', ['::and', ['location', '::equals', 'arm']], '::any'],
             '::any'
           ],
           '::any'
@@ -326,14 +449,18 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'wound',
-          attributeName: 'location',
-          operator: '::equals',
-          operand: 'arm',
+          clauses: [
+            {
+              attributeName: 'location',
+              operator: '::equals',
+              operand: 'arm',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             victim: true,
             wound: true
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('monster', 'name', [])]);
@@ -342,7 +469,7 @@ describe('QueryBuilder', () => {
         'monster',
         [
           'victim',
-          ['wound', ['location', '::equals', 'arm'], '::any'],
+          ['wound', ['::and', ['location', '::equals', 'arm']], '::any'],
           '::any'
         ],
         '::all',
@@ -355,20 +482,24 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'victim',
-          attributeName: 'name',
-          operator: '::equals',
-          operand: 'Hercules',
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Hercules',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             victim: true
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
-        ['victim', ['name', '::equals', 'Hercules'], '::any'],
+        ['victim', ['::and', ['name', '::equals', 'Hercules']], '::any'],
         '::all',
         ['name']
       ]);
@@ -379,14 +510,18 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'wound',
-          attributeName: 'location',
-          operator: '::equals',
-          operand: 'arm',
+          clauses: [
+            {
+              attributeName: 'location',
+              operator: '::equals',
+              operand: 'arm',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             victim: true,
             wound: true
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('prize', 'name', [])]);
@@ -399,7 +534,7 @@ describe('QueryBuilder', () => {
             'monster',
             [
               'victim',
-              ['wound', ['location', '::equals', 'arm'], '::any'],
+              ['wound', ['::and', ['location', '::equals', 'arm']], '::any'],
               '::any'
             ],
             '::any'
@@ -416,20 +551,28 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'prize',
-          attributeName: 'name',
-          operator: '::equals',
-          operand: 'Apples',
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Apples',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             prize: true
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
-        ['labor', ['prize', ['name', '::equals', 'Apples'], '::any'], '::any'],
+        [
+          'labor',
+          ['prize', ['::and', ['name', '::equals', 'Apples']], '::any'],
+          '::any'
+        ],
         '::all',
         ['name']
       ]);
@@ -440,18 +583,22 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'labor',
-          attributeName: 'name',
-          operator: '::in',
-          operand: 'Lion,Hydra',
-          anyMap: {},
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::in',
+              operand: 'Lion,Hydra',
+              attributeType: 'text'
+            }
+          ],
+          anyMap: {}
         }
       ]);
       builder.addColumns([stamp('prize', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'prize',
-        ['labor', ['name', '::in', ['Lion', 'Hydra']], '::any'],
+        ['labor', ['::and', ['name', '::in', ['Lion', 'Hydra']]], '::any'],
         '::all',
         ['name']
       ]);
@@ -464,14 +611,18 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'wound',
-          attributeName: 'location',
-          operator: '::equals',
-          operand: 'arm',
+          clauses: [
+            {
+              attributeName: 'location',
+              operator: '::equals',
+              operand: 'arm',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             victim: false,
             wound: false
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('labor', 'name', [])]);
@@ -482,7 +633,7 @@ describe('QueryBuilder', () => {
           'monster',
           [
             'victim',
-            ['wound', ['location', '::equals', 'arm'], '::every'],
+            ['wound', ['::and', ['location', '::equals', 'arm']], '::every'],
             '::every'
           ],
           '::any'
@@ -497,14 +648,18 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'wound',
-          attributeName: 'location',
-          operator: '::equals',
-          operand: 'arm',
+          clauses: [
+            {
+              attributeName: 'location',
+              operator: '::equals',
+              operand: 'arm',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             victim: false,
             wound: false
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('monster', 'name', [])]);
@@ -513,7 +668,7 @@ describe('QueryBuilder', () => {
         'monster',
         [
           'victim',
-          ['wound', ['location', '::equals', 'arm'], '::every'],
+          ['wound', ['::and', ['location', '::equals', 'arm']], '::every'],
           '::every'
         ],
         '::all',
@@ -526,20 +681,24 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'victim',
-          attributeName: 'name',
-          operator: '::equals',
-          operand: 'Hercules',
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Hercules',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             victim: false
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('monster', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'monster',
-        ['victim', ['name', '::equals', 'Hercules'], '::every'],
+        ['victim', ['::and', ['name', '::equals', 'Hercules']], '::every'],
         '::all',
         ['name']
       ]);
@@ -550,14 +709,18 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'wound',
-          attributeName: 'location',
-          operator: '::equals',
-          operand: 'arm',
+          clauses: [
+            {
+              attributeName: 'location',
+              operator: '::equals',
+              operand: 'arm',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             victim: false,
             wound: false
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('prize', 'name', [])]);
@@ -570,7 +733,7 @@ describe('QueryBuilder', () => {
             'monster',
             [
               'victim',
-              ['wound', ['location', '::equals', 'arm'], '::every'],
+              ['wound', ['::and', ['location', '::equals', 'arm']], '::every'],
               '::every'
             ],
             '::any'
@@ -587,13 +750,17 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'prize',
-          attributeName: 'name',
-          operator: '::equals',
-          operand: 'Apples',
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::equals',
+              operand: 'Apples',
+              attributeType: 'text'
+            }
+          ],
           anyMap: {
             prize: false
-          },
-          attributeType: 'text'
+          }
         }
       ]);
       builder.addColumns([stamp('monster', 'name', [])]);
@@ -602,7 +769,7 @@ describe('QueryBuilder', () => {
         'monster',
         [
           'labor',
-          ['prize', ['name', '::equals', 'Apples'], '::every'],
+          ['prize', ['::and', ['name', '::equals', 'Apples']], '::every'],
           '::any'
         ],
         '::all',
@@ -615,18 +782,22 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'labor',
-          attributeName: 'name',
-          operator: '::in',
-          operand: 'Lion,Hydra',
-          anyMap: {},
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::in',
+              operand: 'Lion,Hydra',
+              attributeType: 'text'
+            }
+          ],
+          anyMap: {}
         }
       ]);
       builder.addColumns([stamp('prize', 'name', [])]);
 
       expect(builder.query()).toEqual([
         'prize',
-        ['labor', ['name', '::in', ['Lion', 'Hydra']], '::any'],
+        ['labor', ['::and', ['name', '::in', ['Lion', 'Hydra']]], '::any'],
         '::all',
         ['name']
       ]);
@@ -638,35 +809,51 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'labor',
-          attributeName: 'number',
-          operator: '::equals',
-          operand: '2',
-          anyMap: {},
-          attributeType: 'number'
+          clauses: [
+            {
+              attributeName: 'number',
+              operator: '::equals',
+              operand: '2',
+              attributeType: 'number'
+            }
+          ],
+          anyMap: {}
         },
         {
           modelName: 'labor',
-          attributeName: 'number',
-          operator: '::in',
-          operand: '1,3,5',
-          anyMap: {},
-          attributeType: 'number'
+          clauses: [
+            {
+              attributeName: 'number',
+              operator: '::in',
+              operand: '1,3,5',
+              attributeType: 'number'
+            }
+          ],
+          anyMap: {}
         },
         {
           modelName: 'labor',
-          attributeName: 'number',
-          operator: '::notin',
-          operand: '2,4,6',
-          anyMap: {},
-          attributeType: 'number'
+          clauses: [
+            {
+              attributeName: 'number',
+              operator: '::notin',
+              operand: '2,4,6',
+              attributeType: 'number'
+            }
+          ],
+          anyMap: {}
         },
         {
           modelName: 'labor',
-          attributeName: 'number',
-          operator: '::>=',
-          operand: '5,6',
-          anyMap: {},
-          attributeType: 'number'
+          clauses: [
+            {
+              attributeName: 'number',
+              operator: '::>=',
+              operand: '5,6',
+              attributeType: 'number'
+            }
+          ],
+          anyMap: {}
         }
       ]);
 
@@ -674,10 +861,10 @@ describe('QueryBuilder', () => {
         'monster',
         [
           '::and',
-          ['labor', ['number', '::equals', 2], '::any'],
-          ['labor', ['number', '::in', [1, 3, 5]], '::any'],
-          ['labor', ['number', '::notin', [2, 4, 6]], '::any'],
-          ['labor', ['number', '::>=', 5], '::any']
+          ['labor', ['::and', ['number', '::equals', 2]], '::any'],
+          ['labor', ['::and', ['number', '::in', [1, 3, 5]]], '::any'],
+          ['labor', ['::and', ['number', '::notin', [2, 4, 6]]], '::any'],
+          ['labor', ['::and', ['number', '::>=', 5]], '::any']
         ],
         '::all',
         ['name']
@@ -690,35 +877,51 @@ describe('QueryBuilder', () => {
       builder.addRecordFilters([
         {
           modelName: 'labor',
-          attributeName: 'name',
-          operator: '::equals',
-          operand: '2',
-          anyMap: {},
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::equals',
+              operand: '2',
+              attributeType: 'text'
+            }
+          ],
+          anyMap: {}
         },
         {
           modelName: 'labor',
-          attributeName: 'name',
-          operator: '::in',
-          operand: '1,3,5',
-          anyMap: {},
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::in',
+              operand: '1,3,5',
+              attributeType: 'text'
+            }
+          ],
+          anyMap: {}
         },
         {
           modelName: 'labor',
-          attributeName: 'name',
-          operator: '::notin',
-          operand: '2,4,6',
-          anyMap: {},
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::notin',
+              operand: '2,4,6',
+              attributeType: 'text'
+            }
+          ],
+          anyMap: {}
         },
         {
           modelName: 'labor',
-          attributeName: 'name',
-          operator: '::>=',
-          operand: '5,6',
-          anyMap: {},
-          attributeType: 'text'
+          clauses: [
+            {
+              attributeName: 'name',
+              operator: '::>=',
+              operand: '5,6',
+              attributeType: 'text'
+            }
+          ],
+          anyMap: {}
         }
       ]);
 
@@ -726,10 +929,10 @@ describe('QueryBuilder', () => {
         'monster',
         [
           '::and',
-          ['labor', ['name', '::equals', '2'], '::any'],
-          ['labor', ['name', '::in', ['1', '3', '5']], '::any'],
-          ['labor', ['name', '::notin', ['2', '4', '6']], '::any'],
-          ['labor', ['name', '::>=', '5,6'], '::any']
+          ['labor', ['::and', ['name', '::equals', '2']], '::any'],
+          ['labor', ['::and', ['name', '::in', ['1', '3', '5']]], '::any'],
+          ['labor', ['::and', ['name', '::notin', ['2', '4', '6']]], '::any'],
+          ['labor', ['::and', ['name', '::>=', '5,6']], '::any']
         ],
         '::all',
         ['name']

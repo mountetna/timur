@@ -93,6 +93,13 @@ const QueryFilterControl = ({
     [patchFilter, filter]
   );
 
+  const handleAddClause = useCallback(() => {
+    patchFilter({
+      ...filter,
+      clauses: [...filter.clauses].concat([{...EmptyQueryClause}])
+    });
+  }, [patchFilter, filter]);
+
   let uniqId = (idType: string): string =>
     `${idType}-Select-${Math.random().toString()}`;
 
@@ -131,7 +138,11 @@ const QueryFilterControl = ({
           <>
             <Grid>
               <Tooltip title='Add and clause' aria-label='Add and clause'>
-                <Button className={classes.paddingLeft} startIcon={<AddIcon />}>
+                <Button
+                  className={classes.paddingLeft}
+                  startIcon={<AddIcon />}
+                  onClick={handleAddClause}
+                >
                   And Clause
                 </Button>
               </Tooltip>

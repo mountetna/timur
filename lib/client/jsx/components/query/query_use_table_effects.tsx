@@ -57,7 +57,7 @@ const useTableEffects = ({
             matrixHeadings = column.slices
               .filter((slice) => isMatrixSlice(slice))
               .map((slice) => {
-                return (slice.operand as string).split(',');
+                return (slice.clauses[0].operand as string).split(',');
               })
               .flat();
           } else {
@@ -81,7 +81,7 @@ const useTableEffects = ({
       },
       []
     );
-  }, [columns, graph, expandMatrices]);
+  }, [columns, graph, expandMatrices, validationValues]);
 
   const formatRowData = useCallback(
     (allData: QueryResponse, cols: QueryTableColumn[]) => {
