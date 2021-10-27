@@ -13,13 +13,9 @@ import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import {Debouncer} from 'etna-js/utils/debouncer';
-import {
-  QueryClause,
-  QueryFilter,
-  QuerySlice
-} from '../../contexts/query/query_types';
+import {QueryClause} from '../../contexts/query/query_types';
 import FilterOperator from './query_filter_operator';
-import useFilterAttributes from './query_use_filter_attributes';
+import useQueryClause from './query_use_query_clause';
 import {QueryGraph} from '../../utils/query_graph';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,23 +28,23 @@ const useStyles = makeStyles((theme) => ({
 const QueryFilterClause = ({
   clause,
   clauseIndex,
-  modelNames,
-  isColumnFilter,
+  modelName,
   graph,
+  isColumnFilter,
   waitTime,
   eager,
-  patchFilter,
-  removeFilter
+  patchClause,
+  removeClause
 }: {
   clause: QueryClause;
   clauseIndex: number;
-  modelNames: string[];
-  isColumnFilter: boolean;
+  modelName: string;
   graph: QueryGraph;
+  isColumnFilter: boolean;
   waitTime?: number;
   eager?: boolean;
-  patchFilter: (filter: QueryFilter | QuerySlice) => void;
-  removeFilter: () => void;
+  patchClause: (clause: QueryClause) => void;
+  removeClause: () => void;
 }) => {
   const [operandValue, setOperandValue] = useState('' as string | number);
   const [previousOperandValue, setPreviousOperandValue] = useState(
@@ -66,64 +62,53 @@ const QueryFilterClause = ({
 
   const classes = useStyles();
 
-  const {modelAttributes, attributeType} = useFilterAttributes({
-    filter,
+  const {modelAttributes, attributeType} = useQueryClause({
+    clause,
+    modelName,
     graph
   });
 
   const filterOperator = useMemo(() => {
-    return new FilterOperator(attributeType, filter.operator, isColumnFilter);
-  }, [attributeType, filter.operator, isColumnFilter]);
+    return new FilterOperator(attributeType, clause.operator, isColumnFilter);
+  }, [attributeType, clause.operator, isColumnFilter]);
 
-  useEffect(() => {
-    // When user selects a different attribute, update the type
-    patchFilter({
-      ...filter,
-      attributeType
-    });
-  }, [filter.attributeName, attributeType]);
-
-  const handleModelSelect = useCallback(
-    (modelName: string) => {
-      patchFilter({
-        modelName,
-        attributeName: '',
-        clauses: [],
-        attributeType: ''
-      });
-    },
-    [patchFilter]
-  );
+  // useEffect(() => {
+  //   // When user selects a different attribute, update the type
+  //   patchClause({
+  //     ...clause,
+  //     attributeType
+  //   });
+  // }, [clause.attributeName, attributeType, clause, patchClause]);
 
   const handleAttributeSelect = useCallback(
     (attributeName: string) => {
-      patchFilter({
-        ...filter,
+      patchClause({
+        ...clause,
         attributeName,
         operator: '',
         operand: ''
       });
     },
-    [filter, patchFilter]
+    [clause, patchClause]
   );
 
   const handleOperatorSelect = useCallback(
     (operator: string) =>
-      patchFilter({
-        ...filter,
+      patchClause({
+        ...clause,
         operator: filterOperator.magmify(operator)
       }),
-    [filter, patchFilter, filterOperator]
+    [clause, patchClause, filterOperator]
   );
 
   const handleOperandChange = useCallback(
     (operand: string) => {
-      patchFilter({
-        ...filter,
+      patchClause({
+        ...clause,
         operand: filterOperator.formatOperand(operand)
       });
     },
-    [patchFilter, filter, filterOperator]
+    [patchClause, clause, filterOperator]
   );
 
   const handleOperandChangeWithDebounce = useCallback(
@@ -136,40 +121,24 @@ const QueryFilterClause = ({
 
   // When the operand value changes, follow it
   useEffect(() => {
-    if (filter.operand !== previousOperandValue) {
+    if (clause.operand !== previousOperandValue) {
       debouncer.reset();
-      setOperandValue(filter.operand);
-      setPreviousOperandValue(filter.operand);
+      setOperandValue(clause.operand);
+      setPreviousOperandValue(clause.operand);
     }
-  }, [filter.operand, debouncer, previousOperandValue]);
+  }, [clause.operand, debouncer, previousOperandValue]);
 
   let uniqId = (idType: string): string =>
     `${idType}-Select-${Math.random().toString()}`;
 
   return (
-    <>
-      <Grid item xs={3}>
-        <FormControl className={classes.fullWidth}>
-          <Select
-            labelId={uniqId('model')}
-            value={filter.modelName}
-            onChange={(e) => handleModelSelect(e.target.value as string)}
-            displayEmpty
-          >
-            {modelNames.map((name, index: number) => (
-              <MenuItem key={index} value={name}>
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item xs={3}>
+    <Grid container>
+      <Grid item xs={4}>
         <FormControl className={classes.fullWidth}>
           {modelAttributes.length > 0 ? (
             <Select
               labelId={uniqId('attribute')}
-              value={filter.attributeName}
+              value={clause.attributeName}
               onChange={(e) => handleAttributeSelect(e.target.value as string)}
               displayEmpty
             >
@@ -182,58 +151,49 @@ const QueryFilterClause = ({
           ) : null}
         </FormControl>
       </Grid>
-      <Grid item container xs={5} direction='column'>
-        {filter.clauses.map((clause: QueryClause, index: number) => {
-          return (
-            <>
-              <Grid item xs={2}>
-                <FormControl className={classes.fullWidth}>
-                  <Select
-                    labelId={uniqId(`operator-${index}`)}
-                    value={filterOperator.prettify() || ''}
-                    onChange={(e) =>
-                      handleOperatorSelect(e.target.value as string)
-                    }
-                    displayEmpty
-                  >
-                    {Object.keys(filterOperator.options())
-                      .sort()
-                      .map((operator: string, index: number) => (
-                        <MenuItem key={index} value={operator}>
-                          {operator}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={3}>
-                {filterOperator.hasOperand() ? (
-                  <FormControl className={classes.textInput}>
-                    <TextField
-                      id={uniqId(`operand-${index}`)}
-                      value={operandValue}
-                      onChange={(e) =>
-                        handleOperandChangeWithDebounce(
-                          e.target.value as string
-                        )
-                      }
-                    />
-                  </FormControl>
-                ) : null}
-              </Grid>
-            </>
-          );
-        })}
+      <Grid item xs={3}>
+        <FormControl className={classes.fullWidth}>
+          <Select
+            labelId={uniqId(`operator-${clauseIndex}`)}
+            value={filterOperator.prettify() || ''}
+            onChange={(e) => handleOperatorSelect(e.target.value as string)}
+            displayEmpty
+          >
+            {Object.keys(filterOperator.options())
+              .sort()
+              .map((operator: string, index: number) => (
+                <MenuItem key={index} value={operator}>
+                  {operator}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
       </Grid>
-
-      <Grid item xs={1} container justify='flex-end'>
-        <Tooltip title='Remove filter' aria-label='remove filter'>
-          <IconButton aria-label='remove filter' onClick={removeFilter}>
-            <ClearIcon />
-          </IconButton>
-        </Tooltip>
+      <Grid item xs={4}>
+        {filterOperator.hasOperand() ? (
+          <FormControl className={classes.textInput}>
+            <TextField
+              id={uniqId(`operand-${clauseIndex}`)}
+              value={operandValue}
+              onChange={(e) =>
+                handleOperandChangeWithDebounce(e.target.value as string)
+              }
+            />
+          </FormControl>
+        ) : null}
       </Grid>
-    </>
+      {!isColumnFilter ? (
+        <Grid item xs={1} container justify='flex-end'>
+          <Tooltip title='Remove clause' aria-label='remove clause'>
+            <IconButton aria-label='remove clause' onClick={removeClause}>
+              <ClearIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+      ) : (
+        <Grid item xs={1} />
+      )}
+    </Grid>
   );
 };
 export default QueryFilterClause;

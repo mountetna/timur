@@ -1,9 +1,7 @@
-// Generic filter component?
-// Model, attribute, operator, operand
-
-import React, {useMemo, useCallback, useState, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -11,21 +9,28 @@ import {makeStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
+import AddIcon from '@material-ui/icons/Add';
 
-import {Debouncer} from 'etna-js/utils/debouncer';
 import {
   QueryClause,
   QueryFilter,
-  QuerySlice
+  QuerySlice,
+  EmptyQueryClause
 } from '../../contexts/query/query_types';
-import FilterOperator from './query_filter_operator';
-import useQueryClause from './query_use_query_clause';
 import {QueryGraph} from '../../utils/query_graph';
+import QueryFilterClause from './query_filter_clause';
 
 const useStyles = makeStyles((theme) => ({
   textInput: {},
   fullWidth: {
     width: '80%'
+  },
+  paper: {
+    padding: '0 0.5rem',
+    marginBottom: '0.5rem'
+  },
+  paddingLeft: {
+    paddingLeft: 'calc(0.5rem - 4px)'
   }
 }));
 
@@ -44,98 +49,45 @@ const QueryFilterControl = ({
   patchFilter: (filter: QueryFilter | QuerySlice) => void;
   removeFilter: () => void;
 }) => {
-  const [operandValue, setOperandValue] = useState('' as string | number);
-  const [previousOperandValue, setPreviousOperandValue] = useState(
-    '' as string | number
-  );
-  const [debouncer, setDebouncer] = useState(
-    () => new Debouncer({windowMs: waitTime, eager})
-  );
-  // Clear the existing debouncer and accept any new changes to the settings
-  useEffect(() => {
-    const debouncer = new Debouncer({windowMs: waitTime, eager});
-    setDebouncer(debouncer);
-    return () => debouncer.reset();
-  }, [waitTime, eager]);
-
   const classes = useStyles();
-
-  const {modelAttributes, attributeType} = useQueryClause({
-    filter,
-    graph
-  });
-
-  const filterOperator = useMemo(() => {
-    return new FilterOperator(attributeType, filter.operator, isColumnFilter);
-  }, [attributeType, filter.operator, isColumnFilter]);
-
-  useEffect(() => {
-    // When user selects a different attribute, update the type
-    patchFilter({
-      ...filter,
-      attributeType
-    });
-  }, [filter.attributeName, attributeType]);
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
       patchFilter({
         modelName,
-        attributeName: '',
-        clauses: [],
-        attributeType: ''
+        clauses: [
+          {
+            ...EmptyQueryClause
+          }
+        ]
       });
     },
     [patchFilter]
   );
 
-  const handleAttributeSelect = useCallback(
-    (attributeName: string) => {
+  const handlePatchClause = useCallback(
+    (clause: QueryClause, index: number) => {
+      let updatedClauses = [...filter.clauses];
+      updatedClauses[index] = clause;
       patchFilter({
         ...filter,
-        attributeName,
-        operator: '',
-        operand: ''
+        clauses: updatedClauses
       });
     },
-    [filter, patchFilter]
+    [patchFilter, filter]
   );
 
-  const handleOperatorSelect = useCallback(
-    (operator: string) =>
+  const handleRemoveClause = useCallback(
+    (index: number) => {
+      let updatedClauses = [...filter.clauses];
+      updatedClauses.splice(index, 1);
       patchFilter({
         ...filter,
-        operator: filterOperator.magmify(operator)
-      }),
-    [filter, patchFilter, filterOperator]
-  );
-
-  const handleOperandChange = useCallback(
-    (operand: string) => {
-      patchFilter({
-        ...filter,
-        operand: filterOperator.formatOperand(operand)
+        clauses: updatedClauses
       });
     },
-    [patchFilter, filter, filterOperator]
+    [patchFilter, filter]
   );
-
-  const handleOperandChangeWithDebounce = useCallback(
-    (value: string) => {
-      debouncer.ready(() => handleOperandChange(value));
-      setOperandValue(value);
-    },
-    [handleOperandChange, debouncer]
-  );
-
-  // When the operand value changes, follow it
-  useEffect(() => {
-    if (filter.operand !== previousOperandValue) {
-      debouncer.reset();
-      setOperandValue(filter.operand);
-      setPreviousOperandValue(filter.operand);
-    }
-  }, [filter.operand, debouncer, previousOperandValue]);
 
   let uniqId = (idType: string): string =>
     `${idType}-Select-${Math.random().toString()}`;
@@ -158,68 +110,49 @@ const QueryFilterControl = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={3}>
-        <FormControl className={classes.fullWidth}>
-          {modelAttributes.length > 0 ? (
-            <Select
-              labelId={uniqId('attribute')}
-              value={filter.attributeName}
-              onChange={(e) => handleAttributeSelect(e.target.value as string)}
-              displayEmpty
-            >
-              {modelAttributes.sort().map((attr, index: number) => (
-                <MenuItem key={index} value={attr.attribute_name}>
-                  {attr.attribute_name}
-                </MenuItem>
-              ))}
-            </Select>
-          ) : null}
-        </FormControl>
-      </Grid>
-      <Grid item container xs={5} direction='column'>
-        {filter.clauses.map((clause: QueryClause, index: number) => {
-          return (
-            <>
-              <Grid item xs={2}>
-                <FormControl className={classes.fullWidth}>
-                  <Select
-                    labelId={uniqId(`operator-${index}`)}
-                    value={filterOperator.prettify() || ''}
-                    onChange={(e) =>
-                      handleOperatorSelect(e.target.value as string)
-                    }
-                    displayEmpty
-                  >
-                    {Object.keys(filterOperator.options())
-                      .sort()
-                      .map((operator: string, index: number) => (
-                        <MenuItem key={index} value={operator}>
-                          {operator}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={3}>
-                {filterOperator.hasOperand() ? (
-                  <FormControl className={classes.textInput}>
-                    <TextField
-                      id={uniqId(`operand-${index}`)}
-                      value={operandValue}
-                      onChange={(e) =>
-                        handleOperandChangeWithDebounce(
-                          e.target.value as string
-                        )
+      <Grid item container xs={8} direction='column'>
+        {isColumnFilter ? (
+          <QueryFilterClause
+            clause={filter.clauses[0]}
+            clauseIndex={0}
+            modelName={filter.modelName}
+            graph={graph}
+            isColumnFilter={isColumnFilter}
+            patchClause={(updatedClause: QueryClause) =>
+              handlePatchClause(updatedClause, 0)
+            }
+            removeClause={() => {}}
+          />
+        ) : (
+          <>
+            {filter.clauses.map((clause: QueryClause, index: number) => {
+              return (
+                <Paper className={classes.paper} key={index}>
+                  <Grid container spacing={1} alignItems='center'>
+                    <QueryFilterClause
+                      key={index}
+                      clause={clause}
+                      clauseIndex={index}
+                      modelName={filter.modelName}
+                      graph={graph}
+                      isColumnFilter={isColumnFilter}
+                      patchClause={(updatedClause: QueryClause) =>
+                        handlePatchClause(updatedClause, index)
                       }
+                      removeClause={() => handleRemoveClause(index)}
                     />
-                  </FormControl>
-                ) : null}
-              </Grid>
-            </>
-          );
-        })}
+                  </Grid>
+                </Paper>
+              );
+            })}
+            <Grid item>
+              <Button className={classes.paddingLeft} startIcon={<AddIcon />}>
+                Clause
+              </Button>
+            </Grid>
+          </>
+        )}
       </Grid>
-
       <Grid item xs={1} container justify='flex-end'>
         <Tooltip title='Remove filter' aria-label='remove filter'>
           <IconButton aria-label='remove filter' onClick={removeFilter}>

@@ -11,7 +11,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryWhereContext} from '../../contexts/query/query_where_context';
 import QueryFilterControl from './query_filter_control';
-import {QueryFilter, QuerySlice} from '../../contexts/query/query_types';
+import {
+  QueryFilter,
+  QuerySlice,
+  EmptyQueryClause
+} from '../../contexts/query/query_types';
 import QueryClause from './query_clause';
 import QueryAnyEverySelectorList from './query_any_every_selector_list';
 
@@ -20,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 10,
     paddingLeft: '1rem',
     paddingRight: '1rem'
+  },
+  paddingLeft: {
+    paddingLeft: 'calc(0.5rem - 4px)'
   }
 }));
 
@@ -45,7 +52,11 @@ const QueryWherePane = () => {
   const addNewRecordFilter = useCallback(() => {
     addRecordFilter({
       modelName: '',
-      clauses: [],
+      clauses: [
+        {
+          ...EmptyQueryClause
+        }
+      ],
       anyMap: {}
     });
   }, [addRecordFilter]);
@@ -121,16 +132,19 @@ const QueryWherePane = () => {
             <Grid item xs={3}>
               Model
             </Grid>
-            <Grid item xs={3}>
-              Attribute
+            <Grid item container xs={8}>
+              <Grid item xs={4} className={classes.paddingLeft}>
+                Attribute
+              </Grid>
+              <Grid item xs={3}>
+                Operator
+              </Grid>
+              <Grid item xs={4}>
+                Operand
+              </Grid>
+              <Grid item xs={1} />
             </Grid>
-            <Grid item xs={2}>
-              Operator
-            </Grid>
-            <Grid item xs={3}>
-              Operand
-            </Grid>
-            <Grid item xs={1}></Grid>
+            <Grid item xs={1} />
           </Grid>
         </Grid>
       ) : null}
@@ -175,8 +189,6 @@ const QueryWherePane = () => {
                   removeFilter={() => handleRemoveFilter(index)}
                 />
               </Grid>
-              <Grid item>Slices</Grid>
-              <Grid item></Grid>
             </Grid>
           </Grid>
         </Paper>

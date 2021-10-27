@@ -5,6 +5,13 @@ export interface QueryClause {
   operand: string | number;
 }
 
+export const EmptyQueryClause: QueryClause = {
+  attributeName: '',
+  operator: '',
+  operand: '',
+  attributeType: ''
+};
+
 export interface QueryBase {
   modelName: string;
   clauses: QueryClause[];
