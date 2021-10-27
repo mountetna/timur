@@ -172,7 +172,7 @@ const QueryWherePane = () => {
               />
             </Grid>
             <Grid item container xs={9} direction='column'>
-              <Grid item container>
+              <Grid item container alignItems='center' justify='flex-start'>
                 <QueryFilterControl
                   key={`${index}-${updateCounter}`}
                   filter={filter}

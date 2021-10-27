@@ -3,7 +3,8 @@ import {
   QueryColumn,
   QueryFilter,
   QuerySlice,
-  QueryBase
+  QueryBase,
+  QueryClause
 } from '../contexts/query/query_types';
 import {QueryGraph} from './query_graph';
 import QuerySimplePathBuilder from './query_simple_path_builder';
@@ -64,49 +65,54 @@ export class QueryBuilder {
     return [this.root, ...this.expandedOperands(this.recordFilters), '::count'];
   }
 
-  isNumeric(queryBase: QueryBase): boolean {
-    return queryBase.attributeType === 'number';
+  isNumeric(queryClause: QueryClause): boolean {
+    return queryClause.attributeType === 'number';
   }
 
-  serializeQueryBase(queryBase: QueryBase): any[] {
+  serializeQueryClause(queryClause: QueryClause): any[] {
     let result: any[] = [];
 
-    result.push(queryBase.attributeName);
-    result.push(queryBase.operator);
+    result.push(queryClause.attributeName);
+    result.push(queryClause.operator);
 
     if (
-      !this.isNumeric(queryBase) &&
-      FilterOperator.commaSeparatedOperators.includes(queryBase.operator)
+      !this.isNumeric(queryClause) &&
+      FilterOperator.commaSeparatedOperators.includes(queryClause.operator)
     ) {
-      result.push((queryBase.operand as string).split(','));
+      result.push((queryClause.operand as string).split(','));
     } else if (
-      FilterOperator.commaSeparatedOperators.includes(queryBase.operator) &&
-      this.isNumeric(queryBase)
+      FilterOperator.commaSeparatedOperators.includes(queryClause.operator) &&
+      this.isNumeric(queryClause)
     ) {
       result.push(
-        (queryBase.operand as string).split(',').map((o) => parseFloat(o))
+        (queryClause.operand as string).split(',').map((o) => parseFloat(o))
       );
     } else if (
-      FilterOperator.terminalInvertOperators.includes(queryBase.operator)
+      FilterOperator.terminalInvertOperators.includes(queryClause.operator)
     ) {
       // invert the model and attribute names, ignore operand
       let length = result.length;
       let tmpOperator = result[length - 1];
       result[length - 1] = result[length - 2];
       result[length - 2] = tmpOperator;
-    } else if (FilterOperator.terminalOperators.includes(queryBase.operator)) {
+    } else if (
+      FilterOperator.terminalOperators.includes(queryClause.operator)
+    ) {
       // ignore operand
-    } else if (this.isNumeric(queryBase)) {
-      result.push(parseFloat(queryBase.operand as string));
+    } else if (this.isNumeric(queryClause)) {
+      result.push(parseFloat(queryClause.operand as string));
     } else {
-      result.push(queryBase.operand);
+      result.push(queryClause.operand);
     }
 
     return result;
   }
 
   filterWithPath(filter: QueryBase, includeModelPath: boolean = true): any[] {
-    let result: any[] = this.serializeQueryBase(filter);
+    let result: any[] = [
+      '::and',
+      filter.clauses.map((clause) => this.serializeQueryClause(clause)).flat()
+    ];
 
     let path: string[] | undefined = this.filterPathWithModelPredicates(
       filter as QueryFilter
@@ -253,7 +259,9 @@ export class QueryBuilder {
       if (isMatrixSlice(matchingSlice)) {
         // For matrices (i.e. ::slice), we'll construct it
         //   a little differently.
-        predicate = predicate.concat(this.serializeQueryBase(matchingSlice));
+        predicate = predicate.concat(
+          this.serializeQueryClause(matchingSlice.clauses[0])
+        );
         // attribute name already
         // included as part of the expanded operand
         includeAttributeName = false;
@@ -265,7 +273,7 @@ export class QueryBuilder {
         predicate.splice(
           sliceModelIndex + 1,
           0,
-          this.serializeQueryBase(matchingSlice)
+          this.serializeQueryClause(matchingSlice.clauses[0])
         );
       }
     });

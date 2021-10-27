@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
   paddingLeft: {
     paddingLeft: 'calc(0.5rem - 4px)'
+  },
+  paddingBottom: {
+    paddingBottom: '0.5rem'
   }
 }));
 
@@ -125,6 +128,13 @@ const QueryFilterControl = ({
           />
         ) : (
           <>
+            <Grid className={classes.paddingBottom}>
+              <Tooltip title='Add clause' aria-label='Add clause'>
+                <Button className={classes.paddingLeft} startIcon={<AddIcon />}>
+                  Clause
+                </Button>
+              </Tooltip>
+            </Grid>
             {filter.clauses.map((clause: QueryClause, index: number) => {
               return (
                 <Paper className={classes.paper} key={index}>
@@ -145,11 +155,6 @@ const QueryFilterControl = ({
                 </Paper>
               );
             })}
-            <Grid item>
-              <Button className={classes.paddingLeft} startIcon={<AddIcon />}>
-                Clause
-              </Button>
-            </Grid>
           </>
         )}
       </Grid>
