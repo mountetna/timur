@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
-import QueryFilterControl from './query_filter_control';
+import QuerySliceControl from './query_slice_control';
 import {QuerySlice, QueryColumn} from '../../contexts/query/query_types';
 import useSliceMethods from './query_use_slice_methods';
 
@@ -71,17 +71,15 @@ const QuerySliceModelAttributePane = ({
         {column?.slices.map((slice: QuerySlice, index: number) => (
           <Paper className={classes.paper} key={index}>
             <Grid container spacing={1} alignItems='center'>
-              <QueryFilterControl
+              <QuerySliceControl
                 key={`model-${column.model_name}-${index}-${updateCounter}`}
-                filter={slice}
-                isColumnFilter={true}
+                slice={slice}
                 modelNames={sliceableModelNames}
                 graph={graph}
-                patchFilter={(updatedFilter: QuerySlice) =>
-                  handlePatchSlice(index, updatedFilter)
+                patchSlice={(updatedSlice: QuerySlice) =>
+                  handlePatchSlice(index, updatedSlice)
                 }
-                removeFilter={() => handleRemoveSlice(index)}
-                copyFilter={() => {}}
+                removeSlice={() => handleRemoveSlice(index)}
               />
             </Grid>
           </Paper>

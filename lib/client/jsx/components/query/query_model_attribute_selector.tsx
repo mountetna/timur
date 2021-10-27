@@ -4,8 +4,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
-import ClearIcon from '@material-ui/icons/Clear';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -22,6 +20,8 @@ import QuerySlicePane from './query_slice_pane';
 
 import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 import {QueryGraph} from '../../utils/query_graph';
+import RemoveIcon from './query_remove_icon';
+import CopyIcon from './query_copy_icon';
 
 const useStyles = makeStyles((theme) => ({
   fullWidth: {
@@ -29,34 +29,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120
   }
 }));
-
-const CopyColumnIcon = React.memo(
-  ({canEdit, copyColumn}: {canEdit: boolean; copyColumn: () => void}) => {
-    if (!canEdit) return null;
-
-    return (
-      <Tooltip title='Copy column' aria-label='copy column'>
-        <IconButton aria-label='copy column' onClick={copyColumn}>
-          <FileCopyIcon color='action' />
-        </IconButton>
-      </Tooltip>
-    );
-  }
-);
-
-const RemoveColumnIcon = React.memo(
-  ({canEdit, removeColumn}: {canEdit: boolean; removeColumn: () => void}) => {
-    if (!canEdit) return null;
-
-    return (
-      <Tooltip title='Remove column' aria-label='remove column'>
-        <IconButton aria-label='remove column' onClick={removeColumn}>
-          <ClearIcon color='action' />
-        </IconButton>
-      </Tooltip>
-    );
-  }
-);
 
 function id(label: string) {
   return `${label}-${Math.random()}`;
@@ -251,8 +223,12 @@ const QueryModelAttributeSelector = React.memo(
             <Grid item xs={7}></Grid>
           )}
           <Grid item container justify='flex-end' xs={1}>
-            <CopyColumnIcon canEdit={canEdit} copyColumn={onCopyColumn} />
-            <RemoveColumnIcon canEdit={canEdit} removeColumn={onRemoveColumn} />
+            <CopyIcon canEdit={canEdit} onClick={onCopyColumn} label='column' />
+            <RemoveIcon
+              canEdit={canEdit}
+              onClick={onRemoveColumn}
+              label='column'
+            />
           </Grid>
         </Grid>
       </Paper>

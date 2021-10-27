@@ -15,11 +15,12 @@ import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import {
   QueryClause,
   QueryFilter,
-  QuerySlice,
   EmptyQueryClause
 } from '../../contexts/query/query_types';
 import {QueryGraph} from '../../utils/query_graph';
 import QueryFilterClause from './query_filter_clause';
+import RemoveIcon from './query_remove_icon';
+import CopyIcon from './query_copy_icon';
 
 const useStyles = makeStyles((theme) => ({
   textInput: {},
@@ -42,19 +43,17 @@ const useStyles = makeStyles((theme) => ({
 const QueryFilterControl = ({
   filter,
   modelNames,
-  isColumnFilter,
   graph,
   patchFilter,
   removeFilter,
   copyFilter
 }: {
-  filter: QueryFilter | QuerySlice;
+  filter: QueryFilter;
   modelNames: string[];
-  isColumnFilter: boolean;
   graph: QueryGraph;
-  patchFilter: (filter: QueryFilter | QuerySlice) => void;
+  patchFilter: (filter: QueryFilter) => void;
   removeFilter: () => void;
-  copyFilter: (filter: QueryFilter | QuerySlice) => void;
+  copyFilter: (filter: QueryFilter) => void;
 }) => {
   const classes = useStyles();
 
@@ -62,6 +61,7 @@ const QueryFilterControl = ({
     (modelName: string) => {
       patchFilter({
         modelName,
+        anyMap: {},
         clauses: [
           {
             ...EmptyQueryClause
@@ -125,70 +125,45 @@ const QueryFilterControl = ({
         </FormControl>
       </Grid>
       <Grid item container xs={8} direction='column'>
-        {isColumnFilter ? (
-          <QueryFilterClause
-            clause={filter.clauses[0]}
-            clauseIndex={0}
-            modelName={filter.modelName}
-            graph={graph}
-            isColumnFilter={isColumnFilter}
-            patchClause={(updatedClause: QueryClause) =>
-              handlePatchClause(updatedClause, 0)
-            }
-            removeClause={() => {}}
-          />
-        ) : (
-          <>
-            <Grid>
-              <Tooltip title='Add and clause' aria-label='Add and clause'>
-                <Button
-                  className={classes.paddingLeft}
-                  startIcon={<AddIcon />}
-                  onClick={handleAddClause}
-                >
-                  And Clause
-                </Button>
-              </Tooltip>
-            </Grid>
-            <Grid direction='column' className={classes.grid}>
-              {filter.clauses.map((clause: QueryClause, index: number) => {
-                return (
-                  <Paper className={classes.paper} key={index}>
-                    <QueryFilterClause
-                      key={index}
-                      clause={clause}
-                      clauseIndex={index}
-                      modelName={filter.modelName}
-                      graph={graph}
-                      isColumnFilter={isColumnFilter}
-                      patchClause={(updatedClause: QueryClause) =>
-                        handlePatchClause(updatedClause, index)
-                      }
-                      removeClause={() => handleRemoveClause(index)}
-                    />
-                  </Paper>
-                );
-              })}
-            </Grid>
-          </>
-        )}
+        <Grid>
+          <Tooltip title='Add and clause' aria-label='Add and clause'>
+            <Button
+              className={classes.paddingLeft}
+              startIcon={<AddIcon />}
+              onClick={handleAddClause}
+            >
+              And Clause
+            </Button>
+          </Tooltip>
+        </Grid>
+        <Grid direction='column' className={classes.grid}>
+          {filter.clauses.map((clause: QueryClause, index: number) => {
+            return (
+              <Paper className={classes.paper} key={index}>
+                <QueryFilterClause
+                  key={index}
+                  clause={clause}
+                  clauseIndex={index}
+                  modelName={filter.modelName}
+                  graph={graph}
+                  isColumnFilter={false}
+                  patchClause={(updatedClause: QueryClause) =>
+                    handlePatchClause(updatedClause, index)
+                  }
+                  removeClause={() => handleRemoveClause(index)}
+                />
+              </Paper>
+            );
+          })}
+        </Grid>
       </Grid>
       <Grid item xs={1} container justify='flex-end'>
-        {!isColumnFilter ? (
-          <Tooltip title='Copy filter' aria-label='copy filter'>
-            <IconButton
-              aria-label='copy filter'
-              onClick={() => copyFilter(filter)}
-            >
-              <FileCopyIcon color='action' />
-            </IconButton>
-          </Tooltip>
-        ) : null}
-        <Tooltip title='Remove filter' aria-label='remove filter'>
-          <IconButton aria-label='remove filter' onClick={removeFilter}>
-            <ClearIcon />
-          </IconButton>
-        </Tooltip>
+        <CopyIcon
+          canEdit={true}
+          onClick={() => copyFilter(filter)}
+          label='filter'
+        />
+        <RemoveIcon canEdit={true} onClick={removeFilter} label='filter' />
       </Grid>
     </>
   );
