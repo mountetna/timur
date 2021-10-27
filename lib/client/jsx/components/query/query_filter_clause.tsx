@@ -5,9 +5,6 @@ import React, {useMemo, useCallback, useState, useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import {makeStyles} from '@material-ui/core/styles';
 
 import {Debouncer} from 'etna-js/utils/debouncer';
 import {QueryClause} from '../../contexts/query/query_types';
@@ -15,13 +12,7 @@ import FilterOperator from './query_filter_operator';
 import useQueryClause from './query_use_query_clause';
 import {QueryGraph} from '../../utils/query_graph';
 import RemoveIcon from './query_remove_icon';
-
-const useStyles = makeStyles((theme) => ({
-  textInput: {},
-  fullWidth: {
-    width: '80%'
-  }
-}));
+import Selector from './query_selector';
 
 const QueryFilterClause = ({
   clause,
@@ -57,8 +48,6 @@ const QueryFilterClause = ({
     setDebouncer(debouncer);
     return () => debouncer.reset();
   }, [waitTime, eager]);
-
-  const classes = useStyles();
 
   const {modelAttributes, attributeType} = useQueryClause({
     clause,
@@ -133,44 +122,28 @@ const QueryFilterClause = ({
   return (
     <Grid container spacing={1} alignItems='center'>
       <Grid item xs={4}>
-        <FormControl className={classes.fullWidth}>
-          {modelAttributes.length > 0 ? (
-            <Select
-              labelId={uniqId('attribute')}
-              value={clause.attributeName}
-              onChange={(e) => handleAttributeSelect(e.target.value as string)}
-              displayEmpty
-            >
-              {modelAttributes.sort().map((attr, index: number) => (
-                <MenuItem key={index} value={attr.attribute_name}>
-                  {attr.attribute_name}
-                </MenuItem>
-              ))}
-            </Select>
-          ) : null}
-        </FormControl>
+        {modelAttributes.length > 0 ? (
+          <Selector
+            canEdit={true}
+            label='attribute'
+            name={clause.attributeName}
+            onSelect={handleAttributeSelect}
+            choiceSet={modelAttributes.map((a) => a.attribute_name)}
+          />
+        ) : null}
       </Grid>
       <Grid item xs={3}>
-        <FormControl className={classes.fullWidth}>
-          <Select
-            labelId={uniqId(`operator-${clauseIndex}`)}
-            value={filterOperator.prettify() || ''}
-            onChange={(e) => handleOperatorSelect(e.target.value as string)}
-            displayEmpty
-          >
-            {Object.keys(filterOperator.options())
-              .sort()
-              .map((operator: string, index: number) => (
-                <MenuItem key={index} value={operator}>
-                  {operator}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
+        <Selector
+          label={`operator-${clauseIndex}`}
+          canEdit={true}
+          name={filterOperator.prettify() || ''}
+          choiceSet={Object.keys(filterOperator.options())}
+          onSelect={handleOperatorSelect}
+        />
       </Grid>
       <Grid item xs={4}>
         {filterOperator.hasOperand() ? (
-          <FormControl className={classes.textInput}>
+          <FormControl>
             <TextField
               id={uniqId(`operand-${clauseIndex}`)}
               value={operandValue}
