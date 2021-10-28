@@ -94,6 +94,19 @@ const QueryFilterControl = ({
     });
   }, [patchFilter, filter]);
 
+  const handleClauseAnySelect = useCallback(
+    (val: string, clause: QueryClause, index: number) => {
+      handlePatchClause(
+        {
+          ...clause,
+          any: val === 'Any'
+        },
+        index
+      );
+    },
+    [handlePatchClause]
+  );
+
   const modelNeighbors = useMemo(() => {
     if (!filter.modelName || filter.modelName === '') return {};
 
@@ -127,17 +140,34 @@ const QueryFilterControl = ({
           {filter.clauses.map((clause: QueryClause, index: number) => {
             return (
               <Paper className={classes.paper} key={index}>
-                <QueryFilterClause
-                  clause={clause}
-                  clauseIndex={index}
-                  graph={graph}
-                  modelNames={Object.keys(modelNeighbors)}
-                  isColumnFilter={false}
-                  patchClause={(updatedClause: QueryClause) =>
-                    handlePatchClause(updatedClause, index)
-                  }
-                  removeClause={() => handleRemoveClause(index)}
-                />
+                <Grid item container alignItems='center'>
+                  <Grid item xs={1}>
+                    {modelNeighbors[clause.modelName] ? (
+                      <Selector
+                        canEdit={true}
+                        name={clause.any ? 'Any' : 'Every'}
+                        onSelect={(val: string) =>
+                          handleClauseAnySelect(val, clause, index)
+                        }
+                        choiceSet={['Any', 'Every']}
+                        label='model'
+                      />
+                    ) : null}
+                  </Grid>
+                  <Grid item xs={11}>
+                    <QueryFilterClause
+                      clause={clause}
+                      clauseIndex={index}
+                      graph={graph}
+                      modelNames={Object.keys(modelNeighbors)}
+                      isColumnFilter={false}
+                      patchClause={(updatedClause: QueryClause) =>
+                        handlePatchClause(updatedClause, index)
+                      }
+                      removeClause={() => handleRemoveClause(index)}
+                    />
+                  </Grid>
+                </Grid>
               </Paper>
             );
           })}

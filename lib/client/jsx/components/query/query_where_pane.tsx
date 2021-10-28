@@ -4,6 +4,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 
 import {makeStyles} from '@material-ui/core/styles';
@@ -25,8 +26,12 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '1rem',
     paddingRight: '1rem'
   },
-  paddingLeft: {
-    paddingLeft: 'calc(0.5rem - 4px)'
+  clauseHeading: {
+    paddingLeft: '0.25rem'
+  },
+  clauseSubheading: {
+    color: 'gray',
+    fontSize: '0.9rem'
   }
 }));
 
@@ -123,12 +128,7 @@ const QueryWherePane = () => {
   return (
     <QueryClause title='Where'>
       {recordFilters.length > 0 ? (
-        <Grid
-          container
-          alignItems='center'
-          justify='center'
-          className={classes.header}
-        >
+        <Grid container justify='center' className={classes.header}>
           <Grid item xs={1}>
             OR
           </Grid>
@@ -139,17 +139,36 @@ const QueryWherePane = () => {
             <Grid item xs={2}>
               Model
             </Grid>
-            <Grid item container xs={9}>
-              <Grid item xs={4} className={classes.paddingLeft}>
-                Attribute
+            <Grid item xs={9} className={classes.clauseHeading}>
+              <Typography>Clauses</Typography>
+              <Grid container item>
+                <Grid
+                  item
+                  container
+                  spacing={1}
+                  alignItems='center'
+                  className={classes.clauseSubheading}
+                >
+                  <Grid item xs={1}>
+                    Any/Every
+                  </Grid>
+                  <Grid item container xs={11}>
+                    <Grid item xs={3}>
+                      Model
+                    </Grid>
+                    <Grid item xs={3}>
+                      Attribute
+                    </Grid>
+                    <Grid item xs={2}>
+                      Operator
+                    </Grid>
+                    <Grid item xs={3}>
+                      Operand
+                    </Grid>
+                    <Grid item xs={1} />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={3} className={classes.paddingLeft}>
-                Operator
-              </Grid>
-              <Grid item xs={4} className={classes.paddingLeft}>
-                Operand
-              </Grid>
-              <Grid item xs={1} />
             </Grid>
             <Grid item xs={1} />
           </Grid>

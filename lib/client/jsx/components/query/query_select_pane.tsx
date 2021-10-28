@@ -23,9 +23,6 @@ const useStyles = makeStyles((theme) => ({
   sliceSubheading: {
     color: 'gray',
     fontSize: '0.9rem'
-  },
-  paddingLeft: {
-    paddingLeft: 'calc(0.5rem - 4px)'
   }
 }));
 

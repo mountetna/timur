@@ -4,7 +4,7 @@ export interface QueryClause {
   operator: string;
   operand: string | number;
   modelName: string;
-  anyMap: QueryFilterAnyMap;
+  any: boolean;
 }
 
 export const EmptyQueryClause: QueryClause = {
@@ -13,7 +13,7 @@ export const EmptyQueryClause: QueryClause = {
   operand: '',
   attributeType: '',
   modelName: '',
-  anyMap: {}
+  any: true
 };
 
 export interface QueryBase {
