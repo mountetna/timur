@@ -108,10 +108,24 @@ export class QueryBuilder {
     return result;
   }
 
+  wrapQueryClause(filterModelName: string, clause: QueryClause): any[] {
+    const serializedClause = this.serializeQueryClause(clause);
+
+    if (filterModelName === clause.modelName) return serializedClause;
+
+    return [
+      clause.modelName,
+      serializedClause,
+      clause.any ? '::any' : '::every'
+    ];
+  }
+
   filterWithPath(filter: QueryBase, includeModelPath: boolean = true): any[] {
     let result: any[] = [
       '::and',
-      ...filter.clauses.map((clause) => this.serializeQueryClause(clause))
+      ...filter.clauses.map((clause) =>
+        this.wrapQueryClause(filter.modelName, clause)
+      )
     ];
 
     let path: string[] | undefined = this.filterPathWithModelPredicates(
@@ -269,7 +283,9 @@ export class QueryBuilder {
         // This splicing works for tables.
         // Adds in a new array for the operand before
         //   the ::first or ::all
-        let sliceModelIndex = predicate.indexOf(matchingSlice.modelName);
+        let sliceModelIndex = predicate.indexOf(
+          matchingSlice.clauses[0].modelName
+        );
         predicate.splice(
           sliceModelIndex + 1,
           0,
