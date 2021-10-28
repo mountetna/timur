@@ -199,13 +199,13 @@ export class QueryGraph {
       [modelName]: false
     };
 
-    Object.keys(this.graph.children[modelName]).forEach(
+    Object.keys(this.graph.children[modelName] || {}).forEach(
       (childNeighbor: string) => {
         results[childNeighbor] = this.stepIsOneToMany(modelName, childNeighbor);
       }
     );
 
-    Object.keys(this.graph.parents[modelName]).forEach(
+    Object.keys(this.graph.parents[modelName] || {}).forEach(
       (parentNeighbor: string) => {
         results[parentNeighbor] = this.stepIsOneToMany(
           modelName,

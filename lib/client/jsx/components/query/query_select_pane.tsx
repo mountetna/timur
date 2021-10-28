@@ -114,18 +114,25 @@ const QuerySelectPane = () => {
         </Grid>
         <Grid item xs={5} className={classes.sliceHeading}>
           <Typography>Slices</Typography>
-          <Grid container className={classes.sliceSubheading}>
-            <Grid item xs={3}>
-              Model
-            </Grid>
-            <Grid item container xs={8}>
-              <Grid item xs={4} className={classes.paddingLeft}>
+          <Grid item container>
+            <Grid
+              xs={11}
+              item
+              container
+              spacing={1}
+              alignItems='center'
+              className={classes.sliceSubheading}
+            >
+              <Grid item xs={3}>
+                Model
+              </Grid>
+              <Grid item xs={3}>
                 Attribute
               </Grid>
-              <Grid item xs={3} className={classes.paddingLeft}>
+              <Grid item xs={2}>
                 Operator
               </Grid>
-              <Grid item xs={4} className={classes.paddingLeft}>
+              <Grid item xs={3}>
                 Operand
               </Grid>
               <Grid item xs={1} />

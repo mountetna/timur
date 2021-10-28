@@ -7,8 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   fullWidth: {
-    width: '80%',
-    minWidth: 120
+    width: '80%'
   }
 }));
 
