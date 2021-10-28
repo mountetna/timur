@@ -122,7 +122,6 @@ const QueryFilterControl = ({
             return (
               <Paper className={classes.paper} key={index}>
                 <QueryFilterClause
-                  key={index}
                   clause={clause}
                   clauseIndex={index}
                   modelName={filter.modelName}
