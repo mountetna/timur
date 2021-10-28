@@ -102,7 +102,7 @@ const QueryFilterControl = ({
 
   return (
     <>
-      <Grid item xs={3}>
+      <Grid item xs={2}>
         <Selector
           canEdit={true}
           name={filter.modelName}
@@ -111,7 +111,7 @@ const QueryFilterControl = ({
           label='model'
         />
       </Grid>
-      <Grid item container xs={8} direction='column'>
+      <Grid item container xs={9} direction='column'>
         <Grid>
           <Tooltip title='Add and clause' aria-label='Add and clause'>
             <Button

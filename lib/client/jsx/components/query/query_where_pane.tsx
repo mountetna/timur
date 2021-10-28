@@ -132,14 +132,14 @@ const QueryWherePane = () => {
           <Grid item xs={1}>
             OR
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={1}>
             Any / Every
           </Grid>
-          <Grid item container xs={9}>
-            <Grid item xs={3}>
+          <Grid item container xs={10}>
+            <Grid item xs={2}>
               Model
             </Grid>
-            <Grid item container xs={8}>
+            <Grid item container xs={9}>
               <Grid item xs={4} className={classes.paddingLeft}>
                 Attribute
               </Grid>
@@ -171,14 +171,14 @@ const QueryWherePane = () => {
                 inputProps={{'aria-label': 'secondary checkbox'}}
               />
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={1}>
               <QueryAnyEverySelectorList
                 filter={filter}
                 index={index}
                 patchRecordFilter={patchRecordFilter}
               />
             </Grid>
-            <Grid item container xs={9} direction='column'>
+            <Grid item container xs={10} direction='column'>
               <Grid item container alignItems='center' justify='flex-start'>
                 <QueryFilterControl
                   key={`${index}-${updateCounter}`}
