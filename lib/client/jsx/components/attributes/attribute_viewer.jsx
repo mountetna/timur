@@ -13,6 +13,7 @@ import LinkAttribute from './link_attribute';
 import IdentifierAttribute from './identifier_attribute';
 import { IntegerAttribute, FloatAttribute } from './numeric_attribute';
 import CollectionAttribute from './collection_attribute';
+import ShiftedDateTimeAttribute from './shifted_date_time_attribute';
 
 const AttributeViewer = (props) => {
   let {attribute_name, record, revision={}, model_name, template, component } = props;
@@ -38,7 +39,8 @@ const AttributeViewer = (props) => {
     integer: IntegerAttribute,
     float: FloatAttribute,
     date_time: DateTimeAttribute,
-    string: StringAttribute
+    string: StringAttribute,
+    shifted_date_time: ShiftedDateTimeAttribute
   }[attribute.attribute_type];
 
   if (!AttributeComponent) {
