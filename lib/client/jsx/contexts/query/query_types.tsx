@@ -3,13 +3,17 @@ export interface QueryClause {
   attributeType: string;
   operator: string;
   operand: string | number;
+  modelName: string;
+  anyMap: QueryFilterAnyMap;
 }
 
 export const EmptyQueryClause: QueryClause = {
   attributeName: '',
   operator: '',
   operand: '',
-  attributeType: ''
+  attributeType: '',
+  modelName: '',
+  anyMap: {}
 };
 
 export interface QueryBase {

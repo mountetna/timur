@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 
 import {Debouncer} from 'etna-js/utils/debouncer';
-import {QueryClause} from '../../contexts/query/query_types';
+import {EmptyQueryClause, QueryClause} from '../../contexts/query/query_types';
 import FilterOperator from './query_filter_operator';
 import useQueryClause from './query_use_query_clause';
 import {QueryGraph} from '../../utils/query_graph';
@@ -17,7 +17,7 @@ import Selector from './query_selector';
 const QueryFilterClause = ({
   clause,
   clauseIndex,
-  modelName,
+  modelNames,
   graph,
   isColumnFilter,
   waitTime,
@@ -27,7 +27,7 @@ const QueryFilterClause = ({
 }: {
   clause: QueryClause;
   clauseIndex: number;
-  modelName: string;
+  modelNames: string[];
   graph: QueryGraph;
   isColumnFilter: boolean;
   waitTime?: number;
@@ -51,7 +51,6 @@ const QueryFilterClause = ({
 
   const {modelAttributes, attributeType} = useQueryClause({
     clause,
-    modelName,
     graph
   });
 
@@ -107,6 +106,16 @@ const QueryFilterClause = ({
     [handleOperandChange, debouncer]
   );
 
+  const handleModelSelect = useCallback(
+    (modelName: string) => {
+      patchClause({
+        ...EmptyQueryClause,
+        modelName
+      });
+    },
+    [patchClause]
+  );
+
   // When the operand value changes, follow it
   useEffect(() => {
     if (clause.operand !== previousOperandValue) {
@@ -121,7 +130,16 @@ const QueryFilterClause = ({
 
   return (
     <Grid container spacing={1} alignItems='center'>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
+        <Selector
+          canEdit={true}
+          name={clause.modelName}
+          onSelect={handleModelSelect}
+          choiceSet={modelNames}
+          label='model'
+        />
+      </Grid>
+      <Grid item xs={3}>
         {modelAttributes.length > 0 ? (
           <Selector
             canEdit={true}
@@ -132,7 +150,7 @@ const QueryFilterClause = ({
           />
         ) : null}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={2}>
         <Selector
           label={`operator-${clauseIndex}`}
           canEdit={true}
@@ -141,7 +159,7 @@ const QueryFilterClause = ({
           onSelect={handleOperatorSelect}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         {filterOperator.hasOperand() ? (
           <FormControl>
             <TextField

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -94,6 +94,12 @@ const QueryFilterControl = ({
     });
   }, [patchFilter, filter]);
 
+  const modelNeighbors = useMemo(() => {
+    if (!filter.modelName || filter.modelName === '') return {};
+
+    return graph.neighbors(filter.modelName);
+  }, [filter.modelName, graph]);
+
   return (
     <>
       <Grid item xs={3}>
@@ -117,15 +123,15 @@ const QueryFilterControl = ({
             </Button>
           </Tooltip>
         </Grid>
-        <Grid direction='column' className={classes.grid}>
+        <Grid container direction='column' className={classes.grid}>
           {filter.clauses.map((clause: QueryClause, index: number) => {
             return (
               <Paper className={classes.paper} key={index}>
                 <QueryFilterClause
                   clause={clause}
                   clauseIndex={index}
-                  modelName={filter.modelName}
                   graph={graph}
+                  modelNames={Object.keys(modelNeighbors)}
                   isColumnFilter={false}
                   patchClause={(updatedClause: QueryClause) =>
                     handlePatchClause(updatedClause, index)

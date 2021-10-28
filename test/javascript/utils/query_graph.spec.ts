@@ -78,6 +78,26 @@ describe('QueryGraph', () => {
     ]);
   });
 
+  it('correctly returns neighbors and one-to-many status', () => {
+    expect(graph.neighbors('monster')).toEqual({
+      labor: false,
+      habitat: false,
+      victim: true,
+      monster: false
+    });
+
+    expect(graph.neighbors('habitat')).toEqual({
+      monster: false,
+      vegetation: true,
+      habitat: false
+    });
+
+    expect(graph.neighbors('wound')).toEqual({
+      victim: false,
+      wound: false
+    });
+  });
+
   describe('for xcrs1 models', () => {
     const models = require('../fixtures/xcrs1_magma_metadata.json').models;
     beforeEach(() => {

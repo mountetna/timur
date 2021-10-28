@@ -8,21 +8,19 @@ import {QueryGraph} from '../../utils/query_graph';
 
 const useQueryClause = ({
   clause,
-  modelName,
   graph
 }: {
   clause: QueryClause;
-  modelName: string;
   graph: QueryGraph;
 }) => {
   const [template, setTemplate] = useState(null as any);
 
   useEffect(() => {
-    setTemplate(graph.template(modelName));
-  }, [modelName, graph]);
+    setTemplate(graph.template(clause.modelName));
+  }, [clause.modelName, graph]);
 
   const modelAttributes = useMemo(() => {
-    if ('' !== modelName) {
+    if ('' !== clause.modelName) {
       if (!template) return [];
 
       let sortedTemplateAttributes = visibleSortedAttributesWithUpdatedAt(
@@ -32,7 +30,7 @@ const useQueryClause = ({
       return selectAllowedModelAttributes(sortedTemplateAttributes);
     }
     return [];
-  }, [modelName, template]);
+  }, [clause.modelName, template]);
 
   const attributeType = useMemo(() => {
     if ('' !== clause.attributeName) {
