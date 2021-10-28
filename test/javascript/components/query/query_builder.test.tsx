@@ -70,7 +70,9 @@ describe('QueryBuilder', () => {
                   attributeName: 'name',
                   operator: '::equals',
                   operand: 'Athens',
-                  attributeType: 'text'
+                  attributeType: 'text',
+                  modelName: 'prize',
+                  any: true
                 }
               ]
             }
@@ -88,7 +90,9 @@ describe('QueryBuilder', () => {
                   attributeName: 'name',
                   operator: '::equals',
                   operand: 'Sparta',
-                  attributeType: 'text'
+                  attributeType: 'text',
+                  modelName: 'prize',
+                  any: true
                 }
               ]
             }
@@ -112,7 +116,9 @@ describe('QueryBuilder', () => {
               attributeName: 'year',
               operator: '::=',
               operand: 2,
-              attributeType: 'number'
+              attributeType: 'number',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}

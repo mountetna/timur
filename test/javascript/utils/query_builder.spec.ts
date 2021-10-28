@@ -59,7 +59,9 @@ describe('QueryBuilder', () => {
               attributeName: 'tube_name',
               operand: '',
               operator: '::has',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'sc_seq',
+              any: true
             }
           ],
           modelName: 'sc_seq'
@@ -99,7 +101,9 @@ describe('QueryBuilder', () => {
               attributeName: 'contributions',
               operator: '::slice',
               operand: 'Athens,Sidon',
-              attributeType: 'matrix'
+              attributeType: 'matrix',
+              modelName: 'labor',
+              any: true
             }
           ]
         }
@@ -112,7 +116,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::equals',
               operand: 'Sparta',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'prize',
+              any: true
             }
           ]
         }
@@ -128,7 +134,9 @@ describe('QueryBuilder', () => {
             attributeName: 'name',
             operator: '::in',
             operand: 'lion,hydra,apples',
-            attributeType: 'text'
+            attributeType: 'text',
+            modelName: 'labor',
+            any: true
           }
         ]
       },
@@ -140,7 +148,9 @@ describe('QueryBuilder', () => {
             attributeName: 'name',
             operator: '::equals',
             operand: 'Nemean Lion',
-            attributeType: 'text'
+            attributeType: 'text',
+            modelName: 'monster',
+            any: true
           }
         ]
       },
@@ -152,7 +162,9 @@ describe('QueryBuilder', () => {
             attributeName: 'number',
             operator: '::equals',
             operand: '2',
-            attributeType: 'number'
+            attributeType: 'number',
+            modelName: 'labor',
+            any: true
           }
         ]
       },
@@ -163,7 +175,9 @@ describe('QueryBuilder', () => {
             attributeName: 'name',
             operator: '::equals',
             operand: 'Apples',
-            attributeType: 'text'
+            attributeType: 'text',
+            modelName: 'prize',
+            any: true
           }
         ],
         anyMap: {
@@ -282,19 +296,25 @@ describe('QueryBuilder', () => {
             attributeName: 'name',
             operator: '::in',
             operand: 'lion,hydra,apples',
-            attributeType: 'text'
+            attributeType: 'text',
+            modelName: 'labor',
+            any: true
           },
           {
             attributeName: 'number',
             operator: '::>',
             operand: '2',
-            attributeType: 'number'
+            attributeType: 'number',
+            modelName: 'labor',
+            any: true
           },
           {
             attributeName: 'number',
             operator: '::<=',
             operand: '8',
-            attributeType: 'number'
+            attributeType: 'number',
+            modelName: 'labor',
+            any: true
           }
         ]
       }
@@ -329,7 +349,9 @@ describe('QueryBuilder', () => {
               attributeName: 'contributions',
               operator: '::slice',
               operand: 'Athens,Sidon',
-              attributeType: 'matrix'
+              attributeType: 'matrix',
+              modelName: 'labor',
+              any: true
             }
           ]
         }
@@ -358,7 +380,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::equals',
               operand: 'Sparta',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'prize',
+              any: true
             }
           ]
         }
@@ -372,7 +396,9 @@ describe('QueryBuilder', () => {
             attributeName: 'name',
             operator: '::in',
             operand: 'lion,hydra,apples',
-            attributeType: 'text'
+            attributeType: 'text',
+            modelName: 'labor',
+            any: true
           }
         ],
         anyMap: {}
@@ -384,7 +410,9 @@ describe('QueryBuilder', () => {
             attributeName: 'name',
             operator: '::equals',
             operand: 'Nemean Lion',
-            attributeType: 'text'
+            attributeType: 'text',
+            modelName: 'monster',
+            any: true
           }
         ],
         anyMap: {}
@@ -417,7 +445,9 @@ describe('QueryBuilder', () => {
               attributeName: 'location',
               operator: '::equals',
               operand: 'arm',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'wound',
+              any: true
             }
           ],
           anyMap: {
@@ -454,7 +484,9 @@ describe('QueryBuilder', () => {
               attributeName: 'location',
               operator: '::equals',
               operand: 'arm',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'wound',
+              any: true
             }
           ],
           anyMap: {
@@ -487,7 +519,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::equals',
               operand: 'Hercules',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'victim',
+              any: true
             }
           ],
           anyMap: {
@@ -515,7 +549,9 @@ describe('QueryBuilder', () => {
               attributeName: 'location',
               operator: '::equals',
               operand: 'arm',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'wound',
+              any: true
             }
           ],
           anyMap: {
@@ -556,7 +592,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::equals',
               operand: 'Apples',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'prize',
+              any: true
             }
           ],
           anyMap: {
@@ -588,7 +626,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::in',
               operand: 'Lion,Hydra',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -616,7 +656,9 @@ describe('QueryBuilder', () => {
               attributeName: 'location',
               operator: '::equals',
               operand: 'arm',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'wound',
+              any: true
             }
           ],
           anyMap: {
@@ -653,7 +695,9 @@ describe('QueryBuilder', () => {
               attributeName: 'location',
               operator: '::equals',
               operand: 'arm',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'wound',
+              any: true
             }
           ],
           anyMap: {
@@ -686,7 +730,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::equals',
               operand: 'Hercules',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'victim',
+              any: true
             }
           ],
           anyMap: {
@@ -714,7 +760,9 @@ describe('QueryBuilder', () => {
               attributeName: 'location',
               operator: '::equals',
               operand: 'arm',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'wound',
+              any: true
             }
           ],
           anyMap: {
@@ -755,7 +803,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::equals',
               operand: 'Apples',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'prize',
+              any: true
             }
           ],
           anyMap: {
@@ -787,7 +837,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::in',
               operand: 'Lion,Hydra',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -814,7 +866,9 @@ describe('QueryBuilder', () => {
               attributeName: 'number',
               operator: '::equals',
               operand: '2',
-              attributeType: 'number'
+              attributeType: 'number',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -826,7 +880,9 @@ describe('QueryBuilder', () => {
               attributeName: 'number',
               operator: '::in',
               operand: '1,3,5',
-              attributeType: 'number'
+              attributeType: 'number',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -838,7 +894,9 @@ describe('QueryBuilder', () => {
               attributeName: 'number',
               operator: '::notin',
               operand: '2,4,6',
-              attributeType: 'number'
+              attributeType: 'number',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -850,7 +908,9 @@ describe('QueryBuilder', () => {
               attributeName: 'number',
               operator: '::>=',
               operand: '5,6',
-              attributeType: 'number'
+              attributeType: 'number',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -882,7 +942,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::equals',
               operand: '2',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -894,7 +956,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::in',
               operand: '1,3,5',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -906,7 +970,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::notin',
               operand: '2,4,6',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -918,7 +984,9 @@ describe('QueryBuilder', () => {
               attributeName: 'name',
               operator: '::>=',
               operand: '5,6',
-              attributeType: 'text'
+              attributeType: 'text',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
