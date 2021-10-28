@@ -90,7 +90,9 @@ const QueryFilterControl = ({
   const handleAddClause = useCallback(() => {
     patchFilter({
       ...filter,
-      clauses: [...filter.clauses].concat([{...EmptyQueryClause}])
+      clauses: [...filter.clauses].concat([
+        {...EmptyQueryClause, modelName: filter.modelName}
+      ])
     });
   }, [patchFilter, filter]);
 
