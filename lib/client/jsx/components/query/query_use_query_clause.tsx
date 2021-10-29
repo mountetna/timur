@@ -13,14 +13,9 @@ const useQueryClause = ({
   clause: QueryClause;
   graph: QueryGraph;
 }) => {
-  const [template, setTemplate] = useState(null as any);
-
-  useEffect(() => {
-    setTemplate(graph.template(clause.modelName));
-  }, [clause.modelName, graph]);
-
   const modelAttributes = useMemo(() => {
     if ('' !== clause.modelName) {
+      const template = graph.template(clause.modelName);
       if (!template) return [];
 
       let sortedTemplateAttributes = visibleSortedAttributesWithUpdatedAt(
@@ -30,10 +25,11 @@ const useQueryClause = ({
       return selectAllowedModelAttributes(sortedTemplateAttributes);
     }
     return [];
-  }, [clause.modelName, template]);
+  }, [clause.modelName, graph]);
 
   const attributeType = useMemo(() => {
     if ('' !== clause.attributeName) {
+      const template = graph.template(clause.modelName);
       if (!template) return 'text';
 
       switch (
@@ -56,7 +52,7 @@ const useQueryClause = ({
       }
     }
     return 'text';
-  }, [clause.attributeName, template]);
+  }, [clause.attributeName, clause.modelName, graph]);
 
   return {
     modelAttributes,

@@ -65,16 +65,14 @@ describe('QueryBuilder', () => {
           slices: [
             {
               modelName: 'prize',
-              clauses: [
-                {
-                  attributeName: 'name',
-                  operator: '::equals',
-                  operand: 'Athens',
-                  attributeType: 'text',
-                  modelName: 'prize',
-                  any: true
-                }
-              ]
+              clause: {
+                attributeName: 'name',
+                operator: '::equals',
+                operand: 'Athens',
+                attributeType: 'text',
+                modelName: 'prize',
+                any: true
+              }
             }
           ]
         },
@@ -85,16 +83,14 @@ describe('QueryBuilder', () => {
           slices: [
             {
               modelName: 'prize',
-              clauses: [
-                {
-                  attributeName: 'name',
-                  operator: '::equals',
-                  operand: 'Sparta',
-                  attributeType: 'text',
-                  modelName: 'prize',
-                  any: true
-                }
-              ]
+              clause: {
+                attributeName: 'name',
+                operator: '::equals',
+                operand: 'Sparta',
+                attributeType: 'text',
+                modelName: 'prize',
+                any: true
+              }
             }
           ]
         }

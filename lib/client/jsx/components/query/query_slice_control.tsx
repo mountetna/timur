@@ -20,12 +20,10 @@ const QuerySliceControl = ({
   removeSlice: () => void;
 }) => {
   const handlePatchClause = useCallback(
-    (clause: QueryClause, index: number) => {
-      let updatedClauses = [...slice.clauses];
-      updatedClauses[index] = clause;
+    (clause: QueryClause) => {
       patchSlice({
         ...slice,
-        clauses: updatedClauses
+        clause
       });
     },
     [patchSlice, slice]
@@ -35,14 +33,12 @@ const QuerySliceControl = ({
     <>
       <Grid item container xs={11}>
         <QueryFilterClause
-          clause={slice.clauses[0]}
+          clause={slice.clause}
           clauseIndex={0}
           graph={graph}
           modelNames={modelNames}
           isColumnFilter={true}
-          patchClause={(updatedClause: QueryClause) =>
-            handlePatchClause(updatedClause, 0)
-          }
+          patchClause={handlePatchClause}
           removeClause={() => {}}
         />
       </Grid>

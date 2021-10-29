@@ -18,10 +18,11 @@ export const EmptyQueryClause: QueryClause = {
 
 export interface QueryBase {
   modelName: string;
-  clauses: QueryClause[];
 }
 
-export interface QuerySlice extends QueryBase {}
+export interface QuerySlice extends QueryBase {
+  clause: QueryClause;
+}
 
 export interface QueryFilterAnyMap {
   [modelName: string]: boolean;
@@ -29,6 +30,7 @@ export interface QueryFilterAnyMap {
 
 export interface QueryFilter extends QueryBase {
   anyMap: QueryFilterAnyMap;
+  clauses: QueryClause[];
 }
 
 export interface QueryColumn {

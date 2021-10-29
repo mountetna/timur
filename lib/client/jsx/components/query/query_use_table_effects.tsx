@@ -57,7 +57,7 @@ const useTableEffects = ({
             matrixHeadings = column.slices
               .filter((slice) => isMatrixSlice(slice))
               .map((slice) => {
-                return (slice.clauses[0].operand as string).split(',');
+                return (slice.clause.operand as string).split(',');
               })
               .flat();
           } else {

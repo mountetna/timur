@@ -96,31 +96,27 @@ describe('QueryBuilder', () => {
       stamp('labor', 'contributions', [
         {
           modelName: 'labor',
-          clauses: [
-            {
-              attributeName: 'contributions',
-              operator: '::slice',
-              operand: 'Athens,Sidon',
-              attributeType: 'matrix',
-              modelName: 'labor',
-              any: true
-            }
-          ]
+          clause: {
+            attributeName: 'contributions',
+            operator: '::slice',
+            operand: 'Athens,Sidon',
+            attributeType: 'matrix',
+            modelName: 'labor',
+            any: true
+          }
         }
       ]),
       stamp('prize', 'value', [
         {
           modelName: 'prize',
-          clauses: [
-            {
-              attributeName: 'name',
-              operator: '::equals',
-              operand: 'Sparta',
-              attributeType: 'text',
-              modelName: 'prize',
-              any: true
-            }
-          ]
+          clause: {
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Sparta',
+            attributeType: 'text',
+            modelName: 'prize',
+            any: true
+          }
         }
       ]),
       stamp('victim', 'country', [])
@@ -344,16 +340,14 @@ describe('QueryBuilder', () => {
       stamp('labor', 'contributions', [
         {
           modelName: 'labor',
-          clauses: [
-            {
-              attributeName: 'contributions',
-              operator: '::slice',
-              operand: 'Athens,Sidon',
-              attributeType: 'matrix',
-              modelName: 'labor',
-              any: true
-            }
-          ]
+          clause: {
+            attributeName: 'contributions',
+            operator: '::slice',
+            operand: 'Athens,Sidon',
+            attributeType: 'matrix',
+            modelName: 'labor',
+            any: true
+          }
         }
       ])
     ]);
@@ -375,16 +369,14 @@ describe('QueryBuilder', () => {
       stamp('prize', 'value', [
         {
           modelName: 'prize',
-          clauses: [
-            {
-              attributeName: 'name',
-              operator: '::equals',
-              operand: 'Sparta',
-              attributeType: 'text',
-              modelName: 'prize',
-              any: true
-            }
-          ]
+          clause: {
+            attributeName: 'name',
+            operator: '::equals',
+            operand: 'Sparta',
+            attributeType: 'text',
+            modelName: 'prize',
+            any: true
+          }
         }
       ])
     ]);

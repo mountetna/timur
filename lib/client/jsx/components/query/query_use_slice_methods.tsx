@@ -27,11 +27,9 @@ const useSliceMethods = (
       ...column,
       slices: [...(column.slices || [])].concat({
         modelName: '',
-        clauses: [
-          {
-            ...EmptyQueryClause
-          }
-        ]
+        clause: {
+          ...EmptyQueryClause
+        }
       })
     });
   }, [patchQueryColumn, column, columnIndex]);

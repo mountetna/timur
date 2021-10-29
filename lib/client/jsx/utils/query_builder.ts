@@ -120,7 +120,7 @@ export class QueryBuilder {
     ];
   }
 
-  filterWithPath(filter: QueryBase, includeModelPath: boolean = true): any[] {
+  filterWithPath(filter: QueryFilter, includeModelPath: boolean = true): any[] {
     let result: any[] = [
       '::and',
       ...filter.clauses.map((clause) =>
@@ -128,9 +128,7 @@ export class QueryBuilder {
       )
     ];
 
-    let path: string[] | undefined = this.filterPathWithModelPredicates(
-      filter as QueryFilter
-    );
+    let path: string[] | undefined = this.filterPathWithModelPredicates(filter);
     if (includeModelPath && undefined != path) {
       // Inject the current [attribute, operator, operand] into
       //   the deepest array, between [model, "::any"]...
@@ -274,7 +272,7 @@ export class QueryBuilder {
         // For matrices (i.e. ::slice), we'll construct it
         //   a little differently.
         predicate = predicate.concat(
-          this.serializeQueryClause(matchingSlice.clauses[0])
+          this.serializeQueryClause(matchingSlice.clause)
         );
         // attribute name already
         // included as part of the expanded operand
@@ -283,13 +281,11 @@ export class QueryBuilder {
         // This splicing works for tables.
         // Adds in a new array for the operand before
         //   the ::first or ::all
-        let sliceModelIndex = predicate.indexOf(
-          matchingSlice.clauses[0].modelName
-        );
+        let sliceModelIndex = predicate.indexOf(matchingSlice.clause.modelName);
         predicate.splice(
           sliceModelIndex + 1,
           0,
-          this.serializeQueryClause(matchingSlice.clauses[0])
+          this.serializeQueryClause(matchingSlice.clause)
         );
       }
     });

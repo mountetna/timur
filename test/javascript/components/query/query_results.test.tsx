@@ -70,14 +70,12 @@ describe('QueryResults', () => {
           slices: [
             {
               modelName: 'prize',
-              clauses: [
-                {
-                  attributeName: 'name',
-                  operator: '::equals',
-                  operand: 'Athens',
-                  attributeType: 'text'
-                }
-              ]
+              clause: {
+                attributeName: 'name',
+                operator: '::equals',
+                operand: 'Athens',
+                attributeType: 'text'
+              }
             }
           ]
         }
@@ -146,14 +144,12 @@ describe('QueryResults', () => {
           slices: [
             {
               modelName: 'prize',
-              clauses: [
-                {
-                  attributeName: 'name',
-                  operator: '::equals',
-                  operand: 'Athens',
-                  attributeType: 'text'
-                }
-              ]
+              clause: {
+                attributeName: 'name',
+                operator: '::equals',
+                operand: 'Athens',
+                attributeType: 'text'
+              }
             }
           ]
         },
@@ -164,14 +160,12 @@ describe('QueryResults', () => {
           slices: [
             {
               modelName: 'labor',
-              clauses: [
-                {
-                  attributeName: 'contributions',
-                  operator: '::slice',
-                  operand: 'Athens,Sparta',
-                  attributeType: 'matrix'
-                }
-              ]
+              clause: {
+                attributeName: 'contributions',
+                operator: '::slice',
+                operand: 'Athens,Sparta',
+                attributeType: 'matrix'
+              }
             }
           ]
         }
