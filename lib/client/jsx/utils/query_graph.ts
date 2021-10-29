@@ -192,9 +192,9 @@ export class QueryGraph {
     return selectableModels;
   }
 
-  neighbors(modelName: string): {[key: string]: boolean} {
-    // Returns the neighboring models (1 step away), with a boolean flag
-    //   for one-to-many relationships. Includes original model.
+  childrenMap(modelName: string): {[key: string]: boolean} {
+    // Returns the child models, with a boolean flag
+    //   for one-to-many relationships. Includes original model for convenience.
     let results: {[key: string]: boolean} = {
       [modelName]: false
     };
@@ -202,15 +202,6 @@ export class QueryGraph {
     Object.keys(this.graph.children[modelName] || {}).forEach(
       (childNeighbor: string) => {
         results[childNeighbor] = this.stepIsOneToMany(modelName, childNeighbor);
-      }
-    );
-
-    Object.keys(this.graph.parents[modelName] || {}).forEach(
-      (parentNeighbor: string) => {
-        results[parentNeighbor] = this.stepIsOneToMany(
-          modelName,
-          parentNeighbor
-        );
       }
     );
 

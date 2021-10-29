@@ -109,10 +109,10 @@ const QueryFilterControl = ({
     [handlePatchClause]
   );
 
-  const modelNeighbors = useMemo(() => {
+  const modelChildren = useMemo(() => {
     if (!filter.modelName || filter.modelName === '') return {};
 
-    return graph.neighbors(filter.modelName);
+    return graph.childrenMap(filter.modelName);
   }, [filter.modelName, graph]);
 
   return (
@@ -144,7 +144,7 @@ const QueryFilterControl = ({
               <Paper className={classes.paper} key={index}>
                 <Grid item container alignItems='center'>
                   <Grid item xs={1}>
-                    {modelNeighbors[clause.modelName] ? (
+                    {modelChildren[clause.modelName] ? (
                       <Selector
                         canEdit={true}
                         name={clause.any ? 'Any' : 'Every'}
@@ -161,7 +161,7 @@ const QueryFilterControl = ({
                       clause={clause}
                       clauseIndex={index}
                       graph={graph}
-                      modelNames={Object.keys(modelNeighbors)}
+                      modelNames={Object.keys(modelChildren)}
                       isColumnFilter={false}
                       patchClause={(updatedClause: QueryClause) =>
                         handlePatchClause(updatedClause, index)

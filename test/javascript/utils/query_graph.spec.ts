@@ -78,22 +78,19 @@ describe('QueryGraph', () => {
     ]);
   });
 
-  it('correctly returns neighbors and one-to-many status', () => {
-    expect(graph.neighbors('monster')).toEqual({
-      labor: false,
+  it('correctly returns children and one-to-many status', () => {
+    expect(graph.childrenMap('monster')).toEqual({
       habitat: false,
       victim: true,
       monster: false
     });
 
-    expect(graph.neighbors('habitat')).toEqual({
-      monster: false,
+    expect(graph.childrenMap('habitat')).toEqual({
       vegetation: true,
       habitat: false
     });
 
-    expect(graph.neighbors('wound')).toEqual({
-      victim: false,
+    expect(graph.childrenMap('wound')).toEqual({
       wound: false
     });
   });
