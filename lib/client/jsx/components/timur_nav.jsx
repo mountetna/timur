@@ -44,13 +44,12 @@ const Logo = connect(({exchanges}) => ({exchanges}))(({exchanges}) => (
   </div>
 ));
 
-const getTabs = (user, canQuery) => {
+const getTabs = (user, canUseAdvanced) => {
   let tabs = {
     browse: Routes.browse_path(CONFIG.project_name),
-    search: Routes.search_path(CONFIG.project_name),
     map: Routes.map_path(CONFIG.project_name),
-    manifests: Routes.manifests_path(CONFIG.project_name),
-    plots: Routes.plots_path(CONFIG.project_name),
+    search: Routes.search_path(CONFIG.project_name),
+    query: Routes.query_path(CONFIG.project_name),
     help: 'https://mountetna.github.io/timur.html'
   };
 
@@ -58,18 +57,19 @@ const getTabs = (user, canQuery) => {
     tabs['views'] = Routes.views_path(CONFIG.project_name);
   }
 
-  if (canQuery) {
-    tabs['query'] = Routes.query_path(CONFIG.project_name);
+  if (canUseAdvanced) {
+    tabs['manifests'] = Routes.manifests_path(CONFIG.project_name);
+    tabs['plots'] = Routes.plots_path(CONFIG.project_name);
   }
 
   return tabs;
 };
 
 const ModeBar = ({mode, user}) => {
-  const canQuery = useFeatureFlag('timurquery');
+  const canUseAdvanced = useFeatureFlag('timuradvanced');
   return (
     <div id='nav'>
-      {Object.entries(getTabs(user, canQuery)).map(([tab_name, route]) => (
+      {Object.entries(getTabs(user, canUseAdvanced)).map(([tab_name, route]) => (
         <div
           key={tab_name}
           className={`nav_tab ${mode == tab_name ? 'selected' : ''}`}
