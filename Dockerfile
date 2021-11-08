@@ -1,10 +1,10 @@
 FROM etna-base
 # Perform these steps first to allow better caching behavior
-COPY src/Gemfile src/Gemfile.lock /app/
+COPY Gemfile Gemfile.lock /app/
 RUN bundle install
-COPY src/package.json src/package-lock.json /app/
+COPY package.json package-lock.json /app/
 RUN npm install
-COPY src /app/
+COPY . /app/
 
 ARG APP_NAME
 ARG FULL_BUILD=1
