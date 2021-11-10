@@ -67,7 +67,7 @@ x-base-etna-services:
       - 'timur_app'
     command: ['httpd', '-DFOREGROUND']
     environment:
-      APP_NAME: 'timur'
+      APP_NAME: 'timur_app_fe'
 
 volumes:
   timur-db-data:
