@@ -44,13 +44,13 @@ const Logo = connect(({exchanges}) => ({exchanges}))(({exchanges}) => (
   </div>
 ));
 
-const getTabs = (user, canUseAdvanced) => {
+const getTabs = ({mode, user, canUseAdvanced}) => {
   let tabs = {
     browse: Routes.browse_path(CONFIG.project_name),
     map: Routes.map_path(CONFIG.project_name),
     search: Routes.search_path(CONFIG.project_name),
     query: Routes.query_path(CONFIG.project_name),
-    help: 'https://mountetna.github.io/timur.html'
+    help: `https://mountetna.github.io/timur.html#${mode}`
   };
 
   if (isAdmin(user, CONFIG.project_name)) {
@@ -69,7 +69,7 @@ const ModeBar = ({mode, user}) => {
   const canUseAdvanced = useFeatureFlag('timuradvanced');
   return (
     <div id='nav'>
-      {Object.entries(getTabs(user, canUseAdvanced)).map(([tab_name, route]) => (
+      {Object.entries(getTabs({mode, user, canUseAdvanced})).map(([tab_name, route]) => (
         <div
           key={tab_name}
           className={`nav_tab ${mode == tab_name ? 'selected' : ''}`}
