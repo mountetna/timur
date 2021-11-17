@@ -43,6 +43,10 @@ const useTableEffects = ({
   const formattedColumns = useMemo(() => {
     return columns.reduce(
       (acc: QueryTableColumn[], column: QueryColumn, index: number) => {
+        let template = graph.template(column.model_name);
+
+        if (!template) return acc;
+
         if (
           expandMatrices &&
           attributeIsMatrix(
@@ -67,13 +71,17 @@ const useTableEffects = ({
           matrixHeadings.forEach((heading) => {
             acc.push({
               label: `${column.display_label}.${heading}`,
-              colId: `${generateIdCol(column, index)}.${heading}`
+              colId: `${generateIdCol(column, index)}.${heading}`,
+              modelName: column.model_name,
+              attribute: template.attributes[column.attribute_name]
             });
           });
         } else {
           acc.push({
             label: column.display_label,
-            colId: generateIdCol(column, index)
+            colId: generateIdCol(column, index),
+            modelName: column.model_name,
+            attribute: template.attributes[column.attribute_name]
           });
         }
 
