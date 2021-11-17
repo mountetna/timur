@@ -23,9 +23,7 @@ const QueryTableAttributeViewer = ({
       : new URL(`https://${path}`).pathname.split('/').pop();
   }
 
-  function mockRecord(attribute: Attribute | null, value: any) {
-    if (!attribute) return {};
-
+  function mockRecord(attribute: Attribute, value: any) {
     switch (attribute.attribute_type) {
       case 'file':
       case 'image':
