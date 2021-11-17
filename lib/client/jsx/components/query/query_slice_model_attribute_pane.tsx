@@ -58,15 +58,6 @@ const QuerySliceModelAttributePane = ({
 
   return (
     <React.Fragment>
-      <Tooltip title='Add slice' aria-label='Add slice'>
-        <Button
-          aria-label='Add slice'
-          onClick={() => addNewSlice()}
-          startIcon={<AddIcon />}
-        >
-          Add slice
-        </Button>
-      </Tooltip>
       <Grid container direction='column' className={classes.grid}>
         {column?.slices.map((slice: QuerySlice, index: number) => (
           <Paper className={classes.paper} key={index}>
@@ -85,6 +76,15 @@ const QuerySliceModelAttributePane = ({
           </Paper>
         ))}
       </Grid>
+      <Tooltip title='Add slice' aria-label='Add slice'>
+        <Button
+          aria-label='Add slice'
+          onClick={() => addNewSlice()}
+          startIcon={<AddIcon />}
+        >
+          Add slice
+        </Button>
+      </Tooltip>
     </React.Fragment>
   );
 };
