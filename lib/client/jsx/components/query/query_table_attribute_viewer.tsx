@@ -11,7 +11,7 @@ const QueryTableAttributeViewer = ({
   graph,
   expandMatrices
 }: {
-  attribute: Attribute;
+  attribute: Attribute | null;
   datum: any;
   expandMatrices: boolean;
   modelName: string;
