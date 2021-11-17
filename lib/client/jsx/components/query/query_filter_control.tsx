@@ -55,7 +55,8 @@ const QueryFilterControl = ({
         anyMap: {},
         clauses: [
           {
-            ...EmptyQueryClause
+            ...EmptyQueryClause,
+            modelName
           }
         ]
       });
