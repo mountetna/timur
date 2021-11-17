@@ -11,9 +11,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import {QueryTableColumn} from '../../contexts/query/query_types';
-import AttributeViewer from '../attributes/attribute_viewer';
+import QueryTableAttributeViewer from './query_table_attribute_viewer';
 import {QueryGraph} from '../../utils/query_graph';
-import {Attribute} from 'etna-js/models/magma-model';
 
 const useStyles = makeStyles({
   table: {
@@ -51,46 +50,6 @@ const QueryTable = ({
 }) => {
   const classes = useStyles();
 
-  function filename(path: string | null) {
-    return path == null
-      ? null
-      : new URL(`https://${path}`).pathname.split('/').pop();
-  }
-
-  function mockRecord(attribute: Attribute | null, value: any) {
-    if (!attribute) return {};
-
-    switch (attribute.attribute_type) {
-      case 'file':
-      case 'image':
-        let name = filename(value);
-
-        return {
-          [attribute.attribute_name]: name
-            ? {
-                url: value,
-                original_filename: name,
-                path: name
-              }
-            : null
-        };
-      case 'file_collection':
-        return {
-          [attribute.attribute_name]: value?.map((datum: string) => {
-            return {
-              url: datum,
-              original_filename: filename(datum),
-              path: filename(datum)
-            };
-          })
-        };
-      default:
-        return {
-          [attribute.attribute_name]: value
-        };
-    }
-  }
-
   return (
     <React.Fragment>
       <Grid
@@ -126,19 +85,13 @@ const QueryTable = ({
                 <TableRow hover tabIndex={-1} key={row[0]}>
                   {row.slice(0, maxColumns).map((datum: any, index: number) => (
                     <TableCell key={index} scope='row'>
-                      {expandMatrices &&
-                      columns[index].attribute?.attribute_type == 'matrix' ? (
-                        datum?.toString()
-                      ) : (
-                        <AttributeViewer
-                          attribute_name={
-                            columns[index].attribute?.attribute_name
-                          }
-                          record={mockRecord(columns[index].attribute, datum)}
-                          model_name={columns[index].modelName}
-                          template={graph.template(columns[index].modelName)}
-                        />
-                      )}
+                      <QueryTableAttributeViewer
+                        attribute={columns[index].attribute}
+                        modelName={columns[index].modelName}
+                        expandMatrices={expandMatrices}
+                        graph={graph}
+                        datum={datum}
+                      />
                     </TableCell>
                   ))}
                 </TableRow>
