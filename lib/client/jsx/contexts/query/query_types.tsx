@@ -1,3 +1,5 @@
+import {Attribute} from 'etna-js/models/magma-model';
+
 export interface QueryClause {
   attributeName: string;
   attributeType: string;
@@ -55,4 +57,6 @@ export const EmptyQueryResponse: QueryResponse = {
 export interface QueryTableColumn {
   label: string;
   colId: string;
+  modelName: string;
+  attribute: Attribute;
 }

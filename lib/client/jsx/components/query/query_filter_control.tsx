@@ -55,7 +55,8 @@ const QueryFilterControl = ({
         anyMap: {},
         clauses: [
           {
-            ...EmptyQueryClause
+            ...EmptyQueryClause,
+            modelName
           }
         ]
       });
@@ -127,17 +128,6 @@ const QueryFilterControl = ({
         />
       </Grid>
       <Grid item container xs={9} direction='column'>
-        <Grid>
-          <Tooltip title='Add and clause' aria-label='Add and clause'>
-            <Button
-              className={classes.paddingLeft}
-              startIcon={<AddIcon />}
-              onClick={handleAddClause}
-            >
-              And Clause
-            </Button>
-          </Tooltip>
-        </Grid>
         <Grid container direction='column' className={classes.grid}>
           {filter.clauses.map((clause: QueryClause, index: number) => {
             return (
@@ -173,6 +163,17 @@ const QueryFilterControl = ({
               </Paper>
             );
           })}
+        </Grid>
+        <Grid>
+          <Tooltip title='Add and clause' aria-label='Add and clause'>
+            <Button
+              className={classes.paddingLeft}
+              startIcon={<AddIcon />}
+              onClick={handleAddClause}
+            >
+              And Clause
+            </Button>
+          </Tooltip>
         </Grid>
       </Grid>
       <Grid item xs={1} container justify='flex-end'>

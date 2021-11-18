@@ -164,6 +164,8 @@ export const pathToColumn = (
     pathToSliceOperands.push(1);
     let sliceOperands = _.at(array, pathToSliceOperands.join('.'))[0];
 
+    if (sliceOperands == null) return '-1';
+
     let sliceIndex = sliceOperands.indexOf(sliceColId);
 
     // Get rid of the extra [1] used to find the slice operands
