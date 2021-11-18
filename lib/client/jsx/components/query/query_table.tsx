@@ -2,7 +2,6 @@ import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -12,6 +11,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import {QueryTableColumn} from '../../contexts/query/query_types';
+import QueryTableAttributeViewer from './query_table_attribute_viewer';
+import {QueryGraph} from '../../utils/query_graph';
 
 const useStyles = makeStyles({
   table: {
@@ -26,6 +27,8 @@ const QueryTable = ({
   page,
   pageSize,
   maxColumns,
+  graph,
+  expandMatrices,
   handlePageChange,
   handlePageSizeChange
 }: {
@@ -35,6 +38,8 @@ const QueryTable = ({
   page: number;
   pageSize: number;
   maxColumns: number;
+  graph: QueryGraph;
+  expandMatrices: boolean;
   handlePageChange: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
     newPage: number
@@ -80,7 +85,13 @@ const QueryTable = ({
                 <TableRow hover tabIndex={-1} key={row[0]}>
                   {row.slice(0, maxColumns).map((datum: any, index: number) => (
                     <TableCell key={index} scope='row'>
-                      {datum?.toString()}
+                      <QueryTableAttributeViewer
+                        attribute={columns[index].attribute}
+                        modelName={columns[index].modelName}
+                        expandMatrices={expandMatrices}
+                        graph={graph}
+                        datum={datum}
+                      />
                     </TableCell>
                   ))}
                 </TableRow>
