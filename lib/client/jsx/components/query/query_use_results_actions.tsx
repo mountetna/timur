@@ -84,7 +84,6 @@ const useResultsActions = ({
             {}
           );
         }, []);
-
         downloadTSV(
           matrixMap,
           formattedColumns.map(({label}: {label: string}) => label),
