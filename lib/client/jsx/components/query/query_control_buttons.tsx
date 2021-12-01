@@ -117,7 +117,7 @@ const QueryControlButtons = () => {
     return builder.count();
   }, [builder]);
 
-  const {columns: formattedColumns, formatRowData} = useTableEffects({
+  const {columns: formattedColumns} = useTableEffects({
     columns,
     data,
     graph,
@@ -130,10 +130,9 @@ const QueryControlButtons = () => {
     query,
     page,
     pageSize,
-    rootModel,
-    formattedColumns,
-    setDataAndNumRecords,
-    formatRowData
+    columns,
+    expandMatrices,
+    setDataAndNumRecords
   });
 
   useEffect(() => {

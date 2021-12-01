@@ -1,4 +1,6 @@
-import React, {useContext, useCallback} from 'react';
+import React, {useContext, useCallback, useMemo} from 'react';
+
+import downloadjs from 'downloadjs';
 
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
@@ -9,7 +11,7 @@ import {ReactReduxContext} from 'react-redux';
 import {
   QueryResponse,
   EmptyQueryResponse,
-  QueryTableColumn
+  QueryColumn
 } from '../../contexts/query/query_types';
 
 const useResultsActions = ({
@@ -17,19 +19,17 @@ const useResultsActions = ({
   query,
   page,
   pageSize,
-  rootModel,
-  formattedColumns,
-  setDataAndNumRecords,
-  formatRowData
+  columns,
+  expandMatrices,
+  setDataAndNumRecords
 }: {
   countQuery: string | any[];
   query: string | any[];
   page: number;
   pageSize: number;
-  rootModel: string | null;
-  formattedColumns: QueryTableColumn[];
+  columns: QueryColumn[];
+  expandMatrices: boolean;
   setDataAndNumRecords: (data: QueryResponse, count: number) => void;
-  formatRowData: (data: QueryResponse, columns: QueryTableColumn[]) => any[];
 }) => {
   let {store} = useContext(ReactReduxContext);
   const invoke = useActionInvoker();
@@ -69,16 +69,46 @@ const useResultsActions = ({
     setDataAndNumRecords
   ]);
 
+  const userColumns = useMemo(() => {
+    let columnLabels = columns.map(
+      ({display_label}: {display_label: string}) => display_label
+    );
+
+    // We need to duplicate the identifier column when renaming,
+    //   since that is provided as the root of the question.answer.
+    return [columnLabels[0], ...columnLabels];
+  }, [columns]);
+
   const downloadData = useCallback(() => {
     if ('' === query) return;
 
-    invoke(
-      requestQueryTSV({
+    let exchange = new Exchange(store.dispatch, 'query-post-tsv-magma');
+    getAnswer(
+      {
         query,
-        user_columns: formattedColumns.map(({label}: {label: string}) => label)
+        format: 'tsv',
+        user_columns: userColumns,
+        expand_matrices: expandMatrices
+      },
+      exchange.fetch.bind(exchange)
+    )
+      .then((answer) => {
+        downloadjs(
+          answer,
+          `${
+            CONFIG.project_name
+          }-query-results-${new Date().toISOString()}.tsv`,
+          'text/tsv'
+        );
       })
-    );
-  }, [query, formattedColumns, invoke]);
+      .catch((error) => {
+        Promise.resolve(error)
+        .then((e) => {
+          console.error(e);
+          invoke(showMessages(e.errors || [e.toString()]));  
+        });
+      });
+  }, [query, userColumns, store.dispatch, invoke, expandMatrices]);
 
   return {
     runQuery,
