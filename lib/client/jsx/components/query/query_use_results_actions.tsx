@@ -3,8 +3,8 @@ import React, {useContext, useCallback} from 'react';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {getAnswer} from 'etna-js/api/magma_api';
+import {requestQueryTSV} from 'etna-js/actions/magma_actions';
 import {Exchange} from 'etna-js/actions/exchange_actions';
-import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
 import {ReactReduxContext} from 'react-redux';
 import {
   QueryResponse,
@@ -72,38 +72,13 @@ const useResultsActions = ({
   const downloadData = useCallback(() => {
     if ('' === query) return;
 
-    let exchange = new Exchange(store.dispatch, 'query-download-tsv-magma');
-    getAnswer({query}, exchange.fetch.bind(exchange))
-      .then((allData) => {
-        let rowData = formatRowData(allData, formattedColumns);
-        let matrixMap = rowData.map((row: any) => {
-          return formattedColumns.reduce(
-            (acc: MatrixDatum, {label}: {label: string}, i: number) => {
-              return {...acc, [label]: row[i]};
-            },
-            {}
-          );
-        }, []);
-        downloadTSV(
-          matrixMap,
-          formattedColumns.map(({label}: {label: string}) => label),
-          `${rootModel}-${new Date().toISOString()}` // at some point include the builder hash?
-        );
+    invoke(
+      requestQueryTSV({
+        query,
+        user_columns: formattedColumns.map(({label}: {label: string}) => label)
       })
-      .catch((e) => {
-        e.then((error: {[key: string]: string[]}) => {
-          console.error(error);
-          invoke(showMessages(error.errors || [error.error] || error));
-        });
-      });
-  }, [
-    query,
-    store.dispatch,
-    formattedColumns,
-    formatRowData,
-    invoke,
-    rootModel
-  ]);
+    );
+  }, [query, formattedColumns, invoke]);
 
   return {
     runQuery,
