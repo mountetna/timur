@@ -5,7 +5,6 @@ import downloadjs from 'downloadjs';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {getAnswer} from 'etna-js/api/magma_api';
-import {requestQueryTSV} from 'etna-js/actions/magma_actions';
 import {Exchange} from 'etna-js/actions/exchange_actions';
 import {ReactReduxContext} from 'react-redux';
 import {
@@ -102,10 +101,9 @@ const useResultsActions = ({
         );
       })
       .catch((error) => {
-        Promise.resolve(error)
-        .then((e) => {
+        Promise.resolve(error).then((e) => {
           console.error(e);
-          invoke(showMessages(e.errors || [e.toString()]));  
+          invoke(showMessages(e.errors || [e.toString()]));
         });
       });
   }, [query, userColumns, store.dispatch, invoke, expandMatrices]);
