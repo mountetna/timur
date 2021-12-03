@@ -1,10 +1,9 @@
-import React, {useContext, useCallback} from 'react';
+import React, {useCallback} from 'react';
 
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {requestAnswer} from 'etna-js/actions/magma_actions';
 import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
-import {ReactReduxContext} from 'react-redux';
 import {
   QueryResponse,
   EmptyQueryResponse,
@@ -30,7 +29,6 @@ const useResultsActions = ({
   setDataAndNumRecords: (data: QueryResponse, count: number) => void;
   formatRowData: (data: QueryResponse, columns: QueryTableColumn[]) => any[];
 }) => {
-  let {store} = useContext(ReactReduxContext);
   const invoke = useActionInvoker();
 
   const runQuery = useCallback(() => {
