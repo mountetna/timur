@@ -49,14 +49,19 @@ const QueryFilterClause = ({
     return () => debouncer.reset();
   }, [waitTime, eager]);
 
-  const {modelAttributes, attributeType} = useQueryClause({
+  const {modelAttributes, attributeType, modelType} = useQueryClause({
     clause,
     graph
   });
 
   const filterOperator = useMemo(() => {
-    return new FilterOperator(attributeType, clause.operator, isColumnFilter);
-  }, [attributeType, clause.operator, isColumnFilter]);
+    return new FilterOperator({
+      attributeType,
+      clause,
+      isColumnFilter,
+      modelType
+    });
+  }, [attributeType, clause, isColumnFilter, modelType]);
 
   useEffect(() => {
     // When user selects a different attribute, update the type

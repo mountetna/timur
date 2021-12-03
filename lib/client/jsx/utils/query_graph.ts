@@ -53,6 +53,17 @@ export class QueryGraph {
     return this.models[modelName].template;
   }
 
+  parentRelationship(modelName: string): string | null {
+    if (!Object.keys(this.models).includes(modelName)) return null;
+
+    const parentModelName = this.models[modelName].template.parent;
+
+    if (!Object.keys(this.models).includes(parentModelName)) return null;
+
+    return this.models[parentModelName].template.attributes[modelName]
+      .attribute_type;
+  }
+
   pathsFrom(modelName: string): string[][] {
     // this.allowedModels could have disconnected models that
     //   where only connected to models in the unallowedModels list,

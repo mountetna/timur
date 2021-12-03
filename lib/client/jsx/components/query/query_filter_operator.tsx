@@ -1,9 +1,10 @@
 import * as _ from 'lodash';
 
+import {QueryClause} from '../../contexts/query/query_types';
+
 export default class FilterOperator {
-  attributeType: string;
-  operator: string;
   isColumnFilter: boolean;
+  clause: QueryClause;
 
   static queryOperatorsByType: {[key: string]: {[key: string]: string}} = {
     base: {
@@ -58,39 +59,52 @@ export default class FilterOperator {
 
   static commaSeparatedOperators: string[] = ['::in', '::slice', '::notin'];
 
-  constructor(
-    attributeType: string,
-    operator: string,
-    isColumnFilter: boolean
-  ) {
-    this.attributeType = attributeType;
-    this.operator = operator;
+  static prepopulatedAttributes: {[key: string]: string[]} = {
+    table: ['name']
+  };
+
+  constructor({
+    clause,
+    isColumnFilter
+  }: {
+    clause: QueryClause;
+    isColumnFilter: boolean;
+  }) {
+    this.clause = clause;
     this.isColumnFilter = isColumnFilter;
   }
 
   hasOperand(): boolean {
     return !(
-      FilterOperator.terminalOperators.includes(this.operator) ||
-      FilterOperator.terminalInvertOperators.includes(this.operator)
+      FilterOperator.terminalOperators.includes(this.clause.operator) ||
+      FilterOperator.terminalInvertOperators.includes(this.clause.operator)
     );
+  }
+
+  hasPrepopulatedOperandOptions(): boolean {
+    if (null == this.clause.modelType) return false;
+
+    return !!FilterOperator.prepopulatedAttributes[
+      this.clause.modelType
+    ]?.includes(this.clause.attributeName);
   }
 
   optionsForAttribute(): {[key: string]: string} {
     return this.isColumnFilter &&
-      this.attributeType in FilterOperator.columnOptionsByType
-      ? FilterOperator.columnOptionsByType[this.attributeType]
+      this.clause.attributeType in FilterOperator.columnOptionsByType
+      ? FilterOperator.columnOptionsByType[this.clause.attributeType]
       : this.attrOptionsWithBaseOptions();
   }
 
   attrOptionsWithBaseOptions(): {[key: string]: string} {
     return {
       ...FilterOperator.queryOperatorsByType.base,
-      ...(FilterOperator.queryOperatorsByType[this.attributeType] || {})
+      ...(FilterOperator.queryOperatorsByType[this.clause.attributeType] || {})
     };
   }
 
   prettify(): string {
-    return _.invert(this.optionsForAttribute())[this.operator];
+    return _.invert(this.optionsForAttribute())[this.clause.operator];
   }
 
   magmify(newOperator: string): string {
