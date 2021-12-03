@@ -60,7 +60,16 @@ export default class FilterOperator {
   static commaSeparatedOperators: string[] = ['::in', '::slice', '::notin'];
 
   static prepopulatedAttributes: {[key: string]: string[]} = {
-    table: ['name']
+    table: [
+      'name',
+      'value',
+      'value_type',
+      'subtype',
+      'category',
+      'status',
+      'type',
+      'present'
+    ]
   };
 
   constructor({

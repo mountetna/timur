@@ -8,6 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 
 import {Debouncer} from 'etna-js/utils/debouncer';
 import {EmptyQueryClause, QueryClause} from '../../contexts/query/query_types';
+import {emptyQueryClauseStamp} from '../../selectors/query_selector';
 import FilterOperator from './query_filter_operator';
 import useQueryClause from './query_use_query_clause';
 import {QueryGraph} from '../../utils/query_graph';
@@ -38,6 +39,9 @@ const QueryFilterClause = ({
   const [operandValue, setOperandValue] = useState('' as string | number);
   const [previousOperandValue, setPreviousOperandValue] = useState(
     '' as string | number
+  );
+  const [prepopulatedOperandOptions, setPrepopulatedOperandOptions] = useState(
+    [] as string[]
   );
   const [debouncer, setDebouncer] = useState(
     () => new Debouncer({windowMs: waitTime, eager})
@@ -111,11 +115,7 @@ const QueryFilterClause = ({
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
-      patchClause({
-        ...EmptyQueryClause,
-        modelName,
-        modelType: graph.parentRelationship(modelName)
-      });
+      patchClause(emptyQueryClauseStamp(graph, modelName));
     },
     [patchClause, graph]
   );
@@ -166,13 +166,17 @@ const QueryFilterClause = ({
       <Grid item xs={3}>
         {filterOperator.hasOperand() ? (
           <FormControl>
-            <TextField
-              id={uniqId(`operand-${clauseIndex}`)}
-              value={operandValue}
-              onChange={(e) =>
-                handleOperandChangeWithDebounce(e.target.value as string)
-              }
-            />
+            {filterOperator.hasPrepopulatedOperandOptions() ? (
+              <div>stuff</div>
+            ) : (
+              <TextField
+                id={uniqId(`operand-${clauseIndex}`)}
+                value={operandValue}
+                onChange={(e) =>
+                  handleOperandChangeWithDebounce(e.target.value as string)
+                }
+              />
+            )}
           </FormControl>
         ) : null}
       </Grid>
