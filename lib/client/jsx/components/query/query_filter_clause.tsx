@@ -49,19 +49,17 @@ const QueryFilterClause = ({
     return () => debouncer.reset();
   }, [waitTime, eager]);
 
-  const {modelAttributes, attributeType, modelType} = useQueryClause({
+  const {modelAttributes, attributeType} = useQueryClause({
     clause,
     graph
   });
 
   const filterOperator = useMemo(() => {
     return new FilterOperator({
-      attributeType,
       clause,
-      isColumnFilter,
-      modelType
+      isColumnFilter
     });
-  }, [attributeType, clause, isColumnFilter, modelType]);
+  }, [clause, isColumnFilter]);
 
   useEffect(() => {
     // When user selects a different attribute, update the type
@@ -115,10 +113,11 @@ const QueryFilterClause = ({
     (modelName: string) => {
       patchClause({
         ...EmptyQueryClause,
-        modelName
+        modelName,
+        modelType: graph.parentRelationship(modelName)
       });
     },
-    [patchClause]
+    [patchClause, graph]
   );
 
   // When the operand value changes, follow it
