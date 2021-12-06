@@ -59,19 +59,6 @@ export default class FilterOperator {
 
   static commaSeparatedOperators: string[] = ['::in', '::slice', '::notin'];
 
-  static prepopulatedAttributes: {[key: string]: string[]} = {
-    table: [
-      'name',
-      'value',
-      'value_type',
-      'subtype',
-      'category',
-      'status',
-      'type',
-      'present'
-    ]
-  };
-
   constructor({
     clause,
     isColumnFilter
@@ -91,24 +78,39 @@ export default class FilterOperator {
   }
 
   hasPrepopulatedOperandOptions(): boolean {
-    if (null == this.clause.modelType) return false;
+    return 'string' === this.clause.attributeType;
+  }
 
-    return !!FilterOperator.prepopulatedAttributes[
-      this.clause.modelType
-    ]?.includes(this.clause.attributeName);
+  attributeInputType(): string {
+    switch (this.clause.attributeType) {
+      case 'string':
+        return 'text';
+      case 'date_time':
+        return 'date';
+      case 'integer':
+      case 'float':
+      case 'number':
+        return 'number';
+      case 'boolean':
+        return 'boolean';
+      case 'matrix':
+        return 'matrix';
+      default:
+        return 'text';
+    }
   }
 
   optionsForAttribute(): {[key: string]: string} {
     return this.isColumnFilter &&
-      this.clause.attributeType in FilterOperator.columnOptionsByType
-      ? FilterOperator.columnOptionsByType[this.clause.attributeType]
+      this.attributeInputType() in FilterOperator.columnOptionsByType
+      ? FilterOperator.columnOptionsByType[this.attributeInputType()]
       : this.attrOptionsWithBaseOptions();
   }
 
   attrOptionsWithBaseOptions(): {[key: string]: string} {
     return {
       ...FilterOperator.queryOperatorsByType.base,
-      ...(FilterOperator.queryOperatorsByType[this.clause.attributeType] || {})
+      ...(FilterOperator.queryOperatorsByType[this.attributeInputType()] || {})
     };
   }
 

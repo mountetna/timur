@@ -6,7 +6,6 @@ export interface QueryClause {
   operator: string;
   operand: string | number;
   modelName: string;
-  modelType: string | null;
   any: boolean;
 }
 
@@ -16,7 +15,6 @@ export const EmptyQueryClause: QueryClause = {
   operand: '',
   attributeType: '',
   modelName: '',
-  modelType: '',
   any: true
 };
 

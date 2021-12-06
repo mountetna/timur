@@ -37,13 +37,13 @@ const useResultsActions = ({
 
     setDataAndNumRecords(EmptyQueryResponse, 0);
     invoke(requestAnswer({query: countQuery}))
-      .then((countData: any) => {
+      .then((countData: {answer: number}) => {
         numRecords = countData.answer;
         return invoke(
           requestAnswer({query, page_size: pageSize, page: page + 1})
         );
       })
-      .then((answerData: any) => {
+      .then((answerData: QueryResponse) => {
         setDataAndNumRecords(answerData, numRecords);
         // setQueries([...queries].splice(0, 0, builder));
       })

@@ -13,12 +13,12 @@ function MatrixDataModal({attribute, row, record, template, sliceRequired}) {
 
   const sliceRegex = /^(\w+)\[\](.+)$/;
 
-  let isSliced = sliceRequired ? outputPredicate.find((p) => {
+  let isSliced = !sliceRequired ? false : outputPredicate.find((p) => {
     let match = p.match(sliceRegex);
     if (!match) return false;
 
     return match[1] === attribute.attribute_name;
-  }) : false;
+  });
 
   let viewAttribute = isSliced
     ? {...attribute, options: isSliced.match(sliceRegex)[2].split(',')}

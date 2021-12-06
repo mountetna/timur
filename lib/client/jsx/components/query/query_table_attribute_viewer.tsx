@@ -67,6 +67,8 @@ const QueryTableAttributeViewer = ({
           record={mockRecord(attribute, datum)}
           model_name={modelName}
           template={graph.template(modelName)}
+          mode='model_viewer'
+          sliceRequired={false}
         />
       )}
     </>
