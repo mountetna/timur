@@ -4,21 +4,7 @@ import MatrixAttributeFilterTable from './matrix_attribute_filter_table';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectSearchOutputPredicate} from '../../selectors/search';
 
-export default function MatrixAttributeSearchViewer(props) {
-  const {openModal} = useModal();
-
-  const openMatrixContainer = () => {
-    openModal(<MatrixDataModal {...props} />);
-  };
-
-  return (
-    <a className='matrix-open-modal-btn pointer' onClick={openMatrixContainer}>
-      View matrix row
-    </a>
-  );
-}
-
-function MatrixDataModal({attribute, row, record, template}) {
+function MatrixDataModal({attribute, row, record, template, sliceRequired}) {
   // We have to make sure to only show the options that were
   //   sliced, if an output predicate was set.
   const outputPredicate = useReduxState((state) =>
@@ -27,12 +13,12 @@ function MatrixDataModal({attribute, row, record, template}) {
 
   const sliceRegex = /^(\w+)\[\](.+)$/;
 
-  let isSliced = outputPredicate.find((p) => {
+  let isSliced = sliceRequired ? outputPredicate.find((p) => {
     let match = p.match(sliceRegex);
     if (!match) return false;
 
     return match[1] === attribute.attribute_name;
-  });
+  }) : false;
 
   let viewAttribute = isSliced
     ? {...attribute, options: isSliced.match(sliceRegex)[2].split(',')}
@@ -45,5 +31,19 @@ function MatrixDataModal({attribute, row, record, template}) {
       </div>
       <MatrixAttributeFilterTable attribute={viewAttribute} row={row} />
     </div>
+  );
+}
+
+export default function MatrixAttributeSearchViewer(props) {
+  const {openModal} = useModal();
+
+  const openMatrixContainer = () => {
+    openModal(<MatrixDataModal {...props} />);
+  };
+
+  return (
+    <a className='matrix-open-modal-btn pointer' onClick={openMatrixContainer}>
+      View matrix row
+    </a>
   );
 }
