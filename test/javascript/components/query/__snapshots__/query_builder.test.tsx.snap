@@ -472,7 +472,7 @@ exports[`QueryBuilder renders 1`] = `
                               class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
                             >
                               <div
-                                class="MuiFormControl-root"
+                                class="MuiFormControl-root MuiFormControl-fullWidth"
                               >
                                 <div
                                   class="MuiFormControl-root MuiTextField-root"
@@ -1077,7 +1077,7 @@ exports[`QueryBuilder renders 1`] = `
                           class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
                         >
                           <div
-                            class="MuiFormControl-root"
+                            class="MuiFormControl-root MuiFormControl-fullWidth"
                           >
                             <div
                               class="MuiFormControl-root MuiTextField-root"
@@ -1501,7 +1501,7 @@ exports[`QueryBuilder renders 1`] = `
                           class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
                         >
                           <div
-                            class="MuiFormControl-root"
+                            class="MuiFormControl-root MuiFormControl-fullWidth"
                           >
                             <div
                               class="MuiFormControl-root MuiTextField-root"
