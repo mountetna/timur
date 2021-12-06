@@ -59,6 +59,8 @@ export default class FilterOperator {
 
   static commaSeparatedOperators: string[] = ['::in', '::slice', '::notin'];
 
+  static numericTypes: string[] = ['number', 'integer', 'float'];
+
   constructor({
     clause,
     isColumnFilter

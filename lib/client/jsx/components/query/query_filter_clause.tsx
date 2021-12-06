@@ -179,6 +179,7 @@ const QueryFilterClause = ({
                 freeSolo
                 options={distinctAttributeValues}
                 renderInput={(params) => <TextField {...params} />}
+                onChange={(e, v) => handleOperandChangeWithDebounce(v || '')}
               />
             ) : (
               <TextField

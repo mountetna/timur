@@ -66,7 +66,7 @@ export class QueryBuilder {
   }
 
   isNumeric(queryClause: QueryClause): boolean {
-    return queryClause.attributeType === 'number';
+    return FilterOperator.numericTypes.includes(queryClause.attributeType);
   }
 
   serializeQueryClause(queryClause: QueryClause): any[] {
