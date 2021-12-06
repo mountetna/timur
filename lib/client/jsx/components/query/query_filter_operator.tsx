@@ -78,7 +78,9 @@ export default class FilterOperator {
   }
 
   hasPrepopulatedOperandOptions(): boolean {
-    return 'string' === this.clause.attributeType;
+    return (
+      'string' === this.clause.attributeType && '' !== this.clause.attributeName
+    );
   }
 
   attributeInputType(): string {

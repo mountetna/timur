@@ -48,7 +48,7 @@ const useResultsActions = ({
         // setQueries([...queries].splice(0, 0, builder));
       })
       .catch((e: any) => {
-        e.then((error: {[key: string]: string[]}) => {
+        Promise.resolve(e).then((error: {[key: string]: string[]}) => {
           console.error(error);
           invoke(showMessages(error.errors || [error.error] || error));
         });

@@ -5,9 +5,10 @@ import React, {useMemo, useCallback, useState, useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import {Debouncer} from 'etna-js/utils/debouncer';
-import {EmptyQueryClause, QueryClause} from '../../contexts/query/query_types';
+import {QueryClause} from '../../contexts/query/query_types';
 import {emptyQueryClauseStamp} from '../../selectors/query_selector';
 import FilterOperator from './query_filter_operator';
 import useQueryClause from './query_use_query_clause';
@@ -40,9 +41,6 @@ const QueryFilterClause = ({
   const [previousOperandValue, setPreviousOperandValue] = useState(
     '' as string | number
   );
-  const [prepopulatedOperandOptions, setPrepopulatedOperandOptions] = useState(
-    [] as string[]
-  );
   const [debouncer, setDebouncer] = useState(
     () => new Debouncer({windowMs: waitTime, eager})
   );
@@ -53,7 +51,12 @@ const QueryFilterClause = ({
     return () => debouncer.reset();
   }, [waitTime, eager]);
 
-  const {modelAttributes, attributeType} = useQueryClause({
+  const {
+    modelAttributes,
+    attributeType,
+    fetchDistinctAttributeValues,
+    distinctAttributeValues
+  } = useQueryClause({
     clause,
     graph
   });
@@ -67,12 +70,16 @@ const QueryFilterClause = ({
 
   useEffect(() => {
     // When user selects a different attribute, update the type
-    if (attributeType !== clause.attributeType)
-      patchClause({
+    if (attributeType !== clause.attributeType) {
+      let updatedClause = {
         ...clause,
         attributeType
-      });
-  }, [attributeType, clause, patchClause]);
+      };
+      patchClause(updatedClause);
+      console.log('updatedClause', updatedClause);
+      fetchDistinctAttributeValues(updatedClause);
+    }
+  }, [attributeType, clause, patchClause, fetchDistinctAttributeValues]);
 
   const handleAttributeSelect = useCallback(
     (attributeName: string) => {
@@ -165,9 +172,14 @@ const QueryFilterClause = ({
       </Grid>
       <Grid item xs={3}>
         {filterOperator.hasOperand() ? (
-          <FormControl>
+          <FormControl fullWidth={true}>
             {filterOperator.hasPrepopulatedOperandOptions() ? (
-              <div>stuff</div>
+              <Autocomplete
+                id={uniqId(`operand-${clauseIndex}`)}
+                freeSolo
+                options={distinctAttributeValues}
+                renderInput={(params) => <TextField {...params} />}
+              />
             ) : (
               <TextField
                 id={uniqId(`operand-${clauseIndex}`)}
