@@ -1,13 +1,14 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
+
+import downloadjs from 'downloadjs';
 
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {requestAnswer} from 'etna-js/actions/magma_actions';
-import {downloadTSV, MatrixDatum} from 'etna-js/utils/tsv';
 import {
   QueryResponse,
   EmptyQueryResponse,
-  QueryTableColumn
+  QueryColumn
 } from '../../contexts/query/query_types';
 
 const useResultsActions = ({
@@ -15,19 +16,17 @@ const useResultsActions = ({
   query,
   page,
   pageSize,
-  rootModel,
-  formattedColumns,
-  setDataAndNumRecords,
-  formatRowData
+  columns,
+  expandMatrices,
+  setDataAndNumRecords
 }: {
   countQuery: string | any[];
   query: string | any[];
   page: number;
   pageSize: number;
-  rootModel: string | null;
-  formattedColumns: QueryTableColumn[];
+  columns: QueryColumn[];
+  expandMatrices: boolean;
   setDataAndNumRecords: (data: QueryResponse, count: number) => void;
-  formatRowData: (data: QueryResponse, columns: QueryTableColumn[]) => any[];
 }) => {
   const invoke = useActionInvoker();
 
@@ -56,34 +55,43 @@ const useResultsActions = ({
       });
   }, [query, countQuery, pageSize, page, invoke, setDataAndNumRecords]);
 
+  const userColumns = useMemo(() => {
+    let columnLabels = columns.map(
+      ({display_label}: {display_label: string}) => display_label
+    );
+
+    // We need to duplicate the identifier column when renaming,
+    //   since that is provided as the root of the question.answer.
+    return [columnLabels[0], ...columnLabels];
+  }, [columns]);
+
   const downloadData = useCallback(() => {
     if ('' === query) return;
 
-    invoke(requestAnswer({query}))
-      .then((allData: any) => {
-        let rowData = formatRowData(allData, formattedColumns);
-        let matrixMap = rowData.map((row: any) => {
-          return formattedColumns.reduce(
-            (acc: MatrixDatum, {label}: {label: string}, i: number) => {
-              return {...acc, [label]: row[i]};
-            },
-            {}
-          );
-        }, []);
-
-        downloadTSV(
-          matrixMap,
-          formattedColumns.map(({label}: {label: string}) => label),
-          `${rootModel}-${new Date().toISOString()}` // at some point include the builder hash?
+    invoke(
+      requestAnswer({
+        query,
+        format: 'tsv',
+        user_columns: userColumns,
+        expand_matrices: expandMatrices
+      })
+    )
+      .then((answer: any) => {
+        downloadjs(
+          answer,
+          `${
+            CONFIG.project_name
+          }-query-results-${new Date().toISOString()}.tsv`,
+          'text/tsv'
         );
       })
-      .catch((e: any) => {
-        e.then((error: {[key: string]: string[]}) => {
-          console.error(error);
-          invoke(showMessages(error.errors || [error.error] || error));
+      .catch((error: any) => {
+        Promise.resolve(error).then((e) => {
+          console.error(e);
+          invoke(showMessages(e.errors || [e.toString()]));
         });
       });
-  }, [query, formattedColumns, formatRowData, invoke, rootModel]);
+  }, [query, userColumns, invoke, expandMatrices]);
 
   return {
     runQuery,
