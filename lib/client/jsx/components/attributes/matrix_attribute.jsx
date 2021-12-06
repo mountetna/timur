@@ -8,7 +8,7 @@ export default class MatrixAttribute extends React.Component {
   }
 
   render() {
-    let {mode, attribute, value: row, record, template} = this.props;
+    let {mode, attribute, value: row, record, template, sliceValues} = this.props;
     if (
       !['browse', 'model_viewer'].includes(mode) ||
       row.every((value) => null == value)
@@ -29,6 +29,7 @@ export default class MatrixAttribute extends React.Component {
           row={row}
           record={record}
           template={template}
+          sliceValues={sliceValues}
         />
       </div>
     );

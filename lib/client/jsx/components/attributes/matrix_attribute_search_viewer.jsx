@@ -4,7 +4,7 @@ import MatrixAttributeFilterTable from './matrix_attribute_filter_table';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {selectSearchOutputPredicate} from '../../selectors/search';
 
-function MatrixDataModal({attribute, row, record, template, sliceRequired}) {
+function MatrixDataModal({attribute, row, record, template, sliceValues}) {
   // We have to make sure to only show the options that were
   //   sliced, if an output predicate was set.
   const outputPredicate = useReduxState((state) =>
@@ -13,16 +13,26 @@ function MatrixDataModal({attribute, row, record, template, sliceRequired}) {
 
   const sliceRegex = /^(\w+)\[\](.+)$/;
 
-  let isSliced = !sliceRequired ? false : outputPredicate.find((p) => {
+  let hasPredicateSlice = outputPredicate?.find((p) => {
     let match = p.match(sliceRegex);
     if (!match) return false;
 
     return match[1] === attribute.attribute_name;
   });
 
-  let viewAttribute = isSliced
-    ? {...attribute, options: isSliced.match(sliceRegex)[2].split(',')}
-    : attribute;
+  let viewAttribute = attribute;
+  console.log('sliceValues', sliceValues, outputPredicate);
+  if (null != sliceValues) {
+    viewAttribute = {
+      ...attribute,
+      options: sliceValues
+    };
+  } else if (hasPredicateSlice) {
+    viewAttribute = {
+      ...attribute,
+      options: hasPredicateSlice.match(sliceRegex)[2].split(',')
+    };
+  }
 
   return (
     <div className='matrix-data-modal'>

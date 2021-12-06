@@ -10,7 +10,7 @@ import {
   pathToColumn,
   attributeIsMatrix,
   hasMatrixSlice,
-  isMatrixSlice
+  queryColumnMatrixHeadings
 } from '../../selectors/query_selector';
 import {QueryGraph} from '../../utils/query_graph';
 
@@ -47,33 +47,28 @@ const useTableEffects = ({
 
         if (!template) return acc;
 
-        if (
-          expandMatrices &&
-          attributeIsMatrix(
-            graph.models,
-            column.model_name,
-            column.attribute_name
-          )
-        ) {
-          let matrixHeadings: string[] = [];
+        let isMatrix: boolean = attributeIsMatrix(
+          graph.models,
+          column.model_name,
+          column.attribute_name
+        );
 
-          if (hasMatrixSlice(column)) {
-            matrixHeadings = column.slices
-              .filter((slice) => isMatrixSlice(slice))
-              .map((slice) => {
-                return (slice.clause.operand as string).split(',');
-              })
-              .flat();
-          } else {
-            matrixHeadings = validationValues(column);
-          }
+        let matrixHeadings: string[] = [];
 
+        if (hasMatrixSlice(column)) {
+          matrixHeadings = queryColumnMatrixHeadings(column);
+        } else {
+          matrixHeadings = isMatrix ? validationValues(column) : [];
+        }
+
+        if (expandMatrices && isMatrix) {
           matrixHeadings.forEach((heading) => {
             acc.push({
               label: `${column.display_label}.${heading}`,
               colId: `${generateIdCol(column, index)}.${heading}`,
               modelName: column.model_name,
-              attribute: template.attributes[column.attribute_name]
+              attribute: template.attributes[column.attribute_name],
+              matrixHeadings
             });
           });
         } else {
@@ -81,7 +76,8 @@ const useTableEffects = ({
             label: column.display_label,
             colId: generateIdCol(column, index),
             modelName: column.model_name,
-            attribute: template.attributes[column.attribute_name]
+            attribute: template.attributes[column.attribute_name],
+            matrixHeadings
           });
         }
 

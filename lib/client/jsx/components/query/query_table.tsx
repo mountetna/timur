@@ -91,6 +91,7 @@ const QueryTable = ({
                         expandMatrices={expandMatrices}
                         graph={graph}
                         datum={datum}
+                        matrixHeadings={columns[index].matrixHeadings}
                       />
                     </TableCell>
                   ))}

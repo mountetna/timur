@@ -226,3 +226,12 @@ export const emptyQueryClauseStamp = (graph: QueryGraph, modelName: string) => {
     modelType: graph.parentRelationship(modelName)
   };
 };
+
+export const queryColumnMatrixHeadings = (column: QueryColumn) => {
+  return column.slices
+    .filter((slice) => isMatrixSlice(slice))
+    .map((slice) => {
+      return (slice.clause.operand as string).split(',');
+    })
+    .flat();
+};

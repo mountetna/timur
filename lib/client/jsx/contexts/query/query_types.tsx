@@ -59,4 +59,5 @@ export interface QueryTableColumn {
   colId: string;
   modelName: string;
   attribute: Attribute;
+  matrixHeadings?: string[];
 }

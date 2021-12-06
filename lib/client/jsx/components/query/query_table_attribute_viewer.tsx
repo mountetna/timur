@@ -9,13 +9,15 @@ const QueryTableAttributeViewer = ({
   datum,
   modelName,
   graph,
-  expandMatrices
+  expandMatrices,
+  matrixHeadings
 }: {
   attribute: Attribute | null;
   datum: any;
   expandMatrices: boolean;
   modelName: string;
   graph: QueryGraph;
+  matrixHeadings: string[] | undefined;
 }) => {
   function filename(path: string | null) {
     return path == null
@@ -68,7 +70,9 @@ const QueryTableAttributeViewer = ({
           model_name={modelName}
           template={graph.template(modelName)}
           mode='model_viewer'
-          sliceRequired={false}
+          sliceValues={
+            matrixHeadings && matrixHeadings.length > 0 ? matrixHeadings : null
+          }
         />
       )}
     </>
