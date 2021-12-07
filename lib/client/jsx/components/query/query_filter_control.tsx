@@ -50,10 +50,10 @@ const QueryFilterControl = ({
       patchFilter({
         modelName,
         anyMap: {},
-        clauses: [emptyQueryClauseStamp(graph, modelName)]
+        clauses: [emptyQueryClauseStamp(modelName)]
       });
     },
-    [patchFilter, graph]
+    [patchFilter]
   );
 
   const handlePatchClause = useCallback(
@@ -84,10 +84,10 @@ const QueryFilterControl = ({
     patchFilter({
       ...filter,
       clauses: [...filter.clauses].concat([
-        emptyQueryClauseStamp(graph, filter.modelName)
+        emptyQueryClauseStamp(filter.modelName)
       ])
     });
-  }, [patchFilter, filter, graph]);
+  }, [patchFilter, filter]);
 
   const handleClauseAnySelect = useCallback(
     (val: string, clause: QueryClause, index: number) => {

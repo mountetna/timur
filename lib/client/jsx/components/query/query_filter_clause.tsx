@@ -85,7 +85,10 @@ const QueryFilterClause = ({
   useEffect(() => {
     // When component loads, if clause already populated then
     //    fetch the pre-selected attribute values.
-    if ('' !== clause.attributeName) {
+    if (
+      '' !== clause.attributeName &&
+      filterOperator.hasPrepopulatedOperandOptions()
+    ) {
       fetchDistinctAttributeValues();
     }
   }, []);
@@ -148,9 +151,9 @@ const QueryFilterClause = ({
 
   const handleModelSelect = useCallback(
     (modelName: string) => {
-      patchClause(emptyQueryClauseStamp(graph, modelName));
+      patchClause(emptyQueryClauseStamp(modelName));
     },
-    [patchClause, graph]
+    [patchClause]
   );
 
   // When the operand value changes, follow it
@@ -208,10 +211,8 @@ const QueryFilterClause = ({
                 options={distinctAttributeValues}
                 renderInput={(params) => <TextField {...params} />}
                 onInputChange={(e, v, r) => {
-                  // r is the "reason" for the event.
-                  //   reset == programmatic
-                  //   input == user typing
-                  //   clear == user clicking the X icon
+                  // Only send event if user manually clears the value
+                  //   or selects a non-empty-string option.
                   if ('' !== v || 'reset' !== r)
                     handleOperandChangeWithDebounce(v || '');
                 }}

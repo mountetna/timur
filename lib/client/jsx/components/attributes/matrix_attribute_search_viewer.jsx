@@ -20,18 +20,12 @@ function MatrixDataModal({attribute, row, record, template, sliceValues}) {
     return match[1] === attribute.attribute_name;
   });
 
-  let viewAttribute = attribute;
-  console.log('sliceValues', sliceValues, outputPredicate);
+  let viewAttribute = {...attribute};
+
   if (null != sliceValues) {
-    viewAttribute = {
-      ...attribute,
-      options: sliceValues
-    };
+    viewAttribute.options = sliceValues;
   } else if (hasPredicateSlice) {
-    viewAttribute = {
-      ...attribute,
-      options: hasPredicateSlice.match(sliceRegex)[2].split(',')
-    };
+    viewAttribute.options = hasPredicateSlice.match(sliceRegex)[2].split(',');
   }
 
   return (

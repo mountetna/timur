@@ -219,7 +219,7 @@ export const hasMatrixSlice = (column: QueryColumn) => {
   return column.slices.some((slice) => isMatrixSlice(slice));
 };
 
-export const emptyQueryClauseStamp = (graph: QueryGraph, modelName: string) => {
+export const emptyQueryClauseStamp = (modelName: string) => {
   return {
     ...EmptyQueryClause,
     modelName

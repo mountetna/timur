@@ -40,7 +40,7 @@ export const stubUrl = ({
   status: number;
   headers?: any;
   host: string;
-  times: number;
+  times?: number;
 }) => {
   nock(host)
     [verb](path, request)

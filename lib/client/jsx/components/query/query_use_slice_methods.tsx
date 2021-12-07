@@ -28,10 +28,10 @@ const useSliceMethods = (
       ...column,
       slices: [...(column.slices || [])].concat({
         modelName: '',
-        clause: emptyQueryClauseStamp(graph, '')
+        clause: emptyQueryClauseStamp('')
       })
     });
-  }, [patchQueryColumn, column, columnIndex, graph]);
+  }, [patchQueryColumn, column, columnIndex]);
 
   const handlePatchSlice = useCallback(
     (sliceIndex: number, slice: QuerySlice) => {

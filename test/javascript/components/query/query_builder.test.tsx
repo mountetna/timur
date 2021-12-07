@@ -52,8 +52,7 @@ describe('QueryBuilder', () => {
       path: '/query',
       request: (body) => true,
       status: 200,
-      response: {answer: ['Greece', 'Italy', 'France']},
-      times: 1
+      response: {answer: ['Greece', 'Italy', 'France']}
     });
 
     store = mockStore({
