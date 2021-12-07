@@ -30,18 +30,21 @@ export const stubUrl = ({
   request,
   status = 200,
   headers = {},
-  host = 'http://localhost'
+  host = 'http://localhost',
+  times = 1
 }: {
   verb: string;
   path: string;
   request: any;
   response: any;
   status: number;
-  headers: any;
+  headers?: any;
   host: string;
+  times: number;
 }) => {
   nock(host)
     [verb](path, request)
+    .times(times)
     .reply(status, response, {
       'Access-Control-Allow-Origin': '*',
       'Content-type': 'application/json',

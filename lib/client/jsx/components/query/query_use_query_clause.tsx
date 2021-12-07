@@ -4,11 +4,7 @@ import _ from 'lodash';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {requestAnswer} from 'etna-js/actions/magma_actions';
-import {
-  QueryClause,
-  QueryColumn,
-  QueryResponse
-} from '../../contexts/query/query_types';
+import {QueryClause, QueryResponse} from '../../contexts/query/query_types';
 import {selectAllowedModelAttributes} from '../../selectors/query_selector';
 import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
 import {QueryGraph} from '../../utils/query_graph';
@@ -51,11 +47,12 @@ const useQueryClause = ({
     return '';
   }, [clause.attributeName, clause.modelName, graph]);
 
-  const fetchDistinctAttributeValues = useCallback(
-    (clause: QueryClause) => {
-      if ('' === clause.modelName || '' === clause.attributeName) return;
-      if ('string' !== clause.attributeType) return;
-
+  const fetchDistinctAttributeValues = useCallback(() => {
+    if ('' === clause.modelName || '' === clause.attributeName) {
+      setDistinctAttributeValues([]);
+    } else if ('string' !== clause.attributeType) {
+      setDistinctAttributeValues([]);
+    } else {
       invoke(
         requestAnswer({
           query: [clause.modelName, '::distinct', clause.attributeName]
@@ -67,9 +64,8 @@ const useQueryClause = ({
         .catch((e: any) => {
           invoke(showMessages([e]));
         });
-    },
-    [invoke]
-  );
+    }
+  }, [clause, invoke]);
 
   return {
     modelAttributes,

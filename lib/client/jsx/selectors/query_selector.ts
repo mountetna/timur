@@ -222,8 +222,7 @@ export const hasMatrixSlice = (column: QueryColumn) => {
 export const emptyQueryClauseStamp = (graph: QueryGraph, modelName: string) => {
   return {
     ...EmptyQueryClause,
-    modelName,
-    modelType: graph.parentRelationship(modelName)
+    modelName
   };
 };
 

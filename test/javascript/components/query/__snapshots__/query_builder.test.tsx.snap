@@ -1644,6 +1644,470 @@ exports[`QueryBuilder renders 1`] = `
             </div>
           </div>
         </div>
+        <div
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <div
+            class="MuiGrid-root query-column-selector MuiGrid-container MuiGrid-align-items-xs-center"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <div
+                class="MuiFormControl-root MuiTextField-root"
+              >
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                >
+                  <input
+                    aria-invalid="false"
+                    class="MuiInputBase-input MuiInput-input"
+                    type="text"
+                    value="victim.country"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <div
+                class="MuiFormControl-root makeStyles-fullWidth"
+              >
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                >
+                  <div
+                    aria-haspopup="listbox"
+                    aria-labelledby="Join Model-0.5"
+                    class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
+                    role="button"
+                    tabindex="0"
+                  >
+                    victim
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput"
+                    tabindex="-1"
+                    value="victim"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSelect-icon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+            >
+              <div
+                class="MuiFormControl-root makeStyles-fullWidth"
+              >
+                <div
+                  aria-expanded="false"
+                  class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon"
+                  role="combobox"
+                >
+                  <div
+                    class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+                  >
+                    <div
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedEnd"
+                    >
+                      <input
+                        aria-autocomplete="list"
+                        aria-invalid="false"
+                        autocapitalize="none"
+                        autocomplete="off"
+                        class="MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd"
+                        id="Join Model-0.5-attribute"
+                        spellcheck="false"
+                        type="text"
+                        value="country"
+                      />
+                      <div
+                        class="MuiAutocomplete-endAdornment"
+                      >
+                        <button
+                          aria-label="Clear"
+                          class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator MuiAutocomplete-clearIndicatorDirty"
+                          tabindex="-1"
+                          title="Clear"
+                          type="button"
+                        >
+                          <span
+                            class="MuiIconButton-label"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+                              focusable="false"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="MuiTouchRipple-root"
+                          />
+                        </button>
+                        <button
+                          aria-label="Open"
+                          class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-popupIndicator"
+                          tabindex="-1"
+                          title="Open"
+                          type="button"
+                        >
+                          <span
+                            class="MuiIconButton-label"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root"
+                              focusable="false"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M7 10l5 5 5-5z"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="MuiTouchRipple-root"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-5"
+            >
+              <div
+                class="MuiGrid-root makeStyles-grid MuiGrid-container MuiGrid-direction-xs-column"
+              >
+                <div
+                  class="MuiPaper-root makeStyles-paper MuiPaper-elevation1 MuiPaper-rounded"
+                >
+                  <div
+                    class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
+                  >
+                    <div
+                      class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-11"
+                    >
+                      <div
+                        class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center"
+                      >
+                        <div
+                          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+                        >
+                          <div
+                            class="MuiFormControl-root makeStyles-fullWidth"
+                          >
+                            <div
+                              class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                            >
+                              <div
+                                aria-haspopup="listbox"
+                                aria-labelledby="model-0.5"
+                                class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
+                                role="button"
+                                tabindex="0"
+                              >
+                                victim
+                              </div>
+                              <input
+                                aria-hidden="true"
+                                class="MuiSelect-nativeInput"
+                                tabindex="-1"
+                                value="victim"
+                              />
+                              <svg
+                                aria-hidden="true"
+                                class="MuiSvgIcon-root MuiSelect-icon"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  d="M7 10l5 5 5-5z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+                        >
+                          <div
+                            class="MuiFormControl-root makeStyles-fullWidth"
+                          >
+                            <div
+                              class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                            >
+                              <div
+                                aria-haspopup="listbox"
+                                aria-labelledby="attribute-0.5"
+                                class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
+                                role="button"
+                                tabindex="0"
+                              >
+                                country
+                              </div>
+                              <input
+                                aria-hidden="true"
+                                class="MuiSelect-nativeInput"
+                                tabindex="-1"
+                                value="country"
+                              />
+                              <svg
+                                aria-hidden="true"
+                                class="MuiSvgIcon-root MuiSelect-icon"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  d="M7 10l5 5 5-5z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
+                        >
+                          <div
+                            class="MuiFormControl-root makeStyles-fullWidth"
+                          >
+                            <div
+                              class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                            >
+                              <div
+                                aria-haspopup="listbox"
+                                aria-labelledby="operator-0-0.5"
+                                class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
+                                role="button"
+                                tabindex="0"
+                              >
+                                Equals
+                              </div>
+                              <input
+                                aria-hidden="true"
+                                class="MuiSelect-nativeInput"
+                                tabindex="-1"
+                                value="Equals"
+                              />
+                              <svg
+                                aria-hidden="true"
+                                class="MuiSvgIcon-root MuiSelect-icon"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  d="M7 10l5 5 5-5z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+                        >
+                          <div
+                            class="MuiFormControl-root MuiFormControl-fullWidth"
+                          >
+                            <div
+                              aria-expanded="false"
+                              class="MuiAutocomplete-root MuiAutocomplete-fullWidth MuiAutocomplete-hasClearIcon"
+                              data-testid="operand-autocomplete"
+                              role="combobox"
+                            >
+                              <div
+                                class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+                              >
+                                <div
+                                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedEnd"
+                                >
+                                  <input
+                                    aria-autocomplete="list"
+                                    aria-invalid="false"
+                                    autocapitalize="none"
+                                    autocomplete="off"
+                                    class="MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd"
+                                    id="operand-0-Select-0.5"
+                                    spellcheck="false"
+                                    type="text"
+                                    value="Italy"
+                                  />
+                                  <div
+                                    class="MuiAutocomplete-endAdornment"
+                                  >
+                                    <button
+                                      aria-label="Clear"
+                                      class="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator MuiAutocomplete-clearIndicatorDirty"
+                                      tabindex="-1"
+                                      title="Clear"
+                                      type="button"
+                                    >
+                                      <span
+                                        class="MuiIconButton-label"
+                                      >
+                                        <svg
+                                          aria-hidden="true"
+                                          class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+                                          focusable="false"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <path
+                                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                                          />
+                                        </svg>
+                                      </span>
+                                      <span
+                                        class="MuiTouchRipple-root"
+                                      />
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
+                    >
+                      <button
+                        aria-label="remove slice"
+                        class="MuiButtonBase-root MuiIconButton-root"
+                        tabindex="0"
+                        title="Remove slice"
+                        type="button"
+                      >
+                        <span
+                          class="MuiIconButton-label"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="MuiSvgIcon-root MuiSvgIcon-colorAction"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          class="MuiTouchRipple-root"
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                aria-label="Add slice"
+                class="MuiButtonBase-root MuiButton-root MuiButton-text"
+                tabindex="0"
+                title="Add slice"
+                type="button"
+              >
+                <span
+                  class="MuiButton-label"
+                >
+                  <span
+                    class="MuiButton-startIcon MuiButton-iconSizeMedium"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                      />
+                    </svg>
+                  </span>
+                  Add slice
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-1"
+            >
+              <button
+                aria-label="copy column"
+                class="MuiButtonBase-root MuiIconButton-root"
+                tabindex="0"
+                title="Copy column"
+                type="button"
+              >
+                <span
+                  class="MuiIconButton-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-colorAction"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4H8c-1.1 0-1.99.9-1.99 2L6 21c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V11l-6-6zM8 21V7h6v5h5v9H8z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+              <button
+                aria-label="remove column"
+                class="MuiButtonBase-root MuiIconButton-root"
+                tabindex="0"
+                title="Remove column"
+                type="button"
+              >
+                <span
+                  class="MuiIconButton-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-colorAction"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-text query-add-column-btn"
           tabindex="0"
@@ -1702,7 +2166,7 @@ exports[`QueryBuilder renders 1`] = `
           tabindex="-1"
         >
           <div
-            style="min-width: 1px; height: 91px;"
+            style="min-width: 1px; height: 103px;"
           />
         </div>
         <div
@@ -1755,7 +2219,7 @@ exports[`QueryBuilder renders 1`] = `
                         role="presentation"
                         style="padding-right: .1px;"
                       >
-                        ["monster",["labor",["::and",["year","::=",2]],"::any"],"::all",["name",["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","prize",["name","::equals","Sparta"],"::first","name"]]]
+                        ["monster",["labor",["::and",["year","::=",2]],"::any"],"::all",["name",["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","prize",["name","::equals","Sparta"],"::first","name"],["victim",["country","::equals","Italy"],"::first","country"]]]
                       </span>
                     </pre>
                   </div>
@@ -2028,6 +2492,12 @@ exports[`QueryBuilder renders 1`] = `
                 scope="col"
               >
                 prize.name
+              </th>
+              <th
+                class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall"
+                scope="col"
+              >
+                victim.country
               </th>
             </tr>
           </thead>

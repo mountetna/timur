@@ -41,9 +41,13 @@ const QueryFilterClause = ({
   const [previousOperandValue, setPreviousOperandValue] = useState(
     '' as string | number
   );
+  const [previousAttributeName, setPreviousAttributeName] = useState(
+    clause.attributeName
+  );
   const [debouncer, setDebouncer] = useState(
     () => new Debouncer({windowMs: waitTime, eager})
   );
+
   // Clear the existing debouncer and accept any new changes to the settings
   useEffect(() => {
     const debouncer = new Debouncer({windowMs: waitTime, eager});
@@ -54,8 +58,8 @@ const QueryFilterClause = ({
   const {
     modelAttributes,
     attributeType,
-    fetchDistinctAttributeValues,
-    distinctAttributeValues
+    distinctAttributeValues,
+    fetchDistinctAttributeValues
   } = useQueryClause({
     clause,
     graph
@@ -71,15 +75,37 @@ const QueryFilterClause = ({
   useEffect(() => {
     // When user selects a different attribute, update the type
     if (attributeType !== clause.attributeType) {
-      let updatedClause = {
+      patchClause({
         ...clause,
         attributeType
-      };
-      patchClause(updatedClause);
-      console.log('updatedClause', updatedClause);
-      fetchDistinctAttributeValues(updatedClause);
+      });
     }
-  }, [attributeType, clause, patchClause, fetchDistinctAttributeValues]);
+  }, [attributeType, clause, patchClause]);
+
+  useEffect(() => {
+    // When component loads, if clause already populated then
+    //    fetch the pre-selected attribute values.
+    if ('' !== clause.attributeName) {
+      fetchDistinctAttributeValues();
+    }
+  }, []);
+
+  useEffect(() => {
+    // When user selects a different attribute, update the pre-populated options
+    if (
+      previousAttributeName !== clause.attributeName &&
+      '' !== clause.attributeName &&
+      filterOperator.hasPrepopulatedOperandOptions()
+    ) {
+      setPreviousAttributeName(clause.attributeName);
+      fetchDistinctAttributeValues();
+    }
+  }, [
+    clause.attributeName,
+    filterOperator,
+    previousAttributeName,
+    fetchDistinctAttributeValues
+  ]);
 
   const handleAttributeSelect = useCallback(
     (attributeName: string) => {
@@ -172,14 +198,25 @@ const QueryFilterClause = ({
       </Grid>
       <Grid item xs={3}>
         {filterOperator.hasOperand() ? (
-          <FormControl fullWidth={true}>
-            {filterOperator.hasPrepopulatedOperandOptions() ? (
+          <FormControl fullWidth>
+            {filterOperator.hasPrepopulatedOperandOptions() &&
+            distinctAttributeValues.length > 0 ? (
               <Autocomplete
                 id={uniqId(`operand-${clauseIndex}`)}
                 freeSolo
+                fullWidth
                 options={distinctAttributeValues}
                 renderInput={(params) => <TextField {...params} />}
-                onChange={(e, v) => handleOperandChangeWithDebounce(v || '')}
+                onInputChange={(e, v, r) => {
+                  // r is the "reason" for the event.
+                  //   reset == programmatic
+                  //   input == user typing
+                  //   clear == user clicking the X icon
+                  if ('' !== v || 'reset' !== r)
+                    handleOperandChangeWithDebounce(v || '');
+                }}
+                inputValue={operandValue.toString()}
+                data-testid='operand-autocomplete'
               />
             ) : (
               <TextField
