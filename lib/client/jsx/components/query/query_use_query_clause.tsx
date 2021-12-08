@@ -1,6 +1,7 @@
 import React, {useMemo, useState, useCallback} from 'react';
 import _ from 'lodash';
 
+import {Cancellable} from 'etna-js/utils/cancellable';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {requestAnswer} from 'etna-js/actions/magma_actions';
@@ -48,23 +49,30 @@ const useQueryClause = ({
   }, [clause.attributeName, clause.modelName, graph]);
 
   const fetchDistinctAttributeValues = useCallback(() => {
+    const cancellable = new Cancellable();
+
     if ('' === clause.modelName || '' === clause.attributeName) {
       setDistinctAttributeValues([]);
     } else if ('string' !== clause.attributeType) {
       setDistinctAttributeValues([]);
     } else {
-      invoke(
-        requestAnswer({
-          query: [clause.modelName, '::distinct', clause.attributeName]
-        })
-      )
-        .then((response: QueryResponse) => {
-          setDistinctAttributeValues(response.answer);
+      cancellable
+        .race(
+          invoke(
+            requestAnswer({
+              query: [clause.modelName, '::distinct', clause.attributeName]
+            })
+          )
+        )
+        .then(({result, cancelled}: any) => {
+          if (result && !cancelled) setDistinctAttributeValues(result.answer);
         })
         .catch((e: any) => {
           invoke(showMessages([e]));
         });
     }
+
+    return () => cancellable.cancel();
   }, [clause, invoke]);
 
   return {
