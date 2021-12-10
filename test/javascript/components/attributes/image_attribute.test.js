@@ -67,7 +67,9 @@ describe('ImageAttribute', () => {
   });
 
   it('does not render action buttons while not editing', () => {
-    const value = null;
+    const value = {
+      url: 'https://example.com?HMAC-header=foo'
+    };
 
     const component = mount(
       <Provider store={store}>
@@ -84,8 +86,11 @@ describe('ImageAttribute', () => {
       </Provider>
     );
 
-    const buttons = component.find('file-buttons');
+    const buttons = component.find('.file-buttons');
     expect(buttons.exists()).toBeFalsy();
+
+    const thumbnail = component.find('.image-thumbnail');
+    expect(thumbnail.exists()).toBeTruthy();
 
     const tree = renderer
       .create(
@@ -144,7 +149,8 @@ describe('ImageAttribute', () => {
       </Provider>
     );
 
-    expect(component.text().trim()).toEqual('Blank file');
+    const thumbnail = component.find('.image-thumbnail');
+    expect(thumbnail.exists()).toBeTruthy();
 
     const tree = renderer
       .create(
@@ -166,8 +172,8 @@ describe('ImageAttribute', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('renders "missing file" correctly while not editing', () => {
-    const value = null;
+  it('renders blank paths correctly while not editing', () => {
+    let value = {path: '::blank'};
 
     const component = mount(
       <Provider store={store}>
@@ -184,7 +190,7 @@ describe('ImageAttribute', () => {
       </Provider>
     );
 
-    expect(component.text().trim()).toEqual('No file');
+    expect(component.text().trim()).toEqual('Blank file');
 
     const tree = renderer
       .create(
@@ -228,7 +234,7 @@ describe('ImageAttribute', () => {
       </Provider>
     );
 
-    expect(component.text().trim()).toEqual('conquest.txt (text/plain)');
+    expect(component.text().trim()).toEqual('No file');
 
     const tree = renderer
       .create(

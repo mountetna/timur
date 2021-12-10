@@ -2,54 +2,32 @@
 
 exports[`ImageAttribute does not render action buttons while not editing 1`] = `
 <div
-  className="attribute file"
+  className="attribute"
 >
-  <span
-    className="file-missing"
-  >
-     No file 
-  </span>
-</div>
-`;
 
-exports[`ImageAttribute renders "missing file" correctly while not editing 1`] = `
-<div
-  className="attribute file"
->
-  <span
-    className="file-missing"
+  <a
+    href="https://example.com?HMAC-header=foo"
   >
-     No file 
-  </span>
+    <img
+      className="image-thumbnail"
+      src="https://example.com?HMAC-header=foo&thumbnail=true"
+    />
+  </a>
+
 </div>
 `;
 
 exports[`ImageAttribute renders blank paths correctly while not editing 1`] = `
 <div
-  className="attribute file"
+  className="attribute"
 >
+
   <span
     className="file-blank"
   >
-     Blank file 
+     Blank file
   </span>
-</div>
-`;
 
-exports[`ImageAttribute renders existing files correctly when not editing 1`] = `
-<div
-  className="attribute file"
->
-  <span
-    className="file-upload"
-  >
-     
-    conquest.txt
-     (
-    text/plain
-    )
-     
-  </span>
 </div>
 `;
 
@@ -202,7 +180,7 @@ exports[`ImageAttribute renders upload meter and controls when uploading 1`] = `
           >
             NaN undefinediB
           </span>
-           of 
+           of
           NaN undefinediB
         </div>
         <div
