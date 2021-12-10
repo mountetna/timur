@@ -9,7 +9,10 @@ export default function TsvOptionsModal({options, onDownload}) {
       <div className='options-tray tray'>
         {options.map((option, index) => {
           return (
-            <label className='expand-matrices' key={index}>
+            <label
+              className={`${option.label.toLowerCase().replaceAll(' ', '_')}`}
+              key={index}
+            >
               <input
                 checked={option.checked}
                 onChange={() => option.onChange(!option.checked)}
