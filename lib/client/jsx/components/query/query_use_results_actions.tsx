@@ -2,6 +2,7 @@ import React, {useCallback, useMemo} from 'react';
 
 import downloadjs from 'downloadjs';
 
+import {useModal} from 'etna-js/components/ModalDialogContainer';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 import {showMessages} from 'etna-js/actions/message_actions';
 import {requestAnswer} from 'etna-js/actions/magma_actions';
@@ -29,6 +30,7 @@ const useResultsActions = ({
   setDataAndNumRecords: (data: QueryResponse, count: number) => void;
 }) => {
   const invoke = useActionInvoker();
+  const {dismissModal} = useModal();
 
   const runQuery = useCallback(() => {
     if ('' === countQuery || '' === query) return;
@@ -65,33 +67,38 @@ const useResultsActions = ({
     return [columnLabels[0], ...columnLabels];
   }, [columns]);
 
-  const downloadData = useCallback(() => {
-    if ('' === query) return;
+  const downloadData = useCallback(
+    ({transpose}: {transpose: boolean}) => {
+      if ('' === query) return;
 
-    invoke(
-      requestAnswer({
-        query,
-        format: 'tsv',
-        user_columns: userColumns,
-        expand_matrices: expandMatrices
-      })
-    )
-      .then((answer: any) => {
-        downloadjs(
-          answer,
-          `${
-            CONFIG.project_name
-          }-query-results-${new Date().toISOString()}.tsv`,
-          'text/tsv'
-        );
-      })
-      .catch((error: any) => {
-        Promise.resolve(error).then((e) => {
-          console.error(e);
-          invoke(showMessages(e.errors || [e.toString()]));
+      invoke(
+        requestAnswer({
+          query,
+          format: 'tsv',
+          user_columns: userColumns,
+          expand_matrices: expandMatrices,
+          transpose
+        })
+      )
+        .then((answer: any) => {
+          downloadjs(
+            answer,
+            `${
+              CONFIG.project_name
+            }-query-results-${new Date().toISOString()}.tsv`,
+            'text/tsv'
+          );
+          dismissModal();
+        })
+        .catch((error: any) => {
+          Promise.resolve(error).then((e) => {
+            console.error(e);
+            invoke(showMessages(e.errors || [e.toString()]));
+          });
         });
-      });
-  }, [query, userColumns, invoke, expandMatrices]);
+    },
+    [query, userColumns, invoke, expandMatrices, dismissModal]
+  );
 
   return {
     runQuery,
