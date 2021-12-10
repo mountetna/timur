@@ -3,7 +3,6 @@ import React from 'react';
 import DisabledButton from './disabled_button';
 
 export default function TsvOptionsModal({options, onDownload}) {
-  console.log('options', options);
   return (
     <div className='tsv-options-modal'>
       <div className='header'>TSV Download Options</div>
