@@ -4,7 +4,6 @@ exports[`ImageAttribute does not render action buttons while not editing 1`] = `
 <div
   className="attribute"
 >
-
   <a
     href="https://example.com?HMAC-header=foo"
   >
@@ -13,7 +12,6 @@ exports[`ImageAttribute does not render action buttons while not editing 1`] = `
       src="https://example.com?HMAC-header=foo&thumbnail=true"
     />
   </a>
-
 </div>
 `;
 
@@ -21,13 +19,37 @@ exports[`ImageAttribute renders blank paths correctly while not editing 1`] = `
 <div
   className="attribute"
 >
-
   <span
     className="file-blank"
   >
-     Blank file
+     Blank file 
   </span>
+</div>
+`;
 
+exports[`ImageAttribute renders blank paths correctly while not editing 2`] = `
+<div
+  className="attribute"
+>
+   
+  <span
+    className="file-blank"
+  >
+     Blank file 
+  </span>
+   
+</div>
+`;
+
+exports[`ImageAttribute renders existing files correctly when not editing 1`] = `
+<div
+  className="attribute"
+>
+  <div
+    className="document_empty"
+  >
+    No file
+  </div>
 </div>
 `;
 

@@ -150,7 +150,7 @@ describe('ImageAttribute', () => {
     );
 
     const thumbnail = component.find('.image-thumbnail');
-    expect(thumbnail.exists()).toBeTruthy();
+    expect(thumbnail.exists()).toBeFalsy();
 
     const tree = renderer
       .create(
@@ -256,7 +256,7 @@ describe('ImageAttribute', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('renders previous value before upload starts', () => {
+  it('renders previous thumbnail before upload starts', () => {
     store = mockStore({
       location: {
         path: '/labors/browse/monster/Nemean Lion'
@@ -267,7 +267,8 @@ describe('ImageAttribute', () => {
     });
 
     const value = {
-      path: 'previous-file-value.txt'
+      path: 'previous-file-value.txt',
+      url: 'previous-file-value-url.txt'
     };
 
     const component = mount(
@@ -287,23 +288,22 @@ describe('ImageAttribute', () => {
 
     component.setProps({
       value: {
-        path:
-          'https://metis.test/labors/upload/temporary-path?X-Etna-Signature=foo'
+        path: 'https://metis.test/labors/upload/temporary-path?X-Etna-Signature=foo'
       },
       revised_value: {
-        path:
-          'https://metis.test/labors/upload/temporary-path?X-Etna-Signature=foo'
+        path: 'https://metis.test/labors/upload/temporary-path?X-Etna-Signature=foo'
       }
     });
     component.update();
 
-    expect(component.text().trim()).toEqual('previous-file-value.txt');
+    const thumbnail = component.find('.image-thumbnail');
+    expect(thumbnail.exists()).toBeTruthy();
 
     const uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeFalsy();
   });
 
-  it('renders upload meter and controls when uploading', () => {
+  fit('renders upload meter and controls when uploading', () => {
     store = mockStore({
       location: {
         path: '/labors/browse/monster/Nemean Lion'
@@ -324,8 +324,7 @@ describe('ImageAttribute', () => {
     });
 
     const value = {
-      path:
-        'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signture=hercules'
+      path: 'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signture=hercules'
     };
 
     const component = mount(
@@ -347,7 +346,7 @@ describe('ImageAttribute', () => {
 
     const uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeTruthy();
-
+    console.log("rendering for snapshot test");
     const tree = renderer
       .create(
         <Provider store={store}>
@@ -370,7 +369,7 @@ describe('ImageAttribute', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('renders previous file path value if upload cancelled', () => {
+  it('renders previous image thumbnail if upload cancelled', () => {
     const upload = {
       file_name: 'temporary-file-location',
       original_filename: 'stats.txt',
@@ -395,7 +394,8 @@ describe('ImageAttribute', () => {
     store = mockStore(() => state);
 
     const value = {
-      path: 'previous-file-value.txt'
+      path: 'previous-file-value.txt',
+      url: 'previous-file-value-url.txt'
     };
 
     const component = mount(
@@ -417,17 +417,16 @@ describe('ImageAttribute', () => {
 
     component.setProps({
       value: {
-        path:
-          'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signature=foo'
+        path: 'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signature=foo'
       },
       revised_value: {
-        path:
-          'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signature=foo'
+        path: 'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signature=foo'
       }
     });
     component.update();
 
-    expect(component.text().trim()).not.toEqual('previous-file-value.txt');
+    let thumbnail = component.find('.image-thumbnail');
+    expect(thumbnail.exists()).toBeTruthy();
     let uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeTruthy();
 
@@ -450,7 +449,8 @@ describe('ImageAttribute', () => {
 
     component.update();
 
-    expect(component.text().trim()).toEqual('previous-file-value.txt');
+    thumbnail = component.find('.image-thumbnail');
+    expect(thumbnail.exists()).toBeTruthy();
 
     uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeFalsy();
@@ -540,7 +540,7 @@ describe('ImageAttribute', () => {
           value={null}
           mode='edit'
           attribute={{name: 'ExpansionPlans'}}
-          document={{'1': 'Timur'}}
+          document={{1: 'Timur'}}
           revised_value=''
         />
       </Provider>
@@ -586,7 +586,7 @@ describe('ImageAttribute', () => {
           value={null}
           mode='edit'
           attribute={{name: 'ExpansionPlans'}}
-          document={{'1': 'Timur'}}
+          document={{1: 'Timur'}}
           revised_value=''
         />
       </Provider>
@@ -620,7 +620,7 @@ describe('ImageAttribute', () => {
           value={null}
           mode='edit'
           attribute={{name: 'ExpansionPlans'}}
-          document={{'1': 'Timur'}}
+          document={{1: 'Timur'}}
           revised_value=''
         />
       </Provider>
@@ -652,7 +652,7 @@ describe('ImageAttribute', () => {
           value={null}
           mode='edit'
           attribute={{name: 'ExpansionPlans'}}
-          document={{'1': 'Timur'}}
+          document={{1: 'Timur'}}
           revised_value=''
         />
       </Provider>
