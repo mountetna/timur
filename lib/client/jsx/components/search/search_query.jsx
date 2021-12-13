@@ -12,7 +12,7 @@ import {
 } from "../../actions/search_actions";
 import QueryBuilder from "./query_builder";
 import DisabledButton from './disabled_button';
-import TsvOptionsModal from './tsv_options_modal';
+import SearchTsvOptionsModal from './search_tsv_options_modal';
 
 const TableSelect = ({model_names, selectedModel, onSelectTableChange}) =>
   <div className='table-select'>
@@ -84,7 +84,7 @@ export function SearchQuery({
         label={'\u21af TSV'}
         disabled={buttonDisabled}
         onClick={() =>
-          openModal(<TsvOptionsModal selectedModel={selectedModel} />)
+          openModal(<SearchTsvOptionsModal selectedModel={selectedModel} />)
         }
       />
     </div>

@@ -14,6 +14,7 @@ import ShareIcon from '@material-ui/icons/Share';
 
 import {makeStyles} from '@material-ui/core/styles';
 
+import {useModal} from 'etna-js/components/ModalDialogContainer';
 import {copyText} from 'etna-js/utils/copy';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {
@@ -31,6 +32,7 @@ import {
 import {QueryBuilder} from '../../utils/query_builder';
 import useTableEffects from './query_use_table_effects';
 import useResultsActions from './query_use_results_actions';
+import QueryTsvOptionsModal from './query_tsv_options_modal';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -79,6 +81,8 @@ const QueryControlButtons = () => {
   const [lastFlattenQuery, setLastFlattenQuery] = useState(flattenQuery);
   const [lastPage, setLastPage] = useState(page);
   const [lastPageSize, setLastPageSize] = useState(pageSize);
+
+  const {openModal} = useModal();
 
   const classes = useStyles();
 
@@ -227,7 +231,12 @@ const QueryControlButtons = () => {
         >
           Query
         </Button>
-        <Button className={classes.button} onClick={downloadData}>
+        <Button
+          className={classes.button}
+          onClick={() => {
+            openModal(<QueryTsvOptionsModal onDownload={downloadData} />);
+          }}
+        >
           {'\u21af TSV'}
         </Button>
         <Button
