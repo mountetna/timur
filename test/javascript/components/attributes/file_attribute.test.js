@@ -297,7 +297,7 @@ describe('FileAttribute', () => {
     expect(uploadControls.exists()).toBeFalsy();
   });
 
-  fit('renders upload meter and controls when uploading', () => {
+  it('renders upload meter and controls when uploading', () => {
     store = mockStore({
       location: {
         path: '/labors/browse/monster/Nemean Lion'
@@ -341,7 +341,7 @@ describe('FileAttribute', () => {
 
     const uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeTruthy();
-    console.log('before render for snapshot');
+
     const tree = renderer
       .create(
         <Provider store={store}>

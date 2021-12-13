@@ -70,12 +70,8 @@ export default function FileAttribute(props) {
     // do nothing
   }
 
-  const {
-    metisSelector,
-    formatFileRevision,
-    setTempRevision,
-    isTempRevision
-  } = useFileInputActions(metis, error, setMetis, setError, onChange, onBlur);
+  const {metisSelector, formatFileRevision, setTempRevision, isTempRevision} =
+    useFileInputActions(metis, error, setMetis, setError, onChange, onBlur);
 
   const browserState = useReduxState(browserStateOf());
   const {uploads} = browserState;
@@ -87,7 +83,6 @@ export default function FileAttribute(props) {
       record_name,
       attribute.attribute_name
     );
-
     if (!updatedUpload) {
       setUpload(null);
       return;

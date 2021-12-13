@@ -7,7 +7,7 @@ import {STUB} from 'etna-js/actions/file_actions';
 
 const ImageAttribute = (props) => {
   let {mode, value} = props;
-  console.log('mode, value', mode, value);
+
   if (
     mode != 'edit' &&
     value &&
@@ -15,11 +15,15 @@ const ImageAttribute = (props) => {
     value.path !== STUB &&
     value.url
   ) {
-    console.log('here');
     return (
-      <a href={value.url}>
-        <img className='image-thumbnail' src={`${value.url}&thumbnail=true`} />
-      </a>
+      <div className='attribute file image'>
+        <a href={value.url}>
+          <img
+            className='image-thumbnail'
+            src={`${value.url}&thumbnail=true`}
+          />
+        </a>
+      </div>
     );
   }
 

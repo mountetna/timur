@@ -212,7 +212,7 @@ describe('ImageAttribute', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('renders existing files correctly when not editing', () => {
+  it('renders existing file objects correctly when not editing', () => {
     const value = new File(
       ['Believe me, you are but pismire ant:'],
       'conquest.txt',
@@ -234,7 +234,7 @@ describe('ImageAttribute', () => {
       </Provider>
     );
 
-    expect(component.text().trim()).toEqual('No file');
+    expect(component.text().trim()).toEqual('conquest.txt (text/plain)');
 
     const tree = renderer
       .create(
@@ -303,7 +303,7 @@ describe('ImageAttribute', () => {
     expect(uploadControls.exists()).toBeFalsy();
   });
 
-  fit('renders upload meter and controls when uploading', () => {
+  it('renders upload meter and controls when uploading', () => {
     store = mockStore({
       location: {
         path: '/labors/browse/monster/Nemean Lion'
@@ -346,7 +346,7 @@ describe('ImageAttribute', () => {
 
     const uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeTruthy();
-    console.log("rendering for snapshot test");
+
     const tree = renderer
       .create(
         <Provider store={store}>
@@ -369,7 +369,7 @@ describe('ImageAttribute', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('renders previous image thumbnail if upload cancelled', () => {
+  it('renders previous image thumbnail if upload cancelled', (done) => {
     const upload = {
       file_name: 'temporary-file-location',
       original_filename: 'stats.txt',
@@ -393,40 +393,30 @@ describe('ImageAttribute', () => {
 
     store = mockStore(() => state);
 
-    const value = {
-      path: 'previous-file-value.txt',
-      url: 'previous-file-value-url.txt'
+    const props = {
+      model_name: 'conquests',
+      record_name: 'Persia',
+      template: null,
+      value: {
+        path: 'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signature=foo'
+      },
+      mode: 'view',
+      attribute: {
+        attribute_name: 'gravatar'
+      },
+      document: 'Timur',
+      revised_value:
+        'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signature=foo'
     };
 
     const component = mount(
       <Provider store={store}>
-        <ImageAttribute
-          model_name='conquests'
-          record_name='Persia'
-          template={null}
-          value={value}
-          mode='view'
-          attribute={{
-            attribute_name: 'gravatar'
-          }}
-          document='Timur'
-          revised_value=''
-        />
+        <ImageAttribute {...props} />
       </Provider>
     );
 
-    component.setProps({
-      value: {
-        path: 'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signature=foo'
-      },
-      revised_value: {
-        path: 'https://metis.test/labors/upload/temporary-file-location?X-Etna-Signature=foo'
-      }
-    });
-    component.update();
-
     let thumbnail = component.find('.image-thumbnail');
-    expect(thumbnail.exists()).toBeTruthy();
+    expect(thumbnail.exists()).toBeFalsy();
     let uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeTruthy();
 
@@ -447,6 +437,19 @@ describe('ImageAttribute', () => {
       store.dispatch({type: 'CANCEL_UPLOAD', upload});
     });
 
+    const newProps = {
+      ...props,
+      value: {
+        path: 'previous-file.txt',
+        url: 'previous-file-url.html'
+      },
+      revised_value: ''
+    };
+
+    component.setProps({
+      children: <ImageAttribute {...newProps} />
+    });
+
     component.update();
 
     thumbnail = component.find('.image-thumbnail');
@@ -454,6 +457,8 @@ describe('ImageAttribute', () => {
 
     uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeFalsy();
+
+    done();
   });
 
   it('sends revisions to Magma when upload completes', () => {
