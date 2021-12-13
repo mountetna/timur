@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 
@@ -16,14 +16,18 @@ export default function QueryTsvOptionsModal({onDownload}: {onDownload: any}) {
     }
   ];
 
-  function handleOnDownload() {
+  const handleOnDownload = useCallback(() => {
     setLoading(true);
     onDownload({transpose});
-  }
+  }, [onDownload, transpose]);
 
   return (
     <>
-      <TsvOptionsModal options={options} onDownload={handleOnDownload} />
+      <TsvOptionsModal
+        options={options}
+        onDownload={handleOnDownload}
+        disabled={loading}
+      />
       {loading ? <LinearProgress /> : null}
     </>
   );

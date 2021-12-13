@@ -59,5 +59,5 @@ export default function SearchTsvOptionsModal({selectedModel}) {
     }
   ];
 
-  return <TsvOptionsModal options={options} onDownload={onDownload} />;
+  return <TsvOptionsModal options={options} onDownload={onDownload} disabled={false} />;
 }

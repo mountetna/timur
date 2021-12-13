@@ -11,6 +11,7 @@ import {
   EmptyQueryResponse,
   QueryColumn
 } from '../../contexts/query/query_types';
+import {Cancellable} from 'etna-js/utils/cancellable';
 
 const useResultsActions = ({
   countQuery,
@@ -71,24 +72,31 @@ const useResultsActions = ({
     ({transpose}: {transpose: boolean}) => {
       if ('' === query) return;
 
-      invoke(
-        requestAnswer({
-          query,
-          format: 'tsv',
-          user_columns: userColumns,
-          expand_matrices: expandMatrices,
-          transpose
-        })
-      )
-        .then((answer: any) => {
-          downloadjs(
-            answer,
-            `${
-              CONFIG.project_name
-            }-query-results-${new Date().toISOString()}.tsv`,
-            'text/tsv'
-          );
-          dismissModal();
+      const cancellable = new Cancellable();
+
+      cancellable
+        .race(
+          invoke(
+            requestAnswer({
+              query,
+              format: 'tsv',
+              user_columns: userColumns,
+              expand_matrices: expandMatrices,
+              transpose
+            })
+          )
+        )
+        .then(({result, cancelled}: any) => {
+          if (result && !cancelled) {
+            downloadjs(
+              result,
+              `${
+                CONFIG.project_name
+              }-query-results-${new Date().toISOString()}.tsv`,
+              'text/tsv'
+            );
+            dismissModal();
+          }
         })
         .catch((error: any) => {
           Promise.resolve(error).then((e) => {
@@ -96,6 +104,8 @@ const useResultsActions = ({
             invoke(showMessages(e.errors || [e.toString()]));
           });
         });
+
+      return () => cancellable.cancel();
     },
     [query, userColumns, invoke, expandMatrices, dismissModal]
   );
