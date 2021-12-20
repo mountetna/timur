@@ -328,27 +328,6 @@ describe('ImageAttribute', () => {
 
     const uploadControls = component.find(ListUpload);
     expect(uploadControls.exists()).toBeTruthy();
-    // console.log('render for snapshot');
-    // const tree = renderer
-    //   .create(
-    //     <Provider store={store}>
-    //       <ImageAttribute
-    //         model_name='conquests'
-    //         record_name='Persia'
-    //         template={null}
-    //         value={value}
-    //         mode='view'
-    //         attribute={{
-    //           attribute_name: 'gravatar'
-    //         }}
-    //         document='Timur'
-    //         revised_value={value}
-    //       />
-    //     </Provider>
-    //   )
-    //   .toJSON();
-
-    // expect(tree).toMatchSnapshot();
   });
 
   it('renders previous image thumbnail if upload cancelled', (done) => {
