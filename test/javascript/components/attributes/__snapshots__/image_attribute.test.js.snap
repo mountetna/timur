@@ -4,11 +4,54 @@ exports[`ImageAttribute does not render action buttons while not editing 1`] = `
 <div
   className="attribute file image"
 >
+  <button
+    aria-describedby={null}
+    aria-label="zoom in"
+    className="MuiButtonBase-root MuiIconButton-root makeStyles-zoomBtn-1"
+    disabled={false}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onDragLeave={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    onMouseDown={[Function]}
+    onMouseLeave={[Function]}
+    onMouseOver={[Function]}
+    onMouseUp={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+    tabIndex={0}
+    title="Zoom in"
+    type="button"
+  >
+    <span
+      className="MuiIconButton-label"
+    >
+      <svg
+        aria-hidden={true}
+        className="MuiSvgIcon-root MuiSvgIcon-colorAction"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+        />
+        <path
+          d="M12 10h-2v2H9v-2H7V9h2V7h1v2h2v1z"
+        />
+      </svg>
+    </span>
+    <span
+      className="MuiTouchRipple-root"
+    />
+  </button>
   <a
     href="https://example.com?HMAC-header=foo"
   >
     <img
-      className="image-thumbnail"
+      className="image-thumbnail small"
       src="https://example.com?HMAC-header=foo&thumbnail=true"
     />
   </a>
@@ -35,23 +78,6 @@ exports[`ImageAttribute renders blank paths correctly while not editing 2`] = `
     className="file-blank"
   >
      Blank file 
-  </span>
-</div>
-`;
-
-exports[`ImageAttribute renders existing file objects correctly when not editing 1`] = `
-<div
-  className="attribute file"
->
-  <span
-    className="file-upload"
-  >
-     
-    conquest.txt
-     (
-    text/plain
-    )
-     
   </span>
 </div>
 `;
@@ -114,148 +140,5 @@ exports[`ImageAttribute renders the button bar while editing 1`] = `
   >
      No file 
   </span>
-</div>
-`;
-
-exports[`ImageAttribute renders upload meter and controls when uploading 1`] = `
-<div
-  className="attribute file"
->
-  <div
-    className="list-entry-group upload"
-  >
-    <div
-      className="list-entry-column-group type"
-      style={
-        Object {
-          "flexBasis": "60px",
-        }
-      }
-    >
-      <span
-        className="icon-grp   fa-stack fa-fw"
-      >
-        <i
-          className="icon undefined  upload fa fa-2x fa-upload"
-        />
-      </span>
-    </div>
-    <div
-      className="list-entry-column-group name"
-      style={
-        Object {
-          "flexBasis": "60%",
-        }
-      }
-    >
-      <span
-        className="list-entry-file-name"
-      >
-        stats.txt
-      </span>
-    </div>
-    <div
-      className="list-entry-column-group status"
-      style={
-        Object {
-          "flexBasis": "90px",
-        }
-      }
-    />
-    <div
-      className="list-entry-column-group updated"
-      style={
-        Object {
-          "flexBasis": "30%",
-        }
-      }
-    >
-      <div
-        className="upload-meter-group"
-      >
-        <div
-          className="upload-meter-tray"
-        >
-          <div
-            className="upload-meter-bar"
-            style={
-              Object {
-                "width": "NaN%",
-              }
-            }
-          />
-        </div>
-        <div
-          className="upload-meter-status"
-        >
-          <span
-            className="icon-grp icon-grp-active  fa-stack fa-fw"
-          >
-            <i
-              className="icon active  upload fa fa-2x fa-upload"
-            />
-          </span>
-        </div>
-        <div
-          className="upload-meter-completion"
-        >
-          <span
-            className="completed"
-            title="kilobytes uploaded"
-          >
-            NaN undefinediB
-          </span>
-           of 
-          NaN undefinediB
-        </div>
-        <div
-          className="upload-meter-speed"
-        >
-          <span
-            title="kilobits per second"
-          >
-            117.2 Kbps
-          </span>
-        </div>
-      </div>
-    </div>
-    <div
-      className="list-entry-column-group size"
-      style={
-        Object {
-          "flexBasis": "10%",
-        }
-      }
-    />
-    <div
-      className="list-entry-column-group control"
-      style={
-        Object {
-          "flexBasis": "100px",
-        }
-      }
-    >
-      <div
-        className="upload-control-group"
-      >
-        <button
-          className="upload-control-btn"
-          onClick={[Function]}
-        >
-          <span
-            className="fas fa-fw fa-pause"
-          />
-        </button>
-        <button
-          className="upload-control-btn"
-          onClick={[Function]}
-        >
-          <span
-            className="fas fa-fw fa-times"
-          />
-        </button>
-      </div>
-    </div>
-  </div>
 </div>
 `;
