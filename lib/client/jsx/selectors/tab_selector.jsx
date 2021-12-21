@@ -96,7 +96,7 @@ export const defaultView = defaultMemoize(
 export const getDefaultTab = (view) => view && view.tabs ? view.tabs[0].name : 'default';
 
 export const hasMagmaAttribute = item =>
-  item.type == 'magma' || (item.type == 'markdown' && item.attribute_name);
+  item.type == 'magma' || (item.type == 'markdown' && item.attribute_name) || (item.type == 'image' && item.attribute_name);
 
 export const getAttributes = ({panes})=> panes.map(
   ({items}) => items.filter(hasMagmaAttribute).map(
