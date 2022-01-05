@@ -12,6 +12,7 @@ import {
   QueryColumn
 } from '../../contexts/query/query_types';
 import {Cancellable} from 'etna-js/utils/cancellable';
+import {userColumns} from '../../selectors/query_selector';
 
 const useResultsActions = ({
   countQuery,
@@ -58,16 +59,6 @@ const useResultsActions = ({
       });
   }, [query, countQuery, pageSize, page, invoke, setDataAndNumRecords]);
 
-  const userColumns = useMemo(() => {
-    let columnLabels = columns.map(
-      ({display_label}: {display_label: string}) => display_label
-    );
-
-    // We need to duplicate the identifier column when renaming,
-    //   since that is provided as the root of the question.answer.
-    return [columnLabels[0], ...columnLabels];
-  }, [columns]);
-
   const downloadData = useCallback(
     ({transpose}: {transpose: boolean}) => {
       if ('' === query) return;
@@ -80,7 +71,7 @@ const useResultsActions = ({
             requestAnswer({
               query,
               format: 'tsv',
-              user_columns: userColumns,
+              user_columns: userColumns(columns),
               expand_matrices: expandMatrices,
               transpose
             })
@@ -107,13 +98,12 @@ const useResultsActions = ({
 
       return () => cancellable.cancel();
     },
-    [query, userColumns, invoke, expandMatrices, dismissModal]
+    [query, columns, invoke, expandMatrices, dismissModal]
   );
 
   return {
     runQuery,
-    downloadData,
-    userColumns
+    downloadData
   };
 };
 

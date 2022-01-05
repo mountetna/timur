@@ -234,3 +234,13 @@ export const queryColumnMatrixHeadings = (column: QueryColumn) => {
     })
     .flat();
 };
+
+export const userColumns = (columns: QueryColumn[]) => {
+  let columnLabels = columns.map(
+    ({display_label}: {display_label: string}) => display_label
+  );
+
+  // We need to duplicate the identifier column when renaming,
+  //   since that is provided as the root of the question.answer.
+  return [columnLabels[0], ...columnLabels];
+};

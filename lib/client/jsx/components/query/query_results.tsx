@@ -7,6 +7,7 @@ import {Controlled as CodeMirror} from 'react-codemirror2';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {QueryResultsContext} from '../../contexts/query/query_results_context';
+import {userColumns} from '../../selectors/query_selector';
 import QueryTable from './query_table';
 import useTableEffects from './query_use_table_effects';
 import AntSwitch from './ant_switch';
@@ -58,6 +59,7 @@ const QueryResults = () => {
     setExpandMatrices,
     setFlattenQuery
   } = useContext(QueryResultsContext);
+
   const classes = useStyles();
 
   const {columns: formattedColumns, rows} = useTableEffects({
@@ -67,9 +69,9 @@ const QueryResults = () => {
     expandMatrices,
     maxColumns
   });
-  
-  const column_names = Object.entries(columns).map(([k, col]) => {
-    return '\"' + col['display_label'] + '\"'
+
+  const quotedUserColumns = userColumns(columns).map((col) => {
+    return '\"' + col + '\"'
   })
 
   function handlePageSizeChange(
@@ -100,7 +102,7 @@ const QueryResults = () => {
           background: 'none',
           tabSize: 2
         }}
-        value={"query: " + queryString + "\nuser_columns: [" + column_names + "]"}
+        value={"query: " + queryString + "\nuser_columns: [" + quotedUserColumns + "]"}
         onBeforeChange={(editor, data, value) => {}}
       />
       <Grid xs={12} item container direction='column'>
