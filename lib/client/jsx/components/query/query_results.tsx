@@ -71,7 +71,6 @@ const QueryResults = () => {
   const column_names = Object.entries(columns).map(([k, col]) => {
     return '\"' + col['display_label'] + '\"'
   })
-  console.log(column_names)
 
   function handlePageSizeChange(
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
