@@ -112,7 +112,8 @@ const useResultsActions = ({
 
   return {
     runQuery,
-    downloadData
+    downloadData,
+    userColumns
   };
 };
 
