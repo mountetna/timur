@@ -67,6 +67,10 @@ const QueryResults = () => {
     expandMatrices,
     maxColumns
   });
+  
+  const column_names = Object.entries(columns).map(([k, col]) => {
+    return '\"' + col['display_label'] + '\"'
+  })
 
   function handlePageSizeChange(
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -96,7 +100,7 @@ const QueryResults = () => {
           background: 'none',
           tabSize: 2
         }}
-        value={queryString}
+        value={"query: " + queryString + "\nuser_columns: [" + column_names + "]"}
         onBeforeChange={(editor, data, value) => {}}
       />
       <Grid xs={12} item container direction='column'>
