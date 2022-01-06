@@ -85,7 +85,7 @@ const QueryResults = () => {
 
   const userColumnsStr = useMemo(() => {
     return JSON.stringify(userColumns(columns));
-  }, [columns, userColumns]);
+  }, [columns]);
 
   const codeMirrorText = `query: ${queryString}\\nuser_columns: ${userColumnsStr}`;
 
