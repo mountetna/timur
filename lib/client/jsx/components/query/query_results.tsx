@@ -70,10 +70,6 @@ const QueryResults = () => {
     maxColumns
   });
 
-  const quotedUserColumns = userColumns(columns).map((col) => {
-    return '\"' + col + '\"'
-  })
-
   function handlePageSizeChange(
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) {
@@ -102,7 +98,7 @@ const QueryResults = () => {
           background: 'none',
           tabSize: 2
         }}
-        value={"query: " + queryString + "\nuser_columns: [" + quotedUserColumns + "]"}
+        value={`query: ${queryString}\nuser_columns: ${JSON.stringify(userColumns(columns))}`}
         onBeforeChange={(editor, data, value) => {}}
       />
       <Grid xs={12} item container direction='column'>
