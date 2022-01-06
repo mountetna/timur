@@ -170,8 +170,8 @@ describe('QueryBuilder', () => {
     await waitFor(() => screen.getByText('Italy'));
 
     userEvent.click(screen.getByText('Italy'));
-    screen.debug();
-    await waitFor(() => screen.getByText(/\["country","::equals","Italy"\]/));
+
+    await waitFor(() => screen.getByText(/"Italy"/));
 
     expect(asFragment()).toMatchSnapshot();
   });

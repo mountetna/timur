@@ -2,8 +2,6 @@ import React, {useContext, useMemo} from 'react';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {Controlled as CodeMirror} from 'react-codemirror2';
-
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {QueryResultsContext} from '../../contexts/query/query_results_context';
@@ -11,6 +9,11 @@ import {userColumns} from '../../selectors/query_selector';
 import QueryTable from './query_table';
 import useTableEffects from './query_use_table_effects';
 import AntSwitch from './ant_switch';
+
+import {defaultHighlightStyle} from '@codemirror/highlight';
+import {json} from '@codemirror/lang-json';
+import {EditorView} from '@codemirror/view';
+import CodeMirror from 'rodemirror';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -89,24 +92,23 @@ const QueryResults = () => {
 
   const codeMirrorText = `query: ${queryString}\nuser_columns: ${userColumnsStr}`;
 
+  const extensions = useMemo(
+    () => [
+      defaultHighlightStyle.fallback,
+      json(),
+      EditorView.editable.of(false),
+      EditorView.lineWrapping
+    ],
+    []
+  );
+
   if (!rootModel) return null;
 
   return (
     <Grid container className={classes.resultsPane}>
-      <CodeMirror
-        className={classes.result}
-        options={{
-          readOnly: 'no-cursor',
-          lineWrapping: true,
-          mode: 'application/json',
-          autoCloseBrackets: true,
-          lint: false,
-          background: 'none',
-          tabSize: 2
-        }}
-        value={codeMirrorText}
-        onBeforeChange={(editor, data, value) => {}}
-      />
+      <Grid item className={classes.result}>
+        <CodeMirror extensions={extensions} value={codeMirrorText} />
+      </Grid>
       <Grid xs={12} item container direction='column'>
         <Grid className={classes.config} item container justify='flex-end'>
           <AntSwitch
