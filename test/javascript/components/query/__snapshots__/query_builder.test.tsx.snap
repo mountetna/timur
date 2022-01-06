@@ -2166,7 +2166,7 @@ exports[`QueryBuilder renders 1`] = `
           tabindex="-1"
         >
           <div
-            style="min-width: 1px; height: 103px;"
+            style="min-width: 1px; height: 122px;"
           />
         </div>
         <div
@@ -2219,7 +2219,7 @@ exports[`QueryBuilder renders 1`] = `
                         role="presentation"
                         style="padding-right: .1px;"
                       >
-                        ["monster",["labor",["::and",["year","::=",2]],"::any"],"::all",["name",["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","prize",["name","::equals","Sparta"],"::first","name"],["victim",["country","::equals","Italy"],"::first","country"]]]
+                        query: ["monster",["labor",["::and",["year","::=",2]],"::any"],"::all",["name",["labor","prize",["name","::equals","Athens"],"::first","name"],["labor","prize",["name","::equals","Sparta"],"::first","name"],["victim",["country","::equals","Italy"],"::first","country"]]]\\nuser_columns: ["monster.name","monster.name","prize.name","prize.name","victim.country"]
                       </span>
                     </pre>
                   </div>

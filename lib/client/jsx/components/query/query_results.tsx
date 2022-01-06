@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useMemo} from 'react';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -83,6 +83,12 @@ const QueryResults = () => {
     setPage(newPage);
   }
 
+  const userColumnsStr = useMemo(() => {
+    return JSON.stringify(userColumns(columns));
+  }, [columns, userColumns]);
+
+  const codeMirrorText = `query: ${queryString}\\nuser_columns: ${userColumnsStr}`;
+
   if (!rootModel) return null;
 
   return (
@@ -98,7 +104,7 @@ const QueryResults = () => {
           background: 'none',
           tabSize: 2
         }}
-        value={`query: ${queryString}\nuser_columns: ${JSON.stringify(userColumns(columns))}`}
+        value={codeMirrorText}
         onBeforeChange={(editor, data, value) => {}}
       />
       <Grid xs={12} item container direction='column'>

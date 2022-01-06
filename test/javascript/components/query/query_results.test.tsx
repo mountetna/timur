@@ -74,7 +74,9 @@ describe('QueryResults', () => {
                 attributeName: 'name',
                 operator: '::equals',
                 operand: 'Athens',
-                attributeType: 'text'
+                attributeType: 'text',
+                modelName: 'prize',
+                any: true
               }
             }
           ]
@@ -92,7 +94,9 @@ describe('QueryResults', () => {
               attributeName: 'year',
               operator: '::equals',
               operand: 2,
-              attributeType: 'number'
+              attributeType: 'number',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}
@@ -148,7 +152,9 @@ describe('QueryResults', () => {
                 attributeName: 'name',
                 operator: '::equals',
                 operand: 'Athens',
-                attributeType: 'text'
+                attributeType: 'text',
+                modelName: 'prize',
+                any: true
               }
             }
           ]
@@ -164,7 +170,9 @@ describe('QueryResults', () => {
                 attributeName: 'contributions',
                 operator: '::slice',
                 operand: 'Athens,Sparta',
-                attributeType: 'matrix'
+                attributeType: 'matrix',
+                modelName: 'labor',
+                any: true
               }
             }
           ]
@@ -182,7 +190,9 @@ describe('QueryResults', () => {
               attributeName: 'year',
               operator: '::equals',
               operand: 2,
-              attributeType: 'number'
+              attributeType: 'number',
+              modelName: 'labor',
+              any: true
             }
           ],
           anyMap: {}

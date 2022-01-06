@@ -12,7 +12,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
         class="CodeMirror cm-s-default CodeMirror-wrap"
       >
         <div
-          style="overflow: hidden; position: relative; width: 3px; height: 0px;"
+          style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 0px;"
         >
           <textarea
             autocapitalize="off"
@@ -25,10 +25,11 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
         <div
           class="CodeMirror-vscrollbar"
           cm-not-content="true"
+          style="display: block; bottom: 0px;"
           tabindex="-1"
         >
           <div
-            style="min-width: 1px;"
+            style="min-width: 1px; height: 68px;"
           />
         </div>
         <div
@@ -37,7 +38,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
           tabindex="-1"
         >
           <div
-            style="height: 100%; min-height: 1px;"
+            style="height: 100%; min-height: 1px; width: 0px;"
           />
         </div>
         <div
@@ -54,7 +55,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
         >
           <div
             class="CodeMirror-sizer"
-            style="margin-left: 0px;"
+            style="margin-left: 0px; padding-right: 0px; padding-bottom: 0px;"
           >
             <div
               style="position: relative;"
@@ -69,18 +70,22 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
                 >
                   <div
                     class="CodeMirror-measure"
+                  />
+                  <div
+                    class="CodeMirror-measure"
                   >
                     <pre
-                      class="CodeMirror-line-like"
+                      class="CodeMirror-line"
+                      role="presentation"
                     >
-                      <span>
-                        xxxxxxxxxx
+                      <span
+                        role="presentation"
+                        style="padding-right: .1px;"
+                      >
+                        query: \\nuser_columns: ["monster.name","monster.name","prize.name","labor.contributions"]
                       </span>
                     </pre>
                   </div>
-                  <div
-                    class="CodeMirror-measure"
-                  />
                   <div
                     style="position: relative; z-index: 1;"
                   />
@@ -96,7 +101,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
             </div>
           </div>
           <div
-            style="position: absolute; height: 50px; width: 1px;"
+            style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent;"
           />
           <div
             class="CodeMirror-gutters"
@@ -381,7 +386,7 @@ exports[`QueryResults renders 1`] = `
         class="CodeMirror cm-s-default CodeMirror-wrap"
       >
         <div
-          style="overflow: hidden; position: relative; width: 3px; height: 0px;"
+          style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 0px;"
         >
           <textarea
             autocapitalize="off"
@@ -394,10 +399,11 @@ exports[`QueryResults renders 1`] = `
         <div
           class="CodeMirror-vscrollbar"
           cm-not-content="true"
+          style="display: block; bottom: 0px;"
           tabindex="-1"
         >
           <div
-            style="min-width: 1px;"
+            style="min-width: 1px; height: 64px;"
           />
         </div>
         <div
@@ -406,7 +412,7 @@ exports[`QueryResults renders 1`] = `
           tabindex="-1"
         >
           <div
-            style="height: 100%; min-height: 1px;"
+            style="height: 100%; min-height: 1px; width: 0px;"
           />
         </div>
         <div
@@ -423,7 +429,7 @@ exports[`QueryResults renders 1`] = `
         >
           <div
             class="CodeMirror-sizer"
-            style="margin-left: 0px;"
+            style="margin-left: 0px; padding-right: 0px; padding-bottom: 0px;"
           >
             <div
               style="position: relative;"
@@ -438,18 +444,22 @@ exports[`QueryResults renders 1`] = `
                 >
                   <div
                     class="CodeMirror-measure"
+                  />
+                  <div
+                    class="CodeMirror-measure"
                   >
                     <pre
-                      class="CodeMirror-line-like"
+                      class="CodeMirror-line"
+                      role="presentation"
                     >
-                      <span>
-                        xxxxxxxxxx
+                      <span
+                        role="presentation"
+                        style="padding-right: .1px;"
+                      >
+                        query: \\nuser_columns: ["monster.name","monster.name","prize.name"]
                       </span>
                     </pre>
                   </div>
-                  <div
-                    class="CodeMirror-measure"
-                  />
                   <div
                     style="position: relative; z-index: 1;"
                   />
@@ -465,7 +475,7 @@ exports[`QueryResults renders 1`] = `
             </div>
           </div>
           <div
-            style="position: absolute; height: 50px; width: 1px;"
+            style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent;"
           />
           <div
             class="CodeMirror-gutters"
