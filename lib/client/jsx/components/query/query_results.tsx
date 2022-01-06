@@ -87,7 +87,7 @@ const QueryResults = () => {
     return JSON.stringify(userColumns(columns));
   }, [columns]);
 
-  const codeMirrorText = `query: ${queryString}\\nuser_columns: ${userColumnsStr}`;
+  const codeMirrorText = `query: ${queryString}\nuser_columns: ${userColumnsStr}`;
 
   if (!rootModel) return null;
 
