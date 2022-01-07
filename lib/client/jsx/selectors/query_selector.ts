@@ -4,7 +4,8 @@ import {Attribute, Model} from '../models/model_types';
 import {
   EmptyQueryClause,
   QueryColumn,
-  QuerySlice
+  QuerySlice,
+  QueryTableColumn
 } from '../contexts/query/query_types';
 import {QueryGraph} from '../utils/query_graph';
 
@@ -235,12 +236,18 @@ export const queryColumnMatrixHeadings = (column: QueryColumn) => {
     .flat();
 };
 
+export const isIdentifierQuery = (
+  columns: QueryColumn[] | QueryTableColumn[]
+) => {
+  return columns.length === 1;
+};
+
 export const userColumns = (columns: QueryColumn[]) => {
-  let columnLabels = columns.map(
+  const columnLabels = columns.map(
     ({display_label}: {display_label: string}) => display_label
   );
 
-  // We need to duplicate the identifier column when renaming,
-  //   since that is provided as the root of the question.answer.
-  return [columnLabels[0], ...columnLabels];
+  return isIdentifierQuery(columns)
+    ? [columnLabels[0], columnLabels[0]]
+    : columnLabels;
 };

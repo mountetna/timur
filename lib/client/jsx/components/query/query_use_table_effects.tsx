@@ -10,7 +10,8 @@ import {
   pathToColumn,
   attributeIsMatrix,
   hasMatrixSlice,
-  queryColumnMatrixHeadings
+  queryColumnMatrixHeadings,
+  isIdentifierQuery
 } from '../../selectors/query_selector';
 import {QueryGraph} from '../../utils/query_graph';
 
@@ -28,7 +29,10 @@ const useTableEffects = ({
   maxColumns: number;
 }) => {
   function generateIdCol(attr: QueryColumn, index: number): string {
-    return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}@${index}`;
+    // Subtract one from index to account for shift without identifier in format
+    return `${CONFIG.project_name}::${attr.model_name}#${attr.attribute_name}@${
+      index - 1
+    }`;
   }
 
   const validationValues = useCallback(
@@ -92,9 +96,10 @@ const useTableEffects = ({
       let colMapping = allData.format[1];
       // Need to order the results the same as `columns`
       return allData.answer.map(([recordName, answer]: [string, any[]]) =>
-        cols.map(
-          ({colId}) =>
-            _.at(answer, pathToColumn(colMapping, colId, expandMatrices))[0]
+        cols.map(({colId}, index: number) =>
+          index === 0
+            ? recordName
+            : _.at(answer, pathToColumn(colMapping, colId, expandMatrices))[0]
         )
       );
     },

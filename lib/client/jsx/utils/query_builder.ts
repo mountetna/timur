@@ -3,7 +3,6 @@ import {
   QueryColumn,
   QueryFilter,
   QuerySlice,
-  QueryBase,
   QueryClause
 } from '../contexts/query/query_types';
 import {QueryGraph} from './query_graph';
@@ -12,7 +11,8 @@ import QueryFilterPathBuilder from './query_filter_path_builder';
 import {
   attributeIsFile,
   isMatrixSlice,
-  getPath
+  getPath,
+  isIdentifierQuery
 } from '../selectors/query_selector';
 import {
   injectValueAtPath,
@@ -230,7 +230,9 @@ export class QueryBuilder {
     //   to the attributes' model.
     if (this.columns.length === 0) return [''];
 
-    let initialValues = this.predicateWithSlice([], this.columns[0]);
+    let initialValues = isIdentifierQuery(this.columns)
+      ? this.predicateWithSlice([], this.columns[0])
+      : [];
 
     return this.columns.slice(1).reduce(
       (acc: any[], column: QueryColumn) => {
