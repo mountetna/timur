@@ -10,8 +10,7 @@ import {
   pathToColumn,
   attributeIsMatrix,
   hasMatrixSlice,
-  queryColumnMatrixHeadings,
-  isIdentifierQuery
+  queryColumnMatrixHeadings
 } from '../../selectors/query_selector';
 import {QueryGraph} from '../../utils/query_graph';
 
