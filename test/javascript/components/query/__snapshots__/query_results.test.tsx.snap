@@ -49,12 +49,6 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
                 <span
                   class="ͼd"
                 >
-                  "monster.name"
-                </span>
-                ,
-                <span
-                  class="ͼd"
-                >
                   "prize.name"
                 </span>
                 ,
@@ -374,12 +368,6 @@ exports[`QueryResults renders 1`] = `
                 class="cm-line"
               >
                 user_columns: [
-                <span
-                  class="ͼd"
-                >
-                  "monster.name"
-                </span>
-                ,
                 <span
                   class="ͼd"
                 >

@@ -2219,13 +2219,7 @@ exports[`QueryBuilder renders 1`] = `
                 >
                   "::all"
                 </span>
-                ,[
-                <span
-                  class="ͼd"
-                >
-                  "name"
-                </span>
-                ,[
+                ,[[
                 <span
                   class="ͼd"
                 >
@@ -2351,12 +2345,6 @@ exports[`QueryBuilder renders 1`] = `
                 class="cm-line"
               >
                 user_columns: [
-                <span
-                  class="ͼd"
-                >
-                  "monster.name"
-                </span>
-                ,
                 <span
                   class="ͼd"
                 >

@@ -201,7 +201,6 @@ describe('QueryBuilder', () => {
       ],
       '::all',
       [
-        'name',
         ['species'],
         ['stats', '::url'],
         ['labor', 'year'],
@@ -233,7 +232,6 @@ describe('QueryBuilder', () => {
       ],
       '::all',
       [
-        'name',
         ['species'],
         ['stats', '::url'],
         ['labor', 'year'],
@@ -268,7 +266,6 @@ describe('QueryBuilder', () => {
       ],
       '::all',
       [
-        'name',
         ['species'],
         ['stats', '::url'],
         ['labor', 'year'],
@@ -355,7 +352,7 @@ describe('QueryBuilder', () => {
     expect(builder.query()).toEqual([
       'labor',
       '::all',
-      ['name', ['contributions', '::slice', ['Athens', 'Sidon']]]
+      [['contributions', '::slice', ['Athens', 'Sidon']]]
     ]);
   });
 

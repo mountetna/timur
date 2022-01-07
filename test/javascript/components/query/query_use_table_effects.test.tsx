@@ -130,7 +130,9 @@ describe('useTableEffects', () => {
                 attributeName: 'contributions',
                 operator: '::slice',
                 operand: 'Athens,Sparta',
-                attributeType: 'matrix'
+                attributeType: 'matrix',
+                modelName: 'labor',
+                any: true
               }
             }
           ]
@@ -140,15 +142,12 @@ describe('useTableEffects', () => {
 
     const data = {
       answer: [
-        ['Nemean Lion', ['Nemean Lion', [1, 2]]],
-        ['Lernean Hydra', ['Lernean Hydra', [3, 0]]]
+        ['Nemean Lion', [[1, 2]]],
+        ['Lernean Hydra', [[3, 0]]]
       ],
       format: [
         'labors::monster#name',
-        [
-          'labors::monster#name',
-          ['labors::labor#contributions', ['Athens', 'Sparta']]
-        ]
+        [['labors::labor#contributions', ['Athens', 'Sparta']]]
       ],
       type: 'Mock'
     };
@@ -209,7 +208,9 @@ describe('useTableEffects', () => {
                 attributeName: 'contributions',
                 operator: '::slice',
                 operand: 'Athens,Sparta',
-                attributeType: 'matrix'
+                attributeType: 'matrix',
+                modelName: 'labor',
+                any: true
               }
             }
           ]
@@ -219,15 +220,12 @@ describe('useTableEffects', () => {
 
     const data = {
       answer: [
-        ['Nemean Lion', ['Nemean Lion', [1, 2]]],
-        ['Lernean Hydra', ['Lernean Hydra', [3, 0]]]
+        ['Nemean Lion', [[1, 2]]],
+        ['Lernean Hydra', [[3, 0]]]
       ],
       format: [
         'labors::monster#name',
-        [
-          'labors::monster#name',
-          ['labors::labor#contributions', ['Athens', 'Sparta']]
-        ]
+        [['labors::labor#contributions', ['Athens', 'Sparta']]]
       ],
       type: 'Mock'
     };
@@ -287,7 +285,9 @@ describe('useTableEffects', () => {
                 attributeName: 'contributions',
                 operator: '::slice',
                 operand: 'Sparta,Athens',
-                attributeType: 'matrix'
+                attributeType: 'matrix',
+                modelName: 'labor',
+                any: true
               }
             }
           ]
@@ -297,15 +297,12 @@ describe('useTableEffects', () => {
 
     const data = {
       answer: [
-        ['Nemean Lion', ['Nemean Lion', [2, 1]]],
-        ['Lernean Hydra', ['Lernean Hydra', [0, 3]]]
+        ['Nemean Lion', [[2, 1]]],
+        ['Lernean Hydra', [[0, 3]]]
       ],
       format: [
         'labors::monster#name',
-        [
-          'labors::monster#name',
-          ['labors::labor#contributions', ['Sparta', 'Athens']]
-        ]
+        [['labors::labor#contributions', ['Sparta', 'Athens']]]
       ],
       type: 'Mock'
     };
@@ -366,7 +363,9 @@ describe('useTableEffects', () => {
                 attributeName: 'name',
                 operator: '::equals',
                 operand: 'Athens',
-                attributeType: 'text'
+                attributeType: 'text',
+                modelName: 'prize',
+                any: true
               }
             }
           ]
@@ -382,7 +381,9 @@ describe('useTableEffects', () => {
                 attributeName: 'name',
                 operator: '::equals',
                 operand: 'Sparta',
-                attributeType: 'text'
+                attributeType: 'text',
+                modelName: 'prize',
+                any: true
               }
             }
           ]
@@ -392,12 +393,12 @@ describe('useTableEffects', () => {
 
     const data = {
       answer: [
-        ['Nemean Lion', ['Nemean Lion', 2, 1]],
-        ['Lernean Hydra', ['Lernean Hydra', 0, 3]]
+        ['Nemean Lion', [2, 1]],
+        ['Lernean Hydra', [0, 3]]
       ],
       format: [
         'labors::monster#name',
-        ['labors::monster#name', 'labors::prize#value', 'labors::prize#value']
+        ['labors::prize#value', 'labors::prize#value']
       ],
       type: 'Mock'
     };
