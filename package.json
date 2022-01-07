@@ -8,8 +8,7 @@
   },
   "dependencies": {
     "@babel/preset-typescript": "^7.13.0",
-    "@codemirror/basic-setup": "^0.19.1",
-    "@codemirror/lang-javascript": "^0.19.4",
+    "@codemirror/highlight": "^0.19.7",
     "@codemirror/lang-json": "^0.19.1",
     "@codemirror/state": "^0.19.6",
     "@codemirror/view": "^0.19.39",
