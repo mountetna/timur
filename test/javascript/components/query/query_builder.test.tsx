@@ -171,7 +171,9 @@ describe('QueryBuilder', () => {
 
     userEvent.click(screen.getByText('Italy'));
 
-    await waitFor(() => screen.getByText(/"Italy"/));
+    await waitFor(
+      () => screen.getByText(/"Italy"/) && screen.getByText(/user_columns/)
+    );
 
     expect(asFragment()).toMatchSnapshot();
   });
