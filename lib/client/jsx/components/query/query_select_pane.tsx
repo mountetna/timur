@@ -6,10 +6,13 @@ import AddIcon from '@material-ui/icons/Add';
 
 import {makeStyles} from '@material-ui/core/styles';
 
+import {DragDropContext, Droppable} from 'react-beautiful-dnd';
+
 import {QueryColumn} from '../../contexts/query/query_types';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import QueryModelAttributeSelector from './query_model_attribute_selector';
+import DraggableQueryModelAttributeSelector from './draggable_query_model_attribute_selector';
 import QueryClause from './query_clause';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +37,8 @@ const QuerySelectPane = () => {
     state: {columns},
     addQueryColumn,
     patchQueryColumn,
-    removeQueryColumn
+    removeQueryColumn,
+    setQueryColumns
   } = useContext(QueryColumnContext);
   const classes = useStyles();
 
@@ -95,87 +99,138 @@ const QuerySelectPane = () => {
     [graph, rootModel]
   );
 
+  const reorder = (
+    columns: QueryColumn[],
+    startIndex: number,
+    endIndex: number
+  ) => {
+    const result = Array.from(columns);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+  };
+
+  const handleOnDragEnd = useCallback(
+    (result) => {
+      if (!result.destination) {
+        return;
+      }
+
+      if (result.destination.index === result.source.index) {
+        return;
+      }
+
+      const newColumns = reorder(
+        columns,
+        result.source.index,
+        result.destination.index
+      );
+
+      setQueryColumns(newColumns);
+    },
+    [columns, setQueryColumns]
+  );
+
   if (!rootModel) return null;
 
   return (
-    <QueryClause title='Columns'>
-      <Grid className={classes.displayLabel} container>
-        <Grid item xs={2}>
-          <Typography>Display Label</Typography>
-        </Grid>
-        <Grid item xs={2}>
-          <Typography>Model</Typography>
-        </Grid>
-        <Grid item xs={2}>
-          <Typography>Attribute</Typography>
-        </Grid>
-        <Grid item xs={5} className={classes.sliceHeading}>
-          <Typography>Slices</Typography>
-          <Grid item container>
-            <Grid
-              xs={11}
-              item
-              container
-              spacing={1}
-              alignItems='center'
-              className={classes.sliceSubheading}
-            >
-              <Grid item xs={3}>
-                Model
-              </Grid>
-              <Grid item xs={3}>
-                Attribute
-              </Grid>
-              <Grid item xs={2}>
-                Operator
-              </Grid>
-              <Grid item xs={3}>
-                Operand
+    <DragDropContext onDragEnd={handleOnDragEnd}>
+      <QueryClause title='Columns'>
+        <Grid className={classes.displayLabel} container>
+          <Grid item xs={2}>
+            <Typography>Display Label</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography>Model</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography>Attribute</Typography>
+          </Grid>
+          <Grid item xs={5} className={classes.sliceHeading}>
+            <Typography>Slices</Typography>
+            <Grid item container>
+              <Grid
+                xs={11}
+                item
+                container
+                spacing={1}
+                alignItems='center'
+                className={classes.sliceSubheading}
+              >
+                <Grid item xs={3}>
+                  Model
+                </Grid>
+                <Grid item xs={3}>
+                  Attribute
+                </Grid>
+                <Grid item xs={2}>
+                  Operator
+                </Grid>
+                <Grid item xs={3}>
+                  Operand
+                </Grid>
+                <Grid item xs={1} />
               </Grid>
               <Grid item xs={1} />
             </Grid>
-            <Grid item xs={1} />
           </Grid>
+          <Grid item xs={1} />
         </Grid>
-        <Grid item xs={1} />
-      </Grid>
-      {columns.map((column: QueryColumn, index: number) => {
-        return (
-          <QueryModelAttributeSelector
-            key={index}
-            label='Join Model'
-            column={column}
-            modelChoiceSet={modelChoiceSet}
-            columnIndex={index}
-            canEdit={0 !== index}
-            graph={graph}
-            onSelectModel={(modelName) =>
-              handleOnSelectModel(index, modelName, column.display_label)
-            }
-            onSelectAttribute={(attributeName) =>
-              handleOnSelectAttribute(index, column, attributeName)
-            }
-            onChangeLabel={(label) => handleOnChangeLabel(index, column, label)}
-            onRemoveColumn={() => handleOnRemoveColumn(index)}
-            onCopyColumn={() => addQueryColumn({...column})}
-          />
-        );
-      })}
-      <Button
-        onClick={() =>
-          addQueryColumn({
-            slices: [],
-            model_name: '',
-            attribute_name: '',
-            display_label: ''
-          })
-        }
-        startIcon={<AddIcon />}
-        className='query-add-column-btn'
-      >
-        Column
-      </Button>
-    </QueryClause>
+        <Droppable droppableId='columns'>
+          {(provided: any) => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+              {columns.map((column: QueryColumn, index: number) => {
+                const ColumnComponent =
+                  0 === index
+                    ? QueryModelAttributeSelector
+                    : DraggableQueryModelAttributeSelector;
+                return (
+                  <ColumnComponent
+                    key={index}
+                    label='Join Model'
+                    column={column}
+                    modelChoiceSet={modelChoiceSet}
+                    columnIndex={index}
+                    canEdit={0 !== index}
+                    graph={graph}
+                    onSelectModel={(modelName: string) =>
+                      handleOnSelectModel(
+                        index,
+                        modelName,
+                        column.display_label
+                      )
+                    }
+                    onSelectAttribute={(attributeName: string) =>
+                      handleOnSelectAttribute(index, column, attributeName)
+                    }
+                    onChangeLabel={(label: string) =>
+                      handleOnChangeLabel(index, column, label)
+                    }
+                    onRemoveColumn={() => handleOnRemoveColumn(index)}
+                    onCopyColumn={() => addQueryColumn({...column})}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </Droppable>
+        <Button
+          onClick={() =>
+            addQueryColumn({
+              slices: [],
+              model_name: '',
+              attribute_name: '',
+              display_label: ''
+            })
+          }
+          startIcon={<AddIcon />}
+          className='query-add-column-btn'
+        >
+          Column
+        </Button>
+      </QueryClause>
+    </DragDropContext>
   );
 };
 
