@@ -36,7 +36,7 @@ const QueryFromPane = () => {
   return (
     <QueryClause title='From'>
       <Grid item container>
-        <Grid item xs={8}>
+        <Grid item xs={6}>
           <QueryModelSelector
             label='Root Model'
             modelValue={rootModel || ''}
@@ -44,7 +44,7 @@ const QueryFromPane = () => {
             onSelectModel={(modelName) => onRootModelSelect(modelName)}
           />
         </Grid>
-        <Grid item container alignItems='center' justify='flex-end' xs={4}>
+        <Grid item container alignItems='center' justify='flex-end' xs={6}>
           {rootModel ? <QueryControlButtons /> : null}
         </Grid>
       </Grid>

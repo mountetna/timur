@@ -61,3 +61,8 @@ export interface QueryTableColumn {
   attribute: Attribute;
   matrixHeadings: string[];
 }
+
+export interface Workflow {
+  displayName: string;
+  icon?: string;
+}
