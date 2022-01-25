@@ -63,6 +63,15 @@ export interface QueryTableColumn {
 }
 
 export interface Workflow {
+  name: string;
   displayName: string;
   icon?: string;
+}
+
+export interface QueryPayload {
+  query: string | any[];
+  expand_matrices?: boolean;
+  user_columns?: string[];
+  transpose?: boolean;
+  format?: string;
 }

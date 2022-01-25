@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import * as _ from 'lodash';
 import {withStyles, makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -13,8 +13,11 @@ import ScatterPlot from '@material-ui/icons/ScatterPlot';
 import {SvgIconTypeMap} from '@material-ui/core/SvgIcon';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
-import {fetchWorkflows} from '../../api/vulcan_api';
+import {QueryColumnContext} from '../../contexts/query/query_column_context';
+import {QueryResultsContext} from '../../contexts/query/query_results_context';
+import {fetchWorkflows, openWorkflow} from '../../api/vulcan_api';
 import {Workflow} from '../../contexts/query/query_types';
+import {queryPayload} from '../../selectors/query_selector';
 
 const PlotIcons: {
   [key: string]: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
@@ -64,9 +67,17 @@ const StyledMenuItem = withStyles((theme) => ({
 const QueryPlotMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [plottingWorkflows, setPlottingWorkflows] = useState([] as Workflow[]);
+
+  const {
+    state: {columns}
+  } = useContext(QueryColumnContext);
+  const {
+    state: {expandMatrices, queryString}
+  } = useContext(QueryResultsContext);
+
   const classes = useStyles();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -80,6 +91,13 @@ const QueryPlotMenu = () => {
     });
   }, []);
 
+  function handleOnClickMenuItem(workflow: Workflow) {
+    openWorkflow(
+      workflow,
+      queryPayload({query: queryString, columns, expandMatrices})
+    );
+  }
+
   if (plottingWorkflows.length === 0) return null;
 
   return (
@@ -89,7 +107,7 @@ const QueryPlotMenu = () => {
         aria-haspopup='true'
         variant='contained'
         color='primary'
-        onClick={handleClick}
+        onClick={handleClickMenu}
       >
         Plot as
       </Button>
@@ -107,7 +125,10 @@ const QueryPlotMenu = () => {
               : MultilineChartIcon;
 
           return (
-            <StyledMenuItem key={index}>
+            <StyledMenuItem
+              key={index}
+              onClick={() => handleOnClickMenuItem(workflow)}
+            >
               <ListItemIcon>
                 <IconComponent fontSize='small' />
               </ListItemIcon>

@@ -5,7 +5,8 @@ import {
   EmptyQueryClause,
   QueryColumn,
   QuerySlice,
-  QueryTableColumn
+  QueryTableColumn,
+  QueryPayload
 } from '../contexts/query/query_types';
 import {QueryGraph} from '../utils/query_graph';
 
@@ -250,4 +251,21 @@ export const userColumns = (columns: QueryColumn[]) => {
   return isIdentifierQuery(columns)
     ? [columnLabels[0], columnLabels[0]]
     : columnLabels;
+};
+
+export const queryPayload = ({
+  query,
+  columns,
+  expandMatrices
+}: {
+  query: string | any[];
+  columns: QueryColumn[];
+  expandMatrices: boolean;
+}): QueryPayload => {
+  return {
+    query,
+    user_columns: userColumns(columns),
+    expand_matrices: expandMatrices,
+    format: 'tsv'
+  };
 };
