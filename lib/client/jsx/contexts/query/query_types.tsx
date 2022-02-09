@@ -62,10 +62,15 @@ export interface QueryTableColumn {
   matrixHeadings: string[];
 }
 
+interface InputQueryMap {
+  [key: string]: string;
+}
+
 export interface Workflow {
   name: string;
   displayName: string;
   icon?: string;
+  inputQueryMap?: InputQueryMap;
 }
 
 export interface QueryPayload {
@@ -74,4 +79,9 @@ export interface QueryPayload {
   user_columns?: string[];
   transpose?: boolean;
   format?: string;
+}
+
+export interface CreateFigurePayload {
+  title: string;
+  inputs: {[key: string]: any};
 }

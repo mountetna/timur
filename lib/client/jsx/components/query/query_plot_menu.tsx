@@ -15,7 +15,7 @@ import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {QueryResultsContext} from '../../contexts/query/query_results_context';
-import {fetchWorkflows, openWorkflow} from '../../api/vulcan_api';
+import {fetchWorkflows, createAndOpenFigure} from '../../api/vulcan_api';
 import {Workflow} from '../../contexts/query/query_types';
 import {queryPayload} from '../../selectors/query_selector';
 
@@ -92,7 +92,7 @@ const QueryPlotMenu = () => {
   }, []);
 
   function handleOnClickMenuItem(workflow: Workflow) {
-    openWorkflow(
+    createAndOpenFigure(
       workflow,
       queryPayload({query: queryString, columns, expandMatrices})
     );

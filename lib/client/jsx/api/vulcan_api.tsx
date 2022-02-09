@@ -11,9 +11,9 @@ export const fetchWorkflows = () =>
     }
   ).then(checkStatus);
 
-export const openWorkflow = (workflow: Workflow, payload: QueryPayload) => {
+export const createAndOpenFigure = (workflow: Workflow, payload: QueryPayload) => {
   fetch(
-    `${CONFIG.vulcan_host}/api/${CONFIG.project_name}/workflows/${workflow.name}/from_query`,
+    `${CONFIG.vulcan_host}/api/${CONFIG.project_name}/figures/create`,
     {
       method: 'POST',
       credentials: 'include',
@@ -22,9 +22,9 @@ export const openWorkflow = (workflow: Workflow, payload: QueryPayload) => {
     }
   )
     .then(checkStatus)
-    .then(({key}) => {
+    .then(({id}) => {
       window.open(
-        `${CONFIG.vulcan_host}/${CONFIG.project_name}/workflow/${workflow.name}/session/${key}`,
+        `${CONFIG.vulcan_host}/${CONFIG.project_name}/figures/${id}`,
         '_blank'
       );
     });

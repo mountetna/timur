@@ -6,7 +6,9 @@ import {
   QueryColumn,
   QuerySlice,
   QueryTableColumn,
-  QueryPayload
+  QueryPayload,
+  Workflow,
+  CreateFigurePayload
 } from '../contexts/query/query_types';
 import {QueryGraph} from '../utils/query_graph';
 
@@ -268,4 +270,29 @@ export const queryPayload = ({
     expand_matrices: expandMatrices,
     format: 'tsv'
   };
+};
+
+export const createFigurePayload = ({
+  query,
+  title,
+  workflow
+}: {
+  query: QueryPayload;
+  title: string;
+  workflow: Workflow;
+}) => {
+  let payload: CreateFigurePayload = {
+    title,
+    inputs: {}
+  };
+
+  Object.entries(workflow.inputQueryMap || {}).forEach(
+    ([cwlInput, inputSource]: [string, string]) => {
+      if (!query.hasOwnProperty(inputSource)) return;
+
+      payload.inputs[cwlInput] = query[inputSource as keyof QueryPayload];
+    }
+  );
+
+  return payload;
 };
