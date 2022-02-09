@@ -20,7 +20,7 @@ exports[`QueryBuilder renders 1`] = `
           class="MuiGrid-root MuiGrid-container MuiGrid-item"
         >
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8"
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
           >
             <div
               class="MuiFormControl-root makeStyles-formControl"
@@ -64,7 +64,7 @@ exports[`QueryBuilder renders 1`] = `
             </div>
           </div>
           <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-4"
+            class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-6"
           >
             <div
               class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-direction-xs-column MuiGrid-align-items-xs-flex-end MuiGrid-justify-xs-flex-end"
