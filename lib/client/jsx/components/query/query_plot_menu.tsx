@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginLeft: '5px',
     display: 'inline-block'
+  },
+  disabledButton: {
+    marginLeft: '5px',
+    display: 'inline-block',
+    cursor: 'not-allowed'
   }
 }));
 
@@ -105,16 +110,17 @@ const QueryPlotMenu = () => {
     );
   }
 
-  if (plottingWorkflows?.length === 0) return null;
+  const buttonDisabled = !plottingWorkflows || plottingWorkflows.length === 0;
 
   return (
-    <div className={classes.button}>
+    <div className={buttonDisabled ? classes.disabledButton : classes.button}>
       <Button
         aria-controls='plot-menu'
         aria-haspopup='true'
         variant='contained'
         color='primary'
         onClick={handleClickMenu}
+        disabled={buttonDisabled}
       >
         Plot as
       </Button>
