@@ -25,7 +25,7 @@ export const createAndOpenFigure = (
     .then(({figure_id}) => {
       window.open(
         `${CONFIG.vulcan_host}/${CONFIG.project_name}/figure/${figure_id}`,
-        '_blank'
+        '_self'
       );
     });
 };
