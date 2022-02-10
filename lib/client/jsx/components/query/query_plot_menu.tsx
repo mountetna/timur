@@ -13,8 +13,6 @@ import ScatterPlot from '@material-ui/icons/ScatterPlot';
 import {SvgIconTypeMap} from '@material-ui/core/SvgIcon';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
-import useAsyncWork from 'etna-js/hooks/useAsyncWork';
-
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {QueryResultsContext} from '../../contexts/query/query_results_context';
 import {fetchWorkflows, createAndOpenFigure} from '../../api/vulcan_api';
