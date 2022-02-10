@@ -15,7 +15,7 @@ export const createAndOpenFigure = (
   workflow: Workflow,
   payload: CreateFigurePayload
 ) => {
-  fetch(`${CONFIG.vulcan_host}/api/${CONFIG.project_name}/figure/create`, {
+  return fetch(`${CONFIG.vulcan_host}/api/${CONFIG.project_name}/figure/create`, {
     method: 'POST',
     credentials: 'include',
     headers: headers('json'),

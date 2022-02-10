@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import * as _ from 'lodash';
 import {withStyles, makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -77,6 +77,7 @@ const StyledMenuItem = withStyles((theme) => ({
 const QueryPlotMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [plottingWorkflows, setPlottingWorkflows] = useState([] as Workflow[]);
+  const [plotLoading, setPlotLoading] = useState([] as boolean[]);
 
   const {
     state: {columns}
@@ -98,11 +99,16 @@ const QueryPlotMenu = () => {
   useEffect(() => {
     fetchWorkflows().then(({workflows}) => {
       setPlottingWorkflows(workflows);
+      setPlotLoading(Array(workflows.length).fill(false));
     });
   }, []);
 
-  const [_, handleOnClickMenuItem] = useAsyncWork(
-    function handleOnClickMenuItem(workflow: Workflow) {
+  const handleOnClickMenuItem = useCallback(
+    (workflow: Workflow, index: number) => {
+      let clone = [...plotLoading];
+      let original = [...plotLoading];
+      clone.splice(index, 1, true);
+      setPlotLoading(clone);
       createAndOpenFigure(
         workflow,
         createFigurePayload({
@@ -110,9 +116,11 @@ const QueryPlotMenu = () => {
           workflow,
           title: `${workflow.displayName} - from query`
         })
-      );
+      ).then(() => {
+        setPlotLoading(original);
+      });
     },
-    {cancelWhenChange: []}
+    [plotLoading]
   );
 
   const buttonDisabled = !plottingWorkflows || plottingWorkflows.length === 0;
@@ -145,7 +153,9 @@ const QueryPlotMenu = () => {
           return (
             <StyledMenuItem
               key={index}
-              onClick={() => handleOnClickMenuItem(workflow)}
+              onClick={() => {
+                if (!plotLoading[index]) handleOnClickMenuItem(workflow, index);
+              }}
             >
               <ListItemIcon>
                 <IconComponent fontSize='small' />
