@@ -20,7 +20,7 @@ exports[`QueryBuilder renders 1`] = `
           class="MuiGrid-root MuiGrid-container MuiGrid-item"
         >
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8"
           >
             <div
               class="MuiFormControl-root makeStyles-formControl"
@@ -64,7 +64,7 @@ exports[`QueryBuilder renders 1`] = `
             </div>
           </div>
           <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-6"
+            class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end MuiGrid-grid-xs-4"
           >
             <div
               class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-direction-xs-column MuiGrid-align-items-xs-flex-end MuiGrid-justify-xs-flex-end"
@@ -156,6 +156,24 @@ exports[`QueryBuilder renders 1`] = `
                     class="MuiTouchRipple-root"
                   />
                 </button>
+                <div
+                  class="makeStyles-disabledButton"
+                >
+                  <button
+                    aria-controls="plot-menu"
+                    aria-haspopup="true"
+                    class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-disabled MuiButtonBase-disabled"
+                    disabled=""
+                    tabindex="-1"
+                    type="button"
+                  >
+                    <span
+                      class="MuiButton-label"
+                    >
+                      Plot as
+                    </span>
+                  </button>
+                </div>
               </div>
               <div
                 class="MuiGrid-root MuiGrid-item"
