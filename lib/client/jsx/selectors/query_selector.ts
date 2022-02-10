@@ -283,6 +283,7 @@ export const createFigurePayload = ({
 }) => {
   let payload: CreateFigurePayload = {
     title,
+    workflow_name: workflow.name,
     inputs: {}
   };
 

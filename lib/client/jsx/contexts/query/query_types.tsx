@@ -83,5 +83,6 @@ export interface QueryPayload {
 
 export interface CreateFigurePayload {
   title: string;
+  workflow_name: string;
   inputs: {[key: string]: any};
 }
