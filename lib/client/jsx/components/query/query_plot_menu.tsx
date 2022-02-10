@@ -17,7 +17,10 @@ import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {QueryResultsContext} from '../../contexts/query/query_results_context';
 import {fetchWorkflows, createAndOpenFigure} from '../../api/vulcan_api';
 import {Workflow} from '../../contexts/query/query_types';
-import {queryPayload} from '../../selectors/query_selector';
+import {
+  queryPayload,
+  createFigurePayload
+} from '../../selectors/query_selector';
 
 const PlotIcons: {
   [key: string]: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
@@ -94,11 +97,15 @@ const QueryPlotMenu = () => {
   function handleOnClickMenuItem(workflow: Workflow) {
     createAndOpenFigure(
       workflow,
-      queryPayload({query: queryString, columns, expandMatrices})
+      createFigurePayload({
+        query: queryPayload({query: queryString, columns, expandMatrices}),
+        workflow,
+        title: `${workflow.displayName} - from query`
+      })
     );
   }
 
-  if (plottingWorkflows.length === 0) return null;
+  if (plottingWorkflows?.length === 0) return null;
 
   return (
     <div className={classes.button}>

@@ -1,6 +1,6 @@
 import {checkStatus, headers} from 'etna-js/utils/fetch';
 
-import {Workflow, QueryPayload} from '../contexts/query/query_types';
+import {Workflow, CreateFigurePayload} from '../contexts/query/query_types';
 
 export const fetchWorkflows = () =>
   fetch(
@@ -13,7 +13,7 @@ export const fetchWorkflows = () =>
 
 export const createAndOpenFigure = (
   workflow: Workflow,
-  payload: QueryPayload
+  payload: CreateFigurePayload
 ) => {
   fetch(`${CONFIG.vulcan_host}/api/${CONFIG.project_name}/figure/create`, {
     method: 'POST',
