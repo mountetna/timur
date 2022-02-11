@@ -48,10 +48,17 @@ export const QueryWhereProvider = (
   const removeRecordFilter = useCallback(
     (filterIndex: number) => {
       let updatedRecordFilters = [...state.recordFilters];
+      let updatedOrRecordFilterIndices = state.orRecordFilterIndices
+        .filter((index) => index !== filterIndex)
+        .map((index) => {
+          if (index >= filterIndex) return index - 1;
+          return index;
+        });
       updatedRecordFilters.splice(filterIndex, 1);
       setState({
         ...state,
-        recordFilters: updatedRecordFilters
+        recordFilters: updatedRecordFilters,
+        orRecordFilterIndices: updatedOrRecordFilterIndices
       });
     },
     [state]
