@@ -13,6 +13,8 @@ import ScatterPlot from '@material-ui/icons/ScatterPlot';
 import {SvgIconTypeMap} from '@material-ui/core/SvgIcon';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
+import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
+import {showMessages} from 'etna-js/actions/message_actions';
 import {QueryColumnContext} from '../../contexts/query/query_column_context';
 import {QueryResultsContext} from '../../contexts/query/query_results_context';
 import {fetchWorkflows, createAndOpenFigure} from '../../api/vulcan_api';
@@ -77,6 +79,7 @@ const QueryPlotMenu = () => {
   const [plottingWorkflows, setPlottingWorkflows] = useState([] as Workflow[]);
   const [plotLoading, setPlotLoading] = useState([] as boolean[]);
 
+  const invoke = useActionInvoker();
   const {
     state: {columns}
   } = useContext(QueryColumnContext);
@@ -95,10 +98,12 @@ const QueryPlotMenu = () => {
   };
 
   useEffect(() => {
-    fetchWorkflows().then(({workflows}) => {
-      setPlottingWorkflows(workflows);
-      setPlotLoading(Array(workflows.length).fill(false));
-    });
+    fetchWorkflows()
+      .then(({workflows}) => {
+        setPlottingWorkflows(workflows);
+        setPlotLoading(Array(workflows.length).fill(false));
+      })
+      .catch((e) => invoke(showMessages([e])));
   }, []);
 
   const handleOnClickMenuItem = useCallback(
@@ -108,17 +113,18 @@ const QueryPlotMenu = () => {
       clone.splice(index, 1, true);
       setPlotLoading(clone);
       createAndOpenFigure(
-        workflow,
         createFigurePayload({
           query: queryPayload({query: queryString, columns, expandMatrices}),
           workflow,
           title: `${workflow.displayName} - from query`
         })
-      ).then(() => {
-        setPlotLoading(original);
-      });
+      )
+        .then(() => {
+          setPlotLoading(original);
+        })
+        .catch((e) => invoke(showMessages([e])));
     },
-    [plotLoading]
+    [plotLoading, columns, queryString, expandMatrices, invoke]
   );
 
   const buttonDisabled = !plottingWorkflows || plottingWorkflows.length === 0;
