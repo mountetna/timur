@@ -1,4 +1,10 @@
-import React, {useState, useEffect, useContext, useCallback} from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useMemo
+} from 'react';
 import * as _ from 'lodash';
 import {withStyles, makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -74,11 +80,13 @@ const StyledMenuItem = withStyles((theme) => ({
   }
 }))(MenuItem);
 
-const QueryPlotMenu = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [plottingWorkflows, setPlottingWorkflows] = useState([] as Workflow[]);
-  const [plotLoading, setPlotLoading] = useState([] as boolean[]);
-
+const usePlotActions = ({
+  plotLoading,
+  setPlotLoading
+}: {
+  plotLoading: boolean[];
+  setPlotLoading: React.Dispatch<React.SetStateAction<any[]>>;
+}) => {
   const invoke = useActionInvoker();
   const {
     state: {columns}
@@ -87,26 +95,7 @@ const QueryPlotMenu = () => {
     state: {expandMatrices, queryString}
   } = useContext(QueryResultsContext);
 
-  const classes = useStyles();
-
-  const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  useEffect(() => {
-    fetchWorkflows()
-      .then(({workflows}) => {
-        setPlottingWorkflows(workflows);
-        setPlotLoading(Array(workflows.length).fill(false));
-      })
-      .catch((e) => invoke(showMessages([e])));
-  }, []);
-
-  const handleOnClickMenuItem = useCallback(
+  const openPlot = useCallback(
     (workflow: Workflow, index: number) => {
       let clone = [...plotLoading];
       let original = [...plotLoading];
@@ -124,20 +113,51 @@ const QueryPlotMenu = () => {
         })
         .catch((e) => invoke(showMessages([e])));
     },
-    [plotLoading, columns, queryString, expandMatrices, invoke]
+    [plotLoading, setPlotLoading, columns, expandMatrices, queryString, invoke]
   );
 
-  const buttonDisabled = !plottingWorkflows || plottingWorkflows.length === 0;
+  return {
+    openPlot
+  };
+};
+
+const MultiplePlotOptionsMenu = ({
+  workflows,
+  disabled
+}: {
+  workflows: Workflow[];
+  disabled: boolean;
+}) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [plotLoading, setPlotLoading] = useState(
+    Array(workflows.length).fill(false)
+  );
+  const {openPlot} = usePlotActions({plotLoading, setPlotLoading});
+
+  const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOnClickMenuItem = useCallback(
+    (workflow: Workflow, index: number) => {
+      openPlot(workflow, index);
+    },
+    [openPlot]
+  );
 
   return (
-    <div className={buttonDisabled ? classes.disabledButton : classes.button}>
+    <>
       <Button
         aria-controls='plot-menu'
         aria-haspopup='true'
         variant='contained'
         color='primary'
         onClick={handleClickMenu}
-        disabled={buttonDisabled}
+        disabled={disabled}
       >
         Plot as
       </Button>
@@ -148,7 +168,7 @@ const QueryPlotMenu = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {plottingWorkflows.map((workflow: Workflow, index: number) => {
+        {workflows.map((workflow: Workflow, index: number) => {
           let IconComponent =
             workflow.icon && workflow.icon in PlotIcons
               ? PlotIcons[workflow.icon]
@@ -157,6 +177,7 @@ const QueryPlotMenu = () => {
           return (
             <StyledMenuItem
               key={index}
+              disabled={disabled || plotLoading[index]}
               onClick={() => {
                 if (!plotLoading[index]) handleOnClickMenuItem(workflow, index);
               }}
@@ -169,6 +190,73 @@ const QueryPlotMenu = () => {
           );
         })}
       </StyledMenu>
+    </>
+  );
+};
+
+const SinglePlotButton = ({
+  workflow,
+  disabled
+}: {
+  workflow: Workflow;
+  disabled: boolean;
+}) => {
+  const [plotLoading, setPlotLoading] = useState([false]);
+  const {openPlot} = usePlotActions({plotLoading, setPlotLoading});
+
+  const handleOnClick = useCallback(() => {
+    openPlot(workflow, 0);
+  }, [openPlot, workflow]);
+
+  return (
+    <Button
+      aria-controls='plot-menu'
+      aria-haspopup='true'
+      variant='contained'
+      color='primary'
+      onClick={handleOnClick}
+      startIcon={<MultilineChartIcon />}
+      disabled={disabled || plotLoading[0]}
+    >
+      Plot
+    </Button>
+  );
+};
+
+const QueryPlotMenu = () => {
+  const [plottingWorkflows, setPlottingWorkflows] = useState([] as Workflow[]);
+
+  const invoke = useActionInvoker();
+
+  const classes = useStyles();
+
+  useEffect(() => {
+    fetchWorkflows()
+      .then(({workflows}) => {
+        setPlottingWorkflows(workflows);
+      })
+      .catch((e) => invoke(showMessages([e])));
+  }, []);
+
+  const buttonDisabled = !plottingWorkflows || plottingWorkflows.length === 0;
+
+  const useSingletonButton = useMemo(() => {
+    return plottingWorkflows.length <= 1;
+  }, [plottingWorkflows]);
+
+  return (
+    <div className={buttonDisabled ? classes.disabledButton : classes.button}>
+      {useSingletonButton ? (
+        <SinglePlotButton
+          workflow={plottingWorkflows[0]}
+          disabled={buttonDisabled}
+        />
+      ) : (
+        <MultiplePlotOptionsMenu
+          disabled={buttonDisabled}
+          workflows={plottingWorkflows}
+        />
+      )}
     </div>
   );
 };
