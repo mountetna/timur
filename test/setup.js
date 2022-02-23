@@ -28,7 +28,8 @@ mockMath.random = () => 0.5;
 global.Math = mockMath;
 global.CONFIG = {
   project_name: 'labors',
-  magma_host: 'https://magma.test'
+  magma_host: 'https://magma.test',
+  vulcan_host: 'https://vulcan.test'
 };
 
 global.Routes = {

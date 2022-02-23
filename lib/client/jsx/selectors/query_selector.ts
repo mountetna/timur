@@ -5,7 +5,10 @@ import {
   EmptyQueryClause,
   QueryColumn,
   QuerySlice,
-  QueryTableColumn
+  QueryTableColumn,
+  QueryPayload,
+  Workflow,
+  CreateFigurePayload
 } from '../contexts/query/query_types';
 import {QueryGraph} from '../utils/query_graph';
 
@@ -250,4 +253,47 @@ export const userColumns = (columns: QueryColumn[]) => {
   return isIdentifierQuery(columns)
     ? [columnLabels[0], columnLabels[0]]
     : columnLabels;
+};
+
+export const queryPayload = ({
+  query,
+  columns,
+  expandMatrices
+}: {
+  query: string | any[];
+  columns: QueryColumn[];
+  expandMatrices: boolean;
+}): QueryPayload => {
+  return {
+    query,
+    user_columns: userColumns(columns),
+    expand_matrices: expandMatrices,
+    format: 'tsv'
+  };
+};
+
+export const createFigurePayload = ({
+  query,
+  title,
+  workflow
+}: {
+  query: QueryPayload;
+  title: string;
+  workflow: Workflow;
+}) => {
+  let payload: CreateFigurePayload = {
+    title,
+    workflow_name: workflow.name,
+    inputs: {}
+  };
+
+  Object.entries(workflow.inputQueryMap || {}).forEach(
+    ([cwlInput, inputSource]: [string, string]) => {
+      if (!query.hasOwnProperty(inputSource)) return;
+
+      payload.inputs[cwlInput] = query[inputSource as keyof QueryPayload];
+    }
+  );
+
+  return payload;
 };

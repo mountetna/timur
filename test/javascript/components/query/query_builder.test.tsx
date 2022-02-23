@@ -55,6 +55,15 @@ describe('QueryBuilder', () => {
       response: {answer: ['Greece', 'Italy', 'France']}
     });
 
+    stubUrl({
+      verb: 'get',
+      host: 'https://vulcan.test',
+      path: '/api/labors/workflows?tag=plotting',
+      request: (body) => true,
+      status: 200,
+      response: {workflows: []}
+    });
+
     store = mockStore({
       magma: {models},
       janus: {projects: require('../../fixtures/project_names.json')}

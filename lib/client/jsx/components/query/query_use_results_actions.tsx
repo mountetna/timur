@@ -12,7 +12,7 @@ import {
   QueryColumn
 } from '../../contexts/query/query_types';
 import {Cancellable} from 'etna-js/utils/cancellable';
-import {userColumns} from '../../selectors/query_selector';
+import {queryPayload} from '../../selectors/query_selector';
 
 const useResultsActions = ({
   countQuery,
@@ -69,10 +69,7 @@ const useResultsActions = ({
         .race(
           invoke(
             requestAnswer({
-              query,
-              format: 'tsv',
-              user_columns: userColumns(columns),
-              expand_matrices: expandMatrices,
+              ...queryPayload({query, columns, expandMatrices}),
               transpose
             })
           )
