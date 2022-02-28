@@ -44,8 +44,11 @@ const models = {
 describe('QueryBuilder', () => {
   let store;
   let graph = new QueryGraph(models);
+  let mockColumnState;
+  let mockGraphState;
+  let mockWhereState;
 
-  it('renders', async () => {
+  beforeEach(() => {
     stubUrl({
       verb: 'post',
       host: 'https://magma.test',
@@ -64,12 +67,7 @@ describe('QueryBuilder', () => {
       response: {workflows: []}
     });
 
-    store = mockStore({
-      magma: {models},
-      janus: {projects: require('../../fixtures/project_names.json')}
-    });
-
-    let mockColumnState = {
+    mockColumnState = {
       columns: [
         {
           model_name: 'monster',
@@ -134,12 +132,12 @@ describe('QueryBuilder', () => {
       ]
     };
 
-    let mockGraphState = {
+    mockGraphState = {
       graph,
       rootModel: 'monster'
     };
 
-    let mockWhereState = {
+    mockWhereState = {
       orRecordFilterIndices: [],
       recordFilters: [
         {
@@ -158,6 +156,16 @@ describe('QueryBuilder', () => {
         }
       ]
     };
+  });
+
+  it('renders with Plot button', async () => {
+    store = mockStore({
+      magma: {models},
+      janus: {projects: require('../../fixtures/project_names.json')},
+      user: {
+        flags: ['queryplot']
+      }
+    });
 
     const {asFragment} = render(<QueryBuilder />, {
       wrapper: querySpecWrapper({
@@ -184,6 +192,43 @@ describe('QueryBuilder', () => {
       () => screen.getByText(/"Italy"/) && screen.getByText(/user_columns/)
     );
 
+    expect(screen.queryByText(/Plot/)).toBeTruthy();
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it('renders without Plot button', async () => {
+    store = mockStore({
+      magma: {models},
+      janus: {projects: require('../../fixtures/project_names.json')},
+      user: {}
+    });
+
+    const {asFragment} = render(<QueryBuilder />, {
+      wrapper: querySpecWrapper({
+        mockColumnState,
+        mockGraphState,
+        mockWhereState,
+        mockResultsState: defaultQueryResultsParams,
+        store
+      })
+    });
+
+    await waitFor(() => screen.getByTestId('operand-autocomplete'));
+
+    const autocomplete = screen.getByTestId('operand-autocomplete');
+    fireEvent.change(autocomplete.getElementsByTagName('input')[0], {
+      target: {value: 'It'}
+    });
+
+    await waitFor(() => screen.getByText('Italy'));
+
+    userEvent.click(screen.getByText('Italy'));
+
+    await waitFor(
+      () => screen.getByText(/"Italy"/) && screen.getByText(/user_columns/)
+    );
+
+    expect(screen.queryByText(/Plot/)).toBeFalsy();
     expect(asFragment()).toMatchSnapshot();
   });
 });
