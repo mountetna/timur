@@ -111,7 +111,7 @@ const usePlotActions = ({
         .then(() => {
           setPlotLoading(original);
         })
-        .catch((e) => invoke(showMessages([e])));
+        .catch((e) => invoke(showMessages(Array.isArray(e) ? e : [e])));
     },
     [plotLoading, setPlotLoading, columns, expandMatrices, queryString, invoke]
   );
@@ -235,7 +235,7 @@ const QueryPlotMenu = () => {
       .then(({workflows}) => {
         setPlottingWorkflows(workflows);
       })
-      .catch((e) => invoke(showMessages([e])));
+      .catch((e) => invoke(showMessages(Array.isArray(e) ? e : [e])));
   }, []);
 
   const buttonDisabled = !plottingWorkflows || plottingWorkflows.length === 0;

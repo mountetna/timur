@@ -14,6 +14,7 @@ import ShareIcon from '@material-ui/icons/Share';
 
 import {makeStyles} from '@material-ui/core/styles';
 
+import {useFeatureFlag} from 'etna-js/hooks/useFeatureFlag';
 import {useModal} from 'etna-js/components/ModalDialogContainer';
 import {copyText} from 'etna-js/utils/copy';
 import {QueryGraphContext} from '../../contexts/query/query_graph_context';
@@ -205,6 +206,8 @@ const QueryControlButtons = () => {
     setLastOrFilterIndices(orRecordFilterIndices);
   }, [runQuery, columns, recordFilters, orRecordFilterIndices]);
 
+  const canPlot = useFeatureFlag('queryplot');
+
   if (!rootModel) return null;
 
   return (
@@ -247,7 +250,7 @@ const QueryControlButtons = () => {
         >
           Copy Link
         </Button>
-        <QueryPlotMenu />
+        {canPlot ? <QueryPlotMenu /> : null}
       </Grid>
       <Grid item>
         {formattedColumns.length > maxColumns ? (
