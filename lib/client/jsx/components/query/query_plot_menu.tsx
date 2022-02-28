@@ -111,7 +111,7 @@ const usePlotActions = ({
         .then(() => {
           setPlotLoading(original);
         })
-        .catch((e) => invoke(showMessages([e])));
+        .catch((e) => invoke(showMessages(Array.isArray(e) ? e : [e])));
     },
     [plotLoading, setPlotLoading, columns, expandMatrices, queryString, invoke]
   );
