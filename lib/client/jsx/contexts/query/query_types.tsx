@@ -67,6 +67,7 @@ interface InputQueryMap {
 }
 
 export interface Workflow {
+  queryAction?: string;
   name: string;
   displayName: string;
   icon?: string;
