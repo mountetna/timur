@@ -185,7 +185,9 @@ const MultiplePlotOptionsMenu = ({
               <ListItemIcon>
                 <IconComponent fontSize='small' />
               </ListItemIcon>
-              <ListItemText primary={workflow.displayName} />
+              <ListItemText
+                primary={workflow.queryAction || workflow.displayName}
+              />
             </StyledMenuItem>
           );
         })}
