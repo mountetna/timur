@@ -15,6 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MultilineChartIcon from '@material-ui/icons/MultilineChart';
 import BarChart from '@material-ui/icons/BarChart';
 import ScatterPlot from '@material-ui/icons/ScatterPlot';
+import TableChart from '@material-ui/icons/TableChart';
 
 import {SvgIconTypeMap} from '@material-ui/core/SvgIcon';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
@@ -34,7 +35,8 @@ const PlotIcons: {
   [key: string]: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
 } = {
   BarChart: BarChart,
-  ScatterPlot: ScatterPlot
+  ScatterPlot: ScatterPlot,
+  TableChart: TableChart
 };
 
 const useStyles = makeStyles((theme) => ({
