@@ -239,7 +239,7 @@ const QueryPlotMenu = () => {
       .then(({workflows}) => {
         setPlottingWorkflows(workflows);
       })
-      .catch((e) => invoke(showMessages(Array.isArray(e) ? e : [e])));
+      .catch((e) => invoke(showMessages(['Error fetching workflows from Vulcan. Plotting disabled.'])));
   }, []);
 
   const buttonDisabled = !plottingWorkflows || plottingWorkflows.length === 0;
