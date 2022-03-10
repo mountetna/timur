@@ -13,6 +13,7 @@ import AntSwitch from './ant_switch';
 import {defaultHighlightStyle} from '@codemirror/highlight';
 import {json} from '@codemirror/lang-json';
 import {EditorView} from '@codemirror/view';
+import {EditorState} from '@codemirror/state';
 import CodeMirror from 'rodemirror';
 
 const useStyles = makeStyles((theme) => ({
@@ -97,9 +98,26 @@ const QueryResults = () => {
       defaultHighlightStyle.fallback,
       json(),
       EditorView.editable.of(false),
+      EditorState.readOnly.of(true),
+      EditorState.transactionFilter.of((tr) => {
+        if (!tr.docChanged && tr.selection) {
+          // Keep any pure selection transactions
+          return tr;
+        } else {
+          // All other transactions, in our case, involve doc changes.
+          // In this case, undo any active selections to avoid confusion.
+          return {
+            ...tr,
+            selection: {
+              anchor: 0,
+              head: 0
+            }
+          };
+        }
+      }),
       EditorView.lineWrapping
     ],
-    []
+    [codeMirrorText]
   );
 
   if (!rootModel) return null;

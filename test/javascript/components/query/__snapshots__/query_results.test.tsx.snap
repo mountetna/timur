@@ -22,6 +22,7 @@ exports[`QueryResults expands and nests matrix columns 1`] = `
           >
             <div
               aria-multiline="true"
+              aria-readonly="true"
               autocapitalize="off"
               autocorrect="off"
               class="cm-content cm-lineWrapping"
@@ -350,6 +351,7 @@ exports[`QueryResults renders 1`] = `
           >
             <div
               aria-multiline="true"
+              aria-readonly="true"
               autocapitalize="off"
               autocorrect="off"
               class="cm-content cm-lineWrapping"

@@ -2229,6 +2229,7 @@ exports[`QueryBuilder renders with Plot button 1`] = `
           >
             <div
               aria-multiline="true"
+              aria-readonly="true"
               autocapitalize="off"
               autocorrect="off"
               class="cm-content cm-lineWrapping"
@@ -4906,6 +4907,7 @@ exports[`QueryBuilder renders without Plot button 1`] = `
           >
             <div
               aria-multiline="true"
+              aria-readonly="true"
               autocapitalize="off"
               autocorrect="off"
               class="cm-content cm-lineWrapping"
