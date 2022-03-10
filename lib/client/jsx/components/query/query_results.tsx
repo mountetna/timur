@@ -1,4 +1,4 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -99,33 +99,46 @@ const QueryResults = () => {
       json(),
       EditorView.editable.of(false),
       EditorState.readOnly.of(true),
-      EditorState.transactionFilter.of((tr) => {
-        if (!tr.docChanged && tr.selection) {
-          // Keep any pure selection transactions
-          return tr;
-        } else {
-          // All other transactions, in our case, involve doc changes.
-          // In this case, undo any active selections to avoid confusion.
-          return {
-            ...tr,
-            selection: {
-              anchor: 0,
-              head: 0
-            }
-          };
-        }
-      }),
+      // EditorState.transactionFilter.of((tr) => {
+      //   console.log('tr', tr, tr.docChanged, tr.selection);
+      //   if (!tr.docChanged && tr.selection) {
+      //     console.log('1');
+      //     // Pass through as normal. Selection-only change
+      //     return {...tr};
+      //   } else {
+      //     console.log('2');
+      //     // If this is only a doc change, clear the selection.
+      //     return {
+      //       ...tr,
+      //       selection: {
+      //         anchor: 0,
+      //         head: 0
+      //       }
+      //     };
+      //   }
+      // }),
       EditorView.lineWrapping
     ],
-    [codeMirrorText]
+    []
   );
+
+  const [selection, setSelection] = useState({anchor: 0, head: 0});
+  const handleOnUpdate = useCallback((v: any) => {
+    console.log('v', v);
+  }, []);
 
   if (!rootModel) return null;
 
+  console.log('codeMirrorText', codeMirrorText);
   return (
     <Grid container className={classes.resultsPane}>
       <Grid item className={classes.result}>
-        <CodeMirror extensions={extensions} value={codeMirrorText} />
+        <CodeMirror
+          extensions={extensions}
+          value={codeMirrorText}
+          selection={selection}
+          onUpdate={handleOnUpdate}
+        />
       </Grid>
       <Grid xs={12} item container direction='column'>
         <Grid className={classes.config} item container justify='flex-end'>
