@@ -27,7 +27,7 @@ const ModelMapGraphic = ({
 
   return (
     <React.Fragment>
-      <svg width={width} height={height}>
+      <svg id='map' width={width} height={height}>
         <defs>
           <Arrowhead />
         </defs>

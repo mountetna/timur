@@ -1,133 +1,37 @@
 @import "globals";
 
-#model_map {
-  display: flex;
-  margin-top: 10px;
-  position: relative;
-  font-family: $body_font;
-
-  .heading {
-    &:first-of-type {
-      border-bottom: $thin_rule;
-    }
-    .name {
-      color: gray;
-      font-size: 1.2em;
-    }
-    .title {
-      color: forestgreen;
-      font-size: 1.2em;
-    }
+svg#map {
+  overflow: visible;
+  line {
+    stroke-width: 3px;
+    stroke: #aca;
   }
-
-  .report {
-    display: flex;
-    flex: 1;
-    vertical-align: top;
-
-    .model_report {
-      flex: 1 1 50%;
-      border-left: 1px solid lightgray;
-      padding: 20px 10px;
-    }
-
-    .attribute_report {
-      flex: 1 1 50%;
-      height: min-content;
-      background: #eee;
-      &:empty {
-        background: none;
-      }
-      padding: 20px;
-      margin-right: 20px;
-      .report_row {
-        border-bottom: 0px;
-      }
-    }
-    .report_row {
-      display: flex;
-
-      :first-child {
-        text-align: right;
-        padding-right: 5px;
-        flex-basis: 130px;
-      }
-      :not(:first-child) {
-        word-wrap: anywhere;
-        flex: 1;
-      }
-
-      .type {
-        color: gray;
-      }
-
-      .value {
-        color: #131;
-        border-bottom: $thin_rule;
-      }
-
-      .description {
-        color: #131;
-        &:before {
-          content: " - ";
-        }
-      }
-    }
-    .heading:first-of-type {
-      margin-bottom: 10px;
-    }
-    .heading:not(:first-of-type) {
-      .name {
-        font-size: 1.1em;
-      }
-    }
-    .map_attribute {
-      .name {
-        cursor: pointer;
-      }
-    }
-  }
-
-  .map {
-    flex-basis: 600px;
-    .heading {
-      position: absolute;
-      left: 15px;
-      top: 20px;
-      border-bottom: $thin_rule;
-    }
-    svg {
-      overflow: visible;
-      line {
-        stroke-width: 3px;
-        stroke: #aca;
-      }
-      #arrow {
-        fill: #aca;
-      }
-    }
-    .model_node {
-      cursor: pointer;
-      position: absolute;
-
-      font-family: $body_font;
-      font-size: 0.75em;
-
-      border-radius: 3px;
-      border: 2px solid #aaa;
-      background: #f2f2f2;
-      box-shadow: 0 0 2px 0 #ccc;
-      padding: 5px;
-
-      &.selected {
-        border: 2px solid #0c0;
-        background: #cfc;
-      }
-
-      transform: translate(-50%,-50%);
-      &:hover {
-        background: #cec;
-      }
-    }
+  #arrow {
+    fill: #aca;
   }
 }
+
+.model_node {
+  cursor: pointer;
+  position: absolute;
+
+  font-family: $body_font;
+  font-size: 0.75em;
+
+  border-radius: 3px;
+  border: 2px solid #aaa;
+  background: #f2f2f2;
+  box-shadow: 0 0 2px 0 #ccc;
+  padding: 5px;
+
+  &.selected {
+    border: 2px solid #0c0;
+    background: #cfc;
+  }
+
+  transform: translate(-50%,-50%);
+  &:hover {
+    background: #cec;
+  }
+}
+

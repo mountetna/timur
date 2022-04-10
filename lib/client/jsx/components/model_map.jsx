@@ -1,61 +1,84 @@
-import React from 'react';
+import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { requestModels } from 'etna-js/actions/magma_actions';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import {makeStyles} from '@material-ui/core/styles';
 
+import AttributeReport from './model_map/attribute_report';
+
+import MapHeading from './model_map/map_heading';
 import ModelReport from './model_map/model_report';
 import ModelMapGraphic from './model_map/model_map_graphic';
 
+import { requestModels } from 'etna-js/actions/magma_actions';
+import { selectTemplate } from 'etna-js/selectors/magma';
+import { fetchProjectsAction } from 'etna-js/actions/janus-actions';
 import { selectProjects } from 'etna-js/selectors/janus-selector';
 import { projectNameFull } from 'etna-js/utils/janus';
-import {fetchProjectsAction} from 'etna-js/actions/janus-actions';
+import { useReduxState } from 'etna-js/hooks/useReduxState';
+import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 
-class ModelMap extends React.Component {
-  constructor() {
-    super()
-    this.state = { current_model: "project", current_attribute: null }
+const mapStyle = makeStyles(theme => ({
+  report: {
+    borderLeft: '1px solid #bbb',
+    height: 'calc(100vh - 61.5px)',
+    flex: '1',
+    width: 'auto',
+    flexWrap: 'nowrap'
+  },
+  model_map: {
+    position: 'relative'
+  },
+  map: {
+    flexBasis: '600px'
+  },
+  heading: {
+    position: 'absolute',
+    left: '15px',
+    top: '15px',
+    width: '560px',
   }
-  componentDidMount() {
-    this.props.requestModels();
-    this.props.fetchProjectsAction();
-  }
-  showModel(current_model) {
-    this.setState( { current_model, current_attribute: null } )
-  }
-  showAttribute(current_attribute) {
-    this.setState( { current_attribute } )
-  }
-  render() {
-    let [ width, height ] = [ 600, 600 ];
-    let { projects } = this.props;
-    let { current_model, current_attribute } = this.state;
+}));
 
-    let full_name = projectNameFull(projects, CONFIG.project_name) || CONFIG.project_name
+const ModelMap = ({}) => {
+  const [ model, setModel ] = useState('project');
+  const [ attribute_name, setAttribute ] = useState(null);
+  const invoke = useActionInvoker();
 
-    return <div id="model_map">
-      <div className="map">
-        <div className="heading report_row">
-        <span className="name">Project</span> <span className="title">{full_name}</span>
-        </div>
-        <ModelMapGraphic 
-          width={width}
-          height={height}
-          selected_models={[current_model]}
-          handler={this.showModel.bind(this)}
-        />
-      </div>
-      <ModelReport
-        showAttribute={ this.showAttribute.bind(this) }
-        model_name={ current_model } attribute_name={ current_attribute }/>
-    </div>
-  }
+  const state = useReduxState();
+  const template = selectTemplate(state,model);
+  const projects = selectProjects(state);
+
+  const attribute = template && attribute_name ? template.attributes[attribute_name] : null;
+  const updateModel = (model) => { setModel(model); setAttribute(null) };
+
+  useEffect( () => {
+    invoke(requestModels());
+    invoke(fetchProjectsAction());
+  }, []);
+
+  const [ width, height ] = [ 600, 600 ];
+
+  const full_name = projectNameFull(projects, CONFIG.project_name) || CONFIG.project_name;
+
+  const classes = mapStyle()
+
+  return <Grid className={classes.model_map} container>
+    <Grid item className="map">
+      <MapHeading className={classes.heading} name='Project' title={full_name}/>
+      <ModelMapGraphic 
+        width={width}
+        height={height}
+        selected_models={[model]}
+        handler={updateModel}
+      />
+    </Grid>
+    <Grid container direction='column' className={ classes.report}>
+      <ModelReport key={model} model_name={ model } template={ template } setAttribute={ setAttribute }/> 
+      <AttributeReport attribute={ attribute }/> 
+    </Grid>
+  </Grid>
 }
 
-export default connect(
-  (state) => {
-    return {
-      projects: selectProjects(state)
-    }
-  },
-  { requestModels, fetchProjectsAction }
-)(ModelMap);
+export default ModelMap;

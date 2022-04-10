@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import {makeStyles} from '@material-ui/core/styles';
+import {useReduxState} from 'etna-js/hooks/useReduxState';
+import MapHeading from './map_heading';
 
 const ATT_ATTS = [
   'attribute_type',
@@ -8,6 +14,7 @@ const ATT_ATTS = [
   'format_hint',
   'attribute_group',
 
+  'validation_type',
   'validation',
 
   'restricted',
@@ -15,34 +22,63 @@ const ATT_ATTS = [
   'hidden'
 ];
 
-const AttributeReport = ({attribute}) =>
-  !attribute ? <div className="attribute_report"/> :
-  <div className="attribute_report">
-    <div className="heading report_row">
-      <span className="name">Attribute</span> <span className="title">{attribute.attribute_name}</span>
-    </div>
-    {
-      ATT_ATTS.map(att => {
-        switch(att) {
-          case 'validation':
-            if (attribute.options)
-              return [ 'validation', attribute.options.join(', ') ];
-            if (attribute.match)
-              return [ 'validation', attribute.match ];
-            if (attribute.validation)
-              return [ 'validation', JSON.stringify(attribute.validation) ];
-            return [ 'validation', null ];
-            break;
-          default:
-            return [ att, attribute[att] ];
+const useStyles = makeStyles((theme) => ({
+  clauseTitle: {
+    fontSize: '1.2rem'
+  },
+  attribute_report: {
+    height: '50%',
+    borderTop: '1px solid #bbb'
+  },
+  attribute_card: {
+    background: '#eee',
+    padding: '15px',
+    height: 'calc(100% - 30px)'
+  },
+  content: {
+    height: 'calc(100% - 64px)',
+    overflowY: 'auto'
+  },
+  type: {
+    color: 'gray'
+  },
+  value: {
+    color: '#131',
+    borderBottom: '1px solid rgba(34, 139, 34, 0.1)',
+    maxHeight: '90px',
+    overflowY: 'auto'
+  }
+}));
+
+const AttributeReport = ({attribute}) => {
+  if (!attribute) return null;
+
+  const classes = useStyles();
+
+  return <Grid className={ classes.attribute_report }>
+    <Card className={ classes.attribute_card} >
+      <MapHeading name='Attribute' title={attribute.attribute_name}/>
+      <CardContent className={ classes.content }>
+        {
+          ATT_ATTS.map(att => {
+            switch(att) {
+              case 'validation':
+                return [ att, attribute.validation ? JSON.stringify(attribute.validation.value) : null ];
+              case 'validation_type':
+                return [ att, attribute.validation?.type ]
+              default:
+                return [ att, attribute[att] ];
+            }
+          }).filter( ([name,value]) => value).map( ([name, value]) =>
+            <Grid container key={name}>
+              <Grid item xs={3} className={ classes.type }>{name}</Grid>
+              <Grid item xs={9} className={ classes.value }>{value}</Grid>
+            </Grid>
+          )
         }
-      }).filter( ([name,value]) => value).map( ([name, value]) =>
-        <div className="report_row" key={name}>
-          <div className="type">{name}</div>
-          <div className="value">{value}</div>
-        </div>
-      )
-    }
-  </div>;
+      </CardContent>
+    </Card>
+  </Grid>;
+}
 
 export default AttributeReport;
