@@ -16,12 +16,16 @@ const headingStyles = makeStyles(theme => ({
   }
 }));
 
-const MapHeading = ({className, name, title}) => {
+const MapHeading = ({className, name, title, children}) => {
   const classes = headingStyles();
   return <Grid className={ `${classes.heading} ${className}` } container>
       <Typography variant='h6' className={classes.name}>{name}</Typography>
       &nbsp;
       <Typography variant='h6' className={classes.title}>{title}</Typography>
+
+      <Grid style={{ width: 'auto', flex: 1, alignItems: 'end', justifyContent: 'right' }} container>
+      { children }
+      </Grid>
     </Grid>
 }
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useEffect, useState } from 'react';
+import React, { useMemo, useCallback, useEffect, useState, useReducer } from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
@@ -41,6 +41,32 @@ const mapStyle = makeStyles(theme => ({
   }
 }));
 
+const countsReducer = (state, action) => {
+  switch(action.type) {
+    case 'MODEL_COUNT':
+      return {
+        ...state,
+        [action.model_name]: {
+          ...(state[action.model_name] || {}),
+          count: action.count
+        }
+      };
+    case 'ATTRIBUTE_COUNT':
+      return {
+        ...state,
+        [action.model_name]: {
+          ...(state[action.model_name] || {}),
+          attributes: {
+            ...state[action.model_name]?.attributes,
+            [ action.attribute_name ]: action.count
+          }
+        }
+      };
+    default:
+      return state;
+  }
+};
+
 const ModelMap = ({}) => {
   const [ model, setModel ] = useState('project');
   const [ attribute_name, setAttribute ] = useState(null);
@@ -52,6 +78,8 @@ const ModelMap = ({}) => {
 
   const attribute = template && attribute_name ? template.attributes[attribute_name] : null;
   const updateModel = (model) => { setModel(model); setAttribute(null) };
+
+  const [ counts, updateCounts ] = useReducer(countsReducer, {});
 
   useEffect( () => {
     invoke(requestModels());
@@ -75,8 +103,8 @@ const ModelMap = ({}) => {
       />
     </Grid>
     <Grid container direction='column' className={ classes.report}>
-      <ModelReport key={model} model_name={ model } template={ template } setAttribute={ setAttribute }/> 
-      <AttributeReport attribute={ attribute }/> 
+      <ModelReport counts={counts} updateCounts={updateCounts} key={model} model_name={ model } template={ template } setAttribute={ setAttribute }/> 
+      <AttributeReport counts={ counts[model] } attribute={ attribute }/> 
     </Grid>
   </Grid>
 }

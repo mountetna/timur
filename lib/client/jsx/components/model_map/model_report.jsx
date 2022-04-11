@@ -1,7 +1,9 @@
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import React, { useState, useCallback } from 'react';
 import { sortAttributes } from '../../utils/attributes';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
+import {requestAnswer} from 'etna-js/actions/magma_actions';
+import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -17,6 +19,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import MapHeading from './map_heading';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const attributeStyles = makeStyles((theme) => ({
   value: {
@@ -27,16 +32,30 @@ const attributeStyles = makeStyles((theme) => ({
     color: 'gray',
     width: '25%',
     paddingRight: '10px'
+  },
+  progress: {
+    width: '30px',
+    margin: '5px'
+  },
+  count: {
+    width: '20%'
   }
 }));
 
-const ModelAttribute = ({ attribute: { attribute_name, attribute_type, description }, setAttribute }) => {
+const ModelAttribute = ({ attribute: { attribute_name, attribute_type, description }, setAttribute, count, modelCount }) => {
   const classes = attributeStyles();
 
   return <TableRow>
     <TableCell className={classes.type} align="right">{attribute_type}</TableCell>
     <TableCell className={classes.value} align="left" onClick={ () => setAttribute(attribute_name) }>{attribute_name} </TableCell>
     <TableCell align="left">{description}</TableCell>
+    { count != undefined && <TableCell className={classes.count} align="left">
+      <Grid container alignItems='center'>
+        {count}
+        <LinearProgress className={classes.progress} variant='determinate' value={100 * count/(modelCount || 1)}/>
+        <Typography variant='body2' color='textSecondary'>{ Math.round(100 * count / (modelCount||1)) }%</Typography>
+      </Grid>
+      </TableCell> }
   </TableRow>
 }
 
@@ -69,13 +88,42 @@ const reportStyles = makeStyles((theme) => ({
   type: {
     width: '25%',
     paddingRight: '10px'
+  },
+  count: {
+    width: '20%'
   }
 }));
 
-const ModelReport = ({ model_name, template, setAttribute }) => {
+const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute }) => {
   if (!template) return null;
 
+  const dispatch = useDispatch()
+
   const classes = reportStyles();
+
+  const modelCount = counts[model_name]?.count;
+  const attributeCounts = counts[model_name]?.attributes;
+
+  const getAnswer = (query, handle) => requestAnswer({ query })(dispatch).then(
+    ({answer}) => handle(answer)
+  );
+
+  console.log({counts});
+
+  const countModel = () => {
+    if (modelCount != undefined) return;
+
+    updateCounts({type: 'MODEL_COUNT', model_name, count: -1});
+
+    getAnswer( [ model_name, '::count' ], count => updateCounts({type: 'MODEL_COUNT', model_name, count}));
+
+    Object.keys(template.attributes).forEach( attribute_name => {
+      getAnswer(
+        [ model_name, [ '::has', attribute_name ], '::count' ],
+        count => updateCounts({type: 'ATTRIBUTE_COUNT', model_name, attribute_name, count})
+      )
+    });
+  };
 
   const [ filterString, setFilterString ] = useState('');
 
@@ -96,7 +144,18 @@ const ModelReport = ({ model_name, template, setAttribute }) => {
   }, [ filterString ])
 
   return <Grid className={ classes.model_report }>
-    <MapHeading className={ classes.heading } name='Model' title={model_name}/>
+    <MapHeading className={ classes.heading } name='Model' title={model_name}>
+      {
+        modelCount != undefined && modelCount >= 0 ? <Typography>{modelCount} {modelCount > 1 || modelCount == 0 ? 'records' : 'record'}</Typography> : 
+        <Tooltip title='Count records and attributes'>
+          <Button
+            disabled={modelCount!=undefined}
+            onClick={() => countModel(model_name)}
+            size='small'
+            color='secondary'>Count</Button>
+        </Tooltip>
+      }
+    </MapHeading>
     <TextField
       fullWidth
       placeholder='Filter attributes'
@@ -120,6 +179,7 @@ const ModelReport = ({ model_name, template, setAttribute }) => {
             <TableCell className={classes.type} align="right">Type</TableCell>
             <TableCell align="left">Attribute</TableCell>
             <TableCell align="left">Description</TableCell>
+            { attributeCounts && <TableCell className={classes.count} align="left">Counts</TableCell> }
           </TableRow>
         </TableHead>
 
@@ -127,7 +187,13 @@ const ModelReport = ({ model_name, template, setAttribute }) => {
         {
           Object.values(sortAttributes(template.attributes)).filter(
             attribute => !attribute.hidden && matchesFilter(attribute)
-          ).map(attribute => <ModelAttribute key={attribute.attribute_name} setAttribute={ setAttribute } attribute={attribute} />)
+          ).map( attribute => <ModelAttribute
+              key={attribute.attribute_name}
+              setAttribute={ setAttribute }
+              count={ attributeCounts && attributeCounts[attribute.attribute_name] }
+              modelCount={ modelCount }
+              attribute={attribute} />
+          )
         }
         </TableBody>
       </Table>

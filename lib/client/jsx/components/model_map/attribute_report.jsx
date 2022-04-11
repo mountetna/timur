@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const AttributeReport = ({attribute}) => {
+const AttributeReport = ({attribute, counts}) => {
   if (!attribute) return null;
 
   const classes = useStyles();
