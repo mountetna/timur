@@ -104,7 +104,7 @@ const ModelMap = ({}) => {
     </Grid>
     <Grid container direction='column' className={ classes.report}>
       <ModelReport counts={counts} updateCounts={updateCounts} key={model} model_name={ model } template={ template } setAttribute={ setAttribute }/> 
-      <AttributeReport counts={ counts[model] } attribute={ attribute }/> 
+      <AttributeReport counts={ counts[model] } attribute={ attribute } model_name={model}/> 
     </Grid>
   </Grid>
 }

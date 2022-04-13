@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
+import React, { useState, Component } from 'react';
+import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import {makeStyles} from '@material-ui/core/styles';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
+import {requestAnswer} from 'etna-js/actions/magma_actions';
 import MapHeading from './map_heading';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const ATT_ATTS = [
   'attribute_type',
@@ -50,14 +54,35 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const AttributeReport = ({attribute, counts}) => {
+const AttributeReport = ({attribute, model_name, counts}) => {
   if (!attribute) return null;
+
+  const dispatch = useDispatch();
+
+  const [ sample, setSample ] = useState(null);
+
+  const showSample = () => {
+    requestAnswer({ query: [
+      model_name, '::distinct', attribute.attribute_name
+    ]})(dispatch).then(
+      ({answer}) => setSample(answer)
+    )
+  }
 
   const classes = useStyles();
 
   return <Grid className={ classes.attribute_report }>
     <Card className={ classes.attribute_card} >
-      <MapHeading name='Attribute' title={attribute.attribute_name}/>
+      <MapHeading name='Attribute' title={attribute.attribute_name}>
+        {
+          <Tooltip title='Show data sample'>
+            <Button
+              onClick={ showSample }
+              size='small'
+              color='secondary'>Sample</Button>
+          </Tooltip>
+        }
+      </MapHeading>
       <CardContent className={ classes.content }>
         {
           ATT_ATTS.map(att => {
@@ -75,6 +100,13 @@ const AttributeReport = ({attribute, counts}) => {
               <Grid item xs={9} className={ classes.value }>{value}</Grid>
             </Grid>
           )
+        }
+        {
+          sample && 
+            <Grid container>
+              <Grid item xs={3} className={ classes.type }>sample</Grid>
+              <Grid item xs={9} className={ classes.value }>{JSON.stringify(sample)}</Grid>
+            </Grid>
         }
       </CardContent>
     </Card>

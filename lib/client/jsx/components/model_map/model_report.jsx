@@ -97,7 +97,7 @@ const reportStyles = makeStyles((theme) => ({
 const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute }) => {
   if (!template) return null;
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const classes = reportStyles();
 
