@@ -118,8 +118,18 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
     getAnswer( [ model_name, '::count' ], count => updateCounts({type: 'MODEL_COUNT', model_name, count}));
 
     Object.keys(template.attributes).forEach( attribute_name => {
+      let query;
+      switch(template.attributes[attribute_name].attribute_type) {
+        case 'collection':
+        case 'table':
+          query = [ model_name, [ attribute_name, [ '::has', '::identifier' ], '::any' ], '::count' ]
+          break;
+        default:
+          query = [ model_name, [ '::has', attribute_name ], '::count' ];
+      };
+
       getAnswer(
-        [ model_name, [ '::has', attribute_name ], '::count' ],
+        query, 
         count => updateCounts({type: 'ATTRIBUTE_COUNT', model_name, attribute_name, count})
       )
     });
