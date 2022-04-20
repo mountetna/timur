@@ -2,26 +2,38 @@
 
 exports[`ModelMap renders 1`] = `
 <div
-  id="model_map"
+  className="MuiGrid-root makeStyles-model_map-2 MuiGrid-container"
 >
   <div
-    className="map"
+    className="MuiGrid-root map MuiGrid-item"
   >
     <div
-      className="heading report_row"
+      className="MuiGrid-root makeStyles-heading-5 makeStyles-heading-4 MuiGrid-container"
     >
-      <span
-        className="name"
+      <h6
+        className="MuiTypography-root makeStyles-name-6 MuiTypography-h6"
       >
         Project
-      </span>
-       
-      <span
-        className="title"
+      </h6>
+       
+      <h6
+        className="MuiTypography-root makeStyles-title-7 MuiTypography-h6"
+      />
+      <div
+        className="MuiGrid-root MuiGrid-container"
+        style={
+          Object {
+            "alignItems": "end",
+            "flex": 1,
+            "justifyContent": "right",
+            "width": "auto",
+          }
+        }
       />
     </div>
     <svg
       height={600}
+      id="map"
       width={600}
     >
       <defs>
@@ -100,133 +112,286 @@ exports[`ModelMap renders 1`] = `
     </div>
   </div>
   <div
-    className="report"
+    className="MuiGrid-root makeStyles-report-1 MuiGrid-container MuiGrid-direction-xs-column"
   >
     <div
-      className="model_report"
+      className="MuiGrid-root makeStyles-model_report-8"
     >
       <div
-        className="heading report_row"
+        className="MuiGrid-root makeStyles-heading-5 makeStyles-heading-9 MuiGrid-container"
       >
-        <span
-          className="name"
+        <h6
+          className="MuiTypography-root makeStyles-name-6 MuiTypography-h6"
         >
           Model
-        </span>
-         
-        <span
-          className="title"
+        </h6>
+         
+        <h6
+          className="MuiTypography-root makeStyles-title-7 MuiTypography-h6"
         >
           project
-        </span>
-      </div>
-      <div
-        className="heading report_row"
-      >
-        <span
-          className="name"
+        </h6>
+        <div
+          className="MuiGrid-root MuiGrid-container"
+          style={
+            Object {
+              "alignItems": "end",
+              "flex": 1,
+              "justifyContent": "right",
+              "width": "auto",
+            }
+          }
         >
-          Attributes
-        </span>
-      </div>
-      <div
-        className="map_attribute report_row"
-      >
-        <span
-          className="type"
-        >
-           
-          identifier
-           
-        </span>
-        <span
-          className="value"
-        >
-          <a
-            className="name"
+          <button
+            aria-describedby={null}
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSecondary MuiButton-textSizeSmall MuiButton-sizeSmall"
+            disabled={false}
+            onBlur={[Function]}
             onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseOver={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            title="Count records and attributes"
+            type="button"
           >
-            name
-          </a>
-          <span
-            className="description"
-          >
-            Name for this project
-          </span>
-        </span>
+            <span
+              className="MuiButton-label"
+            >
+              Count
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+        </div>
       </div>
       <div
-        className="map_attribute report_row"
+        className="MuiFormControl-root MuiTextField-root makeStyles-filter-12 MuiFormControl-fullWidth"
       >
-        <span
-          className="type"
+        <div
+          className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart MuiOutlinedInput-adornedStart MuiInputBase-marginDense MuiOutlinedInput-marginDense"
+          onClick={[Function]}
         >
-           
-          collection
-           
-        </span>
-        <span
-          className="value"
-        >
-          <a
-            className="name"
-            onClick={[Function]}
+          <div
+            className="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-marginDense"
           >
-            labor
-          </a>
-        </span>
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+          </div>
+          <input
+            aria-invalid={false}
+            autoFocus={false}
+            className="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedStart MuiOutlinedInput-inputAdornedStart MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense"
+            disabled={false}
+            onAnimationStart={[Function]}
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            placeholder="Filter attributes"
+            required={false}
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden={true}
+            className="PrivateNotchedOutline-root-17 MuiOutlinedInput-notchedOutline"
+            style={
+              Object {
+                "paddingLeft": 8,
+              }
+            }
+          >
+            <legend
+              className="PrivateNotchedOutline-legend-18"
+              style={
+                Object {
+                  "width": 0.01,
+                }
+              }
+            >
+              <span
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "&#8203;",
+                  }
+                }
+              />
+            </legend>
+          </fieldset>
+        </div>
       </div>
       <div
-        className="map_attribute report_row"
+        className="MuiPaper-root MuiTableContainer-root makeStyles-table-11 MuiPaper-elevation1 MuiPaper-rounded"
       >
-        <span
-          className="type"
+        <table
+          className="MuiTable-root MuiTable-stickyHeader"
+          role={null}
         >
-           
-          table
-           
-        </span>
-        <span
-          className="value"
-        >
-          <a
-            className="name"
-            onClick={[Function]}
+          <thead
+            className="MuiTableHead-root"
+            role={null}
           >
-            codex
-          </a>
-        </span>
+            <tr
+              className="MuiTableRow-root MuiTableRow-head"
+              role={null}
+            >
+              <th
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-head makeStyles-type-15 MuiTableCell-alignRight MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+                scope="col"
+              >
+                Type
+              </th>
+              <th
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+                scope="col"
+              >
+                Attribute
+              </th>
+              <th
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+                scope="col"
+              >
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            className="MuiTableBody-root"
+            role={null}
+          >
+            <tr
+              className="MuiTableRow-root"
+              role={null}
+            >
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+              >
+                identifier
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                onClick={[Function]}
+              >
+                name
+                 
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              >
+                Name for this project
+              </td>
+            </tr>
+            <tr
+              className="MuiTableRow-root"
+              role={null}
+            >
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+              >
+                collection
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                onClick={[Function]}
+              >
+                labor
+                 
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
+            </tr>
+            <tr
+              className="MuiTableRow-root"
+              role={null}
+            >
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+              >
+                table
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                onClick={[Function]}
+              >
+                codex
+                 
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div
-      className="attribute_report"
-    />
   </div>
 </div>
 `;
 
 exports[`ModelMap renders an incomplete graph 1`] = `
 <div
-  id="model_map"
+  className="MuiGrid-root makeStyles-model_map-2 MuiGrid-container"
 >
   <div
-    className="map"
+    className="MuiGrid-root map MuiGrid-item"
   >
     <div
-      className="heading report_row"
+      className="MuiGrid-root makeStyles-heading-5 makeStyles-heading-4 MuiGrid-container"
     >
-      <span
-        className="name"
+      <h6
+        className="MuiTypography-root makeStyles-name-6 MuiTypography-h6"
       >
         Project
-      </span>
-       
-      <span
-        className="title"
+      </h6>
+       
+      <h6
+        className="MuiTypography-root makeStyles-title-7 MuiTypography-h6"
+      />
+      <div
+        className="MuiGrid-root MuiGrid-container"
+        style={
+          Object {
+            "alignItems": "end",
+            "flex": 1,
+            "justifyContent": "right",
+            "width": "auto",
+          }
+        }
       />
     </div>
     <svg
       height={600}
+      id="map"
       width={600}
     >
       <defs>
@@ -259,107 +424,248 @@ exports[`ModelMap renders an incomplete graph 1`] = `
     </div>
   </div>
   <div
-    className="report"
+    className="MuiGrid-root makeStyles-report-1 MuiGrid-container MuiGrid-direction-xs-column"
   >
     <div
-      className="model_report"
+      className="MuiGrid-root makeStyles-model_report-8"
     >
       <div
-        className="heading report_row"
+        className="MuiGrid-root makeStyles-heading-5 makeStyles-heading-9 MuiGrid-container"
       >
-        <span
-          className="name"
+        <h6
+          className="MuiTypography-root makeStyles-name-6 MuiTypography-h6"
         >
           Model
-        </span>
-         
-        <span
-          className="title"
+        </h6>
+         
+        <h6
+          className="MuiTypography-root makeStyles-title-7 MuiTypography-h6"
         >
           project
-        </span>
-      </div>
-      <div
-        className="heading report_row"
-      >
-        <span
-          className="name"
+        </h6>
+        <div
+          className="MuiGrid-root MuiGrid-container"
+          style={
+            Object {
+              "alignItems": "end",
+              "flex": 1,
+              "justifyContent": "right",
+              "width": "auto",
+            }
+          }
         >
-          Attributes
-        </span>
-      </div>
-      <div
-        className="map_attribute report_row"
-      >
-        <span
-          className="type"
-        >
-           
-          identifier
-           
-        </span>
-        <span
-          className="value"
-        >
-          <a
-            className="name"
+          <button
+            aria-describedby={null}
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSecondary MuiButton-textSizeSmall MuiButton-sizeSmall"
+            disabled={false}
+            onBlur={[Function]}
             onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseOver={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            title="Count records and attributes"
+            type="button"
           >
-            name
-          </a>
-          <span
-            className="description"
-          >
-            Name for this project
-          </span>
-        </span>
+            <span
+              className="MuiButton-label"
+            >
+              Count
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+        </div>
       </div>
       <div
-        className="map_attribute report_row"
+        className="MuiFormControl-root MuiTextField-root makeStyles-filter-12 MuiFormControl-fullWidth"
       >
-        <span
-          className="type"
+        <div
+          className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart MuiOutlinedInput-adornedStart MuiInputBase-marginDense MuiOutlinedInput-marginDense"
+          onClick={[Function]}
         >
-           
-          collection
-           
-        </span>
-        <span
-          className="value"
-        >
-          <a
-            className="name"
-            onClick={[Function]}
+          <div
+            className="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-marginDense"
           >
-            labor
-          </a>
-        </span>
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+          </div>
+          <input
+            aria-invalid={false}
+            autoFocus={false}
+            className="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedStart MuiOutlinedInput-inputAdornedStart MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense"
+            disabled={false}
+            onAnimationStart={[Function]}
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            placeholder="Filter attributes"
+            required={false}
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden={true}
+            className="PrivateNotchedOutline-root-17 MuiOutlinedInput-notchedOutline"
+            style={
+              Object {
+                "paddingLeft": 8,
+              }
+            }
+          >
+            <legend
+              className="PrivateNotchedOutline-legend-18"
+              style={
+                Object {
+                  "width": 0.01,
+                }
+              }
+            >
+              <span
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "&#8203;",
+                  }
+                }
+              />
+            </legend>
+          </fieldset>
+        </div>
       </div>
       <div
-        className="map_attribute report_row"
+        className="MuiPaper-root MuiTableContainer-root makeStyles-table-11 MuiPaper-elevation1 MuiPaper-rounded"
       >
-        <span
-          className="type"
+        <table
+          className="MuiTable-root MuiTable-stickyHeader"
+          role={null}
         >
-           
-          table
-           
-        </span>
-        <span
-          className="value"
-        >
-          <a
-            className="name"
-            onClick={[Function]}
+          <thead
+            className="MuiTableHead-root"
+            role={null}
           >
-            codex
-          </a>
-        </span>
+            <tr
+              className="MuiTableRow-root MuiTableRow-head"
+              role={null}
+            >
+              <th
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-head makeStyles-type-15 MuiTableCell-alignRight MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+                scope="col"
+              >
+                Type
+              </th>
+              <th
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+                scope="col"
+              >
+                Attribute
+              </th>
+              <th
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+                scope="col"
+              >
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            className="MuiTableBody-root"
+            role={null}
+          >
+            <tr
+              className="MuiTableRow-root"
+              role={null}
+            >
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+              >
+                identifier
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                onClick={[Function]}
+              >
+                name
+                 
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              >
+                Name for this project
+              </td>
+            </tr>
+            <tr
+              className="MuiTableRow-root"
+              role={null}
+            >
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+              >
+                collection
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                onClick={[Function]}
+              >
+                labor
+                 
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
+            </tr>
+            <tr
+              className="MuiTableRow-root"
+              role={null}
+            >
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+              >
+                table
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                onClick={[Function]}
+              >
+                codex
+                 
+              </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div
-      className="attribute_report"
-    />
   </div>
 </div>
 `;

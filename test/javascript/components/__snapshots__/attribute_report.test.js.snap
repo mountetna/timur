@@ -2,49 +2,68 @@
 
 exports[`AttributeReport renders 1`] = `
 <div
-  className="attribute_report"
+  className="MuiGrid-root makeStyles-attribute_report-2"
 >
   <div
-    className="heading report_row"
-  >
-    <span
-      className="name"
-    >
-      Attribute
-    </span>
-     
-    <span
-      className="title"
-    >
-      name
-    </span>
-  </div>
-  <div
-    className="report_row"
+    className="MuiPaper-root MuiCard-root makeStyles-attribute_card-3 MuiPaper-elevation1 MuiPaper-rounded"
   >
     <div
-      className="type"
+      className="MuiGrid-root makeStyles-heading-7 undefined MuiGrid-container"
     >
-      attribute_type
+      <h6
+        className="MuiTypography-root makeStyles-name-8 MuiTypography-h6"
+      >
+        Attribute
+      </h6>
+       
+      <h6
+        className="MuiTypography-root makeStyles-title-9 MuiTypography-h6"
+      >
+        name
+      </h6>
+      <div
+        className="MuiGrid-root MuiGrid-container"
+        style={
+          Object {
+            "alignItems": "end",
+            "flex": 1,
+            "justifyContent": "right",
+            "width": "auto",
+          }
+        }
+      />
     </div>
     <div
-      className="value"
+      className="MuiCardContent-root makeStyles-content-4"
     >
-      identifier
-    </div>
-  </div>
-  <div
-    className="report_row"
-  >
-    <div
-      className="type"
-    >
-      display_name
-    </div>
-    <div
-      className="value"
-    >
-      Name
+      <div
+        className="MuiGrid-root MuiGrid-container"
+      >
+        <div
+          className="MuiGrid-root makeStyles-type-5 MuiGrid-item MuiGrid-grid-xs-3"
+        >
+          attribute_type
+        </div>
+        <div
+          className="MuiGrid-root makeStyles-value-6 MuiGrid-item MuiGrid-grid-xs-9"
+        >
+          identifier
+        </div>
+      </div>
+      <div
+        className="MuiGrid-root MuiGrid-container"
+      >
+        <div
+          className="MuiGrid-root makeStyles-type-5 MuiGrid-item MuiGrid-grid-xs-3"
+        >
+          display_name
+        </div>
+        <div
+          className="MuiGrid-root makeStyles-value-6 MuiGrid-item MuiGrid-grid-xs-9"
+        >
+          Name
+        </div>
+      </div>
     </div>
   </div>
 </div>
