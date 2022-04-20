@@ -75,7 +75,7 @@ const AttributeReport = ({attribute, model_name, counts}) => {
     <Card className={ classes.attribute_card} >
       <MapHeading name='Attribute' title={attribute.attribute_name}>
         {
-          <Tooltip title='Show data sample'>
+          attribute.attribute_type == 'string' && <Tooltip title='Show data sample'>
             <Button
               onClick={ showSample }
               size='small'
@@ -105,7 +105,7 @@ const AttributeReport = ({attribute, model_name, counts}) => {
           sample && 
             <Grid container>
               <Grid item xs={3} className={ classes.type }>sample</Grid>
-              <Grid item xs={9} className={ classes.value }>{JSON.stringify(sample)}</Grid>
+              <Grid item xs={9} className={ classes.value }>{sample.length > 0 ? JSON.stringify(sample) : <i>No values</i>}</Grid>
             </Grid>
         }
       </CardContent>
