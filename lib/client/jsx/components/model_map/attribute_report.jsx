@@ -50,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
     color: '#131',
     borderBottom: '1px solid rgba(34, 139, 34, 0.1)',
     maxHeight: '90px',
+    wordWrap: 'break-word',
+    width: '0px',
     overflowY: 'auto'
   }
 }));
