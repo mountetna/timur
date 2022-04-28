@@ -206,8 +206,6 @@ const QueryControlButtons = () => {
     setLastOrFilterIndices(orRecordFilterIndices);
   }, [runQuery, columns, recordFilters, orRecordFilterIndices]);
 
-  const canPlot = useFeatureFlag('queryplot');
-
   if (!rootModel) return null;
 
   return (
@@ -250,7 +248,7 @@ const QueryControlButtons = () => {
         >
           Copy Link
         </Button>
-        {canPlot ? <QueryPlotMenu /> : null}
+        <QueryPlotMenu />
       </Grid>
       <Grid item>
         {formattedColumns.length > maxColumns ? (
