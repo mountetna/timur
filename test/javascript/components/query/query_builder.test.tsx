@@ -162,44 +162,6 @@ describe('QueryBuilder', () => {
     store = mockStore({
       magma: {models},
       janus: {projects: require('../../fixtures/project_names.json')},
-      user: {
-        flags: ['queryplot']
-      }
-    });
-
-    const {asFragment} = render(<QueryBuilder />, {
-      wrapper: querySpecWrapper({
-        mockColumnState,
-        mockGraphState,
-        mockWhereState,
-        mockResultsState: defaultQueryResultsParams,
-        store
-      })
-    });
-
-    await waitFor(() => screen.getByTestId('operand-autocomplete'));
-
-    const autocomplete = screen.getByTestId('operand-autocomplete');
-    fireEvent.change(autocomplete.getElementsByTagName('input')[0], {
-      target: {value: 'It'}
-    });
-
-    await waitFor(() => screen.getByText('Italy'));
-
-    userEvent.click(screen.getByText('Italy'));
-
-    await waitFor(
-      () => screen.getByText(/"Italy"/) && screen.getByText(/user_columns/)
-    );
-
-    expect(screen.queryByText(/Plot/)).toBeTruthy();
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  it('renders without Plot button', async () => {
-    store = mockStore({
-      magma: {models},
-      janus: {projects: require('../../fixtures/project_names.json')},
       user: {}
     });
 
@@ -228,7 +190,7 @@ describe('QueryBuilder', () => {
       () => screen.getByText(/"Italy"/) && screen.getByText(/user_columns/)
     );
 
-    expect(screen.queryByText(/Plot/)).toBeFalsy();
+    expect(screen.queryByText(/Plot/)).toBeTruthy();
     expect(asFragment()).toMatchSnapshot();
   });
 });
