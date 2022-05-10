@@ -14,6 +14,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -37,17 +38,18 @@ const attributeStyles = makeStyles((theme) => ({
     width: '30px',
     margin: '5px'
   },
-  count: {
+  counts: {
     width: '20%'
   }
 }));
 
-const ModelAttribute = ({ attribute: { attribute_name, attribute_type, description }, setAttribute, count, modelCount }) => {
+const ModelAttribute = ({ attribute: { attribute_name, attribute_type, attribute_group, description }, setAttribute, count, modelCount }) => {
   const classes = attributeStyles();
 
   return <TableRow>
     <TableCell className={classes.type} align="right">{attribute_type}</TableCell>
     <TableCell className={classes.value} align="left" onClick={ () => setAttribute(attribute_name) }>{attribute_name} </TableCell>
+    <TableCell align="left">{attribute_group}</TableCell>
     <TableCell align="left">{description}</TableCell>
     { count != undefined && <TableCell className={classes.count} align="left">
       <Grid container alignItems='center'>
@@ -108,8 +110,6 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
     ({answer}) => handle(answer)
   );
 
-  console.log({counts});
-
   const countModel = () => {
     if (modelCount != undefined) return;
 
@@ -153,6 +153,27 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
     return false;
   }, [ filterString ])
 
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('type');
+
+  const sortByOrder = attributes => {
+    let srt;
+    if (orderBy === 'type') srt = Object.values(sortAttributes(attributes));
+    else {
+
+      const att_key = {
+        attribute: 'attribute_name',
+        group: 'attribute_group',
+        description: 'description'
+      }[orderBy];
+
+      srt = Object.values(attributes).sort(
+        (a,b) => (a[att_key]||'').localeCompare(b[att_key]||'')
+      )
+    };
+    return (order === 'desc') ? srt.reverse() : srt;
+  }
+
   return <Grid className={ classes.model_report }>
     <MapHeading className={ classes.heading } name='Model' title={model_name}>
       {
@@ -186,16 +207,28 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
-            <TableCell className={classes.type} align="right">Type</TableCell>
-            <TableCell align="left">Attribute</TableCell>
-            <TableCell align="left">Description</TableCell>
-            { attributeCounts && <TableCell className={classes.count} align="left">Counts</TableCell> }
+            {
+              [ 'type', 'attribute', 'group', 'description', 'counts' ].map( key =>
+                (key !== 'counts' || attributeCounts) && 
+                <TableCell key={key} className={ key in classes ? classes[key] : null } align={ key == 'type' ? 'right' : 'left' }>
+                  <TableSortLabel
+                    active={orderBy === key}
+                    direction={orderBy === key ? order : 'asc'}
+                  onClick={ (key => e => {
+                      setOrder( orderBy === key && order === 'asc' ? 'desc' : 'asc' )
+                      setOrderBy(key);
+                    })(key) } >
+                  {key}
+                  </TableSortLabel>
+                </TableCell>
+              )
+            }
           </TableRow>
         </TableHead>
 
         <TableBody>
         {
-          Object.values(sortAttributes(template.attributes)).filter(
+          sortByOrder(template.attributes).filter(
             attribute => !attribute.hidden && matchesFilter(attribute)
           ).map( attribute => <ModelAttribute
               key={attribute.attribute_name}
