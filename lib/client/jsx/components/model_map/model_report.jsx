@@ -96,6 +96,13 @@ const reportStyles = makeStyles((theme) => ({
   }
 }));
 
+const ATT_KEYS = {
+  attribute: 'attribute_name',
+  type: 'attribute_type',
+  group: 'attribute_group',
+  description: 'description'
+};
+
 const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute }) => {
   if (!template) return null;
 
@@ -115,7 +122,7 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
 
     updateCounts({type: 'MODEL_COUNT', model_name, count: -1});
 
-    getAnswer( [ model_name, '::count' ], count => updateCounts({type: 'MODEL_COUNT', model_name, count}));
+    getAnswer([ model_name, '::count' ], count => updateCounts({type: 'MODEL_COUNT', model_name, count}));
 
     Object.keys(template.attributes).forEach( attribute_name => {
       let query;
@@ -137,20 +144,27 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
 
   const [ filterString, setFilterString ] = useState('');
 
+  const filterMatch = new RegExp(`^(?:(${ Object.keys(ATT_KEYS).join('|') }):)?(.*)$`)
+
   const matchesFilter = useCallback(attribute => {
     if (filterString == '') return true;
 
-    const { name, attribute_type, description } = attribute;
+    let tokens = filterString.split(/\s/).filter(_=>_).map(
+      token => token.match(filterMatch).slice(1)
+    );
 
-    if (filterString.split(/\s/).filter(_=>_).map(t => new RegExp(t,'i')).every(
-      token => (
-        name?.match(token) ||
-        attribute_type?.match(token) ||
-        description?.match(token)
-      )
-    )) return true;
+    return tokens.every( ([ column, token ]) => {
+      const tokenMatch = new RegExp(token,'i');
+      const values = (
+        column
+          ? [ attribute[ATT_KEYS[column]] ]
+          : Object.values(ATT_KEYS).map(
+            k => attribute[k]
+          )
+      );
 
-    return false;
+      return values.some( s => s?.match(tokenMatch));
+    });
   }, [ filterString ])
 
   const [order, setOrder] = React.useState('asc');
@@ -161,14 +175,8 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
     if (orderBy === 'type') srt = Object.values(sortAttributes(attributes));
     else {
 
-      const att_key = {
-        attribute: 'attribute_name',
-        group: 'attribute_group',
-        description: 'description'
-      }[orderBy];
-
       srt = Object.values(attributes).sort(
-        (a,b) => (a[att_key]||'').localeCompare(b[att_key]||'')
+        (a,b) => (a[ATT_KEYS[orderBy]]||'').localeCompare(b[ATT_KEYS[orderBy]]||'')
       )
     };
     return (order === 'desc') ? srt.reverse() : srt;
@@ -189,7 +197,7 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
     </MapHeading>
     <TextField
       fullWidth
-      placeholder='Filter attributes'
+      placeholder='Filter attributes, e.g. "rna type:file"'
       variant='outlined'
       size='small'
       className={classes.filter}
