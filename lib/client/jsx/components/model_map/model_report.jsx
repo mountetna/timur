@@ -4,13 +4,15 @@ import { sortAttributes } from '../../utils/attributes';
 import {useReduxState} from 'etna-js/hooks/useReduxState';
 import {requestAnswer} from 'etna-js/actions/magma_actions';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
+import {selectUserPermissions} from 'etna-js/selectors/user-selector';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
 import {makeStyles} from '@material-ui/core/styles';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -21,10 +23,23 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import MapHeading from './map_heading';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ArrowForward from '@material-ui/icons/ArrowForward';
 import Tooltip from '@material-ui/core/Tooltip';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const attributeStyles = makeStyles((theme) => ({
+  attribute: {
+    wordBreak: 'break-all'
+  },
   value: {
     color: 'darkgoldenrod',
     cursor: 'pointer'
@@ -46,18 +61,20 @@ const attributeStyles = makeStyles((theme) => ({
 const ModelAttribute = ({ attribute: { attribute_name, attribute_type, attribute_group, description }, setAttribute, count, modelCount }) => {
   const classes = attributeStyles();
 
-  return <TableRow>
+  return <TableRow className={classes.attribute}>
     <TableCell className={classes.type} align="right">{attribute_type}</TableCell>
     <TableCell className={classes.value} align="left" onClick={ () => setAttribute(attribute_name) }>{attribute_name} </TableCell>
     <TableCell align="left">{attribute_group}</TableCell>
     <TableCell align="left">{description}</TableCell>
-    { count != undefined && <TableCell className={classes.count} align="left">
-      <Grid container alignItems='center'>
-        {count}
-        <LinearProgress className={classes.progress} variant='determinate' value={100 * count/(modelCount || 1)}/>
-        <Typography variant='body2' color='textSecondary'>{ Math.round(100 * count / (modelCount||1)) }%</Typography>
-      </Grid>
-      </TableCell> }
+    {
+      count != undefined && <TableCell className={classes.count} align="left">
+        <Grid container alignItems='center'>
+          {count}
+          <LinearProgress className={classes.progress} variant='determinate' value={100 * count/(modelCount || 1)}/>
+          <Typography variant='body2' color='textSecondary'>{ Math.round(100 * count / (modelCount||1)) }%</Typography>
+        </Grid>
+      </TableCell>
+    }
   </TableRow>
 }
 
@@ -182,18 +199,78 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
     return (order === 'desc') ? srt.reverse() : srt;
   }
 
+  const [ showDiff, setShowDiff ] = useState(false);
+  const [ diffProject, setDiffProject ] = useState(null);
+
+  const [anchor, setAnchor] = useState(null);
+
+  const projects = useReduxState(state => {
+    let permissions = selectUserPermissions(state);
+    return Object.values(permissions).map(({project_name}) => project_name);
+  });
+
   return <Grid className={ classes.model_report }>
     <MapHeading className={ classes.heading } name='Model' title={model_name}>
       {
-        modelCount != undefined && modelCount >= 0 ? <Typography>{modelCount} {modelCount > 1 || modelCount == 0 ? 'records' : 'record'}</Typography> : 
-        <Tooltip title='Count records and attributes'>
-          <Button
-            disabled={modelCount!=undefined}
-            onClick={() => countModel(model_name)}
-            size='small'
-            color='secondary'>Count</Button>
-        </Tooltip>
+        modelCount != undefined && modelCount >= 0 && <Typography>{modelCount} {modelCount > 1 || modelCount == 0 ? 'records' : 'record'}</Typography>
       }
+      <IconButton size='small' onClick={ e => setAnchor(e.target) }>
+        <MoreVertIcon/>
+      </IconButton>
+      <Dialog open={showDiff} onClose={() => setShowDiff(false)}>
+        <DialogTitle id="form-dialog-title">Compare Models</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Select a comparison project and model.
+          </DialogContentText>
+	  <Autocomplete
+	    freeSolo
+	    options={projects}
+	    renderInput={(params) => (
+	      <TextField
+		{...params}
+		label="Select project"
+		margin="normal"
+		variant="outlined"
+		value={ diffProject }
+		onChange={ e => setDiffProject(e.target.value) }
+    		endAdornment={
+		  <InputAdornment position="end">
+		    <IconButton onClick={() => loadDiffProject() }>
+		      <ArrowForward/>
+		    </IconButton>
+		  </InputAdornment>
+		}
+		InputProps={{ ...params.InputProps, type: 'search' }}
+	      />
+	    )}
+	  />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDiff(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={() => setShowDiff(false)} color="primary">
+            Compare
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Menu
+        style={{ marginTop: '40px' }}
+        anchorEl={anchor}
+        open={Boolean(anchor)}
+        onClose={() => setAnchor(null)} >
+        <MenuItem onClick={ () => {
+          setShowDiff(true);
+          setAnchor(null); } }>
+          Compare with another model
+        </MenuItem>
+        <MenuItem
+          disabled={modelCount != undefined}
+          onClick={ () => { countModel(model_name); setAnchor(null); } } >
+          Count records and attributes
+        </MenuItem>
+      </Menu>
     </MapHeading>
     <TextField
       fullWidth
