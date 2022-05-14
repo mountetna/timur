@@ -1,15 +1,15 @@
 import { useDispatch } from 'react-redux';
 import React, { useState, useCallback } from 'react';
-import { sortAttributes } from '../../utils/attributes';
-import {useReduxState} from 'etna-js/hooks/useReduxState';
+import { sortAttributeList } from '../../utils/attributes';
+import SelectProjectModelDialog from '../select_project_model';
 import {requestAnswer} from 'etna-js/actions/magma_actions';
+import {getDocuments} from 'etna-js/api/magma_api';
 import {useActionInvoker} from 'etna-js/hooks/useActionInvoker';
-import {selectUserPermissions} from 'etna-js/selectors/user-selector';
+import {isEqual} from 'lodash';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import {makeStyles} from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -23,18 +23,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import MapHeading from './map_heading';
 import Button from '@material-ui/core/Button';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ArrowForward from '@material-ui/icons/ArrowForward';
 import Tooltip from '@material-ui/core/Tooltip';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Chip from '@material-ui/core/Chip';
 
 const attributeStyles = makeStyles((theme) => ({
   attribute: {
@@ -43,6 +38,8 @@ const attributeStyles = makeStyles((theme) => ({
   value: {
     color: 'darkgoldenrod',
     cursor: 'pointer'
+  },
+  missing: {
   },
   type: {
     color: 'gray',
@@ -55,15 +52,36 @@ const attributeStyles = makeStyles((theme) => ({
   },
   counts: {
     width: '20%'
+  },
+  ident: {
+  },
+  changed: {
+    backgroundColor: 'rgba(255,255,0,0.1)'
+  },
+  present: {
+    backgroundColor: 'rgba(0,255,0,0.1)'
+  },
+  absent: {
+    backgroundColor: 'rgba(255,0,0,0.1)'
   }
 }));
 
-const ModelAttribute = ({ attribute: { attribute_name, attribute_type, attribute_group, description }, setAttribute, count, modelCount }) => {
+const ModelAttribute = ({ attribute_name, template, diffTemplate, setAttribute, count, modelCount }) => {
   const classes = attributeStyles();
 
-  return <TableRow className={classes.attribute}>
+  const attribute = template?.attributes[attribute_name];
+
+  const diffAttribute = diffTemplate?.attributes[attribute_name];
+
+  const [ displayAttribute, diffType ] = !diffTemplate ? [ attribute, 'ident' ] : (
+    (attribute && diffAttribute) ? (isEqual(attribute, diffAttribute) ? [ attribute, 'ident' ] : [ attribute, 'changed' ]) : (attribute ? [ attribute, 'present' ] : [ diffAttribute, 'absent' ])
+  );
+
+  const { attribute_type, attribute_group, description } = displayAttribute;
+
+  return <TableRow className={`${classes.attribute} ${classes[diffType]}`}>
     <TableCell className={classes.type} align="right">{attribute_type}</TableCell>
-    <TableCell className={classes.value} align="left" onClick={ () => setAttribute(attribute_name) }>{attribute_name} </TableCell>
+    <TableCell className={attribute ? classes.value : classes.missing } align="left" onClick={ attribute ? (() => setAttribute(attribute_name)) : undefined }>{attribute_name} </TableCell>
     <TableCell align="left">{attribute_group}</TableCell>
     <TableCell align="left">{description}</TableCell>
     {
@@ -189,10 +207,9 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
 
   const sortByOrder = attributes => {
     let srt;
-    if (orderBy === 'type') srt = Object.values(sortAttributes(attributes));
+    if (orderBy === 'type') srt = sortAttributeList(attributes);
     else {
-
-      srt = Object.values(attributes).sort(
+      srt = attributes.sort(
         (a,b) => (a[ATT_KEYS[orderBy]]||'').localeCompare(b[ATT_KEYS[orderBy]]||'')
       )
     };
@@ -201,68 +218,47 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
 
   const [ showDiff, setShowDiff ] = useState(false);
   const [ diffProject, setDiffProject ] = useState(null);
+  const [ diffModel, setDiffModel ] = useState(null);
+  const [ diffTemplate, setDiffTemplate ] = useState(null);
 
   const [anchor, setAnchor] = useState(null);
 
-  const projects = useReduxState(state => {
-    let permissions = selectUserPermissions(state);
-    return Object.values(permissions).map(({project_name}) => project_name);
-  });
+  const getDiffModelTemplate = (project_name, model_name) => {
+    setDiffProject(project_name);
+    setDiffModel(model_name);
+    getDocuments(
+      {
+        project_name,
+        model_name,
+        record_names: [],
+        attribute_names: 'all'
+      },
+      fetch
+    ).then(({models}) => setDiffTemplate(models[model_name].template));
+  }
+  const attributes = Object.values({
+    ...template.attributes,
+    ...diffTemplate && diffTemplate.attributes
+  })
 
   return <Grid className={ classes.model_report }>
     <MapHeading className={ classes.heading } name='Model' title={model_name}>
       {
-        modelCount != undefined && modelCount >= 0 && <Typography>{modelCount} {modelCount > 1 || modelCount == 0 ? 'records' : 'record'}</Typography>
+        diffTemplate && <Chip label={ `diff: ${diffProject}.${diffModel}` } onDelete={ () => { setDiffTemplate(null); setDiffModel(null); setDiffProject(null); } }/>
+      }
+      {
+        modelCount != undefined && modelCount >= 0 && <Chip label={ `${modelCount} ${modelCount > 1 || modelCount == 0 ? 'records' : 'record'}` }/>
       }
       <IconButton size='small' onClick={ e => setAnchor(e.target) }>
         <MoreVertIcon/>
       </IconButton>
-      <Dialog open={showDiff} onClose={() => setShowDiff(false)}>
-        <DialogTitle id="form-dialog-title">Compare Models</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Select a comparison project and model.
-          </DialogContentText>
-	  <Autocomplete
-	    freeSolo
-	    options={projects}
-	    renderInput={(params) => (
-	      <TextField
-		{...params}
-		label="Select project"
-		margin="normal"
-		variant="outlined"
-		value={ diffProject }
-		onChange={ e => setDiffProject(e.target.value) }
-    		endAdornment={
-		  <InputAdornment position="end">
-		    <IconButton onClick={() => loadDiffProject() }>
-		      <ArrowForward/>
-		    </IconButton>
-		  </InputAdornment>
-		}
-		InputProps={{ ...params.InputProps, type: 'search' }}
-	      />
-	    )}
-	  />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowDiff(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={() => setShowDiff(false)} color="primary">
-            Compare
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Menu
+        elevation={1}
         style={{ marginTop: '40px' }}
         anchorEl={anchor}
         open={Boolean(anchor)}
         onClose={() => setAnchor(null)} >
-        <MenuItem onClick={ () => {
-          setShowDiff(true);
-          setAnchor(null); } }>
+        <MenuItem onClick={ () => { setShowDiff(true); setAnchor(null); } }>
           Compare with another model
         </MenuItem>
         <MenuItem
@@ -272,6 +268,14 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
         </MenuItem>
       </Menu>
     </MapHeading>
+    <SelectProjectModelDialog
+      open={showDiff}
+      onClose={ () => setShowDiff(false) }
+      update={ (project_name, model_name) => getDiffModelTemplate(project_name, model_name) }
+      title='Compare Models'
+      buttonLabel='Compare'
+      description='Select a comparison project and model'
+    />
     <TextField
       fullWidth
       placeholder='Filter attributes, e.g. "rna type:file"'
@@ -313,14 +317,17 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
 
         <TableBody>
         {
-          sortByOrder(template.attributes).filter(
+          sortByOrder(attributes).filter(
             attribute => !attribute.hidden && matchesFilter(attribute)
           ).map( attribute => <ModelAttribute
               key={attribute.attribute_name}
+              attribute_name={ attribute.attribute_name }
               setAttribute={ setAttribute }
               count={ attributeCounts && attributeCounts[attribute.attribute_name] }
               modelCount={ modelCount }
-              attribute={attribute} />
+              template={ template }
+              diffTemplate={ diffTemplate }
+            />
           )
         }
         </TableBody>
