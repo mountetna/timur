@@ -143,8 +143,7 @@ exports[`ModelMap renders 1`] = `
           }
         >
           <button
-            aria-describedby={null}
-            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSecondary MuiButton-textSizeSmall MuiButton-sizeSmall"
+            className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -154,23 +153,27 @@ exports[`ModelMap renders 1`] = `
             onKeyUp={[Function]}
             onMouseDown={[Function]}
             onMouseLeave={[Function]}
-            onMouseOver={[Function]}
             onMouseUp={[Function]}
             onTouchEnd={[Function]}
             onTouchMove={[Function]}
             onTouchStart={[Function]}
             tabIndex={0}
-            title="Count records and attributes"
             type="button"
           >
             <span
-              className="MuiButton-label"
+              className="MuiIconButton-label"
             >
-              Count
+              <svg
+                aria-hidden={true}
+                className="MuiSvgIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                />
+              </svg>
             </span>
-            <span
-              className="MuiTouchRipple-root"
-            />
           </button>
         </div>
       </div>
@@ -204,14 +207,14 @@ exports[`ModelMap renders 1`] = `
             onBlur={[Function]}
             onChange={[Function]}
             onFocus={[Function]}
-            placeholder="Filter attributes"
+            placeholder="Filter attributes, e.g. \\"rna type:file\\""
             required={false}
             type="text"
             value=""
           />
           <fieldset
             aria-hidden={true}
-            className="PrivateNotchedOutline-root-17 MuiOutlinedInput-notchedOutline"
+            className="PrivateNotchedOutline-root-19 MuiOutlinedInput-notchedOutline"
             style={
               Object {
                 "paddingLeft": 8,
@@ -219,7 +222,7 @@ exports[`ModelMap renders 1`] = `
             }
           >
             <legend
-              className="PrivateNotchedOutline-legend-18"
+              className="PrivateNotchedOutline-legend-20"
               style={
                 Object {
                   "width": 0.01,
@@ -257,21 +260,144 @@ exports[`ModelMap renders 1`] = `
                 className="MuiTableCell-root MuiTableCell-head makeStyles-type-15 MuiTableCell-alignRight MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
                 scope="col"
               >
-                Type
+                <span
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  type
+                  <svg
+                    aria-hidden={true}
+                    className="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                    />
+                  </svg>
+                </span>
               </th>
               <th
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
                 scope="col"
               >
-                Attribute
+                <span
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiTableSortLabel-root"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  attribute
+                  <svg
+                    aria-hidden={true}
+                    className="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                    />
+                  </svg>
+                </span>
               </th>
               <th
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
                 scope="col"
               >
-                Description
+                <span
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiTableSortLabel-root"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  group
+                  <svg
+                    aria-hidden={true}
+                    className="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                    />
+                  </svg>
+                </span>
+              </th>
+              <th
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+                scope="col"
+              >
+                <span
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiTableSortLabel-root"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  description
+                  <svg
+                    aria-hidden={true}
+                    className="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                    />
+                  </svg>
+                </span>
               </th>
             </tr>
           </thead>
@@ -280,18 +406,18 @@ exports[`ModelMap renders 1`] = `
             role={null}
           >
             <tr
-              className="MuiTableRow-root"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 identifier
               </td>
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-24 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                 onClick={[Function]}
               >
                 name
@@ -300,23 +426,27 @@ exports[`ModelMap renders 1`] = `
               <td
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
               >
                 Name for this project
               </td>
             </tr>
             <tr
-              className="MuiTableRow-root"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 collection
               </td>
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-24 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                 onClick={[Function]}
               >
                 labor
@@ -326,25 +456,33 @@ exports[`ModelMap renders 1`] = `
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
               />
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
             </tr>
             <tr
-              className="MuiTableRow-root"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 table
               </td>
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-24 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                 onClick={[Function]}
               >
                 codex
                  
               </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
               <td
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
@@ -455,8 +593,7 @@ exports[`ModelMap renders an incomplete graph 1`] = `
           }
         >
           <button
-            aria-describedby={null}
-            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSecondary MuiButton-textSizeSmall MuiButton-sizeSmall"
+            className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -466,19 +603,26 @@ exports[`ModelMap renders an incomplete graph 1`] = `
             onKeyUp={[Function]}
             onMouseDown={[Function]}
             onMouseLeave={[Function]}
-            onMouseOver={[Function]}
             onMouseUp={[Function]}
             onTouchEnd={[Function]}
             onTouchMove={[Function]}
             onTouchStart={[Function]}
             tabIndex={0}
-            title="Count records and attributes"
             type="button"
           >
             <span
-              className="MuiButton-label"
+              className="MuiIconButton-label"
             >
-              Count
+              <svg
+                aria-hidden={true}
+                className="MuiSvgIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                />
+              </svg>
             </span>
             <span
               className="MuiTouchRipple-root"
@@ -516,14 +660,14 @@ exports[`ModelMap renders an incomplete graph 1`] = `
             onBlur={[Function]}
             onChange={[Function]}
             onFocus={[Function]}
-            placeholder="Filter attributes"
+            placeholder="Filter attributes, e.g. \\"rna type:file\\""
             required={false}
             type="text"
             value=""
           />
           <fieldset
             aria-hidden={true}
-            className="PrivateNotchedOutline-root-17 MuiOutlinedInput-notchedOutline"
+            className="PrivateNotchedOutline-root-19 MuiOutlinedInput-notchedOutline"
             style={
               Object {
                 "paddingLeft": 8,
@@ -531,7 +675,7 @@ exports[`ModelMap renders an incomplete graph 1`] = `
             }
           >
             <legend
-              className="PrivateNotchedOutline-legend-18"
+              className="PrivateNotchedOutline-legend-20"
               style={
                 Object {
                   "width": 0.01,
@@ -569,21 +713,144 @@ exports[`ModelMap renders an incomplete graph 1`] = `
                 className="MuiTableCell-root MuiTableCell-head makeStyles-type-15 MuiTableCell-alignRight MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
                 scope="col"
               >
-                Type
+                <span
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  type
+                  <svg
+                    aria-hidden={true}
+                    className="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                    />
+                  </svg>
+                </span>
               </th>
               <th
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
                 scope="col"
               >
-                Attribute
+                <span
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiTableSortLabel-root"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  attribute
+                  <svg
+                    aria-hidden={true}
+                    className="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                    />
+                  </svg>
+                </span>
               </th>
               <th
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
                 scope="col"
               >
-                Description
+                <span
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiTableSortLabel-root"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  group
+                  <svg
+                    aria-hidden={true}
+                    className="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                    />
+                  </svg>
+                </span>
+              </th>
+              <th
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+                scope="col"
+              >
+                <span
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiTableSortLabel-root"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  description
+                  <svg
+                    aria-hidden={true}
+                    className="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                    />
+                  </svg>
+                </span>
               </th>
             </tr>
           </thead>
@@ -592,18 +859,18 @@ exports[`ModelMap renders an incomplete graph 1`] = `
             role={null}
           >
             <tr
-              className="MuiTableRow-root"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 identifier
               </td>
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-24 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                 onClick={[Function]}
               >
                 name
@@ -612,23 +879,27 @@ exports[`ModelMap renders an incomplete graph 1`] = `
               <td
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
               >
                 Name for this project
               </td>
             </tr>
             <tr
-              className="MuiTableRow-root"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 collection
               </td>
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-24 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                 onClick={[Function]}
               >
                 labor
@@ -638,25 +909,33 @@ exports[`ModelMap renders an incomplete graph 1`] = `
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
               />
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
             </tr>
             <tr
-              className="MuiTableRow-root"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-22 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 table
               </td>
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-value-21 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-value-24 MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                 onClick={[Function]}
               >
                 codex
                  
               </td>
+              <td
+                aria-sort={null}
+                className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
+              />
               <td
                 aria-sort={null}
                 className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"

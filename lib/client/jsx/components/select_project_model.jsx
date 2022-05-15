@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CheckIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -49,9 +50,10 @@ const SelectProjectModelDialog = ({open, onClose, update, title, buttonLabel, de
       project_name,
       query: '::model_names'
     })(dispatch).then(
-      ({answer}) => setModels(answer)
-    ).catch( error => setError(error) );
+      ({answer}) => { setModels(answer); setError(null); }
+    ).catch( e => e.then( ({error}) => setError(error) ) );
   }, [ project_name ]);
+
 
   const classes = useStyles();
 
@@ -103,9 +105,9 @@ const SelectProjectModelDialog = ({open, onClose, update, title, buttonLabel, de
           </FormControl>
         </Grid>
       }
+      { error && <DialogContentText><Typography color='error'>{error}</Typography></DialogContentText> }
     </DialogContent>
     <DialogActions>
-      { error }
       <Button onClick={onClose} color="secondary">
         Cancel
       </Button>
