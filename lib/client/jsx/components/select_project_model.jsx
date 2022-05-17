@@ -50,7 +50,7 @@ const SelectProjectModelDialog = ({open, onClose, update, title, buttonLabel, de
       project_name,
       query: '::model_names'
     })(dispatch).then(
-      ({answer}) => { setModels(answer); setError(null); }
+      ({answer}) => { setModels(answer.sort()); setError(null); }
     ).catch( e => e.then( ({error}) => setError(error) ) );
   }, [ project_name ]);
 

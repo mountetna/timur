@@ -41,6 +41,11 @@ const attributeStyles = makeStyles((theme) => ({
   },
   missing: {
   },
+  indicator: {
+    width: '30px',
+    color: 'gray',
+    cursor: 'default'
+  },
   type: {
     color: 'gray',
     width: '25%',
@@ -66,6 +71,13 @@ const attributeStyles = makeStyles((theme) => ({
   }
 }));
 
+const diffTypes = {
+  ident: { ind: '', title: '' },
+  present: { ind: '+', title: 'Present in this model' },
+  absent: { ind: '-', title: 'Absent in this model' },
+  changed: { ind: 'c', title: 'Changed in this model' }
+}
+
 const ModelAttribute = ({ attribute_name, template, diffTemplate, setAttribute, count, modelCount }) => {
   const classes = attributeStyles();
 
@@ -80,6 +92,7 @@ const ModelAttribute = ({ attribute_name, template, diffTemplate, setAttribute, 
   const { attribute_type, attribute_group, description } = displayAttribute;
 
   return <TableRow className={`${classes.attribute} ${classes[diffType]}`}>
+    { diffTemplate && <TableCell className={classes.indicator} align="left" title={diffTypes[diffType].title}>{ diffTypes[diffType].ind }</TableCell> }
     <TableCell className={classes.type} align="right">{attribute_type}</TableCell>
     <TableCell className={attribute ? classes.value : classes.missing } align="left" onClick={ attribute ? (() => setAttribute(attribute_name)) : undefined }>{attribute_name} </TableCell>
     <TableCell align="left">{attribute_group}</TableCell>
@@ -296,6 +309,7 @@ const ModelReport = ({ model_name, updateCounts, counts, template, setAttribute 
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
+            { diffTemplate && <TableCell className={classes.indicator}/> }
             {
               [ 'type', 'attribute', 'group', 'description', 'counts' ].map( key =>
                 (key !== 'counts' || attributeCounts) && 

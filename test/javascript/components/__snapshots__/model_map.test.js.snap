@@ -406,12 +406,12 @@ exports[`ModelMap renders 1`] = `
             role={null}
           >
             <tr
-              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-30"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-27 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 identifier
               </td>
@@ -435,12 +435,12 @@ exports[`ModelMap renders 1`] = `
               </td>
             </tr>
             <tr
-              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-30"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-27 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 collection
               </td>
@@ -462,12 +462,12 @@ exports[`ModelMap renders 1`] = `
               />
             </tr>
             <tr
-              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-30"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-27 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 table
               </td>
@@ -859,12 +859,12 @@ exports[`ModelMap renders an incomplete graph 1`] = `
             role={null}
           >
             <tr
-              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-30"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-27 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 identifier
               </td>
@@ -888,12 +888,12 @@ exports[`ModelMap renders an incomplete graph 1`] = `
               </td>
             </tr>
             <tr
-              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-30"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-27 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 collection
               </td>
@@ -915,12 +915,12 @@ exports[`ModelMap renders an incomplete graph 1`] = `
               />
             </tr>
             <tr
-              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-29"
+              className="MuiTableRow-root makeStyles-attribute-23 makeStyles-ident-30"
               role={null}
             >
               <td
                 aria-sort={null}
-                className="MuiTableCell-root MuiTableCell-body makeStyles-type-26 MuiTableCell-alignRight MuiTableCell-sizeSmall"
+                className="MuiTableCell-root MuiTableCell-body makeStyles-type-27 MuiTableCell-alignRight MuiTableCell-sizeSmall"
               >
                 table
               </td>
