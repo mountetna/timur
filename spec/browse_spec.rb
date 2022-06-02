@@ -31,23 +31,27 @@ describe BrowseController do
         document: DEFAULT_VIEW
       )
 
-      auth_header(:viewer)
-      get('/api/views/labors/monster')
+      below_editor_roles.each do |role|
+        auth_header(role)
+        get('/api/views/labors/monster')
 
-      expect(last_response.status).to eq(200)
+        expect(last_response.status).to eq(200)
 
-      expect(
-        json_body[:view][:document][:tabs][0][:panes][0][:items].map{|s| s[:name].to_sym }
-      ).to eq([:weight, :size, :odor])
+        expect(
+          json_body[:view][:document][:tabs][0][:panes][0][:items].map{|s| s[:name].to_sym }
+        ).to eq([:weight, :size, :odor])
+      end
     end
 
     it 'returns 404 for a non-existent view' do
-      auth_header(:viewer)
-      get('/api/views/labors/monster')
+      below_editor_roles.each do |role|
+        auth_header(role)
+        get('/api/views/labors/monster')
 
-      expect(last_response.status).to eq(404)
+        expect(last_response.status).to eq(404)
 
-      expect(json_body[:error]).to eq('No such view monster in project labors')
+        expect(json_body[:error]).to eq('No such view monster in project labors')
+      end
     end
   end
 
@@ -64,14 +68,16 @@ describe BrowseController do
         document: DEFAULT_VIEW
       )
 
-      auth_header(:viewer)
-      get('/api/views/labors/fetch')
+      below_editor_roles.each do |role|
+        auth_header(role)
+        get('/api/views/labors/fetch')
 
-      expect(last_response.status).to eq(200)
+        expect(last_response.status).to eq(200)
 
-      expect(json_body[:views].size).to eq(2)
-      expect(json_body[:views][0][:document][:tabs][0][:panes][0][:items].map{|s| s[:name].to_sym}
-      ).to eq([:weight, :size, :odor])
+        expect(json_body[:views].size).to eq(2)
+        expect(json_body[:views][0][:document][:tabs][0][:panes][0][:items].map{|s| s[:name].to_sym}
+        ).to eq([:weight, :size, :odor])
+      end
     end
   end
 
@@ -127,11 +133,13 @@ describe BrowseController do
         document: DEFAULT_VIEW
       )
 
-      auth_header(:viewer)
-      post('/api/views/labors/update/monster', document: { tabs: {} })
+      below_admin_roles.each do |role|
+        auth_header(role)
+        post('/api/views/labors/update/monster', document: { tabs: {} })
 
-      expect(last_response.status).to eq(403)
-      expect(View.first.document).to eq(JSON.parse(DEFAULT_VIEW.to_json))
+        expect(last_response.status).to eq(403)
+        expect(View.first.document).to eq(JSON.parse(DEFAULT_VIEW.to_json))
+      end
     end
 
     it 'uses a consistent view format' do

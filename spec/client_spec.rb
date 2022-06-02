@@ -18,12 +18,14 @@ describe "View Client" do
 
   context 'project path' do
     it 'gets the view client for a project user' do
-      auth_header(:viewer)
-      get("/labors")
+      below_editor_roles.each do |role|
+        auth_header(role)
+        get("/labors")
 
-      expect(last_response.status).to eq(200)
-      expect(last_response.body).to match(/CONFIG/)
-      expect(last_response.body).to match(/"project_name":"labors"/)
+        expect(last_response.status).to eq(200)
+        expect(last_response.body).to match(/CONFIG/)
+        expect(last_response.body).to match(/"project_name":"labors"/)
+      end
     end
 
     it 'refuses the view client for a non-user' do

@@ -38,6 +38,9 @@ AUTH_USERS = {
   },
   non_user: {
     email: 'nessus@centaurs.org', name: 'Nessus', perm: ''
+  },
+  guest: {
+    email: 'sinon@troy.org', name: 'Sinon', perm: 'g:labors'
   }
 }
 
@@ -176,4 +179,12 @@ end
 
 def json_post(endpoint, hash)
   post("/#{endpoint}", hash.to_json, {'CONTENT_TYPE'=> 'application/json'})
+end
+
+def below_admin_roles
+  [:editor, :viewer, :guest]
+end
+
+def below_editor_roles
+  [:viewer, :guest]
 end
