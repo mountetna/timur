@@ -4,11 +4,6 @@ class Timur
 
     private
 
-    def redirect_to(path)
-      @response.redirect(path,302)
-      @response.finish
-    end
-
     def success_json(hash)
       success(hash.to_json, 'application/json')
     end
