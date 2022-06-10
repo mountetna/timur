@@ -70,6 +70,16 @@ const QuerySelectPane = () => {
     [patchQueryColumn]
   );
 
+  const handleOnSelectPredicate = useCallback(
+    (columnIndex: number, column: QueryColumn, predicate: string) => {
+      patchQueryColumn(columnIndex, {
+        ...column,
+        predicate
+      });
+    },
+    [patchQueryColumn]
+  );
+
   const handleOnChangeLabel = useCallback(
     (columnIndex: number, column: QueryColumn, label: string) => {
       patchQueryColumn(columnIndex, {
@@ -144,10 +154,10 @@ const QuerySelectPane = () => {
           <Grid item xs={2}>
             <Typography>Model</Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>Attribute</Typography>
           </Grid>
-          <Grid item xs={5} className={classes.sliceHeading}>
+          <Grid item xs={4} className={classes.sliceHeading}>
             <Typography>Slices</Typography>
             <Grid item container>
               <Grid
@@ -204,6 +214,9 @@ const QuerySelectPane = () => {
                     onSelectAttribute={(attributeName: string) =>
                       handleOnSelectAttribute(index, column, attributeName)
                     }
+                    onSelectPredicate={(predicate: string) => {
+                      handleOnSelectPredicate(index, column, predicate);
+                    }}
                     onChangeLabel={(label: string) =>
                       handleOnChangeLabel(index, column, label)
                     }

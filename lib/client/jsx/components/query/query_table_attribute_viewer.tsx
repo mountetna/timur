@@ -1,23 +1,19 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 
 import AttributeViewer from '../attributes/attribute_viewer';
-import {Attribute} from 'etna-js/models/magma-model';
 import {QueryGraph} from '../../utils/query_graph';
+import {QueryTableColumn} from '../../contexts/query/query_types';
 
 const QueryTableAttributeViewer = ({
-  attribute,
+  tableColumn,
   datum,
-  modelName,
   graph,
-  expandMatrices,
-  matrixHeadings
+  expandMatrices
 }: {
-  attribute: Attribute | null;
+  tableColumn: QueryTableColumn;
   datum: any;
   expandMatrices: boolean;
-  modelName: string;
   graph: QueryGraph;
-  matrixHeadings: string[] | undefined;
 }) => {
   function filename(path: string | null) {
     return path == null
@@ -25,16 +21,19 @@ const QueryTableAttributeViewer = ({
       : new URL(`https://${path}`).pathname.split('/').pop();
   }
 
-  function mockRecord(attribute: Attribute, value: any) {
+  const {attribute, modelName, matrixHeadings, predicate} = tableColumn;
+
+  const mockRecord = useMemo(() => {
+    const {attribute} = tableColumn;
     switch (attribute.attribute_type) {
       case 'file':
       case 'image':
-        let name = filename(value);
+        let name = filename(datum);
 
         return {
           [attribute.attribute_name]: name
             ? {
-                url: value,
+                url: datum,
                 original_filename: name,
                 path: name
               }
@@ -42,7 +41,7 @@ const QueryTableAttributeViewer = ({
         };
       case 'file_collection':
         return {
-          [attribute.attribute_name]: value?.map((datum: string) => {
+          [attribute.attribute_name]: datum?.map((datum: string) => {
             return {
               url: datum,
               original_filename: filename(datum),
@@ -52,12 +51,12 @@ const QueryTableAttributeViewer = ({
         };
       default:
         return {
-          [attribute.attribute_name]: value
+          [attribute.attribute_name]: datum
         };
     }
-  }
+  }, [tableColumn, datum]);
 
-  if (!attribute) return null;
+  if (!tableColumn.attribute) return null;
 
   return (
     <>
@@ -66,7 +65,7 @@ const QueryTableAttributeViewer = ({
       ) : (
         <AttributeViewer
           attribute_name={attribute.attribute_name}
-          record={mockRecord(attribute, datum)}
+          record={mockRecord}
           model_name={modelName}
           template={graph.template(modelName)}
           mode='model_viewer'
