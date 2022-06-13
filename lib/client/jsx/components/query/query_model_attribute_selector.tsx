@@ -204,7 +204,7 @@ const QueryModelAttributeSelector = React.memo(
               <Grid item xs={3} container direction='row'>
                 <Grid
                   item
-                  xs={showFilePredicates ? 6 : 12}
+                  xs={showFilePredicates ? 9 : 12}
                   className={classes.topMargin}
                 >
                   <AttributeSelector
@@ -216,7 +216,7 @@ const QueryModelAttributeSelector = React.memo(
                   />
                 </Grid>
                 {showFilePredicates ? (
-                  <Grid item xs={6}>
+                  <Grid item xs={3}>
                     <FilePredicateSelector
                       value={column.predicate || 'url'}
                       onSelect={onSelectPredicate}
