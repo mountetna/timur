@@ -23,6 +23,8 @@ const QueryTableAttributeViewer = ({
 
   const {attribute, modelName, matrixHeadings, predicate} = tableColumn;
 
+  const isMd5Predicate = useMemo(() => 'md5' === predicate, [predicate]);
+
   const mockRecord = useMemo(() => {
     const {attribute} = tableColumn;
     switch (attribute.attribute_type) {
@@ -31,7 +33,9 @@ const QueryTableAttributeViewer = ({
         let name = filename(datum);
 
         return {
-          [attribute.attribute_name]: name
+          [attribute.attribute_name]: isMd5Predicate
+            ? datum
+            : name
             ? {
                 url: datum,
                 original_filename: name,
@@ -41,20 +45,22 @@ const QueryTableAttributeViewer = ({
         };
       case 'file_collection':
         return {
-          [attribute.attribute_name]: datum?.map((datum: string) => {
-            return {
-              url: datum,
-              original_filename: filename(datum),
-              path: filename(datum)
-            };
-          })
+          [attribute.attribute_name]: isMd5Predicate
+            ? datum
+            : datum?.map((datum: string) => {
+                return {
+                  url: datum,
+                  original_filename: filename(datum),
+                  path: filename(datum)
+                };
+              })
         };
       default:
         return {
           [attribute.attribute_name]: datum
         };
     }
-  }, [tableColumn, datum]);
+  }, [tableColumn, datum, isMd5Predicate]);
 
   if (!tableColumn.attribute) return null;
 
@@ -72,6 +78,7 @@ const QueryTableAttributeViewer = ({
           sliceValues={
             matrixHeadings && matrixHeadings.length > 0 ? matrixHeadings : null
           }
+          predicate={predicate}
         />
       )}
     </>

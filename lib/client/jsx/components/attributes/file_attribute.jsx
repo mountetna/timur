@@ -27,7 +27,7 @@ const COLUMN_WIDTHS = COLUMNS.reduce((widths, column) => {
   return widths;
 }, {});
 
-const FileValue = ({value}) =>
+const FileValue = ({value, predicate}) =>
   !value ? (
     <span className='file-missing'> No file </span>
   ) : value instanceof File ? (
@@ -35,6 +35,8 @@ const FileValue = ({value}) =>
       {' '}
       {value.name} ({value.type}){' '}
     </span>
+  ) : 'md5' === predicate ? (
+    <span className=''> {value} </span>
   ) : value === STUB || value.path === STUB ? (
     <span className='file-blank'> Blank file </span>
   ) : value === TEMP || value.path === TEMP ? (
@@ -59,7 +61,8 @@ export default function FileAttribute(props) {
     template,
     attribute,
     model_name,
-    record_name
+    record_name,
+    predicate
   } = props;
 
   function onChange(revision) {
@@ -123,13 +126,13 @@ export default function FileAttribute(props) {
     } else if (isTempRevision(revised_value) && previous_value) {
       return (
         <div className='attribute file'>
-          <FileValue value={previous_value} />
+          <FileValue value={previous_value} predicate={predicate} />
         </div>
       );
     } else {
       return (
         <div className='attribute file'>
-          <FileValue value={value} />
+          <FileValue value={value} predicate={predicate} />
         </div>
       );
     }
