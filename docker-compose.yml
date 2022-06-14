@@ -3,11 +3,10 @@ version: "3.4"
 
 x-base-etna-service:
   &base-etna-service # Base configuration used by most etna services.
-  image: etna-base-dev
+  image: etna-base
   volumes: &base-etna-service-volumes
     - timur-node-modules:/app/node_modules
     - .:/app:delegated
-    - timur-app-gems:/app/vendor/bundle:rw
     - timur-log-dir:/app/log:rw
     - timur-tmp-dir:/app/tmp:rw
     - timur-public-dir:/app/public:rw
