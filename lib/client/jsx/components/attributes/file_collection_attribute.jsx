@@ -12,12 +12,14 @@ import {filePathComponents} from 'etna-js/selectors/magma';
 import ListInput from 'etna-js/components/inputs/list_input';
 import FileInput from 'etna-js/components/inputs/file_input';
 
-const FileCollectionValue = ({value}) =>
+const FileCollectionValue = ({value, predicate}) =>
   value instanceof File ? (
     <span className='list_item file-upload'>
       {' '}
       {value.name} ({value.type}){' '}
     </span>
+  ) : 'md5' === predicate ? (
+    <span className=''> {value} </span>
   ) : value === TEMP || value.path === TEMP ? (
     <span className='list_item file-blank'>
       {' '}
@@ -28,50 +30,13 @@ const FileCollectionValue = ({value}) =>
   );
 
 export default function FileCollectionAttribute(props) {
-  let {mode, value, revised_value} = props;
+  let {mode, value, revised_value, predicate} = props;
 
   const browserState = useReduxState(browserStateOf());
   const {uploads} = browserState;
 
   const {callReviseDocument} = useFileCollectionActions(props);
 
-  // useEffect(() => {
-  //   const updatedUpload = selectUploadForRevision(
-  //     uploads,
-  //     model_name,
-  //     record_name,
-  //     attribute.attribute_name
-  //   );
-
-  //   if (!updatedUpload) {
-  //     setUpload(null);
-  //     return;
-  //   }
-
-  //   if (updatedUpload.status !== 'complete') {
-  //     setUpload(updatedUpload);
-  //   } else if (upload) {
-  //     let {project_name, bucket_name, file_name} = filePathComponents(
-  //       upload.url
-  //     );
-  //     invoke(
-  //       sendRevisions(model_name, {
-  //         [record_name]: {
-  //           [attribute.attribute_name]: {
-  //             path: `metis://${project_name}/${bucket_name}/${file_name}`,
-  //             original_filename: upload.original_filename
-  //           }
-  //         }
-  //       })
-  //     );
-  //     setUpload(null);
-  //   }
-  // }, [uploads]);
-
-  // useEffect(() => {
-  //   // console.log('previous_value being set to', value);
-  //   setPreviousValue(value);
-  // }, []);
   var collator = new Intl.Collator(undefined, {
     numeric: true,
     sensitivity: 'base'
@@ -93,7 +58,7 @@ export default function FileCollectionAttribute(props) {
         <div className='collection'>
           {sortedCollection.map((single_file) => (
             <div key={single_file.url} className='collection_item'>
-              <FileCollectionValue value={single_file} />
+              <FileCollectionValue value={single_file} predicate={predicate} />
             </div>
           ))}
         </div>

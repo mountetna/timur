@@ -40,6 +40,7 @@ export interface QueryColumn {
   attribute_name: string;
   display_label: string;
   slices: QuerySlice[];
+  predicate?: string;
 }
 
 export interface QueryResponse {
@@ -60,6 +61,7 @@ export interface QueryTableColumn {
   modelName: string;
   attribute: Attribute;
   matrixHeadings: string[];
+  predicate: string | undefined;
 }
 
 interface InputQueryMap {

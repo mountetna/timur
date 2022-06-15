@@ -71,7 +71,8 @@ const useTableEffects = ({
               colId: `${generateIdCol(column, index)}.${heading}`,
               modelName: column.model_name,
               attribute: template.attributes[column.attribute_name],
-              matrixHeadings
+              matrixHeadings,
+              predicate: column.predicate
             });
           });
         } else {
@@ -80,7 +81,8 @@ const useTableEffects = ({
             colId: generateIdCol(column, index),
             modelName: column.model_name,
             attribute: template.attributes[column.attribute_name],
-            matrixHeadings
+            matrixHeadings,
+            predicate: column.predicate
           });
         }
 

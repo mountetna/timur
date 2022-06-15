@@ -293,12 +293,7 @@ export class QueryBuilder {
     });
 
     if (includeAttributeName)
-      predicate.push(
-        ...this.attributeNameWithPredicate(
-          column.model_name,
-          column.attribute_name
-        )
-      );
+      predicate.push(...this.attributeNameWithPredicate(column));
 
     return predicate;
   }
@@ -307,11 +302,17 @@ export class QueryBuilder {
     return !isMatrixSlice(slice);
   }
 
-  attributeNameWithPredicate(modelName: string, attributeName: string) {
+  attributeNameWithPredicate(column: QueryColumn) {
     // Probably only used for File / Image / FileCollection attributes?
-    let predicate = [attributeName];
-    if (attributeIsFile(this.graph.models, modelName, attributeName)) {
-      predicate.push('::url');
+    let predicate = [column.attribute_name];
+    if (
+      attributeIsFile(
+        this.graph.models,
+        column.model_name,
+        column.attribute_name
+      )
+    ) {
+      predicate.push(`::${column.predicate || 'url'}`);
     }
 
     return predicate;

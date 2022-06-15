@@ -86,12 +86,10 @@ const QueryTable = ({
                   {row.slice(0, maxColumns).map((datum: any, index: number) => (
                     <TableCell key={index} scope='row'>
                       <QueryTableAttributeViewer
-                        attribute={columns[index].attribute}
-                        modelName={columns[index].modelName}
+                        tableColumn={columns[index]}
                         expandMatrices={expandMatrices}
                         graph={graph}
                         datum={datum}
-                        matrixHeadings={columns[index].matrixHeadings}
                       />
                     </TableCell>
                   ))}

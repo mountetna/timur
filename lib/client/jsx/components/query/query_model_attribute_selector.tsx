@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useCallback, useState, useEffect, useMemo} from 'react';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import {makeStyles} from '@material-ui/core/styles';
@@ -10,7 +10,10 @@ import {Attribute} from '../../models/model_types';
 
 import useSliceMethods from './query_use_slice_methods';
 import {QueryColumn} from '../../contexts/query/query_types';
-import {selectAllowedModelAttributes} from '../../selectors/query_selector';
+import {
+  selectAllowedModelAttributes,
+  attributeIsFile
+} from '../../selectors/query_selector';
 import QuerySlicePane from './query_slice_pane';
 
 import {visibleSortedAttributesWithUpdatedAt} from '../../utils/attributes';
@@ -23,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   fullWidth: {
     width: '80%',
     minWidth: 120
+  },
+  topMargin: {
+    marginTop: '3px'
   }
 }));
 
@@ -74,6 +80,26 @@ const AttributeSelector = React.memo(
   }
 );
 
+const FilePredicateSelector = React.memo(
+  ({
+    onSelect,
+    value
+  }: {
+    onSelect: (newValue: string) => void;
+    value: string;
+  }) => {
+    return (
+      <Selector
+        canEdit={true}
+        label='Predicate'
+        name={value || 'url'}
+        onSelect={onSelect}
+        choiceSet={['url', 'md5']}
+      />
+    );
+  }
+);
+
 const QueryModelAttributeSelector = React.memo(
   ({
     label,
@@ -86,7 +112,8 @@ const QueryModelAttributeSelector = React.memo(
     onSelectAttribute,
     onChangeLabel,
     onRemoveColumn,
-    onCopyColumn
+    onCopyColumn,
+    onSelectPredicate
   }: {
     label: string;
     column: QueryColumn;
@@ -99,6 +126,7 @@ const QueryModelAttributeSelector = React.memo(
     onChangeLabel: (label: string) => void;
     onRemoveColumn: () => void;
     onCopyColumn: () => void;
+    onSelectPredicate: (predicate: string) => void;
   }) => {
     const [selectableModelAttributes, setSelectableModelAttributes] = useState(
       [] as Attribute[]
@@ -107,6 +135,8 @@ const QueryModelAttributeSelector = React.memo(
     //   with the model / attribute as a "label".
     // Matrices will have modelName + attributeName.
     const [updateCounter, setUpdateCounter] = useState(0);
+
+    const classes = useStyles();
 
     const selectAttributesForModel = useCallback(
       (modelName: string) => {
@@ -139,6 +169,13 @@ const QueryModelAttributeSelector = React.memo(
 
     const isSliceable = isSliceableAsMatrix || isSliceableAsCollection;
 
+    const showFilePredicates = useMemo(() => {
+      return (
+        column?.attribute_name &&
+        attributeIsFile(graph.models, column.model_name, column.attribute_name)
+      );
+    }, [column, graph]);
+
     return (
       <Paper>
         <Grid
@@ -164,16 +201,30 @@ const QueryModelAttributeSelector = React.memo(
           </Grid>
           {column.model_name && selectableModelAttributes.length > 0 ? (
             <React.Fragment>
-              <Grid item xs={2}>
-                <AttributeSelector
-                  onSelect={onSelectAttribute}
-                  canEdit={canEdit}
-                  label={label}
-                  attributeChoiceSet={selectableModelAttributes.sort()}
-                  column={column}
-                />
+              <Grid item xs={3} container direction='row'>
+                <Grid
+                  item
+                  xs={showFilePredicates ? 9 : 12}
+                  className={classes.topMargin}
+                >
+                  <AttributeSelector
+                    onSelect={onSelectAttribute}
+                    canEdit={canEdit}
+                    label={label}
+                    attributeChoiceSet={selectableModelAttributes.sort()}
+                    column={column}
+                  />
+                </Grid>
+                {showFilePredicates ? (
+                  <Grid item xs={3}>
+                    <FilePredicateSelector
+                      value={column.predicate || 'url'}
+                      onSelect={onSelectPredicate}
+                    />
+                  </Grid>
+                ) : null}
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={4}>
                 {isSliceable && canEdit ? (
                   <QuerySlicePane column={column} columnIndex={columnIndex} />
                 ) : null}
