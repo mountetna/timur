@@ -62,7 +62,8 @@ const QueryFilterClause = ({
     fetchDistinctAttributeValues
   } = useQueryClause({
     clause,
-    graph
+    graph,
+    isColumnFilter
   });
 
   const filterOperator = useMemo(() => {

@@ -27,6 +27,9 @@ const QueryTableAttributeViewer = ({
 
   const mockRecord = useMemo(() => {
     const {attribute} = tableColumn;
+
+    if (!attribute) return {};
+
     switch (attribute.attribute_type) {
       case 'file':
       case 'image':

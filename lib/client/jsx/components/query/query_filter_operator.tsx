@@ -99,6 +99,10 @@ export default class FilterOperator {
         return 'boolean';
       case 'matrix':
         return 'matrix';
+      case 'child':
+      case 'table':
+      case 'collection':
+        return 'collection';
       default:
         return 'text';
     }

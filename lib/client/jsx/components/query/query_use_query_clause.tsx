@@ -12,10 +12,12 @@ import {QueryGraph} from '../../utils/query_graph';
 
 const useQueryClause = ({
   clause,
-  graph
+  graph,
+  isColumnFilter
 }: {
   clause: QueryClause;
   graph: QueryGraph;
+  isColumnFilter: boolean;
 }) => {
   const [distinctAttributeValues, setDistinctAttributeValues] = useState(
     [] as string[]
@@ -31,10 +33,10 @@ const useQueryClause = ({
         template.attributes
       );
 
-      return selectAllowedModelAttributes(sortedTemplateAttributes);
+      return selectAllowedModelAttributes(sortedTemplateAttributes, !isColumnFilter);
     }
     return [];
-  }, [clause.modelName, graph]);
+  }, [clause.modelName, graph, isColumnFilter]);
 
   const attributeType = useMemo(() => {
     if ('' !== clause.attributeName) {

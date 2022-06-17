@@ -44,19 +44,22 @@ export const attributeIsMatrix = (
 };
 
 export const selectAllowedModelAttributes = (
-  attributes: Attribute[]
+  attributes: Attribute[],
+  includeChildrenModels: boolean = false
 ): Attribute[] => {
-  // I think we should force people to get these FK values
-  //   from the other model, because generally people won't want
-  //   the FK itself, just some attributes of the other model.
   // Keep "identifier" because it's useful for ::has and ::lacks
-  const unallowedAttributeTypes = [
+  // Don't let folks query "up" the tree, only down it.
+  let unallowedAttributeTypes = [
     'parent',
-    'child',
-    'collection',
     'link',
-    'table'
   ];
+
+  if (!includeChildrenModels) {
+    unallowedAttributeTypes.push('child');
+    unallowedAttributeTypes.push('collection');
+    unallowedAttributeTypes.push('table');
+  }
+
   return attributes.filter(
     (attr: Attribute) => !unallowedAttributeTypes.includes(attr.attribute_type)
   );
