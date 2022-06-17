@@ -2274,12 +2274,6 @@ exports[`QueryBuilder renders with Plot button 1`] = `
                 <span
                   class="ͼd"
                 >
-                  "::and"
-                </span>
-                ,[
-                <span
-                  class="ͼd"
-                >
                   "year"
                 </span>
                 ,
@@ -2294,7 +2288,7 @@ exports[`QueryBuilder renders with Plot button 1`] = `
                 >
                   2
                 </span>
-                ]],
+                ],
                 <span
                   class="ͼd"
                 >
