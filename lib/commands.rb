@@ -52,7 +52,7 @@ class Timur
 
     def setup(config)
       super
-      Timur.instance.setup_db
+      Timur.instance.setup_db(false)
     end
   end
 
