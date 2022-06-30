@@ -95,13 +95,13 @@ EOT
       route_path = route.path(
         Hash[
           required_parts.zip(
-            required_parts.map{|part| %Q{'+#{part}+'} }
+            required_parts.map{|part| %Q{${#{part}}} }
           )
         ]
-      )
+      ) { |c| c }
 
       <<EOT.chomp
-    #{route.name}_path: (#{required_parts.join(', ')}) => ('#{route_path}')
+    #{route.name}_path: (#{required_parts.join(', ')}) => (`#{route_path}`)
 EOT
     end
 
