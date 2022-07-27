@@ -4,16 +4,12 @@ import * as React from 'react';
 // Class imports.
 import ViewPane from './view_pane';
 
-const ViewTab = ({ tab, ...pane_props }) => {
+import {reducePanes} from '../../utils/view_utils';
+
+const ViewTab = ({ tab, recordName, ...pane_props }) => {
   if (!tab) return <span className='fas fa-spinner fa-pulse' />;
 
-  let tab_groups = tab.panes.reduce(
-    (groups, pane) => {
-      groups[pane.group] = groups[pane.group] || [];
-      groups[pane.group].push(pane);
-      return groups;
-    }, {}
-  );
+  let tab_groups = reducePanes(tab.panes, recordName);
   console.log({tab_groups});
   return <div id='tab'>
     {

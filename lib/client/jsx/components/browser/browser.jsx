@@ -185,6 +185,7 @@ export default function Browser({ model_name, record_name, tab_name }) {
         view={view}
         current_tab={tab_name}
         onClick={browseToTab}
+        recordName={record_name}
       />
       <ViewTab {
                  ...{ model_name, record_name, template, record, revision, mode, tab }
