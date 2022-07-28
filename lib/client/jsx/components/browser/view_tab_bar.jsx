@@ -19,7 +19,7 @@ const Tab = ({selected,revised,name,onClick}) =>
     {formatName(name)}
   </div>;
 
-const ViewTabBar = ({view: { tabs }, current_tab, revised, onClick, recordName}) =>
+const ViewTabBar = ({view: { tabs }, current_tab, revised, onClick}) =>
   (Object.keys(tabs).length == 1) ? <div style={{display: 'none'}} />
   : <div className='tabbar'>
       <div className='spacer1' />
@@ -29,8 +29,7 @@ const ViewTabBar = ({view: { tabs }, current_tab, revised, onClick, recordName})
             key={index}
             name={tab.name}
             onClick={onClick}
-            revised={ (revised||{})[tab.name] }
-            recordName={recordName} />
+            revised={ (revised||{})[tab.name] } />
         )
       }
       <div className='spacer2' />

@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ViewTab renders with a regex that matches the record_name 1`] = `
+<DocumentFragment>
+  <div
+    id="tab"
+  >
+    <div
+      class="pane_group"
+    >
+      <div
+        class="pane"
+      >
+        <div
+          class="title"
+          title="pane1"
+        >
+          Pane1
+        </div>
+        <div
+          class="items"
+        >
+          <div
+            class="view_item"
+          >
+            <div
+              class="item_name"
+            >
+              attribute1
+            </div>
+            <div
+              class="item_view"
+            >
+              <div
+                class="item"
+              >
+                <div
+                  class="markdown"
+                >
+                  <p>
+                    This is a test
+                  </p>
+                  
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ViewTab renders without a regex 1`] = `
+<DocumentFragment>
+  <div
+    id="tab"
+  >
+    <div
+      class="pane_group"
+    >
+      <div
+        class="pane"
+      >
+        <div
+          class="title"
+          title="pane1"
+        >
+          Pane1
+        </div>
+        <div
+          class="items"
+        >
+          <div
+            class="view_item"
+          >
+            <div
+              class="item_name"
+            >
+              attribute1
+            </div>
+            <div
+              class="item_view"
+            >
+              <div
+                class="item"
+              >
+                <div
+                  class="markdown"
+                >
+                  <p>
+                    This is a test
+                  </p>
+                  
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
