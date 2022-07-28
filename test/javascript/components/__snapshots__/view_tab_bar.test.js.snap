@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ViewTabBar renders with a regex that matches the record_name 1`] = `
+<DocumentFragment>
+  <div
+    class="tabbar"
+  >
+    <div
+      class="spacer1"
+    />
+    <div
+      class="tab"
+    >
+      Overview
+    </div>
+    <div
+      class="tab"
+    >
+      Sequencing
+    </div>
+    <div
+      class="spacer2"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ViewTabBar renders without a regex 1`] = `
+<DocumentFragment>
+  <div
+    class="tabbar"
+  >
+    <div
+      class="spacer1"
+    />
+    <div
+      class="tab"
+    >
+      Overview
+    </div>
+    <div
+      class="tab"
+    >
+      Sequencing
+    </div>
+    <div
+      class="spacer2"
+    />
+  </div>
+</DocumentFragment>
+`;
