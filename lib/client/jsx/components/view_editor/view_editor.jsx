@@ -1,6 +1,7 @@
 import React, {useState, useCallback, useEffect, shallowEqual} from 'react';
 import {useSelector, useDispatch, useStore} from 'react-redux';
 import {pushLocation, setLocation} from 'etna-js/actions/location_actions';
+import {showMessages} from 'etna-js/actions/message_actions';
 import {
   requestView,
   requestAllViews,
@@ -68,7 +69,7 @@ const ViewEditor = ({view_id}) => {
         let curr_view = views[id];
         if (!curr_view) return;
         // copy it so you don't modify the store
-        setView(curr_view);
+        setView({...curr_view});
         break;
     }
     setEditing(id === 'new');
@@ -109,7 +110,15 @@ const ViewEditor = ({view_id}) => {
 
   const onSave = () => {
     // A new view should have an id set to 0.
-    let savedView = { ...view, document: JSON.parse(view.document) };
+    let savedView = {...view};
+    try {
+      savedView.document = JSON.parse(view.document);
+    } catch (e) {
+      console.error(e);
+      dispatch(showMessages([e.message]));
+      return;
+    }
+
     if (view_id == 'new')
       saveNewView(savedView)(dispatch);
     else
@@ -118,8 +127,7 @@ const ViewEditor = ({view_id}) => {
   };
 
   const revertView = () => {
-    let {model_name} = view.model_name;
-    selectView(model_name);
+    selectView(view.id);
     if (editing) toggleEdit();
   };
 
