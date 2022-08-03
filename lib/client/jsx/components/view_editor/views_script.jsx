@@ -5,9 +5,6 @@ import { Controlled as CodeMirror } from 'react-codemirror2';
 import { JSHINT } from 'jshint';
 window.JSHINT = JSHINT;
 
-import jsonlint from 'jsonlint-mod';
-window.jsonlint = jsonlint;
-
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/lint/lint';
