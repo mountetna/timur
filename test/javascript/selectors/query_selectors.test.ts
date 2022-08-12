@@ -237,13 +237,15 @@ describe('createFigurePayload', () => {
     const result = createFigurePayload({
       query: {
         user_columns: ["foo", "bar"],
-        query: "this is a query"
+        query: "this is a query",
+        something: {key: "value"}
       },
       title: "A plot",
       workflow: {
         inputQueryMap: {
           "1": "query",
-          "2": "user_columns"
+          "2": "user_columns",
+          "3": "something"
         },
         name: 'test'
       }
@@ -254,7 +256,8 @@ describe('createFigurePayload', () => {
       workflow_name: 'test',
       inputs: {
         "1": "this is a query",
-        "2": JSON.stringify(["foo", "bar"])
+        "2": JSON.stringify(["foo", "bar"]),
+        "3": JSON.stringify({key: "value"})
       }
     })
   })
