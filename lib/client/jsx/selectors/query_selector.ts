@@ -295,6 +295,13 @@ export const createFigurePayload = ({
       if (!query.hasOwnProperty(inputSource)) return;
 
       payload.inputs[cwlInput] = query[inputSource as keyof QueryPayload];
+
+      if (Array.isArray(payload.inputs[cwlInput]) || (
+        typeof payload.inputs[cwlInput] === 'object' &&
+        payload.inputs[cwlInput] !== null
+      )) {
+        payload.inputs[cwlInput] = JSON.stringify(payload.inputs[cwlInput]);
+      }
     }
   );
 
